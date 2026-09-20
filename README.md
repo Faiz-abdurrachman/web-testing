@@ -1,6 +1,7 @@
 # Data Sorcerers
 
-Homepage hero preview built with Astro, strict TypeScript, and scoped CSS.
+Homepage hero and Our Philosophy preview built with Astro, strict TypeScript,
+and scoped CSS.
 
 ## Run locally
 
@@ -16,15 +17,20 @@ site into `dist/`; `npm run preview` serves that build.
 
 ## Scope
 
-Implemented: desktop navbar, hero artwork, live HTML heading and paragraph,
-CSS buttons, and a responsive mobile navigation menu. Home links to `/`.
+Implemented: desktop navbar, hero artwork, live HTML headings and copy,
+CSS buttons, a responsive mobile navigation menu, and the Our Philosophy
+section with its original illustration, five icons, and two-column principles.
+Home links to `/`.
 Other navigation destinations and CTA URLs have not been supplied; they are
 explicitly unavailable in this preview rather than linking to missing pages.
 Pass an `href` to `Button.astro` when a destination is ready.
 
 The desktop visual target is `assets/hero section/Hero Section.png`, exported
 at 4× from a 1440 × 903 Figma frame. Mobile is an adaptation, because no mobile
-reference was supplied. `assets/` remains the original reference collection.
+reference was supplied. Our Philosophy follows
+`assets/ourphilosophy/Philosophy Section(1).png`, a 4× export of a 1440 × 837
+frame. Open `/#our-philosophy` to jump to it. `assets/` remains the original
+reference collection.
 
 ## Fonts
 
@@ -35,7 +41,7 @@ See [asset notes](docs/assets.md).
 
 ## Project structure
 
-- `src/components/`: Navbar, Hero, and shared Button.
+- `src/components/`: Navbar, Hero, Philosophy, and shared Button.
 - `src/layouts/`: HTML document, metadata, and font preload links.
 - `src/styles/global.css`: fonts, design tokens, reset, and focus styles.
 - `src/pages/index.astro`: homepage composition.
@@ -51,6 +57,6 @@ node scripts/verify.mjs
 
 Run the dev server before the visual verification script. It uses Chromium at
 `/usr/bin/chromium` (override with `CHROMIUM_PATH`) and writes desktop/mobile
-screenshots, a reference overlay, a difference image, and measurements into
-`artifacts/`. It also checks font availability, mobile menu interaction,
-horizontal overflow, and browser errors.
+screenshots, reference overlays, difference images, and measurements into
+`artifacts/`. It also checks exact desktop section geometry, font availability,
+mobile menu interaction, text clipping, horizontal overflow, and browser errors.

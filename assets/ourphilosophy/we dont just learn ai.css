@@ -1,0 +1,22 @@
+/* We Don't Just Learn AI We Build With It */
+
+width: 471px;
+height: 204px;
+
+font-family: 'Nasalization';
+font-style: normal;
+font-weight: 400;
+font-size: 56px;
+line-height: 68px;
+
+background: linear-gradient(270deg, #FFFFFF 0%, #EDE8FF 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+text-fill-color: transparent;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;

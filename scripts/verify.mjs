@@ -55,7 +55,9 @@ try {
     true,
     'Install the local Nasalization font or provide its licensed webfont before visual validation.',
   );
-  await page.screenshot({ path: 'artifacts/hero-desktop.png', fullPage: true });
+  await page
+    .locator('.hero')
+    .screenshot({ path: 'artifacts/hero-desktop.png' });
   const reference = await sharp('assets/hero section/Hero Section.png')
     .resize(1440, 903)
     .removeAlpha()
@@ -78,10 +80,81 @@ try {
   const raw = { width: 1440, height: 903, channels: 3 };
   await sharp(difference, { raw }).png().toFile('artifacts/hero-diff.png');
   await sharp(overlay, { raw }).png().toFile('artifacts/hero-overlay.png');
+  await page.locator('.philosophy').scrollIntoViewIfNeeded();
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await Promise.all([...document.images].map((image) => image.decode()));
+  });
+  await page
+    .locator('.philosophy')
+    .screenshot({ path: 'artifacts/philosophy-desktop.png' });
+  const philosophyReference = await sharp(
+    'assets/ourphilosophy/Philosophy Section(1).png',
+  )
+    .resize(1440, 837)
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const philosophyActual = await sharp('artifacts/philosophy-desktop.png')
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(philosophyActual.length, philosophyReference.length);
+  const philosophyDifference = Buffer.alloc(philosophyActual.length);
+  const philosophyOverlay = Buffer.alloc(philosophyActual.length);
+  let philosophyTotal = 0;
+  for (let i = 0; i < philosophyActual.length; i++) {
+    const delta = Math.abs(philosophyActual[i] - philosophyReference[i]);
+    philosophyTotal += delta;
+    philosophyDifference[i] = Math.min(255, delta * 4);
+    philosophyOverlay[i] = Math.round(
+      (philosophyActual[i] + philosophyReference[i]) / 2,
+    );
+  }
+  const philosophyRaw = { width: 1440, height: 837, channels: 3 };
+  await sharp(philosophyDifference, { raw: philosophyRaw })
+    .png()
+    .toFile('artifacts/philosophy-diff.png');
+  await sharp(philosophyOverlay, { raw: philosophyRaw })
+    .png()
+    .toFile('artifacts/philosophy-overlay.png');
+  const philosophyGeometry = await page
+    .locator('.philosophy')
+    .evaluate((section) => {
+      const sectionRect = section.getBoundingClientRect();
+      const relativeBox = (selector) => {
+        const rect = section.querySelector(selector).getBoundingClientRect();
+        return {
+          x: rect.x - sectionRect.x,
+          y: rect.y - sectionRect.y,
+          width: rect.width,
+          height: rect.height,
+        };
+      };
+      return {
+        width: sectionRect.width,
+        height: sectionRect.height,
+        top: sectionRect.top + scrollY,
+        heading: relativeBox('h2'),
+        principles: relativeBox('.principles'),
+      };
+    });
+  assert.deepEqual(philosophyGeometry, {
+    width: 1440,
+    height: 837,
+    top: 903,
+    heading: { x: 855, y: 190, width: 471, height: 204 },
+    principles: { x: 855, y: 468, width: 471, height: 248 },
+  });
+  await page.screenshot({
+    path: 'artifacts/homepage-desktop.png',
+    fullPage: true,
+  });
   const sizes = [320, 390, 768, 1024, 1440, 1920];
   const responsive = [];
   for (const width of sizes) {
     await page.setViewportSize({ width, height: 900 });
+    await page.evaluate(() => scrollTo(0, 0));
     const dimensions = await page.evaluate(() => ({
       viewport: innerWidth,
       content: document.documentElement.scrollWidth,
@@ -91,11 +164,28 @@ try {
       `Horizontal overflow at ${width}px`,
     );
     responsive.push(dimensions);
+    const clippedText = await page.locator('.philosophy').evaluate((section) =>
+      [...section.querySelectorAll('h2, h3, p')]
+        .filter((element) => {
+          const rect = element.getBoundingClientRect();
+          return (
+            rect.left < 0 ||
+            rect.right > innerWidth ||
+            element.scrollWidth > element.clientWidth + 1
+          );
+        })
+        .map((element) => element.textContent),
+    );
+    assert.deepEqual(clippedText, [], `Clipped philosophy text at ${width}px`);
     if (width === 390) {
       await page.screenshot({
-        path: 'artifacts/hero-mobile.png',
+        path: 'artifacts/homepage-mobile.png',
         fullPage: true,
       });
+      await page
+        .locator('.philosophy')
+        .screenshot({ path: 'artifacts/philosophy-mobile.png' });
+      await page.evaluate(() => scrollTo(0, 0));
       await page.locator('summary').click();
       assert.equal(await page.locator('.mobile-menu').getAttribute('open'), '');
       await page.screenshot({
@@ -114,6 +204,10 @@ try {
     desktop,
     responsive,
     meanAbsoluteChannelDifference: total / actual.length,
+    philosophy: {
+      geometry: philosophyGeometry,
+      meanAbsoluteChannelDifference: philosophyTotal / philosophyActual.length,
+    },
     browserErrors: errors,
   };
   await writeFile(

@@ -1,0 +1,16 @@
+/* Ellipse 4 */
+
+position: absolute;
+width: 280px;
+height: 280px;
+left: 1195px;
+top: 648px;
+
+background: #6C3BFF;
+filter: blur(175px);
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+z-index: 0;

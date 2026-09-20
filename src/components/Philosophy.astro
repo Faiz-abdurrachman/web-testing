@@ -1,0 +1,329 @@
+---
+const principles = [
+  {
+    icon: 'learn',
+    title: 'LEARN',
+    description: 'Build Knowledge',
+    width: 63,
+    height: 64,
+  },
+  {
+    icon: 'ship',
+    title: 'SHIP',
+    description: 'Release',
+    width: 59,
+    height: 60,
+  },
+  {
+    icon: 'experiment',
+    title: 'EXPERIMENT',
+    description: 'Test Ideas',
+    width: 63,
+    height: 64,
+  },
+  {
+    icon: 'impact',
+    title: 'IMPACT',
+    description: 'Change',
+    width: 63,
+    height: 64,
+  },
+  {
+    icon: 'research',
+    title: 'RESEARCH / BUILD',
+    description: 'Discover / Create',
+    width: 59,
+    height: 60,
+  },
+];
+---
+
+<section
+  id="our-philosophy"
+  class="philosophy"
+  aria-labelledby="philosophy-title"
+>
+  <div class="canvas">
+    <picture class="illustration" aria-hidden="true">
+      <source
+        srcset="/images/philosophy/sorcerer-1x.webp 861w, /images/philosophy/sorcerer-2x.webp 1722w"
+        sizes="(max-width: 760px) 100vw, 861px"
+        type="image/webp"
+      />
+      <img
+        src="/images/philosophy/sorcerer-1x.webp"
+        width="861"
+        height="770"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+    <div class="content">
+      <div class="heading">
+        <span class="eyebrow">Our Philosphy</span>
+        <h2 id="philosophy-title">
+          <span>We Don't</span>
+          <span>Just Learn AI</span>
+          <span>We Build With It</span>
+        </h2>
+      </div>
+      <ul class="principles" aria-label="Our principles">
+        {principles.map(({ icon, title, description, width, height }) => (
+          <li>
+            <img
+              src={`/images/philosophy/${icon}.webp`}
+              width={width}
+              height={height}
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="principle-copy">
+              <h3>{title}</h3>
+              <p>{description}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .philosophy {
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+    background: var(--color-background);
+  }
+  .canvas {
+    position: relative;
+    min-height: 837px;
+    max-width: 1440px;
+    margin-inline: auto;
+  }
+  /* The exported blur extends 350px beyond each side of the 280px ellipse. */
+  .canvas::before {
+    content: '';
+    position: absolute;
+    left: 845px;
+    top: 298px;
+    width: 980px;
+    height: 980px;
+    background: url('/images/philosophy/glow.webp') center / contain no-repeat;
+    pointer-events: none;
+  }
+  .illustration {
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 861px;
+    height: 770px;
+    pointer-events: none;
+  }
+  .illustration img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .content {
+    position: relative;
+    margin-left: 855px;
+    padding-top: 150px;
+    width: 471px;
+    display: flex;
+    flex-direction: column;
+    gap: 74px;
+  }
+  .heading {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 93px;
+    height: 26px;
+    padding: 4px 8px;
+    border-radius: 32px;
+    background: rgb(255 255 255 / 15%);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    white-space: nowrap;
+    box-shadow: inset 0 1px 1px rgb(255 255 255 / 40%);
+  }
+  h2 {
+    margin: 0;
+    width: 471px;
+    font-family: var(--font-heading);
+    font-size: 56px;
+    font-weight: 400;
+    line-height: 68px;
+    background: linear-gradient(270deg, #fff, #ede8ff);
+    background-clip: text;
+    color: transparent;
+  }
+  h2 span {
+    display: block;
+    white-space: nowrap;
+  }
+  .principles {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 30px 92px;
+  }
+  li {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-width: 0;
+  }
+  li img {
+    display: block;
+    flex-shrink: 0;
+    object-fit: contain;
+  }
+  .principle-copy {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  h3,
+  p {
+    margin: 0;
+    white-space: nowrap;
+  }
+  h3 {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 27px;
+  }
+  p {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+  }
+  @media (min-width: 761px) and (max-width: 1399px) {
+    .canvas {
+      min-height: 760px;
+    }
+    .illustration {
+      width: 60%;
+      height: auto;
+      aspect-ratio: 861 / 770;
+      top: 100px;
+    }
+    .content {
+      margin-left: 57%;
+      padding-top: 120px;
+      width: calc(43% - var(--page-gutter));
+      gap: 56px;
+    }
+    h2 {
+      width: 100%;
+      font-size: clamp(28px, 3.89vw, 54px);
+      line-height: 1.214286;
+    }
+    .principles {
+      column-gap: 24px;
+    }
+    li {
+      gap: 10px;
+    }
+    li img {
+      width: 42px;
+      height: 44px;
+    }
+    h3 {
+      font-size: 13px;
+      line-height: 21px;
+    }
+    p {
+      font-size: 11px;
+      line-height: 18px;
+    }
+    .canvas::before {
+      left: calc(80% - 350px);
+    }
+  }
+  @media (max-width: 760px) {
+    .canvas {
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 64px var(--page-gutter) 0;
+    }
+    .content {
+      margin-left: 0;
+      padding-top: 0;
+      width: 100%;
+      gap: 40px;
+    }
+    h2 {
+      width: 100%;
+      font-size: clamp(30px, 7.2vw, 50px);
+      line-height: 1.214286;
+    }
+    .principles {
+      column-gap: 20px;
+      row-gap: 26px;
+    }
+    li {
+      gap: 10px;
+    }
+    li img {
+      width: 42px;
+      height: 44px;
+    }
+    h3 {
+      font-size: 13px;
+      line-height: 21px;
+    }
+    p {
+      font-size: 11px;
+      line-height: 18px;
+    }
+    .principle-copy {
+      gap: 4px;
+    }
+    .illustration {
+      position: relative;
+      order: 1;
+      left: calc(-1 * var(--page-gutter));
+      top: auto;
+      width: calc(100% + 2 * var(--page-gutter));
+      height: auto;
+      aspect-ratio: 861 / 770;
+      margin-top: 24px;
+    }
+    .canvas::before {
+      left: calc(65% - 350px);
+      top: -90px;
+      opacity: 0.5;
+    }
+  }
+  @media (max-width: 360px) {
+    .principles {
+      grid-template-columns: 1fr;
+    }
+    li img {
+      width: 50px;
+      height: 52px;
+    }
+    h3 {
+      font-size: 15px;
+    }
+    p {
+      font-size: 13px;
+    }
+  }
+</style>
