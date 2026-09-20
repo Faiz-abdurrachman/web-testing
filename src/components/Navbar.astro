@@ -1,0 +1,237 @@
+---
+import Button from './Button.astro';
+const links = [
+  'Home',
+  'About Us',
+  'Recruitment',
+  'Hall of Frames',
+  'Partners',
+  'Contact',
+];
+---
+
+<header class="navbar">
+  <a class="brand" href="/" aria-label="Data Sorcerers home">
+    <img src="/images/logo.png" width="54" height="59" alt="Data Sorcerers" />
+  </a>
+  <div class="desktop-menu">
+    <nav aria-label="Main navigation">
+      {links.map((label, index) =>
+        index === 0 ? (
+          <a class="nav-link active" href="/" aria-current="page">
+            {label}
+          </a>
+        ) : (
+          <span class="nav-link" aria-disabled="true">
+            {label}
+          </span>
+        ),
+      )}
+    </nav>
+    <Button variant="white">Join Community</Button>
+  </div>
+  <details class="mobile-menu">
+    <summary aria-label="Toggle navigation">
+      <span></span>
+      <span></span>
+      <span></span>
+    </summary>
+    <nav aria-label="Mobile navigation">
+      {links.map((label, index) =>
+        index === 0 ? (
+          <a class="nav-link active" href="/" aria-current="page">
+            {label}
+          </a>
+        ) : (
+          <span class="nav-link" aria-disabled="true">
+            {label}
+          </span>
+        ),
+      )}
+      <Button variant="white">Join Community</Button>
+    </nav>
+  </details>
+</header>
+<style>
+  .navbar {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 106.8px;
+    padding: 24px var(--page-gutter);
+    background: linear-gradient(
+      180deg,
+      rgb(108 59 255 / 10%) 0%,
+      rgb(11 7 18 / 0%) 100.19%
+    );
+  }
+  .brand,
+  .brand img {
+    display: block;
+    width: 54px;
+    height: 58.8px;
+  }
+  .navbar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    backdrop-filter: blur(5px);
+    mask-image: linear-gradient(#000, transparent);
+    pointer-events: none;
+  }
+  .desktop-menu {
+    display: flex;
+    align-items: center;
+    gap: 90px;
+  }
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .nav-link {
+    position: relative;
+    padding: 8px 14px;
+    color: #707070;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+    white-space: nowrap;
+  }
+  .active {
+    color: white;
+  }
+  .active::after {
+    content: '';
+    position: absolute;
+    height: 1px;
+    bottom: 6px;
+    left: 14px;
+    right: 14px;
+    background: #9b7bff;
+  }
+  .mobile-menu {
+    display: none;
+  }
+  @media (min-width: 1301px) {
+    .desktop-menu nav {
+      width: 753px;
+      height: 45px;
+    }
+    .desktop-menu .nav-link:nth-child(1) {
+      width: 78px;
+      height: 45px;
+    }
+    .desktop-menu .nav-link:nth-child(2) {
+      width: 106px;
+    }
+    .desktop-menu .nav-link:nth-child(3) {
+      width: 134px;
+    }
+    .desktop-menu .nav-link:nth-child(4) {
+      width: 146px;
+    }
+    .desktop-menu .nav-link:nth-child(5) {
+      width: 101px;
+    }
+    .desktop-menu .nav-link:nth-child(6) {
+      width: 98px;
+    }
+    .desktop-menu .active::after {
+      left: 14.5px;
+      right: auto;
+      bottom: 8px;
+      width: 49px;
+    }
+  }
+  @media (max-width: 1300px) {
+    .desktop-menu {
+      gap: 30px;
+    }
+    nav {
+      gap: 8px;
+    }
+    .nav-link {
+      padding-inline: 10px;
+      font-size: 16px;
+    }
+  }
+  @media (max-width: 1050px) {
+    .navbar {
+      height: 94px;
+      padding-block: 18px;
+    }
+    .desktop-menu {
+      display: none;
+    }
+    .mobile-menu {
+      display: block;
+    }
+    summary {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 44px;
+      height: 44px;
+      padding: 10px;
+      cursor: pointer;
+      border: 1px solid rgb(203 197 255 / 50%);
+      border-radius: 50%;
+      background: rgb(16 9 35 / 65%);
+      list-style: none;
+    }
+    summary::-webkit-details-marker {
+      display: none;
+    }
+    summary span {
+      display: block;
+      height: 1px;
+      width: 22px;
+      background: white;
+    }
+    .mobile-menu nav {
+      position: absolute;
+      top: 86px;
+      right: var(--page-gutter);
+      left: var(--page-gutter);
+      padding: 22px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+      background: rgb(12 7 25 / 97%);
+      border: 1px solid rgb(155 123 255 / 35%);
+      border-radius: 20px;
+      box-shadow: 0 20px 70px #0009;
+    }
+    .nav-link {
+      font-size: 18px;
+    }
+    .active::after {
+      right: auto;
+      left: 10px;
+      width: 49px;
+    }
+  }
+</style>
+<script>
+  const menu = document.querySelector<HTMLDetailsElement>('.mobile-menu');
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && menu?.open) {
+      menu.open = false;
+      menu.querySelector('summary')?.focus();
+    }
+  });
+  document.addEventListener('click', (event) => {
+    if (
+      menu?.open &&
+      event.target instanceof Node &&
+      !menu.contains(event.target)
+    )
+      menu.open = false;
+  });
+</script>

@@ -1,0 +1,6 @@
+assets/
+artifacts/
+public/
+dist/
+.astro/
+package-lock.json

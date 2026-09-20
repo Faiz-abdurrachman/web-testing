@@ -1,0 +1,159 @@
+---
+import Navbar from './Navbar.astro';
+import Button from './Button.astro';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <picture class="artwork">
+    <source
+      srcset="/images/hero-1440.webp 1440w, /images/hero-2880.webp 2880w"
+      sizes="100vw"
+      type="image/webp"
+    />
+    <img
+      src="/images/hero-1440.webp"
+      width="1440"
+      height="903"
+      alt=""
+      fetchpriority="high"
+      decoding="async"
+    />
+  </picture>
+  <Navbar />
+  <main id="main" class="hero-content">
+    <div class="copy">
+      <h1 id="hero-title">
+        <span>SORCERY IN DATA</span>
+        <span>MAGIC IN AI</span>
+      </h1>
+      <p>
+        An AI &amp; Data Innovation Community where people learn, experiment,
+        research, and build meaningful technology together.
+      </p>
+    </div>
+    <div class="actions" aria-label="Community actions">
+      <Button>Join the Community</Button>
+      <Button variant="glass">Explore Our Project</Button>
+    </div>
+  </main>
+</section>
+<style>
+  .hero {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    min-height: 903px;
+    padding: 80px var(--page-gutter);
+    overflow: clip;
+  }
+  .artwork {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .artwork img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: 96px;
+    width: 100%;
+  }
+  .copy {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  h1 {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 80px;
+    font-weight: 400;
+    line-height: 98px;
+    background: linear-gradient(
+      267.1deg,
+      #fff 5.29%,
+      #dfdfdf 46.05%,
+      #dfdfdf 99.19%
+    );
+    background-clip: text;
+    color: transparent;
+  }
+  h1 span {
+    display: block;
+  }
+  p {
+    margin: 0;
+    max-width: 619px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.176px;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: center;
+  }
+  @media (min-width: 1600px) {
+    .hero {
+      min-height: max(903px, 62.708333vw);
+    }
+  }
+  @media (max-width: 1100px) {
+    h1 {
+      font-size: clamp(42px, 6.5vw, 72px);
+      line-height: 1.225;
+    }
+    .hero {
+      min-height: 820px;
+    }
+  }
+  @media (max-width: 600px) {
+    .hero {
+      min-height: 850px;
+      min-height: max(800px, 100svh);
+      padding-top: 160px;
+      padding-bottom: 340px;
+      align-items: flex-start;
+    }
+    .artwork img {
+      object-position: 61% center;
+    }
+    .artwork::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgb(5 5 7 / 25%),
+        rgb(5 5 7 / 15%) 45%,
+        transparent 70%
+      );
+    }
+    .hero-content {
+      gap: 40px;
+    }
+    .copy {
+      gap: 22px;
+    }
+    h1 {
+      font-size: clamp(27px, 6.5vw, 39px);
+      line-height: 1.3;
+    }
+    p {
+      max-width: 380px;
+      font-size: 15px;
+      line-height: 24px;
+    }
+    .actions {
+      gap: 16px;
+    }
+  }
+</style>

@@ -1,0 +1,23 @@
+/* SORCERY IN DATA MAGIC IN AI */
+
+width: 1280px;
+height: 196px;
+
+font-family: 'Nasalization';
+font-style: normal;
+font-weight: 400;
+font-size: 80px;
+line-height: 98px;
+
+background: linear-gradient(267.1deg, #FFFFFF 5.29%, #DFDFDF 46.05%, #DFDFDF 99.19%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+text-fill-color: transparent;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;

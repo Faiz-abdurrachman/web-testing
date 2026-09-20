@@ -1,0 +1,39 @@
+/* Hero Section */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: flex-start;
+padding: 80px;
+gap: 10px;
+isolation: isolate;
+
+width: 1440px;
+height: 903px;
+
+background: url(background hero.png);
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+z-index: 0;
+
+
+/* Rectangle 23 */
+
+position: absolute;
+width: 1440px;
+height: 136px;
+left: 2px;
+top: 809px;
+
+background: linear-gradient(182.85deg, rgba(108, 59, 255, 0) 2.37%, #050507 72.44%);
+
+/* Inside auto layout */
+flex: none;
+order: 7;
+flex-grow: 0;
+z-index: 7;

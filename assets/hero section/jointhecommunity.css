@@ -1,0 +1,20 @@
+/* Secondary Buttom */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 8px 16px;
+gap: 16px;
+
+width: 205px;
+height: 51px;
+
+background: radial-gradient(108% 590% at 26.44% 0%, #6C3BFF 0%, #9B7BFF 50%, #6C3BFF 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+box-shadow: inset 0px 2px 1.2px #CFDFFF, inset -2px -2px 1.4px #97BFFF, inset -8px -6px 8px rgba(226, 202, 255, 0.25), inset -2px -2px 4px rgba(178, 211, 255, 0.9);
+border-radius: 200px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
