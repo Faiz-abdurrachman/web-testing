@@ -1,0 +1,173 @@
+---
+// Figma node 661:1553. The section lists six FAQ items (component set
+// 830:4263 / 830:4362 / 830:4367 / 830:4372 / 830:4377 / 830:4382). The
+// reference shows the closed (Q) state; the answers come from the open (A)
+// variants so the items expand.
+interface FaqItem {
+  q: string;
+  a: string;
+}
+const items: FaqItem[] = [
+  {
+    q: 'I have no experience at all (starting completely from scratch). Can I still apply?',
+    a: 'Currently, Data Sorcerers is not a beginner course or a bootcamp for learning from scratch. We are looking for individuals who already have a basic foundation in their chosen field. If you are starting from zero, we highly recommend building your foundation through self-taught tutorials or courses first, and then applying for our next batch!',
+  },
+  {
+    q: 'I am not an IT or Information Systems major. Can I still apply?',
+    a: 'Absolutely! Data Sorcerers is open to all educational backgrounds. As long as you meet the minimum requirements for the role you choose, our doors are always open. We even have a Growth & Community division that is perfect for those who excel in communication, networking, and creative design.',
+  },
+  {
+    q: 'Can I apply for more than one division (HoDS)?',
+    a: 'You are required to choose 1 (one) primary division so your learning process remains focused. However, in the application form, you can indicate a secondary interest, which will help us place you in cross-divisional collaborative projects later on.',
+  },
+  {
+    q: 'What are the steps in the recruitment process at Data Sorcerers?',
+    a: 'There are 4 main selection stages:\n  1. Application: Filling out the registration form and providing evidence of your work/portfolio.\n  2. Foundation Screening: A document review focusing on your basic knowledge and commitment.\n  3. HoDS Interview: A casual discussion with the Lead HoDS regarding your interests and capabilities.\n  4. Trial / Mini Challenge: A small-scale challenge or case study to see how you think and solve problems.',
+  },
+  {
+    q: 'The Product & Software division includes UI/UX, Front-end, Back-end, and DevOps.\nDo I need to master all of them?',
+    a: 'Currently, Data Sorcerers is not a beginner course or a bootcamp for learning from scratch. We are looking for individuals who already have a basic foundation in their chosen field. If you are starting from zero, we highly recommend building your foundation through self-taught tutorials or courses first, and then applying for our next batch!',
+  },
+  {
+    q: 'I want to join the Growth & Community division.\nDo I need to understand coding and AI systems?',
+    a: "You don't need to know how to code. The primary requirements are communication, networking, or creative design skills. However, since you will be communicating Data Sorcerers' innovations to the public, having curiosity and a willingness to understand the basics of the technology the team is working on will greatly help you design sharper campaigns and partnerships.",
+  },
+];
+---
+
+<section id="faq" class="faq" aria-labelledby="faq-title">
+  <h2 id="faq-title">FAQ</h2>
+
+  <div class="faq-list">
+    {items.map((item) => (
+      <details class="faq-item">
+        <summary>
+          <span class="faq-q">{item.q}</span>
+          <img
+            class="faq-arrow"
+            src="/images/recruitment/arrow-right.svg"
+            width="24"
+            height="24"
+            alt=""
+            loading="lazy"
+          />
+        </summary>
+        <p class="faq-a">{item.a}</p>
+      </details>
+    ))}
+  </div>
+</section>
+<style>
+  .faq {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 58px;
+    padding: 80px;
+    /* Supplied Background.png = the Figma frame fill (near-black starfield). */
+    background-color: #000;
+    background-image: image-set(
+      url('/images/recruitment/faq-background-1440.webp') 1x,
+      url('/images/recruitment/faq-background-2880.webp') 2x
+    );
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  h2 {
+    margin: 0;
+    width: 100%;
+    max-width: 1280px;
+    font: 400 56px/68px var(--font-heading);
+    text-transform: uppercase;
+    background: linear-gradient(180deg, #fff 0%, #707070 74%);
+    background-clip: text;
+    color: transparent;
+  }
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    width: 100%;
+    max-width: 1280px;
+  }
+  .faq-item {
+    position: relative;
+    border-radius: 20px;
+    background: rgb(255 255 255 / 15%);
+  }
+  .faq-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%);
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+    padding: 19px 32px;
+    cursor: pointer;
+    list-style: none;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq-q {
+    font-size: 26px;
+    font-weight: 500;
+    line-height: 39px;
+    color: #fff;
+    white-space: pre-line;
+  }
+  .faq-arrow {
+    flex: none;
+    display: block;
+    width: 24px;
+    height: 24px;
+  }
+  .faq-a {
+    margin: 24px 0 0;
+    padding: 0 32px 19px;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+    color: #fff;
+    white-space: pre-line;
+  }
+  @media (max-width: 760px) {
+    .faq {
+      gap: 40px;
+      padding: 64px 24px;
+    }
+    h2 {
+      font-size: clamp(30px, 8vw, 48px);
+      line-height: 1.214286;
+    }
+    .faq-list {
+      gap: 16px;
+    }
+    summary {
+      gap: 14px;
+      padding: 14px 20px;
+    }
+    .faq-q {
+      font-size: 18px;
+      line-height: 27px;
+    }
+    .faq-a {
+      margin-top: 16px;
+      padding: 0 20px 14px;
+      font-size: 15px;
+      line-height: 24px;
+    }
+  }
+</style>

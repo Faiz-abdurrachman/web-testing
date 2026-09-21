@@ -221,10 +221,16 @@ Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
   Nasalization 56/68 kiri, lalu tabel 1280 (header "Phase | Date" ungu + body
   6 baris phase) dengan border gradient & separator 1px. Kolom tanggal masih
   placeholder "Date" (sesuai PNG/Figma). Skor diff ~3.2/255.
+- "FAQ" (Figma `661:1553`, 1440 × 986, di y4283): heading Nasalization 56/68
+  uppercase + 6 item accordion `<details>` (tertutup by default = sesuai PNG),
+  fill transparan + border gradient, pertanyaan Manrope 26/39 + arrow. Jawaban
+  diambil dari varian A komponen FAQ. Background starfield (sama seperti WSJ).
+  Skor diff ~5.0/255 (teks panjang).
 - Verify: blok `recruitmentPage`, `recruitmentWhoShouldJoin`, `recruitmentRoles`,
   `recruitmentWhatYouWillDo`, `recruitmentAvailableRoles`,
-  `recruitmentSelectionTimeline` di `scripts/verify.mjs` (geometri exact + diff
-  PNG + overflow 320–1920), plus cek href kartu & back link kontekstual.
+  `recruitmentSelectionTimeline`, `recruitmentFaq` di `scripts/verify.mjs`
+  (geometri exact + diff PNG + overflow 320–1920), plus cek href kartu & back
+  link kontekstual.
 - **Belum**: footer dan section lain di full-page `RECRUITMENT PAGE.png`
   (1440 × 7262).
 

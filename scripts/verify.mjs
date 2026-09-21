@@ -1604,6 +1604,111 @@ try {
       `Selection Timeline text clipped at ${width}px`,
     );
   }
+  // Recruitment page — FAQ (heading + six closed accordion items).
+  await page.setViewportSize({ width: 1440, height: 986 });
+  await page.goto(`${baseUrl}/recruitment`, { waitUntil: 'networkidle' });
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await Promise.all(
+      [...document.images].map((image) => image.decode().catch(() => {})),
+    );
+  });
+  await setNavbarHidden(true);
+  await page.evaluate(() => scrollTo(0, 0));
+  const faqGeometry = await page.locator('.faq').evaluate((section) => {
+    const rect = section.getBoundingClientRect();
+    const relative = (selector) => {
+      const box = section.querySelector(selector).getBoundingClientRect();
+      return {
+        x: box.x - rect.x,
+        y: box.y - rect.y,
+        width: box.width,
+        height: box.height,
+      };
+    };
+    return {
+      width: rect.width,
+      height: rect.height,
+      top: rect.top + scrollY,
+      heading: relative('h2'),
+      list: relative('.faq-list'),
+      items: [...section.querySelectorAll('.faq-item')].map((item) => {
+        const box = item.getBoundingClientRect();
+        return { y: box.y - rect.y, height: box.height };
+      }),
+    };
+  });
+  assert.deepEqual(faqGeometry, {
+    width: 1440,
+    height: 986,
+    top: 4283,
+    heading: { x: 80, y: 80, width: 1280, height: 68 },
+    list: { x: 80, y: 206, width: 1280, height: 700 },
+    items: [
+      { y: 206, height: 77 },
+      { y: 315, height: 77 },
+      { y: 424, height: 77 },
+      { y: 533, height: 77 },
+      { y: 642, height: 116 },
+      { y: 790, height: 116 },
+    ],
+  });
+  await page.locator('.faq').scrollIntoViewIfNeeded();
+  await page.locator('.faq').screenshot({ path: 'artifacts/faq-desktop.png' });
+  const faqReference = await sharp(
+    'assets/assets recruitment page/faq section/Frame 2495.png',
+  )
+    .resize(1440, 986)
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const faqActual = await sharp('artifacts/faq-desktop.png')
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(faqReference.length, faqActual.length);
+  let faqTotal = 0;
+  const faqDiff = Buffer.alloc(faqActual.length);
+  const faqOverlay = Buffer.alloc(faqActual.length);
+  for (let i = 0; i < faqActual.length; i++) {
+    const delta = Math.abs(faqActual[i] - faqReference[i]);
+    faqTotal += delta;
+    faqDiff[i] = Math.min(255, delta * 4);
+    faqOverlay[i] = Math.round((faqActual[i] + faqReference[i]) / 2);
+  }
+  const faqRaw = { width: 1440, height: 986, channels: 3 };
+  await sharp(faqDiff, { raw: faqRaw }).png().toFile('artifacts/faq-diff.png');
+  await sharp(faqOverlay, { raw: faqRaw })
+    .png()
+    .toFile('artifacts/faq-overlay.png');
+  const faqSizes = [320, 390, 768, 1024, 1440, 1680, 1920];
+  const faqResponsive = [];
+  for (const width of faqSizes) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.evaluate(() => scrollTo(0, 0));
+    const dimensions = await page.evaluate(() => ({
+      viewport: innerWidth,
+      content: document.documentElement.scrollWidth,
+    }));
+    assert.ok(
+      dimensions.content <= dimensions.viewport,
+      `FAQ horizontal overflow at ${width}px`,
+    );
+    faqResponsive.push(dimensions);
+    const faqIssues = await page.locator('.faq').evaluate((section) =>
+      [...section.querySelectorAll('h2, .faq-q, .faq-a')]
+        .filter((element) => {
+          const box = element.getBoundingClientRect();
+          return (
+            box.left < -1 ||
+            box.right > innerWidth + 1 ||
+            element.scrollWidth > element.clientWidth + 1
+          );
+        })
+        .map((element) => element.textContent),
+    );
+    assert.deepEqual(faqIssues, [], `FAQ text clipped at ${width}px`);
+  }
   assert.deepEqual(errors, []);
   const report = {
     recruitment: {
@@ -1664,6 +1769,11 @@ try {
       meanAbsoluteChannelDifference:
         selectionTimelineTotal / selectionTimelineActual.length,
       responsive: selectionTimelineResponsive,
+    },
+    recruitmentFaq: {
+      geometry: faqGeometry,
+      meanAbsoluteChannelDifference: faqTotal / faqActual.length,
+      responsive: faqResponsive,
     },
     browserErrors: errors,
   };

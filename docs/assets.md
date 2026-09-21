@@ -445,3 +445,29 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
 - Verification: `scripts/verify.mjs` asserts the section, heading, header, body
   and row geometry exactly, diffs against the reference (~3.2/255; the residual
   is text rasterization), and checks overflow and text from 320px to 1920px.
+
+## Recruitment page — FAQ
+
+- Figma node: `661:1553`; reference
+  `assets/assets recruitment page/faq section/Frame 2495.png`, 5760 × 3944
+  (1440 × 986 at 4×). The section sits at homepage y=4283.
+- Frame: 1440 × 986, `padding 80`, `gap 58`; the background is the supplied
+  `Background.png` (the same near-black starfield as Who Should Join), exported
+  lossless to `public/images/recruitment/faq-background-{1440,2880}.webp`.
+- Heading: "FAQ" (Figma "faq" with uppercase case), Nasalization Regular 400,
+  56 / 68, **left**, gradient `linear-gradient(180deg, #fff 0%, #707070 74%)`,
+  (80, 80, 1280 × 68). The 1280 content is centred on wide viewports.
+- List: 1280 at y=206, `gap 32`; six `<details>` accordion items, closed by
+  default (matching the reference). Each item is `rgba(255,255,255,.15)`, a 1px
+  `linear-gradient(135deg, #ede8ff, #2e276c, #ede8ff)` border, `border-radius
+20px`, `padding 19px 32px`, with the question (Manrope Medium 500, 26 / 39,
+  white) and the `vuesax/outline/arrow-right` icon. Items 1–4 are one line
+  (77px); items 5–6 are two lines (116px).
+- Answers come from the open (A) variants of the six FAQ components
+  (component sets `830:4263`, `830:4362`, `830:4367`, `830:4372`, `830:4377`,
+  `830:4382`): Manrope Medium 18 / 27, revealed below the question with a 42px
+  gap. Answer 5 duplicates answer 1 in Figma and is kept as-is.
+- Verification: `scripts/verify.mjs` asserts the section, heading, list and all
+  six item boxes exactly, diffs against the reference (~5.0/255; the six long
+  questions dominate the rasterization residual), and checks overflow and text
+  from 320px to 1920px.
