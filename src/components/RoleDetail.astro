@@ -1,0 +1,335 @@
+---
+import Button from './Button.astro';
+import type { RoleDetail } from '../data/roles';
+interface Props {
+  role: RoleDetail;
+}
+const { role } = Astro.props;
+---
+
+<main class:list={['role-detail', { centered: role.centered }]}>
+  <div class:list={['role-head', { tight: role.tight }]}>
+    <a class="back" href="/recruitment#who-should-join">
+      <img src="/images/hods/arrow.svg" width="24" height="24" alt="" />
+      <span>Back to Open Roles</span>
+    </a>
+
+    <div class="role-card">
+      <img
+        class="role-art"
+        src={role.cardImage}
+        srcset={`/images/roles/role-${role.id}-1280.webp 1280w, /images/roles/role-${role.id}-2560.webp 2560w`}
+        sizes="1280px"
+        width="1280"
+        height="279"
+        alt=""
+        loading="eager"
+        decoding="async"
+      />
+      <div class="role-card-row">
+        <div class="role-card-left">
+          <h1>{role.title}</h1>
+          <div class="chips">
+            {role.chips.map((chip, index) => (
+              <>
+                {index > 0 && <span class="dot" aria-hidden="true" />}
+                <span class="chip-label">{chip}</span>
+              </>
+            ))}
+          </div>
+          <div class="deadline">
+            <img src="/images/roles/date.svg" width="28" height="28" alt="" />
+            <span>{role.deadline}</span>
+          </div>
+        </div>
+        <Button variant="apply">Apply Now</Button>
+      </div>
+    </div>
+  </div>
+
+  <div class="role-sections">
+    <section class="block">
+      <h2>ABOUT THIS ROLE</h2>
+      <p class="body">{role.about}</p>
+    </section>
+    <section class="block">
+      <h2>REQUIREMENT</h2>
+      <ul class="bullets">
+        {role.requirements.map((item) => (
+          <li>
+            <span class="dot" aria-hidden="true" />
+            <span class="bullet-text">{item}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+
+  <div class="contact">
+    <h2>CONTACT PERSON</h2>
+    <div class="contact-person">
+      <img src="/images/roles/whatsapp.svg" width="24" height="24" alt="" />
+      <span>{role.contact}</span>
+    </div>
+  </div>
+</main>
+<style>
+  .role-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 58px;
+    width: min(100%, 1440px);
+    min-height: 1280px;
+    margin-inline: auto;
+    padding: 80px;
+    background: linear-gradient(-9deg, rgb(108 59 255 / 50%) 0%, #050507 19%);
+  }
+  .role-detail.centered {
+    justify-content: center;
+  }
+  .role-head {
+    display: flex;
+    flex-direction: column;
+    gap: 58px;
+  }
+  .role-head.tight {
+    gap: 28px;
+  }
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    align-self: flex-start;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+  }
+  .back img {
+    display: block;
+    width: 24px;
+    height: 24px;
+  }
+  .role-card {
+    position: relative;
+    isolation: isolate;
+    width: 1280px;
+    max-width: 100%;
+    height: 279px;
+    border-radius: 20px;
+  }
+  .role-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(136deg, #e0dcff 2%, #2e276c 51%, #cbc5ff 100%);
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .role-art {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    object-fit: cover;
+  }
+  .role-card-row {
+    position: absolute;
+    left: 42px;
+    top: 58px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    width: 1196px;
+    max-width: calc(100% - 84px);
+  }
+  .role-card-left {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  h1 {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 400;
+    line-height: 1.225;
+    background: linear-gradient(270deg, #fff, #ede8ff);
+    background-clip: text;
+    color: transparent;
+  }
+  .chips {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .chip-label {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 39px;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .deadline {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 39px;
+  }
+  .deadline img {
+    display: block;
+    width: 28px;
+    height: 28px;
+  }
+  .dot {
+    flex: none;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6c3bff 17%, #ede8ff 50%, #6c3bff 83%);
+  }
+  .role-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 58px;
+  }
+  .block {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  h2 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 39px;
+    color: #fff;
+  }
+  .body {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+    color: #ede8ff;
+  }
+  .bullets {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .bullets li {
+    display: flex;
+    align-items: center;
+    gap: 23px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+  }
+  .bullet-text {
+    white-space: pre-line;
+  }
+  .contact {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 347px;
+    height: 134px;
+    border-radius: 20px;
+    background: rgb(98 80 255 / 10%);
+    box-shadow: inset 0 0 0 1px transparent;
+    position: relative;
+  }
+  .contact::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(136deg, #e0dcff 2%, #2e276c 51%, #cbc5ff 100%);
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .contact-person {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 39px;
+  }
+  .contact-person img {
+    display: block;
+    width: 24px;
+    height: 24px;
+  }
+  @media (max-width: 900px) {
+    .role-detail {
+      min-height: 0;
+      gap: 40px;
+      padding: 40px 24px;
+    }
+    .role-card {
+      height: auto;
+      min-height: 220px;
+    }
+    .role-card-row {
+      position: relative;
+      left: 0;
+      top: 0;
+      flex-direction: column;
+      align-items: flex-start;
+      width: auto;
+      max-width: none;
+      padding: 24px;
+    }
+    h1 {
+      font-size: 32px;
+    }
+    .chips {
+      gap: 10px;
+    }
+    .chip-label,
+    .deadline,
+    .contact-person {
+      font-size: 16px;
+      line-height: 27px;
+    }
+    h2 {
+      font-size: 22px;
+      line-height: 33px;
+    }
+    .body,
+    .bullets li {
+      font-size: 16px;
+      line-height: 24px;
+    }
+    .contact {
+      width: 100%;
+      max-width: 347px;
+      height: auto;
+      padding: 24px;
+    }
+  }
+</style>

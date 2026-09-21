@@ -1,6 +1,10 @@
 ---
 import DomainCard from './DomainCard.astro';
 import { domains } from '../data/domains';
+interface Props {
+  base?: string;
+}
+const { base = '/hods' } = Astro.props;
 ---
 
 <div class="domain-carousel">
@@ -21,7 +25,7 @@ import { domains } from '../data/domains';
     aria-label="Domains — scroll horizontally to explore all six"
   >
     {domains.map((domain) => (
-      <DomainCard domain={domain} />
+      <DomainCard domain={domain} href={`${base}/${domain.id}`} />
     ))}
   </div>
   <button

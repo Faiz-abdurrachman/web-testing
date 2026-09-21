@@ -991,6 +991,196 @@ try {
       `Who Should Join text clipped at ${width}px`,
     );
   }
+  // Recruitment role detail pages (standalone; the Who Should Join cards point
+  // here instead of the homepage's /hods/{id} tab pages).
+  const baseUrl = process.env.PREVIEW_URL || 'http://localhost:4321';
+  const rolePages = [
+    {
+      id: 'data',
+      reference: 'Detile Roles - DATA INTELLIGENCE.png',
+      cardY: 210.5,
+      backY: 155.5,
+      contactY: 990.5,
+    },
+    {
+      id: 'core',
+      reference: 'Detile Roles - DATA INTELLIGENCE-1.png',
+      cardY: 135,
+      backY: 80,
+      contactY: 875,
+    },
+    {
+      id: 'language',
+      reference: 'Detile Roles - LANGUANGE & REASONING.png',
+      cardY: 165,
+      backY: 80,
+      contactY: 945,
+    },
+    {
+      id: 'vision',
+      reference: 'Detile Roles - VISION & MULTIMODEL.png',
+      cardY: 165,
+      backY: 80,
+      contactY: 945,
+    },
+    {
+      id: 'product',
+      reference: 'Detile Roles - PRODUCT & SOFTWARE.png',
+      cardY: 165,
+      backY: 80,
+      contactY: 1026,
+    },
+    {
+      id: 'growth',
+      reference: 'Detile Roles - GROWTH & COMMUNITY.png',
+      cardY: 165,
+      backY: 80,
+      contactY: 986,
+    },
+  ];
+  await page.setViewportSize({ width: 1440, height: 1400 });
+  await page.goto(`${baseUrl}/recruitment`, { waitUntil: 'networkidle' });
+  const roleHrefs = await page
+    .locator('.who-should-join .domain-card')
+    .evaluateAll((cards) => cards.map((card) => card.getAttribute('href')));
+  assert.deepEqual(
+    roleHrefs,
+    rolePages.map((role) => `/recruitment/roles/${role.id}`),
+    'Who Should Join cards must link to the role detail pages',
+  );
+  const roleReport = {};
+  const roleSizes = [320, 390, 768, 1024, 1440, 1680, 1920];
+  for (const role of rolePages) {
+    await page.setViewportSize({ width: 1440, height: 1400 });
+    await page.goto(`${baseUrl}/recruitment/roles/${role.id}`, {
+      waitUntil: 'networkidle',
+    });
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+      await Promise.all(
+        [...document.images].map((image) => image.decode().catch(() => {})),
+      );
+    });
+    await page.evaluate(() => scrollTo(0, 0));
+    const roleGeometry = await page
+      .locator('.role-detail')
+      .evaluate((section) => {
+        const rect = section.getBoundingClientRect();
+        const relative = (selector) => {
+          const box = section.querySelector(selector).getBoundingClientRect();
+          return {
+            x: box.x - rect.x,
+            y: box.y - rect.y,
+            width: box.width,
+            height: box.height,
+          };
+        };
+        return {
+          width: rect.width,
+          height: rect.height,
+          back: relative('.back'),
+          card: relative('.role-card'),
+          apply: relative('.apply'),
+          contact: relative('.contact'),
+        };
+      });
+    assert.equal(roleGeometry.width, 1440, `Role ${role.id} width`);
+    assert.equal(roleGeometry.height, 1280, `Role ${role.id} height`);
+    assert.deepEqual(
+      {
+        x: roleGeometry.card.x,
+        y: roleGeometry.card.y,
+        width: roleGeometry.card.width,
+        height: roleGeometry.card.height,
+      },
+      { x: 80, y: role.cardY, width: 1280, height: 279 },
+      `Role ${role.id} card box`,
+    );
+    assert.equal(roleGeometry.back.y, role.backY, `Role ${role.id} back link`);
+    assert.ok(
+      Math.abs(roleGeometry.contact.y - role.contactY) < 1.5,
+      `Role ${role.id} contact box`,
+    );
+    assert.ok(
+      Math.abs(roleGeometry.apply.y - (role.cardY + 58)) < 1.5,
+      `Role ${role.id} apply button`,
+    );
+    await page
+      .locator('.role-detail')
+      .screenshot({ path: `artifacts/recruitment-role-${role.id}.png` });
+    const roleReference = await sharp(
+      `assets/assets recruitment page/who sould join section/detail role/${role.reference}`,
+    )
+      .resize(1440, 1280)
+      .removeAlpha()
+      .raw()
+      .toBuffer();
+    const roleActual = await sharp(`artifacts/recruitment-role-${role.id}.png`)
+      .removeAlpha()
+      .raw()
+      .toBuffer();
+    assert.equal(
+      roleReference.length,
+      roleActual.length,
+      `Role ${role.id} size`,
+    );
+    let roleTotal = 0;
+    const roleDiff = Buffer.alloc(roleActual.length);
+    const roleOverlay = Buffer.alloc(roleActual.length);
+    for (let i = 0; i < roleActual.length; i++) {
+      const delta = Math.abs(roleActual[i] - roleReference[i]);
+      roleTotal += delta;
+      roleDiff[i] = Math.min(255, delta * 4);
+      roleOverlay[i] = Math.round((roleActual[i] + roleReference[i]) / 2);
+    }
+    const roleRaw = { width: 1440, height: 1280, channels: 3 };
+    await sharp(roleDiff, { raw: roleRaw })
+      .png()
+      .toFile(`artifacts/recruitment-role-${role.id}-diff.png`);
+    await sharp(roleOverlay, { raw: roleRaw })
+      .png()
+      .toFile(`artifacts/recruitment-role-${role.id}-overlay.png`);
+    const roleResponsive = [];
+    for (const width of roleSizes) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.evaluate(() => scrollTo(0, 0));
+      const dimensions = await page.evaluate(() => ({
+        viewport: innerWidth,
+        content: document.documentElement.scrollWidth,
+      }));
+      assert.ok(
+        dimensions.content <= dimensions.viewport,
+        `Role ${role.id} horizontal overflow at ${width}px`,
+      );
+      roleResponsive.push(dimensions);
+      const roleIssues = await page
+        .locator('.role-detail')
+        .evaluate((section) =>
+          [
+            ...section.querySelectorAll(
+              'h1, h2, p, .chip-label, .deadline span, .bullet-text, .contact-person span',
+            ),
+          ]
+            .filter(
+              (element) =>
+                element.getBoundingClientRect().left < -1 ||
+                element.getBoundingClientRect().right > innerWidth + 1 ||
+                element.scrollWidth > element.clientWidth + 1,
+            )
+            .map((element) => element.textContent),
+        );
+      assert.deepEqual(
+        roleIssues,
+        [],
+        `Role ${role.id} text clipped at ${width}px`,
+      );
+    }
+    roleReport[role.id] = {
+      geometry: roleGeometry,
+      meanAbsoluteChannelDifference: roleTotal / roleActual.length,
+      responsive: roleResponsive,
+    };
+  }
   assert.deepEqual(errors, []);
   const report = {
     recruitment: {
@@ -1033,6 +1223,7 @@ try {
         whoShouldJoinTotal / whoShouldJoinActual.length,
       responsive: whoShouldJoinResponsive,
     },
+    recruitmentRoles: roleReport,
     browserErrors: errors,
   };
   await writeFile(

@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import RoleDetail from '../../../components/RoleDetail.astro';
+import { roles } from '../../../data/roles';
+
+export function getStaticPaths() {
+  return roles.map((role) => ({ params: { id: role.id }, props: { role } }));
+}
+
+const { role } = Astro.props;
+---
+
+<BaseLayout title={`${role.title} — Data Sorcerers`}>
+  <RoleDetail role={role} />
+</BaseLayout>

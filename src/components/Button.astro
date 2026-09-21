@@ -2,7 +2,7 @@
 interface Props {
   href?: string;
   compact?: boolean;
-  variant?: 'primary' | 'glass' | 'white' | 'secondary';
+  variant?: 'primary' | 'glass' | 'white' | 'secondary' | 'apply';
 }
 const { href, variant = 'primary', compact = false } = Astro.props;
 ---
@@ -120,6 +120,40 @@ const { href, variant = 'primary', compact = false } = Astro.props;
       rgb(255 255 255 / 0%) 26%,
       rgb(255 255 255 / 0%) 74%,
       #fff 100%
+    );
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  /* Figma "Secondary Buttom" instance used by the role detail pages
+     (97:442 / 563:530): violet radial pill that hugs its label. */
+  .apply {
+    overflow: hidden;
+    background: radial-gradient(
+      circle at 26% 0%,
+      #6c3bff 0%,
+      #9b7bff 50%,
+      #6c3bff 100%
+    );
+    box-shadow:
+      inset -2px -2px 4px rgba(178 211 255 / 90%),
+      inset -8px -6px 8px rgb(226 202 255 / 25%),
+      inset -2px -2px 1.4px #97bfff,
+      inset 0 2px 1.2px #cfdfff;
+  }
+  .apply::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(
+      148deg,
+      rgb(203 197 255 / 50%) 0%,
+      rgb(47 90 255 / 50%) 50%,
+      rgb(238 245 255 / 50%) 100%
     );
     mask:
       linear-gradient(#000 0 0) content-box,

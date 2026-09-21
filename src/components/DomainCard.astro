@@ -2,15 +2,16 @@
 import type { Domain } from '../data/domains';
 interface Props {
   domain: Domain;
+  href?: string;
 }
-const { domain } = Astro.props;
+const { domain, href = `/hods/${domain.id}` } = Astro.props;
 const large = ['product', 'growth'].includes(domain.id);
 ---
 
 <a
   class:list={['domain-card', domain.id, { large }]}
   style={`--tint:${domain.tint}`}
-  href={`/hods/${domain.id}`}
+  href={href}
   aria-labelledby={`domain-${domain.id}`}
 >
   <h3 id={`domain-${domain.id}`}>{domain.title}</h3>

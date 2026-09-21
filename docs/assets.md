@@ -295,3 +295,45 @@ Section.png`, 5760 × 3156 (1440 × 789 at 4×).
   same residual as the homepage, and this reference PNG's cards differ slightly
   from the homepage export), and checks overflow and text from 320px to 1920px.
 - Remaining sections and the footer are not built yet.
+
+## Recruitment page — Role detail
+
+The Who Should Join cards link to `/recruitment/roles/{id}` (id = data, core,
+language, vision, product, growth) — these are the recruitment "Detail Role"
+pages, not the homepage's `/hods/{id}` tab pages.
+
+- Figma nodes: `774:17392` (data), `733:15781` (core), `760:14975` (language),
+  `760:15276` (vision), `760:15347` (product), `760:15439` (growth). Frame:
+  1440 × 1280, `padding 80`, `gap 58`.
+- References: `assets/assets recruitment page/who sould join section/detail
+role/Detile Roles - …png` (5760 × 5120, i.e. 1440 × 1280 at 4×). Note the
+  core reference is the `DATA INTELLIGENCE-1` export (the Figma core frame is
+  misnamed "DATA INTELLIGENCE").
+- Background: `linear-gradient(-9deg, rgb(108 59 255 / 50%) 0%, #050507 19%)`
+  (violet at the bottom-right), matching the PNG.
+- Content per page: "Back to Open Roles" (links to `/recruitment#who-should-join`),
+  the 1280 × 279 role card (art + 136deg gradient border + Nasalization 48
+  title + chip row + deadline + "Apply Now"), ABOUT THIS ROLE, REQUIREMENT
+  bullets, and a 347 × 134 CONTACT PERSON box. All six use
+  `deadline: 20 Oktober 2026` and `contact: Zidan Amikul`.
+- Card art: the frame fill is the `card detile role (HoDS)` component
+  (Property 1=1..6), exported from
+  `…/detail role/gambar detail role/Property 1=N.png` to
+  `public/images/roles/role-{id}-{1280,2560}.webp` (lossless). This is a
+  **different export** from the homepage's `images/hods/card-*.webp`, so the
+  role pages do not reuse it. Icons: `images/hods/arrow.svg` (back),
+  `images/roles/date.svg`, `images/roles/whatsapp.svg`.
+- Layout: back link at y80 (y155.5 on the data page); card at y135 (data:
+  210.5, language/vision/product/growth: 165). Data is the only frame that
+  centers its content and groups the back link with the card (28px gap); core
+  keeps the 28px gap but is top-aligned; the other four space the back link
+  from the card by the outer 58px. The references agree, so the data is driven
+  by `centered` / `tight` flags in `src/data/roles.ts`.
+- The Apply Now pill (`Secondary Buttom` / `563:530`) is a new `Button`
+  `variant="apply"`: 122 × 51, violet radial fill, 2px gradient ring.
+- The pages are standalone (no navbar/footer), like the homepage's `/hods/[id]`
+  pages.
+- Verification: `scripts/verify.mjs` asserts the section, card, back link,
+  apply button and contact box for all six pages, diffs each against its
+  reference (1.7–2.4/255), asserts the Who Should Join card `href`s, and checks
+  overflow and text from 320px to 1920px.
