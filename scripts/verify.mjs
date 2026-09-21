@@ -1827,6 +1827,120 @@ try {
     );
     assert.deepEqual(snippetsIssues, [], `Snippets text clipped at ${width}px`);
   }
+  // Recruitment page — CTA (panel with heading, copy, button and glow).
+  await page.setViewportSize({ width: 1440, height: 537 });
+  await page.goto(`${baseUrl}/recruitment`, { waitUntil: 'networkidle' });
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await Promise.all(
+      [...document.images].map((image) => image.decode().catch(() => {})),
+    );
+  });
+  await setNavbarHidden(true);
+  await page.evaluate(() => scrollTo(0, 0));
+  const ctaGeometry = await page.locator('.cta').evaluate((section) => {
+    const rect = section.getBoundingClientRect();
+    const relative = (selector) => {
+      const box = section.querySelector(selector).getBoundingClientRect();
+      return {
+        x: box.x - rect.x,
+        y: box.y - rect.y,
+        width: box.width,
+        height: box.height,
+      };
+    };
+    return {
+      width: rect.width,
+      height: rect.height,
+      top: rect.top + scrollY,
+      panel: relative('.cta-panel'),
+      heading: relative('h2'),
+      copy: relative('p'),
+      actions: relative('.cta-actions'),
+      glow: relative('.cta-glow'),
+    };
+  });
+  assert.deepEqual(
+    {
+      width: ctaGeometry.width,
+      height: ctaGeometry.height,
+      top: ctaGeometry.top,
+      panel: ctaGeometry.panel,
+      actions: ctaGeometry.actions,
+      glow: ctaGeometry.glow,
+    },
+    {
+      width: 1440,
+      height: 537,
+      top: 6169,
+      panel: { x: 80, y: 80, width: 1280, height: 377 },
+      actions: { x: 617.5, y: 327, width: 205, height: 51 },
+      glow: { x: 349.83, y: 351, width: 1000.33, height: 271.5 },
+    },
+  );
+  assert.ok(
+    Math.abs(ctaGeometry.heading.y - 153) < 1.5 &&
+      Math.abs(ctaGeometry.copy.x - 427) < 1.5 &&
+      Math.abs(ctaGeometry.copy.y - 235) < 1.5,
+    'CTA heading and copy must match the Figma reference',
+  );
+  await page
+    .locator('.cta-panel')
+    .screenshot({ path: 'artifacts/cta-panel-desktop.png' });
+  const ctaReference = await sharp(
+    'assets/assets recruitment page/cta section/Frame 2393.png',
+  )
+    .resize(1280, 377)
+    .flatten({ background: '#050507' })
+    .raw()
+    .toBuffer();
+  const ctaActual = await sharp('artifacts/cta-panel-desktop.png')
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(ctaReference.length, ctaActual.length);
+  let ctaTotal = 0;
+  const ctaDiff = Buffer.alloc(ctaActual.length);
+  const ctaOverlay = Buffer.alloc(ctaActual.length);
+  for (let i = 0; i < ctaActual.length; i++) {
+    const delta = Math.abs(ctaActual[i] - ctaReference[i]);
+    ctaTotal += delta;
+    ctaDiff[i] = Math.min(255, delta * 4);
+    ctaOverlay[i] = Math.round((ctaActual[i] + ctaReference[i]) / 2);
+  }
+  const ctaRaw = { width: 1280, height: 377, channels: 3 };
+  await sharp(ctaDiff, { raw: ctaRaw }).png().toFile('artifacts/cta-diff.png');
+  await sharp(ctaOverlay, { raw: ctaRaw })
+    .png()
+    .toFile('artifacts/cta-overlay.png');
+  const ctaSizes = [320, 390, 768, 1024, 1440, 1680, 1920];
+  const ctaResponsive = [];
+  for (const width of ctaSizes) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.evaluate(() => scrollTo(0, 0));
+    const dimensions = await page.evaluate(() => ({
+      viewport: innerWidth,
+      content: document.documentElement.scrollWidth,
+    }));
+    assert.ok(
+      dimensions.content <= dimensions.viewport,
+      `CTA horizontal overflow at ${width}px`,
+    );
+    ctaResponsive.push(dimensions);
+    const ctaIssues = await page.locator('.cta').evaluate((section) =>
+      [...section.querySelectorAll('h2, p')]
+        .filter((element) => {
+          const box = element.getBoundingClientRect();
+          return (
+            box.left < -1 ||
+            box.right > innerWidth + 1 ||
+            element.scrollWidth > element.clientWidth + 1
+          );
+        })
+        .map((element) => element.textContent),
+    );
+    assert.deepEqual(ctaIssues, [], `CTA text clipped at ${width}px`);
+  }
   assert.deepEqual(errors, []);
   const report = {
     recruitment: {
@@ -1897,6 +2011,11 @@ try {
       geometry: snippetsGeometry,
       meanAbsoluteChannelDifference: snippetsTotal / snippetsActual.length,
       responsive: snippetsResponsive,
+    },
+    recruitmentCta: {
+      geometry: ctaGeometry,
+      meanAbsoluteChannelDifference: ctaTotal / ctaActual.length,
+      responsive: ctaResponsive,
     },
     browserErrors: errors,
   };

@@ -230,11 +230,16 @@ Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
   56/68 center + galeri (`galeryy ds`): foto hero 1280 × 556 + 5 thumbnail
   246 × 103 (space-between). Foto di-export dari render komponen DS 1 (fill
   Figma nggak match crop referensi). Skor diff ~2.2/255.
+- "CTA" (Figma `839:4659`/`839:4660`, section 1440 × 537 di y6169): panel
+  1280 × 377 fill transparan + border gradient, heading Nasalization 56/68,
+  copy Manrope 16/24, tombol "Join the Community" (205 × 51), + glow dekoratif.
+  **Catatan**: `Frame 2393.png` transparan → composite ke `#050507` dulu. Skor
+  diff panel ~10.8/255 (residual = blur glow).
 - Verify: blok `recruitmentPage`, `recruitmentWhoShouldJoin`, `recruitmentRoles`,
   `recruitmentWhatYouWillDo`, `recruitmentAvailableRoles`,
-  `recruitmentSelectionTimeline`, `recruitmentFaq`, `recruitmentSnippets` di
-  `scripts/verify.mjs` (geometri exact + diff PNG + overflow 320–1920), plus cek
-  href kartu & back link kontekstual.
+  `recruitmentSelectionTimeline`, `recruitmentFaq`, `recruitmentSnippets`,
+  `recruitmentCta` di `scripts/verify.mjs` (geometri exact + diff PNG + overflow
+  320–1920), plus cek href kartu & back link kontekstual.
 - **Belum**: footer dan section lain di full-page `RECRUITMENT PAGE.png`
   (1440 × 7262).
 

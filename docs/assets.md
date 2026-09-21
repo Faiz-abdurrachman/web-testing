@@ -493,3 +493,28 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
 - Verification: `scripts/verify.mjs` asserts the section, heading, gallery, hero
   and all five thumb boxes exactly, diffs against the reference (~2.2/255; photo
   resampling), and checks overflow from 320px to 1920px.
+
+## Recruitment page — CTA
+
+- Figma nodes: section `839:4659`, panel `839:4660`; reference
+  `assets/assets recruitment page/cta section/Frame 2393.png`, 5120 × 1508
+  (1280 × 377 at 4×). The section sits at homepage y=6169 and is 1440 × 537.
+- Section: `padding 80`, `#050507`. Panel: 1280 × 377 at (80, 80), `padding
+73px 0 79px` (the reference wants the content higher than Figma's symmetric
+  72px), `gap 44`, `rgba(98,80,255,.1)`, 1px
+  `linear-gradient(135deg, #e0dcff, #2e276c, #e0dcff)` border,
+  `border-radius 20px`, `overflow: hidden`.
+- Heading: "READY TO BECOME A SORCERY?", Nasalization Regular 400, 56 / 68,
+  center, gradient `linear-gradient(270deg, #fff, #ede8ff)`.
+- Copy: "Join a community where your learning can become experimentation, your
+  ideas can become projects, and your work can create real impact." Manrope
+  Regular 400, 16 / 1.5, `letter-spacing -0.011em`, width 586, center.
+- Button: "Join the Community" (`Button` `variant="primary"`), 205 × 51.
+- Decorative glow: Figma `IMAGE-SVG` `839:4672`, 1000.33 × 271.5 at (269.83, 271) inside the panel, exported as PNG (the Figma rasterization) to
+  `public/images/recruitment/cta-glow[-2x].webp`.
+- Note: `Frame 2393.png` is a **transparent** export (the panel fill is
+  `rgba(98,80,255,.1)`); comparisons must composite it over `#050507`.
+- Verification: `scripts/verify.mjs` asserts the section, panel, actions and
+  glow boxes exactly (plus the heading/copy positions), diffs the panel against
+  the reference (~10.8/255; the decorative glow's blur rasterization dominates),
+  and checks overflow from 320px to 1920px.

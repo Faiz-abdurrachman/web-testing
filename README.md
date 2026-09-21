@@ -97,8 +97,10 @@ follows
 (1440 × 986 at 4×): a heading plus six expandable FAQ items (closed by default).
 "Snippets of Life at data sorcerers" follows
 `assets/assets recruitment page/snippets section/Frame 2502.png` (1440 × 900 at
-4×): a centered heading plus a hero photo and five thumbnails. Remaining
-sections and the footer are still to come.
+4×): a centered heading plus a hero photo and five thumbnails. The CTA follows
+`assets/assets recruitment page/cta section/Frame 2393.png` (1280 × 377 at 4×):
+a bordered panel with a heading, copy, "Join the Community" button and a
+decorative glow. Remaining: the footer.
 
 Footer follows `assets/assets home page/footer/Footer.png` (1440 × 556 at 1×), the Figma node
 `765:17071`. It carries the supplied background image, the brand lockup, the
@@ -117,7 +119,7 @@ See [asset notes](docs/assets.md).
 
 ## Project structure
 
-- `src/components/`: Navbar, Hero, Philosophy, WhatWeDo, Domains, DomainCard, DomainRail, Projects, Recruitment, RecruitmentHero, WhoShouldJoin, WhatYouWillDo, AvailableRoles, SelectionTimeline, Faq, Snippets, RoleDetail, Footer, and shared Button.
+- `src/components/`: Navbar, Hero, Philosophy, WhatWeDo, Domains, DomainCard, DomainRail, Projects, Recruitment, RecruitmentHero, WhoShouldJoin, WhatYouWillDo, AvailableRoles, SelectionTimeline, Faq, Snippets, Cta, RoleDetail, Footer, and shared Button.
 - `src/data/domains.ts`: domain copy and topic labels.
 - `src/layouts/`: HTML document, metadata, and font preload links.
 - `src/styles/global.css`: fonts, design tokens, reset, and focus styles.
