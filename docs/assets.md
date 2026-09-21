@@ -211,6 +211,10 @@ score were unchanged when this section was added.
   positions, and checks text containment from 320px through 1920px. Anti-aliased
   text over the bright lower background keeps a higher difference score than
   the flat sections; alignment is exact (mask cross-correlation offset 0).
+- The Recruitment page reuses this same `Footer.astro` component (its
+  `footer.txt` points at the same Figma node `765:17071` and its `Footer.png`
+  is the same 1440 × 556 reference). It renders at homepage y=6706 with the
+  identical ~2.67/255 difference.
 
 ## Recruitment page — Hero
 
@@ -503,7 +507,9 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
 73px 0 79px` (the reference wants the content higher than Figma's symmetric
   72px), `gap 44`, `rgba(98,80,255,.1)`, 1px
   `linear-gradient(135deg, #e0dcff, #2e276c, #e0dcff)` border,
-  `border-radius 20px`, `overflow: hidden`.
+  `border-radius 20px`, `overflow: hidden`. The panel is capped at `max-width:
+1280px` and centred, so on viewports wider than 1440 it stays on the 1440 grid
+  instead of stretching (and the glow keeps its Figma position relative to it).
 - Heading: "READY TO BECOME A SORCERY?", Nasalization Regular 400, 56 / 68,
   center, gradient `linear-gradient(270deg, #fff, #ede8ff)`.
 - Copy: "Join a community where your learning can become experimentation, your

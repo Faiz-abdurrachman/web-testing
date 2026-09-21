@@ -1941,6 +1941,55 @@ try {
     );
     assert.deepEqual(ctaIssues, [], `CTA text clipped at ${width}px`);
   }
+  // Recruitment page — shared footer (same component as the homepage).
+  await page.setViewportSize({ width: 1440, height: 800 });
+  await page.goto(`${baseUrl}/recruitment`, { waitUntil: 'networkidle' });
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await Promise.all(
+      [...document.images].map((image) => image.decode().catch(() => {})),
+    );
+  });
+  await setNavbarHidden(true);
+  const recruitFooterGeometry = await page
+    .locator('.footer')
+    .evaluate((footer) => {
+      const rect = footer.getBoundingClientRect();
+      return {
+        width: rect.width,
+        height: rect.height,
+        top: rect.top + scrollY,
+      };
+    });
+  assert.deepEqual(recruitFooterGeometry, {
+    width: 1440,
+    height: 556,
+    top: 6706,
+  });
+  await page.locator('.footer').scrollIntoViewIfNeeded();
+  await page
+    .locator('.footer')
+    .screenshot({ path: 'artifacts/recruitment-footer-desktop.png' });
+  const recruitFooterReference = await sharp(
+    'assets/assets recruitment page/footer/Footer.png',
+  )
+    .resize(1440, 556)
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const recruitFooterActual = await sharp(
+    'artifacts/recruitment-footer-desktop.png',
+  )
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(recruitFooterReference.length, recruitFooterActual.length);
+  let recruitFooterTotal = 0;
+  for (let i = 0; i < recruitFooterActual.length; i++) {
+    recruitFooterTotal += Math.abs(
+      recruitFooterActual[i] - recruitFooterReference[i],
+    );
+  }
   assert.deepEqual(errors, []);
   const report = {
     recruitment: {
@@ -2016,6 +2065,11 @@ try {
       geometry: ctaGeometry,
       meanAbsoluteChannelDifference: ctaTotal / ctaActual.length,
       responsive: ctaResponsive,
+    },
+    recruitmentFooter: {
+      geometry: recruitFooterGeometry,
+      meanAbsoluteChannelDifference:
+        recruitFooterTotal / recruitFooterActual.length,
     },
     browserErrors: errors,
   };

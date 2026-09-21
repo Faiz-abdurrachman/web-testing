@@ -100,7 +100,8 @@ follows
 4×): a centered heading plus a hero photo and five thumbnails. The CTA follows
 `assets/assets recruitment page/cta section/Frame 2393.png` (1280 × 377 at 4×):
 a bordered panel with a heading, copy, "Join the Community" button and a
-decorative glow. Remaining: the footer.
+decorative glow. The page ends with the shared `Footer` component (same as the
+homepage). The navbar, buttons and footer are shared across pages.
 
 Footer follows `assets/assets home page/footer/Footer.png` (1440 × 556 at 1×), the Figma node
 `765:17071`. It carries the supplied background image, the brand lockup, the

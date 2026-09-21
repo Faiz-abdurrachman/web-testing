@@ -235,11 +235,14 @@ Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
   copy Manrope 16/24, tombol "Join the Community" (205 × 51), + glow dekoratif.
   **Catatan**: `Frame 2393.png` transparan → composite ke `#050507` dulu. Skor
   diff panel ~10.8/255 (residual = blur glow).
+- **Footer**: halaman recruitment pakai komponen `Footer.astro` yang **sama**
+  dengan homepage (node `765:17071`, referensi sama). Render di y6706, diff
+  ~2.67/255. Navbar & Footer = komponen bersama (konsisten antar halaman).
 - Verify: blok `recruitmentPage`, `recruitmentWhoShouldJoin`, `recruitmentRoles`,
   `recruitmentWhatYouWillDo`, `recruitmentAvailableRoles`,
   `recruitmentSelectionTimeline`, `recruitmentFaq`, `recruitmentSnippets`,
-  `recruitmentCta` di `scripts/verify.mjs` (geometri exact + diff PNG + overflow
-  320–1920), plus cek href kartu & back link kontekstual.
+  `recruitmentCta`, `recruitmentFooter` di `scripts/verify.mjs` (geometri exact +
+  diff PNG + overflow 320–1920), plus cek href kartu & back link kontekstual.
 - **Belum**: footer dan section lain di full-page `RECRUITMENT PAGE.png`
   (1440 × 7262).
 
