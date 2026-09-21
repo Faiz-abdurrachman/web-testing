@@ -282,6 +282,11 @@ Section.png`, 5760 × 3156 (1440 × 789 at 4×).
   keyboard/scroll behaviour and CSS were extracted into a shared
   `DomainRail.astro` used by both `Domains.astro` and `WhoShouldJoin.astro`, so
   the cards stay pixel-identical to the homepage.
+- Card links: the cards open the HoDS detail pages with a recruitment origin
+  (`/hods/{id}?from=recruitment`), so that page's back link returns to
+  `/recruitment#who-should-join` ("Back to Open Roles"); the homepage rail keeps
+  plain `/hods/{id}` and "Back to HoDS". The detail pages are static, so the
+  origin is applied on the client from the query (`HoDSDetail.astro`).
 - Background: the frame's fill is effectively black (`Background.png` in the
   folder is a black export; the Figma fill is near-black with under 0.1%
   non-black pixels). The reference and the full-page PNG render this band pure
@@ -298,9 +303,12 @@ Section.png`, 5760 × 3156 (1440 × 789 at 4×).
 
 ## Recruitment page — Role detail
 
-The Who Should Join cards link to `/recruitment/roles/{id}` (id = data, core,
-language, vision, product, growth) — these are the recruitment "Detail Role"
-pages, not the homepage's `/hods/{id}` tab pages.
+Built but currently **not linked**: the Who Should Join cards open the homepage
+HoDS detail pages (`/hods/{id}?from=recruitment`), not these. They are kept for
+a possible future section (e.g. an available-roles listing). Route
+`/recruitment/roles/{id}` (id = data, core, language, vision, product, growth);
+these are the recruitment "Detail Role" pages, a different layout from the
+homepage's `/hods/{id}` tab pages.
 
 - Figma nodes: `774:17392` (data), `733:15781` (core), `760:14975` (language),
   `760:15276` (vision), `760:15347` (product), `760:15439` (growth). Frame:
@@ -335,5 +343,6 @@ role/Detile Roles - …png` (5760 × 5120, i.e. 1440 × 1280 at 4×). Note the
   pages.
 - Verification: `scripts/verify.mjs` asserts the section, card, back link,
   apply button and contact box for all six pages, diffs each against its
-  reference (1.7–2.4/255), asserts the Who Should Join card `href`s, and checks
-  overflow and text from 320px to 1920px.
+  reference (1.7–2.4/255), checks overflow and text from 320px to 1920px, and
+  separately checks the Who Should Join card `href`s and the context-aware HoDS
+  back link.

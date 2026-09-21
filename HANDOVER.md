@@ -188,18 +188,24 @@ Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
     `DomainRail.astro` (dipakai `Domains.astro` & `WhoShouldJoin.astro`) biar
     kartu identik. Background section `#000` (sesuai PNG referensi & full-page,
     beda dari homepage yang `#050507`). Skor diff ~3.0/255.
-- **Role detail** (klik kartu di "Who Should Join"): route
-  `/recruitment/roles/{id}` (data/core/language/vision/product/growth), BUKAN
-  `/hods/{id}` (tab layout home). Frame Figma 1440 × 1280, isi: Back to Open
-  Roles → kartu 1280 × 279 (art + judul + chips + deadline + Apply Now) →
-  ABOUT THIS ROLE → REQUIREMENT → CONTACT PERSON. Konten di
-  `src/data/roles.ts`. Art dari `Property 1=N.png` (beda dengan
-  `images/hods/card-*.webp` home) → `public/images/roles/role-*.webp`. Tombol
-  Apply Now = `Button variant="apply"`. Layout: data centered (gap back→kartu
-  28), core gap 28 top-aligned, sisanya gap 58 top-aligned (flag `centered` /
-  `tight`). Standalone tanpa navbar/footer.
+- **Routing kartu "Who Should Join"**: kartu nembak ke **detail HoDS** yang
+  sama dengan home (`/hods/{id}?from=recruitment`), BUKAN ke halaman role
+  detail. Tombol back di detail HoDS kontekstual: default "Back to HoDS" →
+  `/#domains`; kalau `?from=recruitment` → "Back to Open Roles" →
+  `/recruitment#who-should-join`. Karena halaman statis, `from` diterapkan
+  client-side di `HoDSDetail.astro`.
+- **Halaman role detail** (`/recruitment/roles/{id}`, data/core/language/
+  vision/product/growth) **sudah dibuat tapi belum di-link** (disimpan buat
+  section mendatang). Frame Figma 1440 × 1280, isi: Back to Open Roles → kartu
+  1280 × 279 (art + judul + chips + deadline + Apply Now) → ABOUT THIS ROLE →
+  REQUIREMENT → CONTACT PERSON. Konten di `src/data/roles.ts`. Art dari
+  `Property 1=N.png` (beda dengan `images/hods/card-*.webp` home) →
+  `public/images/roles/role-*.webp`. Tombol Apply Now = `Button variant="apply"`.
+  Layout: data centered (gap back→kartu 28), core gap 28 top-aligned, sisanya
+  gap 58 top-aligned (flag `centered` / `tight`). Standalone tanpa navbar/footer.
 - Verify: blok `recruitmentPage`, `recruitmentWhoShouldJoin`, `recruitmentRoles`
-  di `scripts/verify.mjs` (geometri exact + diff PNG + overflow 320–1920).
+  di `scripts/verify.mjs` (geometri exact + diff PNG + overflow 320–1920),
+  plus cek href kartu & back link kontekstual.
 - **Belum**: footer dan section lain di full-page `RECRUITMENT PAGE.png`
   (1440 × 7262).
 

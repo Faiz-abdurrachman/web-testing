@@ -79,6 +79,18 @@ const { hod } = Astro.props;
 </main>
 
 <script>
+  // The card that opened this page decides where "back" returns to. The pages
+  // are static, so the `from` query is applied on the client.
+  if (new URLSearchParams(location.search).get('from') === 'recruitment') {
+    const back =
+      document.querySelector<HTMLAnchorElement>('.hods-detail .back');
+    if (back) {
+      back.href = '/recruitment#who-should-join';
+      const label = back.querySelector('span');
+      if (label) label.textContent = 'Back to Open Roles';
+    }
+  }
+
   document.querySelectorAll<HTMLElement>('.hods-detail').forEach((root) => {
     const tabs = [...root.querySelectorAll<HTMLButtonElement>('.tab')];
     const panels = [...root.querySelectorAll<HTMLElement>('.panel')];

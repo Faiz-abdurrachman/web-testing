@@ -991,8 +991,9 @@ try {
       `Who Should Join text clipped at ${width}px`,
     );
   }
-  // Recruitment role detail pages (standalone; the Who Should Join cards point
-  // here instead of the homepage's /hods/{id} tab pages).
+  // The Who Should Join cards open the HoDS detail pages, tagged so their back
+  // link returns to the recruitment page. The recruitment role detail pages
+  // (/recruitment/roles/{id}) are still built and verified below.
   const baseUrl = process.env.PREVIEW_URL || 'http://localhost:4321';
   const rolePages = [
     {
@@ -1045,8 +1046,27 @@ try {
     .evaluateAll((cards) => cards.map((card) => card.getAttribute('href')));
   assert.deepEqual(
     roleHrefs,
-    rolePages.map((role) => `/recruitment/roles/${role.id}`),
-    'Who Should Join cards must link to the role detail pages',
+    rolePages.map((role) => `/hods/${role.id}?from=recruitment`),
+    'Who Should Join cards must link to the HoDS detail pages with a recruitment origin',
+  );
+  const backLink = (locator) =>
+    locator.evaluate((anchor) => ({
+      href: anchor.getAttribute('href'),
+      label: anchor.querySelector('span')?.textContent?.trim(),
+    }));
+  await page.goto(`${baseUrl}/hods/data?from=recruitment`, {
+    waitUntil: 'networkidle',
+  });
+  assert.deepEqual(
+    await backLink(page.locator('.hods-detail .back')),
+    { href: '/recruitment#who-should-join', label: 'Back to Open Roles' },
+    'HoDS back link returns to recruitment when opened from there',
+  );
+  await page.goto(`${baseUrl}/hods/data`, { waitUntil: 'networkidle' });
+  assert.deepEqual(
+    await backLink(page.locator('.hods-detail .back')),
+    { href: '/#domains', label: 'Back to HoDS' },
+    'HoDS back link defaults to the homepage',
   );
   const roleReport = {};
   const roleSizes = [320, 390, 768, 1024, 1440, 1680, 1920];

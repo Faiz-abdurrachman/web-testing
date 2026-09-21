@@ -77,11 +77,13 @@ Recruitment active and adds a dark "secondary" button variant for "Apply Now".
 Its "Who Should Join?" section follows
 `assets/assets recruitment page/who sould join section/Who Should Join
 Section.png` (1440 × 789 at 4×) and reuses the homepage's HoDS card rail, now
-extracted into a shared `DomainRail.astro`. Each card links to a role detail
-page at `/recruitment/roles/{id}` (data, core, language, vision, product,
-growth), built from `src/data/roles.ts` and
-`assets/assets recruitment page/who sould join section/detail role/…` (1440 ×
-1280 at 4×). Remaining sections and the footer are still to come.
+extracted into a shared `DomainRail.astro`. Each card opens the HoDS detail
+page (`/hods/{id}?from=recruitment`), and that page's back link returns to
+`/recruitment#who-should-join` instead of the homepage. Role detail pages
+(`/recruitment/roles/{id}`, built from `src/data/roles.ts` and
+`assets/assets recruitment page/who sould join section/detail role/…`, 1440 ×
+1280 at 4×) are implemented but not linked yet. Remaining sections and the
+footer are still to come.
 
 Footer follows `assets/assets home page/footer/Footer.png` (1440 × 556 at 1×), the Figma node
 `765:17071`. It carries the supplied background image, the brand lockup, the
