@@ -48,17 +48,26 @@ that transition belongs to the later full-page integration.
 
 - Manrope 400, 500, 600, 700: Google Fonts, local TTF files.
   License: `public/fonts/Manrope-OFL.txt`.
-- Nasalization Regular: Typodermic, obtained from its linked dafont listing:
-  https://www.dafont.com/nasalization.font
-  The current free download is a desktop license and explicitly excludes
-  serving or embedding the font in a website. The desktop font was installed
-  on the development machine for local preview only and is not in this repo.
-  Source: https://typodermicfonts.com/downloads/
+- Nasalization Regular: Typodermic Fonts (Ray Larabie). The free dafont
+  download (https://www.dafont.com/nasalization.font) is a **desktop** license
+  and explicitly excludes serving or embedding the font in a website. The
+  desktop font was installed on the development machine for local preview only
+  and is not in this repo.
 
-To make the heading consistent on every device, obtain the corresponding
-licensed webfont, place it in `public/fonts/`, and update the Nasalization
-`@font-face` in `src/styles/global.css` to use its URL. Until then, devices
-without the local font use sans-serif; they do not match the heading reference.
+  Licensed webfonts are available from Typodermic's resellers:
+  - Adobe Fonts — https://fonts.adobe.com/fonts/nasalization — included with a
+    Creative Cloud plan and cleared for website publishing; add it to a web
+    project and link the generated CSS (no self-hosting).
+  - MyFonts — https://www.myfonts.com/collections/nasalization-font-typodermic/ —
+    annual, single-domain webfont license for self-hosting with `@font-face`.
+  - Fontspring — https://www.fontspring.com/fonts/typodermic/nasalization
+  - Foundry page — https://typodermicfonts.com/nasalization/
+
+To self-host, place the licensed `.woff2` in `public/fonts/` and add it to the
+Nasalization `@font-face` in `src/styles/global.css`, keeping the `local()`
+lines as a fallback. For Adobe Fonts, add the project `<link>` in
+`BaseLayout.astro`. Until then, devices without the local font use sans-serif
+and do not match the heading reference.
 
 ## Our Philosophy
 
