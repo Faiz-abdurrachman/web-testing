@@ -316,7 +316,11 @@ role/Detile Roles - …png` (5760 × 5120, i.e. 1440 × 1280 at 4×). Note the
   core reference is the `DATA INTELLIGENCE-1` export (the Figma core frame is
   misnamed "DATA INTELLIGENCE").
 - Background: `linear-gradient(-9deg, rgb(108 59 255 / 50%) 0%, #050507 19%)`
-  (violet at the bottom-right), matching the PNG.
+  (violet at the bottom-right), matching the PNG. The gradient is full-bleed
+  (`width: 100%` on the `<main>`, with the content in a centred
+  `max-width: 1440px` inner wrapper) so it reaches the viewport edges on wide
+  screens instead of stopping at 1440. The homepage HoDS detail pages
+  (`HoDSDetail.astro`) use the same full-bleed treatment.
 - Content per page: "Back to Open Roles" (links to `/recruitment#who-should-join`),
   the 1280 × 279 role card (art + 136deg gradient border + Nasalization 48
   title + chip row + deadline + "Apply Now"), ABOUT THIS ROLE, REQUIREMENT

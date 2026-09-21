@@ -7,84 +7,91 @@ interface Props {
 const { role } = Astro.props;
 ---
 
-<main class:list={['role-detail', { centered: role.centered }]}>
-  <div class:list={['role-head', { tight: role.tight }]}>
-    <a class="back" href="/recruitment#who-should-join">
-      <img src="/images/hods/arrow.svg" width="24" height="24" alt="" />
-      <span>Back to Open Roles</span>
-    </a>
+<main class="role-detail">
+  <div class:list={['role-detail-inner', { centered: role.centered }]}>
+    <div class:list={['role-head', { tight: role.tight }]}>
+      <a class="back" href="/recruitment#who-should-join">
+        <img src="/images/hods/arrow.svg" width="24" height="24" alt="" />
+        <span>Back to Open Roles</span>
+      </a>
 
-    <div class="role-card">
-      <img
-        class="role-art"
-        src={role.cardImage}
-        srcset={`/images/roles/role-${role.id}-1280.webp 1280w, /images/roles/role-${role.id}-2560.webp 2560w`}
-        sizes="1280px"
-        width="1280"
-        height="279"
-        alt=""
-        loading="eager"
-        decoding="async"
-      />
-      <div class="role-card-row">
-        <div class="role-card-left">
-          <h1>{role.title}</h1>
-          <div class="chips">
-            {role.chips.map((chip, index) => (
-              <>
-                {index > 0 && <span class="dot" aria-hidden="true" />}
-                <span class="chip-label">{chip}</span>
-              </>
-            ))}
+      <div class="role-card">
+        <img
+          class="role-art"
+          src={role.cardImage}
+          srcset={`/images/roles/role-${role.id}-1280.webp 1280w, /images/roles/role-${role.id}-2560.webp 2560w`}
+          sizes="1280px"
+          width="1280"
+          height="279"
+          alt=""
+          loading="eager"
+          decoding="async"
+        />
+        <div class="role-card-row">
+          <div class="role-card-left">
+            <h1>{role.title}</h1>
+            <div class="chips">
+              {role.chips.map((chip, index) => (
+                <>
+                  {index > 0 && <span class="dot" aria-hidden="true" />}
+                  <span class="chip-label">{chip}</span>
+                </>
+              ))}
+            </div>
+            <div class="deadline">
+              <img src="/images/roles/date.svg" width="28" height="28" alt="" />
+              <span>{role.deadline}</span>
+            </div>
           </div>
-          <div class="deadline">
-            <img src="/images/roles/date.svg" width="28" height="28" alt="" />
-            <span>{role.deadline}</span>
-          </div>
+          <Button variant="apply">Apply Now</Button>
         </div>
-        <Button variant="apply">Apply Now</Button>
       </div>
     </div>
-  </div>
 
-  <div class="role-sections">
-    <section class="block">
-      <h2>ABOUT THIS ROLE</h2>
-      <p class="body">{role.about}</p>
-    </section>
-    <section class="block">
-      <h2>REQUIREMENT</h2>
-      <ul class="bullets">
-        {role.requirements.map((item) => (
-          <li>
-            <span class="dot" aria-hidden="true" />
-            <span class="bullet-text">{item}</span>
-          </li>
-        ))}
-      </ul>
-    </section>
-  </div>
+    <div class="role-sections">
+      <section class="block">
+        <h2>ABOUT THIS ROLE</h2>
+        <p class="body">{role.about}</p>
+      </section>
+      <section class="block">
+        <h2>REQUIREMENT</h2>
+        <ul class="bullets">
+          {role.requirements.map((item) => (
+            <li>
+              <span class="dot" aria-hidden="true" />
+              <span class="bullet-text">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </div>
 
-  <div class="contact">
-    <h2>CONTACT PERSON</h2>
-    <div class="contact-person">
-      <img src="/images/roles/whatsapp.svg" width="24" height="24" alt="" />
-      <span>{role.contact}</span>
+    <div class="contact">
+      <h2>CONTACT PERSON</h2>
+      <div class="contact-person">
+        <img src="/images/roles/whatsapp.svg" width="24" height="24" alt="" />
+        <span>{role.contact}</span>
+      </div>
     </div>
   </div>
 </main>
 <style>
+  /* The gradient is full-bleed; the content stays on the 1440 grid. */
   .role-detail {
+    width: 100%;
+    background: linear-gradient(-9deg, rgb(108 59 255 / 50%) 0%, #050507 19%);
+  }
+  .role-detail-inner {
     display: flex;
     flex-direction: column;
     gap: 58px;
-    width: min(100%, 1440px);
+    width: 100%;
+    max-width: 1440px;
     min-height: 1280px;
     margin-inline: auto;
     padding: 80px;
-    background: linear-gradient(-9deg, rgb(108 59 255 / 50%) 0%, #050507 19%);
   }
-  .role-detail.centered {
+  .role-detail-inner.centered {
     justify-content: center;
   }
   .role-head {
@@ -285,7 +292,7 @@ const { role } = Astro.props;
     height: 24px;
   }
   @media (max-width: 900px) {
-    .role-detail {
+    .role-detail-inner {
       min-height: 0;
       gap: 40px;
       padding: 40px 24px;

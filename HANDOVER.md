@@ -163,6 +163,10 @@ setelah scroll jadi panel `blur(12px) saturate(140%)` + `rgb(5 5 7 / 58%)`.
 > Catatan: frame `Detile Roles - ...` di Figma itu halaman **lain** (About this
 > role / Requirement / Contact person). Yang dipakai = layout tab sesuai aset
 > `assets/hods/detail card hods/`.
+>
+> Gradient ungu di detail HoDS & detail Role itu **full-bleed**: `<main>` selebar
+> 100%, konten di inner `max-width: 1440px` yang di-center. Jangan dipasang di
+> container max-1440, nanti kepotong di layar > 1440 / zoom out.
 
 ---
 

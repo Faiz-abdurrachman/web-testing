@@ -7,74 +7,76 @@ const { hod } = Astro.props;
 ---
 
 <main class="hods-detail">
-  <a class="back" href="/#domains">
-    <img src="/images/hods/arrow.svg" width="24" height="24" alt="" />
-    <span>Back to HoDS</span>
-  </a>
+  <div class="hods-detail-inner">
+    <a class="back" href="/#domains">
+      <img src="/images/hods/arrow.svg" width="24" height="24" alt="" />
+      <span>Back to HoDS</span>
+    </a>
 
-  <div class="role-card">
-    <img
-      class="role-art"
-      src={hod.cardImage}
-      width="1280"
-      height="279"
-      alt=""
-      loading="eager"
-      decoding="async"
-    />
-    <div class="role-copy">
-      <h1>{hod.title}</h1>
-      <p>{hod.description}</p>
-    </div>
-  </div>
-
-  <div class="role-body">
-    <div class="tabs" role="tablist" aria-label={`${hod.title} roles`}>
-      {hod.tabs.map((tab, index) => (
-        <button
-          class:list={['tab', { active: index === 0 }]}
-          type="button"
-          role="tab"
-          id={`tab-${hod.id}-${index}`}
-          aria-controls={`panel-${hod.id}-${index}`}
-          aria-selected={index === 0}
-          tabindex={index === 0 ? 0 : -1}
-          data-index={index}
-        >
-          {tab.label}
-        </button>
-      ))}
+    <div class="role-card">
+      <img
+        class="role-art"
+        src={hod.cardImage}
+        width="1280"
+        height="279"
+        alt=""
+        loading="eager"
+        decoding="async"
+      />
+      <div class="role-copy">
+        <h1>{hod.title}</h1>
+        <p>{hod.description}</p>
+      </div>
     </div>
 
-    {hod.tabs.map((tab, index) => (
-      <div
-        class="panel"
-        id={`panel-${hod.id}-${index}`}
-        role="tabpanel"
-        aria-labelledby={`tab-${hod.id}-${index}`}
-        hidden={index !== 0}
-      >
-        {tab.sections.map((section) => (
-          <section class="block">
-            <h2>{section.title}</h2>
-            {section.kind === 'bullets' ? (
-              <ul class="bullets">
-                {section.bullets?.map((item) => (
-                  <li>
-                    <span class="dot" aria-hidden="true" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p class:list={['body', section.color === 'white' && 'white']}>
-                {section.text}
-              </p>
-            )}
-          </section>
+    <div class="role-body">
+      <div class="tabs" role="tablist" aria-label={`${hod.title} roles`}>
+        {hod.tabs.map((tab, index) => (
+          <button
+            class:list={['tab', { active: index === 0 }]}
+            type="button"
+            role="tab"
+            id={`tab-${hod.id}-${index}`}
+            aria-controls={`panel-${hod.id}-${index}`}
+            aria-selected={index === 0}
+            tabindex={index === 0 ? 0 : -1}
+            data-index={index}
+          >
+            {tab.label}
+          </button>
         ))}
       </div>
-    ))}
+
+      {hod.tabs.map((tab, index) => (
+        <div
+          class="panel"
+          id={`panel-${hod.id}-${index}`}
+          role="tabpanel"
+          aria-labelledby={`tab-${hod.id}-${index}`}
+          hidden={index !== 0}
+        >
+          {tab.sections.map((section) => (
+            <section class="block">
+              <h2>{section.title}</h2>
+              {section.kind === 'bullets' ? (
+                <ul class="bullets">
+                  {section.bullets?.map((item) => (
+                    <li>
+                      <span class="dot" aria-hidden="true" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p class:list={['body', section.color === 'white' && 'white']}>
+                  {section.text}
+                </p>
+              )}
+            </section>
+          ))}
+        </div>
+      ))}
+    </div>
   </div>
 </main>
 
@@ -119,14 +121,19 @@ const { hod } = Astro.props;
 </script>
 
 <style>
+  /* The gradient is full-bleed; the content stays on the 1440 grid. */
   .hods-detail {
+    width: 100%;
+    background: linear-gradient(-9deg, rgb(108 59 255 / 50%) 0%, #050507 19%);
+  }
+  .hods-detail-inner {
     display: flex;
     flex-direction: column;
     gap: 58px;
-    width: min(100%, 1440px);
+    width: 100%;
+    max-width: 1440px;
     margin-inline: auto;
     padding: 80px;
-    background: linear-gradient(-9deg, rgb(108 59 255 / 50%) 0%, #050507 19%);
   }
   .back {
     display: inline-flex;
@@ -289,7 +296,7 @@ const { hod } = Astro.props;
     background: linear-gradient(135deg, #6c3bff 17%, #ede8ff 50%, #6c3bff 83%);
   }
   @media (max-width: 900px) {
-    .hods-detail {
+    .hods-detail-inner {
       gap: 40px;
       padding: 40px 24px;
     }
