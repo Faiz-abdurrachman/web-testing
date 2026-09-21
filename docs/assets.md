@@ -260,7 +260,38 @@ Section.png`, 4320 × 2598 (1440 × 866 at 3×). The reference PNG **includes th
   its original 49px so the homepage comparison is unchanged.
 - Verification: `scripts/verify.mjs` asserts the section, heading, description,
   and button boxes exactly, checks the active nav link, diffs the section
-  against the reference PNG (~2.1/255; the residual is font and glass
+  against the reference PNG (~2.0/255; the residual is font and glass
   rasterization), and checks horizontal overflow and clipped hero text from
   320px to 1920px.
-- Remaining sections (e.g. "Who Should Join") and the footer are not built yet.
+
+## Recruitment page — Who Should Join
+
+- Figma node: `770:15545`; reference
+  `assets/assets recruitment page/who sould join section/Who Should Join
+Section.png`, 5760 × 3156 (1440 × 789 at 4×).
+- Frame: 1440 × 789, `padding 80`, column, `gap 74`. The header is centered and
+  full-width; the card rail below is full-bleed.
+- Heading: "Who Should Join?", Nasalization Regular 400, 56 / 68, centered in a
+  1280px box, fill `linear-gradient(14.17deg, #707070 16.09%, #fff 91.78%)`
+  (verified against the PNG: brighter at the top, greyer at the bottom).
+- Copy: "We welcome passionate individuals across technical, creative, and
+  operational domains." Manrope Medium 500, 18 / 27, `#fff`, centered, 1280px.
+- Card rail: the **same** cards as the homepage's House of Data Sorcerers section
+  (`DomainCard` + `domains.ts`) — six 394 × 436 cards with a 40px gap, first at
+  x=80, the fourth clipped at the viewport edge. The rail markup, arrows,
+  keyboard/scroll behaviour and CSS were extracted into a shared
+  `DomainRail.astro` used by both `Domains.astro` and `WhoShouldJoin.astro`, so
+  the cards stay pixel-identical to the homepage.
+- Background: the frame's fill is effectively black (`Background.png` in the
+  folder is a black export; the Figma fill is near-black with under 0.1%
+  non-black pixels). The reference and the full-page PNG render this band pure
+  black, so the section uses `#000` rather than the homepage's `#050507`; this
+  matches the reference.
+- Measured layout at 1440: section `1440 × 789` at homepage y=866; heading
+  `(80, 80, 1280 × 68)`; copy `(80, 172, 1280 × 27)`; cards at x 80 / 514 / 948
+  / 1382, y 273, 394 × 436.
+- Verification: `scripts/verify.mjs` asserts the section, heading, copy and card
+  boxes exactly, diffs against the reference (~3.0/255; the card art carries the
+  same residual as the homepage, and this reference PNG's cards differ slightly
+  from the homepage export), and checks overflow and text from 320px to 1920px.
+- Remaining sections and the footer are not built yet.

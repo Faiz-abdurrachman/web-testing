@@ -862,6 +862,135 @@ try {
       `Recruitment hero text clipped at ${width}px`,
     );
   }
+  // Recruitment page — Who Should Join (reuses the homepage HoDS card rail).
+  await page.setViewportSize({ width: 1440, height: 903 });
+  await page.evaluate(() => scrollTo(0, 0));
+  await setNavbarHidden(true);
+  const whoShouldJoinGeometry = await page
+    .locator('.who-should-join')
+    .evaluate((section) => {
+      const rect = section.getBoundingClientRect();
+      const relative = (selector) => {
+        const box = section.querySelector(selector).getBoundingClientRect();
+        return {
+          x: box.x - rect.x,
+          y: box.y - rect.y,
+          width: box.width,
+          height: box.height,
+        };
+      };
+      return {
+        width: rect.width,
+        height: rect.height,
+        top: rect.top + scrollY,
+        heading: relative('h2'),
+        copy: relative('header p'),
+        cards: [...section.querySelectorAll('.domain-card')]
+          .slice(0, 4)
+          .map((card) => {
+            const box = card.getBoundingClientRect();
+            return {
+              x: box.x - rect.x,
+              y: box.y - rect.y,
+              width: box.width,
+              height: box.height,
+            };
+          }),
+      };
+    });
+  assert.deepEqual(whoShouldJoinGeometry, {
+    width: 1440,
+    height: 789,
+    top: 866,
+    heading: { x: 80, y: 80, width: 1280, height: 68 },
+    copy: { x: 80, y: 172, width: 1280, height: 27 },
+    cards: [80, 514, 948, 1382].map((x) => ({
+      x,
+      y: 273,
+      width: 394,
+      height: 436,
+    })),
+  });
+  await page.locator('.who-should-join').scrollIntoViewIfNeeded();
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await Promise.all(
+      [...document.images].map((image) => image.decode().catch(() => {})),
+    );
+  });
+  await page
+    .locator('.who-should-join')
+    .screenshot({ path: 'artifacts/who-should-join-desktop.png' });
+  const whoShouldJoinReference = await sharp(
+    'assets/assets recruitment page/who sould join section/Who Should Join Section.png',
+  )
+    .resize(1440, 789)
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const whoShouldJoinActual = await sharp(
+    'artifacts/who-should-join-desktop.png',
+  )
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(whoShouldJoinReference.length, whoShouldJoinActual.length);
+  const whoShouldJoinDiff = Buffer.alloc(whoShouldJoinActual.length);
+  const whoShouldJoinOverlay = Buffer.alloc(whoShouldJoinActual.length);
+  let whoShouldJoinTotal = 0;
+  for (let i = 0; i < whoShouldJoinActual.length; i++) {
+    const delta = Math.abs(whoShouldJoinActual[i] - whoShouldJoinReference[i]);
+    whoShouldJoinTotal += delta;
+    whoShouldJoinDiff[i] = Math.min(255, delta * 4);
+    whoShouldJoinOverlay[i] = Math.round(
+      (whoShouldJoinActual[i] + whoShouldJoinReference[i]) / 2,
+    );
+  }
+  const whoShouldJoinRaw = { width: 1440, height: 789, channels: 3 };
+  await sharp(whoShouldJoinDiff, { raw: whoShouldJoinRaw })
+    .png()
+    .toFile('artifacts/who-should-join-diff.png');
+  await sharp(whoShouldJoinOverlay, { raw: whoShouldJoinRaw })
+    .png()
+    .toFile('artifacts/who-should-join-overlay.png');
+  const whoShouldJoinSizes = [320, 390, 768, 1024, 1440, 1680, 1920];
+  const whoShouldJoinResponsive = [];
+  for (const width of whoShouldJoinSizes) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.evaluate(() => scrollTo(0, 0));
+    const dimensions = await page.evaluate(() => ({
+      viewport: innerWidth,
+      content: document.documentElement.scrollWidth,
+    }));
+    assert.ok(
+      dimensions.content <= dimensions.viewport,
+      `Who Should Join horizontal overflow at ${width}px`,
+    );
+    whoShouldJoinResponsive.push(dimensions);
+    const whoShouldJoinIssues = await page
+      .locator('.who-should-join')
+      .evaluate((section) =>
+        [...section.querySelectorAll('h2, header p')]
+          .filter((element) => {
+            const box = element.getBoundingClientRect();
+            const range = document.createRange();
+            range.selectNodeContents(element);
+            const textBox = range.getBoundingClientRect();
+            return (
+              box.left < -1 ||
+              box.right > innerWidth + 1 ||
+              textBox.left < box.left - 1 ||
+              textBox.right > box.right + 1
+            );
+          })
+          .map((element) => element.textContent),
+      );
+    assert.deepEqual(
+      whoShouldJoinIssues,
+      [],
+      `Who Should Join text clipped at ${width}px`,
+    );
+  }
   assert.deepEqual(errors, []);
   const report = {
     recruitment: {
@@ -897,6 +1026,12 @@ try {
       meanAbsoluteChannelDifference:
         recruitHeroTotal / recruitHeroActual.length,
       responsive: recruitResponsive,
+    },
+    recruitmentWhoShouldJoin: {
+      geometry: whoShouldJoinGeometry,
+      meanAbsoluteChannelDifference:
+        whoShouldJoinTotal / whoShouldJoinActual.length,
+      responsive: whoShouldJoinResponsive,
     },
     browserErrors: errors,
   };

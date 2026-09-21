@@ -74,7 +74,11 @@ The Recruitment page (`/recruitment`) starts with its hero, following
 `assets/assets recruitment page/hero section/About Us Hero Section.png` (1440 ×
 866 at 3×; the reference includes the navbar). It reuses the shared Navbar with
 Recruitment active and adds a dark "secondary" button variant for "Apply Now".
-Remaining sections and the footer are still to come.
+Its "Who Should Join?" section follows
+`assets/assets recruitment page/who sould join section/Who Should Join
+Section.png` (1440 × 789 at 4×) and reuses the homepage's HoDS card rail, now
+extracted into a shared `DomainRail.astro`. Remaining sections and the footer
+are still to come.
 
 Footer follows `assets/assets home page/footer/Footer.png` (1440 × 556 at 1×), the Figma node
 `765:17071`. It carries the supplied background image, the brand lockup, the
@@ -93,7 +97,7 @@ See [asset notes](docs/assets.md).
 
 ## Project structure
 
-- `src/components/`: Navbar, Hero, Philosophy, WhatWeDo, Domains, DomainCard, Projects, Recruitment, RecruitmentHero, Footer, and shared Button.
+- `src/components/`: Navbar, Hero, Philosophy, WhatWeDo, Domains, DomainCard, DomainRail, Projects, Recruitment, RecruitmentHero, WhoShouldJoin, Footer, and shared Button.
 - `src/data/domains.ts`: domain copy and topic labels.
 - `src/layouts/`: HTML document, metadata, and font preload links.
 - `src/styles/global.css`: fonts, design tokens, reset, and focus styles.

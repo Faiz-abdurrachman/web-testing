@@ -1,0 +1,55 @@
+---
+import DomainRail from './DomainRail.astro';
+---
+
+<section
+  id="who-should-join"
+  class="who-should-join"
+  aria-labelledby="who-should-join-title"
+>
+  <header>
+    <h2 id="who-should-join-title">Who Should Join?</h2>
+    <p>
+      We welcome passionate individuals across technical, creative, and
+      operational domains.
+    </p>
+  </header>
+  <DomainRail />
+</section>
+<style>
+  .who-should-join {
+    padding-block: 80px;
+    /* Reference and full-page PNG render this band pure black. */
+    background: #000;
+  }
+  header {
+    padding-inline: var(--page-gutter);
+    text-align: center;
+  }
+  h2 {
+    margin: 0;
+    font: 400 56px/68px var(--font-heading);
+    background: linear-gradient(14.17deg, #707070 16.09%, #fff 91.78%);
+    background-clip: text;
+    color: transparent;
+  }
+  header p {
+    margin: 24px 0 0;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+    color: #fff;
+  }
+  @media (max-width: 760px) {
+    .who-should-join {
+      padding-block: 64px;
+    }
+    h2 {
+      font-size: clamp(30px, 7vw, 48px);
+      line-height: 1.214286;
+    }
+    header p {
+      font-size: 16px;
+    }
+  }
+</style>

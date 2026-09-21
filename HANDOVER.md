@@ -182,10 +182,16 @@ Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
 - Navbar pakai `Navbar.astro` dengan prop `active="Recruitment"`; underline
   106px gradient. Home tetap 49px supaya diff homepage tidak berubah.
 - Tombol pakai `Button.astro` `variant="secondary"` (hug label).
-- Verify: blok `recruitmentPage` di `scripts/verify.mjs` (geometri exact + diff
-  PNG + overflow 320–1920). Skor diff ~2.2/255.
-- **Belum**: section "Who Should Join", footer, dan section lain di full-page
-  `RECRUITMENT PAGE.png` (1440 × 7262).
+- "Who Should Join" (Figma `770:15545`, 1440 × 789): heading Nasalization 56/68
+  - copy Manrope 18/27, lalu **rail kartu HoDS yang sama** dengan homepage
+    (394 × 436, gap 40, full-bleed). Rail diekstrak ke komponen bersama
+    `DomainRail.astro` (dipakai `Domains.astro` & `WhoShouldJoin.astro`) biar
+    kartu identik. Background section `#000` (sesuai PNG referensi & full-page,
+    beda dari homepage yang `#050507`). Skor diff ~3.0/255.
+- Verify: blok `recruitmentPage` + `recruitmentWhoShouldJoin` di
+  `scripts/verify.mjs` (geometri exact + diff PNG + overflow 320–1920).
+- **Belum**: footer dan section lain di full-page `RECRUITMENT PAGE.png`
+  (1440 × 7262).
 
 ---
 
