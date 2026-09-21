@@ -7,9 +7,10 @@ const { domain } = Astro.props;
 const large = ['product', 'growth'].includes(domain.id);
 ---
 
-<article
+<a
   class:list={['domain-card', domain.id, { large }]}
   style={`--tint:${domain.tint}`}
+  href={`/hods/${domain.id}`}
   aria-labelledby={`domain-${domain.id}`}
 >
   <h3 id={`domain-${domain.id}`}>{domain.title}</h3>
@@ -53,10 +54,11 @@ const large = ['product', 'growth'].includes(domain.id);
       ))}
     </div>
   </div>
-</article>
+</a>
 <style>
   .domain-card {
     position: relative;
+    display: block;
     isolation: isolate;
     flex: 0 0 394px;
     height: 436px;

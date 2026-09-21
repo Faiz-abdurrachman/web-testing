@@ -1,0 +1,319 @@
+---
+import type { HodDetail } from '../data/hods';
+interface Props {
+  hod: HodDetail;
+}
+const { hod } = Astro.props;
+---
+
+<main class="hods-detail">
+  <a class="back" href="/#domains">
+    <img src="/images/hods/arrow.svg" width="24" height="24" alt="" />
+    <span>Back to HoDS</span>
+  </a>
+
+  <div class="role-card">
+    <img
+      class="role-art"
+      src={hod.cardImage}
+      width="1280"
+      height="279"
+      alt=""
+      loading="eager"
+      decoding="async"
+    />
+    <div class="role-copy">
+      <h1>{hod.title}</h1>
+      <p>{hod.description}</p>
+    </div>
+  </div>
+
+  <div class="role-body">
+    <div class="tabs" role="tablist" aria-label={`${hod.title} roles`}>
+      {hod.tabs.map((tab, index) => (
+        <button
+          class:list={['tab', { active: index === 0 }]}
+          type="button"
+          role="tab"
+          id={`tab-${hod.id}-${index}`}
+          aria-controls={`panel-${hod.id}-${index}`}
+          aria-selected={index === 0}
+          tabindex={index === 0 ? 0 : -1}
+          data-index={index}
+        >
+          {tab.label}
+        </button>
+      ))}
+    </div>
+
+    {hod.tabs.map((tab, index) => (
+      <div
+        class="panel"
+        id={`panel-${hod.id}-${index}`}
+        role="tabpanel"
+        aria-labelledby={`tab-${hod.id}-${index}`}
+        hidden={index !== 0}
+      >
+        {tab.sections.map((section) => (
+          <section class="block">
+            <h2>{section.title}</h2>
+            {section.kind === 'bullets' ? (
+              <ul class="bullets">
+                {section.bullets?.map((item) => (
+                  <li>
+                    <span class="dot" aria-hidden="true" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p class:list={['body', section.color === 'white' && 'white']}>
+                {section.text}
+              </p>
+            )}
+          </section>
+        ))}
+      </div>
+    ))}
+  </div>
+</main>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.hods-detail').forEach((root) => {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('.tab')];
+    const panels = [...root.querySelectorAll<HTMLElement>('.panel')];
+    const select = (index: number) => {
+      tabs.forEach((tab, i) => {
+        const active = i === index;
+        tab.classList.toggle('active', active);
+        tab.setAttribute('aria-selected', String(active));
+        tab.tabIndex = active ? 0 : -1;
+        panels[i].hidden = !active;
+      });
+    };
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => select(index));
+      tab.addEventListener('keydown', (event) => {
+        if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+        event.preventDefault();
+        const next =
+          (index + (event.key === 'ArrowRight' ? 1 : tabs.length - 1)) %
+          tabs.length;
+        select(next);
+        tabs[next].focus();
+      });
+    });
+  });
+</script>
+
+<style>
+  .hods-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 58px;
+    width: min(100%, 1440px);
+    min-height: 100vh;
+    margin-inline: auto;
+    padding: 80px;
+    background: linear-gradient(-9deg, rgb(108 59 255 / 50%) 0%, #050507 19%);
+  }
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    align-self: flex-start;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+  }
+  .back img {
+    display: block;
+    width: 24px;
+    height: 24px;
+  }
+  .role-card {
+    position: relative;
+    isolation: isolate;
+    width: 1280px;
+    max-width: 100%;
+    height: 279px;
+    border-radius: 20px;
+  }
+  .role-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(136deg, #e0dcff 2%, #2e276c 51%, #cbc5ff 100%);
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .role-art {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    object-fit: cover;
+  }
+  .role-copy {
+    position: absolute;
+    left: 42px;
+    top: 84.5px;
+    width: 1196px;
+    max-width: calc(100% - 84px);
+  }
+  .role-copy h1 {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 400;
+    line-height: 1.225;
+    background: linear-gradient(270deg, #fff, #ede8ff);
+    background-clip: text;
+    color: transparent;
+  }
+  .role-copy p {
+    margin: 14px 0 0;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 39px;
+    color: #fff;
+  }
+  .role-body {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 11px;
+  }
+  .tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    padding: 4px 12px;
+    border: 0;
+    border-radius: 20px;
+    background: rgb(255 255 255 / 15%);
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .tab.active {
+    background: radial-gradient(
+      88.1% 186.23% at 8.33% 18.75%,
+      #6c3bff 0%,
+      #3c2189 98.03%
+    );
+    box-shadow: inset 0 -1px 1.9px rgb(255 255 255 / 25%);
+  }
+  .panel {
+    display: flex;
+    flex-direction: column;
+    gap: 42px;
+  }
+  .panel[hidden] {
+    display: none;
+  }
+  .block {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .block h2 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 39px;
+    color: #fff;
+  }
+  .body {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+    color: #ede8ff;
+    white-space: pre-line;
+  }
+  .body.white {
+    color: #fff;
+  }
+  .bullets {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .bullets li {
+    display: flex;
+    align-items: center;
+    gap: 23px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+  }
+  .dot {
+    flex: none;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6c3bff 17%, #ede8ff 50%, #6c3bff 83%);
+  }
+  @media (max-width: 900px) {
+    .hods-detail {
+      gap: 40px;
+      padding: 40px 24px;
+    }
+    .role-card {
+      height: auto;
+      min-height: 220px;
+      display: flex;
+      align-items: flex-end;
+    }
+    .role-copy {
+      position: relative;
+      left: 0;
+      top: 0;
+      width: auto;
+      max-width: none;
+      padding: 24px;
+    }
+    .role-copy h1 {
+      font-size: 32px;
+    }
+    .role-copy p {
+      font-size: 16px;
+      line-height: 27px;
+    }
+    .tab {
+      font-size: 14px;
+    }
+    .block h2 {
+      font-size: 22px;
+      line-height: 33px;
+    }
+    .body,
+    .bullets li {
+      font-size: 16px;
+      line-height: 24px;
+    }
+  }
+</style>

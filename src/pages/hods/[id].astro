@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import HoDSDetail from '../../components/HoDSDetail.astro';
+import { hods } from '../../data/hods';
+
+export function getStaticPaths() {
+  return hods.map((hod) => ({ params: { id: hod.id }, props: { hod } }));
+}
+
+const { hod } = Astro.props;
+---
+
+<BaseLayout title={`${hod.title} — Data Sorcerers`}>
+  <HoDSDetail hod={hod} />
+</BaseLayout>
