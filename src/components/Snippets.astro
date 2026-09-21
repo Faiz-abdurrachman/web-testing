@@ -1,0 +1,122 @@
+---
+// Figma node 706:2330. A heading plus the "galeryy ds" gallery (component
+// 630:3687): a 1280x556 hero photo and a row of five 246x103 thumbnails. The
+// photos are exported from the DS 1 component render as WebP (1x/2x) — the
+// Figma image fills do not match the reference crop, so the displayed regions
+// are extracted from the component instead.
+const thumbs = [1, 2, 3, 4, 5];
+---
+
+<section id="snippets" class="snippets" aria-labelledby="snippets-title">
+  <h2 id="snippets-title">Snippets of Life at data sorcerers</h2>
+
+  <div class="gallery">
+    <div class="gallery-hero">
+      <img
+        src="/images/recruitment/snippet-hero.webp"
+        srcset="
+          /images/recruitment/snippet-hero.webp     1280w,
+          /images/recruitment/snippet-hero-2x.webp  2560w
+        "
+        sizes="1280px"
+        width="1280"
+        height="556"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+    <div class="gallery-thumbs">
+      {thumbs.map((id) => (
+        <div class="thumb">
+          <img
+            src={`/images/recruitment/snippet-t${id}.webp`}
+            srcset={`/images/recruitment/snippet-t${id}.webp 246w, /images/recruitment/snippet-t${id}-2x.webp 492w`}
+            sizes="246px"
+            width="246"
+            height="103"
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+<style>
+  .snippets {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 58px;
+    padding: 40px 80px;
+    background: #050507;
+  }
+  h2 {
+    margin: 0;
+    width: 100%;
+    max-width: 1280px;
+    font: 400 56px/68px var(--font-heading);
+    text-align: center;
+    background: linear-gradient(90deg, #fff 0%, #ede8ff 100%);
+    background-clip: text;
+    color: transparent;
+  }
+  .gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    width: 100%;
+    max-width: 1280px;
+  }
+  .gallery-hero {
+    width: 100%;
+    height: 556px;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .gallery-hero img,
+  .thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .gallery-thumbs {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .thumb {
+    flex: none;
+    width: 246px;
+    height: 103px;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  @media (max-width: 760px) {
+    .snippets {
+      gap: 40px;
+      padding: 40px 24px;
+    }
+    h2 {
+      font-size: clamp(30px, 8vw, 48px);
+      line-height: 1.214286;
+    }
+    .gallery-hero {
+      height: auto;
+      aspect-ratio: 1280 / 556;
+    }
+    .gallery-thumbs {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+    .thumb {
+      width: calc(50% - 6px);
+      height: auto;
+      aspect-ratio: 246 / 103;
+    }
+  }
+</style>

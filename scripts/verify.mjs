@@ -1709,6 +1709,124 @@ try {
     );
     assert.deepEqual(faqIssues, [], `FAQ text clipped at ${width}px`);
   }
+  // Recruitment page — Snippets (heading + hero photo + five thumbnails).
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(`${baseUrl}/recruitment`, { waitUntil: 'networkidle' });
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await Promise.all(
+      [...document.images].map((image) => image.decode().catch(() => {})),
+    );
+  });
+  await setNavbarHidden(true);
+  await page.evaluate(() => scrollTo(0, 0));
+  const snippetsGeometry = await page
+    .locator('.snippets')
+    .evaluate((section) => {
+      const rect = section.getBoundingClientRect();
+      const relative = (selector) => {
+        const box = section.querySelector(selector).getBoundingClientRect();
+        return {
+          x: box.x - rect.x,
+          y: box.y - rect.y,
+          width: box.width,
+          height: box.height,
+        };
+      };
+      return {
+        width: rect.width,
+        height: rect.height,
+        top: rect.top + scrollY,
+        heading: relative('h2'),
+        gallery: relative('.gallery'),
+        hero: relative('.gallery-hero'),
+        thumbs: [...section.querySelectorAll('.thumb')].map((thumb) => {
+          const box = thumb.getBoundingClientRect();
+          return {
+            x: box.x - rect.x,
+            y: box.y - rect.y,
+            width: box.width,
+            height: box.height,
+          };
+        }),
+      };
+    });
+  assert.deepEqual(snippetsGeometry, {
+    width: 1440,
+    height: 900,
+    top: 5269,
+    heading: { x: 80, y: 40, width: 1280, height: 68 },
+    gallery: { x: 80, y: 166, width: 1280, height: 694 },
+    hero: { x: 80, y: 166, width: 1280, height: 556 },
+    thumbs: [80, 338.5, 597, 855.5, 1114].map((x) => ({
+      x,
+      y: 757,
+      width: 246,
+      height: 103,
+    })),
+  });
+  await page.locator('.snippets').scrollIntoViewIfNeeded();
+  await page
+    .locator('.snippets')
+    .screenshot({ path: 'artifacts/snippets-desktop.png' });
+  const snippetsReference = await sharp(
+    'assets/assets recruitment page/snippets section/Frame 2502.png',
+  )
+    .resize(1440, 900)
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const snippetsActual = await sharp('artifacts/snippets-desktop.png')
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(snippetsReference.length, snippetsActual.length);
+  let snippetsTotal = 0;
+  const snippetsDiff = Buffer.alloc(snippetsActual.length);
+  const snippetsOverlay = Buffer.alloc(snippetsActual.length);
+  for (let i = 0; i < snippetsActual.length; i++) {
+    const delta = Math.abs(snippetsActual[i] - snippetsReference[i]);
+    snippetsTotal += delta;
+    snippetsDiff[i] = Math.min(255, delta * 4);
+    snippetsOverlay[i] = Math.round(
+      (snippetsActual[i] + snippetsReference[i]) / 2,
+    );
+  }
+  const snippetsRaw = { width: 1440, height: 900, channels: 3 };
+  await sharp(snippetsDiff, { raw: snippetsRaw })
+    .png()
+    .toFile('artifacts/snippets-diff.png');
+  await sharp(snippetsOverlay, { raw: snippetsRaw })
+    .png()
+    .toFile('artifacts/snippets-overlay.png');
+  const snippetsSizes = [320, 390, 768, 1024, 1440, 1680, 1920];
+  const snippetsResponsive = [];
+  for (const width of snippetsSizes) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.evaluate(() => scrollTo(0, 0));
+    const dimensions = await page.evaluate(() => ({
+      viewport: innerWidth,
+      content: document.documentElement.scrollWidth,
+    }));
+    assert.ok(
+      dimensions.content <= dimensions.viewport,
+      `Snippets horizontal overflow at ${width}px`,
+    );
+    snippetsResponsive.push(dimensions);
+    const snippetsIssues = await page.locator('.snippets').evaluate((section) =>
+      [...section.querySelectorAll('h2')]
+        .filter((element) => {
+          const box = element.getBoundingClientRect();
+          return (
+            box.left < -1 ||
+            box.right > innerWidth + 1 ||
+            element.scrollWidth > element.clientWidth + 1
+          );
+        })
+        .map((element) => element.textContent),
+    );
+    assert.deepEqual(snippetsIssues, [], `Snippets text clipped at ${width}px`);
+  }
   assert.deepEqual(errors, []);
   const report = {
     recruitment: {
@@ -1774,6 +1892,11 @@ try {
       geometry: faqGeometry,
       meanAbsoluteChannelDifference: faqTotal / faqActual.length,
       responsive: faqResponsive,
+    },
+    recruitmentSnippets: {
+      geometry: snippetsGeometry,
+      meanAbsoluteChannelDifference: snippetsTotal / snippetsActual.length,
+      responsive: snippetsResponsive,
     },
     browserErrors: errors,
   };

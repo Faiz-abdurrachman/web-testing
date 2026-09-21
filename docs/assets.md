@@ -471,3 +471,25 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
   six item boxes exactly, diffs against the reference (~5.0/255; the six long
   questions dominate the rasterization residual), and checks overflow and text
   from 320px to 1920px.
+
+## Recruitment page — Snippets
+
+- Figma node: `706:2330`; reference
+  `assets/assets recruitment page/snippets section/Frame 2502.png`, 5760 × 3600
+  (1440 × 900 at 4×). The section sits at homepage y=5269.
+- Frame: 1440 × 900, `padding 40px 80px`, `gap 58`, `#050507`.
+- Heading: "Snippets of Life at data sorcerers", Nasalization Regular 400,
+  56 / 68, **center**, gradient `linear-gradient(90deg, #fff, #ede8ff)`,
+  (80, 40, 1280 × 68). The content is centred on wide viewports.
+- Gallery ("galeryy ds", component `630:3687`, DS 1 variant), 1280 wide at
+  y=166: a 1280 × 556 hero photo and a row of five 246 × 103 thumbnails
+  (space-between at x 80 / 338.5 / 597 / 855.5 / 1114), all `border-radius:
+20px`, `gap 35`.
+- The Figma image fills do not reproduce the reference crop, so the displayed
+  photo regions are extracted from the DS 1 component render (5120 × 2776) and
+  exported to `public/images/recruitment/snippet-{hero,t1..t5}[-2x].webp`
+  (lossless). The photos are artwork; the frames, radii and layout are HTML/CSS.
+  Below 760px the gallery stacks and the thumbnails wrap.
+- Verification: `scripts/verify.mjs` asserts the section, heading, gallery, hero
+  and all five thumb boxes exactly, diffs against the reference (~2.2/255; photo
+  resampling), and checks overflow from 320px to 1920px.

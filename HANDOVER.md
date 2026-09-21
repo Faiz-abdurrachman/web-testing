@@ -226,11 +226,15 @@ Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
   fill transparan + border gradient, pertanyaan Manrope 26/39 + arrow. Jawaban
   diambil dari varian A komponen FAQ. Background starfield (sama seperti WSJ).
   Skor diff ~5.0/255 (teks panjang).
+- "Snippets" (Figma `706:2330`, 1440 × 900, di y5269): heading Nasalization
+  56/68 center + galeri (`galeryy ds`): foto hero 1280 × 556 + 5 thumbnail
+  246 × 103 (space-between). Foto di-export dari render komponen DS 1 (fill
+  Figma nggak match crop referensi). Skor diff ~2.2/255.
 - Verify: blok `recruitmentPage`, `recruitmentWhoShouldJoin`, `recruitmentRoles`,
   `recruitmentWhatYouWillDo`, `recruitmentAvailableRoles`,
-  `recruitmentSelectionTimeline`, `recruitmentFaq` di `scripts/verify.mjs`
-  (geometri exact + diff PNG + overflow 320–1920), plus cek href kartu & back
-  link kontekstual.
+  `recruitmentSelectionTimeline`, `recruitmentFaq`, `recruitmentSnippets` di
+  `scripts/verify.mjs` (geometri exact + diff PNG + overflow 320–1920), plus cek
+  href kartu & back link kontekstual.
 - **Belum**: footer dan section lain di full-page `RECRUITMENT PAGE.png`
   (1440 × 7262).
 
