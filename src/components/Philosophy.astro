@@ -93,6 +93,7 @@ const principles = [
 <style>
   .philosophy {
     position: relative;
+    container-type: inline-size;
     isolation: isolate;
     overflow: clip;
     background: var(--color-background);
@@ -126,6 +127,12 @@ const principles = [
     display: block;
     width: 100%;
     height: 100%;
+  }
+  @media (min-width: 1441px) {
+    .illustration {
+      /* Anchor the artwork to the section edge outside the centered canvas. */
+      left: calc((1440px - 100cqw) / 2);
+    }
   }
   .content {
     position: relative;
