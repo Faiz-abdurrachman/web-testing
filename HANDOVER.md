@@ -8,6 +8,7 @@ yang masih pending.
 - **Figma**: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS
   (file `Web Community DS`)
 - **Deploy**: Vercel (auto dari branch `main`)
+- **Buat AI agent**: baca juga `AGENTS.md` (operating manual ringkas buat AI).
 
 ---
 
