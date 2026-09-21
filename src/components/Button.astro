@@ -38,6 +38,11 @@ const { href, variant = 'primary', compact = false } = Astro.props;
     white-space: nowrap;
     color: white;
     cursor: pointer;
+    /* Gradients cannot interpolate, so only the rim/text fade; the fill swaps instantly. */
+    transition:
+      box-shadow 0.3s ease,
+      color 0.3s ease,
+      outline-color 0.3s ease;
   }
   .button[aria-disabled] {
     cursor: default;
@@ -215,6 +220,71 @@ const { href, variant = 'primary', compact = false } = Astro.props;
       inset -6px -6px 2px -4px #b3b3b3,
       inset 0 0 0 2px #999,
       inset 0 0 40px rgb(242 242 242 / 50%);
+  }
+  /* Hover: dark pills turn violet, violet pills turn dark, white turns violet. */
+  .glass:hover,
+  .secondary:hover,
+  .white:hover {
+    background: radial-gradient(
+      circle at 26% 0%,
+      #6c3bff 0%,
+      #9b7bff 50%,
+      #6c3bff 100%
+    );
+    box-shadow:
+      inset -2px -2px 4px rgb(178 211 255 / 90%),
+      inset -8px -6px 8px rgb(226 202 255 / 25%),
+      inset -2px -2px 1.4px #97bfff,
+      inset 0 2px 1.2px #cfdfff;
+  }
+  .white:hover {
+    color: #fff;
+  }
+  .glass:hover::before {
+    opacity: 0;
+  }
+  .glass:hover::after,
+  .secondary:hover::after {
+    background: linear-gradient(
+      148deg,
+      rgb(203 197 255 / 50%) 0%,
+      rgb(47 90 255 / 50%) 50%,
+      rgb(238 245 255 / 50%) 100%
+    );
+  }
+  .primary:hover,
+  .apply:hover {
+    background: #333;
+    box-shadow:
+      inset -6px -6px 2px -4px #b3b3b3,
+      inset 4px 4px 2px -4px #b3b3b3,
+      inset -3px -3px 3px -1px rgb(255 255 255 / 50%);
+  }
+  .primary:hover {
+    outline-color: #999;
+  }
+  .primary:hover::before {
+    opacity: 0;
+  }
+  .primary:hover::after {
+    box-shadow:
+      inset -6px -6px 2px -4px #b3b3b3,
+      inset 4px 4px 2px -4px #b3b3b3,
+      inset -3px -3px 3px -1px rgb(255 255 255 / 50%);
+  }
+  .apply:hover::after {
+    background: linear-gradient(
+      135deg,
+      #fff 0%,
+      rgb(255 255 255 / 0%) 26%,
+      rgb(255 255 255 / 0%) 74%,
+      #fff 100%
+    );
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .button {
+      transition: none;
+    }
   }
   @media (max-width: 600px) {
     .button {

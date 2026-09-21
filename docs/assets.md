@@ -544,3 +544,21 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
   glow boxes exactly (plus the heading/copy positions), diffs the panel against
   the reference (~5.1/255; font and glow rasterization remain),
   and checks overflow from 320px to 1920px.
+
+## Buttons (shared)
+
+`Button.astro` implements the Figma "Secondary Buttom" (`97:442`) and "CTA
+Navbar" (`97:483`) component sets; the reference exports live in
+`assets/button/button/`.
+
+- `primary` — violet radial pill (Join the Community).
+- `glass` — dark glass pill (Explore Our Project).
+- `white` — white navbar pill (Join Community).
+- `secondary` — dark glass pill that hugs its label (recruitment hero Apply Now).
+- `apply` — violet pill that hugs its label (role detail Apply Now).
+
+Hover comes from each set's state-2 variants: the dark pills turn violet, the
+violet pills turn dark, and the white pill turns violet. The fill swaps
+instantly (gradients do not interpolate) while the rim and text fade;
+`prefers-reduced-motion` removes that transition. Default rendering is
+unchanged, so the section comparisons are unaffected.

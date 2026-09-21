@@ -116,6 +116,12 @@ vercel.json      konfigurasi deploy
   Di mesin dev dipakai font lokal, jadi di device lain heading fallback ke
   sans-serif. Cara dapat webfont berlisensi: lihat §11.
 
+**Button (`Button.astro`)** — varian `primary`/`glass`/`white`/`secondary`/
+`apply` (Figma `97:442` & `97:483`). Hover = swap warna dari varian state-2:
+pill gelap → violet, pill violet → gelap, pill putih → violet. Fill swap
+instan (gradient nggak bisa di-transition), rim/teks yang nge-fade;
+`prefers-reduced-motion` mematikan transisi. Default nggak berubah.
+
 ---
 
 ## 7. Section homepage
