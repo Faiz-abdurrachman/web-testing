@@ -227,9 +227,13 @@ Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
   diambil dari varian A komponen FAQ. Background starfield (sama seperti WSJ).
   Skor diff ~5.0/255 (teks panjang).
 - "Snippets" (Figma `706:2330`, 1440 × 900, di y5269): heading Nasalization
-  56/68 center + galeri (`galeryy ds`): foto hero 1280 × 556 + 5 thumbnail
-  246 × 103 (space-between). Foto di-export dari render komponen DS 1 (fill
-  Figma nggak match crop referensi). Skor diff ~2.2/255.
+  56/68 center + galeri (`galeryy ds`) berupa **carousel fluid**: hero
+  1280 × 556 (5 foto, panah kiri/kanan, drag/swipe, thumbnail bisa diklik,
+  keyboard, loop, `prefers-reduced-motion`) + 5 thumbnail 246 × 103. Elemen &
+  gap proporsional (container query unit) → nggak overflow. Foto di-export dari
+  render komponen DS (hero per varian, thumb dari DS 1). Diff ~0.7/255.
+  (Bonus fix: line Selection Timeline & kolom tanggal dijadikan % biar nggak
+  overflow di 768–1024.)
 - "CTA" (Figma `839:4659`/`839:4660`, section 1440 × 537 di y6169): panel
   1280 × 377 fill transparan + border gradient, heading Nasalization 56/68,
   copy Manrope 16/24, tombol "Join the Community" (205 × 51), + glow dekoratif

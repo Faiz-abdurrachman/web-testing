@@ -105,7 +105,8 @@ const date = 'Date';
     position: absolute;
     left: 0;
     top: -18.5px;
-    width: 1248px;
+    /* Reaches the body's right edge (content width + the 32px right padding). */
+    width: calc(100% + 32px);
     height: 1px;
     background: linear-gradient(90deg, #9b7bff 0%, rgb(255 255 255 / 0%) 100%);
   }
@@ -121,7 +122,8 @@ const date = 'Date';
   }
   .date-col {
     flex: none;
-    width: 568px;
+    /* 568px of the 1216px body content, proportional so it never overflows. */
+    width: 46.710526%;
     font-size: 26px;
     font-weight: 500;
     line-height: 39px;

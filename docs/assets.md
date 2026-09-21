@@ -485,18 +485,29 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
 - Heading: "Snippets of Life at data sorcerers", Nasalization Regular 400,
   56 / 68, **center**, gradient `linear-gradient(90deg, #fff, #ede8ff)`,
   (80, 40, 1280 × 68). The content is centred on wide viewports.
-- Gallery ("galeryy ds", component `630:3687`, DS 1 variant), 1280 wide at
-  y=166: a 1280 × 556 hero photo and a row of five 246 × 103 thumbnails
-  (space-between at x 80 / 338.5 / 597 / 855.5 / 1114), all `border-radius:
-20px`, `gap 35`.
+- Gallery ("galeryy ds", component `630:3687`), 1280 wide at y=166: a hero
+  carousel (1280 × 556, `border-radius: 20px`) and a row of five 246 × 103
+  thumbnails (space-between at x 80 / 338.5 / 597 / 855.5 / 1114), gap 35. The
+  five DS variants use the same five photos with a different hero, so the hero
+  is a 5-slide carousel: arrows (left/right, same style as the other rails),
+  drag/swipe, clickable thumbnails and arrow keys. The track clones the ends so
+  it loops without a jump; `prefers-reduced-motion` drops the transition.
+- Layout is fluid: the gallery is capped at 1280px and the hero/thumbnails use
+  `aspect-ratio` with a percentage thumbnail width, so the element sizes scale
+  with the viewport (a container query unit drives the 35px hero→thumbnail gap)
+  instead of overflowing. At 1440 it is exactly the reference.
 - The Figma image fills do not reproduce the reference crop, so the displayed
-  photo regions are extracted from the DS 1 component render (5120 × 2776) and
-  exported to `public/images/recruitment/snippet-{hero,t1..t5}[-2x].webp`
-  (lossless). The photos are artwork; the frames, radii and layout are HTML/CSS.
-  Below 760px the gallery stacks and the thumbnails wrap.
+  regions are extracted from the DS component renders (hero per variant, thumbs
+  from DS 1) and exported to
+  `public/images/recruitment/snippet-{hero-1..5,thumb-1..5}[-2x].webp`
+  (lossless). The photos are artwork; the frames, radii, arrows and layout are
+  HTML/CSS.
 - Verification: `scripts/verify.mjs` asserts the section, heading, gallery, hero
-  and all five thumb boxes exactly, diffs against the reference (~2.2/255; photo
-  resampling), and checks overflow from 320px to 1920px.
+  and all five thumb boxes exactly, diffs against the reference (initial slide,
+  ~0.7/255), hides the new `.snippet-arrow` overlay, and checks overflow from
+  320px to 1920px. (The Selection Timeline rules and its proportional date
+  column were also switched to percentage widths so nothing overflows at
+  768–1024px.)
 
 ## Recruitment page — CTA
 

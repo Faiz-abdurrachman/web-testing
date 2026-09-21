@@ -97,7 +97,9 @@ follows
 (1440 × 986 at 4×): a heading plus six expandable FAQ items (closed by default).
 "Snippets of Life at data sorcerers" follows
 `assets/assets recruitment page/snippets section/Frame 2502.png` (1440 × 900 at
-4×): a centered heading plus a hero photo and five thumbnails. The CTA follows
+4×): a centered heading plus a fluid photo gallery — a hero carousel (arrows,
+drag/swipe, clickable thumbnails, keyboard, reduced-motion fallback) and five
+thumbnails. The CTA follows
 `assets/assets recruitment page/cta section/Frame 2393.png` (1280 × 377 at 4×):
 a bordered panel with a heading, copy, "Join the Community" button and a
 decorative glow. The page ends with the shared `Footer` component (same as the
