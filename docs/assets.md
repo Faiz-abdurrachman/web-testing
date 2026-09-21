@@ -3,7 +3,7 @@
 ## Visual reference
 
 - Figma file: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=755-15215
-- Main reference: `assets/hero section/Hero Section.png` (5760 × 3612).
+- Main reference: `assets/assets home page/hero section/Hero Section.png` (5760 × 3612).
 - Frame: 1440 × 903; horizontal inset: 80; navbar height: 106.8.
 - Heading: Nasalization Regular, 80 / 98; two explicit lines.
 - Body: Manrope Regular, 16 / 24; width 619; letter spacing -0.176.
@@ -15,8 +15,8 @@ that transition belongs to the later full-page integration.
 
 ## Navbar
 
-- Figma node: `755:15219` (component set `530:13894`). The `assets/navbar/`
-  tab exports and `assets/hero section/Navbar.png` are all 5760 × 428 (the
+- Figma node: `755:15219` (component set `530:13894`). The `assets/assets home page/navbar/`
+  tab exports and `assets/assets home page/hero section/Navbar.png` are all 5760 × 428 (the
   1440 × 107 navbar at 4×).
 - Frame: full-width, `padding 24px 80px`, `space-between`. The logo is
   54 × 58.8; the menu group uses a 90px gap, the six tabs an 18px gap, and each
@@ -33,7 +33,7 @@ that transition belongs to the later full-page integration.
 
 ## Images
 
-- Hero: user-provided `assets/hero section/Gambar Hero Section.png`.
+- Hero: user-provided `assets/assets home page/hero section/Gambar Hero Section.png`.
   Responsive WebP versions preserve the frame composition at 1440 and 2880
   pixels. The original remains untouched. Matching features against the PNG
   reference identified a slightly zoomed fill: source crop approximately
@@ -72,7 +72,7 @@ and do not match the heading reference.
 ## Our Philosophy
 
 - Figma node: `755:15281` in the same file.
-- Reference: `assets/ourphilosophy/Philosophy Section(1).png`, 5760 × 3348.
+- Reference: `assets/assets home page/ourphilosophy/Philosophy Section(1).png`, 5760 × 3348.
 - Frame: 1440 × 837; starts at homepage y=903, immediately after the hero.
 - Label: x=855, y=150, 93 × 26. The supplied spelling “Our Philosphy” is kept.
 - Heading: x=855, y=190, 471 × 204; Nasalization Regular 56/68; three lines.
@@ -97,7 +97,7 @@ score were unchanged when this section was added.
 ## What We Do
 
 - Figma node: `763:16215` in the same file.
-- Reference: `assets/what we do/What We Do Section.png`, 5760 × 3376.
+- Reference: `assets/assets home page/what we do/What We Do Section.png`, 5760 × 3376.
 - Frame: 1440 × 844, starts at homepage y=1740.
 - Cards: first at (160,80), 311 × 254; second at (971,80), 309 × 254;
   third at (160,510), 309 × 254; fourth at (970,510), 310 × 254.
@@ -117,7 +117,7 @@ score were unchanged when this section was added.
 
 ## House of Data Sorcerers
 
-- Figma node: `765:16731`; reference: `assets/hods/House of Data Sorcerers Section.png`.
+- Figma node: `765:16731`; reference: `assets/assets home page/hods/House of Data Sorcerers Section.png`.
 - Frame: 1440 × 826, at homepage y=2584. Header begins at y=80; cards at y=310.
 - Six cards, each 394 × 436, with 40px gaps; first card x=80. The fourth
   card is intentionally partially visible at the viewport edge.
@@ -184,7 +184,7 @@ score were unchanged when this section was added.
 
 ## Footer
 
-- Figma node: `765:17071`; reference: `assets/footer/Footer.png`, 5760 × 2224.
+- Figma node: `765:17071`; reference: `assets/assets home page/footer/Footer.png`, 5760 × 2224.
 - Frame: 1440 × 556 at 1×; padding `80px 80px 28px`; column gap 60.
 - Row 1 is `1280 × 324`. Brand column at x=80: brand lockup 206 wide
   (Nasalization Regular 32, gradient `linear-gradient(270deg, #fff, #EDE8FF)`;
@@ -195,7 +195,7 @@ score were unchanged when this section was added.
 - Row 2: 1px divider `rgb(203 197 255 / 30%)` at y=463.69, then the legal bar at
   y=484.69 — copyright at x=80 (320 wide) and Terms/Privacy/Cookies at x=640.72
   (218 wide), Manrope Regular 16/24.
-- The background is the supplied HD Figma image (`assets/footer/Gambar Footer.png`,
+- The background is the supplied HD Figma image (`assets/assets home page/footer/Gambar Footer.png`,
   5760 × 2224) encoded as **lossless** WebP at 1440 and 2880 under
   `public/images/footer/`, so the footer art is not lossy-compressed. The
   supplied artwork sits 2px (4px at 2×) right of the fill baked into

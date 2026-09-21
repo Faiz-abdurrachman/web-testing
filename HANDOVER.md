@@ -74,6 +74,7 @@ src/
 scripts/         verify.mjs  (verifikasi visual)
 public/          fonts/ + images/ (aset yang diserve)
 assets/          aset referensi mentah (PNG dari Figma) — TIDAK di-serve
+  <nama page>/   dikelompokkan per halaman, mis. "assets home page/"
 docs/            assets.md (catatan provenance tiap section)
 artifacts/       output verifikasi (screenshot/diff/overlay) — git-ignored
 vercel.json      konfigurasi deploy
@@ -120,15 +121,15 @@ vercel.json      konfigurasi deploy
 Frame 1440, gutter 80. Skor = mean absolute channel difference vs PNG referensi
 (bukan 0 karena rasterisasi font + resampling gambar).
 
-| Section                 | Ukuran   | Figma node  | Referensi (PNG)                                   | Diff  |
-| ----------------------- | -------- | ----------- | ------------------------------------------------- | ----- |
-| Hero (incl. navbar)     | 1440×903 | `755:15215` | `assets/hero section/Hero Section.png`            | 1.95  |
-| Our Philosophy          | 1440×837 | `755:15281` | `assets/ourphilosophy/Philosophy Section(1).png`  | 1.67  |
-| What We Do              | 1440×844 | `763:16215` | `assets/what we do/What We Do Section.png`        | 1.96  |
-| House of Data Sorcerers | 1440×826 | `765:16731` | `assets/hods/House of Data Sorcerers Section.png` | 2.60  |
-| Our Project             | 1440×917 | `765:16732` | `assets/our project/Our Project Section.png`      | 5.10* |
-| Recruitment CTA         | 1440×577 | `765:16766` | `assets/cta/CTA Recruicment Section.png`          | 2.17  |
-| Footer                  | 1440×556 | `765:17071` | `assets/footer/Footer.png`                        | 2.67  |
+| Section                 | Ukuran   | Figma node  | Referensi (PNG)                                                    | Diff  |
+| ----------------------- | -------- | ----------- | ------------------------------------------------------------------ | ----- |
+| Hero (incl. navbar)     | 1440×903 | `755:15215` | `assets/assets home page/hero section/Hero Section.png`            | 1.95  |
+| Our Philosophy          | 1440×837 | `755:15281` | `assets/assets home page/ourphilosophy/Philosophy Section(1).png`  | 1.67  |
+| What We Do              | 1440×844 | `763:16215` | `assets/assets home page/what we do/What We Do Section.png`        | 1.96  |
+| House of Data Sorcerers | 1440×826 | `765:16731` | `assets/assets home page/hods/House of Data Sorcerers Section.png` | 2.60  |
+| Our Project             | 1440×917 | `765:16732` | `assets/assets home page/our project/Our Project Section.png`      | 5.10* |
+| Recruitment CTA         | 1440×577 | `765:16766` | `assets/assets home page/cta/CTA Recruicment Section.png`          | 2.17  |
+| Footer                  | 1440×556 | `765:17071` | `assets/assets home page/footer/Footer.png`                        | 2.67  |
 
 \* Naik karena carousel project 3D (kartu tetangga menggantikan panel samping
 dekoratif — lihat §9).
@@ -159,7 +160,7 @@ setelah scroll jadi panel `blur(12px) saturate(140%)` + `rgb(5 5 7 / 58%)`.
 
 > Catatan: frame `Detile Roles - ...` di Figma itu halaman **lain** (About this
 > role / Requirement / Contact person). Yang dipakai = layout tab sesuai aset
-> `assets/hods/detail card hods/`.
+> `assets/assets home page/hods/detail card hods/`.
 
 ---
 

@@ -51,7 +51,7 @@ src/pages/hods/[id].astro detail route (getStaticPaths over hods.ts)
 src/styles/global.css    @font-face, tokens, reset, cursor-glow
 scripts/verify.mjs       visual + geometry + responsive verification
 public/                  served assets (fonts, images)
-assets/                  raw Figma PNG references (NOT served; large)
+assets/<page>/           raw Figma PNG references, grouped per page (NOT served; large)
 docs/assets.md           provenance per section (keep updated)
 artifacts/               verify output (git-ignored)
 ```

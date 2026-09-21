@@ -44,21 +44,21 @@ Other navigation destinations and CTA URLs have not been supplied; they are
 explicitly unavailable in this preview rather than linking to missing pages.
 Pass an `href` to `Button.astro` when a destination is ready.
 
-The desktop visual target is `assets/hero section/Hero Section.png`, exported
+The desktop visual target is `assets/assets home page/hero section/Hero Section.png`, exported
 at 4× from a 1440 × 903 Figma frame. Mobile is an adaptation, because no mobile
 reference was supplied. Our Philosophy follows
-`assets/ourphilosophy/Philosophy Section(1).png`, a 4× export of a 1440 × 837
+`assets/assets home page/ourphilosophy/Philosophy Section(1).png`, a 4× export of a 1440 × 837
 frame. Open `/#our-philosophy` to jump to it. `assets/` remains the original
 reference collection.
 
-What We Do follows `assets/what we do/What We Do Section.png`, a 4× export of
+What We Do follows `assets/assets home page/what we do/What We Do Section.png`, a 4× export of
 a 1440 × 844 frame. Open `/#what-we-do` to jump to it.
 
-HODS follows `assets/hods/House of Data Sorcerers Section.png`, a 4× export
+HODS follows `assets/assets home page/hods/House of Data Sorcerers Section.png`, a 4× export
 of a 1440 × 826 frame. Open `/#domains` to jump to it. Cards are 394 × 436px,
 spaced 40px apart on desktop; the next card intentionally enters at the right edge.
 
-Our Project follows `assets/our project/Our Project Section.png` (1440 × 917
+Our Project follows `assets/assets home page/our project/Our Project Section.png` (1440 × 917
 at 1×) for the card, heading, and spacing, and presents the work as a 3D
 coverflow: the highlighted project sits centered on the Figma grid while the
 left and right projects sit at the reference's side-panel positions, tilted and
@@ -66,11 +66,11 @@ blurred. Navigate with the arrows, the dots, drag/swipe, or the arrow keys. Four
 placeholder projects live in `src/data/projects.ts` — swap them for real
 content. Open `/#projects`.
 
-Recruitment CTA follows `assets/cta/CTA Recruicment Section.png` (1440 × 577
+Recruitment CTA follows `assets/assets home page/cta/CTA Recruicment Section.png` (1440 × 577
 at 1×). Open `/#recruitment`. Its two buttons remain unavailable until
 their actual destinations are supplied, consistent with the hero preview.
 
-Footer follows `assets/footer/Footer.png` (1440 × 556 at 1×), the Figma node
+Footer follows `assets/assets home page/footer/Footer.png` (1440 × 556 at 1×), the Figma node
 `765:17071`. It carries the supplied background image, the brand lockup, the
 social icons, the Navigation and Contact columns, and the legal bar. Text,
 borders, the divider, and the social buttons are HTML/CSS; the two social

@@ -80,7 +80,9 @@ try {
     .locator('.hero')
     .screenshot({ path: 'artifacts/hero-desktop.png' });
   await setNavbarHidden(true);
-  const reference = await sharp('assets/hero section/Hero Section.png')
+  const reference = await sharp(
+    'assets/assets home page/hero section/Hero Section.png',
+  )
     .resize(1440, 903)
     .removeAlpha()
     .raw()
@@ -111,7 +113,7 @@ try {
     .locator('.philosophy')
     .screenshot({ path: 'artifacts/philosophy-desktop.png' });
   const philosophyReference = await sharp(
-    'assets/ourphilosophy/Philosophy Section(1).png',
+    'assets/assets home page/ourphilosophy/Philosophy Section(1).png',
   )
     .resize(1440, 837)
     .removeAlpha()
@@ -211,7 +213,7 @@ try {
     ],
   });
   const pillarsReference = await sharp(
-    'assets/what we do/What We Do Section.png',
+    'assets/assets home page/what we do/What We Do Section.png',
   )
     .resize(1440, 844)
     .removeAlpha()
@@ -276,7 +278,7 @@ try {
     })),
   });
   const domainReference = await sharp(
-    'assets/hods/House of Data Sorcerers Section.png',
+    'assets/assets home page/hods/House of Data Sorcerers Section.png',
   )
     .resize(1440, 826)
     .removeAlpha()
@@ -373,7 +375,7 @@ try {
     },
   });
   const projectsReference = await sharp(
-    'assets/our project/Our Project Section.png',
+    'assets/assets home page/our project/Our Project Section.png',
   )
     .resize(1440, 917)
     .removeAlpha()
@@ -452,7 +454,7 @@ try {
     },
   });
   const recruitmentReference = await sharp(
-    'assets/cta/CTA Recruicment Section.png',
+    'assets/assets home page/cta/CTA Recruicment Section.png',
   )
     .resize(1440, 577)
     .removeAlpha()
@@ -523,7 +525,9 @@ try {
       Math.abs(footerGeometry.legal.y - 484.69) < 1,
     'Footer divider and legal bar must match the Figma reference',
   );
-  const footerReference = await sharp('assets/footer/Footer.png')
+  const footerReference = await sharp(
+    'assets/assets home page/footer/Footer.png',
+  )
     .resize(1440, 556)
     .removeAlpha()
     .raw()
