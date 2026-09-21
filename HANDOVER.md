@@ -190,7 +190,8 @@ Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
   - copy Manrope 18/27, lalu **rail kartu HoDS yang sama** dengan homepage
     (394 × 436, gap 40, full-bleed). Rail diekstrak ke komponen bersama
     `DomainRail.astro` (dipakai `Domains.astro` & `WhoShouldJoin.astro`) biar
-    kartu identik. Background section `#000` (sesuai PNG referensi & full-page,
+    kartu identik. Keyboard ←/→ aktif otomatis saat section di tengah viewport
+    (lihat §9). Background section `#000` (sesuai PNG referensi & full-page,
     beda dari homepage yang `#050507`). Skor diff ~3.0/255.
 - **Routing kartu "Who Should Join"**: kartu nembak ke **detail HoDS** yang
   sama dengan home (`/hods/{id}?from=recruitment`), BUKAN ke halaman role

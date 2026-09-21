@@ -167,30 +167,18 @@ import { projects } from '../data/projects';
         go(1);
       }
     });
-    // Once the section is on screen the arrow keys drive the carousel without
-    // needing to focus it first (the focused stage handler runs first and sets
-    // defaultPrevented, so this one skips).
+    // Arrow keys drive the carousel whenever its section is the one at the
+    // viewport centre (no focus needed); the focused stage handler runs first
+    // and sets defaultPrevented, so this one skips.
     const section = stage.closest('.projects') ?? stage;
-    let inView = false;
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(
-        ([entry]) => {
-          inView = entry.isIntersecting;
-        },
-        { threshold: 0.5 },
-      ).observe(section);
-    } else {
-      inView = true;
-    }
     addEventListener('keydown', (event) => {
-      if (!inView || event.defaultPrevented) return;
+      if (event.defaultPrevented) return;
       const target = event.target as HTMLElement | null;
-      if (
-        target?.closest(
-          'input, textarea, select, [contenteditable="true"], .domain-rail, .gallery',
-        )
-      )
+      if (target?.closest('input, textarea, select, [contenteditable="true"]'))
         return;
+      const rect = section.getBoundingClientRect();
+      const center = innerHeight / 2;
+      if (rect.top > center || rect.bottom < center) return;
       if (event.key === 'ArrowLeft') {
         event.preventDefault();
         go(-1);

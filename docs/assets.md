@@ -127,8 +127,10 @@ score were unchanged when this section was added.
 - Card titles: Manrope Bold 22/33. Descriptions: Manrope Regular 16/24.
   The spelling “ORC” follows the supplied design.
 - Native horizontal overflow supports touch and trackpads; focused keyboard
-  navigation supports Left/Right and Home/End. No destination/detail page
-  was supplied, so domain cards are informational articles.
+  navigation supports Left/Right and Home/End, and the arrow keys also scroll
+  the rail whenever its section is the one at the viewport centre (no focus
+  needed). No destination/detail page was supplied, so domain cards are
+  informational articles.
 - Mobile adapts card width and heading size; no mobile reference was supplied.
 - Verification compares the section to its PNG, checks exact desktop card
   bounds and keyboard scrolling, and checks overflow at 320–1920px.
@@ -160,9 +162,10 @@ score were unchanged when this section was added.
   present from the first project. Switching rotates the cards between slots.
   Navigation covers arrows, dots, drag/swipe, and arrow keys; motion is disabled
   under `prefers-reduced-motion`. The arrow keys also work whenever the section
-  is on screen (an IntersectionObserver at 50% visibility), so no focus is
-  needed; if another carousel is focused it keeps its own keys. Project data
-  lives in `src/data/projects.ts` and currently holds four placeholders.
+  is the one at the viewport centre, so no focus is needed. Each carousel only
+  reacts when its own section holds the centre, which keeps them from fighting
+  over the keys. Project data lives in `src/data/projects.ts` and currently
+  holds four placeholders.
 - Verification includes reference overlay/difference images, desktop geometry
   (heading + active card), text containment and page overflow checks from 320px
   to 1920px.
@@ -493,8 +496,9 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
   five DS variants use the same five photos with a different hero, so the hero
   is a 5-slide carousel: arrows (left/right, same style as the other rails),
   drag/swipe, clickable thumbnails and arrow keys (active whenever the section
-  is on screen, like the homepage carousel). The track clones the ends so it
-  loops without a jump; `prefers-reduced-motion` drops the transition.
+  is the one at the viewport centre, like the homepage carousel). The track
+  clones the ends so it loops without a jump; `prefers-reduced-motion` drops the
+  transition.
 - Layout is fluid: the gallery is capped at 1280px and the hero/thumbnails use
   `aspect-ratio` with a percentage thumbnail width, so the element sizes scale
   with the viewport (a container query unit drives the 35px hero→thumbnail gap)

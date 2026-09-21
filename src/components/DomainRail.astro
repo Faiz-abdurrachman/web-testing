@@ -79,6 +79,31 @@ const { base = '/hods', suffix = '' } = Astro.props;
         rail.scrollTo({ left: positions[event.key], behavior: 'instant' });
       }
     });
+
+    // Arrow keys also drive the rail when its section is the one at the
+    // viewport centre, without needing to focus it first.
+    const section = rail.closest('section') ?? rail;
+    addEventListener('keydown', (event) => {
+      if (event.defaultPrevented) return;
+      const target = event.target as HTMLElement | null;
+      if (target?.closest('input, textarea, select, [contenteditable="true"]'))
+        return;
+      const rect = section.getBoundingClientRect();
+      const center = innerHeight / 2;
+      if (rect.top > center || rect.bottom < center) return;
+      const behavior: ScrollBehavior = matchMedia(
+        '(prefers-reduced-motion: reduce)',
+      ).matches
+        ? 'auto'
+        : 'smooth';
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        rail.scrollBy({ left: -step(), behavior });
+      } else if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        rail.scrollBy({ left: step(), behavior });
+      }
+    });
   });
 </script>
 <style>

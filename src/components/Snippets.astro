@@ -191,28 +191,19 @@ const photos = [1, 2, 3, 4, 5];
           go(-1);
         }
       });
-      // Drive the carousel with the arrow keys once the section is on screen,
-      // without needing to focus it first.
-      let inView = false;
-      if ('IntersectionObserver' in window) {
-        new IntersectionObserver(
-          ([entry]) => {
-            inView = entry.isIntersecting;
-          },
-          { threshold: 0.5 },
-        ).observe(gallery);
-      } else {
-        inView = true;
-      }
+      // Arrow keys drive the carousel whenever its section is the one at the
+      // viewport centre (no focus needed); the focused handler runs first.
+      const section = gallery.closest('.snippets') ?? gallery;
       addEventListener('keydown', (event) => {
-        if (!inView || event.defaultPrevented) return;
+        if (event.defaultPrevented) return;
         const target = event.target as HTMLElement | null;
         if (
-          target?.closest(
-            'input, textarea, select, [contenteditable="true"], .domain-rail, .project-stage',
-          )
+          target?.closest('input, textarea, select, [contenteditable="true"]')
         )
           return;
+        const rect = section.getBoundingClientRect();
+        const center = innerHeight / 2;
+        if (rect.top > center || rect.bottom < center) return;
         if (event.key === 'ArrowRight') {
           event.preventDefault();
           go(1);
