@@ -367,10 +367,14 @@ FILL`). Including it drops the section difference from ~1.83 to ~1.45/255.
   - two tarot card artworks — `card-1` (356 × 430 at 983, 215) and `card-2`
     (295.39 × 361.78 at 129, 431), exported from the supplied PNGs to lossless
     WebP at 1×/2× under `public/images/what-you-will-do/`;
-  - a decorative connector vector (`connector.svg`, 1312 × 531 at 64, 311),
-    exported from Figma (lines and 7px nodes in `#6C3BFF`/white);
-  - eight HTML/CSS label pills (462 × 31) in a diagonal staircase at x 158 / 380
-    / 600 / 821 and y 345 / 399 / 453 / 507 / 561 / 615 / 669 / 723. Each is a
+  - a decorative connector vector (`connector.svg`, 1312 × 531). Figma places it
+    at y=96 in the Body and reports 529px; the SVG's own height is 531 and the
+    reference PNG aligns it at y=95, so it sits at 64, 310 (lines and 7px nodes
+    in `#6C3BFF`/white);
+  - eight HTML/CSS label pills inside the 1125 × 409 "Content" frame (at 94, 130
+    of the Body; absolute 158, 345), in a diagonal staircase at x 158 / 380 / 600
+    / 821 and y 345 / 399 / 453 / 507 / 561 / 615 / 669 / 723. Each is 462 × 31
+    (label 2 is 461 in Figma) with a
     `linear-gradient(134deg, #fff 0%, #6c3bff 4%, #6c3bff X%, transparent)`
     (X = 57 / 56 / – / – / 26 / 26 / 43 / 43%), a 6px gradient dot and Manrope
     Medium 18 / 27 text: LEARN WITH OTHERS, PRACTICE YOUR SKILLS, WORK ON
@@ -380,5 +384,5 @@ FILL`). Including it drops the section difference from ~1.83 to ~1.45/255.
   and connector hidden) — an adaptation, since no mobile reference exists.
 - Verification: `scripts/verify.mjs` asserts the section, heading, body, all
   eight labels, both cards and the connector exactly, diffs against the
-  reference (~1.45/255; the residual is anti-aliasing on the connector lines and
+  reference (~1.24/255; the residual is anti-aliasing on the connector lines and
   the label edges), and checks overflow and text from 320px to 1920px.

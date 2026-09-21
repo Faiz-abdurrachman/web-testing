@@ -1,16 +1,16 @@
 ---
-// Layout comes from Figma node 770:16251. The eight labels are a diagonal
-// staircase inside a fixed 1312x625 collage; positions are relative to that
-// collage (Content frame at 94,130 plus the Figma offsets).
-const labels: [string, number, number, number | null][] = [
-  ['LEARN WITH OTHERS', 94, 130, 57],
-  ['PRACTICE YOUR SKILLS', 94, 184, 56],
-  ['WORK ON EXPERIMENTS', 316, 238, null],
-  ['CONTRIBUTE TO PROJECTS', 316, 292, null],
-  ['PARTICIPATE IN RESEARCH', 536, 346, 26],
-  ['SHARE KNOWLEDGE', 536, 400, 26],
-  ['BUILD YOUR PORTOFOLIO', 757, 454, 43],
-  ['COLLABORATE ACROSS DISCIPLINES', 757, 508, 43],
+// Layout comes from Figma node 770:16251. The Body is a fixed 1312x625 collage
+// and the eight labels live in the 1125x409 "Content" frame; offsets below are
+// the Figma values (Content at 94,130 inside the Body).
+const labels: [string, number, number, number | null, number][] = [
+  ['LEARN WITH OTHERS', 0, 0, 57, 462],
+  ['PRACTICE YOUR SKILLS', 0, 54, 56, 461],
+  ['WORK ON EXPERIMENTS', 222, 108, null, 462],
+  ['CONTRIBUTE TO PROJECTS', 222, 162, null, 462],
+  ['PARTICIPATE IN RESEARCH', 442, 216, 26, 462],
+  ['SHARE KNOWLEDGE', 442, 270, 26, 462],
+  ['BUILD YOUR PORTOFOLIO', 663, 324, 43, 462],
+  ['COLLABORATE ACROSS DISCIPLINES', 663, 378, 43, 462],
 ];
 const gradient = (stop: number | null) =>
   stop === null
@@ -64,15 +64,17 @@ const gradient = (stop: number | null) =>
       loading="lazy"
       decoding="async"
     />
-    {labels.map(([text, x, y, stop]) => (
-      <div
-        class="label"
-        style={`left:${x}px;top:${y}px;background:${gradient(stop)}`}
-      >
-        <span class="dot" aria-hidden="true" />
-        <span class="label-text">{text}</span>
-      </div>
-    ))}
+    <div class="content">
+      {labels.map(([text, x, y, stop, width]) => (
+        <div
+          class="label"
+          style={`--x:${x}px;--y:${y}px;--w:${width}px;--grad:${gradient(stop)}`}
+        >
+          <span class="dot" aria-hidden="true" />
+          <span class="label-text">{text}</span>
+        </div>
+      ))}
+    </div>
   </div>
 </section>
 <style>
@@ -81,7 +83,8 @@ const gradient = (stop: number | null) =>
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    padding: 80px 80px 63px;
+    height: 903px;
+    padding: 80px;
     /* Supplied Background.png = the Figma frame fill (near-black starfield). */
     background-color: #000;
     background-image: image-set(
@@ -92,6 +95,11 @@ const gradient = (stop: number | null) =>
     background-size: cover;
     background-repeat: no-repeat;
     overflow: clip;
+  }
+  h2,
+  p,
+  .wyd-body {
+    flex: none;
   }
   h2 {
     margin: 0;
@@ -135,19 +143,30 @@ const gradient = (stop: number | null) =>
   .connector {
     position: absolute;
     left: 0;
-    top: 96px;
+    /* Figma y=96, but the reference PNG aligns at 95 (SVG 531 vs node 529). */
+    top: 95px;
     display: block;
     width: 1312px;
     height: 531px;
   }
+  .content {
+    position: absolute;
+    left: 94px;
+    top: 130px;
+    width: 1125px;
+    height: 409px;
+  }
   .label {
     position: absolute;
+    left: var(--x);
+    top: var(--y);
     display: flex;
     align-items: center;
     gap: 10px;
-    width: 462px;
+    width: var(--w);
     height: 31px;
     padding: 2px 16px;
+    background: var(--grad);
   }
   .dot {
     flex: none;
@@ -165,6 +184,7 @@ const gradient = (stop: number | null) =>
   }
   @media (max-width: 1320px) {
     .what-you-will-do {
+      height: auto;
       padding: 64px 24px;
     }
     h2 {
@@ -182,6 +202,15 @@ const gradient = (stop: number | null) =>
     .card,
     .connector {
       display: none;
+    }
+    .content {
+      position: static;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      height: auto;
     }
     .label {
       position: static;

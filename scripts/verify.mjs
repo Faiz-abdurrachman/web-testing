@@ -1231,6 +1231,7 @@ try {
         top: rect.top + scrollY,
         heading: relative('h2'),
         body: relative('.wyd-body'),
+        content: relative('.content'),
         labels: [...section.querySelectorAll('.label')].map((label) => {
           const box = label.getBoundingClientRect();
           return {
@@ -1251,19 +1252,25 @@ try {
     top: 1655,
     heading: { x: 80, y: 80, width: 1280, height: 68 },
     body: { x: 64, y: 215, width: 1312, height: 625 },
+    content: { x: 158, y: 345, width: 1125, height: 409 },
     labels: [
-      [158, 345],
-      [158, 399],
-      [380, 453],
-      [380, 507],
-      [600, 561],
-      [600, 615],
-      [821, 669],
-      [821, 723],
-    ].map(([x, y]) => ({ x, y, width: 462, height: 31 })),
+      [158, 462],
+      [158, 461],
+      [380, 462],
+      [380, 462],
+      [600, 462],
+      [600, 462],
+      [821, 462],
+      [821, 462],
+    ].map(([x, width], index) => ({
+      x,
+      y: 345 + index * 54,
+      width,
+      height: 31,
+    })),
     card1: { x: 983, y: 215, width: 356, height: 430 },
     card2: { x: 129, y: 431, width: 295.375, height: 361.765625 },
-    connector: { x: 64, y: 311, width: 1312, height: 531 },
+    connector: { x: 64, y: 310, width: 1312, height: 531 },
   });
   await page.locator('.what-you-will-do').scrollIntoViewIfNeeded();
   await page
