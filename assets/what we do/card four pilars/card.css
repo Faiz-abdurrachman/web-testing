@@ -1,0 +1,14 @@
+/* Frame 2321 */
+
+box-sizing: border-box;
+
+width: 311px;
+height: 254px;
+
+background: rgba(255, 255, 255, 0.15);
+border-radius: 20px 0px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;

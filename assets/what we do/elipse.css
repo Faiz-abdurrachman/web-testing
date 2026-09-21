@@ -1,0 +1,16 @@
+/* Ellipse 3 */
+
+position: absolute;
+width: 230px;
+height: 230px;
+left: calc(50% - 230px/2 - 0.5px);
+top: calc(50% - 230px/2);
+
+background: #6C3BFF;
+filter: blur(125px);
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+z-index: 0;

@@ -1,0 +1,343 @@
+---
+const pillars = [
+  {
+    number: '01',
+    title: 'LEARNING',
+    description:
+      'Structured learning paths, workshops, and curated resources to build deep capability in AI and data.',
+  },
+  {
+    number: '02',
+    title: 'EXPERIMENTATION',
+    description:
+      'Rapid experimentation culture — test ideas, technologies, and approaches in a safe and collaborative environment.',
+  },
+  {
+    number: '03',
+    title: 'RESEARCH',
+    description:
+      'Conduct meaningful research, publish papers, and create new knowledge that advances the field of AI and data science.',
+  },
+  {
+    number: '04',
+    title: 'BUILD',
+    description:
+      'Turn ideas and research into production-grade projects, open-source tools, and real-world solutions that create impact.',
+  },
+];
+---
+
+<section id="what-we-do" class="what-we-do" aria-labelledby="pillars-title">
+  <picture class="stars" aria-hidden="true">
+    <source
+      srcset="/images/what-we-do/stars-1440.webp 1440w, /images/what-we-do/stars-2880.webp 2880w"
+      sizes="100vw"
+      type="image/webp"
+    />
+    <img
+      src="/images/what-we-do/stars-1440.webp"
+      width="1440"
+      height="901"
+      alt=""
+      loading="lazy"
+      decoding="async"
+    />
+  </picture>
+  <div class="pillars-layout">
+    <div class="section-heading">
+      <span class="eyebrow">What We Do</span>
+      <h2 id="pillars-title">
+        <span>Four Pillars</span>
+        <span>of Innovation</span>
+      </h2>
+    </div>
+    {pillars.map(({ number, title, description }) => (
+      <article
+        class:list={['pillar', `pillar-${number}`]}
+        aria-labelledby={`pillar-${number}-title`}
+      >
+        <div class="pillar-copy">
+          <div class="pillar-heading">
+            <span class="number">{number}</span>
+            <h3 id={`pillar-${number}-title`}>{title}</h3>
+          </div>
+          <p>{description}</p>
+        </div>
+        <img
+          class="card-glow"
+          src="/images/what-we-do/card-glow.svg"
+          width="1231"
+          height="357"
+          alt=""
+          loading="lazy"
+        />
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .what-we-do {
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+    background: #000;
+    padding: 80px;
+  }
+  .stars {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .stars img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .pillars-layout {
+    position: relative;
+    display: grid;
+    grid-template-columns: 311px 1fr 310px;
+    grid-template-rows: 254px 176px 254px;
+    max-width: 1120px;
+    margin-inline: auto;
+  }
+  .pillars-layout::after {
+    content: '';
+    position: absolute;
+    top: -631px;
+    right: -542px;
+    width: 980px;
+    height: 980px;
+    background: url('/images/what-we-do/corner-glow.svg') center / contain
+      no-repeat;
+    pointer-events: none;
+  }
+  .section-heading {
+    position: relative;
+    isolation: isolate;
+    grid-area: 2 / 1 / 3 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    margin-inline: -80px;
+  }
+  .section-heading::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    width: 730px;
+    height: 730px;
+    left: calc(50% - 0.5px);
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: url('/images/what-we-do/center-glow.webp') center / contain
+      no-repeat;
+    pointer-events: none;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 26px;
+    width: 84px;
+    padding: 4px 8px;
+    border-radius: 32px;
+    background: rgb(255 255 255 / 15%);
+    box-shadow: inset 0 1px 1px rgb(255 255 255 / 40%);
+    font-size: 12px;
+    line-height: 18px;
+    white-space: nowrap;
+  }
+  h2 {
+    margin: 0;
+    width: 100%;
+    font-family: var(--font-heading);
+    font-size: 56px;
+    font-weight: 400;
+    line-height: 68px;
+    text-align: center;
+    background: linear-gradient(270deg, #fff, #ede8ff);
+    background-clip: text;
+    color: transparent;
+  }
+  h2 span {
+    display: block;
+  }
+  .pillar {
+    position: relative;
+    isolation: isolate;
+    height: 254px;
+    overflow: hidden;
+    border-radius: 20px 0;
+    background: rgb(255 255 255 / 15%);
+  }
+  .pillar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(
+      135deg,
+      #e0dcff,
+      #7868a5 40%,
+      #3a226e 70%,
+      #e0dcff
+    );
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .pillar-01 {
+    grid-area: 1 / 1;
+    width: 311px;
+  }
+  .pillar-02 {
+    grid-area: 1 / 3;
+    justify-self: end;
+    width: 309px;
+  }
+  .pillar-03 {
+    grid-area: 3 / 1;
+    width: 309px;
+  }
+  .pillar-04 {
+    grid-area: 3 / 3;
+    width: 310px;
+  }
+  .pillar-copy {
+    position: relative;
+    margin-top: 37px;
+    margin-left: 22px;
+    width: 267px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 17px;
+    text-align: center;
+  }
+  .pillar-02 .pillar-copy {
+    margin-left: 20px;
+  }
+  .pillar-03 .pillar-copy,
+  .pillar-04 .pillar-copy {
+    margin-left: 19px;
+  }
+  .pillar-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+  }
+  .number {
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.176px;
+    color: #ede8ff;
+  }
+  h3 {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 36px;
+    letter-spacing: -0.264px;
+    white-space: nowrap;
+  }
+  p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.176px;
+  }
+  .card-glow {
+    position: absolute;
+    left: -237.4px;
+    top: 101.6px;
+    width: 1230.8px;
+    height: 357px;
+    max-width: none;
+    pointer-events: none;
+  }
+  @media (min-width: 761px) and (max-width: 1199px) {
+    .what-we-do {
+      padding: 64px var(--page-gutter);
+    }
+    .pillars-layout {
+      grid-template-columns: 1fr 32px 1fr;
+      grid-template-rows: auto 176px auto;
+    }
+    .pillar {
+      width: 100%;
+      max-width: 311px;
+    }
+    .pillar-04 {
+      justify-self: end;
+    }
+    .pillar-copy,
+    .pillar-02 .pillar-copy,
+    .pillar-03 .pillar-copy,
+    .pillar-04 .pillar-copy {
+      width: calc(100% - 40px);
+      margin-inline: 20px;
+    }
+    h3 {
+      font-size: clamp(19px, 2vw, 24px);
+    }
+    p {
+      font-size: 15px;
+    }
+    .section-heading {
+      margin-inline: 0;
+    }
+    h2 {
+      font-size: 48px;
+      line-height: 60px;
+    }
+  }
+  @media (max-width: 760px) {
+    .what-we-do {
+      padding: 64px var(--page-gutter);
+    }
+    .pillars-layout {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+    .section-heading {
+      margin: 0 0 16px;
+      width: 100%;
+    }
+    h2 {
+      font-size: clamp(30px, 7vw, 48px);
+      line-height: 1.214286;
+    }
+    .pillar {
+      width: min(100%, 311px);
+    }
+    .pillar-copy,
+    .pillar-02 .pillar-copy,
+    .pillar-03 .pillar-copy,
+    .pillar-04 .pillar-copy {
+      width: calc(100% - 36px);
+      margin-inline: 18px;
+    }
+    h3 {
+      font-size: clamp(20px, 5.6vw, 24px);
+    }
+    p {
+      font-size: 15px;
+    }
+    .pillars-layout::after {
+      right: -670px;
+      top: -600px;
+    }
+  }
+</style>
