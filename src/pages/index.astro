@@ -1,12 +1,24 @@
 ---
+import Recruitment from '../components/Recruitment.astro';
+import Projects from '../components/Projects.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from '../components/Footer.astro';
+import Navbar from '../components/Navbar.astro';
 import Hero from '../components/Hero.astro';
 import Philosophy from '../components/Philosophy.astro';
+import Domains from '../components/Domains.astro';
+import WhatWeDo from '../components/WhatWeDo.astro';
 ---
 
 <BaseLayout>
+  <Navbar />
   <main id="main">
     <Hero />
     <Philosophy />
+    <WhatWeDo />
+    <Domains />
+    <Projects />
+    <Recruitment />
   </main>
+  <Footer />
 </BaseLayout>
