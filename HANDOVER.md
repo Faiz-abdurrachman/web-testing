@@ -208,9 +208,15 @@ Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
   kartu tarot (artwork), connector SVG dekoratif, dan 8 label HTML/CSS di
   staircase diagonal (462 × 31). Background hitam. Di <1320px label distack,
   kartu/connector disembunyikan (adaptasi). Skor diff ~1.8/255.
+- "Available Roles" (Figma `661:1510`, 1440 × 910, di y2558): heading
+  Nasalization 56/68 kiri + copy Manrope 18/27, lalu 6 baris role `1280 × 77`
+  (gap 23, fill `rgba(255,255,255,.15)`, border gradient, dot + nama +
+  arrow-right). Tiap baris link ke `/recruitment/roles/{id}` — ini yang akhirnya
+  memakai halaman role detail. Skor diff ~2.8/255.
 - Verify: blok `recruitmentPage`, `recruitmentWhoShouldJoin`, `recruitmentRoles`,
-  `recruitmentWhatYouWillDo` di `scripts/verify.mjs` (geometri exact + diff PNG +
-  overflow 320–1920), plus cek href kartu & back link kontekstual.
+  `recruitmentWhatYouWillDo`, `recruitmentAvailableRoles` di `scripts/verify.mjs`
+  (geometri exact + diff PNG + overflow 320–1920), plus cek href kartu & back
+  link kontekstual.
 - **Belum**: footer dan section lain di full-page `RECRUITMENT PAGE.png`
   (1440 × 7262).
 

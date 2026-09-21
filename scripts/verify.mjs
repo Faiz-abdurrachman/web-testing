@@ -7,7 +7,7 @@ await mkdir('artifacts', { recursive: true });
 const browser = await chromium.launch({
   executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium',
   headless: true,
-  args: ['--no-sandbox'],
+  args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu'],
 });
 const page = await browser.newPage({
   viewport: { width: 1440, height: 903 },
@@ -1342,6 +1342,143 @@ try {
       `What You Will Do text clipped at ${width}px`,
     );
   }
+  // Recruitment page — Available Roles (six rows linking to the role pages).
+  await page.setViewportSize({ width: 1440, height: 910 });
+  await page.goto(`${baseUrl}/recruitment`, { waitUntil: 'networkidle' });
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await Promise.all(
+      [...document.images].map((image) => image.decode().catch(() => {})),
+    );
+  });
+  await setNavbarHidden(true);
+  await page.evaluate(() => scrollTo(0, 0));
+  const availableRolesGeometry = await page
+    .locator('.available-roles')
+    .evaluate((section) => {
+      const rect = section.getBoundingClientRect();
+      const relative = (selector) => {
+        const box = section.querySelector(selector).getBoundingClientRect();
+        return {
+          x: box.x - rect.x,
+          y: box.y - rect.y,
+          width: box.width,
+          height: box.height,
+        };
+      };
+      return {
+        width: rect.width,
+        height: rect.height,
+        top: rect.top + scrollY,
+        heading: relative('h2'),
+        copy: relative('header p'),
+        list: relative('.role-list'),
+        rows: [...section.querySelectorAll('.role-row')].map((row) => {
+          const box = row.getBoundingClientRect();
+          return {
+            x: box.x - rect.x,
+            y: box.y - rect.y,
+            width: box.width,
+            height: box.height,
+          };
+        }),
+      };
+    });
+  assert.deepEqual(availableRolesGeometry, {
+    width: 1440,
+    height: 910,
+    top: 2558,
+    heading: { x: 80, y: 80, width: 1280, height: 68 },
+    copy: { x: 80, y: 168, width: 1280, height: 27 },
+    list: { x: 80, y: 253, width: 1280, height: 577 },
+    rows: [253, 353, 453, 553, 653, 753].map((y) => ({
+      x: 80,
+      y,
+      width: 1280,
+      height: 77,
+    })),
+  });
+  assert.deepEqual(
+    await page
+      .locator('.available-roles .role-row')
+      .evaluateAll((rows) => rows.map((row) => row.getAttribute('href'))),
+    ['data', 'core', 'language', 'vision', 'product', 'growth'].map(
+      (id) => `/recruitment/roles/${id}`,
+    ),
+    'Available Roles rows must link to the role detail pages',
+  );
+  await page.locator('.available-roles').scrollIntoViewIfNeeded();
+  await page
+    .locator('.available-roles')
+    .screenshot({ path: 'artifacts/available-roles-desktop.png' });
+  const availableRolesReference = await sharp(
+    'assets/assets recruitment page/available roles section/Available Roles Section.png',
+  )
+    .resize(1440, 910)
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const availableRolesActual = await sharp(
+    'artifacts/available-roles-desktop.png',
+  )
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(availableRolesReference.length, availableRolesActual.length);
+  let availableRolesTotal = 0;
+  const availableRolesDiff = Buffer.alloc(availableRolesActual.length);
+  const availableRolesOverlay = Buffer.alloc(availableRolesActual.length);
+  for (let i = 0; i < availableRolesActual.length; i++) {
+    const delta = Math.abs(
+      availableRolesActual[i] - availableRolesReference[i],
+    );
+    availableRolesTotal += delta;
+    availableRolesDiff[i] = Math.min(255, delta * 4);
+    availableRolesOverlay[i] = Math.round(
+      (availableRolesActual[i] + availableRolesReference[i]) / 2,
+    );
+  }
+  const availableRolesRaw = { width: 1440, height: 910, channels: 3 };
+  await sharp(availableRolesDiff, { raw: availableRolesRaw })
+    .png()
+    .toFile('artifacts/available-roles-diff.png');
+  await sharp(availableRolesOverlay, { raw: availableRolesRaw })
+    .png()
+    .toFile('artifacts/available-roles-overlay.png');
+  const availableRolesSizes = [320, 390, 768, 1024, 1440, 1680, 1920];
+  const availableRolesResponsive = [];
+  for (const width of availableRolesSizes) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.evaluate(() => scrollTo(0, 0));
+    const dimensions = await page.evaluate(() => ({
+      viewport: innerWidth,
+      content: document.documentElement.scrollWidth,
+    }));
+    assert.ok(
+      dimensions.content <= dimensions.viewport,
+      `Available Roles horizontal overflow at ${width}px`,
+    );
+    availableRolesResponsive.push(dimensions);
+    const availableRolesIssues = await page
+      .locator('.available-roles')
+      .evaluate((section) =>
+        [...section.querySelectorAll('h2, p, .role-name')]
+          .filter((element) => {
+            const box = element.getBoundingClientRect();
+            return (
+              box.left < -1 ||
+              box.right > innerWidth + 1 ||
+              element.scrollWidth > element.clientWidth + 1
+            );
+          })
+          .map((element) => element.textContent),
+      );
+    assert.deepEqual(
+      availableRolesIssues,
+      [],
+      `Available Roles text clipped at ${width}px`,
+    );
+  }
   assert.deepEqual(errors, []);
   const report = {
     recruitment: {
@@ -1390,6 +1527,12 @@ try {
       meanAbsoluteChannelDifference:
         whatYouWillDoTotal / whatYouWillDoActual.length,
       responsive: whatYouWillDoResponsive,
+    },
+    recruitmentAvailableRoles: {
+      geometry: availableRolesGeometry,
+      meanAbsoluteChannelDifference:
+        availableRolesTotal / availableRolesActual.length,
+      responsive: availableRolesResponsive,
     },
     browserErrors: errors,
   };

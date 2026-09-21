@@ -303,12 +303,10 @@ Section.png`, 5760 × 3156 (1440 × 789 at 4×).
 
 ## Recruitment page — Role detail
 
-Built but currently **not linked**: the Who Should Join cards open the homepage
-HoDS detail pages (`/hods/{id}?from=recruitment`), not these. They are kept for
-a possible future section (e.g. an available-roles listing). Route
-`/recruitment/roles/{id}` (id = data, core, language, vision, product, growth);
-these are the recruitment "Detail Role" pages, a different layout from the
-homepage's `/hods/{id}` tab pages.
+Linked from the "Available Roles" section. Route `/recruitment/roles/{id}`
+(id = data, core, language, vision, product, growth); these are the recruitment
+"Detail Role" pages, a different layout from the homepage's `/hods/{id}` tab
+pages. (The Who Should Join cards open the homepage HoDS detail pages instead.)
 
 - Figma nodes: `774:17392` (data), `733:15781` (core), `760:14975` (language),
   `760:15276` (vision), `760:15347` (product), `760:15439` (growth). Frame:
@@ -386,3 +384,29 @@ FILL`). Including it drops the section difference from ~1.83 to ~1.45/255.
   eight labels, both cards and the connector exactly, diffs against the
   reference (~1.24/255; the residual is anti-aliasing on the connector lines and
   the label edges), and checks overflow and text from 320px to 1920px.
+
+## Recruitment page — Available Roles
+
+- Figma node: `661:1510`; reference
+  `assets/assets recruitment page/available roles section/Available Roles
+Section.png`, 5760 × 3640 (1440 × 910 at 4×). The section sits at homepage
+  y=2558.
+- Frame: 1440 × 910, `padding 80`, `gap 58`, `#050507`.
+- Heading: "Available Roles", Nasalization Regular 400, 56 / 68, **left**
+  aligned in a 1280px box at (80, 80), gradient
+  `linear-gradient(180deg, #fff 0%, #707070 84%)`. The heading and copy were
+  exported as `components/Available Roles.png` / `Text.png`.
+- Copy: "Select a role to view full details, requirements, and apply.", Manrope
+  Medium 500, 18 / 27, `#fff`, left, (80, 168, 1280 × 27).
+- Role list: six rows, `1280 × 77`, `gap 23`, starting at y=253. Each row is
+  `padding 18px 32px`, `border-radius 20px`, `rgba(255,255,255,.15)` fill, a 1px
+  `linear-gradient(135deg, #ede8ff, #2e276c, #ede8ff)` border, a 6px gradient
+  dot + role name (Manrope Regular 400, 26 / 39, `#fff`, gap 22) on the left and
+  the Figma `vuesax/outline/arrow-right` icon (`images/recruitment/
+arrow-right.svg`) on the right. Row names come from `domains.ts`.
+- Each row links to the role detail page (`/recruitment/roles/{id}`) — this is
+  where the previously unlinked role pages are used.
+- Verification: `scripts/verify.mjs` asserts the section, heading, copy, list and
+  all six rows exactly, checks the row `href`s, diffs against the reference
+  (~2.8/255; the residual is the row text rasterization), and checks overflow and
+  text from 320px to 1920px.
