@@ -19,8 +19,15 @@ import DomainRail from './DomainRail.astro';
 <style>
   .who-should-join {
     padding-block: 80px;
-    /* Reference and full-page PNG render this band pure black. */
-    background: #000;
+    /* Supplied Background.png = the Figma frame fill (near-black starfield). */
+    background-color: #000;
+    background-image: image-set(
+      url('/images/recruitment/who-should-join-background-1440.webp') 1x,
+      url('/images/recruitment/who-should-join-background-2880.webp') 2x
+    );
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
   }
   header {
     padding-inline: var(--page-gutter);

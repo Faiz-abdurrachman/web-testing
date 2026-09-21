@@ -287,11 +287,11 @@ Section.png`, 5760 × 3156 (1440 × 789 at 4×).
   `/recruitment#who-should-join` ("Back to Open Roles"); the homepage rail keeps
   plain `/hods/{id}` and "Back to HoDS". The detail pages are static, so the
   origin is applied on the client from the query (`HoDSDetail.astro`).
-- Background: the frame's fill is effectively black (`Background.png` in the
-  folder is a black export; the Figma fill is near-black with under 0.1%
-  non-black pixels). The reference and the full-page PNG render this band pure
-  black, so the section uses `#000` rather than the homepage's `#050507`; this
-  matches the reference.
+- Background: `Background.png` is the Figma frame fill (a near-black starfield,
+  the same artwork as the What You Will Do fill). Exported lossless to
+  `public/images/recruitment/who-should-join-background-{1440,2880}.webp` and
+  painted with `background-size: cover`, centered. The card rail dominates the
+  difference (~3.0/255), so the starfield only moves it slightly.
 - Measured layout at 1440: section `1440 × 789` at homepage y=866; heading
   `(80, 80, 1280 × 68)`; copy `(80, 172, 1280 × 27)`; cards at x 80 / 514 / 948
   / 1382, y 273, 394 × 436.
