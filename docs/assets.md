@@ -395,7 +395,10 @@ FILL`). Including it drops the section difference from ~1.83 to ~1.45/255.
   `assets/assets recruitment page/available roles section/Available Roles
 Section.png`, 5760 × 3640 (1440 × 910 at 4×). The section sits at homepage
   y=2558.
-- Frame: 1440 × 910, `padding 80`, `gap 58`, `#050507`.
+- Frame: 1440 × 910, `padding 80`, `gap 58`, `#050507`. The 1280 content is
+  centred (`align-items: center` + `max-width: 1280px`), so it stays centered on
+  viewports wider than 1440 instead of hugging the left gutter; at 1440 it is
+  unchanged (x=80).
 - Heading: "Available Roles", Nasalization Regular 400, 56 / 68, **left**
   aligned in a 1280px box at (80, 80), gradient
   `linear-gradient(180deg, #fff 0%, #707070 84%)`. The heading and copy were
@@ -420,7 +423,9 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
 - Figma node: `661:1515`; reference
   `assets/assets recruitment page/selection timeline section/TIMELINE.png`,
   5760 × 3260 (1440 × 815 at 4×). The section sits at homepage y=3468.
-- Frame: 1440 × 815, `padding 80`, `gap 58`, `#050507`.
+- Frame: 1440 × 815, `padding 80`, `gap 58`, `#050507`. Like Available Roles, the
+  1280 content is centred, so it stays centered on viewports wider than 1440
+  (unchanged at 1440).
 - Heading: "Selection Timeline", Nasalization Regular 400, 56 / 68, **left**,
   gradient `linear-gradient(180deg, #fff 0%, #707070 80%)`, (80, 80, 1280 × 68).
 - Table, 1280 wide at x=80:
