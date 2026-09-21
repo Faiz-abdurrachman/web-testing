@@ -10,6 +10,7 @@ yang masih pending.
 - **Deploy**: Vercel (auto dari branch `main`)
 - **Buat AI agent**: baca juga `AGENTS.md` (operating manual ringkas buat AI).
 - **Prompt buat AI baru**: `docs/kickoff-prompt.md` (copy-paste starter).
+- **Prompt bikin halaman baru presisi**: `docs/page-build-prompt.md`.
 
 ---
 

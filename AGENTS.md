@@ -6,7 +6,8 @@ pages. Goal: **pixel-accurate to Figma/PNG** with lightweight HTML/CSS.
 Human-facing docs: `HANDOVER.md` (full context) and `docs/assets.md`
 (per-section provenance + Figma nodes). Read those for "why"; this file is the
 operating manual. A copy-paste starter for new agents lives in
-`docs/kickoff-prompt.md`.
+`docs/kickoff-prompt.md`; for building a new page/section use
+`docs/page-build-prompt.md`.
 
 ## Commands
 
