@@ -70,6 +70,12 @@ Recruitment CTA follows `assets/assets home page/cta/CTA Recruicment Section.png
 at 1×). Open `/#recruitment`. Its two buttons remain unavailable until
 their actual destinations are supplied, consistent with the hero preview.
 
+The Recruitment page (`/recruitment`) starts with its hero, following
+`assets/assets recruitment page/hero section/About Us Hero Section.png` (1440 ×
+866 at 3×; the reference includes the navbar). It reuses the shared Navbar with
+Recruitment active and adds a dark "secondary" button variant for "Apply Now".
+Remaining sections and the footer are still to come.
+
 Footer follows `assets/assets home page/footer/Footer.png` (1440 × 556 at 1×), the Figma node
 `765:17071`. It carries the supplied background image, the brand lockup, the
 social icons, the Navigation and Contact columns, and the legal bar. Text,
@@ -87,11 +93,12 @@ See [asset notes](docs/assets.md).
 
 ## Project structure
 
-- `src/components/`: Navbar, Hero, Philosophy, WhatWeDo, Domains, DomainCard, Projects, Recruitment, Footer, and shared Button.
+- `src/components/`: Navbar, Hero, Philosophy, WhatWeDo, Domains, DomainCard, Projects, Recruitment, RecruitmentHero, Footer, and shared Button.
 - `src/data/domains.ts`: domain copy and topic labels.
 - `src/layouts/`: HTML document, metadata, and font preload links.
 - `src/styles/global.css`: fonts, design tokens, reset, and focus styles.
 - `src/pages/index.astro`: homepage composition.
+- `src/pages/recruitment.astro`: Recruitment page (hero so far).
 - `public/`: locally served images and licensed fonts.
 
 ## Validation

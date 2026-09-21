@@ -71,6 +71,7 @@ src/
   layouts/       BaseLayout.astro (head, font preload, slot)
   pages/         index.astro           (homepage)
                  hods/[id].astro       (6 halaman detail, getStaticPaths)
+                 recruitment.astro     (halaman Recruitment, baru hero)
   styles/        global.css (font-face, tokens, reset)
 scripts/         verify.mjs  (verifikasi visual)
 public/          fonts/ + images/ (aset yang diserve)
@@ -161,7 +162,30 @@ setelah scroll jadi panel `blur(12px) saturate(140%)` + `rgb(5 5 7 / 58%)`.
 
 > Catatan: frame `Detile Roles - ...` di Figma itu halaman **lain** (About this
 > role / Requirement / Contact person). Yang dipakai = layout tab sesuai aset
-> `assets/assets home page/hods/detail card hods/`.
+> `assets/hods/detail card hods/`.
+
+---
+
+## 8b. Halaman Recruitment (dibangun bertahap)
+
+Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
+
+- Aset referensi: `assets/assets recruitment page/`.
+- Hero: Figma node `770:15523` (dinamai "About Us Hero Section" di file, tapi
+  isinya hero Recruitment). Frame 1440 × 866, gap 63, konten di-center.
+  Heading Nasalization 80/98 (2 baris, gradient putih→#707070→putih), deskripsi
+  Manrope Medium 18/27 `#EDE8FF`, tombol "Apply Now" (`Secondary Buttom`
+  `97:442`) 122 × 51.
+- Background: `Gambar Hero About Us.png` full-width top-aligned → WebP di
+  `public/images/recruitment/`. (`Background.png` di folder itu nyaris hitam,
+  tidak dipakai.)
+- Navbar pakai `Navbar.astro` dengan prop `active="Recruitment"`; underline
+  106px gradient. Home tetap 49px supaya diff homepage tidak berubah.
+- Tombol pakai `Button.astro` `variant="secondary"` (hug label).
+- Verify: blok `recruitmentPage` di `scripts/verify.mjs` (geometri exact + diff
+  PNG + overflow 320–1920). Skor diff ~2.2/255.
+- **Belum**: section "Who Should Join", footer, dan section lain di full-page
+  `RECRUITMENT PAGE.png` (1440 × 7262).
 
 ---
 
@@ -287,7 +311,9 @@ f925e1d  Revert motion               ← HEAD
 - [ ] **Data project asli** — `src/data/projects.ts` masih 4 placeholder, gambar sama semua.
 - [ ] **Link yang belum tersedia** (sengaja `aria-disabled`, bukan link mati):
       nav link selain Home, tombol hero/CTA, social + Terms/Privacy/Cookies di footer.
-- [ ] Halaman lain yang ada di Figma tapi belum dibuat: About Us, Recruitment page,
+- [ ] **Halaman Recruitment**: hero sudah jadi (§8b); section "Who Should
+      Join", footer, dan section lain menyusul.
+- [ ] Halaman lain yang ada di Figma tapi belum dibuat: About Us,
       Hall of Frames, Partners, Contact.
 - [ ] Audit tiap halaman detail HoDS kalau ada pembaruan art/konten di Figma.
 - [ ] Opsional: lanjutkan motion (lihat §10) & optimasi bundle.

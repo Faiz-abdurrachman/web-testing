@@ -2,7 +2,7 @@
 interface Props {
   href?: string;
   compact?: boolean;
-  variant?: 'primary' | 'glass' | 'white';
+  variant?: 'primary' | 'glass' | 'white' | 'secondary';
 }
 const { href, variant = 'primary', compact = false } = Astro.props;
 ---
@@ -93,6 +93,30 @@ const { href, variant = 'primary', compact = false } = Astro.props;
     width: 172px;
     background: white;
     color: #1e1e1e;
+  }
+  /* Figma "Secondary Buttom" (component set 97:442): dark glass pill that hugs
+     its label, with a blurred "liquid" highlight clipped inside. */
+  .secondary {
+    overflow: hidden;
+    background: #1a1a1a;
+    backdrop-filter: blur(6px);
+    box-shadow:
+      inset 0 0 40px rgb(242 242 242 / 50%),
+      inset 0 0 0 2px #999,
+      inset -6px -6px 2px -4px #b3b3b3,
+      inset 4px 4px 2px -4px #b3b3b3,
+      inset 6px 6px 1.06557px -6px rgb(255 255 255 / 50%);
+  }
+  .secondary::before {
+    content: '';
+    position: absolute;
+    top: -27.45px;
+    left: -85.34px;
+    z-index: -1;
+    width: 294.11px;
+    height: 121.64px;
+    background: rgb(217 217 217 / 10%);
+    backdrop-filter: blur(4px);
   }
   .glass {
     width: 198px;

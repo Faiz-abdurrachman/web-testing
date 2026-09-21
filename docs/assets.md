@@ -211,3 +211,48 @@ score were unchanged when this section was added.
   positions, and checks text containment from 320px through 1920px. Anti-aliased
   text over the bright lower background keeps a higher difference score than
   the flat sections; alignment is exact (mask cross-correlation offset 0).
+
+## Recruitment page — Hero
+
+Built section by section; only the hero exists so far. Route: `/recruitment`.
+
+- Figma node: `770:15523`. The node is named "About Us Hero Section" in the
+  file, but its content (and the supplied `hero.txt`) is the Recruitment page
+  hero. Reference: `assets/assets recruitment page/hero section/About Us Hero
+Section.png`, 4320 × 2598 (1440 × 866 at 3×). The reference PNG **includes the
+  navbar**, so the navbar stays visible when it is screenshotted.
+- Frame: 1440 × 866, `padding 0 80`, column, `justify-content: center`,
+  `align-items: center`, `gap 63px`.
+- Heading: "YOUR NEXT CHAPTER START HERE.", Nasalization Regular 400, 80 / 98,
+  centered in a 900px box, two lines ("YOUR NEXT CHAPTER" then "START HERE.").
+  Fill is `linear-gradient(180deg, #fff 0%, #707070 55%, #fff 100%)` with
+  `background-clip: text`. Measured glyphs: line 1 `(273, 269, 891)`, line 2
+  `(462, 368, 516)`.
+- Description: "Join Data Sorcerers and turn your curiosity into capability,
+  experiments, research, and real-world projects." Manrope Medium 500, 18 / 27,
+  `#EDE8FF`, centered in a 900px box. Measured glyphs: `(277, 484, 884)` — a
+  single line.
+- Button: "Apply Now" (Figma `Secondary Buttom`, component set `97:442`,
+  instance `770:15519`): 122 × 51, `border-radius: 200px`, `#1A1A1A`,
+  `backdrop-filter: blur(6px)`, inset highlights, plus a clipped "liquid"
+  highlight (`294.11 × 121.64` at `(-85.34, -27.45)`, `rgba(217,217,217,.1)`,
+  `blur(4px)`). Implemented as `Button.astro` `variant="secondary"`, which hugs
+  its label; the label is Manrope SemiBold 18 / 34.1.
+- Measured layout boxes at 1440: heading `(270, 247.5, 900 × 196)`, description
+  `(270, 477.5, 900 × 27)`, button `(659.22, 567.5, 121.55 × 51)`.
+- Background: `Gambar Hero About Us.png` (5756 × 3600), drawn full-width and
+  top-aligned (`object-fit: cover; object-position: top`), so the lower ~35px is
+  cropped. It is the decorative glow/arc layer with no text; the masked
+  difference against the reference is ~1.2/255. The folder's `Background.png` is
+  effectively black and is unused. Served as
+  `public/images/recruitment/hero-1440.webp` and `hero-2880.webp`
+  (high-quality WebP).
+- Navbar: the shared `Navbar.astro` with `active="Recruitment"`. The active
+  underline is the Figma 106px gradient
+  `linear-gradient(163deg, #9b7bff, #ede8ff, #9b7bff)`; the Home underline keeps
+  its original 49px so the homepage comparison is unchanged.
+- Verification: `scripts/verify.mjs` asserts the section, heading, description,
+  and button boxes exactly, checks the active nav link, diffs the section
+  against the reference PNG (~2.2/255; font rasterization and the glow remain),
+  and checks horizontal overflow and clipped hero text from 320px to 1920px.
+- Remaining sections (e.g. "Who Should Join") and the footer are not built yet.

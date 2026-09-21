@@ -1,5 +1,9 @@
 ---
 import Button from './Button.astro';
+interface Props {
+  active?: string;
+}
+const { active = 'Home' } = Astro.props;
 const links = [
   'Home',
   'About Us',
@@ -8,6 +12,11 @@ const links = [
   'Partners',
   'Contact',
 ];
+// Only pages that exist get a real destination; the rest stay unavailable.
+const destinations: Record<string, string> = {
+  Home: '/',
+  Recruitment: '/recruitment',
+};
 ---
 
 <header class="navbar">
@@ -17,9 +26,13 @@ const links = [
     </a>
     <div class="desktop-menu">
       <nav aria-label="Main navigation">
-        {links.map((label, index) =>
-          index === 0 ? (
-            <a class="nav-link active" href="/" aria-current="page">
+        {links.map((label) =>
+          destinations[label] ? (
+            <a
+              class:list={['nav-link', { active: label === active }]}
+              href={destinations[label]}
+              aria-current={label === active ? 'page' : undefined}
+            >
               {label}
             </a>
           ) : (
@@ -38,9 +51,13 @@ const links = [
         <span></span>
       </summary>
       <nav aria-label="Mobile navigation">
-        {links.map((label, index) =>
-          index === 0 ? (
-            <a class="nav-link active" href="/" aria-current="page">
+        {links.map((label) =>
+          destinations[label] ? (
+            <a
+              class:list={['nav-link', { active: label === active }]}
+              href={destinations[label]}
+              aria-current={label === active ? 'page' : undefined}
+            >
               {label}
             </a>
           ) : (
@@ -161,7 +178,18 @@ const links = [
       left: 14.5px;
       right: auto;
       bottom: 8px;
+    }
+    .desktop-menu .active:nth-child(1)::after {
       width: 49px;
+    }
+    .desktop-menu .active:nth-child(3)::after {
+      width: 106px;
+      background: linear-gradient(
+        163deg,
+        #9b7bff 0%,
+        #ede8ff 50%,
+        #9b7bff 100%
+      );
     }
   }
   @media (max-width: 1300px) {

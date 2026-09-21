@@ -741,6 +741,127 @@ try {
       );
     }
   }
+  // Recruitment page — hero section (its reference PNG includes the navbar).
+  await page.goto(
+    `${process.env.PREVIEW_URL || 'http://localhost:4321'}/recruitment`,
+    { waitUntil: 'networkidle' },
+  );
+  await page.setViewportSize({ width: 1440, height: 903 });
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await Promise.all(
+      [...document.images].map((image) => image.decode().catch(() => {})),
+    );
+  });
+  await page.evaluate(() => scrollTo(0, 0));
+  await page
+    .locator('.recruitment-hero')
+    .screenshot({ path: 'artifacts/recruitment-hero-desktop.png' });
+  const recruitHeroGeometry = await page
+    .locator('.recruitment-hero')
+    .evaluate((section) => {
+      const rect = section.getBoundingClientRect();
+      const relative = (selector) => {
+        const box = section.querySelector(selector).getBoundingClientRect();
+        return {
+          x: box.x - rect.x,
+          y: box.y - rect.y,
+          width: box.width,
+          height: box.height,
+        };
+      };
+      return {
+        width: rect.width,
+        height: rect.height,
+        top: rect.top + scrollY,
+        h1: relative('h1'),
+        copy: relative('p'),
+        button: relative('button'),
+      };
+    });
+  assert.deepEqual(recruitHeroGeometry, {
+    width: 1440,
+    height: 866,
+    top: 0,
+    h1: { x: 270, y: 247.5, width: 900, height: 196 },
+    copy: { x: 270, y: 477.5, width: 900, height: 27 },
+    button: { x: 659.21875, y: 567.5, width: 121.546875, height: 51 },
+  });
+  assert.equal(
+    await page.locator('.desktop-menu .nav-link.active').textContent(),
+    'Recruitment',
+    'Recruitment must be the active navigation link on its page',
+  );
+  const recruitHeroReference = await sharp(
+    'assets/assets recruitment page/hero section/About Us Hero Section.png',
+  )
+    .resize(1440, 866)
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const recruitHeroActual = await sharp(
+    'artifacts/recruitment-hero-desktop.png',
+  )
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(recruitHeroReference.length, recruitHeroActual.length);
+  const recruitHeroDiff = Buffer.alloc(recruitHeroActual.length);
+  const recruitHeroOverlay = Buffer.alloc(recruitHeroActual.length);
+  let recruitHeroTotal = 0;
+  for (let i = 0; i < recruitHeroActual.length; i++) {
+    const delta = Math.abs(recruitHeroActual[i] - recruitHeroReference[i]);
+    recruitHeroTotal += delta;
+    recruitHeroDiff[i] = Math.min(255, delta * 4);
+    recruitHeroOverlay[i] = Math.round(
+      (recruitHeroActual[i] + recruitHeroReference[i]) / 2,
+    );
+  }
+  const recruitHeroRaw = { width: 1440, height: 866, channels: 3 };
+  await sharp(recruitHeroDiff, { raw: recruitHeroRaw })
+    .png()
+    .toFile('artifacts/recruitment-hero-diff.png');
+  await sharp(recruitHeroOverlay, { raw: recruitHeroRaw })
+    .png()
+    .toFile('artifacts/recruitment-hero-overlay.png');
+  const recruitSizes = [320, 390, 768, 1024, 1440, 1680, 1920];
+  const recruitResponsive = [];
+  for (const width of recruitSizes) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.evaluate(() => scrollTo(0, 0));
+    const dimensions = await page.evaluate(() => ({
+      viewport: innerWidth,
+      content: document.documentElement.scrollWidth,
+    }));
+    assert.ok(
+      dimensions.content <= dimensions.viewport,
+      `Recruitment horizontal overflow at ${width}px`,
+    );
+    recruitResponsive.push(dimensions);
+    const recruitHeroIssues = await page
+      .locator('.recruitment-hero')
+      .evaluate((section) =>
+        [...section.querySelectorAll('h1, p, button')]
+          .filter((element) => {
+            const box = element.getBoundingClientRect();
+            const range = document.createRange();
+            range.selectNodeContents(element);
+            const textBox = range.getBoundingClientRect();
+            return (
+              box.left < -1 ||
+              box.right > innerWidth + 1 ||
+              textBox.left < box.left - 1 ||
+              textBox.right > box.right + 1
+            );
+          })
+          .map((element) => element.textContent),
+      );
+    assert.deepEqual(
+      recruitHeroIssues,
+      [],
+      `Recruitment hero text clipped at ${width}px`,
+    );
+  }
   assert.deepEqual(errors, []);
   const report = {
     recruitment: {
@@ -770,6 +891,12 @@ try {
     philosophy: {
       geometry: philosophyGeometry,
       meanAbsoluteChannelDifference: philosophyTotal / philosophyActual.length,
+    },
+    recruitmentPage: {
+      geometry: recruitHeroGeometry,
+      meanAbsoluteChannelDifference:
+        recruitHeroTotal / recruitHeroActual.length,
+      responsive: recruitResponsive,
     },
     browserErrors: errors,
   };
