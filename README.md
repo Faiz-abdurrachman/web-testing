@@ -89,8 +89,11 @@ artworks, a decorative connector SVG and eight HTML/CSS label pills. "Available
 Roles" follows
 `assets/assets recruitment page/available roles section/Available Roles
 Section.png` (1440 × 910 at 4×): a left-aligned heading and copy plus six role
-rows that link to the `/recruitment/roles/{id}` pages. Remaining sections and
-the footer are still to come.
+rows that link to the `/recruitment/roles/{id}` pages. "Selection Timeline"
+follows
+`assets/assets recruitment page/selection timeline section/TIMELINE.png`
+(1440 × 815 at 4×): a heading plus a Phase/Date table of six recruitment phases.
+Remaining sections and the footer are still to come.
 
 Footer follows `assets/assets home page/footer/Footer.png` (1440 × 556 at 1×), the Figma node
 `765:17071`. It carries the supplied background image, the brand lockup, the
@@ -109,7 +112,7 @@ See [asset notes](docs/assets.md).
 
 ## Project structure
 
-- `src/components/`: Navbar, Hero, Philosophy, WhatWeDo, Domains, DomainCard, DomainRail, Projects, Recruitment, RecruitmentHero, WhoShouldJoin, WhatYouWillDo, AvailableRoles, RoleDetail, Footer, and shared Button.
+- `src/components/`: Navbar, Hero, Philosophy, WhatWeDo, Domains, DomainCard, DomainRail, Projects, Recruitment, RecruitmentHero, WhoShouldJoin, WhatYouWillDo, AvailableRoles, SelectionTimeline, RoleDetail, Footer, and shared Button.
 - `src/data/domains.ts`: domain copy and topic labels.
 - `src/layouts/`: HTML document, metadata, and font preload links.
 - `src/styles/global.css`: fonts, design tokens, reset, and focus styles.

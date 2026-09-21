@@ -410,3 +410,29 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
   all six rows exactly, checks the row `href`s, diffs against the reference
   (~2.8/255; the residual is the row text rasterization), and checks overflow and
   text from 320px to 1920px.
+
+## Recruitment page — Selection Timeline
+
+- Figma node: `661:1515`; reference
+  `assets/assets recruitment page/selection timeline section/TIMELINE.png`,
+  5760 × 3260 (1440 × 815 at 4×). The section sits at homepage y=3468.
+- Frame: 1440 × 815, `padding 80`, `gap 58`, `#050507`.
+- Heading: "Selection Timeline", Nasalization Regular 400, 56 / 68, **left**,
+  gradient `linear-gradient(180deg, #fff 0%, #707070 80%)`, (80, 80, 1280 × 68).
+- Table, 1280 wide at x=80:
+  - Header (80, 206, 1280 × 78): `rgba(108,59,255,.25)` fill, 1px
+    `linear-gradient(135deg, #ede8ff, #2e276c, #ede8ff)` border,
+    `border-radius 20px 20px 0 0`, `padding 18px 32px`; "Phase" (Manrope Bold
+    700, 26 / 39) and a 568px "Date" column.
+  - Body (80, 284, 1280 × 451): `rgba(255,255,255,.15)` fill, the same border
+    and `border-radius 0 0 20px 20px`, `padding 18px 32px`, `gap 36px`. Six rows
+    (phase Manrope Medium 500 26 / 39, left; 568px date column) separated by 1px
+    rules (`linear-gradient(90deg, #9b7bff, transparent)`, 1248 wide).
+  - Phases: OPEN RECRUITMENT, APPLICATION, FOUNDATION SCREENING, HOODS
+    INTERVIEW, TRIAL / CHALLENGE, MEMBER.
+  - The date cells hold the Figma placeholder text "Date" (the reference PNG
+    shows the same); swap in the real dates when they are supplied. The section
+    was cross-checked with OCR against the reference for the phase names.
+- Verification: `scripts/verify.mjs` asserts the section, heading, header, body
+  and row geometry exactly, diffs against the reference (~3.2/255; the residual
+  is text rasterization), and checks overflow and text from 320px to 1920px.

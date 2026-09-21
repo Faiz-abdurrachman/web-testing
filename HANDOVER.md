@@ -213,10 +213,14 @@ Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
   (gap 23, fill `rgba(255,255,255,.15)`, border gradient, dot + nama +
   arrow-right). Tiap baris link ke `/recruitment/roles/{id}` — ini yang akhirnya
   memakai halaman role detail. Skor diff ~2.8/255.
+- "Selection Timeline" (Figma `661:1515`, 1440 × 815, di y3468): heading
+  Nasalization 56/68 kiri, lalu tabel 1280 (header "Phase | Date" ungu + body
+  6 baris phase) dengan border gradient & separator 1px. Kolom tanggal masih
+  placeholder "Date" (sesuai PNG/Figma). Skor diff ~3.2/255.
 - Verify: blok `recruitmentPage`, `recruitmentWhoShouldJoin`, `recruitmentRoles`,
-  `recruitmentWhatYouWillDo`, `recruitmentAvailableRoles` di `scripts/verify.mjs`
-  (geometri exact + diff PNG + overflow 320–1920), plus cek href kartu & back
-  link kontekstual.
+  `recruitmentWhatYouWillDo`, `recruitmentAvailableRoles`,
+  `recruitmentSelectionTimeline` di `scripts/verify.mjs` (geometri exact + diff
+  PNG + overflow 320–1920), plus cek href kartu & back link kontekstual.
 - **Belum**: footer dan section lain di full-page `RECRUITMENT PAGE.png`
   (1440 × 7262).
 

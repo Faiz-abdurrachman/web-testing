@@ -1,0 +1,156 @@
+---
+// Figma node 661:1515. The table is 1280 wide: a header row then a body with
+// six phase rows separated by 1px gradient rules. The date cells hold the
+// Figma placeholder text ("Date") in the supplied reference; replace with the
+// real dates when they are available.
+const phases = [
+  'OPEN RECRUITMENT',
+  'APPLICATION',
+  'FOUNDATION SCREENING',
+  'HOODS INTERVIEW',
+  'TRIAL / CHALLENGE',
+  'MEMBER',
+];
+const date = 'Date';
+---
+
+<section
+  id="selection-timeline"
+  class="selection-timeline"
+  aria-labelledby="selection-timeline-title"
+>
+  <h2 id="selection-timeline-title">Selection Timeline</h2>
+
+  <div class="timeline">
+    <div class="tl-head">
+      <span class="phase head">Phase</span>
+      <span class="date-col head">{date}</span>
+    </div>
+    <div class="tl-body">
+      {phases.map((phase) => (
+        <div class="tl-row">
+          <span class="phase">{phase}</span>
+          <span class="date-col">{date}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+<style>
+  .selection-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 58px;
+    padding: 80px;
+    background: #050507;
+  }
+  h2 {
+    margin: 0;
+    font: 400 56px/68px var(--font-heading);
+    background: linear-gradient(180deg, #fff 0%, #707070 80%);
+    background-clip: text;
+    color: transparent;
+  }
+  .timeline {
+    width: 1280px;
+    max-width: 100%;
+  }
+  .tl-head,
+  .tl-body {
+    position: relative;
+  }
+  .tl-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Heights include the 1px ring so the table totals 529px. */
+    height: 78px;
+    padding: 18px 32px;
+    border-radius: 20px 20px 0 0;
+    background: rgb(108 59 255 / 25%);
+  }
+  .tl-body {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    height: 451px;
+    padding: 18px 32px;
+    border-radius: 0 0 20px 20px;
+    background: rgb(255 255 255 / 15%);
+  }
+  .tl-head::after,
+  .tl-body::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%);
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .tl-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .tl-row + .tl-row::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -18.5px;
+    width: 1248px;
+    height: 1px;
+    background: linear-gradient(90deg, #9b7bff 0%, rgb(255 255 255 / 0%) 100%);
+  }
+  .phase {
+    flex: 1;
+    font-size: 26px;
+    font-weight: 500;
+    line-height: 39px;
+    color: #fff;
+  }
+  .phase.head {
+    font-weight: 700;
+  }
+  .date-col {
+    flex: none;
+    width: 568px;
+    font-size: 26px;
+    font-weight: 500;
+    line-height: 39px;
+    color: #fff;
+  }
+  .date-col.head {
+    font-weight: 700;
+    text-align: center;
+  }
+  @media (max-width: 760px) {
+    .selection-timeline {
+      gap: 40px;
+      padding: 64px 24px;
+    }
+    h2 {
+      font-size: clamp(30px, 8vw, 48px);
+      line-height: 1.214286;
+    }
+    .tl-body {
+      gap: 24px;
+    }
+    .phase,
+    .date-col {
+      font-size: 18px;
+      line-height: 27px;
+    }
+    .date-col {
+      width: 40%;
+    }
+    .tl-row + .tl-row::before {
+      top: -12.5px;
+      width: 100%;
+    }
+  }
+</style>

@@ -1479,6 +1479,131 @@ try {
       `Available Roles text clipped at ${width}px`,
     );
   }
+  // Recruitment page — Selection Timeline (header row + six phase rows).
+  await page.setViewportSize({ width: 1440, height: 815 });
+  await page.goto(`${baseUrl}/recruitment`, { waitUntil: 'networkidle' });
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await Promise.all(
+      [...document.images].map((image) => image.decode().catch(() => {})),
+    );
+  });
+  await setNavbarHidden(true);
+  await page.evaluate(() => scrollTo(0, 0));
+  const selectionTimelineGeometry = await page
+    .locator('.selection-timeline')
+    .evaluate((section) => {
+      const rect = section.getBoundingClientRect();
+      const relative = (selector) => {
+        const box = section.querySelector(selector).getBoundingClientRect();
+        return {
+          x: box.x - rect.x,
+          y: box.y - rect.y,
+          width: box.width,
+          height: box.height,
+        };
+      };
+      return {
+        width: rect.width,
+        height: rect.height,
+        top: rect.top + scrollY,
+        heading: relative('h2'),
+        head: relative('.tl-head'),
+        body: relative('.tl-body'),
+        rows: [...section.querySelectorAll('.tl-row')].map((row) => {
+          const box = row.getBoundingClientRect();
+          return { x: box.x - rect.x, y: box.y - rect.y, height: box.height };
+        }),
+      };
+    });
+  assert.deepEqual(selectionTimelineGeometry, {
+    width: 1440,
+    height: 815,
+    top: 3468,
+    heading: { x: 80, y: 80, width: 1280, height: 68 },
+    head: { x: 80, y: 206, width: 1280, height: 78 },
+    body: { x: 80, y: 284, width: 1280, height: 451 },
+    rows: [302, 377, 452, 527, 602, 677].map((y) => ({
+      x: 112,
+      y,
+      height: 39,
+    })),
+  });
+  await page.locator('.selection-timeline').scrollIntoViewIfNeeded();
+  await page
+    .locator('.selection-timeline')
+    .screenshot({ path: 'artifacts/selection-timeline-desktop.png' });
+  const selectionTimelineReference = await sharp(
+    'assets/assets recruitment page/selection timeline section/TIMELINE.png',
+  )
+    .resize(1440, 815)
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const selectionTimelineActual = await sharp(
+    'artifacts/selection-timeline-desktop.png',
+  )
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(
+    selectionTimelineReference.length,
+    selectionTimelineActual.length,
+  );
+  let selectionTimelineTotal = 0;
+  const selectionTimelineDiff = Buffer.alloc(selectionTimelineActual.length);
+  const selectionTimelineOverlay = Buffer.alloc(selectionTimelineActual.length);
+  for (let i = 0; i < selectionTimelineActual.length; i++) {
+    const delta = Math.abs(
+      selectionTimelineActual[i] - selectionTimelineReference[i],
+    );
+    selectionTimelineTotal += delta;
+    selectionTimelineDiff[i] = Math.min(255, delta * 4);
+    selectionTimelineOverlay[i] = Math.round(
+      (selectionTimelineActual[i] + selectionTimelineReference[i]) / 2,
+    );
+  }
+  const selectionTimelineRaw = { width: 1440, height: 815, channels: 3 };
+  await sharp(selectionTimelineDiff, { raw: selectionTimelineRaw })
+    .png()
+    .toFile('artifacts/selection-timeline-diff.png');
+  await sharp(selectionTimelineOverlay, { raw: selectionTimelineRaw })
+    .png()
+    .toFile('artifacts/selection-timeline-overlay.png');
+  const selectionTimelineSizes = [320, 390, 768, 1024, 1440, 1680, 1920];
+  const selectionTimelineResponsive = [];
+  for (const width of selectionTimelineSizes) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.evaluate(() => scrollTo(0, 0));
+    const dimensions = await page.evaluate(() => ({
+      viewport: innerWidth,
+      content: document.documentElement.scrollWidth,
+    }));
+    assert.ok(
+      dimensions.content <= dimensions.viewport,
+      `Selection Timeline horizontal overflow at ${width}px`,
+    );
+    selectionTimelineResponsive.push(dimensions);
+    const selectionTimelineIssues = await page
+      .locator('.selection-timeline')
+      .evaluate((section) =>
+        [...section.querySelectorAll('h2, .phase, .date-col')]
+          .filter((element) => {
+            const box = element.getBoundingClientRect();
+            return (
+              box.left < -1 ||
+              box.right > innerWidth + 1 ||
+              element.scrollWidth > element.clientWidth + 1
+            );
+          })
+          .map((element) => element.textContent),
+      );
+    assert.deepEqual(
+      selectionTimelineIssues,
+      [],
+      `Selection Timeline text clipped at ${width}px`,
+    );
+  }
   assert.deepEqual(errors, []);
   const report = {
     recruitment: {
@@ -1533,6 +1658,12 @@ try {
       meanAbsoluteChannelDifference:
         availableRolesTotal / availableRolesActual.length,
       responsive: availableRolesResponsive,
+    },
+    recruitmentSelectionTimeline: {
+      geometry: selectionTimelineGeometry,
+      meanAbsoluteChannelDifference:
+        selectionTimelineTotal / selectionTimelineActual.length,
+      responsive: selectionTimelineResponsive,
     },
     browserErrors: errors,
   };
