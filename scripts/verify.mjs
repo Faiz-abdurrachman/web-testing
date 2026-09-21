@@ -1857,7 +1857,7 @@ try {
       heading: relative('h2'),
       copy: relative('p'),
       actions: relative('.cta-actions'),
-      glow: relative('.cta-glow'),
+      glow: relative('.glow-frame'),
     };
   });
   assert.deepEqual(
@@ -1875,7 +1875,7 @@ try {
       top: 6169,
       panel: { x: 80, y: 80, width: 1280, height: 377 },
       actions: { x: 617.5, y: 327, width: 205, height: 51 },
-      glow: { x: 349.83, y: 351, width: 1000.33, height: 271.5 },
+      glow: { x: 349.83, y: 351, width: 1000.331, height: 271.502 },
     },
   );
   assert.ok(

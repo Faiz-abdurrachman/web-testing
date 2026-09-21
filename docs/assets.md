@@ -516,11 +516,13 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
   ideas can become projects, and your work can create real impact." Manrope
   Regular 400, 16 / 1.5, `letter-spacing -0.011em`, width 586, center.
 - Button: "Join the Community" (`Button` `variant="primary"`), 205 × 51.
-- Decorative glow: Figma `IMAGE-SVG` `839:4672`, 1000.33 × 271.5 at (269.83, 271) inside the panel, exported as PNG (the Figma rasterization) to
-  `public/images/recruitment/cta-glow[-2x].webp`.
+- Decorative glow: Figma `IMAGE-SVG` `839:4672`, 1000.33 × 271.5 at (269.83, 271) inside the panel. It reuses the homepage CTA's treatment
+  (`public/images/recruitment/glow.svg`, rotated -2.23deg and oversized inside a
+  1000.331 × 271.502 frame), which matches the reference far better than the raw
+  Figma SVG/PNG export (browser blur rasterization differs).
 - Note: `Frame 2393.png` is a **transparent** export (the panel fill is
   `rgba(98,80,255,.1)`); comparisons must composite it over `#050507`.
 - Verification: `scripts/verify.mjs` asserts the section, panel, actions and
   glow boxes exactly (plus the heading/copy positions), diffs the panel against
-  the reference (~10.8/255; the decorative glow's blur rasterization dominates),
+  the reference (~5.1/255; font and glow rasterization remain),
   and checks overflow from 320px to 1920px.

@@ -232,9 +232,11 @@ Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
   Figma nggak match crop referensi). Skor diff ~2.2/255.
 - "CTA" (Figma `839:4659`/`839:4660`, section 1440 × 537 di y6169): panel
   1280 × 377 fill transparan + border gradient, heading Nasalization 56/68,
-  copy Manrope 16/24, tombol "Join the Community" (205 × 51), + glow dekoratif.
-  **Catatan**: `Frame 2393.png` transparan → composite ke `#050507` dulu. Skor
-  diff panel ~10.8/255 (residual = blur glow).
+  copy Manrope 16/24, tombol "Join the Community" (205 × 51), + glow dekoratif
+  (pakai perlakuan yang sama dengan CTA home: `glow.svg` di-rotate/oversize).
+  **Catatan**: `Frame 2393.png` transparan → composite ke `#050507` dulu. Panel
+  dikunci `max-width:1280` + center biar glow tetap presisi di layar lebar. Skor
+  diff panel ~5.1/255.
 - **Footer**: halaman recruitment pakai komponen `Footer.astro` yang **sama**
   dengan homepage (node `765:17071`, referensi sama). Render di y6706, diff
   ~2.67/255. Navbar & Footer = komponen bersama (konsisten antar halaman).
