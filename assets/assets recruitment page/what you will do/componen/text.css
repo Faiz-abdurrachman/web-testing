@@ -1,0 +1,16 @@
+/* Frame 2351 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 2px 16px;
+gap: 10px;
+
+position: absolute;
+width: 462px;
+height: 31px;
+left: 0px;
+top: 0px;
+
+background: linear-gradient(90.43deg, #FFFFFF -3.55%, #6C3BFF 3.54%, #6C3BFF 56.69%, rgba(108, 59, 255, 0) 100%);
