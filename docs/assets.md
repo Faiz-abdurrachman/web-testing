@@ -156,7 +156,8 @@ score were unchanged when this section was added.
   slots: the highlighted card stays on the Figma grid (549 × 567 at
   (445.5,270)) while the neighbours sit at the reference's side-panel
   positions (x ≈ 78.5 and 998.5), tilted with `rotateY` and blurred so only the
-  active project is sharp. Switching rotates the cards between slots.
+  active project is sharp. The carousel loops, so left and right cards are
+  present from the first project. Switching rotates the cards between slots.
   Navigation covers arrows, dots, drag/swipe, and arrow keys; motion is disabled
   under `prefers-reduced-motion`. Project data lives in `src/data/projects.ts`
   and currently holds four placeholders.

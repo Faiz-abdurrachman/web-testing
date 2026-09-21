@@ -92,6 +92,7 @@ import { projects } from '../data/projects';
         ?.querySelectorAll<HTMLButtonElement>('.project-dots .dot') ?? []),
     ];
     if (!cards.length) return;
+    const count = cards.length;
     let active = 0;
 
     const render = () => {
@@ -104,7 +105,9 @@ import { projects } from '../data/projects';
       const sideOffset = width * 0.838 * base;
       const step = width * 0.62 * base;
       cards.forEach((card, index) => {
-        const slot = index - active;
+        let slot = index - active;
+        if (slot > count / 2) slot -= count;
+        else if (slot < -count / 2) slot += count;
         const distance = Math.abs(slot);
         const direction = Math.sign(slot);
         const x =
@@ -137,14 +140,10 @@ import { projects } from '../data/projects';
       dots.forEach((dot, index) =>
         dot.setAttribute('aria-selected', String(index === active)),
       );
-      if (arrows[0]) arrows[0].disabled = active <= 0;
-      if (arrows[1]) arrows[1].disabled = active >= cards.length - 1;
     };
 
     const go = (delta: number) => {
-      const next = Math.max(0, Math.min(cards.length - 1, active + delta));
-      if (next === active) return;
-      active = next;
+      active = (active + delta + count) % count;
       render();
     };
 
@@ -245,6 +244,7 @@ import { projects } from '../data/projects';
     height: 567px;
     border-radius: 20px;
     overflow: hidden;
+    clip-path: inset(0 round 20px);
     background: rgb(98 80 255 / 10%);
     opacity: 0;
     transform: translate(-50%, -50%);
