@@ -1,0 +1,24 @@
+/* READY TO BECOME A SORCERY? */
+
+width: 1278px;
+height: 68px;
+
+font-family: 'Nasalization';
+font-style: normal;
+font-weight: 400;
+font-size: 56px;
+line-height: 68px;
+text-align: center;
+
+background: linear-gradient(270deg, #FFFFFF 0%, #EDE8FF 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+text-fill-color: transparent;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;

@@ -1,17 +1,22 @@
 ---
 interface Props {
   href?: string;
+  compact?: boolean;
   variant?: 'primary' | 'glass' | 'white';
 }
-const { href, variant = 'primary' } = Astro.props;
+const { href, variant = 'primary', compact = false } = Astro.props;
 ---
 
 {href ? (
-  <a class:list={['button', variant]} href={href}>
+  <a class:list={['button', variant, { compact }]} href={href}>
     <slot />
   </a>
 ) : (
-  <button class:list={['button', variant]} type="button" aria-disabled="true">
+  <button
+    class:list={['button', variant, { compact }]}
+    type="button"
+    aria-disabled="true"
+  >
     <slot />
   </button>
 )}
@@ -133,6 +138,16 @@ const { href, variant = 'primary' } = Astro.props;
       linear-gradient(#000 0 0);
     mask-composite: exclude;
     pointer-events: none;
+  }
+  .glass.compact {
+    width: 179px;
+    background: rgb(217 217 217 / 10%);
+    box-shadow:
+      inset 6px 6px 1.06557px -6px rgb(255 255 255 / 50%),
+      inset 4px 4px 2px -4px #b3b3b3,
+      inset -6px -6px 2px -4px #b3b3b3,
+      inset 0 0 0 2px #999,
+      inset 0 0 40px rgb(242 242 242 / 50%);
   }
   @media (max-width: 600px) {
     .button {
