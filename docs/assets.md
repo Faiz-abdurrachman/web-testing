@@ -237,7 +237,12 @@ Section.png`, 4320 × 2598 (1440 × 866 at 3×). The reference PNG **includes th
   `backdrop-filter: blur(6px)`, inset highlights, plus a clipped "liquid"
   highlight (`294.11 × 121.64` at `(-85.34, -27.45)`, `rgba(217,217,217,.1)`,
   `blur(4px)`). Implemented as `Button.astro` `variant="secondary"`, which hugs
-  its label; the label is Manrope SemiBold 18 / 34.1.
+  its label; the label is Manrope SemiBold 18 / 34.1. The rim is baked from the
+  reference PNG rather than from the raw Figma shadows: a bright 2px diagonal
+  ring (top-left and bottom-right) plus soft inset rims. Figma's
+  `inset 0 0 40px rgba(242,242,242,.5)` rasterizes as a subtle rim, while its
+  literal CSS translation washes the whole pill, so the PNG recipe is used
+  instead (region difference ~8.6/255, close to the font-rasterization floor).
 - Measured layout boxes at 1440: heading `(270, 247.5, 900 × 196)`, description
   `(270, 477.5, 900 × 27)`, button `(659.22, 567.5, 121.55 × 51)`.
 - Background: `Gambar Hero About Us.png` (5756 × 3600), drawn full-width and
@@ -245,14 +250,17 @@ Section.png`, 4320 × 2598 (1440 × 866 at 3×). The reference PNG **includes th
   cropped. It is the decorative glow/arc layer with no text; the masked
   difference against the reference is ~1.2/255. The folder's `Background.png` is
   effectively black and is unused. Served as
-  `public/images/recruitment/hero-1440.webp` and `hero-2880.webp`
-  (high-quality WebP).
+  `public/images/recruitment/hero-1440.webp` and `hero-2880.webp` as
+  **lossless** WebP: the artwork carries fine grain that lossy WebP removes,
+  which visibly softens the glow (lossless restores the reference's
+  high-frequency detail).
 - Navbar: the shared `Navbar.astro` with `active="Recruitment"`. The active
   underline is the Figma 106px gradient
   `linear-gradient(163deg, #9b7bff, #ede8ff, #9b7bff)`; the Home underline keeps
   its original 49px so the homepage comparison is unchanged.
 - Verification: `scripts/verify.mjs` asserts the section, heading, description,
   and button boxes exactly, checks the active nav link, diffs the section
-  against the reference PNG (~2.2/255; font rasterization and the glow remain),
-  and checks horizontal overflow and clipped hero text from 320px to 1920px.
+  against the reference PNG (~2.1/255; the residual is font and glass
+  rasterization), and checks horizontal overflow and clipped hero text from
+  320px to 1920px.
 - Remaining sections (e.g. "Who Should Join") and the footer are not built yet.

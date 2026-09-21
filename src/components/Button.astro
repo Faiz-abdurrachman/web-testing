@@ -95,28 +95,37 @@ const { href, variant = 'primary', compact = false } = Astro.props;
     color: #1e1e1e;
   }
   /* Figma "Secondary Buttom" (component set 97:442): dark glass pill that hugs
-     its label, with a blurred "liquid" highlight clipped inside. */
+     its label. The rim highlights are baked from the reference PNG: a bright
+     diagonal ring (top-left and bottom-right) plus two soft inset rims, which
+     matches the exported rasterization more closely than the CSS translation of
+     the raw Figma shadows (Figma's inset blur washes the whole pill). */
   .secondary {
     overflow: hidden;
-    background: #1a1a1a;
+    background: #333;
     backdrop-filter: blur(6px);
     box-shadow:
-      inset 0 0 40px rgb(242 242 242 / 50%),
-      inset 0 0 0 2px #999,
       inset -6px -6px 2px -4px #b3b3b3,
       inset 4px 4px 2px -4px #b3b3b3,
-      inset 6px 6px 1.06557px -6px rgb(255 255 255 / 50%);
+      inset -3px -3px 3px -1px rgb(255 255 255 / 50%);
   }
-  .secondary::before {
+  .secondary::after {
     content: '';
     position: absolute;
-    top: -27.45px;
-    left: -85.34px;
-    z-index: -1;
-    width: 294.11px;
-    height: 121.64px;
-    background: rgb(217 217 217 / 10%);
-    backdrop-filter: blur(4px);
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(
+      135deg,
+      #fff 0%,
+      rgb(255 255 255 / 0%) 26%,
+      rgb(255 255 255 / 0%) 74%,
+      #fff 100%
+    );
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
   }
   .glass {
     width: 198px;
