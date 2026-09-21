@@ -11,68 +11,59 @@ const links = [
 ---
 
 <header class="navbar">
-  <a class="brand" href="/" aria-label="Data Sorcerers home">
-    <img src="/images/logo.png" width="54" height="59" alt="Data Sorcerers" />
-  </a>
-  <div class="desktop-menu">
-    <nav aria-label="Main navigation">
-      {links.map((label, index) =>
-        index === 0 ? (
-          <a class="nav-link active" href="/" aria-current="page">
-            {label}
-          </a>
-        ) : (
-          <span class="nav-link" aria-disabled="true">
-            {label}
-          </span>
-        ),
-      )}
-    </nav>
-    <Button variant="white">Join Community</Button>
-  </div>
-  <details class="mobile-menu">
-    <summary aria-label="Toggle navigation">
-      <span></span>
-      <span></span>
-      <span></span>
-    </summary>
-    <nav aria-label="Mobile navigation">
-      {links.map((label, index) =>
-        index === 0 ? (
-          <a class="nav-link active" href="/" aria-current="page">
-            {label}
-          </a>
-        ) : (
-          <span class="nav-link" aria-disabled="true">
-            {label}
-          </span>
-        ),
-      )}
+  <div class="navbar-inner">
+    <a class="brand" href="/" aria-label="Data Sorcerers home">
+      <img src="/images/logo.png" width="54" height="59" alt="Data Sorcerers" />
+    </a>
+    <div class="desktop-menu">
+      <nav aria-label="Main navigation">
+        {links.map((label, index) =>
+          index === 0 ? (
+            <a class="nav-link active" href="/" aria-current="page">
+              {label}
+            </a>
+          ) : (
+            <span class="nav-link" aria-disabled="true">
+              {label}
+            </span>
+          ),
+        )}
+      </nav>
       <Button variant="white">Join Community</Button>
-    </nav>
-  </details>
+    </div>
+    <details class="mobile-menu">
+      <summary aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </summary>
+      <nav aria-label="Mobile navigation">
+        {links.map((label, index) =>
+          index === 0 ? (
+            <a class="nav-link active" href="/" aria-current="page">
+              {label}
+            </a>
+          ) : (
+            <span class="nav-link" aria-disabled="true">
+              {label}
+            </span>
+          ),
+        )}
+        <Button variant="white">Join Community</Button>
+      </nav>
+    </details>
+  </div>
 </header>
 <style>
   .navbar {
-    position: absolute;
+    position: fixed;
     inset: 0 0 auto;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 106.8px;
-    padding: 24px var(--page-gutter);
+    z-index: 50;
     background: linear-gradient(
       180deg,
       rgb(108 59 255 / 10%) 0%,
       rgb(11 7 18 / 0%) 100.19%
     );
-  }
-  .brand,
-  .brand img {
-    display: block;
-    width: 54px;
-    height: 58.8px;
   }
   .navbar::before {
     content: '';
@@ -82,6 +73,31 @@ const links = [
     backdrop-filter: blur(5px);
     mask-image: linear-gradient(#000, transparent);
     pointer-events: none;
+    transition:
+      background 0.35s ease,
+      backdrop-filter 0.35s ease;
+  }
+  .navbar.is-scrolled::before {
+    backdrop-filter: blur(18px) saturate(140%);
+    mask-image: none;
+    background: rgb(5 5 7 / 58%);
+    box-shadow: inset 0 -1px 0 rgb(203 197 255 / 12%);
+  }
+  .navbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1440px;
+    height: 106.8px;
+    margin-inline: auto;
+    padding: 24px 80px;
+  }
+  .brand,
+  .brand img {
+    display: block;
+    width: 54px;
+    height: 58.8px;
   }
   .desktop-menu {
     display: flex;
@@ -161,9 +177,9 @@ const links = [
     }
   }
   @media (max-width: 1050px) {
-    .navbar {
+    .navbar-inner {
       height: 94px;
-      padding-block: 18px;
+      padding: 18px var(--page-gutter);
     }
     .desktop-menu {
       display: none;
@@ -219,6 +235,12 @@ const links = [
   }
 </style>
 <script>
+  const navbar = document.querySelector('.navbar');
+  const sync = () =>
+    navbar?.classList.toggle('is-scrolled', window.scrollY > 8);
+  sync();
+  addEventListener('scroll', sync, { passive: true });
+
   const menu = document.querySelector<HTMLDetailsElement>('.mobile-menu');
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && menu?.open) {
