@@ -159,8 +159,10 @@ score were unchanged when this section was added.
   active project is sharp. The carousel loops, so left and right cards are
   present from the first project. Switching rotates the cards between slots.
   Navigation covers arrows, dots, drag/swipe, and arrow keys; motion is disabled
-  under `prefers-reduced-motion`. Project data lives in `src/data/projects.ts`
-  and currently holds four placeholders.
+  under `prefers-reduced-motion`. The arrow keys also work whenever the section
+  is on screen (an IntersectionObserver at 50% visibility), so no focus is
+  needed; if another carousel is focused it keeps its own keys. Project data
+  lives in `src/data/projects.ts` and currently holds four placeholders.
 - Verification includes reference overlay/difference images, desktop geometry
   (heading + active card), text containment and page overflow checks from 320px
   to 1920px.
@@ -490,8 +492,9 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
   thumbnails (space-between at x 80 / 338.5 / 597 / 855.5 / 1114), gap 35. The
   five DS variants use the same five photos with a different hero, so the hero
   is a 5-slide carousel: arrows (left/right, same style as the other rails),
-  drag/swipe, clickable thumbnails and arrow keys. The track clones the ends so
-  it loops without a jump; `prefers-reduced-motion` drops the transition.
+  drag/swipe, clickable thumbnails and arrow keys (active whenever the section
+  is on screen, like the homepage carousel). The track clones the ends so it
+  loops without a jump; `prefers-reduced-motion` drops the transition.
 - Layout is fluid: the gallery is capped at 1280px and the hero/thumbnails use
   `aspect-ratio` with a percentage thumbnail width, so the element sizes scale
   with the viewport (a container query unit drives the 35px hero→thumbnail gap)

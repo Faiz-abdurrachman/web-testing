@@ -229,7 +229,8 @@ Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
 - "Snippets" (Figma `706:2330`, 1440 × 900, di y5269): heading Nasalization
   56/68 center + galeri (`galeryy ds`) berupa **carousel fluid**: hero
   1280 × 556 (5 foto, panah kiri/kanan, drag/swipe, thumbnail bisa diklik,
-  keyboard, loop, `prefers-reduced-motion`) + 5 thumbnail 246 × 103. Elemen &
+  keyboard (aktif otomatis saat section di viewport), loop,
+  `prefers-reduced-motion`) + 5 thumbnail 246 × 103. Elemen &
   gap proporsional (container query unit) → nggak overflow. Foto di-export dari
   render komponen DS (hero per varian, thumb dari DS 1). Diff ~0.7/255.
   (Bonus fix: line Selection Timeline & kolom tanggal dijadikan % biar nggak
@@ -260,7 +261,9 @@ Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
   kartu kiri/kanan di posisi panel samping (`x ≈ 78.5 / 998.5`), miring
   (`rotateY 24°`) + **blur**.
 - **Loop** (kiri & kanan selalu ada dari project pertama).
-- Navigasi: panah, dot, drag/swipe, keyboard (←/→). `prefers-reduced-motion` → tanpa transisi.
+- Navigasi: panah, dot, drag/swipe, keyboard (←/→). Keyboard ←/→ juga aktif
+  otomatis begitu section masuk viewport (IntersectionObserver 50%), tanpa perlu
+  fokus dulu. `prefers-reduced-motion` → tanpa transisi.
 - Data: `src/data/projects.ts` — **4 placeholder** (gambar masih sama semua).
 - ⚠️ Jebakan yang sudah kejadian:
   - `overflow:hidden` + `border-radius` + transform 3D → **sudut jadi kotak**.
