@@ -1,0 +1,252 @@
+<section id="projects" class="projects" aria-labelledby="projects-title">
+  <div class="projects-inner">
+    <header>
+      <span class="eyebrow">Our Project</span>
+      <h2 id="projects-title">What Our Sorcery Create</h2>
+    </header>
+    <div class="project-display">
+      <div class="side-panel left" aria-hidden="true">
+        <img
+          src="/images/projects/side-left.svg"
+          width="363"
+          height="530"
+          alt=""
+          loading="lazy"
+        />
+      </div>
+      <article class="project-card" aria-labelledby="project-arutala">
+        <div class="project-image">
+          <img
+            src="/images/projects/arutala-aksara.webp"
+            width="1799"
+            height="1102"
+            alt="Arutala Aksara interface for practicing handwritten Javanese characters"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div class="project-tags" aria-label="Project categories">
+          <span>HoDS Apa</span>
+          <span>Lomba/research</span>
+        </div>
+        <div class="project-copy">
+          <h3 id="project-arutala">Arutala Aksara</h3>
+          <p>
+            Lorem ipsum Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem
+            ipsumLorem ipsumLorem ipsum Lorem ipsumLorem ipsumLorem ipsumLorem
+            ipsumLorem ipsum
+          </p>
+        </div>
+      </article>
+      <div class="side-panel right" aria-hidden="true">
+        <img
+          src="/images/projects/side-right.svg"
+          width="363"
+          height="530"
+          alt=""
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .projects {
+    padding: 80px var(--page-gutter);
+    background: var(--color-background);
+    overflow: clip;
+  }
+  .projects-inner {
+    max-width: 1280px;
+    margin-inline: auto;
+  }
+  header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 26px;
+    padding: 4px 12px;
+    border-radius: 32px;
+    background: rgb(255 255 255 / 15%);
+    box-shadow: inset 0 1px 1px rgb(255 255 255 / 40%);
+    font-size: 12px;
+    line-height: 18px;
+  }
+  h2 {
+    margin: 0;
+    font: 400 56px/68px var(--font-heading);
+    background: linear-gradient(270deg, #fff, #ede8ff);
+    background-clip: text;
+    color: transparent;
+  }
+  .project-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin-top: 82px;
+  }
+  .side-panel {
+    flex: none;
+    width: 363px;
+    height: 534px;
+    display: flex;
+    align-items: center;
+  }
+  .side-panel img {
+    display: block;
+    width: 363px;
+    height: 530.25px;
+  }
+  .left {
+    transform: rotate(180deg);
+  }
+  .project-card {
+    position: relative;
+    isolation: isolate;
+    flex: none;
+    width: 549px;
+    height: 567px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: rgb(98 80 255 / 10%);
+  }
+  .project-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      #e0dcff,
+      #332959 52%,
+      #332959 75%,
+      #e0dcff
+    );
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .project-image {
+    position: absolute;
+    top: 1px;
+    left: 0;
+    width: 587px;
+    height: 349px;
+    overflow: hidden;
+    opacity: 0.8;
+  }
+  .project-image img {
+    display: block;
+    position: absolute;
+    top: -0.105px;
+    width: 100%;
+    height: 359.156px;
+    max-width: none;
+  }
+  .project-tags {
+    position: absolute;
+    top: 305px;
+    left: 55px;
+    display: flex;
+    gap: 16px;
+  }
+  .project-tags span {
+    padding: 4px 12px;
+    border-radius: 32px;
+    background: #6c3bff;
+    font-size: 12px;
+    line-height: 18px;
+    white-space: nowrap;
+  }
+  .project-copy {
+    position: absolute;
+    left: 52.5px;
+    top: 384px;
+    width: 451px;
+  }
+  h3 {
+    margin: 0 0 15px 0.5px;
+    font-size: 26px;
+    line-height: 39px;
+    font-weight: 700;
+  }
+  .project-copy p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 24px;
+  }
+  @media (min-width: 761px) and (max-width: 1199px) {
+    .side-panel {
+      width: calc((100% - 557px) / 2);
+      overflow: hidden;
+    }
+    .side-panel img {
+      width: 100%;
+      height: 100%;
+    }
+    .project-display {
+      gap: 4px;
+    }
+  }
+  @media (max-width: 760px) {
+    .projects {
+      padding-block: 64px;
+    }
+    h2 {
+      font-size: clamp(30px, 7vw, 48px);
+      line-height: 1.214286;
+    }
+    .project-display {
+      margin-top: 40px;
+    }
+    .side-panel {
+      display: none;
+    }
+    .project-card {
+      width: 100%;
+      max-width: 549px;
+      height: auto;
+    }
+    .project-image {
+      position: relative;
+      top: 0;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 549/349;
+    }
+    .project-image img {
+      width: 106.921676%;
+      height: auto;
+    }
+    .project-tags {
+      top: auto;
+      bottom: auto;
+      left: 24px;
+      transform: translateY(calc(-100% - 18px));
+      gap: 12px;
+    }
+    .project-copy {
+      position: static;
+      width: auto;
+      padding: 32px 24px 40px;
+    }
+    h3 {
+      font-size: 24px;
+      line-height: 36px;
+      margin-left: 0;
+    }
+    .project-copy p {
+      overflow-wrap: anywhere;
+    }
+  }
+</style>

@@ -1,0 +1,14 @@
+/* Frame 2264 */
+
+box-sizing: border-box;
+
+width: 549px;
+height: 567px;
+
+background: rgba(98, 80, 255, 0.1);
+border-radius: 20px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
