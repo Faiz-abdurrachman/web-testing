@@ -256,7 +256,28 @@ import { projects } from '../data/projects';
   }
   .project-card.is-active {
     opacity: 1;
-    box-shadow: 0 45px 130px rgb(108 59 255 / 32%);
+  }
+  .project-card::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -26px;
+    z-index: -1;
+    width: 68%;
+    height: 152px;
+    transform: translateX(-50%);
+    background: radial-gradient(
+      closest-side,
+      rgb(108 59 255 / 68%),
+      rgb(108 59 255 / 0%)
+    );
+    filter: blur(24px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+  .project-card.is-active::before {
+    opacity: 1;
   }
   .project-inner {
     position: absolute;
