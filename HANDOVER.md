@@ -203,9 +203,14 @@ Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
   `public/images/roles/role-*.webp`. Tombol Apply Now = `Button variant="apply"`.
   Layout: data centered (gap back→kartu 28), core gap 28 top-aligned, sisanya
   gap 58 top-aligned (flag `centered` / `tight`). Standalone tanpa navbar/footer.
-- Verify: blok `recruitmentPage`, `recruitmentWhoShouldJoin`, `recruitmentRoles`
-  di `scripts/verify.mjs` (geometri exact + diff PNG + overflow 320–1920),
-  plus cek href kartu & back link kontekstual.
+- "What You Will Do" (Figma `770:16251`, 1440 × 903, di y1655): heading
+  Nasalization 56/68 + copy Manrope 18/27, lalu collage 1312 × 625 berisi 2
+  kartu tarot (artwork), connector SVG dekoratif, dan 8 label HTML/CSS di
+  staircase diagonal (462 × 31). Background hitam. Di <1320px label distack,
+  kartu/connector disembunyikan (adaptasi). Skor diff ~1.8/255.
+- Verify: blok `recruitmentPage`, `recruitmentWhoShouldJoin`, `recruitmentRoles`,
+  `recruitmentWhatYouWillDo` di `scripts/verify.mjs` (geometri exact + diff PNG +
+  overflow 320–1920), plus cek href kartu & back link kontekstual.
 - **Belum**: footer dan section lain di full-page `RECRUITMENT PAGE.png`
   (1440 × 7262).
 

@@ -82,8 +82,11 @@ page (`/hods/{id}?from=recruitment`), and that page's back link returns to
 `/recruitment#who-should-join` instead of the homepage. Role detail pages
 (`/recruitment/roles/{id}`, built from `src/data/roles.ts` and
 `assets/assets recruitment page/who sould join section/detail role/…`, 1440 ×
-1280 at 4×) are implemented but not linked yet. Remaining sections and the
-footer are still to come.
+1280 at 4×) are implemented but not linked yet. "What You Will Do" follows
+`assets/assets recruitment page/what you will do/What You Will Do Section.png`
+(1440 × 903 at 4×): a header plus a 1312 × 625 collage of two tarot-card
+artworks, a decorative connector SVG and eight HTML/CSS label pills. Remaining
+sections and the footer are still to come.
 
 Footer follows `assets/assets home page/footer/Footer.png` (1440 × 556 at 1×), the Figma node
 `765:17071`. It carries the supplied background image, the brand lockup, the
@@ -102,7 +105,7 @@ See [asset notes](docs/assets.md).
 
 ## Project structure
 
-- `src/components/`: Navbar, Hero, Philosophy, WhatWeDo, Domains, DomainCard, DomainRail, Projects, Recruitment, RecruitmentHero, WhoShouldJoin, RoleDetail, Footer, and shared Button.
+- `src/components/`: Navbar, Hero, Philosophy, WhatWeDo, Domains, DomainCard, DomainRail, Projects, Recruitment, RecruitmentHero, WhoShouldJoin, WhatYouWillDo, RoleDetail, Footer, and shared Button.
 - `src/data/domains.ts`: domain copy and topic labels.
 - `src/layouts/`: HTML document, metadata, and font preload links.
 - `src/styles/global.css`: fonts, design tokens, reset, and focus styles.

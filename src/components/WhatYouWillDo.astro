@@ -1,0 +1,191 @@
+---
+// Layout comes from Figma node 770:16251. The eight labels are a diagonal
+// staircase inside a fixed 1312x625 collage; positions are relative to that
+// collage (Content frame at 94,130 plus the Figma offsets).
+const labels: [string, number, number, number | null][] = [
+  ['LEARN WITH OTHERS', 94, 130, 57],
+  ['PRACTICE YOUR SKILLS', 94, 184, 56],
+  ['WORK ON EXPERIMENTS', 316, 238, null],
+  ['CONTRIBUTE TO PROJECTS', 316, 292, null],
+  ['PARTICIPATE IN RESEARCH', 536, 346, 26],
+  ['SHARE KNOWLEDGE', 536, 400, 26],
+  ['BUILD YOUR PORTOFOLIO', 757, 454, 43],
+  ['COLLABORATE ACROSS DISCIPLINES', 757, 508, 43],
+];
+const gradient = (stop: number | null) =>
+  stop === null
+    ? 'linear-gradient(134deg, #fff 0%, #6c3bff 4%, rgb(108 59 255 / 0%) 100%)'
+    : `linear-gradient(134deg, #fff 0%, #6c3bff 4%, #6c3bff ${stop}%, rgb(108 59 255 / 0%) 100%)`;
+---
+
+<section
+  id="what-you-will-do"
+  class="what-you-will-do"
+  aria-labelledby="what-you-will-do-title"
+>
+  <h2 id="what-you-will-do-title">What You Will Do</h2>
+  <p>Life inside the Data Sorcerers ecosystem</p>
+
+  <div class="wyd-body">
+    <img
+      class="card card-1"
+      src="/images/what-you-will-do/card-1-356.webp"
+      srcset="
+        /images/what-you-will-do/card-1-356.webp 356w,
+        /images/what-you-will-do/card-1-712.webp 712w
+      "
+      sizes="356px"
+      width="356"
+      height="430"
+      alt=""
+      loading="lazy"
+      decoding="async"
+    />
+    <img
+      class="card card-2"
+      src="/images/what-you-will-do/card-2-295.webp"
+      srcset="
+        /images/what-you-will-do/card-2-295.webp 295w,
+        /images/what-you-will-do/card-2-590.webp 590w
+      "
+      sizes="296px"
+      width="295"
+      height="362"
+      alt=""
+      loading="lazy"
+      decoding="async"
+    />
+    <img
+      class="connector"
+      src="/images/what-you-will-do/connector.svg"
+      width="1312"
+      height="531"
+      alt=""
+      loading="lazy"
+      decoding="async"
+    />
+    {labels.map(([text, x, y, stop]) => (
+      <div
+        class="label"
+        style={`left:${x}px;top:${y}px;background:${gradient(stop)}`}
+      >
+        <span class="dot" aria-hidden="true" />
+        <span class="label-text">{text}</span>
+      </div>
+    ))}
+  </div>
+</section>
+<style>
+  .what-you-will-do {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 80px 80px 63px;
+    background: #000;
+    overflow: clip;
+  }
+  h2 {
+    margin: 0;
+    width: 1280px;
+    max-width: 100%;
+    font: 400 56px/68px var(--font-heading);
+    text-align: center;
+    background: linear-gradient(180deg, #fff 0%, #707070 78%);
+    background-clip: text;
+    color: transparent;
+  }
+  p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+    color: #fff;
+    text-align: center;
+  }
+  .wyd-body {
+    position: relative;
+    width: 1312px;
+    height: 625px;
+  }
+  .card {
+    position: absolute;
+    display: block;
+  }
+  .card-1 {
+    left: 919px;
+    top: 0;
+    width: 356px;
+    height: 430px;
+  }
+  .card-2 {
+    left: 65px;
+    top: 216px;
+    width: 295.39px;
+    height: 361.78px;
+  }
+  .connector {
+    position: absolute;
+    left: 0;
+    top: 96px;
+    display: block;
+    width: 1312px;
+    height: 531px;
+  }
+  .label {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 462px;
+    height: 31px;
+    padding: 2px 16px;
+  }
+  .dot {
+    flex: none;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6c3bff 17%, #ede8ff 50%, #6c3bff 83%);
+  }
+  .label-text {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+    color: #fff;
+    white-space: nowrap;
+  }
+  @media (max-width: 1320px) {
+    .what-you-will-do {
+      padding: 64px 24px;
+    }
+    h2 {
+      font-size: clamp(30px, 7vw, 48px);
+      line-height: 1.214286;
+    }
+    .wyd-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      height: auto;
+    }
+    .card,
+    .connector {
+      display: none;
+    }
+    .label {
+      position: static;
+      width: 100%;
+      max-width: 462px;
+      height: auto;
+      min-height: 31px;
+    }
+    .label-text {
+      font-size: 16px;
+      line-height: 24px;
+      white-space: normal;
+    }
+  }
+</style>

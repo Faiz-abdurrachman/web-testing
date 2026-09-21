@@ -346,3 +346,36 @@ role/Detile Roles - …png` (5760 × 5120, i.e. 1440 × 1280 at 4×). Note the
   reference (1.7–2.4/255), checks overflow and text from 320px to 1920px, and
   separately checks the Who Should Join card `href`s and the context-aware HoDS
   back link.
+
+## Recruitment page — What You Will Do
+
+- Figma node: `770:16251`; reference
+  `assets/assets recruitment page/what you will do/What You Will Do Section.png`,
+  5760 × 3612 (1440 × 903 at 4×). The section sits at homepage y=1655.
+- Frame: 1440 × 903, `padding 80 80 63` (the bottom is 63, not 80, so the
+  section matches the reference height), column, centered, `gap 20`, black
+  background (the frame's fill is effectively black, and the supplied
+  `Background.png` is a black export).
+- Heading: "What You Will Do", Nasalization Regular 400, 56 / 68, centered in a
+  1280px box, gradient `linear-gradient(180deg, #fff 0%, #707070 78%)`.
+- Copy: "Life inside the Data Sorcerers ecosystem", Manrope Medium 500, 18 / 27,
+  `#fff`, centered.
+- Body: a fixed 1312 × 625 collage at (64, 215) holding:
+  - two tarot card artworks — `card-1` (356 × 430 at 983, 215) and `card-2`
+    (295.39 × 361.78 at 129, 431), exported from the supplied PNGs to lossless
+    WebP at 1×/2× under `public/images/what-you-will-do/`;
+  - a decorative connector vector (`connector.svg`, 1312 × 531 at 64, 311),
+    exported from Figma (lines and 7px nodes in `#6C3BFF`/white);
+  - eight HTML/CSS label pills (462 × 31) in a diagonal staircase at x 158 / 380
+    / 600 / 821 and y 345 / 399 / 453 / 507 / 561 / 615 / 669 / 723. Each is a
+    `linear-gradient(134deg, #fff 0%, #6c3bff 4%, #6c3bff X%, transparent)`
+    (X = 57 / 56 / – / – / 26 / 26 / 43 / 43%), a 6px gradient dot and Manrope
+    Medium 18 / 27 text: LEARN WITH OTHERS, PRACTICE YOUR SKILLS, WORK ON
+    EXPERIMENTS, CONTRIBUTE TO PROJECTS, PARTICIPATE IN RESEARCH, SHARE
+    KNOWLEDGE, BUILD YOUR PORTOFOLIO, COLLABORATE ACROSS DISCIPLINES.
+- Below 1320px the collage becomes a stacked column of the eight labels (cards
+  and connector hidden) — an adaptation, since no mobile reference exists.
+- Verification: `scripts/verify.mjs` asserts the section, heading, body, all
+  eight labels, both cards and the connector exactly, diffs against the
+  reference (~1.8/255; the residual is anti-aliasing on the connector and label
+  edges), and checks overflow and text from 320px to 1920px.

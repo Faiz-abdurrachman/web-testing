@@ -1201,6 +1201,140 @@ try {
       responsive: roleResponsive,
     };
   }
+  // Recruitment page — What You Will Do (header + 1312x625 collage).
+  await page.setViewportSize({ width: 1440, height: 903 });
+  await page.goto(`${baseUrl}/recruitment`, { waitUntil: 'networkidle' });
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await Promise.all(
+      [...document.images].map((image) => image.decode().catch(() => {})),
+    );
+  });
+  await setNavbarHidden(true);
+  await page.evaluate(() => scrollTo(0, 0));
+  const whatYouWillDoGeometry = await page
+    .locator('.what-you-will-do')
+    .evaluate((section) => {
+      const rect = section.getBoundingClientRect();
+      const relative = (selector) => {
+        const box = section.querySelector(selector).getBoundingClientRect();
+        return {
+          x: box.x - rect.x,
+          y: box.y - rect.y,
+          width: box.width,
+          height: box.height,
+        };
+      };
+      return {
+        width: rect.width,
+        height: rect.height,
+        top: rect.top + scrollY,
+        heading: relative('h2'),
+        body: relative('.wyd-body'),
+        labels: [...section.querySelectorAll('.label')].map((label) => {
+          const box = label.getBoundingClientRect();
+          return {
+            x: box.x - rect.x,
+            y: box.y - rect.y,
+            width: box.width,
+            height: box.height,
+          };
+        }),
+        card1: relative('.card-1'),
+        card2: relative('.card-2'),
+        connector: relative('.connector'),
+      };
+    });
+  assert.deepEqual(whatYouWillDoGeometry, {
+    width: 1440,
+    height: 903,
+    top: 1655,
+    heading: { x: 80, y: 80, width: 1280, height: 68 },
+    body: { x: 64, y: 215, width: 1312, height: 625 },
+    labels: [
+      [158, 345],
+      [158, 399],
+      [380, 453],
+      [380, 507],
+      [600, 561],
+      [600, 615],
+      [821, 669],
+      [821, 723],
+    ].map(([x, y]) => ({ x, y, width: 462, height: 31 })),
+    card1: { x: 983, y: 215, width: 356, height: 430 },
+    card2: { x: 129, y: 431, width: 295.375, height: 361.765625 },
+    connector: { x: 64, y: 311, width: 1312, height: 531 },
+  });
+  await page.locator('.what-you-will-do').scrollIntoViewIfNeeded();
+  await page
+    .locator('.what-you-will-do')
+    .screenshot({ path: 'artifacts/what-you-will-do-desktop.png' });
+  const whatYouWillDoReference = await sharp(
+    'assets/assets recruitment page/what you will do/What You Will Do Section.png',
+  )
+    .resize(1440, 903)
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const whatYouWillDoActual = await sharp(
+    'artifacts/what-you-will-do-desktop.png',
+  )
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(whatYouWillDoReference.length, whatYouWillDoActual.length);
+  let whatYouWillDoTotal = 0;
+  const whatYouWillDoDiff = Buffer.alloc(whatYouWillDoActual.length);
+  const whatYouWillDoOverlay = Buffer.alloc(whatYouWillDoActual.length);
+  for (let i = 0; i < whatYouWillDoActual.length; i++) {
+    const delta = Math.abs(whatYouWillDoActual[i] - whatYouWillDoReference[i]);
+    whatYouWillDoTotal += delta;
+    whatYouWillDoDiff[i] = Math.min(255, delta * 4);
+    whatYouWillDoOverlay[i] = Math.round(
+      (whatYouWillDoActual[i] + whatYouWillDoReference[i]) / 2,
+    );
+  }
+  const whatYouWillDoRaw = { width: 1440, height: 903, channels: 3 };
+  await sharp(whatYouWillDoDiff, { raw: whatYouWillDoRaw })
+    .png()
+    .toFile('artifacts/what-you-will-do-diff.png');
+  await sharp(whatYouWillDoOverlay, { raw: whatYouWillDoRaw })
+    .png()
+    .toFile('artifacts/what-you-will-do-overlay.png');
+  const whatYouWillDoSizes = [320, 390, 768, 1024, 1320, 1440, 1680, 1920];
+  const whatYouWillDoResponsive = [];
+  for (const width of whatYouWillDoSizes) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.evaluate(() => scrollTo(0, 0));
+    const dimensions = await page.evaluate(() => ({
+      viewport: innerWidth,
+      content: document.documentElement.scrollWidth,
+    }));
+    assert.ok(
+      dimensions.content <= dimensions.viewport,
+      `What You Will Do horizontal overflow at ${width}px`,
+    );
+    whatYouWillDoResponsive.push(dimensions);
+    const whatYouWillDoIssues = await page
+      .locator('.what-you-will-do')
+      .evaluate((section) =>
+        [...section.querySelectorAll('h2, p, .label-text')]
+          .filter((element) => {
+            const box = element.getBoundingClientRect();
+            return (
+              box.left < -1 ||
+              box.right > innerWidth + 1 ||
+              element.scrollWidth > element.clientWidth + 1
+            );
+          })
+          .map((element) => element.textContent),
+      );
+    assert.deepEqual(
+      whatYouWillDoIssues,
+      [],
+      `What You Will Do text clipped at ${width}px`,
+    );
+  }
   assert.deepEqual(errors, []);
   const report = {
     recruitment: {
@@ -1244,6 +1378,12 @@ try {
       responsive: whoShouldJoinResponsive,
     },
     recruitmentRoles: roleReport,
+    recruitmentWhatYouWillDo: {
+      geometry: whatYouWillDoGeometry,
+      meanAbsoluteChannelDifference:
+        whatYouWillDoTotal / whatYouWillDoActual.length,
+      responsive: whatYouWillDoResponsive,
+    },
     browserErrors: errors,
   };
   await writeFile(
