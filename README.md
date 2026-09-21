@@ -15,6 +15,21 @@ npm run dev
 Open http://localhost:4321. `npm run build` checks types and builds the static
 site into `dist/`; `npm run preview` serves that build.
 
+## Motion
+
+GSAP (ScrollTrigger) plus a small Three.js hero layer run on the homepage only
+(`src/components/Motion.astro`, `src/scripts/motion.ts`, `Hero.astro`) and are
+skipped entirely under `prefers-reduced-motion`:
+
+- scroll reveals for section headings and cards,
+- hero background/content parallax on scroll, plus pointer parallax,
+- 3D tilt on the HoDS and What We Do cards,
+- magnetic buttons and a cursor glow (fine pointers only),
+- horizontal snap on the HoDS rail.
+
+The Three.js particle layer is dynamically imported so it stays out of the
+initial bundle, and it is not created when reduced motion is requested.
+
 ## Deploy
 
 Static Astro output, so it deploys to Vercel with the committed `vercel.json`

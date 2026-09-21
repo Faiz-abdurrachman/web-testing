@@ -131,6 +131,8 @@ import { domains } from '../data/domains';
     overscroll-behavior-x: contain;
     padding-inline: max(var(--page-gutter), calc((100vw - 1280px) / 2));
     scrollbar-width: none;
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: max(var(--page-gutter), calc((100vw - 1280px) / 2));
   }
   .domain-rail::-webkit-scrollbar {
     display: none;
