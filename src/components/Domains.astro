@@ -1,0 +1,109 @@
+---
+import DomainCard from './DomainCard.astro';
+import { domains } from '../data/domains';
+---
+
+<section id="domains" class="domains" aria-labelledby="domains-title">
+  <header>
+    <span class="eyebrow">House of Data Sorcerers</span>
+    <h2 id="domains-title">Choose Your Domain</h2>
+    <p>
+      Every Sorcerer specializes. Find your domain and go deep with a community
+      of experts.
+    </p>
+  </header>
+  <div
+    class="domain-rail"
+    tabindex="0"
+    role="region"
+    aria-label="Domains — scroll horizontally to explore all six"
+  >
+    {domains.map((domain) => (
+      <DomainCard domain={domain} />
+    ))}
+  </div>
+</section>
+<script>
+  document.querySelectorAll<HTMLElement>('.domain-rail').forEach((rail) => {
+    rail.addEventListener('keydown', (event) => {
+      const step =
+        (rail.querySelector('article')?.getBoundingClientRect().width ?? 394) +
+        parseFloat(getComputedStyle(rail).columnGap);
+      const positions: Record<string, number> = {
+        ArrowLeft: rail.scrollLeft - step,
+        ArrowRight: rail.scrollLeft + step,
+        Home: 0,
+        End: rail.scrollWidth,
+      };
+      if (event.key in positions) {
+        event.preventDefault();
+        rail.scrollTo({ left: positions[event.key], behavior: 'instant' });
+      }
+    });
+  });
+</script>
+<style>
+  .domains {
+    padding-block: 80px;
+    background: #050507;
+  }
+  header {
+    padding-inline: var(--page-gutter);
+    text-align: center;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 26px;
+    padding: 4px 12px;
+    border-radius: 32px;
+    background: rgb(255 255 255 / 15%);
+    box-shadow: inset 0 1px 1px rgb(255 255 255 / 40%);
+    font-size: 12px;
+    line-height: 18px;
+  }
+  h2 {
+    margin: 14px 0 24px;
+    font: 400 56px/68px var(--font-heading);
+    background: linear-gradient(270deg, #fff, #ede8ff);
+    background-clip: text;
+    color: transparent;
+  }
+  header p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.176px;
+  }
+  .domain-rail {
+    display: flex;
+    gap: 40px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    padding-inline: max(var(--page-gutter), calc((100vw - 1280px) / 2));
+    margin-top: 74px;
+    scrollbar-width: none;
+  }
+  .domain-rail::-webkit-scrollbar {
+    display: none;
+  }
+  .domain-rail:focus-visible {
+    outline: 2px solid #bba7ff;
+    outline-offset: 6px;
+  }
+  @media (max-width: 760px) {
+    .domains {
+      padding-block: 64px;
+    }
+    h2 {
+      font-size: clamp(30px, 7vw, 48px);
+      line-height: 1.214286;
+    }
+    .domain-rail {
+      margin-top: 40px;
+      padding-inline: 24px;
+      gap: 24px;
+    }
+  }
+</style>

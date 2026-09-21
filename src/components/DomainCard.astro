@@ -1,0 +1,247 @@
+---
+import type { Domain } from '../data/domains';
+interface Props {
+  domain: Domain;
+}
+const { domain } = Astro.props;
+const large = ['product', 'growth'].includes(domain.id);
+---
+
+<article
+  class:list={['domain-card', domain.id, { large }]}
+  style={`--tint:${domain.tint}`}
+  aria-labelledby={`domain-${domain.id}`}
+>
+  <h3 id={`domain-${domain.id}`}>{domain.title}</h3>
+  <p>{domain.description}</p>
+  <img
+    class="glow"
+    src={`/images/domains/${domain.id}.svg`}
+    alt=""
+    loading="lazy"
+  />
+  <div class="cloud-frame">
+    <div class="cloud">
+      {!large &&
+        [
+          [0, 59.85],
+          [-22.49, 126.57],
+          [553.5, 59.85],
+          [563.48, 121.92],
+          ...(domain.id === 'vision' ? [] : [[402.85, 243.58]]),
+        ].map(([x, y]) => (
+          <span
+            class="blank extra"
+            aria-hidden="true"
+            style={`left:${x}px;top:${y}px`}
+          />
+        ))}
+      {domain.rows.map((row, i) => (
+        <div
+          class:list={['chip-row', `row-${i}`]}
+          style={`left:${row.x}px;top:${row.y}px;gap:${row.gap}px`}
+        >
+          {row.labels.map((label) => (
+            <span
+              class:list={[label ? 'chip' : 'blank']}
+              aria-hidden={label ? undefined : 'true'}
+            >
+              {label}
+            </span>
+          ))}
+        </div>
+      ))}
+    </div>
+  </div>
+</article>
+<style>
+  .domain-card {
+    position: relative;
+    isolation: isolate;
+    flex: 0 0 394px;
+    height: 436px;
+    overflow: hidden;
+    border-radius: 20px 0;
+    background: rgb(var(--tint) / 10%);
+  }
+  .domain-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(
+      135deg,
+      #fff,
+      rgb(var(--tint)) 52%,
+      rgb(var(--tint)) 75%,
+      #fff
+    );
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  h3 {
+    position: relative;
+    margin: 16px 14px 0;
+    font-size: 22px;
+    line-height: 33px;
+    font-weight: 700;
+  }
+  p {
+    position: relative;
+    margin: 11px 14px 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: #d8d1d1;
+  }
+  .glow {
+    position: absolute;
+    z-index: -1;
+    left: 65.34px;
+    top: 166.18px;
+    width: 1298.94px;
+    height: 456.375px;
+    max-width: none;
+    pointer-events: none;
+  }
+  .cloud-frame {
+    position: absolute;
+    left: -169px;
+    top: 131px;
+    width: 750.85px;
+    height: 381.861px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cloud {
+    position: relative;
+    flex: none;
+    width: 718.644px;
+    height: 287.647px;
+    transform: rotate(-7.74deg);
+  }
+  .chip-row {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+  .chip {
+    flex: none;
+    padding: 6.789px 20.367px;
+    border-radius: 54.312px;
+    background: rgb(255 255 255 / 15%);
+    box-shadow:
+      inset 0 1px 1px rgb(255 255 255 / 70%),
+      inset 0 -1px 1px rgb(255 255 255 / 40%);
+    font-size: 20.367px;
+    line-height: 30.551px;
+  }
+  .blank {
+    display: block;
+    flex: none;
+    width: 155.17px;
+    height: 44.334px;
+    border: 0.554px solid rgb(255 255 255 / 5%);
+    border-radius: 54.312px;
+    background: rgb(255 255 255 / 5%);
+  }
+  .extra {
+    position: absolute;
+  }
+  .row-0 .blank:first-child {
+    height: 38.841px;
+  }
+  .row-2 .blank {
+    width: 168.153px;
+    height: 44.578px;
+    background: rgb(255 255 255 / 15%);
+  }
+  .language .row-2 .chip:last-child {
+    box-shadow: none;
+  }
+  .vision .cloud-frame {
+    width: 740.188px;
+    height: 303.46px;
+  }
+  .vision .cloud {
+    height: 208.523px;
+  }
+  .large h3 {
+    margin-left: 21px;
+  }
+  .large p {
+    margin-left: 21px;
+    margin-right: 18px;
+  }
+  .large .cloud-frame {
+    left: -180.63px;
+    top: 167.91px;
+    width: 758.281px;
+    height: 276.416px;
+  }
+  .large .cloud {
+    width: 741.027px;
+    height: 178.24px;
+  }
+  .large .chip {
+    font-size: 21.945px;
+    line-height: 32.918px;
+    padding: 7.315px 21.945px;
+    border-radius: 58.521px;
+  }
+  .large .blank,
+  .large .row-0 .blank:first-child,
+  .large .row-2 .blank {
+    width: 167.193px;
+    height: 47.769px;
+    background: rgb(255 255 255 / 5%);
+  }
+  .product .glow {
+    left: -374.58px;
+    width: 1279.97px;
+    height: 453.37px;
+  }
+  .growth h3 {
+    margin-top: 14px;
+  }
+  .growth p {
+    margin: 8px 16px 0 25px;
+  }
+  .growth .cloud-frame {
+    top: 168.16px;
+    width: 754.543px;
+    height: 275.618px;
+  }
+  .growth .cloud {
+    width: 737.296px;
+    height: 177.941px;
+  }
+  .growth .glow {
+    left: -766.66px;
+    top: 170.18px;
+    width: 1256.04px;
+    height: 439.876px;
+  }
+  @media (max-width: 600px) {
+    .domain-card {
+      flex-basis: calc(100vw - 48px);
+      max-width: 394px;
+    }
+    .large .cloud-frame {
+      transform-origin: 180.63px 268.09px;
+    }
+    h3 {
+      font-size: 20px;
+    }
+    .cloud-frame {
+      top: 150px;
+      transform: scale(min(1, calc((100vw - 48px) / 394px)));
+      transform-origin: 169px 286px;
+    }
+  }
+</style>
