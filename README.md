@@ -15,6 +15,18 @@ npm run dev
 Open http://localhost:4321. `npm run build` checks types and builds the static
 site into `dist/`; `npm run preview` serves that build.
 
+## Deploy
+
+Static Astro output, so it deploys to Vercel with the committed `vercel.json`
+(`framework: astro`, `npm ci`, `npm run build`, output `dist`). Import the
+GitHub repository in Vercel; no environment variables are required. Node 22 is
+pinned through `engines.node`. `.vercelignore` keeps the large `assets/`
+reference folder out of the upload.
+
+The bundled fonts cover the body text. The Nasalization heading font is not
+bundled (see [asset notes](docs/assets.md)), so deployed previews render the
+headings with the fallback until a licensed webfont is added.
+
 ## Scope
 
 Implemented: desktop navbar, hero artwork, live HTML headings and copy,
