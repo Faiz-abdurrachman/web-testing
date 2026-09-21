@@ -59,8 +59,12 @@ of a 1440 × 826 frame. Open `/#domains` to jump to it. Cards are 394 × 436px,
 spaced 40px apart on desktop; the next card intentionally enters at the right edge.
 
 Our Project follows `assets/our project/Our Project Section.png` (1440 × 917
-at 1×). Open `/#projects` to preview its featured project and decorative side
-panels. Copy and tags retain the supplied placeholder content.
+at 1×) for the card, heading, and spacing, and presents the work as a 3D
+coverflow: the active project sits centered on the Figma grid while neighbouring
+projects angle back in depth. Navigate with the arrows, the dots, drag/swipe, or
+the arrow keys. Four placeholder projects live in `src/data/projects.ts` — swap
+them for real content. The reference's decorative side panels are replaced by
+the neighbouring project cards. Open `/#projects`.
 
 Recruitment CTA follows `assets/cta/CTA Recruicment Section.png` (1440 × 577
 at 1×). Open `/#recruitment`. Its two buttons remain unavailable until

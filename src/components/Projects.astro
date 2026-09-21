@@ -1,57 +1,180 @@
+---
+import { projects } from '../data/projects';
+---
+
 <section id="projects" class="projects" aria-labelledby="projects-title">
   <div class="projects-inner">
     <header>
       <span class="eyebrow">Our Project</span>
       <h2 id="projects-title">What Our Sorcery Create</h2>
     </header>
-    <div class="project-display">
-      <div class="side-panel left" aria-hidden="true">
-        <img
-          src="/images/projects/side-left.svg"
-          width="363"
-          height="530"
-          alt=""
-          loading="lazy"
-        />
+    <div
+      class="project-stage"
+      tabindex="0"
+      role="group"
+      aria-roledescription="carousel"
+      aria-label="Projects — use the arrow keys to browse"
+    >
+      <div class="project-track">
+        {projects.map((project, index) => (
+          <article
+            class:list={['project-card', { 'is-active': index === 0 }]}
+            data-index={index}
+            aria-hidden={index === 0 ? undefined : 'true'}
+            aria-labelledby={`project-${project.id}`}
+          >
+            <div class="project-image">
+              <img
+                src={project.image}
+                width="1799"
+                height="1102"
+                alt=""
+                loading={index === 0 ? 'eager' : 'lazy'}
+                decoding="async"
+              />
+            </div>
+            <div class="project-tags" aria-label="Project categories">
+              {project.tags.map((tag) => (
+                <span>{tag}</span>
+              ))}
+            </div>
+            <div class="project-copy">
+              <h3 id={`project-${project.id}`}>{project.title}</h3>
+              <p>{project.description}</p>
+            </div>
+          </article>
+        ))}
       </div>
-      <article class="project-card" aria-labelledby="project-arutala">
-        <div class="project-image">
-          <img
-            src="/images/projects/arutala-aksara.webp"
-            width="1799"
-            height="1102"
-            alt="Arutala Aksara interface for practicing handwritten Javanese characters"
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
-        <div class="project-tags" aria-label="Project categories">
-          <span>HoDS Apa</span>
-          <span>Lomba/research</span>
-        </div>
-        <div class="project-copy">
-          <h3 id="project-arutala">Arutala Aksara</h3>
-          <p>
-            Lorem ipsum Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem
-            ipsumLorem ipsumLorem ipsum Lorem ipsumLorem ipsumLorem ipsumLorem
-            ipsumLorem ipsum
-          </p>
-        </div>
-      </article>
-      <div class="side-panel right" aria-hidden="true">
-        <img
-          src="/images/projects/side-right.svg"
-          width="363"
-          height="530"
-          alt=""
-          loading="lazy"
+      <button
+        class="project-arrow prev"
+        type="button"
+        aria-label="Previous project"
+        data-dir="-1"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M15 5l-7 7 7 7"></path>
+        </svg>
+      </button>
+      <button
+        class="project-arrow next"
+        type="button"
+        aria-label="Next project"
+        data-dir="1"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 5l7 7-7 7"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="project-dots" role="tablist" aria-label="Select project">
+      {projects.map((project, index) => (
+        <button
+          class="dot"
+          type="button"
+          role="tab"
+          aria-label={project.title}
+          aria-selected={index === 0}
+          data-index={index}
         />
-      </div>
+      ))}
     </div>
   </div>
 </section>
+<script>
+  document.querySelectorAll<HTMLElement>('.project-stage').forEach((stage) => {
+    const cards = [...stage.querySelectorAll<HTMLElement>('.project-card')];
+    const arrows = [
+      ...stage.querySelectorAll<HTMLButtonElement>('.project-arrow'),
+    ];
+    const dots = [
+      ...(stage
+        .closest('.projects')
+        ?.querySelectorAll<HTMLButtonElement>('.project-dots .dot') ?? []),
+    ];
+    if (!cards.length) return;
+    let active = 0;
+
+    const render = () => {
+      const width = 549;
+      const stageWidth = stage.clientWidth || 1280;
+      const base = Math.min(1, (stageWidth * 0.9) / width);
+      stage.style.height = `${567 * base}px`;
+      const spacing = width * 0.42 * base;
+      cards.forEach((card, index) => {
+        const offset = index - active;
+        const distance = Math.abs(offset);
+        const direction = Math.sign(offset);
+        const rotate = Math.max(-50, Math.min(50, -direction * 42));
+        const scale = base * Math.max(0.72, 1 - distance * 0.08);
+        card.style.transform =
+          `translate(-50%, -50%) ` +
+          `translateX(${offset * spacing}px) ` +
+          `translateZ(${-distance * width * 0.4 * base}px) ` +
+          `rotateY(${rotate}deg) scale(${scale})`;
+        card.style.opacity =
+          distance > 2 ? '0' : String(Math.max(0.16, 1 - distance * 0.28));
+        card.style.filter =
+          distance === 0
+            ? 'none'
+            : `blur(${distance * 1.4}px) brightness(0.62)`;
+        card.style.zIndex = String(100 - distance);
+        card.style.pointerEvents = distance === 0 ? 'auto' : 'none';
+        card.classList.toggle('is-active', index === active);
+        card.setAttribute('aria-hidden', index === active ? 'false' : 'true');
+      });
+      dots.forEach((dot, index) =>
+        dot.setAttribute('aria-selected', String(index === active)),
+      );
+      if (arrows[0]) arrows[0].disabled = active <= 0;
+      if (arrows[1]) arrows[1].disabled = active >= cards.length - 1;
+    };
+
+    const go = (delta: number) => {
+      const next = Math.max(0, Math.min(cards.length - 1, active + delta));
+      if (next === active) return;
+      active = next;
+      render();
+    };
+
+    arrows.forEach((arrow) =>
+      arrow.addEventListener('click', () => go(Number(arrow.dataset.dir))),
+    );
+    dots.forEach((dot, index) =>
+      dot.addEventListener('click', () => {
+        active = index;
+        render();
+      }),
+    );
+    stage.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        go(-1);
+      } else if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        go(1);
+      }
+    });
+    let startX: number | null = null;
+    stage.addEventListener('pointerdown', (event) => {
+      startX = event.clientX;
+    });
+    const end = (event: PointerEvent) => {
+      if (startX === null) return;
+      const delta = event.clientX - startX;
+      startX = null;
+      if (Math.abs(delta) > 40) go(delta < 0 ? 1 : -1);
+    };
+    stage.addEventListener('pointerup', end);
+    stage.addEventListener('pointercancel', () => {
+      startX = null;
+    });
+    addEventListener('resize', render, { passive: true });
+    render();
+  });
+</script>
 <style>
   .projects {
+    position: relative;
     padding: 80px var(--page-gutter);
     background: var(--color-background);
     overflow: clip;
@@ -85,37 +208,44 @@
     background-clip: text;
     color: transparent;
   }
-  .project-display {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
+  .project-stage {
+    position: relative;
+    height: 567px;
     margin-top: 82px;
+    perspective: 1800px;
+    outline: none;
   }
-  .side-panel {
-    flex: none;
-    width: 363px;
-    height: 534px;
-    display: flex;
-    align-items: center;
+  .project-stage:focus-visible {
+    outline: 2px solid #bba7ff;
+    outline-offset: 12px;
+    border-radius: 24px;
   }
-  .side-panel img {
-    display: block;
-    width: 363px;
-    height: 530.25px;
-  }
-  .left {
-    transform: rotate(180deg);
+  .project-track {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
   }
   .project-card {
-    position: relative;
-    isolation: isolate;
-    flex: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
     width: 549px;
     height: 567px;
     border-radius: 20px;
     overflow: hidden;
     background: rgb(98 80 255 / 10%);
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition:
+      transform 0.62s cubic-bezier(0.22, 0.61, 0.36, 1),
+      opacity 0.5s ease,
+      filter 0.5s ease,
+      box-shadow 0.5s ease;
+    will-change: transform, opacity, filter;
+  }
+  .project-card.is-active {
+    opacity: 1;
+    box-shadow: 0 45px 130px rgb(108 59 255 / 32%);
   }
   .project-card::after {
     content: '';
@@ -138,25 +268,25 @@
   }
   .project-image {
     position: absolute;
-    top: 1px;
+    top: 0.176%;
     left: 0;
-    width: 587px;
-    height: 349px;
+    width: 106.921676%;
+    height: 61.552028%;
     overflow: hidden;
     opacity: 0.8;
   }
   .project-image img {
     display: block;
     position: absolute;
-    top: -0.105px;
+    top: -0.03%;
     width: 100%;
-    height: 359.156px;
+    height: 102.90974%;
     max-width: none;
   }
   .project-tags {
     position: absolute;
-    top: 305px;
-    left: 55px;
+    top: 53.791888%;
+    left: 10.018215%;
     display: flex;
     gap: 16px;
   }
@@ -170,9 +300,9 @@
   }
   .project-copy {
     position: absolute;
-    left: 52.5px;
-    top: 384px;
-    width: 451px;
+    left: 9.562841%;
+    top: 67.724868%;
+    width: 82.149362%;
   }
   h3 {
     margin: 0 0 15px 0.5px;
@@ -185,18 +315,64 @@
     font-size: 16px;
     line-height: 24px;
   }
-  @media (min-width: 761px) and (max-width: 1199px) {
-    .side-panel {
-      width: calc((100% - 557px) / 2);
-      overflow: hidden;
-    }
-    .side-panel img {
-      width: 100%;
-      height: 100%;
-    }
-    .project-display {
-      gap: 4px;
-    }
+  .project-arrow {
+    position: absolute;
+    top: 50%;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    transform: translateY(-50%);
+    border: 1px solid rgb(203 197 255 / 45%);
+    border-radius: 50%;
+    background: rgb(16 9 35 / 72%);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+  }
+  .project-arrow svg {
+    width: 26px;
+    height: 26px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .project-arrow.prev {
+    left: 4px;
+  }
+  .project-arrow.next {
+    right: 4px;
+  }
+  .project-arrow:disabled {
+    opacity: 0.25;
+    cursor: default;
+  }
+  .project-dots {
+    position: absolute;
+    bottom: 26px;
+    left: 50%;
+    display: flex;
+    gap: 10px;
+    transform: translateX(-50%);
+  }
+  .dot {
+    width: 9px;
+    height: 9px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 25%);
+    cursor: pointer;
+    transition:
+      background 0.3s ease,
+      transform 0.3s ease;
+  }
+  .dot[aria-selected='true'] {
+    background: #9b7bff;
+    transform: scale(1.35);
   }
   @media (max-width: 760px) {
     .projects {
@@ -206,47 +382,16 @@
       font-size: clamp(30px, 7vw, 48px);
       line-height: 1.214286;
     }
-    .project-display {
+    .project-stage {
       margin-top: 40px;
     }
-    .side-panel {
+    .project-arrow {
       display: none;
     }
+  }
+  @media (prefers-reduced-motion: reduce) {
     .project-card {
-      width: 100%;
-      max-width: 549px;
-      height: auto;
-    }
-    .project-image {
-      position: relative;
-      top: 0;
-      width: 100%;
-      height: auto;
-      aspect-ratio: 549/349;
-    }
-    .project-image img {
-      width: 106.921676%;
-      height: auto;
-    }
-    .project-tags {
-      top: auto;
-      bottom: auto;
-      left: 24px;
-      transform: translateY(calc(-100% - 18px));
-      gap: 12px;
-    }
-    .project-copy {
-      position: static;
-      width: auto;
-      padding: 32px 24px 40px;
-    }
-    h3 {
-      font-size: 24px;
-      line-height: 36px;
-      margin-left: 0;
-    }
-    .project-copy p {
-      overflow-wrap: anywhere;
+      transition: none;
     }
   }
 </style>

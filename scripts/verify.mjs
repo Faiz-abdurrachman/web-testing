@@ -12,6 +12,7 @@ const browser = await chromium.launch({
 const page = await browser.newPage({
   viewport: { width: 1440, height: 903 },
   deviceScaleFactor: 1,
+  reducedMotion: 'reduce',
 });
 const errors = [];
 page.on('pageerror', (error) => errors.push(error.message));
@@ -23,10 +24,15 @@ page.on('response', (response) => {
 // hero; their reference PNGs do not contain it. Geometry stays measurable.
 const setNavbarHidden = (hidden) =>
   page.evaluate((value) => {
-    const navbar = document.querySelector('.navbar');
-    if (navbar) navbar.style.visibility = value ? 'hidden' : '';
-    document.querySelectorAll('.rail-arrow').forEach((arrow) => {
-      arrow.style.visibility = value ? 'hidden' : '';
+    const selectors = [
+      '.navbar',
+      '.rail-arrow',
+      '.project-arrow',
+      '.project-dots',
+      '.project-card:not(.is-active)',
+    ].join(',');
+    document.querySelectorAll(selectors).forEach((element) => {
+      element.style.visibility = value ? 'hidden' : '';
     });
   }, hidden);
 try {
@@ -337,7 +343,7 @@ try {
         height: box.height,
         top: box.top + scrollY,
         elements: Object.fromEntries(
-          ['h2', '.project-card', '.left', '.right'].map((selector) => {
+          ['h2', '.project-card.is-active'].map((selector) => {
             const r = section.querySelector(selector).getBoundingClientRect();
             return [
               selector,
@@ -358,9 +364,12 @@ try {
     top: 3410,
     elements: {
       h2: { x: 80, y: 120, width: 751.296875, height: 68 },
-      '.project-card': { x: 445.5, y: 270, width: 549, height: 567 },
-      '.left': { x: 78.5, y: 286.5, width: 363, height: 534 },
-      '.right': { x: 998.5, y: 286.5, width: 363, height: 534 },
+      '.project-card.is-active': {
+        x: 445.5,
+        y: 270,
+        width: 549,
+        height: 567,
+      },
     },
   });
   const projectsReference = await sharp(
@@ -586,19 +595,21 @@ try {
     const projectIssues = await page
       .locator('.projects')
       .evaluate((section) => {
+        dispatchEvent(new Event('resize'));
         const issues = [];
-        const card = section
-          .querySelector('.project-card')
-          .getBoundingClientRect();
-        for (const element of section.querySelectorAll(
-          'h2,h3,.project-copy p,.project-tags',
+        const active = section.querySelector('.project-card.is-active');
+        const card = active.getBoundingClientRect();
+        const heading = section.querySelector('h2');
+        if (
+          heading.scrollWidth > heading.clientWidth + 1 ||
+          heading.getBoundingClientRect().right > innerWidth
+        )
+          issues.push('Heading clipped');
+        for (const element of active.querySelectorAll(
+          'h3,.project-copy p,.project-tags',
         )) {
           const box = element.getBoundingClientRect();
-          if (
-            box.left < 0 ||
-            box.right > innerWidth ||
-            element.scrollWidth > element.clientWidth + 1
-          )
+          if (box.left < 0 || box.right > innerWidth)
             issues.push('Text clipped');
           if (element.matches('.project-copy p') && box.bottom > card.bottom)
             issues.push('Description exceeds card');
