@@ -82,7 +82,15 @@ const gradient = (stop: number | null) =>
     align-items: center;
     gap: 20px;
     padding: 80px 80px 63px;
-    background: #000;
+    /* Supplied Background.png = the Figma frame fill (near-black starfield). */
+    background-color: #000;
+    background-image: image-set(
+      url('/images/what-you-will-do/background-1440.webp') 1x,
+      url('/images/what-you-will-do/background-2880.webp') 2x
+    );
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
     overflow: clip;
   }
   h2 {

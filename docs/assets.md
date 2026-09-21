@@ -353,9 +353,12 @@ role/Detile Roles - …png` (5760 × 5120, i.e. 1440 × 1280 at 4×). Note the
   `assets/assets recruitment page/what you will do/What You Will Do Section.png`,
   5760 × 3612 (1440 × 903 at 4×). The section sits at homepage y=1655.
 - Frame: 1440 × 903, `padding 80 80 63` (the bottom is 63, not 80, so the
-  section matches the reference height), column, centered, `gap 20`, black
-  background (the frame's fill is effectively black, and the supplied
-  `Background.png` is a black export).
+  section matches the reference height), column, centered, `gap 20`.
+- Background: the supplied `Background.png` is the Figma frame fill (a
+  near-black starfield; it matches the fill exported from Figma, MAD 0.11). It
+  is exported lossless to `public/images/what-you-will-do/background-{1440,
+2880}.webp` and painted with `background-size: cover` (Figma `scaleMode:
+FILL`). Including it drops the section difference from ~1.83 to ~1.45/255.
 - Heading: "What You Will Do", Nasalization Regular 400, 56 / 68, centered in a
   1280px box, gradient `linear-gradient(180deg, #fff 0%, #707070 78%)`.
 - Copy: "Life inside the Data Sorcerers ecosystem", Manrope Medium 500, 18 / 27,
@@ -377,5 +380,5 @@ role/Detile Roles - …png` (5760 × 5120, i.e. 1440 × 1280 at 4×). Note the
   and connector hidden) — an adaptation, since no mobile reference exists.
 - Verification: `scripts/verify.mjs` asserts the section, heading, body, all
   eight labels, both cards and the connector exactly, diffs against the
-  reference (~1.8/255; the residual is anti-aliasing on the connector and label
-  edges), and checks overflow and text from 320px to 1920px.
+  reference (~1.45/255; the residual is anti-aliasing on the connector lines and
+  the label edges), and checks overflow and text from 320px to 1920px.
