@@ -60,11 +60,11 @@ spaced 40px apart on desktop; the next card intentionally enters at the right ed
 
 Our Project follows `assets/our project/Our Project Section.png` (1440 × 917
 at 1×) for the card, heading, and spacing, and presents the work as a 3D
-coverflow: the active project sits centered on the Figma grid while neighbouring
-projects angle back in depth. Navigate with the arrows, the dots, drag/swipe, or
-the arrow keys. Four placeholder projects live in `src/data/projects.ts` — swap
-them for real content. The reference's decorative side panels are replaced by
-the neighbouring project cards. Open `/#projects`.
+coverflow: the highlighted project sits centered on the Figma grid while the
+left and right projects sit at the reference's side-panel positions, tilted and
+blurred. Navigate with the arrows, the dots, drag/swipe, or the arrow keys. Four
+placeholder projects live in `src/data/projects.ts` — swap them for real
+content. Open `/#projects`.
 
 Recruitment CTA follows `assets/cta/CTA Recruicment Section.png` (1440 × 577
 at 1×). Open `/#recruitment`. Its two buttons remain unavailable until

@@ -152,13 +152,14 @@ score were unchanged when this section was added.
   carousel controls or destination links were supplied.
 - Mobile hides the decorative side panels and fits the featured project to
   available width. This is an adaptation, not a supplied mobile design.
-- The section is presented as a **3D coverflow**: the active card stays on the
-  Figma grid (549 × 567 at (445.5,270)) and the neighbouring cards are pushed
-  back with `perspective`, `translateZ`, `rotateY`, `scale`, and a depth blur.
+- The section is presented as a **3D coverflow** with left / centre / right
+  slots: the highlighted card stays on the Figma grid (549 × 567 at
+  (445.5,270)) while the neighbours sit at the reference's side-panel
+  positions (x ≈ 78.5 and 998.5), tilted with `rotateY` and blurred so only the
+  active project is sharp. Switching rotates the cards between slots.
   Navigation covers arrows, dots, drag/swipe, and arrow keys; motion is disabled
-  under `prefers-reduced-motion`. The reference's decorative side panels are
-  replaced by the neighbouring project cards. Project data lives in
-  `src/data/projects.ts` and currently holds four placeholders.
+  under `prefers-reduced-motion`. Project data lives in `src/data/projects.ts`
+  and currently holds four placeholders.
 - Verification includes reference overlay/difference images, desktop geometry
   (heading + active card), text containment and page overflow checks from 320px
   to 1920px.
