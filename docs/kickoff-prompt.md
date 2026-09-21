@@ -1,0 +1,49 @@
+# Kickoff prompt — buat AI agent baru
+
+Copy-paste ini ke AI baru sebelum ngasih task. Ganti bagian `TASK` di bawah.
+
+---
+
+```text
+Kamu lanjut kerja di repo "Data Sorcerers" (static Astro site: landing page +
+6 halaman detail HoDS). Sebelum ngapa-ngapain, WAJIB baca dulu (urut):
+
+1. AGENTS.md      → aturan operasional, commands, konvensi verifikasi, gotchas
+2. HANDOVER.md    → konteks lengkap: stack, struktur, status tiap section,
+                    checkpoint, TODO
+3. docs/assets.md → provenance tiap section + node Figma
+
+Ringkas aturan intinya (patuhi):
+- PNG referensi = sumber kebenaran. CSS export Figma cuma hint. Kalau beda → ikut PNG.
+- Semua UI harus HTML/CSS asli. Jangan flatten screenshot jadi gambar (teks, tombol,
+  border, kartu, gradient text).
+- Ukur dari PNG pakai sharp (bbox/pixel diff). Jangan nebak/eyeball.
+- Angka geometri sudah di-assert di scripts/verify.mjs (deepEqual). Kalau desain
+  sengaja diubah, update assertion-nya juga.
+- Wajib kasih fallback prefers-reduced-motion buat tiap animasi.
+- Runtime deps sengaja cuma `astro`. Jangan tambah library tanpa tanya; lazy-import
+  kalau berat.
+- Commit per fitur, pesan gaya `feat:` / `fix:` / `docs:` / `chore:`, push ke `main`.
+
+Cara kerja & verifikasi:
+- npm ci   → install (Node 22.x)
+- npm run dev            → dev server http://localhost:4321
+- npm run build          → astro check + build (HARUS 0 error)
+- npm run format:check   → harus lolos
+- node scripts/verify.mjs → verifikasi visual (dev server harus jalan; HARUS exit 0)
+
+Kalau bikin/ubah section: update docs/assets.md + tambah/cek assertion di
+scripts/verify.mjs (geometri + containment + overflow 320–1920px). Baca bagian
+"Verification workflow" di AGENTS.md dulu (reducedMotion + setNavbarHidden).
+
+Yang perlu kamu tahu sekarang:
+- HEAD 'main' = state SEBELUM eksperimen motion. Commit GSAP+Three (5feea0d)
+  sudah di-revert (f925e1d). Card 3D (carousel project) tetap ada dan jangan diutak-atik.
+- TODO utama: font Nasalization (webfont berlisensi), data project asli, halaman
+  lain (About, Recruitment, Hall of Frames, Partners, Contact).
+
+Sebelum mulai task di bawah: ringkas dulu pemahamanmu + rencana singkat, lalu kerjakan.
+
+TASK:
+<taruh task kamu di sini>
+```
