@@ -25,6 +25,9 @@ const setNavbarHidden = (hidden) =>
   page.evaluate((value) => {
     const navbar = document.querySelector('.navbar');
     if (navbar) navbar.style.visibility = value ? 'hidden' : '';
+    document.querySelectorAll('.rail-arrow').forEach((arrow) => {
+      arrow.style.visibility = value ? 'hidden' : '';
+    });
   }, hidden);
 try {
   await page.goto(process.env.PREVIEW_URL || 'http://localhost:4321', {
@@ -244,7 +247,7 @@ try {
       width: box.width,
       height: box.height,
       top: box.top + scrollY,
-      cards: [...section.querySelectorAll('article')].map((card) => {
+      cards: [...section.querySelectorAll('.domain-card')].map((card) => {
         const rect = card.getBoundingClientRect();
         return {
           x: rect.x - box.x,
@@ -606,7 +609,7 @@ try {
     const domainIssues = await page
       .locator('.domains')
       .evaluate((section) =>
-        [...section.querySelectorAll('article')].flatMap((card) =>
+        [...section.querySelectorAll('.domain-card')].flatMap((card) =>
           [...card.querySelectorAll('h3,p')]
             .filter((text) => text.scrollWidth > text.clientWidth + 1)
             .map((text) => text.textContent),

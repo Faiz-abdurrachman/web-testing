@@ -12,26 +12,70 @@ import { domains } from '../data/domains';
       of experts.
     </p>
   </header>
-  <div
-    class="domain-rail"
-    tabindex="0"
-    role="region"
-    aria-label="Domains — scroll horizontally to explore all six"
-  >
-    {domains.map((domain) => (
-      <DomainCard domain={domain} />
-    ))}
+  <div class="domain-carousel">
+    <button
+      class="rail-arrow prev"
+      type="button"
+      aria-label="Previous domains"
+      data-dir="-1"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M15 5l-7 7 7 7"></path>
+      </svg>
+    </button>
+    <div
+      class="domain-rail"
+      tabindex="0"
+      role="region"
+      aria-label="Domains — scroll horizontally to explore all six"
+    >
+      {domains.map((domain) => (
+        <DomainCard domain={domain} />
+      ))}
+    </div>
+    <button
+      class="rail-arrow next"
+      type="button"
+      aria-label="Next domains"
+      data-dir="1"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M9 5l7 7-7 7"></path>
+      </svg>
+    </button>
   </div>
 </section>
 <script>
   document.querySelectorAll<HTMLElement>('.domain-rail').forEach((rail) => {
+    const carousel = rail.closest('.domain-carousel');
+    const arrows = carousel
+      ? [...carousel.querySelectorAll<HTMLButtonElement>('.rail-arrow')]
+      : [];
+    const step = () =>
+      (rail.querySelector('.domain-card')?.getBoundingClientRect().width ??
+        394) + (parseFloat(getComputedStyle(rail).columnGap) || 0);
+
+    arrows.forEach((arrow) =>
+      arrow.addEventListener('click', () => {
+        rail.scrollBy({
+          left: Number(arrow.dataset.dir) * step(),
+          behavior: 'smooth',
+        });
+      }),
+    );
+
+    const sync = () => {
+      const max = rail.scrollWidth - rail.clientWidth;
+      if (arrows[0]) arrows[0].disabled = rail.scrollLeft <= 1;
+      if (arrows[1]) arrows[1].disabled = rail.scrollLeft >= max - 1;
+    };
+    rail.addEventListener('scroll', sync, { passive: true });
+    sync();
+
     rail.addEventListener('keydown', (event) => {
-      const step =
-        (rail.querySelector('article')?.getBoundingClientRect().width ?? 394) +
-        parseFloat(getComputedStyle(rail).columnGap);
       const positions: Record<string, number> = {
-        ArrowLeft: rail.scrollLeft - step,
-        ArrowRight: rail.scrollLeft + step,
+        ArrowLeft: rail.scrollLeft - step(),
+        ArrowRight: rail.scrollLeft + step(),
         Home: 0,
         End: rail.scrollWidth,
       };
@@ -76,13 +120,16 @@ import { domains } from '../data/domains';
     line-height: 24px;
     letter-spacing: -0.176px;
   }
+  .domain-carousel {
+    position: relative;
+    margin-top: 74px;
+  }
   .domain-rail {
     display: flex;
     gap: 40px;
     overflow-x: auto;
     overscroll-behavior-x: contain;
     padding-inline: max(var(--page-gutter), calc((100vw - 1280px) / 2));
-    margin-top: 74px;
     scrollbar-width: none;
   }
   .domain-rail::-webkit-scrollbar {
@@ -92,6 +139,41 @@ import { domains } from '../data/domains';
     outline: 2px solid #bba7ff;
     outline-offset: 6px;
   }
+  .rail-arrow {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    transform: translateY(-50%);
+    border: 1px solid rgb(203 197 255 / 45%);
+    border-radius: 50%;
+    background: rgb(16 9 35 / 72%);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+  }
+  .rail-arrow svg {
+    width: 26px;
+    height: 26px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .rail-arrow.prev {
+    left: 20px;
+  }
+  .rail-arrow.next {
+    right: 20px;
+  }
+  .rail-arrow:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
   @media (max-width: 760px) {
     .domains {
       padding-block: 64px;
@@ -100,10 +182,15 @@ import { domains } from '../data/domains';
       font-size: clamp(30px, 7vw, 48px);
       line-height: 1.214286;
     }
-    .domain-rail {
+    .domain-carousel {
       margin-top: 40px;
+    }
+    .domain-rail {
       padding-inline: 24px;
       gap: 24px;
+    }
+    .rail-arrow {
+      display: none;
     }
   }
 </style>
