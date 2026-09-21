@@ -1,0 +1,22 @@
+/* Text */
+
+width: 1280px;
+height: 27px;
+
+/* Typography/Manrope - Body/B-1 */
+font-family: 'Manrope';
+font-style: normal;
+font-weight: 500;
+font-size: 18px;
+line-height: 27px;
+/* identical to box height, or 150% */
+text-align: center;
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
