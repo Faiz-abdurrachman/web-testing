@@ -1,7 +1,7 @@
 # Data Sorcerers
 
-Homepage hero and Our Philosophy preview built with Astro, strict TypeScript,
-and scoped CSS.
+Homepage preview with Hero, Our Philosophy, What We Do, House of Data Sorcerers, and Our Project, built with Astro,
+strict TypeScript, and scoped CSS.
 
 ## Run locally
 
@@ -20,6 +20,13 @@ site into `dist/`; `npm run preview` serves that build.
 Implemented: desktop navbar, hero artwork, live HTML headings and copy,
 CSS buttons, a responsive mobile navigation menu, and the Our Philosophy
 section with its original illustration, five icons, and two-column principles.
+The navbar is a fixed, full-width bar whose content is locked to the 1440px
+Figma frame and centered on wider screens; once the page scrolls it gains a
+backdrop blur and a translucent panel.
+What We Do adds four HTML/CSS cards around a centered heading, with original
+star artwork and exported decorative glow assets.
+HODS adds six HTML/CSS domain cards in a horizontal scrolling row. Swipe or
+use a trackpad; focus the row and use arrow keys or Home/End on a keyboard.
 Home links to `/`.
 Other navigation destinations and CTA URLs have not been supplied; they are
 explicitly unavailable in this preview rather than linking to missing pages.
@@ -32,6 +39,29 @@ reference was supplied. Our Philosophy follows
 frame. Open `/#our-philosophy` to jump to it. `assets/` remains the original
 reference collection.
 
+What We Do follows `assets/what we do/What We Do Section.png`, a 4× export of
+a 1440 × 844 frame. Open `/#what-we-do` to jump to it.
+
+HODS follows `assets/hods/House of Data Sorcerers Section.png`, a 4× export
+of a 1440 × 826 frame. Open `/#domains` to jump to it. Cards are 394 × 436px,
+spaced 40px apart on desktop; the next card intentionally enters at the right edge.
+
+Our Project follows `assets/our project/Our Project Section.png` (1440 × 917
+at 1×). Open `/#projects` to preview its featured project and decorative side
+panels. Copy and tags retain the supplied placeholder content.
+
+Recruitment CTA follows `assets/cta/CTA Recruicment Section.png` (1440 × 577
+at 1×). Open `/#recruitment`. Its two buttons remain unavailable until
+their actual destinations are supplied, consistent with the hero preview.
+
+Footer follows `assets/footer/Footer.png` (1440 × 556 at 1×), the Figma node
+`765:17071`. It carries the supplied background image, the brand lockup, the
+social icons, the Navigation and Contact columns, and the legal bar. Text,
+borders, the divider, and the social buttons are HTML/CSS; the two social
+glyphs and the background are original Figma exports. Open `/#` and scroll to
+the bottom. Social, Navigation, Terms, Privacy, and Cookies destinations have
+not been supplied, so they remain explicitly unavailable in this preview.
+
 ## Fonts
 
 Manrope is bundled under the SIL Open Font License. Nasalization uses an
@@ -41,7 +71,8 @@ See [asset notes](docs/assets.md).
 
 ## Project structure
 
-- `src/components/`: Navbar, Hero, Philosophy, and shared Button.
+- `src/components/`: Navbar, Hero, Philosophy, WhatWeDo, Domains, DomainCard, Projects, Recruitment, Footer, and shared Button.
+- `src/data/domains.ts`: domain copy and topic labels.
 - `src/layouts/`: HTML document, metadata, and font preload links.
 - `src/styles/global.css`: fonts, design tokens, reset, and focus styles.
 - `src/pages/index.astro`: homepage composition.
