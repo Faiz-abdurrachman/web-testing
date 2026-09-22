@@ -216,6 +216,8 @@ const destinations: Record<string, string> = {
       display: block;
     }
     summary {
+      position: relative;
+      z-index: 2;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -238,6 +240,18 @@ const destinations: Record<string, string> = {
       width: 22px;
       background: white;
       filter: drop-shadow(0 1px 2px rgb(0 0 0 / 65%));
+      transition:
+        transform 0.25s ease,
+        opacity 0.2s ease;
+    }
+    .mobile-menu[open] summary span:nth-child(1) {
+      transform: translateY(6px) rotate(45deg);
+    }
+    .mobile-menu[open] summary span:nth-child(2) {
+      opacity: 0;
+    }
+    .mobile-menu[open] summary span:nth-child(3) {
+      transform: translateY(-6px) rotate(-45deg);
     }
     .mobile-menu nav {
       position: absolute;
@@ -245,36 +259,53 @@ const destinations: Record<string, string> = {
       right: 0;
       left: 0;
       z-index: 1;
-      isolation: isolate;
       display: flex;
       flex-direction: column;
       align-items: stretch;
-      gap: 8px;
-      padding: 24px var(--page-gutter) 32px;
-      background: none;
+      gap: 0;
+      max-height: calc(100vh - 94px);
+      max-height: calc(100dvh - 94px);
+      padding: 12px var(--page-gutter) max(48px, env(safe-area-inset-bottom));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      background: rgb(5 5 7 / 90%);
+      backdrop-filter: blur(22px) saturate(140%);
+      -webkit-backdrop-filter: blur(22px) saturate(140%);
+      mask-image: linear-gradient(#000 calc(100% - 36px), transparent);
+      -webkit-mask-image: linear-gradient(#000 calc(100% - 36px), transparent);
       border: 0;
       border-radius: 0;
       box-shadow: none;
     }
-    .mobile-menu nav::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      background: rgb(5 5 7 / 35%);
-      backdrop-filter: blur(18px) saturate(140%);
-      -webkit-backdrop-filter: blur(18px) saturate(140%);
-      mask-image: linear-gradient(#000 78%, transparent);
-      -webkit-mask-image: linear-gradient(#000 78%, transparent);
-      pointer-events: none;
-    }
-    .nav-link {
+    .mobile-menu .nav-link {
+      padding: 13px 4px;
       font-size: 18px;
+      line-height: 27px;
+      color: rgb(255 255 255 / 70%);
+      border-top: 1px solid rgb(203 197 255 / 12%);
     }
-    .active::after {
-      right: auto;
-      left: 10px;
-      width: 49px;
+    .mobile-menu .nav-link:first-child {
+      border-top: 0;
+    }
+    .mobile-menu .nav-link.active {
+      color: #fff;
+      background: linear-gradient(
+        90deg,
+        rgb(108 59 255 / 26%),
+        rgb(108 59 255 / 0%)
+      );
+    }
+    .mobile-menu .active::after {
+      display: none;
+    }
+    .mobile-menu nav :global(.button) {
+      width: 100%;
+      margin-top: 24px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    summary span {
+      transition: none;
     }
   }
   :global(body.menu-open) {
