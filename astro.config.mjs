@@ -11,4 +11,12 @@ export default defineConfig({
   output: 'static',
   devToolbar: { enabled: false },
   integrations: [sitemap()],
+  // Keep both `backdrop-filter` and `-webkit-backdrop-filter` in the built CSS
+  // (the default Lightning CSS pass dropped the unprefixed one, so the navbar
+  // blur disappeared in Firefox on the deployed site).
+  vite: {
+    build: {
+      cssMinify: 'esbuild',
+    },
+  },
 });
