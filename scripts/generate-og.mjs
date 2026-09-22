@@ -59,7 +59,12 @@ const iconBuffer = async (size) => {
     })
     .toBuffer();
   return sharp({
-    create: { width: size, height: size, channels: 4, background: BG },
+    create: {
+      width: size,
+      height: size,
+      channels: 4,
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    },
   })
     .composite([{ input: mark, gravity: 'center' }])
     .png()
