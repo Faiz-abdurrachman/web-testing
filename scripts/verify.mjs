@@ -279,9 +279,9 @@ try {
     height: 826,
     top: 2584,
     cards: Array.from({ length: 6 }, (_, i) => ({
-      x: 80 + i * 434,
+      x: 80 + i * 439.984375,
       y: 310,
-      width: 394,
+      width: 399.984375,
       height: 436,
     })),
   });
@@ -331,7 +331,7 @@ try {
   await page.keyboard.press('Home');
   assert.equal(await rail.evaluate((element) => element.scrollLeft), 0);
   await page.keyboard.press('ArrowRight');
-  assert.equal(await rail.evaluate((element) => element.scrollLeft), 434);
+  assert.equal(await rail.evaluate((element) => element.scrollLeft), 440);
   await page.keyboard.press('Home');
   await rail.evaluate((element) => element.blur());
   await page.evaluate(() => scrollTo(0, 0));
@@ -495,7 +495,10 @@ try {
   await page.evaluate(async () => {
     await document.fonts.ready;
     await Promise.all(
-      [...document.images].map((image) => image.decode().catch(() => {})),
+      [...document.images].map(async (image) => {
+        image.loading = 'eager';
+        await image.decode().catch(() => {});
+      }),
     );
   });
   await page
@@ -758,7 +761,10 @@ try {
   await page.evaluate(async () => {
     await document.fonts.ready;
     await Promise.all(
-      [...document.images].map((image) => image.decode().catch(() => {})),
+      [...document.images].map(async (image) => {
+        image.loading = 'eager';
+        await image.decode().catch(() => {});
+      }),
     );
   });
   await page.evaluate(() => scrollTo(0, 0));
@@ -791,9 +797,9 @@ try {
     width: 1440,
     height: 866,
     top: 0,
-    h1: { x: 270, y: 247.5, width: 900, height: 196 },
-    copy: { x: 270, y: 477.5, width: 900, height: 27 },
-    button: { x: 659.21875, y: 567.5, width: 121.546875, height: 51 },
+    h1: { x: 270, y: 277.5, width: 900, height: 196 },
+    copy: { x: 270, y: 507.5, width: 900, height: 27 },
+    button: { x: 659.21875, y: 597.5, width: 121.546875, height: 51 },
   });
   assert.equal(
     await page.locator('.desktop-menu .nav-link.active').textContent(),
@@ -912,10 +918,10 @@ try {
     top: 866,
     heading: { x: 80, y: 80, width: 1280, height: 68 },
     copy: { x: 80, y: 172, width: 1280, height: 27 },
-    cards: [80, 514, 948, 1382].map((x) => ({
+    cards: [80, 519.984375, 959.96875, 1399.953125].map((x) => ({
       x,
       y: 273,
-      width: 394,
+      width: 399.984375,
       height: 436,
     })),
   });
@@ -923,7 +929,10 @@ try {
   await page.evaluate(async () => {
     await document.fonts.ready;
     await Promise.all(
-      [...document.images].map((image) => image.decode().catch(() => {})),
+      [...document.images].map(async (image) => {
+        image.loading = 'eager';
+        await image.decode().catch(() => {});
+      }),
     );
   });
   await page
@@ -1067,7 +1076,7 @@ try {
   });
   assert.deepEqual(
     await backLink(page.locator('.hods-detail .back')),
-    { href: '/recruitment#who-should-join', label: 'Back to Open Roles' },
+    { href: '/recruitment#who-should-join', label: 'Back to Who Should Join' },
     'HoDS back link returns to recruitment when opened from there',
   );
   await page.goto(`${baseUrl}/hods/data`, { waitUntil: 'networkidle' });
@@ -1086,7 +1095,10 @@ try {
     await page.evaluate(async () => {
       await document.fonts.ready;
       await Promise.all(
-        [...document.images].map((image) => image.decode().catch(() => {})),
+        [...document.images].map(async (image) => {
+          image.loading = 'eager';
+          await image.decode().catch(() => {});
+        }),
       );
     });
     await page.evaluate(() => scrollTo(0, 0));
@@ -1215,7 +1227,10 @@ try {
   await page.evaluate(async () => {
     await document.fonts.ready;
     await Promise.all(
-      [...document.images].map((image) => image.decode().catch(() => {})),
+      [...document.images].map(async (image) => {
+        image.loading = 'eager';
+        await image.decode().catch(() => {});
+      }),
     );
   });
   await setNavbarHidden(true);
@@ -1356,7 +1371,10 @@ try {
   await page.evaluate(async () => {
     await document.fonts.ready;
     await Promise.all(
-      [...document.images].map((image) => image.decode().catch(() => {})),
+      [...document.images].map(async (image) => {
+        image.loading = 'eager';
+        await image.decode().catch(() => {});
+      }),
     );
   });
   await setNavbarHidden(true);
@@ -1394,17 +1412,19 @@ try {
     });
   assert.deepEqual(availableRolesGeometry, {
     width: 1440,
-    height: 910,
+    height: 1060.9375,
     top: 2558,
     heading: { x: 80, y: 80, width: 1280, height: 68 },
     copy: { x: 80, y: 168, width: 1280, height: 27 },
-    list: { x: 80, y: 253, width: 1280, height: 577 },
-    rows: [253, 353, 453, 553, 653, 753].map((y) => ({
-      x: 80,
-      y,
-      width: 1280,
-      height: 77,
-    })),
+    list: { x: 80, y: 253, width: 1280, height: 727.9375 },
+    rows: [253, 636.359375].flatMap((y, row) =>
+      [80, 514.65625, 949.328125].map((x, col) => ({
+        x,
+        y,
+        width: col === 1 ? 410.671875 : 410.65625,
+        height: row === 0 ? 359.359375 : 344.578125,
+      })),
+    ),
   });
   assert.deepEqual(
     await page
@@ -1419,40 +1439,7 @@ try {
   await page
     .locator('.available-roles')
     .screenshot({ path: 'artifacts/available-roles-desktop.png' });
-  const availableRolesReference = await sharp(
-    'assets/assets recruitment page/available roles section/Available Roles Section.png',
-  )
-    .resize(1440, 910)
-    .removeAlpha()
-    .raw()
-    .toBuffer();
-  const availableRolesActual = await sharp(
-    'artifacts/available-roles-desktop.png',
-  )
-    .removeAlpha()
-    .raw()
-    .toBuffer();
-  assert.equal(availableRolesReference.length, availableRolesActual.length);
-  let availableRolesTotal = 0;
-  const availableRolesDiff = Buffer.alloc(availableRolesActual.length);
-  const availableRolesOverlay = Buffer.alloc(availableRolesActual.length);
-  for (let i = 0; i < availableRolesActual.length; i++) {
-    const delta = Math.abs(
-      availableRolesActual[i] - availableRolesReference[i],
-    );
-    availableRolesTotal += delta;
-    availableRolesDiff[i] = Math.min(255, delta * 4);
-    availableRolesOverlay[i] = Math.round(
-      (availableRolesActual[i] + availableRolesReference[i]) / 2,
-    );
-  }
-  const availableRolesRaw = { width: 1440, height: 910, channels: 3 };
-  await sharp(availableRolesDiff, { raw: availableRolesRaw })
-    .png()
-    .toFile('artifacts/available-roles-diff.png');
-  await sharp(availableRolesOverlay, { raw: availableRolesRaw })
-    .png()
-    .toFile('artifacts/available-roles-overlay.png');
+  // Mentor-approved redesign: the old six-row PNG is no longer its reference.
   const availableRolesSizes = [320, 390, 768, 1024, 1440, 1680, 1920];
   const availableRolesResponsive = [];
   for (const width of availableRolesSizes) {
@@ -1487,13 +1474,17 @@ try {
       `Available Roles text clipped at ${width}px`,
     );
   }
+  // Use a consistent desktop viewport: hero height now follows viewport height.
   // Recruitment page — Selection Timeline (header row + six phase rows).
-  await page.setViewportSize({ width: 1440, height: 815 });
+  await page.setViewportSize({ width: 1440, height: 903 });
   await page.goto(`${baseUrl}/recruitment`, { waitUntil: 'networkidle' });
   await page.evaluate(async () => {
     await document.fonts.ready;
     await Promise.all(
-      [...document.images].map((image) => image.decode().catch(() => {})),
+      [...document.images].map(async (image) => {
+        image.loading = 'eager';
+        await image.decode().catch(() => {});
+      }),
     );
   });
   await setNavbarHidden(true);
@@ -1527,7 +1518,7 @@ try {
   assert.deepEqual(selectionTimelineGeometry, {
     width: 1440,
     height: 815,
-    top: 3468,
+    top: 3618.9375,
     heading: { x: 80, y: 80, width: 1280, height: 68 },
     head: { x: 80, y: 206, width: 1280, height: 78 },
     body: { x: 80, y: 284, width: 1280, height: 451 },
@@ -1551,6 +1542,8 @@ try {
   const selectionTimelineActual = await sharp(
     'artifacts/selection-timeline-desktop.png',
   )
+    // Fractional section origins round screenshot bounds outward by one pixel.
+    .extract({ left: 0, top: 0, width: 1440, height: 815 })
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -1618,7 +1611,10 @@ try {
   await page.evaluate(async () => {
     await document.fonts.ready;
     await Promise.all(
-      [...document.images].map((image) => image.decode().catch(() => {})),
+      [...document.images].map(async (image) => {
+        image.loading = 'eager';
+        await image.decode().catch(() => {});
+      }),
     );
   });
   await setNavbarHidden(true);
@@ -1649,7 +1645,7 @@ try {
   assert.deepEqual(faqGeometry, {
     width: 1440,
     height: 986,
-    top: 4283,
+    top: 4433.9375,
     heading: { x: 80, y: 80, width: 1280, height: 68 },
     list: { x: 80, y: 206, width: 1280, height: 700 },
     items: [
@@ -1671,6 +1667,8 @@ try {
     .raw()
     .toBuffer();
   const faqActual = await sharp('artifacts/faq-desktop.png')
+    // Fractional section origins round screenshot bounds outward by one pixel.
+    .extract({ left: 0, top: 0, width: 1440, height: 986 })
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -1723,7 +1721,10 @@ try {
   await page.evaluate(async () => {
     await document.fonts.ready;
     await Promise.all(
-      [...document.images].map((image) => image.decode().catch(() => {})),
+      [...document.images].map(async (image) => {
+        image.loading = 'eager';
+        await image.decode().catch(() => {});
+      }),
     );
   });
   await setNavbarHidden(true);
@@ -1762,7 +1763,7 @@ try {
   assert.deepEqual(snippetsGeometry, {
     width: 1440,
     height: 900,
-    top: 5269,
+    top: 5419.9375,
     heading: { x: 80, y: 40, width: 1280, height: 68 },
     gallery: { x: 80, y: 166, width: 1280, height: 694 },
     hero: { x: 80, y: 166, width: 1280, height: 556 },
@@ -1785,6 +1786,8 @@ try {
     .raw()
     .toBuffer();
   const snippetsActual = await sharp('artifacts/snippets-desktop.png')
+    // Fractional section origins round screenshot bounds outward by one pixel.
+    .extract({ left: 0, top: 0, width: 1440, height: 900 })
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -1836,12 +1839,15 @@ try {
     assert.deepEqual(snippetsIssues, [], `Snippets text clipped at ${width}px`);
   }
   // Recruitment page — CTA (panel with heading, copy, button and glow).
-  await page.setViewportSize({ width: 1440, height: 537 });
+  await page.setViewportSize({ width: 1440, height: 903 });
   await page.goto(`${baseUrl}/recruitment`, { waitUntil: 'networkidle' });
   await page.evaluate(async () => {
     await document.fonts.ready;
     await Promise.all(
-      [...document.images].map((image) => image.decode().catch(() => {})),
+      [...document.images].map(async (image) => {
+        image.loading = 'eager';
+        await image.decode().catch(() => {});
+      }),
     );
   });
   await setNavbarHidden(true);
@@ -1880,10 +1886,10 @@ try {
     {
       width: 1440,
       height: 537,
-      top: 6169,
+      top: 6319.9375,
       panel: { x: 80, y: 80, width: 1280, height: 377 },
       actions: { x: 617.5, y: 327, width: 205, height: 51 },
-      glow: { x: 349.83, y: 351, width: 1000.331, height: 271.502 },
+      glow: { x: 349.828125, y: 351, width: 1000.328125, height: 271.5 },
     },
   );
   assert.ok(
@@ -1903,6 +1909,8 @@ try {
     .raw()
     .toBuffer();
   const ctaActual = await sharp('artifacts/cta-panel-desktop.png')
+    // Fractional section origins round screenshot bounds outward by one pixel.
+    .extract({ left: 0, top: 0, width: 1280, height: 377 })
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -1950,12 +1958,15 @@ try {
     assert.deepEqual(ctaIssues, [], `CTA text clipped at ${width}px`);
   }
   // Recruitment page — shared footer (same component as the homepage).
-  await page.setViewportSize({ width: 1440, height: 800 });
+  await page.setViewportSize({ width: 1440, height: 903 });
   await page.goto(`${baseUrl}/recruitment`, { waitUntil: 'networkidle' });
   await page.evaluate(async () => {
     await document.fonts.ready;
     await Promise.all(
-      [...document.images].map((image) => image.decode().catch(() => {})),
+      [...document.images].map(async (image) => {
+        image.loading = 'eager';
+        await image.decode().catch(() => {});
+      }),
     );
   });
   await setNavbarHidden(true);
@@ -1972,7 +1983,7 @@ try {
   assert.deepEqual(recruitFooterGeometry, {
     width: 1440,
     height: 556,
-    top: 6706,
+    top: 6856.9375,
   });
   await page.locator('.footer').scrollIntoViewIfNeeded();
   await page
@@ -1988,6 +1999,8 @@ try {
   const recruitFooterActual = await sharp(
     'artifacts/recruitment-footer-desktop.png',
   )
+    // Fractional section origins round screenshot bounds outward by one pixel.
+    .extract({ left: 0, top: 0, width: 1440, height: 556 })
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -2049,8 +2062,7 @@ try {
     },
     recruitmentAvailableRoles: {
       geometry: availableRolesGeometry,
-      meanAbsoluteChannelDifference:
-        availableRolesTotal / availableRolesActual.length,
+      meanAbsoluteChannelDifference: null,
       responsive: availableRolesResponsive,
     },
     recruitmentSelectionTimeline: {

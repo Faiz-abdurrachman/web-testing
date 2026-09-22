@@ -576,3 +576,16 @@ git log --oneline            # lihat checkpoint
   unik, description, canonical absolut, OG/Twitter lengkap, `og:image` ada &
   1200×630, JSON-LD valid, `robots.txt`, dan 14 URL sitemap. **PASS.**
 - Validasi share asli (Facebook Debugger / X Card Validator) butuh domain live.
+
+## 20. Mentor feedback revision (23 September 2026)
+
+See `docs/assets.md` → "Mentor feedback revision" for authoritative changes to
+older geometry above. Heroes now adapt to viewport height; HoDS rails show a bounded
+3/2/1 cards; Available Roles is a descriptive card grid; legal links align right;
+navbar text is brighter. Drag no longer consumes ordinary HoDS clicks, and role
+back links return to Available Roles. All role artwork exports are text-free.
+The supplied `assets/background/hd` sources are served as pixel-identical lossless
+WebP, with their actual native resolution documented rather than described as 4K.
+Run `node scripts/generate-backgrounds.mjs` to reproduce those assets and clean role
+images. Run `PREVIEW_URL=http://localhost:4331 node scripts/verify-feedback.mjs`
+for focused interaction and visual coverage, alongside the existing audits.

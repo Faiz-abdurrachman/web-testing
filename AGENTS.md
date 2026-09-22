@@ -183,3 +183,17 @@ When adding/changing a section, update `docs/assets.md` and the relevant
     per-section pakai skrip Playwright ringan.
 - Open TODO: Nasalization webfont, real project data, tanggal recruitment,
   halaman **About Us / Hall of Frames / Partners / Contact**.
+
+## Mentor revision — 23 September 2026
+
+The user approved changes that supersede the older PNG in these areas: bounded
+HoDS rail (3 cards >1200px / 2 at 761–1200px / 1 ≤760px), viewport-aware heroes,
+Available Roles preview-card grid, brighter navbar text and right-aligned legal
+links. Role detail Back targets `#available-roles`; recruitment HoDS Back still
+returns to `#who-should-join` with the matching label. Role images must be clean
+artwork, generated from `public/images/hods/card-*.webp`, not the flattened role
+reference exports. See the dated section in `docs/assets.md` for asset provenance
+and revised geometry. `scripts/generate-backgrounds.mjs` verifies pixel-identical
+lossless conversion of `assets/background/hd`; do not claim these ~1.6K sources are
+native 4K. Run `scripts/verify-feedback.mjs` against the preview for click/drag/tap,
+back-navigation, rail geometry and DPR screenshots in addition to normal audits.

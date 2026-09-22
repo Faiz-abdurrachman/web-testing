@@ -638,3 +638,46 @@ unchanged, so the section comparisons are unaffected.
   canvas, not composited on a dark fill).
 - `BaseLayout` points every page's canonical, Open Graph and Twitter tags at this
   card; the canonical origin comes from `site` (`SITE_URL`) in `astro.config.mjs`.
+
+## Mentor feedback revision — 23 September 2026
+
+This revision intentionally supersedes the original PNG geometry for hero content,
+HoDS rails, footer legal alignment and Available Roles. Existing artwork, brand
+fonts and unrelated section geometry are retained.
+
+- New supplied sources: `assets/background/hd/{hero,recruitment,footer,hitam bintang}.png`.
+  Native sizes are 1583×993, 1586×992, 2019×779 and 1586×992 respectively.
+  `scripts/generate-backgrounds.mjs` exports them at their original dimensions as
+  lossless WebP under `public/images/backgrounds/` and asserts equality of decoded
+  RGBA pixels. No enlargement or sharpen filter is applied. These sources are not
+  native 4K/Retina backgrounds: wide/high-DPR displays still interpolate pixels.
+  Above 1920px, hero artwork is capped at 1920px, bottom-aligned and feathered
+  at the sides to avoid excessive enlargement and cropped figures.
+  New HD artwork is served directly at native resolution (no misleading larger
+  `srcset` descriptors). Hero, Recruitment, Footer and the three starfield sections
+  use these assets. OG generation now uses the new hero source.
+- Heroes cap their desktop minimum height at the viewport height and their original
+  903/866px heights, without growing with viewport width. Content can grow when
+  needed. Home mobile retains room for the figure; Recruitment mobile uses content
+  plus padding. Recruitment heading is brighter and has a subtle background overlay.
+- DomainRail now clips to a centred max-1280 content area: three full cards above
+  1200px, two at 761–1200px, one at ≤760px. Gap is 40px (24px on mobile). Side
+  arrows are outside the content on large desktop; below at ≤1200px. Pointer capture
+  begins only after a 6px drag threshold; plain clicks keep normal anchor behavior.
+  Reduced motion disables smooth arrow scrolling. Resize updates arrow availability.
+- Role detail artwork was found to contain baked-in title/chips/deadline/buttons.
+  All six served role images are now generated from the clean, artwork-only
+  `public/images/hods/card-{id}.webp` fills at 1280/2560px. Text/buttons remain HTML.
+  This supersedes the older advice that the role export must be used independently.
+- Role back links now return to `/recruitment#available-roles`. HoDS back links
+  preserve their origin; recruitment origin is labelled "Back to Who Should Join".
+- Available Roles is a 3/2/1-column grid (desktop/tablet/mobile), with title, first
+  sentence of the existing role description, three focus chips and View role link.
+  It has no matching old PNG; verification checks its new geometry and containment
+  rather than treating the obsolete row layout as a visual reference.
+- Footer legal links align to the right. Navbar available links use `#ede8ff`,
+  unavailable links `#b5aec9`, and active links white.
+- `scripts/verify-feedback.mjs` covers actual clicks through all six HoDS cards
+  from both origins, drag without accidental navigation, keyboard endpoints, role
+  card/back navigation, rail clipping geometry, footer alignment, hero viewport
+  bounds and screenshots at DPR 1/2. Output: `artifacts/feedback/`.

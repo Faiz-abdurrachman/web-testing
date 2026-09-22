@@ -1,5 +1,5 @@
 ---
-import { domains } from '../data/domains';
+import { roles } from '../data/roles';
 ---
 
 <section
@@ -9,136 +9,151 @@ import { domains } from '../data/domains';
 >
   <header>
     <h2 id="available-roles-title">Available Roles</h2>
-    <p>Select a role to view full details, requirements, and apply.</p>
+    <p>
+      Find your place. Explore each role, what you will build, and the skills
+      you can bring.
+    </p>
   </header>
-
   <div class="role-list">
-    {domains.map((domain) => (
-      <a class="role-row" href={`/recruitment/roles/${domain.id}`}>
-        <span class="role-left">
-          <span class="dot" aria-hidden="true" />
-          <span class="role-name">{domain.title}</span>
+    {roles.map((role, index) => (
+      <a class="role-row" href={`/recruitment/roles/${role.id}`}>
+        <span class="role-number" aria-hidden="true">
+          0{index + 1} / OPEN ROLE
         </span>
-        <img
-          class="arrow"
-          src="/images/recruitment/arrow-right.svg"
-          width="24"
-          height="24"
-          alt=""
-          loading="lazy"
-        />
+        <h3 class="role-name">{role.title}</h3>
+        <p class="role-summary">{role.about.split(/(?<=\.)\s/)[0]}</p>
+        <ul class="role-tags" aria-label="Areas of focus">
+          {role.chips.slice(0, 3).map((chip) => (
+            <li>{chip}</li>
+          ))}
+        </ul>
+        <span class="role-link">
+          View role <span aria-hidden="true">↗</span>
+        </span>
       </a>
     ))}
   </div>
 </section>
 <style>
   .available-roles {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 58px;
-    padding: 80px;
+    scroll-margin-top: 110px;
+    padding: 80px var(--page-gutter);
     background: #050507;
   }
-  header {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    gap: 20px;
+  header,
+  .role-list {
     width: 100%;
     max-width: 1280px;
+    margin-inline: auto;
+  }
+  header {
+    margin-bottom: 58px;
   }
   h2 {
     margin: 0;
     font: 400 56px/68px var(--font-heading);
-    background: linear-gradient(180deg, #fff 0%, #707070 84%);
-    background-clip: text;
-    color: transparent;
+    color: #ede8ff;
   }
-  p {
-    margin: 0;
+  header p {
+    margin: 20px 0 0;
     font-size: 18px;
-    font-weight: 500;
     line-height: 27px;
-    color: #fff;
+    color: #ede8ff;
   }
   .role-list {
-    display: flex;
-    flex-direction: column;
-    gap: 23px;
-    width: 100%;
-    max-width: 1280px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
   }
   .role-row {
-    position: relative;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 77px;
-    padding: 18px 32px;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+    padding: 28px;
+    border: 1px solid #645487;
     border-radius: 20px;
-    background: rgb(255 255 255 / 15%);
+    background: linear-gradient(145deg, #211735, #100d18);
+    transition:
+      border-color 180ms ease,
+      background-color 180ms ease;
   }
-  .role-row::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(135deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%);
-    mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    mask-composite: exclude;
-    pointer-events: none;
+  .role-row:hover {
+    border-color: #c5b4ff;
+    background: #24183c;
   }
-  .role-left {
-    display: flex;
-    align-items: center;
-    gap: 22px;
-  }
-  .dot {
-    flex: none;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #6c3bff 17%, #ede8ff 50%, #6c3bff 83%);
+  .role-number {
+    color: #bba7eb;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
   }
   .role-name {
-    font-size: 26px;
-    font-weight: 400;
-    line-height: 39px;
-    color: #fff;
+    margin: 0;
+    font: 700 23px/1.4 var(--font-body);
   }
-  .arrow {
-    display: block;
-    flex: none;
-    width: 24px;
-    height: 24px;
+  .role-summary {
+    margin: 0;
+    color: #ddd6ec;
+    font-size: 16px;
+    line-height: 1.65;
   }
-  @media (max-width: 760px) {
+  .role-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0;
+    margin: 0 0 8px;
+    list-style: none;
+  }
+  .role-tags li {
+    padding: 5px 10px;
+    border: 1px solid #625078;
+    border-radius: 999px;
+    color: #e6ddfa;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .role-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 18px;
+    border-top: 1px solid #493859;
+    font-weight: 600;
+    color: #e0d4ff;
+  }
+  .role-link span {
+    font-size: 24px;
+  }
+  @media (max-width: 1100px) {
+    .role-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 600px) {
     .available-roles {
-      gap: 40px;
-      padding: 64px 24px;
+      padding-block: 64px;
+    }
+    header {
+      margin-bottom: 32px;
     }
     h2 {
       font-size: clamp(30px, 8vw, 48px);
-      line-height: 1.214286;
+      line-height: 1.22;
     }
     .role-list {
+      grid-template-columns: 1fr;
       gap: 16px;
     }
     .role-row {
-      height: auto;
-      min-height: 64px;
-      padding: 14px 20px;
+      padding: 24px;
     }
-    .role-left {
-      gap: 14px;
-    }
-    .role-name {
-      font-size: 20px;
-      line-height: 30px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .role-row {
+      transition: none;
     }
   }
 </style>
