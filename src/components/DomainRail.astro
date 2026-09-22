@@ -158,13 +158,14 @@ const { base = '/hods', suffix = '' } = Astro.props;
   }
   .rail-arrow {
     position: absolute;
-    bottom: -66px;
+    top: 50%;
     z-index: 2;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 52px;
     height: 52px;
+    transform: translateY(-50%);
     border: 1px solid rgb(203 197 255 / 60%);
     border-radius: 50%;
     background: rgb(16 9 35 / 85%);
@@ -181,14 +182,27 @@ const { base = '/hods', suffix = '' } = Astro.props;
     stroke-linejoin: round;
   }
   .rail-arrow.prev {
-    left: max(var(--page-gutter), calc((100vw - 1280px) / 2));
+    left: max(8px, max(var(--page-gutter), (100vw - 1280px) / 2) - 66px);
   }
   .rail-arrow.next {
-    right: max(var(--page-gutter), calc((100vw - 1280px) / 2));
+    right: max(8px, max(var(--page-gutter), (100vw - 1280px) / 2) - 66px);
   }
   .rail-arrow:disabled {
     opacity: 0.3;
     cursor: default;
+  }
+  @media (max-width: 1050px) {
+    .rail-arrow {
+      top: auto;
+      bottom: -66px;
+      transform: none;
+    }
+    .rail-arrow.prev {
+      left: max(var(--page-gutter), (100vw - 1280px) / 2);
+    }
+    .rail-arrow.next {
+      right: max(var(--page-gutter), (100vw - 1280px) / 2);
+    }
   }
   @media (max-width: 760px) {
     .domain-rail {
@@ -196,9 +210,11 @@ const { base = '/hods', suffix = '' } = Astro.props;
       gap: 24px;
     }
     .rail-arrow {
+      top: auto;
+      bottom: -52px;
       width: 40px;
       height: 40px;
-      bottom: -52px;
+      transform: none;
     }
     .rail-arrow svg {
       width: 20px;

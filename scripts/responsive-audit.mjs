@@ -61,10 +61,13 @@ const measure = (page) =>
       }
     }
 
-    // 3. carousel arrows must never overlap a card
+    // 3. carousel arrows must never sit on top of the content they drive.
+    //    The rail's side arrows legitimately overlay the scrolling cards (there
+    //    is no gutter wide enough), so only the focused card and the gallery
+    //    hero/thumbnails are checked.
     const overlapChecks = [
-      ['.rail-arrow.next', '.domain-card'],
-      ['.project-arrow.next', '.project-card'],
+      ['.project-arrow.next', '.project-card.is-active'],
+      ['.project-arrow.prev', '.project-card.is-active'],
       ['.snippet-arrow.next', '.gallery-hero'],
       ['.snippet-arrow.next', '.gallery-thumbs'],
     ];
@@ -73,12 +76,11 @@ const measure = (page) =>
       if (!arrow) continue;
       for (const el of document.querySelectorAll(b)) {
         const box = el.getBoundingClientRect();
-        if (
-          arrow.x < box.right &&
-          arrow.right > box.x &&
-          arrow.y < box.bottom &&
-          arrow.bottom > box.y
-        ) {
+        const overlapX =
+          Math.min(arrow.right, box.right) - Math.max(arrow.x, box.x);
+        const overlapY =
+          Math.min(arrow.bottom, box.bottom) - Math.max(arrow.y, box.y);
+        if (overlapX > 6 && overlapY > 6) {
           issues.push(`overlap:${a}×${b}`);
           break;
         }

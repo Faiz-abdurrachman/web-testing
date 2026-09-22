@@ -382,13 +382,14 @@ import { projects } from '../data/projects';
   }
   .project-arrow {
     position: absolute;
-    bottom: -66px;
+    top: 50%;
     z-index: 200;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 52px;
     height: 52px;
+    transform: translateY(-50%);
     border: 1px solid rgb(203 197 255 / 60%);
     border-radius: 50%;
     background: rgb(16 9 35 / 85%);
@@ -438,6 +439,13 @@ import { projects } from '../data/projects';
     background: #9b7bff;
     transform: scale(1.35);
   }
+  @media (max-width: 1050px) {
+    .project-arrow {
+      top: auto;
+      bottom: -66px;
+      transform: none;
+    }
+  }
   @media (max-width: 760px) {
     .projects {
       padding-block: 64px;
@@ -450,9 +458,11 @@ import { projects } from '../data/projects';
       margin-top: 40px;
     }
     .project-arrow {
+      top: auto;
+      bottom: -52px;
       width: 40px;
       height: 40px;
-      bottom: -52px;
+      transform: none;
     }
     .project-arrow svg {
       width: 20px;
