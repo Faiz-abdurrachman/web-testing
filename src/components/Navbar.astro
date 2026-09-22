@@ -110,6 +110,10 @@ const destinations: Record<string, string> = {
     margin-inline: auto;
     padding: 24px 80px;
   }
+  .brand {
+    position: relative;
+    z-index: 3;
+  }
   .brand,
   .brand img {
     display: block;
@@ -217,7 +221,7 @@ const destinations: Record<string, string> = {
     }
     summary {
       position: relative;
-      z-index: 2;
+      z-index: 3;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -254,33 +258,28 @@ const destinations: Record<string, string> = {
       transform: translateY(-6px) rotate(-45deg);
     }
     .mobile-menu nav {
-      position: absolute;
-      top: 100%;
-      right: 0;
-      left: 0;
+      position: fixed;
+      inset: 0;
       z-index: 1;
       display: flex;
       flex-direction: column;
       align-items: stretch;
       gap: 0;
-      max-height: calc(100vh - 94px);
-      max-height: calc(100dvh - 94px);
-      padding: 12px var(--page-gutter) max(48px, env(safe-area-inset-bottom));
+      padding: calc(94px + 32px) var(--page-gutter)
+        max(32px, env(safe-area-inset-bottom));
       overflow-y: auto;
       overscroll-behavior: contain;
-      background: rgb(5 5 7 / 90%);
-      backdrop-filter: blur(22px) saturate(140%);
-      -webkit-backdrop-filter: blur(22px) saturate(140%);
-      mask-image: linear-gradient(#000 calc(100% - 36px), transparent);
-      -webkit-mask-image: linear-gradient(#000 calc(100% - 36px), transparent);
+      background: rgb(5 5 7 / 94%);
+      backdrop-filter: blur(24px) saturate(140%);
+      -webkit-backdrop-filter: blur(24px) saturate(140%);
       border: 0;
       border-radius: 0;
       box-shadow: none;
     }
     .mobile-menu .nav-link {
-      padding: 13px 4px;
-      font-size: 18px;
-      line-height: 27px;
+      padding: 16px 4px;
+      font-size: 20px;
+      line-height: 30px;
       color: rgb(255 255 255 / 70%);
       border-top: 1px solid rgb(203 197 255 / 12%);
     }
@@ -300,7 +299,7 @@ const destinations: Record<string, string> = {
     }
     .mobile-menu nav :global(.button) {
       width: 100%;
-      margin-top: 24px;
+      margin-top: 32px;
     }
   }
   @media (prefers-reduced-motion: reduce) {
