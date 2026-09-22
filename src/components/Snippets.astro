@@ -36,26 +36,6 @@ const photos = [1, 2, 3, 4, 5];
           ))}
         </div>
       </div>
-      <button
-        class="snippet-arrow prev"
-        type="button"
-        data-prev
-        aria-label="Previous snippet"
-      >
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M15 5l-7 7 7 7"></path>
-        </svg>
-      </button>
-      <button
-        class="snippet-arrow next"
-        type="button"
-        data-next
-        aria-label="Next snippet"
-      >
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M9 5l7 7-7 7"></path>
-        </svg>
-      </button>
     </div>
 
     <div class="gallery-thumbs">
@@ -79,6 +59,27 @@ const photos = [1, 2, 3, 4, 5];
         </button>
       ))}
     </div>
+
+    <button
+      class="snippet-arrow prev"
+      type="button"
+      data-prev
+      aria-label="Previous snippet"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M15 5l-7 7 7 7"></path>
+      </svg>
+    </button>
+    <button
+      class="snippet-arrow next"
+      type="button"
+      data-next
+      aria-label="Next snippet"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M9 5l7 7-7 7"></path>
+      </svg>
+    </button>
   </div>
 </section>
 <script>
@@ -240,6 +241,7 @@ const photos = [1, 2, 3, 4, 5];
      zooming changes the element sizes instead of overflowing. */
   .gallery {
     container-type: inline-size;
+    position: relative;
     width: 100%;
     max-width: 1280px;
     display: flex;
@@ -287,7 +289,7 @@ const photos = [1, 2, 3, 4, 5];
   }
   .snippet-arrow {
     position: absolute;
-    top: 50%;
+    top: 21.71875cqw; /* centre of the 1280 : 556 hero */
     z-index: 2;
     display: flex;
     align-items: center;
@@ -311,10 +313,10 @@ const photos = [1, 2, 3, 4, 5];
     stroke-linejoin: round;
   }
   .snippet-arrow.prev {
-    left: 20px;
+    left: -66px;
   }
   .snippet-arrow.next {
-    right: 20px;
+    right: -66px;
   }
   .gallery-thumbs {
     display: flex;
@@ -351,12 +353,21 @@ const photos = [1, 2, 3, 4, 5];
       line-height: 1.214286;
     }
     .snippet-arrow {
-      width: 40px;
-      height: 40px;
+      top: auto;
+      bottom: -38px;
+      transform: none;
+      width: 36px;
+      height: 36px;
     }
     .snippet-arrow svg {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
+    }
+    .snippet-arrow.prev {
+      left: 0;
+    }
+    .snippet-arrow.next {
+      right: 0;
     }
   }
 </style>
