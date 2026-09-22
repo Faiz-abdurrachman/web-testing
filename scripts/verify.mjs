@@ -3,6 +3,13 @@ import sharp from 'sharp';
 import { mkdir, writeFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
 
+// The experimental /lab/hero-3d route has no PNG reference. Its WebGL camera,
+// containment, reduced-motion and loading checks live in verify-hero-lab.mjs.
+// Opt in explicitly: VERIFY_HERO_LAB=1 PREVIEW_URL=http://localhost:4331 node scripts/verify.mjs
+if (process.env.VERIFY_HERO_LAB === '1') {
+  await import('./verify-hero-lab.mjs');
+}
+
 await mkdir('artifacts', { recursive: true });
 const browser = await chromium.launch({
   executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium',
