@@ -26,10 +26,15 @@ that transition belongs to the later full-page integration.
   Figma frame the logo and CTA stay on the 1440 grid (brand x = 80 at 1440,
   320 at 1920, 640 at 2560) instead of stretching to the viewport edges.
 - At the top the bar keeps the reference's soft `backdrop-filter: blur(5px)`.
-  After an 8px scroll it switches to a translucent blurred panel
-  (`blur(18px) saturate(140%)`, `rgb(5 5 7 / 58%)` with a hairline bottom edge).
-  This is an interaction addition; the top-of-page render is unchanged from the
-  reference, so the hero comparison is unaffected.
+  After an 8px scroll it keeps a **blur-only** treatment (`blur(12px)
+saturate(140%)`) feathered by a mask — no background panel and no hairline
+  border, so it never reads as a box. This is an interaction addition; the
+  top-of-page render is unchanged from the reference, so the hero comparison is
+  unaffected.
+- Below 1050px the desktop menu is replaced by a full-screen `<details>` menu: a
+  borderless blurred overlay with a soft edge, JS-animated open/close, a
+  hamburger that morphs into an X, body scroll lock and a reduced-motion
+  fallback. Nav links get a rounded hover pill on both menus.
 
 ## Images
 
@@ -126,11 +131,13 @@ score were unchanged when this section was added.
   `public/images/domains/`; full-card reference PNGs are never used as UI.
 - Card titles: Manrope Bold 22/33. Descriptions: Manrope Regular 16/24.
   The spelling “ORC” follows the supplied design.
-- Native horizontal overflow supports touch and trackpads; focused keyboard
+- Navigation: native horizontal overflow supports touch and trackpads, plus
+  click-drag for mouse. The rail arrows sit at the **sides on desktop** and
+  **below the cards on mobile/tablet (≤1050px)**; on desktop the side arrows
+  overlay the rail's edge cards (the rail is full-bleed and the gap cannot fit a
+  52px arrow). Cards link to their HoDS detail pages. Focused keyboard
   navigation supports Left/Right and Home/End, and the arrow keys also scroll
-  the rail whenever its section is the one at the viewport centre (no focus
-  needed). No destination/detail page was supplied, so domain cards are
-  informational articles.
+  the rail whenever its section is at the viewport centre (no focus needed).
 - Mobile adapts card width and heading size; no mobile reference was supplied.
 - Verification compares the section to its PNG, checks exact desktop card
   bounds and keyboard scrolling, and checks overflow at 320–1920px.
@@ -161,7 +168,9 @@ score were unchanged when this section was added.
   active project is sharp. The carousel loops, so left and right cards are
   present from the first project. Switching rotates the cards between slots.
   Navigation covers arrows, dots, drag/swipe, and arrow keys; motion is disabled
-  under `prefers-reduced-motion`. The arrow keys also work whenever the section
+  under `prefers-reduced-motion`. The arrows sit at the **sides on desktop**
+  (>1050px) and **below the stage on mobile/tablet** (≤1050px); the side arrows
+  never touch the active card. The arrow keys also work whenever the section
   is the one at the viewport centre, so no focus is needed. Each carousel only
   reacts when its own section holds the centre, which keeps them from fighting
   over the keys. Project data lives in `src/data/projects.ts` and currently
@@ -290,7 +299,8 @@ Section.png`, 5760 × 3156 (1440 × 789 at 4×).
   x=80, the fourth clipped at the viewport edge. The rail markup, arrows,
   keyboard/scroll behaviour and CSS were extracted into a shared
   `DomainRail.astro` used by both `Domains.astro` and `WhoShouldJoin.astro`, so
-  the cards stay pixel-identical to the homepage.
+  the cards stay pixel-identical to the homepage. Arrows follow the shared
+  placement (sides on desktop, below on mobile ≤1050px).
 - Card links: the cards open the HoDS detail pages with a recruitment origin
   (`/hods/{id}?from=recruitment`), so that page's back link returns to
   `/recruitment#who-should-join` ("Back to Open Roles"); the homepage rail keeps
@@ -502,11 +512,12 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
   carousel (1280 × 556, `border-radius: 20px`) and a row of five 246 × 103
   thumbnails (space-between at x 80 / 338.5 / 597 / 855.5 / 1114), gap 35. The
   five DS variants use the same five photos with a different hero, so the hero
-  is a 5-slide carousel: arrows (left/right, same style as the other rails),
-  drag/swipe, clickable thumbnails and arrow keys (active whenever the section
-  is the one at the viewport centre, like the homepage carousel). The track
-  clones the ends so it loops without a jump; `prefers-reduced-motion` drops the
-  transition.
+  is a 5-slide carousel: arrows (same style as the other rails; in the side
+  gutter next to the hero on desktop >760px, below the gallery on mobile
+  ≤760px, never over the hero or thumbnails), drag/swipe, clickable thumbnails
+  and arrow keys (active whenever the section is the one at the viewport centre,
+  like the homepage carousel). The track clones the ends so it loops without a
+  jump; `prefers-reduced-motion` drops the transition.
 - Layout is fluid: the gallery is capped at 1280px and the hero/thumbnails use
   `aspect-ratio` with a percentage thumbnail width, so the element sizes scale
   with the viewport (a container query unit drives the 35px hero→thumbnail gap)

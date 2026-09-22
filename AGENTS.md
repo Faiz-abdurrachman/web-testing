@@ -18,11 +18,18 @@ npm run build             # astro check && astro build (must stay 0 errors)
 npm run format            # prettier --write .
 npm run format:check      # must pass before commit
 node scripts/verify.mjs   # visual verification (dev server must be running)
+node scripts/responsive-audit.mjs  # responsive audit: all pages × 26 widths
 ```
 
 `scripts/verify.mjs` uses Chromium at `/usr/bin/chromium` (override with
 `CHROMIUM_PATH`) and `PREVIEW_URL` (default `http://localhost:4321`). It exits
 non-zero on any failed assertion.
+
+`scripts/responsive-audit.mjs` is a lightweight, per-route Playwright pass over
+all 14 routes × 26 widths (320 → 3840). It checks horizontal overflow, clipped
+text, carousel-arrow/card overlap and the navbar breakpoint, and writes
+`artifacts/responsive-audit.json`. Use it when the full `verify.mjs` is too slow
+or the dev server makes `waitUntil: networkidle` hang (see Verification workflow).
 
 ## Non-negotiable rules
 
@@ -51,6 +58,7 @@ src/pages/index.astro    homepage composition
 src/pages/hods/[id].astro detail route (getStaticPaths over hods.ts)
 src/styles/global.css    @font-face, tokens, reset, cursor-glow
 scripts/verify.mjs       visual + geometry + responsive verification
+scripts/responsive-audit.mjs  per-page × per-width responsive audit
 public/                  served assets (fonts, images)
 assets/<page>/           raw Figma PNG references, grouped per page (NOT served; large)
 docs/assets.md           provenance per section (keep updated)
@@ -71,6 +79,11 @@ artifacts/               verify output (git-ignored)
 - The report writes `artifacts/verification.json` plus `*-diff.png` /
   `*-overlay.png`. There is **no MAE threshold assertion** — geometry, responsive
   overflow, clipping, interactions, and `browserErrors` are what fail.
+- `verify.mjs` waits on `networkidle`; against the **dev** server (Vite HMR) that
+  can hang indefinitely. If so, build and run it against the static preview:
+  `npm run build && npx astro preview --port 4331` then
+  `PREVIEW_URL=http://localhost:4331 node scripts/verify.mjs`. When even that is
+  too slow, `scripts/responsive-audit.mjs` covers the responsive checks.
 
 When adding/changing a section, update `docs/assets.md` and the relevant
 `verify.mjs` geometry + containment checks.
@@ -90,6 +103,15 @@ When adding/changing a section, update `docs/assets.md` and the relevant
 - `assets/` is hundreds of MB — it must stay listed in `.vercelignore`.
 - Nav/CTA/social/legal links are intentionally `aria-disabled` (destinations not
   supplied). Do not invent URLs.
+- The mobile menu is a full-screen `<details>` whose open/close is animated in
+  JS: the `summary` click is `preventDefault`ed and the code toggles the `open`
+  property, adding `is-closing` for the exit transition. Keep the reduced-motion
+  branch (instant) or screenshots/verification get flaky.
+- Carousel arrows: **desktop = sides, mobile = bottom**. `DomainRail` + Projects
+  switch at `1050px`, Snippets at `760px`. `DomainRail`'s side arrows overlay the
+  rail's edge cards (cards are full-bleed; the gutter cannot fit a 52px arrow) —
+  intended. Projects' side arrows must not touch the _active_ card;
+  `responsive-audit.mjs` asserts it.
 
 ## Fonts
 
@@ -101,10 +123,16 @@ When adding/changing a section, update `docs/assets.md` and the relevant
 ## Current checkpoint
 
 - `main` HEAD (lihat `git log`; checkpoint fitur recruitment = `ff7fe20`) = homepage + **halaman Recruitment lengkap** (hero →
-  Who Should Join → What You Will Do → Available Roles → Selection Timeline →
+  Who Should Join → What You Will Do �� Available Roles → Selection Timeline →
   FAQ → Snippets → CTA → Footer) + halaman detail role
   (`/recruitment/roles/{id}`, di-link dari Available Roles) + hover button.
   Detail HoDS (home) tetap.
+- Polish terakhir (setelah checkpoint recruitment): navbar state scroll jadi
+  **blur-only** (tanpa panel gelap / garis kotak), menu hamburger **full-screen**
+  dengan animasi buka/tutup JS (fallback instant saat `prefers-reduced-motion`)
+  plus hover pill membulat; panah carousel **kiri-kanan di desktop, bawah di
+  mobile**; skrip `scripts/responsive-audit.mjs` (14 halaman × 26 lebar) ALL PASS.
+  Lihat `git log`.
 - Motion (GSAP + Three.js) masih **di-revert**: `5feea0d` → `f925e1d`. Kalau
   dilanjutkan, pakai `gsap.matchMedia` + `prefers-reduced-motion` + re-verify.
 - Reference assets dikelompokkan per halaman di `assets/` (`assets home page/`,

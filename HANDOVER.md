@@ -36,6 +36,7 @@ Verifikasi visual (butuh dev server jalan):
 
 ```sh
 node scripts/verify.mjs          # → tulis artifacts/, exit 0 kalau lolos
+node scripts/responsive-audit.mjs # audit responsif 14 halaman × 26 lebar
 npm run format:check             # cek Prettier
 ```
 
@@ -149,8 +150,13 @@ Frame 1440, gutter 80. Skor = mean absolute channel difference vs PNG referensi
 dekoratif — lihat §9).
 
 **Navbar** (`530:13894` / `755:15219`): fixed, inner `max-width:1440px` di-center,
-`padding 24px 80px`, tinggi 106.8. Di atas halaman transparan (`blur(5px)`),
-setelah scroll jadi panel `blur(12px) saturate(140%)` + `rgb(5 5 7 / 58%)`.
+`padding 24px 80px`, tinggi 106.8. Di atas halaman transparan (`blur(5px)`).
+Setelah scroll tetap **blur-only**: `blur(12px) saturate(140%)` dengan mask fade
+ke bawah, **tanpa** background panel dan **tanpa** garis tepi (dulu ada panel
+`rgb(5 5 7 / 58%)` + hairline; dihapus agar tidak terlihat seperti kotak).
+Hover link nav = pill membulat (`border-radius:999px`, bg putih 10%) dengan
+transisi. Menu mobile (≤1050) = **full-screen** dengan animasi buka/tutup
+(lihat §8b).
 
 ---
 
@@ -263,6 +269,13 @@ Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
   `recruitmentSelectionTimeline`, `recruitmentFaq`, `recruitmentSnippets`,
   `recruitmentCta`, `recruitmentFooter` di `scripts/verify.mjs` (geometri exact +
   diff PNG + overflow 320–1920), plus cek href kartu & back link kontekstual.
+- **Menu mobile** (komponen `Navbar.astro`, semua halaman): di ≤1050px menu jadi
+  overlay **full-screen** (`position:fixed; inset:0`) dengan blur + darkening
+  ringan, borderless, fade halus di tepi. Buka/tutup **dianimasikan di JS**: klik
+  `summary` di-`preventDefault`, toggle properti `open`, tambah `is-closing` untuk
+  fade keluar; fallback instan saat `prefers-reduced-motion`. Body dikunci
+  (`body.menu-open`), hamburger berubah jadi X saat terbuka, Escape/klik-luar/resize
+  menutup.
 - Halaman recruitment sudah **LENGKAP** (§8b): hero → Who Should Join → What You
   Will Do → Available Roles → Selection Timeline → FAQ → Snippets → CTA → Footer.
   Full-page `RECRUITMENT PAGE.png` (1440 × 7262) cuma referensi; CTA-nya beda
@@ -283,6 +296,13 @@ Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
   fokus jalan duluan (`defaultPrevented`). Berlaku di Projects, Snippets, dan
   `DomainRail` (home Domains + recruitment WhoShouldJoin). `prefers-reduced-motion`
   → tanpa transisi.
+- **Penempatan panah (semua carousel)**: **desktop → kiri/kanan**, **mobile →
+  bawah** kartu. Projects & DomainRail ganti di `1050px`, Snippets di `760px`.
+  Panah samping DomainRail menumpuk tepi kartu rail (rail full-bleed; gutter nggak
+  cukup untuk panah 52px) — disengaja. Panah samping Projects **tidak** menyentuh
+  kartu aktif. Drag: DomainRail native scroll (touch) + drag mouse; Projects &
+  Snippets pakai pointer event. `responsive-audit.mjs` meng-assert panah Projects
+  vs kartu aktif.
 - Data: `src/data/projects.ts` — **4 placeholder** (gambar masih sama semua).
 - ⚠️ Jebakan yang sudah kejadian:
   - `overflow:hidden` + `border-radius` + transform 3D → **sudut jadi kotak**.
@@ -350,6 +370,22 @@ Self-host: taruh `.woff2` di `public/fonts/`, update `@font-face` Nasalization d
     panah Snippets (`.snippet-arrow`). `setNavbarHidden()` menangani itu semua.
 - Output: `artifacts/verification.json` + gambar `*-desktop.png`, `*-diff.png`,
   `*-overlay.png`.
+- ⚠️ `verify.mjs` menunggu `waitUntil: 'networkidle'`; terhadap **dev server**
+  (Vite HMR) ini bisa hang (kejadian di mesin ini). Jalankan terhadap build statis:
+  `npm run build && npx astro preview --port 4331` lalu
+  `PREVIEW_URL=http://localhost:4331 node scripts/verify.mjs`. Kalau tetap berat,
+  pakai `scripts/responsive-audit.mjs` (per-route, `domcontentloaded`, hemat memori).
+
+**`scripts/responsive-audit.mjs`** — audit responsif semua halaman (pengganti
+cepat untuk cek overflow):
+
+- 14 route × 26 lebar (320, 360, 375, 390, 414, 480, 600, 760, 768, 820, 900,
+  1024, 1050, 1051, 1100, 1200, 1280, 1300, 1366, 1440, 1600, 1680, 1920, 2560,
+  3440, 3840).
+- Cek: overflow horizontal, teks ke-clip/offscreen, panah vs konten (kartu aktif
+  Projects, hero/thumb Snippets), dan mode navbar di breakpoint 1050. Menulis
+  `artifacts/responsive-audit.json`; exit non-zero kalau ada isu.
+- Status terakhir: **ALL PASS** (364 kombinasi).
 
 Skor homepage (full run terakhir, overall **1.947**, 0 browser error):
 
@@ -395,6 +431,10 @@ projects 5.104 recruitment 2.174 footer 2.666
   hover button). Pola: `feat:` section didahului `chore: … reference assets`.
 - Checkpoint fitur recruitment = `ff7fe20` (recruitment lengkap + hover button);
   HEAD nambah commit docs setelahnya (`git log`).
+- Setelah checkpoint recruitment: polish navbar/menu + carousel — state scroll
+  navbar **blur-only** (tanpa panel/garis), menu mobile **full-screen** + animasi
+  buka/tutup, hover pill membulat, panah carousel **desktop kiri-kanan / mobile
+  bawah**, plus `scripts/responsive-audit.mjs`. Lihat `git log`.
 - Pola commit: per fitur + aset referensi dipisah; push ke `main` (Vercel).
 
 ---
@@ -444,6 +484,20 @@ projects 5.104 recruitment 2.174 footer 2.666
 12. **Keyboard carousel** pakai aturan "section di tengah viewport"; jangan andelin
     IntersectionObserver + `defaultPrevented` saja (dua carousel bisa jalan
     bareng di zona overlap). Skip `input/textarea`.
+13. **Menu mobile** = full-screen `<details>` dengan animasi JS. Jangan andalkan
+    `allow-discrete`/`@starting-style` untuk animasi close (di Chromium mesin ini
+    nggak jalan); close pakai `is-closing` + finalize lewat `transitionend`.
+    Klik `summary` wajib `preventDefault`, kalau nggak toggle native langsung
+    nutup tanpa animasi. Fallback `prefers-reduced-motion` harus instan (verify
+    pakai reduced motion).
+14. **Panah carousel jangan nutupin konten**: desktop samping, mobile bawah.
+    DomainRail samping sengaja menumpuk tepi kartu rail (full-bleed, gutter nggak
+    cukup); Projects harus bebas dari kartu aktif. Kalau padding section < tinggi
+    panah, jangan taruh panah di padding (Snippets bawah cuma 40px → pakai gutter
+    saat desktop, bawah saat mobile).
+15. **Jaga geometri 1440**: perubahan responsif pakai `position:absolute` supaya
+    tinggi section yang di-assert tidak berubah. Jalankan
+    `node scripts/responsive-audit.mjs` setiap habis ubah layout.
 13. **`<details>` nggak bisa dianimasikan native**: konten item tertutup di-hide
     UA, jadi transisi CSS nggak jalan. Faq.astro pakai progressive enhancement:
     `preventDefault()` di `summary`, animasi tinggi panel via JS (320ms) + guard
@@ -462,6 +516,7 @@ npm run dev                  # dev server (4321)
 npm run build                # check + build
 npm run preview              # serve dist
 node scripts/verify.mjs      # verifikasi visual (butuh dev server)
+node scripts/responsive-audit.mjs # audit responsif 14 halaman × 26 lebar
 npm run format               # rapiin
 git log --oneline            # lihat checkpoint
 ````
