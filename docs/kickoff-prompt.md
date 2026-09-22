@@ -37,7 +37,7 @@ scripts/verify.mjs (geometri + containment + overflow 320–1920px). Baca bagian
 "Verification workflow" di AGENTS.md dulu (reducedMotion + setNavbarHidden).
 
 Yang perlu kamu tahu sekarang:
-- HEAD 'main' ('ff7fe20') = homepage + halaman Recruitment LENGKAP: hero → Who
+- HEAD 'main' (lihat git log; checkpoint fitur recruitment = ff7fe20) = homepage + halaman Recruitment LENGKAP: hero → Who
   Should Join → What You Will Do → Available Roles → Selection Timeline → FAQ →
   Snippets → CTA → Footer, plus halaman detail role (/recruitment/roles/{id},
   di-link dari Available Roles) + hover button.

@@ -393,7 +393,8 @@ projects 5.104 recruitment 2.174 footer 2.666
   Roles, Selection Timeline, FAQ, Snippets, CTA, Footer, plus detail role
   (`/recruitment/roles/{id}`) dan polish (gradient full-bleed, keyboard carousel,
   hover button). Pola: `feat:` section didahului `chore: … reference assets`.
-- **HEAD `ff7fe20`** = recruitment lengkap + hover button.
+- Checkpoint fitur recruitment = `ff7fe20` (recruitment lengkap + hover button);
+  HEAD nambah commit docs setelahnya (`git log`).
 - Pola commit: per fitur + aset referensi dipisah; push ke `main` (Vercel).
 
 ---

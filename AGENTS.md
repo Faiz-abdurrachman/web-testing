@@ -100,7 +100,7 @@ When adding/changing a section, update `docs/assets.md` and the relevant
 
 ## Current checkpoint
 
-- `main` HEAD (`ff7fe20`) = homepage + **halaman Recruitment lengkap** (hero →
+- `main` HEAD (lihat `git log`; checkpoint fitur recruitment = `ff7fe20`) = homepage + **halaman Recruitment lengkap** (hero →
   Who Should Join → What You Will Do → Available Roles → Selection Timeline →
   FAQ → Snippets → CTA → Footer) + halaman detail role
   (`/recruitment/roles/{id}`, di-link dari Available Roles) + hover button.
