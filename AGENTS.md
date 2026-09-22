@@ -100,10 +100,23 @@ When adding/changing a section, update `docs/assets.md` and the relevant
 
 ## Current checkpoint
 
-- `main` HEAD is the state **before** the motion experiment. The GSAP + Three.js
-  motion commit (`5feea0d`) was reverted (`f925e1d`). Card 3D (project carousel)
-  predates that and must stay.
-- If asked to resume motion: it is legitimate to `git cherry-pick 5feea0d`, but
-  re-implement with `gsap.matchMedia` + reduced-motion and re-verify.
-- Open TODO: Nasalization webfont, real project data, missing pages (About,
-  Recruitment, Hall of Frames, Partners, Contact).
+- `main` HEAD (`ff7fe20`) = homepage + **halaman Recruitment lengkap** (hero →
+  Who Should Join → What You Will Do → Available Roles → Selection Timeline →
+  FAQ → Snippets → CTA → Footer) + halaman detail role
+  (`/recruitment/roles/{id}`, di-link dari Available Roles) + hover button.
+  Detail HoDS (home) tetap.
+- Motion (GSAP + Three.js) masih **di-revert**: `5feea0d` → `f925e1d`. Kalau
+  dilanjutkan, pakai `gsap.matchMedia` + `prefers-reduced-motion` + re-verify.
+- Reference assets dikelompokkan per halaman di `assets/` (`assets home page/`,
+  `assets recruitment page/`, `button/`); `assets/` di-`.vercelignore`.
+- **Konvensi tambahan** (detail di HANDOVER §16):
+  - Carousel/rail: ←/→ aktif saat section-nya di **tengah viewport** (aturan
+    shared; cuma satu carousel yang pegang). Berlaku Projects, Snippets,
+    `DomainRail` (home Domains + recruitment WhoShouldJoin).
+  - Button: hover = **swap warna** (dark↔violet, white→violet).
+  - Detail page: gradient **full-bleed** (`<main>` 100% + inner max-1440).
+  - Jangan pakai lebar fixed-px yang bisa overflow; tes 320–1920px.
+  - Kalau `verify.mjs` full OOM-kill Chromium (mesin RAM kecil) → verifikasi
+    per-section pakai skrip Playwright ringan.
+- Open TODO: Nasalization webfont, real project data, tanggal recruitment,
+  halaman **About Us / Hall of Frames / Partners / Contact**.

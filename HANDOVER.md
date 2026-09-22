@@ -63,21 +63,27 @@ npm run format:check             # cek Prettier
 
 ```
 src/
-  components/    Navbar, Hero, Philosophy, WhatWeDo, Domains, DomainCard,
-                 Projects, Recruitment, Footer, HoDSDetail, Button
-  data/          domains.ts  (6 kartu HoDS)
-                 hods.ts     (6 kategori detail, 22 tab)
+  components/    Shared: Navbar (prop `active`), Footer, Button
+                 (primary/glass/white/secondary/apply), DomainCard, DomainRail.
+                 Home: Hero, Philosophy, WhatWeDo, Domains, Projects, Recruitment.
+                 Recruitment: RecruitmentHero, WhoShouldJoin, WhatYouWillDo,
+                 AvailableRoles, SelectionTimeline, Faq, Snippets, Cta, RoleDetail.
+  data/          domains.ts  (6 kartu HoDS, dipakai home + recruitment)
+                 hods.ts     (6 kategori detail home, 22 tab)
+                 roles.ts    (6 detail-role recruitment: chips/about/requirements)
                  projects.ts (4 project, masih placeholder)
   layouts/       BaseLayout.astro (head, font preload, slot)
-  pages/         index.astro           (homepage)
-                 hods/[id].astro       (6 halaman detail, getStaticPaths)
-                 recruitment.astro     (halaman Recruitment, baru hero)
+  pages/         index.astro                     (homepage)
+                 hods/[id].astro                 (6 detail HoDS, getStaticPaths)
+                 recruitment.astro               (halaman Recruitment lengkap)
+                 recruitment/roles/[id].astro    (6 detail role, getStaticPaths)
   styles/        global.css (font-face, tokens, reset)
 scripts/         verify.mjs  (verifikasi visual)
 public/          fonts/ + images/ (aset yang diserve)
 assets/          aset referensi mentah (PNG dari Figma) — TIDAK di-serve
-  <nama page>/   dikelompokkan per halaman, mis. "assets home page/"
-docs/            assets.md (catatan provenance tiap section)
+  <nama page>/   dikelompokkan per halaman, mis. "assets home page/",
+                 "assets recruitment page/", plus "button/".
+docs/            assets.md (provenance tiap section) + kickoff/page-build prompt
 artifacts/       output verifikasi (screenshot/diff/overlay) — git-ignored
 vercel.json      konfigurasi deploy
 .vercelignore    exclude assets besar dari upload
@@ -206,8 +212,8 @@ Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
   `/recruitment#who-should-join`. Karena halaman statis, `from` diterapkan
   client-side di `HoDSDetail.astro`.
 - **Halaman role detail** (`/recruitment/roles/{id}`, data/core/language/
-  vision/product/growth) **sudah dibuat tapi belum di-link** (disimpan buat
-  section mendatang). Frame Figma 1440 × 1280, isi: Back to Open Roles → kartu
+  vision/product/growth): di-link dari section "Available Roles". Frame Figma
+  1440 × 1280, isi: Back to Open Roles → kartu
   1280 × 279 (art + judul + chips + deadline + Apply Now) → ABOUT THIS ROLE →
   REQUIREMENT → CONTACT PERSON. Konten di `src/data/roles.ts`. Art dari
   `Property 1=N.png` (beda dengan `images/hods/card-*.webp` home) →
@@ -218,7 +224,7 @@ Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
   Nasalization 56/68 + copy Manrope 18/27, lalu collage 1312 × 625 berisi 2
   kartu tarot (artwork), connector SVG dekoratif, dan 8 label HTML/CSS di
   staircase diagonal (462 × 31). Background hitam. Di <1320px label distack,
-  kartu/connector disembunyikan (adaptasi). Skor diff ~1.8/255.
+  kartu/connector disembunyikan (adaptasi). Skor diff ~1.24/255.
 - "Available Roles" (Figma `661:1510`, 1440 × 910, di y2558): heading
   Nasalization 56/68 kiri + copy Manrope 18/27, lalu 6 baris role `1280 × 77`
   (gap 23, fill `rgba(255,255,255,.15)`, border gradient, dot + nama +
@@ -257,8 +263,10 @@ Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
   `recruitmentSelectionTimeline`, `recruitmentFaq`, `recruitmentSnippets`,
   `recruitmentCta`, `recruitmentFooter` di `scripts/verify.mjs` (geometri exact +
   diff PNG + overflow 320–1920), plus cek href kartu & back link kontekstual.
-- **Belum**: footer dan section lain di full-page `RECRUITMENT PAGE.png`
-  (1440 × 7262).
+- Halaman recruitment sudah **LENGKAP** (§8b): hero → Who Should Join → What You
+  Will Do → Available Roles → Selection Timeline → FAQ → Snippets → CTA → Footer.
+  Full-page `RECRUITMENT PAGE.png` (1440 × 7262) cuma referensi; CTA-nya beda
+  dari section PNG (pakai referensi section).
 
 ---
 
@@ -268,9 +276,13 @@ Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
   kartu kiri/kanan di posisi panel samping (`x ≈ 78.5 / 998.5`), miring
   (`rotateY 24°`) + **blur**.
 - **Loop** (kiri & kanan selalu ada dari project pertama).
-- Navigasi: panah, dot, drag/swipe, keyboard (←/→). Keyboard ←/→ juga aktif
-  otomatis begitu section masuk viewport (IntersectionObserver 50%), tanpa perlu
-  fokus dulu. `prefers-reduced-motion` → tanpa transisi.
+- Navigasi: panah, dot, drag/swipe, keyboard (←/→). **Aturan keyboard (semua
+  carousel/rail):** ←/→ aktif otomatis saat **section-nya ada di tengah viewport**
+  (`rect.top ≤ innerHeight/2 ≤ rect.bottom`), tanpa perlu fokus. Cuma satu
+  carousel yang pegang tombol (yang di tengah), jadi nggak bentrok. Handler saat
+  fokus jalan duluan (`defaultPrevented`). Berlaku di Projects, Snippets, dan
+  `DomainRail` (home Domains + recruitment WhoShouldJoin). `prefers-reduced-motion`
+  → tanpa transisi.
 - Data: `src/data/projects.ts` — **4 placeholder** (gambar masih sama semua).
 - ⚠️ Jebakan yang sudah kejadian:
   - `overflow:hidden` + `border-radius` + transform 3D → **sudut jadi kotak**.
@@ -334,49 +346,55 @@ Self-host: taruh `.woff2` di `public/fonts/`, update `@font-face` Nasalization d
 - **Konvensi penting di dalam verifikasi:**
   - `reducedMotion: 'reduce'` — supaya animasi/transisi tidak mengacaukan ukuran.
   - **Elemen yang bukan bagian PNG referensi disembunyikan saat screenshot:**
-    navbar (fixed), panah rail, panah/dots project, dan kartu project non-aktif.
-  - `setNavbarHidden()` menangani itu semua.
+    navbar (fixed), panah rail, panah/dots project, kartu project non-aktif, dan
+    panah Snippets (`.snippet-arrow`). `setNavbarHidden()` menangani itu semua.
 - Output: `artifacts/verification.json` + gambar `*-desktop.png`, `*-diff.png`,
   `*-overlay.png`.
 
-Skor terakhir (overall **1.947**, 0 browser error):
+Skor homepage (full run terakhir, overall **1.947**, 0 browser error):
 
 ```
 philosophy 1.670  whatWeDo 1.958  domains 2.596
 projects   5.104  recruitment 2.174  footer 2.666
 ```
 
+Skor halaman recruitment (diukur terisolasi — lihat catatan memori):
+
+```
+hero 2.039  WSJ 3.005  WYD 1.236  Available Roles 2.788
+Selection Timeline 3.178  FAQ 4.999
+Snippets 0.694  CTA(panel) 5.135  footer 2.666
+```
+
+Sisa diff didominasi rasterisasi font + glow dekoratif (browser vs Figma).
+
+⚠️ **Memori**: `verify.mjs` full (screenshot full-page + banyak navigasi) bisa
+bikin Chromium di-OOM-kill di mesin RAM kecil (sisa ~1 GB) — gejalanya browser
+"closed" di tengah run. Launch args sudah `--disable-dev-shm-usage --disable-gpu`.
+Kalau tetap gagal, verifikasi **per-section** pakai skrip Playwright ringan
+(goto `domcontentloaded`, eager-load gambar, screenshot elemen). Di mesin lega
+full verify tetap target.
+philosophy 1.670 whatWeDo 1.958 domains 2.596
+projects 5.104 recruitment 2.174 footer 2.666
+
+````
+
 ---
 
 ## 14. Commit history / checkpoint
 
-```
-a0b58fd  set up Astro + hero
-8afaa22  Our Philosophy
-463a93b  What We Do
-c2b30f4  House of Data Sorcerers
-5fbacd1  Our Project
-421bcb7  Recruitment CTA
-7e41a6a  footer
-325087c  center navbar canvas + scroll blur
-3359963  anchor philosophy artwork to centered canvas
-ed50fe0  compose homepage sections
-a321e37  docs + visual verification
-c611a71  configure Vercel deployment
-85c0e46  sources for licensed Nasalization webfont
-2979999  HoDS detail pages with role tabs
-20ae5d5  per-category HoDS detail card art
-bd90366  carousel arrows on HoDS rail
-372da54  3D coverflow carousel (Our Project)
-6328b4e  left/centre/right blurred slots
-ce45779  loop carousel + fix rounded clipping under 3D
-d79ce6a  round card corners without clipping glow
-4b2ff6b  soft radial glow under active project card
-8fb3d37  navbar scroll blur → 12px
-69acaac  HoDS detail reference assets   ← CHECKPOINT (sebelum motion)
-5feea0d  gsap + three motion (di-revert)
-f925e1d  Revert motion               ← HEAD
-```
+- Histori homepage awal + carousel 3D + detail HoDS: lihat `git log`.
+- `69acaac` = checkpoint sebelum eksperimen motion; `5feea0d` (GSAP + Three.js)
+  → di-revert `f925e1d`.
+- `5315b72`…`901d78f` = docs (AGENTS.md, HANDOVER.md, kickoff-prompt,
+  page-build-prompt) + `4b91b51` assets dikelompokkan per halaman.
+- `d61338e`…`ff7fe20` = **halaman Recruitment lengkap**: reference assets
+  (chore) + tiap section: hero, Who Should Join, What You Will Do, Available
+  Roles, Selection Timeline, FAQ, Snippets, CTA, Footer, plus detail role
+  (`/recruitment/roles/{id}`) dan polish (gradient full-bleed, keyboard carousel,
+  hover button). Pola: `feat:` section didahului `chore: … reference assets`.
+- **HEAD `ff7fe20`** = recruitment lengkap + hover button.
+- Pola commit: per fitur + aset referensi dipisah; push ke `main` (Vercel).
 
 ---
 
@@ -384,13 +402,15 @@ f925e1d  Revert motion               ← HEAD
 
 - [ ] **Nasalization webfont** (heading fallback di device lain) — §11.
 - [ ] **Data project asli** — `src/data/projects.ts` masih 4 placeholder, gambar sama semua.
+- [ ] **Tanggal recruitment** — kolom "Date" di Selection Timeline masih
+      placeholder (sesuai PNG/Figma). Ganti kalau tanggal asli sudah ada.
 - [ ] **Link yang belum tersedia** (sengaja `aria-disabled`, bukan link mati):
-      nav link selain Home, tombol hero/CTA, social + Terms/Privacy/Cookies di footer.
-- [ ] **Halaman Recruitment**: hero sudah jadi (§8b); section "Who Should
-      Join", footer, dan section lain menyusul.
-- [ ] Halaman lain yang ada di Figma tapi belum dibuat: About Us,
-      Hall of Frames, Partners, Contact.
-- [ ] Audit tiap halaman detail HoDS kalau ada pembaruan art/konten di Figma.
+      nav link selain Home & Recruitment, sebagian tombol hero/CTA, social +
+      Terms/Privacy/Cookies di footer.
+- [x] ~~Halaman Recruitment~~ — **LENGKAP** (§8b).
+- [ ] Halaman lain yang ada di Figma tapi belum dibuat: **About Us,
+      Hall of Frames, Partners, Contact**.
+- [ ] Audit tiap halaman detail HoDS / detail role kalau ada pembaruan Figma.
 - [ ] Opsional: lanjutkan motion (lihat §10) & optimasi bundle.
 
 ---
@@ -409,6 +429,20 @@ f925e1d  Revert motion               ← HEAD
 6. **Aset gede**: `assets/` ratusan MB → jangan lupa `.vercelignore`.
 7. **Verifikasi**: transition 3D bikin ukuran mid-animasi → set `reducedMotion`.
 8. **`prefers-reduced-motion`** harus selalu jadi fallback.
+9. **Lebar fixed-px bikin overflow** di layar sempit: di Selection Timeline,
+   garis separator (`1248px`) & kolom tanggal (`568px`) bikin halaman overflow di
+   768–1024. Fix: jadi proporsional (`calc(100% + 32px)` & `%`). Selalu tes
+   overflow 320–1920.
+10. **Referensi PNG bisa transparan**: `Frame 2393.png` (CTA) panel fill-nya
+    `rgba(98,80,255,.1)` + area transparan → `removeAlpha()` salah; **composite ke
+    `#050507`** dulu waktu diff.
+11. **Fill image Figma nggak selalu match crop referensi** (Snippets hero,
+    glow CTA). Ukur dulu; kalau nggak match, pakai **render komponen** (export
+    region dari PNG komponen) atau perlakuan yang sama dengan section yang sudah
+    lolos (glow CTA = glow home).
+12. **Keyboard carousel** pakai aturan "section di tengah viewport"; jangan andelin
+    IntersectionObserver + `defaultPrevented` saja (dua carousel bisa jalan
+    bareng di zona overlap). Skip `input/textarea`.
 
 ---
 
@@ -422,7 +456,7 @@ npm run preview              # serve dist
 node scripts/verify.mjs      # verifikasi visual (butuh dev server)
 npm run format               # rapiin
 git log --oneline            # lihat checkpoint
-```
+````
 
 ---
 

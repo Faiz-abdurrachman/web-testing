@@ -37,10 +37,21 @@ scripts/verify.mjs (geometri + containment + overflow 320–1920px). Baca bagian
 "Verification workflow" di AGENTS.md dulu (reducedMotion + setNavbarHidden).
 
 Yang perlu kamu tahu sekarang:
-- HEAD 'main' = state SEBELUM eksperimen motion. Commit GSAP+Three (5feea0d)
-  sudah di-revert (f925e1d). Card 3D (carousel project) tetap ada dan jangan diutak-atik.
-- TODO utama: font Nasalization (webfont berlisensi), data project asli, halaman
-  lain (About, Recruitment, Hall of Frames, Partners, Contact).
+- HEAD 'main' ('ff7fe20') = homepage + halaman Recruitment LENGKAP: hero → Who
+  Should Join → What You Will Do → Available Roles → Selection Timeline → FAQ →
+  Snippets → CTA → Footer, plus halaman detail role (/recruitment/roles/{id},
+  di-link dari Available Roles) + hover button.
+- Detail HoDS (home) = layout tab; detail role (recruitment) = layout lain
+  (About this role/Requirement/Contact). Gradient keduanya full-bleed.
+- Motion GSAP+Three (commit 5feea0d) masih di-revert (f925e1d). Card 3D
+  (carousel project) tetap ada dan jangan diutak-atik.
+- Konvensi tambahan: carousel/rail pakai ←/→ saat section-nya di tengah viewport;
+  button hover = swap warna (dark↔violet, white→violet); jangan pakai lebar
+  fixed-px yang bisa overflow (tes 320–1920px).
+- Kalau `verify.mjs` full bikin Chromium OOM-killed (mesin RAM kecil),
+  verifikasi per-section pakai skrip Playwright ringan.
+- TODO utama: font Nasalization (webfont berlisensi), data project asli, tanggal
+  recruitment, halaman lain (About Us, Hall of Frames, Partners, Contact).
 
 Sebelum mulai task di bawah: ringkas dulu pemahamanmu + rencana singkat, lalu kerjakan.
 

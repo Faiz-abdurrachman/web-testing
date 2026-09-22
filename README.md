@@ -1,7 +1,9 @@
 # Data Sorcerers
 
-Homepage preview with Hero, Our Philosophy, What We Do, House of Data Sorcerers, and Our Project, built with Astro,
-strict TypeScript, and scoped CSS.
+Pixel-accurate Astro site: the homepage (Hero, Our Philosophy, What We Do, House
+of Data Sorcerers, Our Project, Recruitment CTA, Footer), the six HoDS detail
+pages, and the full Recruitment page (hero through footer) with six role detail
+pages. Built with Astro, strict TypeScript, and scoped CSS.
 
 ## Run locally
 
