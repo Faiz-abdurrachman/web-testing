@@ -444,6 +444,13 @@ projects 5.104 recruitment 2.174 footer 2.666
 12. **Keyboard carousel** pakai aturan "section di tengah viewport"; jangan andelin
     IntersectionObserver + `defaultPrevented` saja (dua carousel bisa jalan
     bareng di zona overlap). Skip `input/textarea`.
+13. **`<details>` nggak bisa dianimasikan native**: konten item tertutup di-hide
+    UA, jadi transisi CSS nggak jalan. Faq.astro pakai progressive enhancement:
+    `preventDefault()` di `summary`, animasi tinggi panel via JS (320ms) + guard
+    `version` biar klik cepat nggak bikin state nyangkut, dan `[open]`/
+    `height:auto` tetap dipasang supaya tetap jalan tanpa JS. Panah: chevron-down
+    (`chevron-down.svg` = path `arrow-right` dirotasi 90°) → `rotate(180deg)` saat
+    terbuka. Dua-duanya di-nonaktifkan di `prefers-reduced-motion`.
 
 ---
 

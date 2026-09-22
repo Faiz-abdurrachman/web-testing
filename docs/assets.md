@@ -470,12 +470,20 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
   default (matching the reference). Each item is `rgba(255,255,255,.15)`, a 1px
   `linear-gradient(135deg, #ede8ff, #2e276c, #ede8ff)` border, `border-radius
 20px`, `padding 19px 32px`, with the question (Manrope Medium 500, 26 / 39,
-  white) and the `vuesax/outline/arrow-right` icon. Items 1–4 are one line
-  (77px); items 5–6 are two lines (116px).
+  white) and a `vuesax/outline/arrow` chevron. The reference render shows it
+  **pointing down** when the item is closed (the `arrow-right` path rotated 90°,
+  shipped as `public/images/recruitment/chevron-down.svg`); it rotates 180° to
+  point up when open. Items 1–4 are one line (77px); items 5–6 are two lines
+  (116px).
 - Answers come from the open (A) variants of the six FAQ components
   (component sets `830:4263`, `830:4362`, `830:4367`, `830:4372`, `830:4377`,
   `830:4382`): Manrope Medium 18 / 27, revealed below the question with a 42px
-  gap. Answer 5 duplicates answer 1 in Figma and is kept as-is.
+  gap. Answer 5 duplicates answer 1 in Figma and is kept as-is. The toggle is
+  animated: the arrow transition is pure CSS (`rotate(180deg)` on
+  `[open]`/`.is-open`), while a small inline script measures and transitions
+  the answer panel height (320ms) so expansion never snaps. Both transitions
+  are disabled under `prefers-reduced-motion` (instant toggle), and the
+  `[open]` selector keeps the native `<details>` usable without JS.
 - Verification: `scripts/verify.mjs` asserts the section, heading, list and all
   six item boxes exactly, diffs against the reference (~5.0/255; the six long
   questions dominate the rasterization residual), and checks overflow and text

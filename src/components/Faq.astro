@@ -45,14 +45,16 @@ const items: FaqItem[] = [
           <span class="faq-q">{item.q}</span>
           <img
             class="faq-arrow"
-            src="/images/recruitment/arrow-right.svg"
+            src="/images/recruitment/chevron-down.svg"
             width="24"
             height="24"
             alt=""
             loading="lazy"
           />
         </summary>
-        <p class="faq-a">{item.a}</p>
+        <div class="faq-a-wrap">
+          <p class="faq-a">{item.a}</p>
+        </div>
       </details>
     ))}
   </div>
@@ -133,6 +135,21 @@ const items: FaqItem[] = [
     display: block;
     width: 24px;
     height: 24px;
+    transition: transform 320ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  /* Closed = chevron-down, open = chevron-up. */
+  .faq-item.is-open .faq-arrow {
+    transform: rotate(180deg);
+  }
+  .faq-a-wrap {
+    height: 0;
+    overflow: hidden;
+    transition: height 320ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  /* Fallback when JS is unavailable (native <details> toggle). */
+  .faq-item.is-open .faq-a-wrap,
+  .faq-item[open] .faq-a-wrap {
+    height: auto;
   }
   .faq-a {
     margin: 24px 0 0;
@@ -142,6 +159,12 @@ const items: FaqItem[] = [
     line-height: 27px;
     color: #fff;
     white-space: pre-line;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .faq-arrow,
+    .faq-a-wrap {
+      transition: none;
+    }
   }
   @media (max-width: 760px) {
     .faq {
@@ -171,3 +194,56 @@ const items: FaqItem[] = [
     }
   }
 </style>
+
+<script>
+  // Smoothly animates the native <details>/<summary> accordion: the panel is
+  // measured and then transitioned between 0 and its natural height, so the
+  // expansion never snaps. Under prefers-reduced-motion the toggle is instant.
+  const DURATION = 320;
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
+  document
+    .querySelectorAll<HTMLDetailsElement>('details.faq-item')
+    .forEach((details) => {
+      const summary = details.querySelector('summary');
+      const panel = details.querySelector<HTMLElement>('.faq-a-wrap');
+      if (!summary || !panel) return;
+
+      let version = 0;
+
+      summary.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        const opening = !details.open;
+        const token = ++version;
+        details.classList.toggle('is-open', opening);
+
+        if (reduceMotion.matches) {
+          details.open = opening;
+          panel.style.height = '';
+          return;
+        }
+
+        const settle = () => {
+          if (token !== version) return;
+          panel.style.height = '';
+          if (!opening) details.open = false;
+        };
+
+        if (opening) {
+          details.open = true;
+          const target = panel.scrollHeight;
+          panel.style.height = '0px';
+          void panel.offsetHeight;
+          panel.style.height = `${target}px`;
+        } else {
+          panel.style.height = `${panel.scrollHeight}px`;
+          void panel.offsetHeight;
+          panel.style.height = '0px';
+        }
+
+        panel.addEventListener('transitionend', settle, { once: true });
+        setTimeout(settle, DURATION + 80);
+      });
+    });
+</script>
