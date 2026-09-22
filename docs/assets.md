@@ -25,12 +25,12 @@ that transition belongs to the later full-page integration.
   `max-width: 1440px` container and centered, so on screens wider than the
   Figma frame the logo and CTA stay on the 1440 grid (brand x = 80 at 1440,
   320 at 1920, 640 at 2560) instead of stretching to the viewport edges.
-- At the top the bar keeps the reference's soft `backdrop-filter: blur(5px)`.
-  After an 8px scroll it keeps a **blur-only** treatment (`blur(12px)
-saturate(140%)`) feathered by a mask — no background panel and no hairline
-  border, so it never reads as a box. This is an interaction addition; the
-  top-of-page render is unchanged from the reference, so the hero comparison is
-  unaffected.
+- At the top the bar keeps the reference's soft `backdrop-filter: blur(8px)
+saturate(140%)`. After an 8px scroll it keeps a **blur-only** treatment
+  (`blur(28px) saturate(180%) brightness(1.07)`) feathered by a mask — no
+  background panel and no hairline border, so it never reads as a box. The mask
+  keeps the blur visible across most of the bar (`#000 65%` → transparent). This
+  is an interaction addition; the hero comparison is unaffected geometrically.
 - Below 1050px the desktop menu is replaced by a full-screen `<details>` menu: a
   borderless blurred overlay with a soft edge, JS-animated open/close, a
   hamburger that morphs into an X, body scroll lock and a reduced-motion

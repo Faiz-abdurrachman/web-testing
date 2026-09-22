@@ -152,8 +152,9 @@ Frame 1440, gutter 80. Skor = mean absolute channel difference vs PNG referensi
 dekoratif — lihat §9).
 
 **Navbar** (`530:13894` / `755:15219`): fixed, inner `max-width:1440px` di-center,
-`padding 24px 80px`, tinggi 106.8. Di atas halaman transparan (`blur(5px)`).
-Setelah scroll tetap **blur-only**: `blur(12px) saturate(140%)` dengan mask fade
+`padding 24px 80px`, tinggi 106.8. Di atas halaman transparan (`blur(8px)
+saturate(140%)`). Setelah scroll tetap **blur-only**: `blur(28px) saturate(180%)
+brightness(1.07)` dengan mask fade
 ke bawah, **tanpa** background panel dan **tanpa** garis tepi (dulu ada panel
 `rgb(5 5 7 / 58%)` + hairline; dihapus agar tidak terlihat seperti kotak).
 Hover link nav = pill membulat (`border-radius:999px`, bg putih 10%) dengan
