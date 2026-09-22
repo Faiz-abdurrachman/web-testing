@@ -10,29 +10,26 @@ const ROUTES = [
   ...IDS.map((id) => `/recruitment/roles/${id}`),
 ];
 const WIDTHS = [
-  320, 360, 375, 390, 414, 480, 600, 760, 768, 820, 900, 1024, 1050, 1100, 1200,
-  1280, 1300, 1366, 1440, 1600, 1680, 1920, 2560,
+  320, 360, 375, 390, 414, 480, 600, 760, 768, 820, 900, 1024, 1050, 1051, 1100,
+  1200, 1280, 1300, 1366, 1440, 1600, 1680, 1920, 2560, 3440, 3840,
 ];
 
 const measure = (page) =>
   page.evaluate(() => {
     const doc = document.documentElement;
     const overflow = doc.scrollWidth - innerWidth;
-    const offenders = [];
+    const issues = [];
+
+    // 1. top-level sections that visually extend past the viewport
     for (const el of document.querySelectorAll('main > *, footer')) {
       const box = el.getBoundingClientRect();
-      if (box.right > innerWidth + 1 || el.scrollWidth > el.clientWidth + 1) {
-        offenders.push({
-          tag: el.tagName.toLowerCase(),
-          class: (el.className || '').toString().split(/\s+/)[0] || '',
-          right: Math.round(box.right),
-          scrollWidth: el.scrollWidth,
-          clientWidth: el.clientWidth,
-        });
-      }
+      if (box.right > innerWidth + 1)
+        issues.push(
+          `overflow:${el.tagName.toLowerCase()}.${(el.className || '').toString().split(/\s+/)[0]}`,
+        );
     }
 
-    const clipped = [];
+    // 2. clipped text (not in a deliberate scroller / dimmed neighbour card)
     const textNodes = document.querySelectorAll(
       'main h1, main h2, main h3, main h4, main h5, main h6, main p, ' +
         'main li, main label, main a, main button, footer h2, footer p, ' +
@@ -48,13 +45,7 @@ const measure = (page) =>
       if (rect.right > innerWidth + 1 || rect.left < -1) {
         const ancestor = el.closest('main, footer');
         if (ancestor && ancestor.scrollWidth <= ancestor.clientWidth + 1)
-          clipped.push({
-            el: name,
-            why: 'outside viewport (not scrollable)',
-            left: Math.round(rect.left),
-            right: Math.round(rect.right),
-            text: el.textContent.trim().slice(0, 40),
-          });
+          issues.push(`offscreen:${name}`);
         continue;
       }
       let parent = el.parentElement;
@@ -63,25 +54,57 @@ const measure = (page) =>
         if (style.overflow === 'hidden' || style.overflowX === 'hidden') {
           const box = parent.getBoundingClientRect();
           if (rect.right > box.right + 1 || rect.left < box.left - 1)
-            clipped.push({
-              el: name,
-              why: 'clipped by ancestor',
-              left: Math.round(rect.left),
-              right: Math.round(rect.right),
-              text: el.textContent.trim().slice(0, 40),
-            });
+            issues.push(`clipped:${name}`);
           break;
         }
         parent = parent.parentElement;
       }
     }
-    return { overflow, offenders, clipped };
+
+    // 3. carousel arrows must never overlap a card
+    const overlapChecks = [
+      ['.rail-arrow.next', '.domain-card'],
+      ['.project-arrow.next', '.project-card'],
+      ['.snippet-arrow.next', '.gallery-hero'],
+      ['.snippet-arrow.next', '.gallery-thumbs'],
+    ];
+    for (const [a, b] of overlapChecks) {
+      const arrow = document.querySelector(a)?.getBoundingClientRect();
+      if (!arrow) continue;
+      for (const el of document.querySelectorAll(b)) {
+        const box = el.getBoundingClientRect();
+        if (
+          arrow.x < box.right &&
+          arrow.right > box.x &&
+          arrow.y < box.bottom &&
+          arrow.bottom > box.y
+        ) {
+          issues.push(`overlap:${a}×${b}`);
+          break;
+        }
+      }
+    }
+
+    // 4. navbar shows the right menu for the breakpoint (pages with a navbar)
+    const desktop = document.querySelector('.desktop-menu');
+    const mobile = document.querySelector('.mobile-menu');
+    if (desktop && mobile) {
+      const mobileExpected = innerWidth <= 1050;
+      const desktopNone = getComputedStyle(desktop).display === 'none';
+      const mobileNone = getComputedStyle(mobile).display === 'none';
+      if (desktopNone !== mobileExpected)
+        issues.push('navbar:desktop-menu-wrong');
+      if (mobileNone !== !mobileExpected)
+        issues.push('navbar:mobile-menu-wrong');
+    }
+
+    return { overflow, issues: [...new Set(issues)] };
   });
 
 await mkdir('artifacts', { recursive: true });
 const results = [];
 const browserErrors = [];
-let done = 0;
+let combos = 0;
 
 for (const route of ROUTES) {
   const browser = await chromium.launch({
@@ -96,9 +119,11 @@ for (const route of ROUTES) {
       reducedMotion: 'reduce',
     });
     const page = await context.newPage();
-    page.on('pageerror', (error) =>
-      browserErrors.push(`${route}: ${error.message}`),
-    );
+    page.on('pageerror', (e) => browserErrors.push(`${route}: ${e.message}`));
+    page.on('response', (r) => {
+      if (r.status() >= 400)
+        browserErrors.push(`${route}: ${r.status()} ${r.url()}`);
+    });
     for (const width of WIDTHS) {
       try {
         await page.setViewportSize({ width, height: 900 });
@@ -117,9 +142,14 @@ for (const route of ROUTES) {
         });
         await page.evaluate(() => scrollTo(0, 0));
         const data = await measure(page);
-        if (data.overflow > 1 || data.clipped.length > 0)
-          results.push({ route, width, ...data });
-        done++;
+        if (data.overflow > 1 || data.issues.length)
+          results.push({
+            route,
+            width,
+            overflow: data.overflow,
+            issues: data.issues,
+          });
+        combos++;
       } catch (error) {
         browserErrors.push(`${route} @ ${width}: ${error.message}`);
       }
@@ -127,30 +157,27 @@ for (const route of ROUTES) {
   } finally {
     await browser.close();
   }
-  process.stderr.write(`audited ${route} (${done} combos)\n`);
+  process.stderr.write(`audited ${route}\n`);
 }
 
 await writeFile(
   'artifacts/responsive-audit.json',
-  JSON.stringify({ results, browserErrors }, null, 2),
+  JSON.stringify({ combos, results, browserErrors }, null, 2),
 );
 
-if (results.length === 0) {
+console.log(
+  `Checked ${ROUTES.length} routes × ${WIDTHS.length} widths = ${combos} combos.`,
+);
+if (results.length === 0 && browserErrors.length === 0) {
   console.log(
-    `OK — no horizontal overflow or clipped text across ${ROUTES.length} routes × ${WIDTHS.length} widths.`,
+    'ALL PASS — no overflow, clipped text, card overlap, or wrong navbar mode.',
   );
 } else {
   console.log(`ISSUES on ${results.length} route/width combos:`);
-  for (const r of results) {
-    const parts = [];
-    if (r.overflow > 1)
-      parts.push(`overflow +${r.overflow}px ${JSON.stringify(r.offenders)}`);
-    for (const c of r.clipped)
-      parts.push(
-        `clip[${c.el} · ${c.why} · ${c.left}..${c.right} · "${c.text}"]`,
-      );
-    console.log(`  ${r.route} @ ${r.width}px → ${parts.join(' | ')}`);
-  }
+  for (const r of results)
+    console.log(
+      `  ${r.route} @ ${r.width}px → overflow=${r.overflow} ${JSON.stringify(r.issues)}`,
+    );
 }
 if (browserErrors.length) console.log('Browser/errors:', browserErrors);
 process.exit(results.length === 0 && browserErrors.length === 0 ? 0 : 1);
