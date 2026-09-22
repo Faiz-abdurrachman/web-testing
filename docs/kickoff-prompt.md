@@ -35,6 +35,9 @@ Cara kerja & verifikasi:
   lalu `PREVIEW_URL=http://localhost:4331 node scripts/verify.mjs`.
 - node scripts/responsive-audit.mjs → audit responsif 14 halaman × 26 lebar
   (320–3840; HARUS exit 0)
+- npm run assets:og → regen og share image + favicon + manifest
+- npm run seo:audit → validasi meta/OG/canonical/sitemap di dist (setelah build;
+  HARUS exit 0)
 
 Kalau bikin/ubah section: update docs/assets.md + tambah/cek assertion di
 scripts/verify.mjs (geometri + containment + overflow 320–1920px). Baca bagian
@@ -54,6 +57,11 @@ Yang perlu kamu tahu sekarang:
   instan saat prefers-reduced-motion) + hover pill membulat; panah carousel
   **kiri-kanan di desktop, bawah di mobile** (Projects & DomainRail ganti di
   1050px, Snippets di 760px). Pakai `scripts/responsive-audit.mjs` buat cek cepat.
+- SEO/OG sudah ada: origin `site` dari `SITE_URL` (default
+  `https://community-web.vercel.app`) → canonical + Open Graph/Twitter + JSON-LD
+  di `BaseLayout`, `robots.txt`, sitemap (`@astrojs/sitemap`), share card
+  `public/og/og-default.jpg` (regen `npm run assets:og`), validasi
+  `npm run seo:audit`. **Ganti origin kalau domain final beda.**
 - Konvensi tambahan: carousel/rail pakai ←/→ saat section-nya di tengah viewport;
   button hover = swap warna (dark↔violet, white→violet); jangan pakai lebar
   fixed-px yang bisa overflow (tes 320–3840px).

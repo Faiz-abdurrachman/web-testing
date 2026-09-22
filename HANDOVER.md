@@ -37,6 +37,8 @@ Verifikasi visual (butuh dev server jalan):
 ```sh
 node scripts/verify.mjs          # → tulis artifacts/, exit 0 kalau lolos
 node scripts/responsive-audit.mjs # audit responsif 14 halaman × 26 lebar
+npm run assets:og                # regen og image + favicon + manifest
+npm run seo:audit                # validasi meta/OG/canonical/sitemap (setelah build)
 npm run format:check             # cek Prettier
 ```
 
@@ -435,6 +437,12 @@ projects 5.104 recruitment 2.174 footer 2.666
   navbar **blur-only** (tanpa panel/garis), menu mobile **full-screen** + animasi
   buka/tutup, hover pill membulat, panah carousel **desktop kiri-kanan / mobile
   bawah**, plus `scripts/responsive-audit.mjs`. Lihat `git log`.
+- SEO/OG: origin `site` dari `SITE_URL` (default
+  `https://community-web.vercel.app`); canonical + OG/Twitter + JSON-LD di
+  `BaseLayout`; `robots.txt` (endpoint `src/pages/robots.txt.ts`); sitemap
+  `@astrojs/sitemap`; share card `public/og/og-default.jpg` (dibuat via
+  `npm run assets:og`); validasi `npm run seo:audit` **PASS**. **Ganti origin
+  begitu domain final beda.**
 - Pola commit: per fitur + aset referensi dipisah; push ke `main` (Vercel).
 
 ---
@@ -498,7 +506,7 @@ projects 5.104 recruitment 2.174 footer 2.666
 15. **Jaga geometri 1440**: perubahan responsif pakai `position:absolute` supaya
     tinggi section yang di-assert tidak berubah. Jalankan
     `node scripts/responsive-audit.mjs` setiap habis ubah layout.
-13. **`<details>` nggak bisa dianimasikan native**: konten item tertutup di-hide
+16. **`<details>` nggak bisa dianimasikan native**: konten item tertutup di-hide
     UA, jadi transisi CSS nggak jalan. Faq.astro pakai progressive enhancement:
     `preventDefault()` di `summary`, animasi tinggi panel via JS (320ms) + guard
     `version` biar klik cepat nggak bikin state nyangkut, dan `[open]`/
@@ -517,6 +525,8 @@ npm run build                # check + build
 npm run preview              # serve dist
 node scripts/verify.mjs      # verifikasi visual (butuh dev server)
 node scripts/responsive-audit.mjs # audit responsif 14 halaman × 26 lebar
+npm run assets:og            # regen og image + favicon + manifest
+npm run seo:audit            # validasi meta/OG/canonical/sitemap (setelah build)
 npm run format               # rapiin
 git log --oneline            # lihat checkpoint
 ````
@@ -528,3 +538,30 @@ git log --oneline            # lihat checkpoint
 - Detail provenance tiap aset + node Figma: `docs/assets.md`
 - Ringkasan publik: `README.md`
 - Artefak verifikasi terakhir: `artifacts/verification.json`
+
+---
+
+## 19. SEO, Open Graph & sitemap
+
+- **Origin kanonik**: `astro.config.mjs` → `site` dari `SITE_URL` (default
+  `https://community-web.vercel.app`). Ini yang dipakai canonical, `og:url`,
+  sitemap, dan JSON-LD. Ganti default (atau set `SITE_URL` di Vercel) begitu
+  domain final diketahui.
+- **`BaseLayout.astro`** meng-emit: `<title>`, meta description, `robots`,
+  `canonical`, ikon (`favicon.ico`/png, apple-touch, manifest), Open Graph
+  (`og:type/site_name/locale/title/description/url/image` + `image:width/height/alt`),
+  Twitter `summary_large_image`, dan JSON-LD `Organization` + `WebSite`.
+  Prop baru: `description`, `image`, `type` (`website`|`article`), `noindex`.
+- **Per halaman**: home pakai default; `recruitment` deskripsi khusus; halaman
+  detail HoDS & role pakai `type="article"` + deskripsi dari data (judul role diberi
+  suffix "Open Role" biar tidak bentrok dengan judul HoDS).
+- **Share card**: `public/og/og-default.jpg` (1200×630 JPEG), dibuat
+  `scripts/generate-og.mjs` (`npm run assets:og`) dari `Gambar Hero Section.png`
+  - logo + `SORCERY IN DATA MAGIC IN AI.png`, pakai overlay gradient biar teks di
+    kiri kebaca. Favicon/manifest juga dibuat skrip yang sama.
+- **robots + sitemap**: `src/pages/robots.txt.ts` (pakai `Astro.site`);
+  `@astrojs/sitemap` menulis `sitemap-index.xml` + `sitemap-0.xml` (14 URL).
+- **Audit**: `npm run seo:audit` membaca `dist/**/*.html` dan memvalidasi title
+  unik, description, canonical absolut, OG/Twitter lengkap, `og:image` ada &
+  1200×630, JSON-LD valid, `robots.txt`, dan 14 URL sitemap. **PASS.**
+- Validasi share asli (Facebook Debugger / X Card Validator) butuh domain live.
