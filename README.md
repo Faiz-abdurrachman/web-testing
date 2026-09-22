@@ -27,6 +27,7 @@ plus beberapa interaksi (navbar blur, carousel, accordion, hover button).
 10. [Font](#10-font)
 11. [Aset referensi](#11-aset-referensi)
 12. [Yang belum / TODO](#12-yang-belum--todo)
+13. [SEO & Open Graph](#13-seo--open-graph)
 
 ---
 
@@ -68,16 +69,19 @@ Buka **http://localhost:4321**.
 
 ### Command penting
 
-| Command                   | Fungsi                                                                                       |
-| ------------------------- | -------------------------------------------------------------------------------------------- |
-| `npm ci`                  | Install dependency (bersih, sesuai lockfile).                                                |
-| `npm run dev`             | Dev server (http://localhost:4321, host `0.0.0.0`).                                          |
-| `npm run build`           | `astro check` + build static ke `dist/`. **Harus 0 error.**                                  |
-| `npm run preview`         | Serve hasil build (`dist/`).                                                                 |
-| `npm run check`           | Type-check Astro/TS saja.                                                                    |
-| `npm run format`          | Rapikan semua file pakai Prettier.                                                           |
-| `npm run format:check`    | Cek format (harus lolos sebelum commit).                                                     |
-| `node scripts/verify.mjs` | Verifikasi visual (dev server harus jalan; harus exit 0). Bisa juga `npm run verify:visual`. |
+| Command                             | Fungsi                                                                                       |
+| ----------------------------------- | -------------------------------------------------------------------------------------------- |
+| `npm ci`                            | Install dependency (bersih, sesuai lockfile).                                                |
+| `npm run dev`                       | Dev server (http://localhost:4321, host `0.0.0.0`).                                          |
+| `npm run build`                     | `astro check` + build static ke `dist/`. **Harus 0 error.**                                  |
+| `npm run preview`                   | Serve hasil build (`dist/`).                                                                 |
+| `npm run check`                     | Type-check Astro/TS saja.                                                                    |
+| `npm run format`                    | Rapikan semua file pakai Prettier.                                                           |
+| `npm run format:check`              | Cek format (harus lolos sebelum commit).                                                     |
+| `node scripts/verify.mjs`           | Verifikasi visual (dev server harus jalan; harus exit 0). Bisa juga `npm run verify:visual`. |
+| `node scripts/responsive-audit.mjs` | Audit responsif 14 halaman × 26 lebar (320–3840).                                            |
+| `npm run assets:og`                 | Regenerate og image (`public/og/og-default.jpg`) + favicon + manifest.                       |
+| `npm run seo:audit`                 | Validasi title/meta/OG/canonical/sitemap di `dist/` (setelah build).                         |
 
 ### Alur kerja singkat (rekomendasi)
 
@@ -86,6 +90,8 @@ npm run dev            # terminal 1: dev server
 npm run build          # pastikan 0 error
 npm run format:check   # pastikan bersih
 node scripts/verify.mjs # pastikan exit 0 (butuh dev server jalan)
+node scripts/responsive-audit.mjs # audit responsif semua halaman
+npm run seo:audit      # validasi SEO/OG (setelah build)
 ```
 
 ---
@@ -135,9 +141,13 @@ Selection Timeline → FAQ → Snippets of Life → CTA → Footer.
 
 ### Interaksi yang sudah jalan
 
-- Navbar blur saat scroll, menu mobile (hamburger).
+- Navbar state scroll **blur-only** (tanpa panel/garis kotak); menu mobile
+  **full-screen** dengan animasi buka/tutup (fallback instan saat
+  `prefers-reduced-motion`) dan hover link berbentuk pill membulat.
 - Carousel: Our Project (3D coverflow, loop), Snippets (galeri foto), rail HoDS
   (Home "Choose Your Domain" & Recruitment "Who Should Join"), FAQ accordion.
+  Panah: **kiri-kanan di desktop, bawah di mobile** (Projects & DomainRail ganti
+  di `1050px`, Snippets di `760px`).
 - **Keyboard ←/→** aktif otomatis saat section-nya di tengah viewport (tanpa
   klik/fokus dulu), berlaku di semua carousel/rail.
 - **Hover button** = swap warna (lihat §6).
@@ -157,14 +167,20 @@ src/
                 hods.ts     (6 detail HoDS home, 22 tab)
                 roles.ts    (6 detail role recruitment)
                 projects.ts (4 project, placeholder)
-  layouts/      BaseLayout.astro (head, meta, font preload, slot)
+  layouts/      BaseLayout.astro (head: title/description/canonical/OG/Twitter/
+                JSON-LD/icons, font preload, slot)
   pages/        index.astro                   (homepage)
                 hods/[id].astro               (detail HoDS, getStaticPaths)
                 recruitment.astro             (halaman Recruitment)
                 recruitment/roles/[id].astro  (detail role, getStaticPaths)
+                robots.txt.ts                 (robots.txt endpoint)
   styles/       global.css (font-face, token, reset)
 scripts/        verify.mjs (verifikasi visual)
+                responsive-audit.mjs (audit responsif semua halaman)
+                generate-og.mjs (og image + favicon + manifest)
+                seo-audit.mjs (validasi SEO/OG di dist/)
 public/         fonts/ + images/ (aset yang diserve)
+                og/og-default.jpg, favicon*, icon-*, site.webmanifest
 assets/         aset referensi mentah Figma (TIDAK di-serve, besar)
   assets home page/  assets recruitment page/  button/
 docs/           assets.md, kickoff-prompt.md, page-build-prompt.md
@@ -207,7 +223,11 @@ vercel.json     konfigurasi deploy
   `max-width: 1440px` yang di-center. Jangan taruh gradient di container
   max-1440 (kepotong di layar > 1440 / zoom out).
 - **Jangan pakai lebar fixed-px** yang bisa overflow; pakai `%` / `clamp()` /
-  `aspect-ratio`. Selalu tes 320–1920px.
+  `aspect-ratio`. Selalu tes 320–3840px (jalankan `responsive-audit.mjs`).
+- **Panah carousel**: kiri-kanan di desktop, bawah di mobile. DomainRail samping
+  sengaja menumpuk tepi kartu rail (full-bleed); panah Projects tidak boleh
+  menyentuh kartu aktif. Jangan taruh panah di padding section kalau padding-nya
+  lebih pendek dari tinggi panah.
 - **Elemen overlay** yang tidak ada di PNG referensi (navbar fixed, panah
   carousel, dots, kartu non-aktif) disembunyikan saat screenshot verifikasi
   (`setNavbarHidden` di `verify.mjs`). Kalau nambah overlay baru, tambahkan ke
@@ -252,12 +272,23 @@ sisa < ~1–1,5 GB), verifikasi **per-section** pakai skrip Playwright ringan
 (goto `domcontentloaded`, eager-load gambar, screenshot elemen). Launch args
 Chromium sudah `--disable-dev-shm-usage --disable-gpu` untuk bantu.
 
+- `verify.mjs` menunggu `waitUntil: 'networkidle'`; di **dev server** (Vite HMR)
+  itu bisa hang. Kalau begitu, jalankan terhadap build statis:
+  `npm run build && npx astro preview --port 4331` lalu
+  `PREVIEW_URL=http://localhost:4331 node scripts/verify.mjs`.
+- Cek responsif semua halaman (tanpa diff PNG, cepat, hemat memori):
+  `node scripts/responsive-audit.mjs` — 14 halaman × 26 lebar (320–3840).
+- Cek SEO/OG: `npm run seo:audit` (setelah `npm run build`) — lihat §13.
+
 ---
 
 ## 9. Deploy
 
-- **GitHub → Vercel** (branch `main`, auto-deploy). Import repo di Vercel, nggak
-  butuh env var.
+- **GitHub → Vercel** (branch `main`, auto-deploy). Import repo di Vercel.
+- **Domain kanonik**: `astro.config.mjs` → `site` dari `SITE_URL`, default
+  `https://data-sorcerers-community-sigma.vercel.app`. Ganti default (atau set
+  env `SITE_URL` di Vercel) bila domain final berubah — ini yang dipakai
+  canonical, `og:url`, dan sitemap.
 - `vercel.json`: `framework: astro`, `installCommand: npm ci`,
   `buildCommand: npm run build`, `outputDirectory: dist`.
 - `.vercelignore`: `assets`, `artifacts`, `.astro`, `.opencode` — biar folder
@@ -299,6 +330,27 @@ Chromium sudah `--disable-dev-shm-usage --disable-gpu` untuk bantu.
 - [ ] Audit art/konten detail HoDS & detail role kalau ada pembaruan Figma.
 - [ ] Opsional: lanjutkan motion (GSAP + Three.js — lihat `HANDOVER.md` §10) &
       optimasi bundle.
+
+---
+
+## 13. SEO & Open Graph
+
+- **Canonical origin** dari `site` (`SITE_URL`), default
+  `https://data-sorcerers-community-sigma.vercel.app`.
+- **`BaseLayout`** meng-emit: title, description, `robots`, canonical, ikon,
+  manifest, Open Graph, Twitter `summary_large_image`, dan JSON-LD
+  `Organization` + `WebSite`. Prop per halaman: `title`, `description`, `image`,
+  `type` (`article` untuk halaman detail), `noindex`.
+- **Share card**: `public/og/og-default.jpg` (1200 × 630) — regenerate dengan
+  `npm run assets:og` (dari `Gambar Hero Section.png` + logo + headline
+  `SORCERY IN DATA MAGIC IN AI.png`). Skrip yang sama juga bikin favicon +
+  `site.webmanifest`.
+- **robots + sitemap**: `src/pages/robots.txt.ts` + `@astrojs/sitemap`
+  (`sitemap-index.xml`, 14 URL).
+- **Validasi**: `npm run build && npm run seo:audit` → harus **PASS**.
+- Catatan cache: WhatsApp/medsos nge-cache preview **per URL**. Setelah OG
+  berubah, link lama perlu di-refresh (Facebook Sharing Debugger → "Scrape
+  Again") atau dibagikan ulang dengan versi URL (`?v=2`); canonical tetap bersih.
 
 ---
 

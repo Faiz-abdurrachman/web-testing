@@ -190,9 +190,11 @@ transisi. Menu mobile (≤1050) = **full-screen** dengan animasi buka/tutup
 
 ---
 
-## 8b. Halaman Recruitment (dibangun bertahap)
+## 8b. Halaman Recruitment (LENGKAP)
 
-Route `/recruitment`, dibangun **per section**. Yang sudah ada: **hero**.
+Route `/recruitment`. **LENGKAP**: hero → Who Should Join → What You Will Do →
+Available Roles → Selection Timeline → FAQ → Snippets → CTA → Footer, plus 6
+halaman detail role. Bagian di bawah ini merinci tiap section.
 
 - Aset referensi: `assets/assets recruitment page/`.
 - Hero: Figma node `770:15523` (dinamai "About Us Hero Section" di file, tapi

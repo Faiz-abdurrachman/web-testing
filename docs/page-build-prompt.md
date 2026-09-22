@@ -51,12 +51,15 @@ LANGKAH 4 — Verifikasi (LOOP sampai presisi, jangan berhenti sebelum pas):
 - Tambah pengecekan di scripts/verify.mjs:
   * geometri desktop EXACT (assert.deepEqual: x/y/width/height section + elemen kunci),
   * screenshot section + diff vs PNG referensi (tulis ke artifacts/),
-  * containment teks + overflow horizontal 320–1920px,
+  * containment teks + overflow horizontal 320–3840px,
   * 0 browser error.
 - Saat screenshot, elemen yang TIDAK ada di PNG referensi harus disembunyikan
   (lihat setNavbarHidden di verify.mjs; kalau ada overlay UI baru, tambahkan ke list).
 - Target: `npm run build` 0 error; `node scripts/verify.mjs` exit 0; 0 browser
   error; skor diff ~< 2.5/255 (sisa wajar dari rasterisasi font + resampling gambar).
+- Jalankan juga `node scripts/responsive-audit.mjs` (14 halaman × 26 lebar) dan
+  `npm run seo:audit` (setelah build) — dua-duanya harus PASS. Kalau ada section
+  ber-carousel, panah: kiri-kanan di desktop, bawah di mobile (lihat AGENTS gotchas).
 - Kalau geometri/diff belum pas: UKUR, perbaiki, ulangi. Jangan klaim selesai
   sebelum benar-benar sesuai.
 
@@ -71,7 +74,7 @@ CHECKLIST PRESISI (patokan "beres"):
 - [ ] PNG = otoritas saat CSS Figma beda.
 - [ ] Semua teks/tombol/border = HTML/CSS asli.
 - [ ] Geometri element kunci PASS (deepEqual) di verify.
-- [ ] Overflow 320–1920px aman, teks tidak terpotong.
+- [ ] Overflow 320–3840px aman, teks tidak terpotong.
 - [ ] prefers-reduced-motion ada kalau ada animasi.
 - [ ] build 0 error, verify exit 0, 0 browser error.
 - [ ] docs/assets.md + README + HANDOVER diupdate.

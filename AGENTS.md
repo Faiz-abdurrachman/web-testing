@@ -1,7 +1,8 @@
 # AGENTS.md — instructions for AI agents
 
-Project: **Data Sorcerers** — a static Astro landing site + 6 domain-detail
-pages. Goal: **pixel-accurate to Figma/PNG** with lightweight HTML/CSS.
+Project: **Data Sorcerers** — a static Astro landing site, a Recruitment page
+(+ 6 role-detail pages) and 6 domain-detail pages. Goal: **pixel-accurate to
+Figma/PNG** with lightweight HTML/CSS.
 
 Human-facing docs: `HANDOVER.md` (full context) and `docs/assets.md`
 (per-section provenance + Figma nodes). Read those for "why"; this file is the
@@ -170,7 +171,7 @@ When adding/changing a section, update `docs/assets.md` and the relevant
     `DomainRail` (home Domains + recruitment WhoShouldJoin).
   - Button: hover = **swap warna** (dark↔violet, white→violet).
   - Detail page: gradient **full-bleed** (`<main>` 100% + inner max-1440).
-  - Jangan pakai lebar fixed-px yang bisa overflow; tes 320–1920px.
+  - Jangan pakai lebar fixed-px yang bisa overflow; tes 320–3840px.
   - Kalau `verify.mjs` full OOM-kill Chromium (mesin RAM kecil) → verifikasi
     per-section pakai skrip Playwright ringan.
 - Open TODO: Nasalization webfont, real project data, tanggal recruitment,

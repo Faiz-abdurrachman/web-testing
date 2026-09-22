@@ -232,7 +232,9 @@ score were unchanged when this section was added.
 
 ## Recruitment page — Hero
 
-Built section by section; only the hero exists so far. Route: `/recruitment`.
+Route: `/recruitment`. The page is complete (hero → Who Should Join → What You
+Will Do → Available Roles → Selection Timeline → FAQ → Snippets → CTA → Footer);
+this section documents the hero.
 
 - Figma node: `770:15523`. The node is named "About Us Hero Section" in the
   file, but its content (and the supplied `hero.txt`) is the Recruitment page
@@ -318,7 +320,8 @@ Section.png`, 5760 × 3156 (1440 × 789 at 4×).
   boxes exactly, diffs against the reference (~3.0/255; the card art carries the
   same residual as the homepage, and this reference PNG's cards differ slightly
   from the homepage export), and checks overflow and text from 320px to 1920px.
-- Remaining sections and the footer are not built yet.
+- The remaining recruitment sections and the footer are documented below; the
+  page reuses the shared `Footer.astro`.
 
 ## Recruitment page — Role detail
 
