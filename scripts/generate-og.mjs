@@ -1,7 +1,7 @@
 import sharp from 'sharp';
 import { mkdir, writeFile } from 'node:fs/promises';
 
-const HERO = 'assets/assets home page/hero section/Gambar Hero Section.png';
+const HERO = 'assets/background/hd/hero.png';
 const HEADLINE =
   'assets/assets home page/hero section/SORCERY IN DATA MAGIC IN AI.png';
 const LOGO = 'public/images/logo.png';

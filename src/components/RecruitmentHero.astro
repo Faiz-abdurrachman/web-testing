@@ -4,16 +4,8 @@ import Button from './Button.astro';
 
 <section class="recruitment-hero" aria-labelledby="recruitment-hero-title">
   <picture class="artwork">
-    <source
-      srcset="
-        /images/recruitment/hero-1440.webp 1440w,
-        /images/recruitment/hero-2880.webp 2880w
-      "
-      sizes="100vw"
-      type="image/webp"
-    />
     <img
-      src="/images/recruitment/hero-1440.webp"
+      src="/images/backgrounds/recruitment.webp"
       width="1440"
       height="901"
       alt=""
@@ -42,8 +34,8 @@ import Button from './Button.astro';
     align-items: center;
     justify-content: center;
     gap: 63px;
-    min-height: 866px;
-    padding: 0 var(--page-gutter);
+    min-height: min(866px, 100svh);
+    padding: 140px var(--page-gutter) 80px;
     overflow: clip;
     text-align: center;
   }
@@ -57,7 +49,18 @@ import Button from './Button.astro';
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: top;
+    object-position: center;
+  }
+  .artwork::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgb(5 5 7 / 15%),
+      rgb(5 5 7 / 45%) 50%,
+      transparent
+    );
   }
   .hero-content {
     display: flex;
@@ -74,7 +77,7 @@ import Button from './Button.astro';
     font-size: 80px;
     font-weight: 400;
     line-height: 98px;
-    background: linear-gradient(180deg, #fff 0%, #707070 55%, #fff 100%);
+    background: linear-gradient(180deg, #fff 0%, #d8d1ed 55%, #fff 100%);
     background-clip: text;
     color: transparent;
   }
@@ -90,14 +93,27 @@ import Button from './Button.astro';
     font-weight: 500;
     line-height: 27px;
   }
-  @media (min-width: 1600px) {
-    .recruitment-hero {
-      min-height: max(866px, 60.138889vw);
+  @media (min-width: 1921px) {
+    .artwork {
+      left: 50%;
+      right: auto;
+      width: 1920px;
+      transform: translateX(-50%);
+      mask-image: linear-gradient(
+        90deg,
+        transparent,
+        #000 12%,
+        #000 88%,
+        transparent
+      );
+    }
+    .artwork img {
+      object-position: center bottom;
     }
   }
   @media (max-width: 1100px) {
     .recruitment-hero {
-      min-height: 760px;
+      min-height: min(760px, 100svh);
       gap: 48px;
     }
     h1 {
@@ -107,10 +123,10 @@ import Button from './Button.astro';
   }
   @media (max-width: 600px) {
     .recruitment-hero {
-      min-height: max(640px, 100svh);
+      min-height: 0;
       gap: 40px;
       justify-content: flex-start;
-      padding-top: 170px;
+      padding-top: 140px;
     }
     .hero-content {
       gap: 24px;

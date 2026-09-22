@@ -133,7 +133,7 @@ const destinations: Record<string, string> = {
   .nav-link {
     position: relative;
     padding: 8px 14px;
-    color: #707070;
+    color: #ede8ff;
     font-size: 18px;
     font-weight: 500;
     line-height: 27px;
@@ -142,6 +142,9 @@ const destinations: Record<string, string> = {
     transition:
       color 0.25s ease,
       background-color 0.25s ease;
+  }
+  .nav-link[aria-disabled='true'] {
+    color: #b5aec9;
   }
   a.nav-link:hover,
   a.nav-link:focus-visible {
