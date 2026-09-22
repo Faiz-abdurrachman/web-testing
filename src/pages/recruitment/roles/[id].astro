@@ -8,8 +8,19 @@ export function getStaticPaths() {
 }
 
 const { role } = Astro.props;
+
+const firstSentence = role.about.split(/(?<=\.)\s/)[0];
+let description = firstSentence;
+if (description.length > 160)
+  description = description.slice(0, 157).trimEnd() + '…';
+else if (description.length < 60)
+  description = `${role.title} — open role at Data Sorcerers. See the role details, requirements and how to apply.`;
 ---
 
-<BaseLayout title={`${role.title} — Data Sorcerers`}>
+<BaseLayout
+  title={`${role.title} — Open Role — Data Sorcerers`}
+  description={description}
+  type="article"
+>
   <RoleDetail role={role} />
 </BaseLayout>

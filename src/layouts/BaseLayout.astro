@@ -2,8 +2,40 @@
 import '../styles/global.css';
 interface Props {
   title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  noindex?: boolean;
 }
-const { title = 'Data Sorcerers — Sorcery in Data, Magic in AI' } = Astro.props;
+const {
+  title = 'Data Sorcerers — Sorcery in Data, Magic in AI',
+  description = 'An AI & Data Innovation Community where people learn, experiment, research, and build meaningful technology together.',
+  image = '/og/og-default.jpg',
+  type = 'website',
+  noindex = false,
+} = Astro.props;
+
+const site = Astro.site ?? new URL('https://community-web.vercel.app');
+const pageUrl = new URL(Astro.url.pathname, site).href;
+const imageUrl = new URL(image, site).href;
+const imageAlt = 'Data Sorcerers — Sorcery in Data, Magic in AI';
+
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Data Sorcerers',
+    url: site.href,
+    logo: new URL('/icon-512.png', site).href,
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Data Sorcerers',
+    url: site.href,
+  },
+];
 ---
 
 <!doctype html>
@@ -11,12 +43,38 @@ const { title = 'Data Sorcerers — Sorcery in Data, Magic in AI' } = Astro.prop
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
     <meta
-      name="description"
-      content="An AI & Data Innovation Community where people learn, experiment, research, and build meaningful technology together."
+      name="robots"
+      content={noindex ? 'noindex, nofollow' : 'index, follow'}
     />
+    <link rel="canonical" href={pageUrl} />
     <meta name="theme-color" content="#050507" />
-    <link rel="icon" href="/images/logo.png" type="image/png" />
+    <meta name="author" content="Data Sorcerers" />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="Data Sorcerers" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <meta name="twitter:image:alt" content={imageAlt} />
+
     <link
       rel="preload"
       href="/fonts/manrope-400.ttf"
@@ -38,7 +96,11 @@ const { title = 'Data Sorcerers — Sorcery in Data, Magic in AI' } = Astro.prop
       type="font/ttf"
       crossorigin
     />
-    <title>{title}</title>
+
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(structuredData)}
+    ></script>
   </head>
   <body>
     <a class="skip-link" href="#main">

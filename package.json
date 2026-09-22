@@ -12,6 +12,8 @@
     "build": "astro check && astro build",
     "preview": "astro preview --host 0.0.0.0",
     "verify:visual": "node scripts/verify.mjs",
+    "assets:og": "node scripts/generate-og.mjs",
+    "seo:audit": "node scripts/seo-audit.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
@@ -20,6 +22,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",
+    "@astrojs/sitemap": "^3.7.4",
     "@playwright/test": "1.63.0",
     "prettier": "3.9.8",
     "prettier-plugin-astro": "1.0.1",

@@ -10,6 +10,10 @@ export function getStaticPaths() {
 const { hod } = Astro.props;
 ---
 
-<BaseLayout title={`${hod.title} — Data Sorcerers`}>
+<BaseLayout
+  title={`${hod.title} — Data Sorcerers`}
+  description={hod.description}
+  type="article"
+>
   <HoDSDetail hod={hod} />
 </BaseLayout>
