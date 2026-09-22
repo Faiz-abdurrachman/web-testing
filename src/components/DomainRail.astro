@@ -67,6 +67,32 @@ const { base = '/hods', suffix = '' } = Astro.props;
     rail.addEventListener('scroll', sync, { passive: true });
     sync();
 
+    // Touch already scrolls natively; add click-drag for mouse users.
+    let dragging = false;
+    let startX = 0;
+    let startLeft = 0;
+    rail.addEventListener('pointerdown', (event) => {
+      if (event.pointerType !== 'mouse' || event.button !== 0) return;
+      dragging = true;
+      startX = event.clientX;
+      startLeft = rail.scrollLeft;
+      rail.classList.add('is-dragging');
+      rail.setPointerCapture(event.pointerId);
+    });
+    rail.addEventListener('pointermove', (event) => {
+      if (!dragging) return;
+      rail.scrollLeft = startLeft - (event.clientX - startX);
+    });
+    const endDrag = (event: PointerEvent) => {
+      if (!dragging) return;
+      dragging = false;
+      rail.classList.remove('is-dragging');
+      if (rail.hasPointerCapture(event.pointerId))
+        rail.releasePointerCapture(event.pointerId);
+    };
+    rail.addEventListener('pointerup', endDrag);
+    rail.addEventListener('pointercancel', endDrag);
+
     rail.addEventListener('keydown', (event) => {
       const positions: Record<string, number> = {
         ArrowLeft: rail.scrollLeft - step(),
@@ -118,6 +144,10 @@ const { base = '/hods', suffix = '' } = Astro.props;
     overscroll-behavior-x: contain;
     padding-inline: max(var(--page-gutter), calc((100vw - 1280px) / 2));
     scrollbar-width: none;
+    cursor: grab;
+  }
+  .domain-rail.is-dragging {
+    cursor: grabbing;
   }
   .domain-rail::-webkit-scrollbar {
     display: none;
@@ -128,17 +158,16 @@ const { base = '/hods', suffix = '' } = Astro.props;
   }
   .rail-arrow {
     position: absolute;
-    top: 50%;
+    bottom: -66px;
     z-index: 2;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 52px;
     height: 52px;
-    transform: translateY(-50%);
-    border: 1px solid rgb(203 197 255 / 45%);
+    border: 1px solid rgb(203 197 255 / 60%);
     border-radius: 50%;
-    background: rgb(16 9 35 / 72%);
+    background: rgb(16 9 35 / 85%);
     backdrop-filter: blur(6px);
     cursor: pointer;
   }
@@ -152,10 +181,10 @@ const { base = '/hods', suffix = '' } = Astro.props;
     stroke-linejoin: round;
   }
   .rail-arrow.prev {
-    left: 20px;
+    left: max(var(--page-gutter), calc((100vw - 1280px) / 2));
   }
   .rail-arrow.next {
-    right: 20px;
+    right: max(var(--page-gutter), calc((100vw - 1280px) / 2));
   }
   .rail-arrow:disabled {
     opacity: 0.3;
@@ -167,7 +196,19 @@ const { base = '/hods', suffix = '' } = Astro.props;
       gap: 24px;
     }
     .rail-arrow {
-      display: none;
+      width: 40px;
+      height: 40px;
+      bottom: -52px;
+    }
+    .rail-arrow svg {
+      width: 20px;
+      height: 20px;
+    }
+    .rail-arrow.prev {
+      left: 24px;
+    }
+    .rail-arrow.next {
+      right: 24px;
     }
   }
 </style>

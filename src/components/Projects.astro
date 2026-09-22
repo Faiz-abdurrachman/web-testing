@@ -247,6 +247,11 @@ import { projects } from '../data/projects';
     margin-top: 82px;
     perspective: 1800px;
     outline: none;
+    touch-action: pan-y;
+    cursor: grab;
+  }
+  .project-stage:active {
+    cursor: grabbing;
   }
   .project-stage:focus-visible {
     outline: 2px solid #bba7ff;
@@ -377,17 +382,16 @@ import { projects } from '../data/projects';
   }
   .project-arrow {
     position: absolute;
-    top: 50%;
+    bottom: -66px;
     z-index: 200;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 52px;
     height: 52px;
-    transform: translateY(-50%);
-    border: 1px solid rgb(203 197 255 / 45%);
+    border: 1px solid rgb(203 197 255 / 60%);
     border-radius: 50%;
-    background: rgb(16 9 35 / 72%);
+    background: rgb(16 9 35 / 85%);
     backdrop-filter: blur(6px);
     cursor: pointer;
   }
@@ -401,10 +405,10 @@ import { projects } from '../data/projects';
     stroke-linejoin: round;
   }
   .project-arrow.prev {
-    left: 4px;
+    left: 0;
   }
   .project-arrow.next {
-    right: 4px;
+    right: 0;
   }
   .project-arrow:disabled {
     opacity: 0.25;
@@ -446,7 +450,19 @@ import { projects } from '../data/projects';
       margin-top: 40px;
     }
     .project-arrow {
-      display: none;
+      width: 40px;
+      height: 40px;
+      bottom: -52px;
+    }
+    .project-arrow svg {
+      width: 20px;
+      height: 20px;
+    }
+    .project-arrow.prev {
+      left: 0;
+    }
+    .project-arrow.next {
+      right: 0;
     }
   }
   @media (prefers-reduced-motion: reduce) {
