@@ -31,6 +31,10 @@ saturate(140%)`. After an 8px scroll it keeps a **blur-only** treatment
   background panel and no hairline border, so it never reads as a box. The mask
   keeps the blur visible across most of the bar (`#000 65%` → transparent). This
   is an interaction addition; the hero comparison is unaffected geometrically.
+  The production build keeps **both** `backdrop-filter` and
+  `-webkit-backdrop-filter` (esbuild `cssMinify` in `astro.config.mjs`); the
+  default Lightning CSS pass dropped the unprefixed one, which removed the blur
+  in Firefox on the deployed site.
 - Below 1050px the desktop menu is replaced by a full-screen `<details>` menu: a
   borderless blurred overlay with a soft edge, JS-animated open/close, a
   hamburger that morphs into an X, body scroll lock and a reduced-motion
@@ -599,5 +603,7 @@ unchanged, so the section comparisons are unaffected.
     font.
 - The same script writes the favicons (`favicon.ico`, `favicon.png`,
   `apple-touch-icon.png`, `icon-192/512.png`) and `site.webmanifest` from the logo.
+  The icon backgrounds are **transparent** (the logo is centred on an empty
+  canvas, not composited on a dark fill).
 - `BaseLayout` points every page's canonical, Open Graph and Twitter tags at this
   card; the canonical origin comes from `site` (`SITE_URL`) in `astro.config.mjs`.

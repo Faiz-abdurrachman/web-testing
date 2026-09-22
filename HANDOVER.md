@@ -159,7 +159,9 @@ ke bawah, **tanpa** background panel dan **tanpa** garis tepi (dulu ada panel
 `rgb(5 5 7 / 58%)` + hairline; dihapus agar tidak terlihat seperti kotak).
 Hover link nav = pill membulat (`border-radius:999px`, bg putih 10%) dengan
 transisi. Menu mobile (≤1050) = **full-screen** dengan animasi buka/tutup
-(lihat §8b).
+(lihat §8b). Build memakai `vite.build.cssMinify: 'esbuild'` supaya
+`backdrop-filter` **unprefixed + `-webkit-`** dua-duanya ikut ke CSS produksi
+(lihat §16.17).
 
 ---
 
@@ -516,6 +518,11 @@ projects 5.104 recruitment 2.174 footer 2.666
     `height:auto` tetap dipasang supaya tetap jalan tanpa JS. Panah: chevron-down
     (`chevron-down.svg` = path `arrow-right` dirotasi 90°) → `rotate(180deg)` saat
     terbuka. Dua-duanya di-nonaktifkan di `prefers-reduced-motion`.
+17. **Minifier build bisa buang properti CSS**: Lightning CSS (default) menghapus
+    `backdrop-filter` **unprefixed**, cuma nyisa `-webkit-` → blur navbar hilang
+    di Firefox saat deploy padahal di `npm run dev` kelihatan. Fix:
+    `vite.build.cssMinify: 'esbuild'` di `astro.config.mjs` (dua prefix ikut).
+    **Selalu verifikasi CSS modern di `dist/`/situs live**, jangan cuma dev.
 
 ---
 
@@ -561,7 +568,8 @@ git log --oneline            # lihat checkpoint
 - **Share card**: `public/og/og-default.jpg` (1200×630 JPEG), dibuat
   `scripts/generate-og.mjs` (`npm run assets:og`) dari `Gambar Hero Section.png`
   - logo + `SORCERY IN DATA MAGIC IN AI.png`, pakai overlay gradient biar teks di
-    kiri kebaca. Favicon/manifest juga dibuat skrip yang sama.
+    kiri kebaca. Favicon/manifest juga dibuat skrip yang sama; favicon
+    **transparan** (tanpa background gelap).
 - **robots + sitemap**: `src/pages/robots.txt.ts` (pakai `Astro.site`);
   `@astrojs/sitemap` menulis `sitemap-index.xml` + `sitemap-0.xml` (14 URL).
 - **Audit**: `npm run seo:audit` membaca `dist/**/*.html` dan memvalidasi title

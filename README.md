@@ -343,8 +343,12 @@ Chromium sudah `--disable-dev-shm-usage --disable-gpu` untuk bantu.
   `type` (`article` untuk halaman detail), `noindex`.
 - **Share card**: `public/og/og-default.jpg` (1200 × 630) — regenerate dengan
   `npm run assets:og` (dari `Gambar Hero Section.png` + logo + headline
-  `SORCERY IN DATA MAGIC IN AI.png`). Skrip yang sama juga bikin favicon +
-  `site.webmanifest`.
+  `SORCERY IN DATA MAGIC IN AI.png`). Skrip yang sama juga bikin favicon
+  (**transparan**, tanpa background) + `site.webmanifest`.
+- **Minifier**: `astro.config.mjs` pakai `vite.build.cssMinify: 'esbuild'` supaya
+  properti modern (mis. `backdrop-filter` unprefixed **dan** `-webkit-`) nggak
+  dibuang minifier. **Cek fitur CSS di `dist/`/situs live, jangan cuma
+  `npm run dev`.**
 - **robots + sitemap**: `src/pages/robots.txt.ts` + `@astrojs/sitemap`
   (`sitemap-index.xml`, 14 URL).
 - **Validasi**: `npm run build && npm run seo:audit` → harus **PASS**.

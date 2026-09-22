@@ -38,6 +38,9 @@ Cara kerja & verifikasi:
 - npm run assets:og → regen og share image + favicon + manifest
 - npm run seo:audit → validasi meta/OG/canonical/sitemap di dist (setelah build;
   HARUS exit 0)
+- Fitur CSS modern (mis. `backdrop-filter`): verifikasi di `dist/`/situs live,
+  bukan cuma dev — minifier bisa buang properti (repo pakai `vite.build.cssMinify:
+  'esbuild'`).
 
 Kalau bikin/ubah section: update docs/assets.md + tambah/cek assertion di
 scripts/verify.mjs (geometri + containment + overflow 320–1920px). Baca bagian
