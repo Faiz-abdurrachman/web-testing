@@ -15,7 +15,8 @@ const {
   noindex = false,
 } = Astro.props;
 
-const site = Astro.site ?? new URL('https://community-web.vercel.app');
+const site =
+  Astro.site ?? new URL('https://data-sorcerers-community-sigma.vercel.app');
 const pageUrl = new URL(Astro.url.pathname, site).href;
 const imageUrl = new URL(image, site).href;
 const imageAlt = 'Data Sorcerers — Sorcery in Data, Magic in AI';

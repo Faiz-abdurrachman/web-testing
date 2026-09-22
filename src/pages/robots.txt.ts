@@ -3,7 +3,8 @@ import type { APIRoute } from 'astro';
 export const prerender = true;
 
 export const GET: APIRoute = ({ site }) => {
-  const origin = site ?? new URL('https://community-web.vercel.app');
+  const origin =
+    site ?? new URL('https://data-sorcerers-community-sigma.vercel.app');
   const body = [
     'User-agent: *',
     'Allow: /',

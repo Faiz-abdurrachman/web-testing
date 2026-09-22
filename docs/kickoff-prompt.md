@@ -58,7 +58,7 @@ Yang perlu kamu tahu sekarang:
   **kiri-kanan di desktop, bawah di mobile** (Projects & DomainRail ganti di
   1050px, Snippets di 760px). Pakai `scripts/responsive-audit.mjs` buat cek cepat.
 - SEO/OG sudah ada: origin `site` dari `SITE_URL` (default
-  `https://community-web.vercel.app`) → canonical + Open Graph/Twitter + JSON-LD
+  `https://data-sorcerers-community-sigma.vercel.app`) → canonical + Open Graph/Twitter + JSON-LD
   di `BaseLayout`, `robots.txt`, sitemap (`@astrojs/sitemap`), share card
   `public/og/og-default.jpg` (regen `npm run assets:og`), validasi
   `npm run seo:audit`. **Ganti origin kalau domain final beda.**

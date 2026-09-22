@@ -52,7 +52,7 @@ or the dev server makes `waitUntil: networkidle` hang (see Verification workflow
 ## SEO & sharing
 
 - `astro.config.mjs` sets `site` from `SITE_URL` (default
-  `https://community-web.vercel.app`). It drives canonical, `og:url` and the
+  `https://data-sorcerers-community-sigma.vercel.app`). It drives canonical, `og:url` and the
   sitemap — change it there (or set `SITE_URL`) when the domain changes.
 - Every page goes through `BaseLayout`, which emits title, description,
   canonical, Open Graph, Twitter (`summary_large_image`), icons, manifest and
@@ -158,7 +158,7 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   Lihat `git log`.
 - SEO/OG selesai: canonical + Open Graph/Twitter + JSON-LD + `robots.txt` +
   sitemap (`@astrojs/sitemap`) + share card `public/og/og-default.jpg`. Origin
-  dari `SITE_URL` (default `https://community-web.vercel.app`) — **ganti begitu
+  dari `SITE_URL` (default `https://data-sorcerers-community-sigma.vercel.app`) — **ganti begitu
   domain final diketahui**. `npm run seo:audit` PASS.
 - Motion (GSAP + Three.js) masih **di-revert**: `5feea0d` → `f925e1d`. Kalau
   dilanjutkan, pakai `gsap.matchMedia` + `prefers-reduced-motion` + re-verify.

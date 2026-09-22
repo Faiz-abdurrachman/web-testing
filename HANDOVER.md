@@ -438,7 +438,7 @@ projects 5.104 recruitment 2.174 footer 2.666
   buka/tutup, hover pill membulat, panah carousel **desktop kiri-kanan / mobile
   bawah**, plus `scripts/responsive-audit.mjs`. Lihat `git log`.
 - SEO/OG: origin `site` dari `SITE_URL` (default
-  `https://community-web.vercel.app`); canonical + OG/Twitter + JSON-LD di
+  `https://data-sorcerers-community-sigma.vercel.app`); canonical + OG/Twitter + JSON-LD di
   `BaseLayout`; `robots.txt` (endpoint `src/pages/robots.txt.ts`); sitemap
   `@astrojs/sitemap`; share card `public/og/og-default.jpg` (dibuat via
   `npm run assets:og`); validasi `npm run seo:audit` **PASS**. **Ganti origin
@@ -544,7 +544,7 @@ git log --oneline            # lihat checkpoint
 ## 19. SEO, Open Graph & sitemap
 
 - **Origin kanonik**: `astro.config.mjs` → `site` dari `SITE_URL` (default
-  `https://community-web.vercel.app`). Ini yang dipakai canonical, `og:url`,
+  `https://data-sorcerers-community-sigma.vercel.app`). Ini yang dipakai canonical, `og:url`,
   sitemap, dan JSON-LD. Ganti default (atau set `SITE_URL` di Vercel) begitu
   domain final diketahui.
 - **`BaseLayout.astro`** meng-emit: `<title>`, meta description, `robots`,
