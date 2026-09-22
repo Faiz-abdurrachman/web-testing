@@ -164,6 +164,18 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   plus hover pill membulat; panah carousel **kiri-kanan di desktop, bawah di
   mobile**; skrip `scripts/responsive-audit.mjs` (14 halaman × 26 lebar) ALL PASS.
   Lihat `git log`.
+- **Available Roles cards (redesign)**: proporsional penuh — `aspect-ratio:
+1350 / 795` + `container-type: inline-size`, semua ukuran dalam `cqw`; border
+  emas inset via CSS `::after` + `mask-composite`; sparkle SVG 4 sudut
+  (`public/images/recruitment/card-sparkle.svg`). Judul memakai **Title Case** dari
+  `domains.ts` (bukan all-caps dari `roles.ts`); latar/teks bertint violet
+  (`#6c3bff`/`#9b7bff`/`#ede8ff`). Chip = label dalam tanda kurung. Geometri
+  di-assert di `verify.mjs` (section `840.65625`, list `507.65625`, kartu
+  `241.828125`). Sumber referensi: `assets/card baru/*.png` (lokal, **untracked**).
+- **Hero mobile fluid (≤600px)**: h1/body/gap/padding pakai `clamp()` fluid +
+  `min-height: clamp(560px, 88svh, 760px)` dengan konten dipusatkan vertikal;
+  judul konsisten 2 baris sampai 320px; tombol home stack ≤480px. **≥601px tidak
+  diubah** — tablet/desktop dan diff PNG hero 1440 tetap (jaga ini saat mengedit).
 - SEO/OG selesai: canonical + Open Graph/Twitter + JSON-LD + `robots.txt` +
   sitemap (`@astrojs/sitemap`) + share card `public/og/og-default.jpg`. Origin
   dari `SITE_URL` (default `https://data-sorcerers-community-sigma.vercel.app`) — **ganti begitu

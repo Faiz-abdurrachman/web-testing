@@ -47,8 +47,10 @@ scripts/verify.mjs (geometri + containment + overflow 320–1920px). Baca bagian
 "Verification workflow" di AGENTS.md dulu (reducedMotion + setNavbarHidden).
 
 Yang perlu kamu tahu sekarang:
-- HEAD 'main' (lihat git log; checkpoint fitur recruitment = ff7fe20) = homepage + halaman Recruitment LENGKAP: hero → Who
-  Should Join → What You Will Do → Available Roles → Selection Timeline → FAQ →
+- HEAD 'main' (lihat `git log`; checkpoint fitur recruitment = `ff7fe20`,
+  lanjutan mentor revision = `06586ac`, balance hero mobile = `51d565a`) = homepage
+  + halaman Recruitment LENGKAP: hero →
+  Who Should Join → What You Will Do → Available Roles → Selection Timeline → FAQ →
   Snippets → CTA → Footer, plus halaman detail role (/recruitment/roles/{id},
   di-link dari Available Roles) + hover button.
 - Detail HoDS (home) = layout tab; detail role (recruitment) = layout lain
@@ -60,6 +62,21 @@ Yang perlu kamu tahu sekarang:
   instan saat prefers-reduced-motion) + hover pill membulat; panah carousel
   **kiri-kanan di desktop, bawah di mobile** (Projects & DomainRail ganti di
   1050px, Snippets di 760px). Pakai `scripts/responsive-audit.mjs` buat cek cepat.
+- **Available Roles (redesign kartu terbaru)**: kartu proporsional penuh —
+  `aspect-ratio: 1350 / 795` + `container-type: inline-size`, semua metrik `cqw`;
+  border emas inset (CSS `::after` + `mask-composite`), sparkle SVG 4 sudut
+  (`public/images/recruitment/card-sparkle.svg`). Judul pakai **Title Case** dari
+  `domains.ts` (bukan all-caps), latar/teks bertint violet (`#6c3bff`/`#9b7bff`/
+  `#ede8ff`). Chip = label dalam tanda kurung. Referensi aset baru:
+  `assets/card baru/*.png` (lokal, untracked). Geometri di-assert di `verify.mjs`
+  (section `840.65625`, list `507.65625`, kartu `241.828125`). Detail:
+  `docs/assets.md` → "Available Roles — card redesign".
+- **Hero mobile fluid (23 Sep 2026)**: home & recruitment di `≤600px` pakai
+  `clamp()` fluid untuk h1/body/gap/padding + `min-height: clamp(560px, 88svh,
+  760px)` dengan konten dipusatkan vertikal; judul konsisten **2 baris** sampai
+  320px; tombol home **stack full-width ≤480px**. **≥601px tidak diubah** (tablet/
+  desktop dan diff PNG 1440 tetap). Detail: `docs/assets.md` → "Hero mobile
+  fluid scale".
 - SEO/OG sudah ada: origin `site` dari `SITE_URL` (default
   `https://data-sorcerers-community-sigma.vercel.app`) → canonical + Open Graph/Twitter + JSON-LD
   di `BaseLayout`, `robots.txt`, sitemap (`@astrojs/sitemap`), share card
@@ -77,5 +94,5 @@ Yang perlu kamu tahu sekarang:
 Sebelum mulai task di bawah: ringkas dulu pemahamanmu + rencana singkat, lalu kerjakan.
 
 TASK:
-<pahami semaunya dulu>
+<pahami semuanya dulu>
 ```

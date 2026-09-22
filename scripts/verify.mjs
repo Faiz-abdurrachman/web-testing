@@ -1412,17 +1412,17 @@ try {
     });
   assert.deepEqual(availableRolesGeometry, {
     width: 1440,
-    height: 1060.9375,
+    height: 840.65625,
     top: 2558,
     heading: { x: 80, y: 80, width: 1280, height: 68 },
     copy: { x: 80, y: 168, width: 1280, height: 27 },
-    list: { x: 80, y: 253, width: 1280, height: 727.9375 },
-    rows: [253, 636.359375].flatMap((y, row) =>
+    list: { x: 80, y: 253, width: 1280, height: 507.65625 },
+    rows: [253, 518.828125].flatMap((y) =>
       [80, 514.65625, 949.328125].map((x, col) => ({
         x,
         y,
         width: col === 1 ? 410.671875 : 410.65625,
-        height: row === 0 ? 359.359375 : 344.578125,
+        height: 241.828125,
       })),
     ),
   });
@@ -1440,6 +1440,9 @@ try {
     .locator('.available-roles')
     .screenshot({ path: 'artifacts/available-roles-desktop.png' });
   // Mentor-approved redesign: the old six-row PNG is no longer its reference.
+  // The 23 Sep 2026 card design (assets/card baru/) drives the border/fill;
+  // its text is rebuilt in HTML/CSS with the site fonts, so this checks the
+  // new geometry and containment rather than a pixel diff.
   const availableRolesSizes = [320, 390, 768, 1024, 1440, 1680, 1920];
   const availableRolesResponsive = [];
   for (const width of availableRolesSizes) {
@@ -1457,7 +1460,11 @@ try {
     const availableRolesIssues = await page
       .locator('.available-roles')
       .evaluate((section) =>
-        [...section.querySelectorAll('h2, p, .role-name')]
+        [
+          ...section.querySelectorAll(
+            'h2, p, .role-name, .role-tags li, .role-link',
+          ),
+        ]
           .filter((element) => {
             const box = element.getBoundingClientRect();
             return (
@@ -1518,7 +1525,7 @@ try {
   assert.deepEqual(selectionTimelineGeometry, {
     width: 1440,
     height: 815,
-    top: 3618.9375,
+    top: 3398.65625,
     heading: { x: 80, y: 80, width: 1280, height: 68 },
     head: { x: 80, y: 206, width: 1280, height: 78 },
     body: { x: 80, y: 284, width: 1280, height: 451 },
@@ -1645,7 +1652,7 @@ try {
   assert.deepEqual(faqGeometry, {
     width: 1440,
     height: 986,
-    top: 4433.9375,
+    top: 4213.65625,
     heading: { x: 80, y: 80, width: 1280, height: 68 },
     list: { x: 80, y: 206, width: 1280, height: 700 },
     items: [
@@ -1763,7 +1770,7 @@ try {
   assert.deepEqual(snippetsGeometry, {
     width: 1440,
     height: 900,
-    top: 5419.9375,
+    top: 5199.65625,
     heading: { x: 80, y: 40, width: 1280, height: 68 },
     gallery: { x: 80, y: 166, width: 1280, height: 694 },
     hero: { x: 80, y: 166, width: 1280, height: 556 },
@@ -1886,7 +1893,7 @@ try {
     {
       width: 1440,
       height: 537,
-      top: 6319.9375,
+      top: 6099.65625,
       panel: { x: 80, y: 80, width: 1280, height: 377 },
       actions: { x: 617.5, y: 327, width: 205, height: 51 },
       glow: { x: 349.828125, y: 351, width: 1000.328125, height: 271.5 },
@@ -1983,7 +1990,7 @@ try {
   assert.deepEqual(recruitFooterGeometry, {
     width: 1440,
     height: 556,
-    top: 6856.9375,
+    top: 6636.65625,
   });
   await page.locator('.footer').scrollIntoViewIfNeeded();
   await page

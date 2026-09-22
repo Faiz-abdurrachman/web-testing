@@ -238,11 +238,14 @@ halaman detail role. Bagian di bawah ini merinci tiap section.
   kartu tarot (artwork), connector SVG dekoratif, dan 8 label HTML/CSS di
   staircase diagonal (462 × 31). Background hitam. Di <1320px label distack,
   kartu/connector disembunyikan (adaptasi). Skor diff ~1.24/255.
-- "Available Roles" (Figma `661:1510`, 1440 × 910, di y2558): heading
-  Nasalization 56/68 kiri + copy Manrope 18/27, lalu 6 baris role `1280 × 77`
-  (gap 23, fill `rgba(255,255,255,.15)`, border gradient, dot + nama +
-  arrow-right). Tiap baris link ke `/recruitment/roles/{id}` — ini yang akhirnya
-  memakai halaman role detail. Skor diff ~2.8/255.
+- "Available Roles": **grid kartu 3/2/1** (bukan 6 baris `1280 × 77` lama).
+  Kartu proporsional penuh `aspect-ratio: 1350 / 795` + `container-type:
+inline-size` (semua metrik `cqw`), border emas inset (CSS `::after` +
+  `mask-composite`), sparkle SVG 4 sudut, judul **Title Case** dari `domains.ts`,
+  latar/teks bertint violet. Tiap kartu link ke `/recruitment/roles/{id}`.
+  Referensi desain baru: `assets/card baru/*.png`. Lihat `docs/assets.md` →
+  "Available Roles — card redesign"; geometri section (`840.65625`) di-assert di
+  `verify.mjs`. (Layout 6-baris yang lama di Figma `661:1510` sudah obsolete.)
 - "Selection Timeline" (Figma `661:1515`, 1440 × 815, di y3468): heading
   Nasalization 56/68 kiri, lalu tabel 1280 (header "Phase | Date" ungu + body
   6 baris phase) dengan border gradient & separator 1px. Kolom tanggal masih
@@ -448,7 +451,19 @@ projects 5.104 recruitment 2.174 footer 2.666
   `@astrojs/sitemap`; share card `public/og/og-default.jpg` (dibuat via
   `npm run assets:og`); validasi `npm run seo:audit` **PASS**. **Ganti origin
   begitu domain final beda.**
+- `7a6a984` = lab 3D hero (`/lab/hero-3d`, noindex, terpisah); `60cc01b`,
+  `c53d84d`, `06586ac` = **mentor revision 23 Sep 2026** (rail bounded, background
+  HD native, Available Roles preview grid, hero viewport-aware). `51d565a` =
+  balance tinggi hero mobile.
+- **Checkpoint terbaru (HEAD, lihat `git log`)**: **redesign kartu Available Roles**
+  (proporsional `cqw` + border emas + sparkle SVG + judul Title Case + tint violet)
+  dan **hero mobile fluid** (`≤600px` clamp + band `clamp(560px,88svh,760px)`,
+  konten terpusat; `≥601px` tidak berubah). Dokumen (AGENTS/HANDOVER/assets/
+  kickoff) disinkronkan di commit yang sama.
 - Pola commit: per fitur + aset referensi dipisah; push ke `main` (Vercel).
+- **Catatan aset lokal (untracked, sengaja)**: `assets/background/background/`
+  (~87 MB) dan `assets/card baru/` (6 PNG) ada di mesin dev tapi **tidak** di-commit
+  (ukuran + bukan milik repo/mentor). `.vercelignore` tetap mengecualikan `assets/`.
 
 ---
 
@@ -462,6 +477,8 @@ projects 5.104 recruitment 2.174 footer 2.666
       nav link selain Home & Recruitment, sebagian tombol hero/CTA, social +
       Terms/Privacy/Cookies di footer.
 - [x] ~~Halaman Recruitment~~ — **LENGKAP** (§8b).
+- [x] ~~Redesign kartu Available Roles (proporsional + border emas + sparkle)~~ dan
+      ~~hero mobile fluid (home & recruitment)~~ — selesai 23 Sep 2026 (§21).
 - [ ] Halaman lain yang ada di Figma tapi belum dibuat: **About Us,
       Hall of Frames, Partners, Contact**.
 - [ ] Audit tiap halaman detail HoDS / detail role kalau ada pembaruan Figma.
@@ -589,3 +606,47 @@ WebP, with their actual native resolution documented rather than described as 4K
 Run `node scripts/generate-backgrounds.mjs` to reproduce those assets and clean role
 images. Run `PREVIEW_URL=http://localhost:4331 node scripts/verify-feedback.mjs`
 for focused interaction and visual coverage, alongside the existing audits.
+
+## 21. Redesign kartu Available Roles + hero mobile fluid (23 September 2026)
+
+Dua perubahan terbaru (setelah `51d565a`). Detail aset di `docs/assets.md`.
+
+**A. Available Roles — kartu proporsional (menggantikan preview grid `06586ac`)**
+
+- Sumber desain baru: `assets/card baru/{data intelligence,core ai,language,
+vision,product,growth}.png` (1448 × 1086; kartu alpha-bbox ≈ 1358 × 797,
+  rasio ≈ 1,70). **Lokal & untracked** (tidak di-commit).
+- Kartu: `aspect-ratio: 1350 / 795` + `container-type: inline-size`; semua metrik
+  internal `cqw` → skala persis seperti PNG di lebar kolom apa pun.
+- **Border emas inset** dibuat di CSS (`::after`, `inset: 1.19cqw`, stroke
+  ~0.3cqw, gradient `#ffe6a3 → #a97a50`), **bukan** gambar. Sparkle 4 sudut =
+  `public/images/recruitment/card-sparkle.svg` (dekoratif). Tidak ada PNG yang
+  di-flatten.
+- Konten: `01 / OPEN ROLE` → judul → ringkasan (kalimat pertama, clamp 3 baris) →
+  3 chip (label dalam tanda kurung) → `View role`. Judul pakai **Title Case** dari
+  `domains.ts` (`Core AI & Engineering`), bukan all-caps `roles.ts`.
+- Tint violet (`#6c3bff` / `#9b7bff` / `#ede8ff`) agar selaras palet web.
+- Grid tetap **3 / 2 / 1**; font judul Manrope 700, body Manrope.
+- `verify.mjs`: assertion geometri baru (section `840.65625`, list
+  `507.65625`, kartu `241.828125`) + containment 320–1920. Posisi section
+  recruitment setelahnya (timeline/FAQ/snippets/CTA/footer) ikut digeser
+  (delta `-100.328125` dari angka lama).
+
+**B. Hero mobile fluid (home & recruitment)**
+
+- Hanya blok `≤600px` yang diubah; `601–1100` dan `≥1101` **tidak disentuh**
+  (tablet/desktop + diff PNG hero 1440 tetap).
+- h1/body/gap/padding `clamp()` fluid; judul konsisten **2 baris** sampai 320px
+  (home floor 28px, recruitment 23px); tombol home stack full-width `≤480px`.
+- Tinggi: `min-height: clamp(560px, 88svh, 760px)` dengan konten dipusatkan
+  vertikal → hero mengisi ≈79–99% layar, tidak kekecilan dan tanpa celah kosong
+  menumpuk di bawah. Cap h1 di 600px = nilai 601px (home 42px, recruitment 40px)
+  supaya mulus di batas breakpoint.
+- Risiko: **Nasalization belum di-bundle**, jadi di device tanpa font itu heading
+  fallback ke sans-serif dan metrik/line-break bisa berbeda. "Pas di semua pixel"
+  hanya terjamin di environment yang punya Nasalization sampai webfont berlisensi
+  ditambahkan.
+
+**Verifikasi akhir yang dijalankan & PASS**: `npm run format:check`, `npm run
+build` (astro check 0 error), `verify.mjs` (exit 0, `browserErrors: []`),
+`responsive-audit.mjs` (364/364), `verify-feedback.mjs`, `seo:audit`.

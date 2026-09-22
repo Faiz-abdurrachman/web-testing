@@ -681,3 +681,70 @@ fonts and unrelated section geometry are retained.
   from both origins, drag without accidental navigation, keyboard endpoints, role
   card/back navigation, rail clipping geometry, footer alignment, hero viewport
   bounds and screenshots at DPR 1/2. Output: `artifacts/feedback/`.
+
+## Available Roles — card redesign (23 September 2026)
+
+The mentor supplied new per-role card artwork that supersedes the earlier
+Available Roles preview card. The design is adopted, but its baked-in Figma
+typography is **not** used: the text is rebuilt in HTML/CSS with the site fonts.
+
+- Sources: `assets/card baru/{data intelligence,core ai,language,vision,product,growth}.png`,
+  1448 × 1086 canvas with the card alpha-bbox ≈ 1358 × 797 (ratio ≈ 1.70:1).
+  Supplied as a per-page reference group, not served.
+- Measured from the PNGs (card width 1350):
+  - corner radius ≈ 46px ≈ 3.4% of the card width;
+  - a **gold gradient frame inset** ≈ 16px (≈1.2% of width) with a ~4px stroke —
+    brighter at the top, rgb(248,212,121), fading to rgb(150,110,65) lower;
+  - a **4-point sparkle** at each corner (≈40 × 50px), a white core with a warm
+    gold glow, ≈20–30px inside the corner;
+  - card fill is a dark violet gradient (top rgb(41,30,47) → bottom rgb(23,16,27))
+    over a soft violet glow.
+- The sparkle is the only extracted asset: `public/images/recruitment/card-sparkle.svg`
+  (decorative vector). Border, fill, chips and text are HTML/CSS; the PNG is never
+  flattened into the UI.
+- Layout follows the supplied card fully (number, title, summary, chips,
+  `View role`) with the grid kept at **3 / 2 / 1** columns. The card is a fixed
+  `aspect-ratio: 1350 / 795` with `container-type: inline-size`, and every inner
+  metric is expressed in `cqw`, so the whole composition scales with the column
+  width exactly like the reference. Positions (in `cqw`): number `top 7.85 /
+left 7.41`, title `top 14.37`, summary `top 23.85 / width 56.2`, chips
+  `top 38.52`, `View role` `top 51.04` (icon at the content-left, label at
+  `left 13.6`). Chips are parenthesised labels, matching the reference, not pills.
+- The only intentional deviation is the **typeface**: the reference uses the
+  Figma font, which is replaced with the site fonts (title Manrope 700, body
+  Manrope). Because glyph metrics differ, text widths and line breaks are not
+  pixel-identical; the summary is clamped to the reference's three lines.
+- Titles are shown in the site's **Title Case** (`domains.ts`, e.g.
+  "Core AI & Engineering") instead of the reference's all-caps, and the card
+  fill/glow and title colour are tinted violet (`#6c3bff` / `#9b7bff` /
+  `#ede8ff`) so the card sits with the rest of the site palette.
+- Behaviour is proportional at **all** breakpoints (chosen option): on phones the
+  card is faithful to the reference but the type is small. This is a deliberate
+  trade-off, not a bug.
+- Verification: `scripts/verify.mjs` asserts the new section/list/card geometry
+  (section `840.65625`, list `507.65625`; all cards `241.828125` high) and checks
+  text containment from 320–1920px. There is no PNG pixel diff for this section
+  because the supplied card text is intentionally replaced.
+
+## Hero mobile fluid scale (23 September 2026)
+
+Home and recruitment heroes are mobile-first fluid below 601px; the tablet
+(601–1100) and desktop (≥1101) values are intentionally untouched, so the 1440
+PNG comparisons and `verify.mjs` hero geometry stay valid.
+
+- The `≤600px` blocks use `clamp()` for heading, body, spacing and vertical
+  padding (`svh`-aware), so the scale is continuous instead of stepping at
+  breakpoints.
+- Both heroes keep a viewport-relative height band,
+  `min-height: clamp(560px, 88svh, 760px)`, with the content vertically centred.
+  They therefore occupy ≈79–99% of the viewport (never hugging the content and
+  looking small, and never taller than the screen), while centred content avoids
+  a single large empty gap at the bottom.
+- The heading cap at 600px equals the 601px value (home 42px, recruitment 40px),
+  so there is no jump across the mobile/tablet boundary.
+- The heading floor keeps both heroes on two lines down to 320px (home 28px,
+  recruitment 23px); the recruitment copy clamps to 2 lines too.
+- Home buttons stack full-width at ≤480px, so they never wrap unpredictably.
+- Verified with a 11-width × 9-height mobile matrix plus the tablet/desktop
+  widths: no overflow, no clipped text, identical ≥601px geometry, and
+  `responsive-audit.mjs` ALL PASS (364 combos).
