@@ -138,6 +138,15 @@ const destinations: Record<string, string> = {
     font-weight: 500;
     line-height: 27px;
     white-space: nowrap;
+    border-radius: 999px;
+    transition:
+      color 0.25s ease,
+      background-color 0.25s ease;
+  }
+  a.nav-link:hover,
+  a.nav-link:focus-visible {
+    color: #fff;
+    background-color: rgb(255 255 255 / 10%);
   }
   .active {
     color: white;
@@ -264,7 +273,9 @@ const destinations: Record<string, string> = {
       display: flex;
       flex-direction: column;
       align-items: stretch;
-      gap: 0;
+      gap: 4px;
+      opacity: 1;
+      transform: none;
       padding: calc(94px + 32px) var(--page-gutter)
         max(32px, env(safe-area-inset-bottom));
       overflow-y: auto;
@@ -275,22 +286,40 @@ const destinations: Record<string, string> = {
       border: 0;
       border-radius: 0;
       box-shadow: none;
+      transition:
+        opacity 0.32s ease,
+        transform 0.32s ease;
+    }
+    .mobile-menu:not([open]) nav {
+      display: none;
+    }
+    .mobile-menu.is-closing nav {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    @starting-style {
+      .mobile-menu[open] nav {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
     }
     .mobile-menu .nav-link {
-      padding: 16px 4px;
+      padding: 16px 14px;
       font-size: 20px;
       line-height: 30px;
-      color: rgb(255 255 255 / 70%);
-      border-top: 1px solid rgb(203 197 255 / 12%);
+      color: rgb(255 255 255 / 72%);
+      border-radius: 14px;
     }
-    .mobile-menu .nav-link:first-child {
-      border-top: 0;
+    .mobile-menu .nav-link:not(.active):hover,
+    .mobile-menu .nav-link:not(.active):focus-visible {
+      color: #fff;
+      background: rgb(255 255 255 / 8%);
     }
     .mobile-menu .nav-link.active {
       color: #fff;
       background: linear-gradient(
         90deg,
-        rgb(108 59 255 / 26%),
+        rgb(108 59 255 / 30%),
         rgb(108 59 255 / 0%)
       );
     }
@@ -303,7 +332,9 @@ const destinations: Record<string, string> = {
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    summary span {
+    summary span,
+    .nav-link,
+    .mobile-menu nav {
       transition: none;
     }
   }
@@ -319,10 +350,50 @@ const destinations: Record<string, string> = {
   addEventListener('scroll', sync, { passive: true });
 
   const menu = document.querySelector<HTMLDetailsElement>('.mobile-menu');
+  const nav = menu?.querySelector<HTMLElement>('nav');
+  const summary = menu?.querySelector<HTMLElement>('summary');
+  const reduceMotion = () =>
+    matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let closeTimer: ReturnType<typeof setTimeout> | undefined;
+
+  const openMenu = () => {
+    if (!menu) return;
+    clearTimeout(closeTimer);
+    menu.classList.remove('is-closing');
+    menu.open = true;
+  };
+
+  const closeMenu = () => {
+    if (!menu?.open) return;
+    if (reduceMotion() || !nav) {
+      menu.classList.remove('is-closing');
+      menu.open = false;
+      return;
+    }
+    if (menu.classList.contains('is-closing')) return;
+    menu.classList.add('is-closing');
+    const finish = (event?: Event) => {
+      if (event && event.target !== nav) return;
+      nav.removeEventListener('transitionend', finish);
+      clearTimeout(closeTimer);
+      menu.classList.remove('is-closing');
+      menu.open = false;
+    };
+    nav.addEventListener('transitionend', finish);
+    closeTimer = setTimeout(finish, 450);
+  };
+
+  summary?.addEventListener('click', (event) => {
+    event.preventDefault();
+    if (menu?.open) closeMenu();
+    else openMenu();
+  });
+
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && menu?.open) {
-      menu.open = false;
-      menu.querySelector('summary')?.focus();
+      closeMenu();
+      summary?.focus();
     }
   });
   document.addEventListener('click', (event) => {
@@ -331,13 +402,17 @@ const destinations: Record<string, string> = {
       event.target instanceof Node &&
       !menu.contains(event.target)
     )
-      menu.open = false;
+      closeMenu();
   });
 
   const syncLock = () =>
     document.body.classList.toggle('menu-open', !!menu?.open);
   menu?.addEventListener('toggle', syncLock);
   addEventListener('resize', () => {
-    if (menu?.open && innerWidth > 1050) menu.open = false;
+    if (menu?.open && innerWidth > 1050) {
+      clearTimeout(closeTimer);
+      menu.classList.remove('is-closing');
+      menu.open = false;
+    }
   });
 </script>
