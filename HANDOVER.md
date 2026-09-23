@@ -457,7 +457,7 @@ projects 5.104 recruitment 2.174 footer 2.666
   balance tinggi hero mobile.
 - **Checkpoint terbaru (HEAD, lihat `git log`)**: **redesign kartu Available Roles**
   (proporsional `cqw` + border emas + sparkle SVG + judul Title Case + tint violet)
-  dan **hero mobile fluid** (`≤600px` clamp + band `clamp(560px,88svh,760px)`,
+  dan **hero mobile fluid** (`≤600px` clamp + `min-height: 100svh`,
   konten terpusat; `≥601px` tidak berubah). Dokumen (AGENTS/HANDOVER/assets/
   kickoff) disinkronkan di commit yang sama.
 - Pola commit: per fitur + aset referensi dipisah; push ke `main` (Vercel).
@@ -638,10 +638,9 @@ vision,product,growth}.png` (1448 × 1086; kartu alpha-bbox ≈ 1358 × 797,
   (tablet/desktop + diff PNG hero 1440 tetap).
 - h1/body/gap/padding `clamp()` fluid; judul konsisten **2 baris** sampai 320px
   (home floor 28px, recruitment 23px); tombol home stack full-width `≤480px`.
-- Tinggi: `min-height: clamp(560px, 88svh, 760px)` dengan konten dipusatkan
-  vertikal → hero mengisi ≈79–99% layar, tidak kekecilan dan tanpa celah kosong
-  menumpuk di bawah. Cap h1 di 600px = nilai 601px (home 42px, recruitment 40px)
-  supaya mulus di batas breakpoint.
+- Tinggi: `min-height: 100svh` (fallback `100vh`) dengan konten dipusatkan
+  vertikal → hero mengisi **penuh** layar mobile di semua ukuran. Cap h1 di 600px
+  = nilai 601px (home 42px, recruitment 40px) supaya mulus di batas breakpoint.
 - Risiko: **Nasalization belum di-bundle**, jadi di device tanpa font itu heading
   fallback ke sans-serif dan metrik/line-break bisa berbeda. "Pas di semua pixel"
   hanya terjamin di environment yang punya Nasalization sampai webfont berlisensi

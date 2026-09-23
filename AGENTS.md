@@ -173,7 +173,7 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   di-assert di `verify.mjs` (section `840.65625`, list `507.65625`, kartu
   `241.828125`). Sumber referensi: `assets/card baru/*.png` (lokal, **untracked**).
 - **Hero mobile fluid (≤600px)**: h1/body/gap/padding pakai `clamp()` fluid +
-  `min-height: clamp(560px, 88svh, 760px)` dengan konten dipusatkan vertikal;
+  `min-height: 100svh` dengan konten dipusatkan vertikal;
   judul konsisten 2 baris sampai 320px; tombol home stack ≤480px. **≥601px tidak
   diubah** — tablet/desktop dan diff PNG hero 1440 tetap (jaga ini saat mengedit).
 - SEO/OG selesai: canonical + Open Graph/Twitter + JSON-LD + `robots.txt` +

@@ -735,11 +735,9 @@ PNG comparisons and `verify.mjs` hero geometry stay valid.
 - The `≤600px` blocks use `clamp()` for heading, body, spacing and vertical
   padding (`svh`-aware), so the scale is continuous instead of stepping at
   breakpoints.
-- Both heroes keep a viewport-relative height band,
-  `min-height: clamp(560px, 88svh, 760px)`, with the content vertically centred.
-  They therefore occupy ≈79–99% of the viewport (never hugging the content and
-  looking small, and never taller than the screen), while centred content avoids
-  a single large empty gap at the bottom.
+- Both heroes fill the mobile viewport exactly: `min-height: 100svh` (`100vh`
+  fallback) with the content vertically centred, so the hero matches the screen
+  at every mobile size (320–600px).
 - The heading cap at 600px equals the 601px value (home 42px, recruitment 40px),
   so there is no jump across the mobile/tablet boundary.
 - The heading floor keeps both heroes on two lines down to 320px (home 28px,

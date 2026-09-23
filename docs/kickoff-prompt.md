@@ -72,8 +72,8 @@ Yang perlu kamu tahu sekarang:
   (section `840.65625`, list `507.65625`, kartu `241.828125`). Detail:
   `docs/assets.md` → "Available Roles — card redesign".
 - **Hero mobile fluid (23 Sep 2026)**: home & recruitment di `≤600px` pakai
-  `clamp()` fluid untuk h1/body/gap/padding + `min-height: clamp(560px, 88svh,
-  760px)` dengan konten dipusatkan vertikal; judul konsisten **2 baris** sampai
+  `clamp()` fluid untuk h1/body/gap/padding + `min-height: 100svh` (fallback
+  `100vh`) dengan konten dipusatkan vertikal; judul konsisten **2 baris** sampai
   320px; tombol home **stack full-width ≤480px**. **≥601px tidak diubah** (tablet/
   desktop dan diff PNG 1440 tetap). Detail: `docs/assets.md` → "Hero mobile
   fluid scale".
