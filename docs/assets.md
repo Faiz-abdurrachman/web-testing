@@ -341,12 +341,17 @@ score were unchanged when this section was added.
   Heading typography: Nasalization Regular 56/68.
 - Card titles: Nasalization Regular 24/36; numbers and descriptions:
   Manrope Regular 16/24, letter spacing -0.176px.
-- Background is **pure CSS, no image assets**: a subtle starfield (repeating
-  radial-gradient tile) on `.what-we-do`, plus the purple glows — upper-right and
-  center on `.what-we-do::before`. Colour values (`#6C3BFF` / `#9B7BFF`) and
-  positions were measured from the reference PNG. The former star/glow
-  background exports (`stars-*.webp`, `center-glow.webp`, `corner-glow.svg`)
-  were removed.
+- Background is a **generated periodic star tile**:
+  `public/images/what-we-do/starfield-base.png` (520 × 440, transparent, tiled
+  with `background-repeat: repeat`) on `.what-we-do`, plus the purple glows —
+  upper-right and center on `.what-we-do::before`. Colour values (`#6C3BFF` /
+  `#9B7BFF`) and positions were measured from the reference PNG. The tile is
+  rasterised from the original 42 CSS `radial-gradient`s by
+  `scripts/generate-star-tiles.mjs` (`npm run assets:starfield`, patterns in
+  `scripts/starfield-patterns.mjs`), so it is pixel-identical to the CSS version
+  (baseline MAE 0 / max 1) while costing one small texture blit instead of 42
+  gradient evaluations per tile. The former star/glow background exports
+  (`stars-*.webp`, `center-glow.webp`, `corner-glow.svg`) stay removed.
 - The **card glow is unchanged**: still the supplied SVG export
   `public/images/what-we-do/card-glow.svg`, positioned by `.card-glow`. Only the
   background was converted to CSS; card markup, borders, typography and the glow
@@ -360,11 +365,20 @@ score were unchanged when this section was added.
   flicker. Each layer's `inset` (`-460px` / `-540px`) is larger than its travel,
   so the moving box always covers the section and no empty edge can show. The mid
   layer (`.pillars-layout::before`) is left at `opacity: 0` to keep only two
-  drifting layers + the glow. `will-change: transform` is set on the moving
-  layers. An `IntersectionObserver` in `motion.ts` toggles `is-idle` on
-  `.what-we-do` so all animations `animation-play-state: paused` while the
-  section is off-screen. The old per-frame `--wwd-px/--wwd-py` →
-  `background-position` pointer parallax was removed and is not coming back.
+  drifting layers + the glow. Both drifting layers are generated tiles too
+  (`starfield-far.png` 440 × 360, `starfield-near.png` 520 × 400), so the huge
+  layers raster by blitting a small texture instead of re-evaluating 20/8
+  gradients per tile. `will-change: transform` is applied **only while the
+  section is near the viewport** (`.what-we-do:not(.is-idle)`) so off-screen the
+  page doesn't hold the oversized layers' textures resident. An
+  `IntersectionObserver` in `motion.ts` toggles `is-idle` on `.what-we-do` so all
+  animations `animation-play-state: paused` while the section is off-screen. The
+  old per-frame `--wwd-px/--wwd-py` → `background-position` pointer parallax was
+  removed and is not coming back. Measured effect of the tile conversion: the
+  scroll-into-section long task dropped from 186 ms to 0 ms and average frame
+  time from ~52 ms to ~37 ms (headless software-render audit; `no-gpu`, so treat
+  the absolute numbers as relative). A regression guard lives in
+  `scripts/perf-audit.mjs` (`npm run perf:audit`).
 - The whole sky lives inside `@media (prefers-reduced-motion: no-preference)`
   and every layer defaults to `opacity: 0`, so under reduced motion the section
   is still pixel-identical to the reference PNG (verification runs with

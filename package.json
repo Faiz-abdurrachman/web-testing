@@ -14,7 +14,9 @@
     "verify:visual": "node scripts/verify.mjs",
     "assets:optimize": "node scripts/optimize-images.mjs",
     "assets:og": "node scripts/generate-og.mjs",
+    "assets:starfield": "node scripts/generate-star-tiles.mjs",
     "seo:audit": "node scripts/seo-audit.mjs",
+    "perf:audit": "node scripts/perf-audit.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },

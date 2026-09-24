@@ -22,7 +22,9 @@ node scripts/verify.mjs   # visual verification (dev server must be running)
 node scripts/responsive-audit.mjs  # responsive audit: all pages × 26 widths
 npm run assets:og         # regenerate og image + favicons + manifest
 npm run assets:optimize   # re-encode heavy webp (lossy q82/85/88) from assets/image-src
+npm run assets:starfield  # regenerate What We Do starfield tiles (Chromium)
 npm run seo:audit         # validate meta/OG/canonical/sitemap in dist (after build)
+npm run perf:audit        # scroll-jank report per section (set PERF_MAX_TASK to fail)
 ```
 
 `scripts/verify.mjs` uses Chromium at `/usr/bin/chromium` (override with
@@ -83,6 +85,9 @@ src/styles/global.css    @font-face, tokens, reset
 scripts/verify.mjs       visual + geometry + responsive verification
 scripts/responsive-audit.mjs  per-page × per-width responsive audit
 scripts/generate-og.mjs  og share card + favicons + manifest (sharp)
+scripts/generate-star-tiles.mjs  What We Do starfield tiles (Chromium)
+scripts/starfield-patterns.mjs   gradient source for the starfield tiles
+scripts/perf-audit.mjs   scroll-jank + long-task report per section
 scripts/seo-audit.mjs    validates title/meta/OG/canonical/sitemap in dist/
 src/pages/robots.txt.ts  robots.txt endpoint (uses Astro.site)
 public/og/og-default.jpg share card (served)

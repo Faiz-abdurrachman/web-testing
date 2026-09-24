@@ -13,8 +13,9 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
   `src/scripts/motion.ts`).
 - Semua gate hijau: `format:check`, `build` (14 halaman), `verify.mjs`
   (`browserErrors: []`), `responsive-audit.mjs` (364 combos), `seo:audit`.
-- **Terbaru:** navbar "living HUD" — kaca melayang full-capsule, flash sweep,
-  indikator tab aktif meluncur springy (lihat section paling atas).
+- **Terbaru:** navbar "living HUD" (kaca melayang full-capsule, flash sweep,
+  indikator tab aktif meluncur springy) + perf What We Do (starfield jadi tile
+  gambar + `perf:audit`).
 
 ## Baru saja: Navbar "living HUD" (kaca melayang + flash + indikator meluncur)
 
@@ -50,6 +51,47 @@ hamburger + logo mobile saat scroll; **tanpa badge petir**.
 
 **Terverifikasi:** `format:check`, `build` 0/0/0, `responsive-audit` 364 combos
 ALL PASS, `verify.mjs` exit 0 (`browserErrors: []`).
+
+## Baru saja: What We Do starfield jadi tile gambar (perf scroll)
+
+**Keluhan user (25 Sep 2026):** masuk section "Four Pillars of Innovation" terasa
+**berat banget** saat scroll. Profiling (Playwright, preview 4333): long task
+100–200 ms + avg ~50 ms/frame tepat saat section mulai ter-raster, 55 composited
+layer, dua layer bintang animasi 4.16 MP & 3.88 MP.
+
+**Fix (Fase 1 — `src/components/WhatWeDo.astro` + skrip baru):**
+
+- Tiga layer bintang (base 42 gradient, far 20, near 8) di `background-image`
+  jadi **tile PNG periodik** yang di-render persis oleh Chromium:
+  `scripts/generate-star-tiles.mjs` (`npm run assets:starfield`), pola sumber di
+  `scripts/starfield-patterns.mjs` (di-ekstrak dari CSS lama). Output
+  `public/images/what-we-do/starfield-{base,far,near}.png`
+  (520×440 / 440×360 / 520×400). Tampilan **pixel-identical** ke versi CSS
+  (MAE 0 / max 1 di mode reduce).
+- `will-change` sekarang **hanya saat section dekat viewport**
+  (`.what-we-do:not(.is-idle)`), biar off-screen tidak menyimpan texture raksasa.
+
+**Hasil terukur:** long task masuk section **186 ms → 0 ms**, avg frame ~52 → ~37 ms
+(headless `--disable-gpu`; angka absolut inflasi, bandingkan relatif). MAE
+`verify.mjs` whatWeDo tetap **2.036**, geometry persis, `browserErrors: []`,
+`responsive-audit` 364 combos ALL PASS, `format:check` hijau. Karena audit ini
+software-render, tetap cek di GPU nyata sebelum klaim final.
+
+**Fase 2 (diukur, TIDAK diubah):** A/B hover/tilt per kartu (`.pillar-01`,
+no-reduce) menunjukkan border `mask-composite`, hover `filter` glow 1231 px, dan
+`tilt()` 3D **tidak terukur** sebagai biaya (semua ~37 ms = lantai environment
+software-render). Justru membuang `overflow: hidden` lebih berat (51 ms) karena
+glow tak ter-clip. Jadi tidak ada perubahan; jangan buang `tilt()`/mask tanpa
+alasan baru.
+
+**Fase 3 (selesai):** entry long-task yang tersisa hanya di load awal
+(hero/splash, ~174 ms), **bukan** di What We Do, jadi tuning trigger
+`pillarIntro` tidak perlu. Ditambah regression guard
+`scripts/perf-audit.mjs` (`npm run perf:audit`) yang mengukur frame avg/p90/worst
+
+- long task per section ke `artifacts/perf-audit.json`; set `PERF_MAX_TASK` (ms)
+  untuk bikin run gagal kalau ada task lewat budget. Hasil sekarang: `.what-we-do`
+  avg 35 ms, long task 0.
 
 ## Baru saja: "Four Pillars" cinematic 3D entrance (auto-play, bukan pin)
 
