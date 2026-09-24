@@ -26,21 +26,23 @@ const destinations: Record<string, string> = {
     </a>
     <div class="desktop-menu">
       <nav aria-label="Main navigation">
-        {links.map((label) =>
+        {links.map((label, i) =>
           destinations[label] ? (
             <a
               class:list={['nav-link', { active: label === active }]}
               href={destinations[label]}
               aria-current={label === active ? 'page' : undefined}
+              style={`--i:${i + 1}`}
             >
               {label}
             </a>
           ) : (
-            <span class="nav-link" aria-disabled="true">
+            <span class="nav-link" aria-disabled="true" style={`--i:${i + 1}`}>
               {label}
             </span>
           ),
         )}
+        <span class="nav-indicator" aria-hidden="true"></span>
       </nav>
       <Button variant="white">Join Community</Button>
     </div>
@@ -51,17 +53,18 @@ const destinations: Record<string, string> = {
         <span></span>
       </summary>
       <nav aria-label="Mobile navigation">
-        {links.map((label) =>
+        {links.map((label, i) =>
           destinations[label] ? (
             <a
               class:list={['nav-link', { active: label === active }]}
               href={destinations[label]}
               aria-current={label === active ? 'page' : undefined}
+              style={`--i:${i + 1}`}
             >
               {label}
             </a>
           ) : (
-            <span class="nav-link" aria-disabled="true">
+            <span class="nav-link" aria-disabled="true" style={`--i:${i + 1}`}>
               {label}
             </span>
           ),
@@ -70,49 +73,171 @@ const destinations: Record<string, string> = {
       </nav>
     </details>
   </div>
+  <span class="navbar-flash" aria-hidden="true"></span>
 </header>
 <style>
   .navbar {
+    --nb-h: 106.8px;
+    --nb-h-condensed: 72px;
+    /* Floating-bar geometry: flush and invisible over the hero, then it detaches. */
+    --nb-gap: 0px;
+    --nb-inset: 0px;
+    --nb-radius: 0px;
+    --nb-frame: 1600px;
+    /* Slow, buttery ease: the bar settles like jelly rather than snapping. */
+    --nb-ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --nb-dur: 0.9s;
+    /* Springy ease for the indicator's travel. */
+    --nb-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     position: fixed;
     inset: 0 0 auto;
     z-index: 50;
-    background: linear-gradient(
-      180deg,
-      rgb(108 59 255 / 10%) 0%,
-      rgb(11 7 18 / 0%) 100.19%
-    );
+    /* At the very top the bar is invisible so it reads as part of the hero. */
+    background: transparent;
   }
+  .navbar.is-condensed {
+    --nb-frame: 1440px;
+  }
+  .navbar.is-scrolled {
+    --nb-gap: 10px;
+    --nb-inset: 14px;
+    /* Full capsule: both top and bottom are rounded once it detaches. */
+    --nb-radius: 999px;
+  }
+  /* Panel edges track the content frame, then float out from it. */
+  .navbar::after {
+    content: '';
+    position: absolute;
+    top: var(--nb-gap);
+    right: max(var(--nb-inset), calc(50% - var(--nb-frame) / 2));
+    bottom: 0;
+    left: max(var(--nb-inset), calc(50% - var(--nb-frame) / 2));
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(
+      180px 96px at var(--mx, 50%) 118%,
+      rgb(108 59 255 / 34%),
+      transparent 72%
+    );
+    transition:
+      opacity 0.35s ease,
+      top var(--nb-dur) var(--nb-ease),
+      left var(--nb-dur) var(--nb-ease),
+      right var(--nb-dur) var(--nb-ease);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .navbar.is-scrolled.is-glowing::after {
+      opacity: 1;
+    }
+  }
+  /* One-shot diagonal glint that sweeps the capsule when it detaches. */
+  .navbar-flash {
+    position: absolute;
+    top: var(--nb-gap);
+    right: max(var(--nb-inset), calc(50% - var(--nb-frame) / 2));
+    bottom: 0;
+    left: max(var(--nb-inset), calc(50% - var(--nb-frame) / 2));
+    z-index: 0;
+    overflow: hidden;
+    border-radius: var(--nb-radius);
+    pointer-events: none;
+    transition: border-radius 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .navbar-flash::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    bottom: -30%;
+    left: 0;
+    width: 34%;
+    opacity: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgb(232 224 255 / 55%),
+      transparent
+    );
+    transform: translate3d(-160%, 0, 0) skewX(-15deg);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .navbar.is-scrolled .navbar-flash::before {
+      animation: nav-flash 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+    }
+  }
+  @keyframes nav-flash {
+    0% {
+      opacity: 0;
+      transform: translate3d(-160%, 0, 0) skewX(-15deg);
+    }
+    18% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translate3d(420%, 0, 0) skewX(-15deg);
+    }
+  }
+  /* Soft glass bar that detaches once the page is scrolled. */
   .navbar::before {
     content: '';
     position: absolute;
-    inset: 0;
+    top: var(--nb-gap);
+    right: max(var(--nb-inset), calc(50% - var(--nb-frame) / 2));
+    bottom: 0;
+    left: max(var(--nb-inset), calc(50% - var(--nb-frame) / 2));
     z-index: -1;
-    backdrop-filter: blur(8px) saturate(140%);
-    -webkit-backdrop-filter: blur(8px) saturate(140%);
-    mask-image: linear-gradient(#000 65%, transparent);
-    -webkit-mask-image: linear-gradient(#000 65%, transparent);
-    pointer-events: none;
-    transition:
-      backdrop-filter 0.35s ease,
-      -webkit-backdrop-filter 0.35s ease;
-  }
-  .navbar.is-scrolled::before {
+    opacity: 0;
+    border-radius: var(--nb-radius);
+    background: rgb(12 8 20 / 34%);
     backdrop-filter: blur(28px) saturate(180%) brightness(1.07);
     -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(1.07);
+    box-shadow:
+      0 20px 44px -28px rgb(0 0 0 / 66%),
+      inset 0 1px 0 rgb(255 255 255 / 8%),
+      inset 0 -1px 0 rgb(255 255 255 / 4%);
+    pointer-events: none;
+    transition:
+      opacity 0.4s ease,
+      top var(--nb-dur) var(--nb-ease),
+      left var(--nb-dur) var(--nb-ease),
+      right var(--nb-dur) var(--nb-ease),
+      border-radius var(--nb-dur) var(--nb-ease);
+  }
+  .navbar.is-scrolled::before {
+    opacity: 1;
   }
   .navbar-inner {
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    max-width: 1440px;
-    height: 106.8px;
+    /* At the top the bar breathes wider; on scroll it pulls back to the 1440 grid. */
+    max-width: 1600px;
+    height: var(--nb-h);
+    margin-top: var(--nb-gap);
     margin-inline: auto;
-    padding: 24px 80px;
+    padding: 24px clamp(56px, 4.5vw, 80px);
+    transition:
+      height var(--nb-dur) var(--nb-ease),
+      margin-top var(--nb-dur) var(--nb-ease),
+      padding var(--nb-dur) var(--nb-ease),
+      max-width var(--nb-dur) var(--nb-ease);
+  }
+  .navbar.is-condensed .navbar-inner {
+    height: var(--nb-h-condensed);
+    max-width: 1440px;
+    padding: 10px 80px;
   }
   .brand {
     position: relative;
     z-index: 3;
+    transition: transform var(--nb-dur) var(--nb-ease);
+  }
+  .navbar.is-condensed .brand {
+    transform: scale(0.86);
   }
   .brand,
   .brand img {
@@ -124,14 +249,17 @@ const destinations: Record<string, string> = {
     display: flex;
     align-items: center;
     gap: 90px;
+    transition: gap var(--nb-dur) var(--nb-ease);
   }
   nav {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 18px;
   }
   .nav-link {
     position: relative;
+    z-index: 1;
     padding: 8px 14px;
     color: #ede8ff;
     font-size: 18px;
@@ -149,24 +277,110 @@ const destinations: Record<string, string> = {
   a.nav-link:hover,
   a.nav-link:focus-visible {
     color: #fff;
-    background-color: rgb(255 255 255 / 10%);
   }
-  .active {
-    color: white;
-  }
-  .active::after {
+  /* Sheen that sweeps across a hovered link, clipped to the pill radius. */
+  a.nav-link::before {
     content: '';
     position: absolute;
-    height: 1px;
-    bottom: 6px;
-    left: 14px;
-    right: 14px;
-    background: #9b7bff;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 34%,
+      rgb(255 255 255 / 22%) 50%,
+      transparent 66%
+    );
+    background-size: 240% 100%;
+    background-position: 130% 0;
+    background-repeat: no-repeat;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    a.nav-link:not(.active):hover::before,
+    a.nav-link:not(.active):focus-visible::before {
+      animation: nav-sheen 0.7s ease both;
+    }
+  }
+  @keyframes nav-sheen {
+    0% {
+      opacity: 0;
+      background-position: 130% 0;
+    }
+    18% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      background-position: -30% 0;
+    }
+  }
+  /* Sliding active pill: carries the charged violet fill and the gradient rim.
+     JS moves it between links, so the highlight travels with a jelly spring
+     instead of popping. */
+  .nav-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    border-radius: 999px;
+    background: radial-gradient(
+      120% 160% at 12% -20%,
+      rgb(155 123 255 / 32%) 0%,
+      rgb(108 59 255 / 24%) 45%,
+      rgb(108 59 255 / 10%) 100%
+    );
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 22%),
+      0 8px 24px -12px rgb(108 59 255 / 80%);
+    pointer-events: none;
+    transition:
+      left 0.6s var(--nb-spring),
+      width 0.5s var(--nb-spring),
+      opacity 0.4s ease;
+    will-change: left, width;
+  }
+  /* Gradient rim (not a flat line). */
+  .nav-indicator::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      145deg,
+      rgb(255 255 255 / 85%) 0%,
+      rgb(155 123 255 / 35%) 26%,
+      rgb(108 59 255 / 0%) 55%,
+      rgb(200 180 255 / 70%) 100%
+    );
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  a.nav-link.active {
+    color: #fff;
+    text-shadow: 0 0 14px rgb(196 180 255 / 55%);
+  }
+  a.nav-link.active:hover,
+  a.nav-link.active:focus-visible {
+    color: #fff;
   }
   .mobile-menu {
     display: none;
   }
   @media (min-width: 1301px) {
+    .desktop-menu {
+      gap: 130px;
+    }
+    .navbar.is-condensed .desktop-menu {
+      gap: 90px;
+    }
     .desktop-menu nav {
       width: 753px;
       height: 45px;
@@ -190,23 +404,6 @@ const destinations: Record<string, string> = {
     .desktop-menu .nav-link:nth-child(6) {
       width: 98px;
     }
-    .desktop-menu .active::after {
-      left: 14.5px;
-      right: auto;
-      bottom: 8px;
-    }
-    .desktop-menu .active:nth-child(1)::after {
-      width: 49px;
-    }
-    .desktop-menu .active:nth-child(3)::after {
-      width: 106px;
-      background: linear-gradient(
-        163deg,
-        #9b7bff 0%,
-        #ede8ff 50%,
-        #9b7bff 100%
-      );
-    }
   }
   @media (max-width: 1300px) {
     .desktop-menu {
@@ -221,8 +418,12 @@ const destinations: Record<string, string> = {
     }
   }
   @media (max-width: 1050px) {
+    .navbar {
+      --nb-h: 94px;
+      --nb-h-condensed: 64px;
+    }
     .navbar-inner {
-      height: 94px;
+      height: var(--nb-h);
       padding: 18px var(--page-gutter);
     }
     .desktop-menu {
@@ -231,34 +432,49 @@ const destinations: Record<string, string> = {
     .mobile-menu {
       display: block;
     }
+    a.nav-link::before {
+      display: none;
+    }
     summary {
       position: relative;
       z-index: 3;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 5px;
+      gap: 4px;
       width: 44px;
       height: 44px;
       padding: 10px;
       cursor: pointer;
       background: none;
-      border: 0;
-      border-radius: 0;
+      border: 1px solid transparent;
+      border-radius: 14px;
       list-style: none;
+      transition:
+        background-color var(--nb-dur) var(--nb-ease),
+        border-color var(--nb-dur) var(--nb-ease);
+    }
+    /* Once the capsule floats, the burger reads as its own glass button. */
+    .navbar.is-scrolled summary {
+      background: rgb(255 255 255 / 8%);
+      border-color: rgb(255 255 255 / 12%);
     }
     summary::-webkit-details-marker {
       display: none;
     }
     summary span {
       display: block;
-      height: 1px;
+      height: 2px;
       width: 22px;
+      border-radius: 2px;
       background: white;
       filter: drop-shadow(0 1px 2px rgb(0 0 0 / 65%));
       transition:
-        transform 0.25s ease,
+        transform 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6),
         opacity 0.2s ease;
+    }
+    summary span:nth-child(2) {
+      width: 14px;
     }
     .mobile-menu[open] summary span:nth-child(1) {
       transform: translateY(6px) rotate(45deg);
@@ -325,6 +541,8 @@ const destinations: Record<string, string> = {
         rgb(108 59 255 / 30%),
         rgb(108 59 255 / 0%)
       );
+      box-shadow: none;
+      text-shadow: none;
     }
     .mobile-menu .active::after {
       display: none;
@@ -334,11 +552,87 @@ const destinations: Record<string, string> = {
       margin-top: 32px;
     }
   }
+  @media (prefers-reduced-motion: no-preference) {
+    .navbar.is-ready .brand,
+    .navbar.is-ready .desktop-menu .nav-link,
+    .navbar.is-ready .desktop-menu .button {
+      animation: nav-in 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+      animation-delay: calc(var(--i, 0) * 55ms + 80ms);
+    }
+    .navbar.is-ready .desktop-menu .button {
+      animation-delay: 0.5s;
+    }
+  }
+  @keyframes nav-in {
+    from {
+      opacity: 0;
+      transform: translateY(-12px);
+      filter: blur(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+  }
   @media (prefers-reduced-motion: reduce) {
     summary span,
     .nav-link,
-    .mobile-menu nav {
+    .desktop-menu,
+    .mobile-menu nav,
+    .navbar,
+    .navbar-inner,
+    .brand,
+    .nav-indicator,
+    .navbar-flash,
+    summary,
+    .navbar::before,
+    .navbar::after {
       transition: none;
+    }
+  }
+  /* Premium hover for the navbar CTA only (keeps other white buttons as-is). */
+  :global(.navbar .button.white) {
+    transition:
+      background 0.3s ease,
+      color 0.3s ease,
+      box-shadow 0.3s ease,
+      transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.navbar .button.white:hover) {
+      transform: translateY(-1px);
+      box-shadow:
+        inset -2px -2px 4px rgb(178 211 255 / 90%),
+        inset -8px -6px 8px rgb(226 202 255 / 25%),
+        inset -2px -2px 1.4px #97bfff,
+        inset 0 2px 1.2px #cfdfff,
+        0 10px 26px -10px rgb(108 59 255 / 75%);
+    }
+    :global(.navbar .button.white:active) {
+      transform: translateY(0);
+    }
+  }
+  :global(.navbar .button.white::before) {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 34%,
+      rgb(108 59 255 / 26%) 50%,
+      transparent 66%
+    );
+    background-size: 240% 100%;
+    background-position: 130% 0;
+    background-repeat: no-repeat;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.navbar .button.white:hover::before) {
+      animation: nav-sheen 0.7s ease both;
     }
   }
   :global(body.menu-open) {
@@ -346,17 +640,120 @@ const destinations: Record<string, string> = {
   }
 </style>
 <script>
-  const navbar = document.querySelector('.navbar');
-  const sync = () =>
-    navbar?.classList.toggle('is-scrolled', window.scrollY > 8);
-  sync();
-  addEventListener('scroll', sync, { passive: true });
+  const navbar = document.querySelector<HTMLElement>('.navbar');
+  const indicator = navbar?.querySelector<HTMLElement>('.nav-indicator');
+  const desktopLinks = navbar
+    ? [...navbar.querySelectorAll<HTMLElement>('.desktop-menu a.nav-link')]
+    : [];
+  const reduceMotion = () =>
+    matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = () => matchMedia('(pointer: fine)').matches;
+
+  const syncScroll = () => {
+    if (!navbar) return;
+    const y = window.scrollY;
+    navbar.classList.toggle('is-scrolled', y > 8);
+    navbar.classList.toggle('is-condensed', y > 40);
+  };
+
+  // The active pill slides between links instead of popping. Hovering another
+  // link pulls it there too, so the highlight feels alive.
+  let hoverLink: HTMLElement | null = null;
+
+  const moveIndicator = (el: HTMLElement) => {
+    if (!indicator) return;
+    indicator.style.opacity = '1';
+    indicator.style.left = `${el.offsetLeft}px`;
+    indicator.style.top = `${el.offsetTop}px`;
+    indicator.style.width = `${el.offsetWidth}px`;
+    indicator.style.height = `${el.offsetHeight}px`;
+  };
+
+  const syncIndicator = () => {
+    if (!indicator || !navbar) return;
+    if (innerWidth <= 1050) {
+      indicator.style.opacity = '0';
+      return;
+    }
+    const target =
+      hoverLink || navbar.querySelector<HTMLElement>('a.nav-link.active');
+    if (target) moveIndicator(target);
+    else indicator.style.opacity = '0';
+  };
+
+  syncScroll();
+  addEventListener(
+    'scroll',
+    () => {
+      syncScroll();
+      syncIndicator();
+    },
+    { passive: true },
+  );
+  addEventListener('resize', () => {
+    syncScroll();
+    syncIndicator();
+  });
+
+  desktopLinks.forEach((link) => {
+    link.addEventListener('mouseenter', () => {
+      hoverLink = link;
+      syncIndicator();
+    });
+    link.addEventListener('focus', () => {
+      hoverLink = link;
+      syncIndicator();
+    });
+  });
+  const desktopNav = navbar?.querySelector<HTMLElement>('.desktop-menu nav');
+  desktopNav?.addEventListener('mouseleave', () => {
+    hoverLink = null;
+    syncIndicator();
+  });
+  desktopNav?.addEventListener('blur', () => {
+    hoverLink = null;
+    syncIndicator();
+  });
+
+  // While the bar morphs its padding/gap the links move, so re-measure once the
+  // transition settles.
+  for (const el of [
+    navbar?.querySelector('.desktop-menu'),
+    navbar?.querySelector('.navbar-inner'),
+  ]) {
+    el?.addEventListener('transitionend', syncIndicator);
+  }
+
+  requestAnimationFrame(syncIndicator);
+  document.fonts?.ready.then(syncIndicator).catch(() => {});
+  addEventListener('load', syncIndicator, { once: true });
+
+  const armNav = () => navbar?.classList.add('is-ready');
+  if (document.documentElement.classList.contains('splash-done')) {
+    armNav();
+  } else {
+    addEventListener('ds:splash-done', armNav, { once: true });
+    setTimeout(armNav, 7000);
+  }
+
+  if (navbar && finePointer() && !reduceMotion()) {
+    navbar.addEventListener(
+      'pointermove',
+      (event) => {
+        const rect = navbar.getBoundingClientRect();
+        navbar.style.setProperty('--mx', `${event.clientX - rect.left}px`);
+        navbar.classList.add('is-glowing');
+      },
+      { passive: true },
+    );
+    navbar.addEventListener('mouseleave', () =>
+      navbar.classList.remove('is-glowing'),
+    );
+  }
 
   const menu = document.querySelector<HTMLDetailsElement>('.mobile-menu');
   const nav = menu?.querySelector<HTMLElement>('nav');
   const summary = menu?.querySelector<HTMLElement>('summary');
-  const reduceMotion = () =>
-    matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   let closeTimer: ReturnType<typeof setTimeout> | undefined;
 

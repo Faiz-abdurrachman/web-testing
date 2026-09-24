@@ -13,6 +13,43 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
   `src/scripts/motion.ts`).
 - Semua gate hijau: `format:check`, `build` (14 halaman), `verify.mjs`
   (`browserErrors: []`), `responsive-audit.mjs` (364 combos), `seo:audit`.
+- **Terbaru:** navbar "living HUD" — kaca melayang full-capsule, flash sweep,
+  indikator tab aktif meluncur springy (lihat section paling atas).
+
+## Baru saja: Navbar "living HUD" (kaca melayang + flash + indikator meluncur)
+
+**Permintaan user (25 Sep 2026):** referensi gaya navbar magelang-ai-expo tapi
+lebih glass/blur; di paling atas transparan menyatu hero, saat scroll jadi
+**kapsul kaca melayang** (atas + bawah membulat), **tanpa auto-hide**; hapus garis
+progress; hapus siluet putih hero → pindah jadi kilau di navbar; transisi
+masuk/keluar navbar & pergantian tab aktif harus **kenyal ("agar-agar")**; atur
+hamburger + logo mobile saat scroll; **tanpa badge petir**.
+
+**Implementasi** (`src/components/Navbar.astro`, `src/components/Hero.astro`,
+`src/scripts/motion.ts`):
+
+- Hero: `.hero-flare` (siluet putih) **dihapus** dari markup + CSS + timeline
+  motion; glow-nya dipindah ke navbar.
+- Di hero transparan total (inner `max-width: 1600px`,
+  `padding-inline: clamp(56px,4.5vw,80px)`, gap 130) → saat `is-scrolled` (y>8)
+  menarik ke grid 1440 dan jadi kapsul kaca `--nb-radius: 999px` (mask feather
+  lama dihapus; `margin-top: 10px`, `--nb-inset: 14px`,
+  `backdrop-filter: blur(28px) saturate(180%) brightness(1.07)`, inset highlight
+  atas + bawah). `is-condensed` (y>40) → 72px / 64px ≤1050px, logo 0.86.
+- Easing: `--nb-dur: 0.9s` + `--nb-ease: cubic-bezier(0.16,1,0.3,1)` untuk
+  geometri bar; `--nb-spring: cubic-bezier(0.34,1.56,0.64,1)` untuk indikator.
+- `.nav-indicator`: kapsul ungu yang **meluncur** (dipindah JS) dengan
+  `left 0.6s` / `width 0.5s` spring + rim gradien `mask-composite`; ikut
+  hover/focus lalu duduk di `a.nav-link.active`; re-sync saat resize,
+  `transitionend`, dan font load. **Tanpa petir** (bolt `::before` dihapus).
+- `.navbar-flash`: satu kali sapuan diagonal putih (`nav-flash` keyframe, ter-clip
+  ke radius kapsul) saat pertama `is-scrolled` — pengganti flare hero.
+- Mobile ≤1050px: `summary` 44×44 `border-radius: 14px`, dapat glass bg + border
+  saat `is-scrolled`; garis burger animasi springy. Auto-hide tetap dihapus.
+- Semua inert saat `prefers-reduced-motion: reduce`.
+
+**Terverifikasi:** `format:check`, `build` 0/0/0, `responsive-audit` 364 combos
+ALL PASS, `verify.mjs` exit 0 (`browserErrors: []`).
 
 ## Baru saja: "Four Pillars" cinematic 3D entrance (auto-play, bukan pin)
 

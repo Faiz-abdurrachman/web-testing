@@ -181,20 +181,73 @@ object-position: 54% bottom`; `381–399px` → `height: 74%; 52.5% bottom`;
   `max-width: 1440px` container and centered, so on screens wider than the
   Figma frame the logo and CTA stay on the 1440 grid (brand x = 80 at 1440,
   320 at 1920, 640 at 2560) instead of stretching to the viewport edges.
-- At the top the bar keeps the reference's soft `backdrop-filter: blur(8px)
-saturate(140%)`. After an 8px scroll it keeps a **blur-only** treatment
-  (`blur(28px) saturate(180%) brightness(1.07)`) feathered by a mask — no
-  background panel and no hairline border, so it never reads as a box. The mask
-  keeps the blur visible across most of the bar (`#000 65%` → transparent). This
-  is an interaction addition; the hero comparison is unaffected geometrically.
-  The production build keeps **both** `backdrop-filter` and
-  `-webkit-backdrop-filter` (esbuild `cssMinify` in `astro.config.mjs`); the
-  default Lightning CSS pass dropped the unprefixed one, which removed the blur
-  in Firefox on the deployed site.
+- At the very top the bar is **fully transparent** (no background, no blur) so it
+  reads as part of the hero, and its content **breathes wider** than the 1440
+  grid: `.navbar-inner` caps at `max-width: 1600px` with
+  `padding-inline: clamp(56px, 4.5vw, 80px)` and the nav/CTA gap grows to 130px.
+  After an 8px scroll it **pulls back to the 1440 grid and detaches into a
+  floating glass capsule** (`max-width: 1440px`, `padding-inline: 80px`, gap
+  90px, `margin-top: 10px`, `--nb-inset: 14px`, `--nb-radius: 999px` — both top
+  and bottom fully rounded): `.navbar::before` fades in a light
+  `rgb(12 8 20 / 34%)` tint with
+  `backdrop-filter: blur(28px) saturate(180%) brightness(1.07)`, an inset top
+  highlight, an inset bottom highlight and a soft drop shadow. The panel edges
+  track the content frame
+  (`left/right: max(--nb-inset, calc(50% - --nb-frame/2))`, `--nb-frame` = 1600px
+  → 1440px once condensed) so at wide viewports it stays on the 1440 grid instead
+  of stretching. The earlier bottom-edge feather (`mask-image`) was **removed** so
+  the capsule reads as a complete rounded pill (user revision 25 Sep 2026). The
+  production build keeps **both** `backdrop-filter` and `-webkit-backdrop-filter`
+  (esbuild `cssMinify` in `astro.config.mjs`); the default Lightning CSS pass
+  dropped the unprefixed one, which removed the blur in Firefox on the deployed
+  site.
+- **Living HUD additions** (interaction layer; the homepage PNG diff is
+  unaffected because `verify.mjs` hides `.navbar` before section screenshots):
+  - `is-scrolled` (y > 8) reveals the glass capsule (above); `is-condensed`
+    (y > 40) shrinks the bar to 72px (`--nb-h-condensed`, 64px ≤1050px), pulls
+    the grid back and scales the logo to 0.86; `is-ready` runs a staggered
+    entrance after `ds:splash-done` (`.brand`, each `.desktop-menu .nav-link` at
+    `--i * 55ms + 80ms`, CTA 0.5s).
+  - **Springy, "agar-agar" transitions**: the bar geometry (top/left/right,
+    border-radius, max-width, padding, height) eases with `--nb-dur: 0.9s` +
+    `--nb-ease: cubic-bezier(0.16, 1, 0.3, 1)` (buttery ease-out-expo), so the
+    landing is soft rather than snapping.
+  - **No auto-hide**: the bar never slides away (the earlier hero-aware
+    hide-on-scroll-down was removed 25 Sep 2026 per user feedback — it made the
+    navbar vanish mid-hero). It only fades from transparent to glass.
+  - **Active tab** is a sliding `.nav-indicator` capsule (an absolutely positioned
+    `<span>` moved by JS between links): violet radial fill, inset top highlight,
+    outer violet glow and a 1px gradient rim (`mask-composite: exclude`). It
+    travels with a **jelly-spring** easing
+    (`--nb-spring: cubic-bezier(0.34, 1.56, 0.64, 1)`; `left 0.6s`, `width 0.5s`)
+    and tracks hover/focus before settling on `a.nav-link.active`; it is re-synced
+    on resize, `transitionend` and font load. The old 1px underline, the per-link
+    hover bolt and the anchored lightning bolt were all removed (user: no "garis
+    doang" / no bolt badge).
+  - **Navbar flash**: `.navbar-flash` runs a one-shot diagonal white sweep
+    (`nav-flash` keyframe, clipped to the capsule radius) when the bar first turns
+    `is-scrolled`. The hero's old white flare was **removed** and its glow moved
+    here (user: glow on the navbar, not the hero).
+  - **Cursor bloom** `.navbar::after` (radial violet, follows `--mx`) fades in on
+    fine pointers **once scrolled** (`is-scrolled.is-glowing`), so it never breaks
+    the transparent hero state.
+  - **Hover sheen**: `a.nav-link:not(.active)::before` sweeps a soft diagonal
+    highlight (animated `background-position`, clipped to the pill radius) via the
+    shared `nav-sheen` keyframe.
+  - **Navbar CTA only** (`:global(.navbar .button.white)`, so other white buttons
+    are untouched): on hover it lifts `translateY(-1px)`, adds a violet drop-glow,
+    and runs the same `nav-sheen` sweep; the white→violet colour swap from
+    `Button.astro` still applies.
+  - All of the above are inert under `prefers-reduced-motion: reduce` (no sheen,
+    no lift, no flash; geometry snaps), so `verify.mjs` / `responsive-audit.mjs`
+    stay clean.
 - Below 1050px the desktop menu is replaced by a full-screen `<details>` menu: a
   borderless blurred overlay with a soft edge, JS-animated open/close, a
   hamburger that morphs into an X, body scroll lock and a reduced-motion
-  fallback. Nav links get a rounded hover pill on both menus.
+  fallback. Nav links get a rounded hover pill on both menus. In the floating
+  capsule the hamburger is a 44 × 44 rounded square (`border-radius: 14px`) that
+  gains a glass background + border once `is-scrolled`, with springy
+  (`cubic-bezier(0.68, -0.6, 0.32, 1.6)`) bar-to-X lines.
 
 ## Images
 

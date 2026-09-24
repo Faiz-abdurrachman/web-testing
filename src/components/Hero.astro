@@ -40,7 +40,6 @@ import Button from './Button.astro';
   <canvas class="hero-canvas" aria-hidden="true"></canvas>
   <div class="hero-veil" aria-hidden="true"></div>
   <div class="hero-sweep" aria-hidden="true"></div>
-  <div class="hero-flare" aria-hidden="true"></div>
   <div class="hero-content">
     <div class="copy">
       <div class="title-wrap">
@@ -461,23 +460,6 @@ import Button from './Button.astro';
     );
     opacity: 0;
     transform: translate3d(-120%, 0, 0) skewX(-16deg);
-  }
-  .hero-flare {
-    position: absolute;
-    top: -40%;
-    bottom: -40%;
-    left: 0;
-    z-index: 2;
-    width: 26%;
-    pointer-events: none;
-    opacity: 0;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgb(232 224 255 / 42%),
-      transparent
-    );
-    transform: translate3d(-160%, 0, 0) skewX(-14deg);
   }
   .hero-canvas {
     position: absolute;

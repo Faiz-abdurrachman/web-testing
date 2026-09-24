@@ -235,7 +235,6 @@ export function initMotion() {
         const stack = hero.querySelector<HTMLElement>('.artwork-stack');
         const figure = hero.querySelector<HTMLElement>('.art-figure');
         const content = hero.querySelector<HTMLElement>('.hero-content');
-        const flare = hero.querySelector<HTMLElement>('.hero-flare');
 
         // The pointer parallax below slides this full-bleed layer, so give it a
         // little overscan: at scale 1 it is exactly the hero size, so any
@@ -275,20 +274,6 @@ export function initMotion() {
             { y: -200, autoAlpha: 0, scale: 0.94, ease: 'none', duration: 1 },
             0,
           );
-          if (flare) {
-            tl.fromTo(
-              flare,
-              { xPercent: -160, autoAlpha: 0 },
-              {
-                xPercent: 520,
-                autoAlpha: 1,
-                skewX: -14,
-                ease: 'none',
-                duration: 0.55,
-              },
-              0.05,
-            ).to(flare, { autoAlpha: 0, ease: 'none', duration: 0.2 }, 0.6);
-          }
           tl.to(
             burst,
             {
