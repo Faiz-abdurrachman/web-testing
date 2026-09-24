@@ -291,9 +291,21 @@ export function initMotion() {
       reveal(philosophy, '.illustration');
       reveal(philosophy, '.principles > li', { y: 28, stagger: 0.1 });
 
-      const whatWeDo = document.querySelector('.what-we-do');
+      const whatWeDo = document.querySelector<HTMLElement>('.what-we-do');
       reveal(whatWeDo, '.section-heading > *');
       reveal(whatWeDo, '.pillar', { y: 60, stagger: 0.12 });
+
+      // Park the star drift while the section is off-screen: the compositor then
+      // has nothing to animate for the rest of the page.
+      if (whatWeDo) {
+        const idle = new IntersectionObserver(
+          ([entry]) =>
+            whatWeDo.classList.toggle('is-idle', !entry.isIntersecting),
+          { rootMargin: '240px 0px' },
+        );
+        idle.observe(whatWeDo);
+        cleanups.push(() => idle.disconnect());
+      }
 
       const domains = document.querySelector('.domains');
       reveal(domains, 'header > *');

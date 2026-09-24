@@ -308,7 +308,7 @@ const pillars = [
   .what-we-do::after {
     content: '';
     position: absolute;
-    inset: -180px;
+    inset: -460px;
     z-index: -1;
     pointer-events: none;
     background-image:
@@ -424,12 +424,14 @@ const pillars = [
     background-size: 440px 360px;
     opacity: 0;
   }
-  /* Background motion is frozen for now: every star layer below stays at
-     `opacity: 0` and the glow is static, so the section renders exactly like the
-     reference PNG — no animation and no pointer interaction. To bring the living
-     sky back, re-add the drift/twinkle animations (see docs/ai-handoff.md). */
-  /* Two extra star layers (mid + near) give the sky depth and motion without
-     adding any purple wash. Both are currently disabled (opacity: 0). */
+  /* Star layers are hidden in the base state (`opacity: 0`) so that under
+     `prefers-reduced-motion: reduce` the section stays pixel-identical to the
+     reference PNG. The living sky is opt-in inside the `no-preference` media
+     query below: only `transform`/`opacity` animate (compositor), and each star
+     layer drifts one full background tile per loop so the wrap is seamless. The
+     layer `inset` is kept larger than its tile so the sliding box always covers
+     the section. The mid layer stays disabled (two drifting layers + glow keep
+     the compositing cost low). */
   .pillars-layout::before {
     content: '';
     position: absolute;
@@ -505,7 +507,7 @@ const pillars = [
   .pillars-layout::after {
     content: '';
     position: absolute;
-    inset: -200px;
+    inset: -540px;
     z-index: -1;
     pointer-events: none;
     background-image:
@@ -555,6 +557,53 @@ const pillars = [
       );
     background-size: 520px 400px;
     opacity: 0;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .what-we-do::before {
+      will-change: opacity;
+      animation: wwd-glow-breathe 11s ease-in-out infinite alternate;
+    }
+    /* One full background tile per loop, linear → seamless outer-space drift. */
+    .what-we-do::after {
+      opacity: 0.8;
+      will-change: transform;
+      animation: wwd-drift-far 12s linear infinite;
+    }
+    .pillars-layout::after {
+      opacity: 0.85;
+      will-change: transform;
+      animation: wwd-drift-near 7s linear infinite;
+    }
+    /* motion.ts toggles `is-idle` while the section is off-screen. */
+    .what-we-do.is-idle::before,
+    .what-we-do.is-idle::after,
+    .what-we-do.is-idle .pillars-layout::after {
+      animation-play-state: paused;
+    }
+  }
+  @keyframes wwd-glow-breathe {
+    from {
+      opacity: 0.86;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes wwd-drift-far {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-440px, -360px, 0);
+    }
+  }
+  @keyframes wwd-drift-near {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-520px, -400px, 0);
+    }
   }
   .pillars-layout {
     position: relative;
