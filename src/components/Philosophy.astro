@@ -66,6 +66,10 @@ const principles = [
         <span class="spark spark-a"></span>
         <span class="spark spark-b"></span>
         <span class="spark spark-c"></span>
+        <span class="spark spark-d"></span>
+        <span class="spark spark-e"></span>
+        <span class="spark spark-f"></span>
+        <span class="spark spark-g"></span>
       </span>
     </div>
     <div class="content">
@@ -209,16 +213,50 @@ const principles = [
     --s: 5px;
     --r: 150px;
     --a: 0deg;
+    --dur: 11s;
+    --tw: 3.1s;
   }
   .spark-b {
     --s: 6px;
     --r: 205px;
     --a: 140deg;
+    --dur: 16s;
+    --tw: 4.3s;
   }
   .spark-c {
     --s: 4px;
     --r: 118px;
     --a: 250deg;
+    --dur: 8.5s;
+    --tw: 2.6s;
+  }
+  .spark-d {
+    --s: 4px;
+    --r: 168px;
+    --a: 60deg;
+    --dur: 13s;
+    --tw: 3.7s;
+  }
+  .spark-e {
+    --s: 7px;
+    --r: 236px;
+    --a: 195deg;
+    --dur: 19s;
+    --tw: 4.9s;
+  }
+  .spark-f {
+    --s: 3px;
+    --r: 96px;
+    --a: 300deg;
+    --dur: 9.5s;
+    --tw: 2.2s;
+  }
+  .spark-g {
+    --s: 5px;
+    --r: 128px;
+    --a: 20deg;
+    --dur: 12s;
+    --tw: 3.4s;
   }
   @media (min-width: 1441px) {
     .illustration {
@@ -319,19 +357,15 @@ const principles = [
       opacity: 1;
     }
     .aura {
-      animation: phil-aura 18s linear infinite;
+      animation: phil-aura 18s cubic-bezier(0.5, 0, 0.5, 1) infinite;
     }
     .pulse {
       animation: phil-pulse 5.5s ease-in-out infinite;
     }
-    .spark-a {
-      animation: phil-orbit 11s linear infinite;
-    }
-    .spark-b {
-      animation: phil-orbit 16s linear infinite;
-    }
-    .spark-c {
-      animation: phil-orbit 8.5s linear infinite;
+    .spark {
+      animation:
+        phil-orbit var(--dur) cubic-bezier(0.5, 0, 0.5, 1) infinite,
+        phil-twinkle var(--tw) ease-in-out infinite;
     }
     .illustration picture {
       animation: phil-float 7s ease-in-out infinite;
@@ -356,7 +390,22 @@ const principles = [
     }
   }
   @keyframes phil-aura {
-    to {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0.5, 0, 0.5, 1);
+    }
+    30% {
+      transform: rotate(152deg);
+      animation-timing-function: cubic-bezier(0.5, 0, 0.5, 1);
+    }
+    54% {
+      transform: rotate(176deg);
+      animation-timing-function: cubic-bezier(0.5, 0, 0.5, 1);
+    }
+    82% {
+      transform: rotate(332deg);
+    }
+    100% {
       transform: rotate(360deg);
     }
   }
@@ -372,12 +421,36 @@ const principles = [
     }
   }
   @keyframes phil-orbit {
-    from {
+    0% {
       transform: rotate(var(--a)) translateX(calc(var(--r) * var(--u)));
+      animation-timing-function: cubic-bezier(0.55, 0, 0.45, 1);
     }
-    to {
+    30% {
+      transform: rotate(calc(var(--a) + 158deg))
+        translateX(calc(var(--r) * var(--u)));
+      animation-timing-function: cubic-bezier(0.55, 0, 0.45, 1);
+    }
+    52% {
+      transform: rotate(calc(var(--a) + 182deg))
+        translateX(calc(var(--r) * var(--u)));
+      animation-timing-function: cubic-bezier(0.55, 0, 0.45, 1);
+    }
+    80% {
+      transform: rotate(calc(var(--a) + 334deg))
+        translateX(calc(var(--r) * var(--u)));
+    }
+    100% {
       transform: rotate(calc(var(--a) + 360deg))
         translateX(calc(var(--r) * var(--u)));
+    }
+  }
+  @keyframes phil-twinkle {
+    0%,
+    100% {
+      opacity: 0.35;
+    }
+    50% {
+      opacity: 1;
     }
   }
   @keyframes phil-float {
