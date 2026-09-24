@@ -120,7 +120,8 @@ vercel.json      konfigurasi deploy
 
 **Font:**
 
-- **Manrope** 400/500/600/700 — di-bundle lokal (`public/fonts/*.ttf`, lisensi OFL).
+- **Manrope** 400/500/600/700 — di-bundle lokal sebagai **WOFF2**
+  (`public/fonts/*.woff2`, lisensi OFL) dengan TTF sebagai fallback.
 - **Nasalization** — **TIDAK di-bundle** (lisensi desktop melarang embed web).
   Di mesin dev dipakai font lokal, jadi di device lain heading fallback ke
   sans-serif. Cara dapat webfont berlisensi: lihat §11.
@@ -618,10 +619,11 @@ older geometry above. Heroes now adapt to viewport height; HoDS rails show a bou
 3/2/1 cards; Available Roles is a descriptive card grid; legal links align right;
 navbar text is brighter. Drag no longer consumes ordinary HoDS clicks, and role
 back links return to Available Roles. All role artwork exports are text-free.
-The supplied `assets/background/hd` sources are served as pixel-identical lossless
-WebP, with their actual native resolution documented rather than described as 4K.
-Run `node scripts/generate-backgrounds.mjs` to reproduce those assets and clean role
-images. Run `PREVIEW_URL=http://localhost:4331 node scripts/verify-feedback.mjs`
+The supplied `assets/background/hd` sources are served as lossy WebP **q88**
+(MAE < 5 vs the source), with their actual native resolution documented rather
+than described as 4K. Run `node scripts/generate-backgrounds.mjs` to reproduce
+those assets and clean role images, and `npm run assets:optimize` to re-encode
+the remaining heavy artwork. Run `PREVIEW_URL=http://localhost:4331 node scripts/verify-feedback.mjs`
 for focused interaction and visual coverage, alongside the existing audits.
 
 ## 21. Redesign kartu Available Roles + hero mobile fluid (23 September 2026)

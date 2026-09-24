@@ -6,6 +6,29 @@
 > `scripts/generate-*.mjs` remain in `assets/`. Paths below still name the
 > original locations; move a file back from the archive if you need it.
 
+## Performance pass (25 September 2026)
+
+The served artwork is now **lossy WebP** at q82 (content photos), q85 (HoDS
+cards) and q88 (full-bleed backgrounds + role cards). This supersedes the
+earlier "lossless" notes below: lossless photo WebP was 3–10× larger at no
+visible gain. Measured MAE stays under 2/255 on the backgrounds.
+
+- `npm run assets:optimize` (`scripts/optimize-images.mjs`) re-encodes the heavy
+  served art under `public/images/{recruitment,footer,what-you-will-do,philosophy,projects,hods}`.
+  It backs the pristine originals up to `assets/image-src/` (git-ignored) and
+  always encodes from there, so re-running never compounds loss; a file that
+  would grow is left as its original. `philosophy/glow.webp` is downscaled to
+  512px — a soft 980px glow, so the resize is invisible.
+- `scripts/generate-backgrounds.mjs` writes the full-bleed backgrounds and role
+  cards at q88 (from `assets/background/hd/*.png` and the pristine cards) and
+  asserts MAE < 5 instead of bit-identical pixels.
+- Manrope is served as **WOFF2** first (`public/fonts/manrope-*.woff2`, ~30KB vs
+  ~95KB TTF), with the TTF kept as a fallback and preloaded as woff2.
+- The hero clip is fetched after `requestIdleCallback` (or 300ms) and skipped
+  under `saveData`/2G, so the static art is the first paint.
+- Result: `dist` 56MB → 13MB; initial transfer `/` 2.37 → 1.72MB and
+  `/recruitment` 3.37 → 0.59MB (full scroll 3.60/5.82 → 1.87/1.14MB).
+
 ## Visual reference
 
 - Figma file: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=755-15215
@@ -100,6 +123,17 @@ The hero art is no longer one flattened image. It is split into two full-frame
   re-rendered sorcerer. The previous single flattened art is retired
   (`public/images/backgrounds/hero.webp` removed; `generate-backgrounds.mjs` no
   longer emits it).
+- **Short viewports (height ≤ 560px, e.g. phone landscape)**: `min-height:
+100svh` plus the mobile paddings made `.hero` taller than the viewport, so
+  `object-fit: cover` cropped the bottom of the figure (feet/reflection lost).
+  A `@media (max-height: 560px)` block at the end of `Hero.astro` tightens the
+  paddings/gaps and font sizes (`clamp(..., Nsvh, ...)`) and anchors the art with
+  `object-position: 61% bottom` so the character stays in frame. The 560px
+  threshold leaves every portrait phone (shortest is 568px) and the 1440 × 903
+  desktop reference untouched. Verified: 568×320, 600×343, 540×300, 480×320,
+  900×400 and 1280×500 keep the hero within the viewport with the full figure;
+  390×844, 360×640, 320×568 and 1440×903 are byte-identical. The 480×320 case is
+  322px vs a 320px viewport (2px overflow) but the feet remain visible.
 
 ## Navbar
 
@@ -214,18 +248,24 @@ score were unchanged when this section was added.
   `public/images/what-we-do/card-glow.svg`, positioned by `.card-glow`. Only the
   background was converted to CSS; card markup, borders, typography and the glow
   image are as before.
-- **Background motion is FROZEN (for now)**: the section renders a fully static,
-  PNG-matched background — the glow is the untouched static `::before` frame and
-  the three star layers (`.what-we-do::after`, `.pillars-layout::before`,
-  `.pillars-layout::after`) are kept in the stylesheet but held at `opacity: 0`,
-  so they never show. There is **no animation** (the `wwd-aurora` / `twinkle` /
-  `wwd-drift*` keyframes and the `is-idle` `IntersectionObserver` were removed)
-  and **no pointer interaction** (the old `--wwd-px/--wwd-py` →
-  `background-position` parallax was removed). Reason: the previous living
-  background read as janky ("patah-patah"); its known defects were (a) drift
-  travel larger than the layer `inset` padding, which swept a hard empty edge
-  into view and snapped back every loop, and (b) per-frame `background-position`
-  repaints. See `docs/ai-handoff.md` for how to re-enable it correctly.
+- **Living sky (outer-space drift)**: the base starfield + glow stay
+  PNG-matched; two extra star layers then fly through space and the glow
+  breathes. All of it is compositor-only — `transform`/`opacity`, never
+  `background-position`. Each star layer slides **exactly one background tile**
+  per loop (`440×360px` at `12s`, `520×400px` at `7s`) with `linear` timing, so
+  the wrap is seamless because the pattern is periodic — no snap, no twinkle
+  flicker. Each layer's `inset` (`-460px` / `-540px`) is larger than its travel,
+  so the moving box always covers the section and no empty edge can show. The mid
+  layer (`.pillars-layout::before`) is left at `opacity: 0` to keep only two
+  drifting layers + the glow. `will-change: transform` is set on the moving
+  layers. An `IntersectionObserver` in `motion.ts` toggles `is-idle` on
+  `.what-we-do` so all animations `animation-play-state: paused` while the
+  section is off-screen. The old per-frame `--wwd-px/--wwd-py` →
+  `background-position` pointer parallax was removed and is not coming back.
+- The whole sky lives inside `@media (prefers-reduced-motion: no-preference)`
+  and every layer defaults to `opacity: 0`, so under reduced motion the section
+  is still pixel-identical to the reference PNG (verification runs with
+  `reducedMotion: 'reduce'`).
 - **Card hover** (`.pillar:hover`, `@media (hover: hover)`): a violet spotlight
   follows the cursor (`.pillar::before` at `--mx/--my`, set by the existing 3D
   tilt), the gold hairline brightens, the drop shadow lifts and `.card-glow`
@@ -834,3 +874,31 @@ PNG comparisons and `verify.mjs` hero geometry stay valid.
 - Verified with a 11-width × 9-height mobile matrix plus the tablet/desktop
   widths: no overflow, no clipped text, identical ≥601px geometry, and
   `responsive-audit.mjs` ALL PASS (364 combos).
+
+## Loading splash — magic circle (24 September 2026)
+
+- New `src/components/Splash.astro`, mounted as the first child of `<body>` in
+  `BaseLayout.astro`. Full-screen `position: fixed` overlay so the hero is not
+  visible while its art loads.
+- Artwork is 100% CSS/SVG (no new dependency, no raster asset): a gold magic
+  circle (outer ring + 24 radial ticks, 7-point heptagram, dashed violet inner
+  ring) drawn over a dark violet nebula gradient, with the existing
+  `public/images/logo.png` glowing at the centre, 16 twinkling star sparks, the
+  wordmark (Nasalization fallback) and a shimmering progress bar.
+- Shown **once per session** (`sessionStorage: ds:splash`); an inline `<head>`
+  script arms it via `html.splash-armed` only when unseen **and** not
+  `prefers-reduced-motion: reduce` (otherwise it adds `html.splash-done`). The
+  overlay defaults to `display: none`, so reduced-motion and no-JS visitors
+  never see it. Exit is `window.load` + min 3000ms / hard-cap 6000ms, skippable
+  by pointer/key/wheel/touch; scroll is locked for its duration with a
+  scrollbar-width `padding-right` compensation so the reveal does not shift.
+- Hero entrance (CSS in `Hero.astro`, GSAP in `Motion.astro`) is gated on
+  `html.hero-ready` so the intro plays **once, in view**, after the overlay and
+  after ScrollTrigger has built its `.pin-spacer` (`:global(html.hero-ready)` is
+  required because the Hero styles are scoped). `motion.ts` adds the class once
+  the pin is settled and removes it after the longest entrance, because the pin's
+  DOM re-parenting on `refresh()` otherwise cancels and replays the CSS animation
+  (the reported "hero double refresh" on reload).
+- `.splash` added to `verify.mjs` `setNavbarHidden` for defence; because the
+  verifiers run with `reducedMotion: 'reduce'` the overlay is never armed during
+  audits.

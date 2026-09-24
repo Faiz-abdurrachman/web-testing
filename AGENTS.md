@@ -21,6 +21,7 @@ npm run format:check      # must pass before commit
 node scripts/verify.mjs   # visual verification (dev server must be running)
 node scripts/responsive-audit.mjs  # responsive audit: all pages × 26 widths
 npm run assets:og         # regenerate og image + favicons + manifest
+npm run assets:optimize   # re-encode heavy webp (lossy q82/85/88) from assets/image-src
 npm run seo:audit         # validate meta/OG/canonical/sitemap in dist (after build)
 ```
 
@@ -148,7 +149,9 @@ When adding/changing a section, update `docs/assets.md` and the relevant
 
 ## Fonts
 
-- Manrope is bundled (`public/fonts/*.ttf`, OFL).
+- Manrope is bundled as **WOFF2** (`public/fonts/*.woff2`, OFL) with the TTF kept
+  as a fallback. `scripts/optimize-images.mjs` handles the served artwork; heavy
+  webp is intentionally lossy (q82/85/88) — see `docs/assets.md` §Performance pass.
 - **Nasalization is NOT bundled** (desktop license blocks web embedding). Headings
   fall back to sans-serif off the dev machine. A licensed webfont must be added by
   the humans (see `HANDOVER.md` §11). Do not try to work around the license.
@@ -224,7 +227,7 @@ links. Role detail Back targets `#available-roles`; recruitment HoDS Back still
 returns to `#who-should-join` with the matching label. Role images must be clean
 artwork, generated from `public/images/hods/card-*.webp`, not the flattened role
 reference exports. See the dated section in `docs/assets.md` for asset provenance
-and revised geometry. `scripts/generate-backgrounds.mjs` verifies pixel-identical
-lossless conversion of `assets/background/hd`; do not claim these ~1.6K sources are
-native 4K. Run `scripts/verify-feedback.mjs` against the preview for click/drag/tap,
+and revised geometry. `scripts/generate-backgrounds.mjs` re-encodes
+`assets/background/hd` to lossy WebP q88 and asserts MAE < 5; do not claim these
+~1.6K sources are native 4K. Run `scripts/verify-feedback.mjs` against the preview for click/drag/tap,
 back-navigation, rail geometry and DPR screenshots in addition to normal audits.
