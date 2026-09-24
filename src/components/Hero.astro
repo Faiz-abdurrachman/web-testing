@@ -23,7 +23,14 @@ import Button from './Button.astro';
           alt=""
           decoding="async"
         />
-        <video class="art-video" muted loop playsinline preload="none">
+        <video
+          class="art-video"
+          muted
+          loop
+          playsinline
+          preload="none"
+          poster="/images/hero/background.webp"
+        >
           <source src="/images/hero/hero-bg.webm" type="video/webm" />
           <source src="/images/hero/hero-bg.mp4" type="video/mp4" />
         </video>
@@ -58,9 +65,11 @@ import Button from './Button.astro';
   // field rushes toward the viewer as the hero zooms in.
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Animated background. Only fetched and played on larger, motion-OK
-  // viewports; under reduced motion (or ≤600px) the static art stays and the
-  // clip is never downloaded, so the fallback is always the reference art.
+  // Animated background. Only fetched on larger, motion-OK viewports; under
+  // reduced motion (or ≤600px) the static art stays and the clip is never
+  // downloaded, so the fallback is always the reference art. It plays on a
+  // continuous loop (the clip is a seamless ping-pong boomerang), and is never
+  // scrubbed by scroll, so it keeps moving whether or not the visitor scrolls.
   const video = document.querySelector<HTMLVideoElement>('.art-video');
   if (video) {
     const wide = window.matchMedia('(min-width: 601px)').matches;
@@ -69,19 +78,9 @@ import Button from './Button.astro';
         video.classList.add('is-ready');
         void video.play().catch(() => {});
       };
-      if (video.readyState >= 3) start();
-      else video.addEventListener('canplay', start, { once: true });
-
-      // Don't decode while the hero scrolls away or the tab is hidden.
-      new IntersectionObserver(([entry]) => {
-        if (entry.isIntersecting) void video.play().catch(() => {});
-        else video.pause();
-      }).observe(video);
-      document.addEventListener('visibilitychange', () => {
-        if (document.hidden) video.pause();
-        else void video.play().catch(() => {});
-      });
-
+      if (video.readyState >= 2) start();
+      else video.addEventListener('loadeddata', start, { once: true });
+      video.preload = 'auto';
       video.load();
     }
   }

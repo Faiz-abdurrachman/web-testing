@@ -57,12 +57,11 @@ Three.js particle canvas in `Hero.astro`:
   camera (`z 9 → 4.5`). Measured canvas contribution jumped from `MAE 0.05` (old
   90-point layer, effectively invisible) to `~1.35` at mid-sequence.
 - Pointer parallax on `.artwork-stack` (`±3%`, `pointer: fine`), `.domain-card` /
-  `.pillar` 3D tilt (`rotationX/Y`), magnetic `.button` translate, and a
-  `.cursor-glow` that follows the pointer.
+  `.pillar` 3D tilt (`rotationX/Y`), and magnetic `.button` translate.
 - Everything is wrapped in
   `gsap.matchMedia('(prefers-reduced-motion: no-preference)')`, so requesting
   reduced motion reverts every tween/ScrollTrigger and runs the returned cleanup
-  (event listeners removed, glow removed). The Three.js layer is skipped under
+  (event listeners removed). The Three.js layer is skipped under
   reduced motion and is `import()`-ed so it never blocks the initial bundle.
 - Reduced-motion contract: under `verify.mjs`/`responsive-audit.mjs` (both use
   `reducedMotion: 'reduce'`) nothing animates, so geometry/diff stay clean and

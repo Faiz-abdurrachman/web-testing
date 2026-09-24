@@ -166,7 +166,6 @@ export function initMotion() {
         const figure = hero.querySelector<HTMLElement>('.art-figure');
         const content = hero.querySelector<HTMLElement>('.hero-content');
         const flare = hero.querySelector<HTMLElement>('.hero-flare');
-
         if (figure) animateFigure(figure, hero, cleanups, finePointer());
 
         if (desktop && stack && content) {
@@ -185,11 +184,15 @@ export function initMotion() {
             },
           });
 
-          tl.to(stack, { scale: 1.35, y: -110, ease: 'none' }, 0);
-          if (figure) tl.to(figure, { y: 90, ease: 'none' }, 0);
+          // Every tween spans the full `duration: 1` timeline so the motion
+          // ends exactly when the pin releases. Without it GSAP's 0.5s default
+          // finished the zoom halfway through and the still-pinned hero read as
+          // "stuck" while the remaining scroll did nothing.
+          tl.to(stack, { scale: 1.35, y: -110, ease: 'none', duration: 1 }, 0);
+          if (figure) tl.to(figure, { y: 90, ease: 'none', duration: 1 }, 0);
           tl.to(
             content,
-            { y: -200, autoAlpha: 0, scale: 0.94, ease: 'none' },
+            { y: -200, autoAlpha: 0, scale: 0.94, ease: 'none', duration: 1 },
             0,
           );
           if (flare) {
@@ -332,23 +335,6 @@ export function initMotion() {
             button.removeEventListener('mousemove', onMove);
             button.removeEventListener('mouseleave', onLeave);
           });
-        });
-
-        // Cursor glow.
-        const glow = document.createElement('div');
-        glow.className = 'cursor-glow';
-        glow.setAttribute('aria-hidden', 'true');
-        document.body.appendChild(glow);
-        const gx = gsap.quickTo(glow, 'x', { duration: 0.55, ease: 'power3' });
-        const gy = gsap.quickTo(glow, 'y', { duration: 0.55, ease: 'power3' });
-        const onMove = (event: MouseEvent) => {
-          gx(event.clientX);
-          gy(event.clientY);
-        };
-        window.addEventListener('mousemove', onMove);
-        cleanups.push(() => {
-          window.removeEventListener('mousemove', onMove);
-          glow.remove();
         });
       }
 

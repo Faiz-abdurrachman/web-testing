@@ -78,7 +78,7 @@ src/data/hods.ts         6 detail categories → 22 tabs (LEARNING/…/OUTPUT)
 src/data/projects.ts     4 placeholder projects (swap for real data)
 src/pages/index.astro    homepage composition
 src/pages/hods/[id].astro detail route (getStaticPaths over hods.ts)
-src/styles/global.css    @font-face, tokens, reset, cursor-glow
+src/styles/global.css    @font-face, tokens, reset
 scripts/verify.mjs       visual + geometry + responsive verification
 scripts/responsive-audit.mjs  per-page × per-width responsive audit
 scripts/generate-og.mjs  og share card + favicons + manifest (sharp)
