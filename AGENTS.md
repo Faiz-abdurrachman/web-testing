@@ -5,10 +5,10 @@ Project: **Data Sorcerers** — a static Astro landing site, a Recruitment page
 Figma/PNG** with lightweight HTML/CSS.
 
 Human-facing docs: `HANDOVER.md` (full context) and `docs/assets.md`
-(per-section provenance + Figma nodes). Read those for "why"; this file is the
-operating manual. A copy-paste starter for new agents lives in
-`docs/kickoff-prompt.md`; for building a new page/section use
-`docs/page-build-prompt.md`.
+(per-section provenance + Figma nodes). For the current live state read
+`docs/ai-handoff.md` first. Read those for "why"; this file is the operating
+manual. A copy-paste starter for new agents lives in `docs/kickoff-prompt.md`;
+for building a new page/section use `docs/page-build-prompt.md`.
 
 ## Commands
 
@@ -88,6 +88,7 @@ public/og/og-default.jpg share card (served)
 public/                  served assets (fonts, images)
 assets/<page>/           raw PNGs read by verify/generate scripts (NOT served; unused ones archived outside repo)
 docs/assets.md           provenance per section (keep updated)
+docs/ai-handoff.md       live "where we are now" handoff for the next AI agent
 artifacts/               verify output (git-ignored)
 ```
 
