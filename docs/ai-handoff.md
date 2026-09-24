@@ -183,6 +183,13 @@ Gotcha: `verify.mjs` bisa hang di `networkidle` melawan dev (Vite HMR) → build
 - `scripts/verify-feedback.mjs` **gagal pre-existing**: timeout di
   `locator('.artwork .art-bg')` untuk route `/recruitment` (hero recruitment pakai
   `.artwork img`, bukan `.art-bg`). Tidak terkait What We Do.
+- **Hero di HP = statis by design**: gate `(min-width: 601px)` di `Hero.astro`
+  bikin video `hero-bg` tidak pernah dimuat di `≤600px` (`preload="none"`,
+  `opacity: 0`); yang tampil cuma `background.webp` + `figure.webp`. Jadi di HP
+  hero cuma gambar, bukan bug / bukan aset lama.
+- Aset hero lama `public/images/hero-2880.webp` (2880×1806, tak direferensikan
+  sejak `c53d84d`) sudah dihapus; backup di
+  `/home/faiz/ds/ds-backup/hero-2880.webp`.
 - Untracked yang sengaja dibiarkan: `.agents/`, `skills-lock.json`,
   `assets/background/hd/video.mp4`, `assets/card baru/` (6 PNG belum dipakai).
 - Referensi PNG "What We Do": `assets/assets home page/what we do/What We Do

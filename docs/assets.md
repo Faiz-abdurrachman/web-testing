@@ -182,7 +182,11 @@ saturate(140%)`. After an 8px scroll it keeps a **blur-only** treatment
   "Hero layered scene" above). The earlier flattened art
   (`assets/background/hd/hero.png` ← `Gambar Hero Section.png`) is still the
   source for the OG share card via `scripts/generate-og.mjs`; it is not used by
-  the homepage hero anymore. Matching features against the PNG
+  the homepage hero anymore. The leftover served copy
+  `public/images/hero-2880.webp` (2880 × 1806, from the first commit `a0b58fd`,
+  unreferenced since `c53d84d`; its `hero-1440.webp` sibling was already gone)
+  was deleted and backed up outside the repo at
+  `/home/faiz/ds/ds-backup/hero-2880.webp` (`sha256 9346ab9a…`). Matching features against the PNG
   reference identified a slightly zoomed fill: source crop approximately
   `(22.69, 0, 5725.3, 3576.0)` in the 5736 × 3600 source. This is important:
   simply stretching the full supplied background shifts the figure and horizon.
