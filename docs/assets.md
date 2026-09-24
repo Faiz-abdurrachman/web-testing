@@ -249,6 +249,16 @@ and do not match the heading reference.
   bounds include 350px of blur overflow on each side of the 280px ellipse.
 - Below desktop width, the content adapts; mobile places the illustration
   beneath the text. No mobile Figma reference was supplied.
+- **Crystal motion FX** (only under `prefers-reduced-motion: no-preference`):
+  a rotating conic `.aura`, a breathing radial `.pulse`, and seven orbiting
+  `.spark` dots (a–g) centred on the crystal (`--crystal-x/y`), all
+  `mix-blend-mode: screen` and compositor-only (`transform`/`opacity`). `.fx` is
+  `opacity: 0` by default so the reduced-motion render stays pixel-identical to
+  the export. The static `glow.webp` carries the reference bloom; the dynamic
+  layers stay subtle on purpose (tuned 2026-09-25 when the glow read too
+  dominant — aura `50%/42% → 20%/16%`, width `62% → 56%`; pulse `55% → 18%`,
+  width `42% → 38%`). Aligned grid check now matches the reference within ±2
+  brightness (only the crystal core sits ~+10), versus the previous wash-out.
 
 Desktop comparison on the development machine verified the section, heading,
 and principles coordinates exactly. The image comparison still contains minor
@@ -301,8 +311,17 @@ score were unchanged when this section was added.
   scales/brightens. Transitions are gated to
   `prefers-reduced-motion: no-preference`; reduced motion still shows the hover
   state instantly.
-- Cards otherwise use the standard fade-up reveal (`reveal(whatWeDo, '.pillar',
-…)`).
+- **Pillars entrance — "summon from the core"** (`pillarIntro` in `motion.ts`):
+  on `≥1024px` the section is **pinned** (`start: 'top top'`, `end: '+=130%'`,
+  `scrub: 1`) and a scrubbed timeline runs — the eyebrow fades in, the two `h2`
+  lines mask up (`.line` wrapper with `overflow: hidden`; the gradient lives on
+  the inner span so the clip actually masks it), `.pillars-layout` tilts from
+  `rotationX: 11 / rotationY: -5` back to flat like a settling camera, and each
+  `.pillar` flies **outward from the heading** (`x/y` ±70/±56 toward centre,
+  `scale: 0.82`, `rotation: ±4deg`, staggered 01→02→03→04). Under `1024px` the
+  same build-up runs once (no pin, no camera tilt); `≤760px` keeps the simple
+  `reveal` fade-up. All transform/opacity only.
+- The old generic `reveal(whatWeDo, '.pillar', …)` is gone.
 - Every animation that remains (card hover) lives inside
   `@media (prefers-reduced-motion: no-preference)`; under reduced motion the hover
   state is instant, so verification screenshots stay pixel-identical to the

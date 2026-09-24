@@ -108,6 +108,84 @@ function animateFigure(
   });
 }
 
+function pillarIntro(whatWeDo: HTMLElement, opts: { pin: boolean }) {
+  const layout = whatWeDo.querySelector<HTMLElement>('.pillars-layout');
+  const eyebrow = whatWeDo.querySelector<HTMLElement>(
+    '.section-heading .eyebrow',
+  );
+  const lines = gsap.utils.toArray<HTMLElement>(
+    '.section-heading h2 > .line > span',
+    whatWeDo,
+  );
+  const pillars = gsap.utils.toArray<HTMLElement>('.pillar', whatWeDo);
+  if (!pillars.length) return;
+
+  // Each card starts pulled toward the heading (its grid corner's opposite) and
+  // flies out to its slot; the layout tilts like a camera settling on the scene.
+  const inward = [
+    { x: 70, y: 56, r: -4 },
+    { x: -70, y: 56, r: 4 },
+    { x: 70, y: -56, r: -4 },
+    { x: -70, y: -56, r: 4 },
+  ];
+
+  if (eyebrow) gsap.set(eyebrow, { autoAlpha: 0, y: 14 });
+  if (lines.length) gsap.set(lines, { yPercent: 115 });
+  if (opts.pin && layout) {
+    gsap.set(layout, {
+      rotationX: 11,
+      rotationY: -5,
+      transformPerspective: 1200,
+      transformOrigin: '50% 55%',
+    });
+  }
+  pillars.forEach((card, i) => {
+    const v = inward[i % inward.length];
+    gsap.set(card, {
+      x: v.x,
+      y: v.y,
+      rotation: v.r,
+      scale: 0.82,
+      autoAlpha: 0,
+      transformPerspective: 900,
+    });
+  });
+
+  const tl = gsap.timeline({
+    defaults: { ease: 'power3.out' },
+    scrollTrigger: opts.pin
+      ? {
+          trigger: whatWeDo,
+          start: 'top top',
+          end: '+=130%',
+          scrub: 1,
+          pin: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        }
+      : { trigger: whatWeDo, start: 'top 68%', once: true },
+  });
+
+  if (eyebrow) tl.to(eyebrow, { autoAlpha: 1, y: 0, duration: 0.45 }, 0);
+  if (lines.length)
+    tl.to(lines, { yPercent: 0, duration: 0.85, stagger: 0.1 }, 0.08);
+  if (opts.pin && layout)
+    tl.to(layout, { rotationX: 0, rotationY: 0, duration: 1.3 }, 0);
+  tl.to(
+    pillars,
+    {
+      x: 0,
+      y: 0,
+      rotation: 0,
+      scale: 1,
+      autoAlpha: 1,
+      duration: 1,
+      stagger: 0.12,
+    },
+    0.22,
+  );
+}
+
 function tilt(element: HTMLElement, max: number, cleanups: Cleanup[]) {
   gsap.set(element, { transformPerspective: 900 });
   const rx = gsap.quickTo(element, 'rotationX', {
@@ -151,11 +229,18 @@ export function initMotion() {
     {
       reduce: '(prefers-reduced-motion: reduce)',
       desktop: '(min-width: 768px)',
+      wide: '(min-width: 1024px)',
+      small: '(max-width: 760px)',
     },
     (context) => {
-      const { reduce, desktop } = (
+      const { reduce, desktop, wide, small } = (
         context as unknown as {
-          conditions: { reduce: boolean; desktop: boolean };
+          conditions: {
+            reduce: boolean;
+            desktop: boolean;
+            wide: boolean;
+            small: boolean;
+          };
         }
       ).conditions;
       if (reduce) return;
@@ -296,8 +381,16 @@ export function initMotion() {
       reveal(philosophy, '.principles > li', { y: 28, stagger: 0.1 });
 
       const whatWeDo = document.querySelector<HTMLElement>('.what-we-do');
-      reveal(whatWeDo, '.section-heading > *');
-      reveal(whatWeDo, '.pillar', { y: 60, stagger: 0.12 });
+      if (whatWeDo) {
+        if (small) {
+          reveal(whatWeDo, '.section-heading > *');
+          reveal(whatWeDo, '.pillar', { y: 44, stagger: 0.1 });
+        } else {
+          // Pinned 3D sequence on wide screens; a shorter, non-pinned build-up
+          // on tablets where the layout is only two columns.
+          pillarIntro(whatWeDo, { pin: wide });
+        }
+      }
 
       // Park the star drift while the section is off-screen: the compositor then
       // has nothing to animate for the rest of the page.

@@ -32,8 +32,12 @@ const pillars = [
     <div class="section-heading">
       <span class="eyebrow">What We Do</span>
       <h2 id="pillars-title">
-        <span>Four Pillars</span>
-        <span>of Innovation</span>
+        <span class="line">
+          <span>Four Pillars</span>
+        </span>
+        <span class="line">
+          <span>of Innovation</span>
+        </span>
       </h2>
     </div>
     {pillars.map(({ number, title, description }) => (
@@ -645,12 +649,21 @@ const pillars = [
     font-weight: 400;
     line-height: 68px;
     text-align: center;
-    background: linear-gradient(270deg, #fff, #ede8ff);
-    background-clip: text;
     color: transparent;
   }
   h2 span {
     display: block;
+  }
+  h2 > .line {
+    overflow: hidden;
+  }
+  /* Gradient lives on the line's inner span (not the h2) so the `.line` overflow
+     clip actually masks it during the reveal — `background-clip: text` on the h2
+     paints outside a descendant's clip otherwise. */
+  h2 > .line > span {
+    background: linear-gradient(270deg, #fff, #ede8ff);
+    background-clip: text;
+    color: transparent;
   }
   .pillar {
     position: relative;
