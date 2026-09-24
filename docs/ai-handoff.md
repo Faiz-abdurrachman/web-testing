@@ -142,6 +142,18 @@ tak tersentuh. Terverifikasi 568×320 / 600×343 / 540×300 / 900×400 / 1280×5
 fit + karakter utuh, portrait & 1440×903 tak berubah (sisa: 480×320 overflow 2px,
 kaki tetap terlihat).
 
+### Hero portrait: figur statis jangan menutupi CTA / mepet tepi kanan
+
+Di HP portrait (≤600px), `figure.webp` dijangkar bawah lewat `@media
+(max-width: 600px) and (min-height: 561px)` (`.artwork .art-figure { top:auto;
+bottom:0; height:80%; object-position:50.5% bottom }`). Tier per-lebar lalu
+menjaga cutout tetap punya celah dari tombol stacked tanpa menempel tepi kanan:
+`400–600px` → `height:74%; 54% bottom`; `381–399px` → `height:74%; 52.5%`;
+`341–360px` → `47%`; `≤340px` → `height:72%; 38.5%`. Selector wajib
+`.artwork .art-figure` (0,2,0) supaya menang atas `.artwork :is(img,video)`
+(0,1,1). Terukur reduced-motion: 412×915 figur x 218–366 (celah 10px, margin
+kanan 46px); 320/360/390/430/540/580 overlap 0 & utuh.
+
 ### Hero video animasi kepotong di 601–~730px (karakter jangan keluar frame)
 
 Video `hero-bg.webm/mp4` (1582×992) menggantikan layer statis di `≥601px`.
