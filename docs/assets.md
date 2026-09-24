@@ -204,11 +204,40 @@ score were unchanged when this section was added.
   Heading typography: Nasalization Regular 56/68.
 - Card titles: Nasalization Regular 24/36; numbers and descriptions:
   Manrope Regular 16/24, letter spacing -0.176px.
-- Background: supplied `Background.png`, converted into responsive WebP.
-- Center glow: supplied `Ellipse 3.png`, lossless WebP including blur overflow.
-- Card glow and upper-right glow: original SVG exports from Figma, stored in
-  `public/images/what-we-do/`. These contain decoration only; card titles,
-  numbers, descriptions, borders, and layout are HTML/CSS.
+- Background is **pure CSS, no image assets**: a subtle starfield (repeating
+  radial-gradient tile) on `.what-we-do`, plus the purple glows — upper-right and
+  center on `.what-we-do::before`. Colour values (`#6C3BFF` / `#9B7BFF`) and
+  positions were measured from the reference PNG. The former star/glow
+  background exports (`stars-*.webp`, `center-glow.webp`, `corner-glow.svg`)
+  were removed.
+- The **card glow is unchanged**: still the supplied SVG export
+  `public/images/what-we-do/card-glow.svg`, positioned by `.card-glow`. Only the
+  background was converted to CSS; card markup, borders, typography and the glow
+  image are as before.
+- **Background motion is FROZEN (for now)**: the section renders a fully static,
+  PNG-matched background — the glow is the untouched static `::before` frame and
+  the three star layers (`.what-we-do::after`, `.pillars-layout::before`,
+  `.pillars-layout::after`) are kept in the stylesheet but held at `opacity: 0`,
+  so they never show. There is **no animation** (the `wwd-aurora` / `twinkle` /
+  `wwd-drift*` keyframes and the `is-idle` `IntersectionObserver` were removed)
+  and **no pointer interaction** (the old `--wwd-px/--wwd-py` →
+  `background-position` parallax was removed). Reason: the previous living
+  background read as janky ("patah-patah"); its known defects were (a) drift
+  travel larger than the layer `inset` padding, which swept a hard empty edge
+  into view and snapped back every loop, and (b) per-frame `background-position`
+  repaints. See `docs/ai-handoff.md` for how to re-enable it correctly.
+- **Card hover** (`.pillar:hover`, `@media (hover: hover)`): a violet spotlight
+  follows the cursor (`.pillar::before` at `--mx/--my`, set by the existing 3D
+  tilt), the gold hairline brightens, the drop shadow lifts and `.card-glow`
+  scales/brightens. Transitions are gated to
+  `prefers-reduced-motion: no-preference`; reduced motion still shows the hover
+  state instantly.
+- Cards otherwise use the standard fade-up reveal (`reveal(whatWeDo, '.pillar',
+…)`).
+- Every animation that remains (card hover) lives inside
+  `@media (prefers-reduced-motion: no-preference)`; under reduced motion the hover
+  state is instant, so verification screenshots stay pixel-identical to the
+  reference.
 - Mobile places the heading first, then the four cards in reading order.
   The desktop composition uses CSS Grid with explicit reference dimensions.
 - Visual verification checks exact card geometry at 1440px and checks for
