@@ -44,6 +44,62 @@ The screenshot is the final visual authority when exported CSS differs.
 The standalone hero reference does not include the homepage's bottom fade;
 that transition belongs to the later full-page integration.
 
+### Hero motion layer (Tier 1)
+
+All of the hero motion is added markup + CSS keyframes + one inline script
+(`src/scripts/hero-motion.ts`, no new dependencies):
+
+- One orchestrated page-load moment, not scattered effects. An earlier pass had
+  an ambient cursor spotlight (`.hero-aura`) and a violet ember canvas
+  (`.hero-embers`); both were removed as distracting decoration after review
+  against the frontend-design guidance to spend boldness in one place.
+- Entrance (CSS only, gated behind `@media (prefers-reduced-motion: no-preference)`):
+  the artwork blurs/zooms in, a dark `.hero-veil` lifts, one quiet `.hero-sweep`
+  light streak crosses, the two `h1` lines rise out of a blur, then the paragraph
+  and actions fade up.
+- Scroll parallax (JS, skipped entirely under reduced motion): `.artwork` and
+  `.hero-content` drift a few pixels via `translate3d` only. The artwork is given
+  extra bleed via `top/bottom: -6%` under `.is-motion` so the parallax never
+  reveals an edge; no `scale` is animated. It starts after the entrance so the
+  artwork never animates its transform while it is also blurring in.
+- Performance choices: the sweep animates `transform` (not `left`), DOM writes are
+  skipped when the parallax value has not changed, and the rAF loop is paused when
+  the hero is off-screen or the tab is hidden.
+- Reduced-motion contract: the script returns before adding `.is-motion`, so the
+  veil/sweep stay at `opacity: 0` and nothing is animated. The hero renders
+  pixel-identical to the static reference, which is why `verify.mjs` (reduce mode)
+  still passes with no new `setNavbarHidden` entries.
+
+### Hero layered scene (Option B, production pack)
+
+The hero art is no longer one flattened image. It is split into two full-frame
+1583 × 993 layers so the sorcerer can parallax independently of the plate:
+
+- Source pack: `assets/background/hero/data-sorcerers-hero-production-pack/`
+  (audited; not served). Only `background/background_clean.png` and
+  `character/sorcerer_primary.png` are used. The pack's FX layers are full-frame
+  images that over-blow under `screen` blending, so none are shipped; rune/staff/
+  crystal exports are baked into the plate and unused.
+- Generator: `node scripts/generate-hero-layers.mjs` writes
+  `public/images/hero/background.webp` (clean plate, lossy q86) and
+  `public/images/hero/figure.webp` (lossless cutout on a transparent plate with a
+  mirrored 0.32-opacity reflection). Both are exactly 1583 × 993.
+- Placement was measured from the reference, not eyeballed: character height
+  **355 px** of 993 (35.7%), feet at **86%** height, centred at **60.5%** width
+  → trimmed cutout `218 × 355` at `left = 849, top = 499`. Asserted in the
+  generator.
+- Both layers share `object-fit: cover` inside `.artwork-stack`, so the cutout
+  stays locked to the plate at every viewport (verified at 390, 1440 and 1920 px
+  — identical `getBoundingClientRect`). Parallax moves `.art-bg` (+46 px) and
+  `.art-figure` (+28 px) at different rates for depth; the entrance
+  blur/zoom now targets `.artwork-stack` so both layers stay together.
+- **Fidelity trade-off**: `sorcerer_primary.png` is a reconstruction, not a
+  pixel-match extraction of the reference figure (template RMSE ≈ 104 against
+  the flattened master). The hero therefore reads as the same scene with a
+  re-rendered sorcerer. The previous single flattened art is retired
+  (`public/images/backgrounds/hero.webp` removed; `generate-backgrounds.mjs` no
+  longer emits it).
+
 ## Navbar
 
 - Figma node: `755:15219` (component set `530:13894`). The `assets/assets home page/navbar/`
@@ -73,9 +129,12 @@ saturate(140%)`. After an 8px scroll it keeps a **blur-only** treatment
 
 ## Images
 
-- Hero: user-provided `assets/assets home page/hero section/Gambar Hero Section.png`.
-  Responsive WebP versions preserve the frame composition at 1440 and 2880
-  pixels. The original remains untouched. Matching features against the PNG
+- Hero: the homepage hero now renders the layered production-pack scene (see
+  "Hero layered scene" above). The earlier flattened art
+  (`assets/background/hd/hero.png` ← `Gambar Hero Section.png`) is still the
+  source for the OG share card via `scripts/generate-og.mjs`, and
+  `public/images/hero-1440.webp` remains the `/lab/hero-3d` fallback background;
+  neither is used by the homepage hero anymore. Matching features against the PNG
   reference identified a slightly zoomed fill: source crop approximately
   `(22.69, 0, 5725.3, 3576.0)` in the 5736 × 3600 source. This is important:
   simply stretching the full supplied background shifts the figure and horizon.

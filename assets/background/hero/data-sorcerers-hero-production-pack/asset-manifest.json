@@ -1,0 +1,73 @@
+{
+  "pack": "Data Sorcerers Hero Production Pack",
+  "primary_character": "character/sorcerer_primary.png",
+  "clean_background": "background/background_clean.png",
+  "recommended_layers": [
+    {
+      "z": 0,
+      "file": "background/background_clean.png",
+      "motion": "0.5-1.5%",
+      "blend": "normal"
+    },
+    {
+      "z": 1,
+      "file": "fx/starfield_overlay.png",
+      "motion": "1-2%",
+      "blend": "screen"
+    },
+    {
+      "z": 2,
+      "file": "fx/cosmic_arc_overlay.png",
+      "motion": "2-4%",
+      "blend": "screen"
+    },
+    {
+      "z": 3,
+      "file": "fx/horizon_lightburst.png",
+      "motion": "pulse",
+      "blend": "screen"
+    },
+    {
+      "z": 4,
+      "file": "runes/rune_arcane_tech.png",
+      "motion": "slow rotate",
+      "blend": "screen"
+    },
+    {
+      "z": 5,
+      "file": "character/sorcerer_primary.png",
+      "motion": "4-7%",
+      "blend": "normal"
+    },
+    {
+      "z": 6,
+      "file": "crystal/crystal_primary.png",
+      "motion": "float/orbit",
+      "blend": "screen"
+    },
+    {
+      "z": 7,
+      "file": "staff/staff_primary.png",
+      "motion": "independent optional",
+      "blend": "normal"
+    },
+    {
+      "z": 8,
+      "file": "fx/fog_foreground.png",
+      "motion": "6-10%",
+      "blend": "screen"
+    },
+    {
+      "z": 9,
+      "file": "fx/particle_swirl.png",
+      "motion": "drift",
+      "blend": "screen"
+    }
+  ],
+  "notes": [
+    "8K master files are Lanczos upscales of lower-resolution sources; no new native 8K detail is claimed.",
+    "environment_depth_concept.png is an artistic depth concept, not calibrated metric depth.",
+    "Character/staff/crystal alpha masks are derived from the real PNG alpha channels.",
+    "Generated visual assets are reconstructions/derivatives, not pixel-identical extractions from the original hero artwork."
+  ]
+}

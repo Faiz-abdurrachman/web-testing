@@ -176,6 +176,14 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   `min-height: 100svh` dengan konten dipusatkan vertikal;
   judul konsisten 2 baris sampai 320px; tombol home stack ≤480px. **≥601px tidak
   diubah** — tablet/desktop dan diff PNG hero 1440 tetap (jaga ini saat mengedit).
+- **Hero layered scene (Option B)**: art hero sekarang dua layer full-frame
+  1583 × 993 (`public/images/hero/background.webp` + `figure.webp`) dari
+  `assets/background/hero/data-sorcerers-hero-production-pack/`, digenerate
+  `scripts/generate-hero-layers.mjs` (placeholder terukur: karakter tinggi 355,
+  kaki 86%, tengah 60.5%). Keduanya `object-fit: cover` dalam `.artwork-stack`
+  jadi selalu sejajar; parallax `.art-bg` +46 / `.art-figure` +28. Catatan:
+  `sorcerer_primary.png` = rekonstruksi (RMSE ≈ 104 vs master), bukan ekstraksi
+  pixel-match. `public/images/backgrounds/hero.webp` sudah dihapus.
 - SEO/OG selesai: canonical + Open Graph/Twitter + JSON-LD + `robots.txt` +
   sitemap (`@astrojs/sitemap`) + share card `public/og/og-default.jpg`. Origin
   dari `SITE_URL` (default `https://data-sorcerers-community-sigma.vercel.app`) — **ganti begitu
