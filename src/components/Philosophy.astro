@@ -44,21 +44,30 @@ const principles = [
   aria-labelledby="philosophy-title"
 >
   <div class="canvas">
-    <picture class="illustration" aria-hidden="true">
-      <source
-        srcset="/images/philosophy/sorcerer-1x.webp 861w, /images/philosophy/sorcerer-2x.webp 1722w"
-        sizes="(max-width: 760px) 100vw, 861px"
-        type="image/webp"
-      />
-      <img
-        src="/images/philosophy/sorcerer-1x.webp"
-        width="861"
-        height="770"
-        alt=""
-        loading="lazy"
-        decoding="async"
-      />
-    </picture>
+    <div class="illustration" aria-hidden="true">
+      <picture>
+        <source
+          srcset="/images/philosophy/sorcerer-1x.webp 861w, /images/philosophy/sorcerer-2x.webp 1722w"
+          sizes="(max-width: 760px) 100vw, 861px"
+          type="image/webp"
+        />
+        <img
+          src="/images/philosophy/sorcerer-1x.webp"
+          width="861"
+          height="770"
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
+      </picture>
+      <span class="fx">
+        <span class="aura"></span>
+        <span class="pulse"></span>
+        <span class="spark spark-a"></span>
+        <span class="spark spark-b"></span>
+        <span class="spark spark-c"></span>
+      </span>
+    </div>
     <div class="content">
       <div class="heading">
         <span class="eyebrow">Our Philosphy</span>
@@ -123,10 +132,93 @@ const principles = [
     height: 770px;
     pointer-events: none;
   }
+  .illustration picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
   .illustration img {
     display: block;
     width: 100%;
     height: 100%;
+  }
+  /* Crystal-centered FX. Hidden unless motion is allowed so the reduced-motion
+     render stays pixel-identical to the reference export. */
+  .fx {
+    --crystal-x: 57%;
+    --crystal-y: 52%;
+    --u: 1;
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .fx .aura,
+  .fx .pulse,
+  .fx .spark {
+    position: absolute;
+    left: var(--crystal-x);
+    top: var(--crystal-y);
+    mix-blend-mode: screen;
+  }
+  .aura {
+    width: 62%;
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      rgb(155 123 255 / 50%) 45deg,
+      transparent 110deg,
+      transparent 190deg,
+      rgb(108 59 255 / 42%) 235deg,
+      transparent 300deg
+    );
+    -webkit-mask: radial-gradient(
+      circle closest-side,
+      transparent 32%,
+      #000 54%,
+      transparent 92%
+    );
+    mask: radial-gradient(
+      circle closest-side,
+      transparent 32%,
+      #000 54%,
+      transparent 92%
+    );
+  }
+  .pulse {
+    width: 42%;
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    background: radial-gradient(
+      circle closest-side,
+      rgb(160 130 255 / 55%),
+      transparent 82%
+    );
+  }
+  .spark {
+    width: var(--s);
+    height: var(--s);
+    margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+    border-radius: 50%;
+    background: #d8ccff;
+    box-shadow: 0 0 10px 2px rgb(139 92 246 / 75%);
+  }
+  .spark-a {
+    --s: 5px;
+    --r: 150px;
+    --a: 0deg;
+  }
+  .spark-b {
+    --s: 6px;
+    --r: 205px;
+    --a: 140deg;
+  }
+  .spark-c {
+    --s: 4px;
+    --r: 118px;
+    --a: 250deg;
   }
   @media (min-width: 1441px) {
     .illustration {
@@ -219,7 +311,88 @@ const principles = [
     font-weight: 400;
     line-height: 21px;
   }
+  .principles li h3 {
+    transition: color 0.35s ease;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .fx {
+      opacity: 1;
+    }
+    .aura {
+      animation: phil-aura 18s linear infinite;
+    }
+    .pulse {
+      animation: phil-pulse 5.5s ease-in-out infinite;
+    }
+    .spark-a {
+      animation: phil-orbit 11s linear infinite;
+    }
+    .spark-b {
+      animation: phil-orbit 16s linear infinite;
+    }
+    .spark-c {
+      animation: phil-orbit 8.5s linear infinite;
+    }
+    .illustration picture {
+      animation: phil-float 7s ease-in-out infinite;
+    }
+    .principles li {
+      transition: transform 0.35s ease;
+    }
+    .principles li:hover {
+      transform: translateY(-3px);
+    }
+    .principles li img {
+      transition:
+        transform 0.35s ease,
+        filter 0.35s ease;
+    }
+    .principles li:hover img {
+      transform: scale(1.1);
+      filter: drop-shadow(0 0 12px rgb(108 59 255 / 85%)) brightness(1.15);
+    }
+    .principles li:hover h3 {
+      color: #c9b8ff;
+    }
+  }
+  @keyframes phil-aura {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes phil-pulse {
+    0%,
+    100% {
+      opacity: 0.35;
+      transform: scale(0.94);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(1.08);
+    }
+  }
+  @keyframes phil-orbit {
+    from {
+      transform: rotate(var(--a)) translateX(calc(var(--r) * var(--u)));
+    }
+    to {
+      transform: rotate(calc(var(--a) + 360deg))
+        translateX(calc(var(--r) * var(--u)));
+    }
+  }
+  @keyframes phil-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
   @media (min-width: 761px) and (max-width: 1399px) {
+    .fx {
+      --u: 0.62;
+    }
     .canvas {
       min-height: 760px;
     }
@@ -263,6 +436,9 @@ const principles = [
     }
   }
   @media (max-width: 760px) {
+    .fx {
+      --u: 0.42;
+    }
     .canvas {
       min-height: 0;
       display: flex;
