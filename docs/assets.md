@@ -56,6 +56,15 @@ Three.js particle canvas in `Hero.astro`:
   the artwork blurs/zooms in, a dark `.hero-veil` lifts, one quiet `.hero-sweep`
   light streak crosses, the two `h1` lines rise out of a blur, then the paragraph
   and actions fade up.
+- Headline "strike": as each `h1` line resolves, a sharp diagonal zig-zag
+  lightning strike (`.bolt` — `.halo` + `.core` SVG polylines with
+  `pathLength="100"`, single dash-draw, no fork) is drawn behind the text,
+  synced to the `hero-line` delays (0.42s / 0.57s). The crisp white core
+  (`stroke-width: 2`, barely blurred) over a wider soft violet halo reads as
+  lightning rather than a smooth tube/worm. A soft `.strike-burst` radial bloom
+  pops at the arc's far end (0.58s). Uses `stroke-dashoffset` / `opacity` /
+  `transform`; `opacity: 0` at rest and gated to `no-preference`, so the
+  reduced-motion frame is unchanged.
 - `.artwork-entrance` carries that CSS blur/zoom on its own wrapper; the GSAP
   targets (`.artwork-stack`, `.art-figure`) sit below it so the keyframe's
   `fill: both` end state can never override GSAP's inline transform.
@@ -318,12 +327,14 @@ score were unchanged when this section was added.
   the viewport (`scrollTrigger: { start: 'top 72%', once: true }` — no pin and no
   `scrub`, so it completes on its own rather than tracking scroll). The eyebrow
   fades in, the two `h2` lines mask up (`.line` wrapper with `overflow: hidden`;
-  the gradient lives on the inner span so the clip actually masks it),
-  `.pillars-layout` tilts from `rotationX: 11 / rotationY: -5` back to flat like
-  a settling camera, and each `.pillar` flies **outward from the heading**
-  (`x/y` ±70/±56 toward centre, `scale: 0.82`, `rotation: ±4deg`, staggered
-  01→02→03→04, ~1.4s total). `≤760px` keeps the simple `reveal` fade-up. All
-  transform/opacity only.
+  the gradient lives on the inner span so the clip actually masks it), and each
+  `.pillar` flies **outward from the heading** (`x/y` ±70/±56 toward centre,
+  `scale: 0.82`, `rotation: ±4deg`, staggered 01→02→03→04, ~1.4s total).
+  `≤760px` keeps the simple `reveal` fade-up. All transform/opacity only.
+  A 3D camera tilt on `.pillars-layout` (`rotationX/Y`) was **removed after
+  review** — it put the whole section on its own layer and re-rasterised the
+  starfield every frame for little visual gain; the 2D card fly-out reads just
+  as well and stays cheap.
 - The old generic `reveal(whatWeDo, '.pillar', …)` is gone.
 - Every animation that remains (card hover) lives inside
   `@media (prefers-reduced-motion: no-preference)`; under reduced motion the hover

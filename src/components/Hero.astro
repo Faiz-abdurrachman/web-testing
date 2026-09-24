@@ -43,10 +43,65 @@ import Button from './Button.astro';
   <div class="hero-flare" aria-hidden="true"></div>
   <div class="hero-content">
     <div class="copy">
-      <h1 id="hero-title">
-        <span>SORCERY IN DATA</span>
-        <span>MAGIC IN AI</span>
-      </h1>
+      <div class="title-wrap">
+        <h1 id="hero-title">
+          <span>SORCERY IN DATA</span>
+          <span>MAGIC IN AI</span>
+        </h1>
+        <div class="strike" aria-hidden="true">
+          <svg
+            class="bolt bolt-1"
+            viewBox="0 0 600 60"
+            preserveAspectRatio="none"
+          >
+            <defs>
+              <linearGradient id="strike-grad-1" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#9b7bff" stop-opacity="0" />
+                <stop offset="0.1" stop-color="#9b7bff" stop-opacity="0.65" />
+                <stop offset="0.55" stop-color="#e8e0ff" stop-opacity="1" />
+                <stop offset="0.9" stop-color="#e8e0ff" stop-opacity="0.8" />
+                <stop offset="1" stop-color="#e8e0ff" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+            <path
+              class="halo"
+              pathLength="100"
+              d="M0 30 L77.5 12.3 L152.3 44.5 L205.2 13.4 L260.6 46.7 L333.5 16.4 L449.3 39.5 L492.1 22.9 L600 33.1"
+            />
+            <path
+              class="core"
+              pathLength="100"
+              d="M0 30 L77.5 12.3 L152.3 44.5 L205.2 13.4 L260.6 46.7 L333.5 16.4 L449.3 39.5 L492.1 22.9 L600 33.1"
+            />
+          </svg>
+          <svg
+            class="bolt bolt-2"
+            viewBox="0 0 600 60"
+            preserveAspectRatio="none"
+          >
+            <defs>
+              <linearGradient id="strike-grad-2" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#9b7bff" stop-opacity="0" />
+                <stop offset="0.1" stop-color="#9b7bff" stop-opacity="0.65" />
+                <stop offset="0.55" stop-color="#e8e0ff" stop-opacity="1" />
+                <stop offset="0.9" stop-color="#e8e0ff" stop-opacity="0.8" />
+                <stop offset="1" stop-color="#e8e0ff" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+            <path
+              class="halo"
+              pathLength="100"
+              d="M0 30 L80.7 22.2 L128 36.4 L213.1 18.9 L301.3 39.4 L351.6 18.4 L393.4 47.3 L441.2 22.2 L526.7 43.8 L600 32.5"
+            />
+            <path
+              class="core"
+              pathLength="100"
+              d="M0 30 L80.7 22.2 L128 36.4 L213.1 18.9 L301.3 39.4 L351.6 18.4 L393.4 47.3 L441.2 22.2 L526.7 43.8 L600 32.5"
+            />
+          </svg>
+          <span class="strike-burst"></span>
+        </div>
+      </div>
       <p>
         An AI &amp; Data Innovation Community where people learn, experiment,
         research, and build meaningful technology together.
@@ -292,6 +347,76 @@ import Button from './Button.astro';
   h1 span {
     display: block;
   }
+  /* Lightning strike that flashes as each headline line resolves. Sits behind
+     the text (h1 is lifted on its own layer) and is invisible until the
+     hero-ready animations run, so the reduced-motion render is untouched. */
+  .title-wrap {
+    position: relative;
+    isolation: isolate;
+  }
+  h1 {
+    position: relative;
+    z-index: 1;
+  }
+  .strike {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .bolt {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 52px;
+    overflow: visible;
+  }
+  .bolt path {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    opacity: 0;
+  }
+  .bolt-1 :is(.halo, .core) {
+    stroke: url(#strike-grad-1);
+  }
+  .bolt-2 :is(.halo, .core) {
+    stroke: url(#strike-grad-2);
+  }
+  .bolt .halo {
+    stroke-width: 13;
+    stroke-opacity: 0.4;
+    filter: blur(4px);
+  }
+  .bolt .core {
+    stroke-width: 2;
+    stroke-opacity: 1;
+    filter: blur(0.4px);
+  }
+  .bolt-1 {
+    top: 14%;
+  }
+  .bolt-2 {
+    top: 62%;
+  }
+  .strike-burst {
+    position: absolute;
+    top: 14%;
+    right: 6%;
+    width: 280px;
+    height: 280px;
+    opacity: 0;
+    filter: blur(12px);
+    background: radial-gradient(
+      circle,
+      rgb(216 200 255 / 45%),
+      transparent 64%
+    );
+    transform: translate(30%, -50%) scale(0.6);
+  }
   p {
     margin: 0;
     max-width: 619px;
@@ -391,6 +516,18 @@ import Button from './Button.astro';
     :global(html.hero-ready) .actions {
       animation: hero-up 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) 0.95s both;
     }
+    :global(html.hero-ready) .bolt path {
+      animation: strike-draw 0.5s ease-out both;
+    }
+    :global(html.hero-ready) .bolt-1 path {
+      animation-delay: 0.42s;
+    }
+    :global(html.hero-ready) .bolt-2 path {
+      animation-delay: 0.57s;
+    }
+    :global(html.hero-ready) .strike-burst {
+      animation: strike-burst 0.5s ease-out 0.58s both;
+    }
   }
   @keyframes hero-art {
     from {
@@ -443,6 +580,42 @@ import Button from './Button.astro';
     to {
       opacity: 1;
       transform: none;
+    }
+  }
+  @keyframes strike-draw {
+    0% {
+      opacity: 0;
+      stroke-dashoffset: 100;
+    }
+    8% {
+      opacity: 0.95;
+    }
+    55% {
+      opacity: 0.95;
+      stroke-dashoffset: 0;
+    }
+    68% {
+      opacity: 0.2;
+    }
+    80% {
+      opacity: 0.9;
+    }
+    100% {
+      opacity: 0;
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes strike-burst {
+    0% {
+      opacity: 0;
+      transform: translate(30%, -50%) scale(0.6);
+    }
+    22% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(30%, -50%) scale(1.25);
     }
   }
   @media (min-width: 1921px) {

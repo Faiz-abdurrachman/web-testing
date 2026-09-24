@@ -109,7 +109,6 @@ function animateFigure(
 }
 
 function pillarIntro(whatWeDo: HTMLElement) {
-  const layout = whatWeDo.querySelector<HTMLElement>('.pillars-layout');
   const eyebrow = whatWeDo.querySelector<HTMLElement>(
     '.section-heading .eyebrow',
   );
@@ -131,14 +130,9 @@ function pillarIntro(whatWeDo: HTMLElement) {
 
   if (eyebrow) gsap.set(eyebrow, { autoAlpha: 0, y: 14 });
   if (lines.length) gsap.set(lines, { yPercent: 115 });
-  if (layout) {
-    gsap.set(layout, {
-      rotationX: 11,
-      rotationY: -5,
-      transformPerspective: 1200,
-      transformOrigin: '50% 55%',
-    });
-  }
+  // Keep it cheap: 2D translate/scale/opacity only — no 3D camera tilt on the
+  // whole layout (that forced the section onto its own layer and re-rasterised
+  // the starfield every frame).
   pillars.forEach((card, i) => {
     const v = inward[i % inward.length];
     gsap.set(card, {
@@ -147,7 +141,6 @@ function pillarIntro(whatWeDo: HTMLElement) {
       rotation: v.r,
       scale: 0.82,
       autoAlpha: 0,
-      transformPerspective: 900,
     });
   });
 
@@ -161,7 +154,6 @@ function pillarIntro(whatWeDo: HTMLElement) {
   if (eyebrow) tl.to(eyebrow, { autoAlpha: 1, y: 0, duration: 0.5 }, 0);
   if (lines.length)
     tl.to(lines, { yPercent: 0, duration: 0.8, stagger: 0.1 }, 0.05);
-  if (layout) tl.to(layout, { rotationX: 0, rotationY: 0, duration: 1.1 }, 0);
   tl.to(
     pillars,
     {

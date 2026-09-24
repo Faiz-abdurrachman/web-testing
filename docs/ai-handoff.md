@@ -24,14 +24,43 @@ Innovation`) harus "keluar" smooth pakai GSAP, ga boring / ga AI-slop.
 pas section masuk viewport (`scrollTrigger: { start:'top 72%', once:true }` —
 **tanpa pin, tanpa scrub**, jadi selesai sendiri, bukan parallax/scroll-linked):
 eyebrow fade, 2 baris `h2` mask-up (wrapper `.line` `overflow:hidden`; gradient
-dipindah ke inner span biar clip-nya bekerja), `.pillars-layout` tilt
-`rotationX:11 / rotationY:-5 → 0` (kamera settle), 4 `.pillar` terbang keluar
-dari tengah (`x/y` ±70/±56, `scale .82`, `rotation ±4deg`, stagger 01→04, ~1.4s).
+dipindah ke inner span biar clip-nya bekerja), 4 `.pillar` terbang keluar dari
+tengah (`x/y` ±70/±56, `scale .82`, `rotation ±4deg`, stagger 01→04, ~1.4s).
 `≤760px` = `reveal` fade-up biasa. Saat reduce tidak dipanggil → gate aman.
+
+**Revisi (25 Sep 2026) — dibikin lebih ringan:** user minta "jangan terlalu
+berat". 3D camera tilt di `.pillars-layout` (`rotationX:11 / rotationY:-5 → 0`)
+**dihapus** — itu menaruh seluruh section di layer sendiri & me-raster ulang
+starfield tiap frame. Sekarang murni 2D (`x/y/scale/rotation/opacity`) → tetap
+bagus, jauh lebih murah. Jangan animasikan `rotationX/Y` di `.pillar` (dipakai
+`tilt()` hover).
+
 **Terverifikasi:** `verify.mjs` PASS (whatWeDo geometry persis, MAE 2.04,
 `browserErrors: []`), `responsive-audit` 364 combos ALL PASS, build 14 halaman.
-Catatan: jangan animasikan `rotationX/Y` di `.pillar` (dipakai `tilt()` hover) —
-3D-nya di container, kartu cukup 2D.
+
+## Baru saja: Hero headline "strike" (kilatan petir, ringan)
+
+**Permintaan user (25 Sep 2026):** headline hero (`SORCERY IN DATA` / `MAGIC IN
+AI`) munculnya seperti **disamber petir / ada kilatan**, jangan lebay, tetap
+elegan, nyambung dengan animasi hero. "Sedikit lebih berani".
+
+**Implementasi** (CSS-only di `src/components/Hero.astro`, tanpa ubah JS): markup
+`h1` dibungkus `.title-wrap` (relative) + overlay `.strike` (di belakang teks;
+`h1` di `z-index:1`). Isinya 2 `svg.bolt` (per baris; masing-masing 2 path —
+`.halo` violet lebar + `.core` putih tipis, `pathLength="100"`) dengan **zig-zag
+diagonal tajam satu lintasan** (tanpa fork; koreksi lanjutan 25 Sep: versi
+cubic-Bézier "mulus" ternyata terbaca user **seperti ulat/tube lembut** — halo
+26px/blur9 + core blur2 + amplitudo kecil. Fix: halo ditipiskan `stroke-width:13;
+stroke-opacity:.4; blur(4px)`, core dipertegas `stroke-width:2; opacity:1;
+blur(.4px)`, amplitudo zig-zag diperbesar, tinggi bolt 46→52px) yang digambar
+sekali via dash-draw, plus `.strike-burst` radial bloom di ujung bolt.
+`.strike-glint` sudah **dihapus** (band kotak cahaya = sumber "kotakan"). Timing
+disinkronkan dengan `hero-line` delay `0.42s`/`0.57s`, burst `0.58s`. Animasi pakai
+`stroke-dashoffset/opacity/transform` + `filter: blur()` tipis pada stroke,
+default `opacity:0` dan digate `@media (prefers-reduced-motion: no-preference)`
+→ render reduce tetap pixel-identical. **Terverifikasi:** `verify.mjs` PASS (EXIT 0,
+`browserErrors: []`), build & `responsive-audit` PASS; screenshot hero no-reduce
+1440/390 oke.
 
 ## Baru saja: FX "Our Philosophy" diturunkan (spark tetap banyak)
 
