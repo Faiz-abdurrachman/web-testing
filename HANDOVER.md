@@ -57,8 +57,8 @@ npm run format:check             # cek Prettier
 | Runtime    | **Node 22.x** (`engines.node`)                        | Dipakai Vercel juga                              |
 | Deploy     | **Vercel** (`vercel.json`)                            | Static, zero-config Astro                        |
 
-> Prinsip "ringan & cepat" jadi acuan. Dependency runtime sengaja cuma `astro`.
-> (Percobaan GSAP + Three.js ada di commit `5feea0d`, tapi **di-revert** — lihat §10.)
+> Prinsip "ringan & cepat" jadi acuan. Dependency runtime: `astro` + `gsap`
+> (disetujui) + `three`. Motion GSAP + Three.js sudah **aktif** — lihat §10.
 
 ---
 
@@ -322,19 +322,31 @@ inline-size` (semua metrik `cqw`), border emas inset (CSS `::after` +
 
 ---
 
-## 10. Motion / interaksi (STATUS: di-revert)
+## 10. Motion / interaksi (STATUS: AKTIF)
 
-Pernah dibuat lalu **di-revert** supaya kembali ke standar:
+Dibuat pertama di `5feea0d`, sempat di-revert (`f925e1d`), lalu **dihidupkan
+ulang** dengan pendekatan yang lebih aman:
 
-- Commit `5feea0d` "feat: add gsap scroll motion, 3d tilt, and a three.js hero
-  layer" → di-revert oleh `f925e1d`. Tree sekarang identik dengan `69acaac`.
-- Kalau mau lanjut/eksplor lagi: `git cherry-pick 5feea0d` atau lihat diff-nya
-  (`git show 5feea0d`). Isinya: GSAP + ScrollTrigger (scroll reveal, hero
-  parallax, 3D tilt, magnetic button, cursor glow) + Three.js partikel di hero.
-- Yang **tetap ada** (bukan bagian revert): navbar blur, panah carousel HoDS +
-  snap, carousel project 3D.
-- Kalau nanti bikin ulang: pakai `gsap.matchMedia` + `prefers-reduced-motion`,
-  dan verifikasi pakai `reducedMotion: 'reduce'` biar diff tetap bersih.
+- `src/components/Motion.astro` + `src/scripts/motion.ts` (GSAP + ScrollTrigger):
+  pinned scroll sequence hero (desktop ≥768px: `.artwork-stack` zoom 1→1.35 +
+  `y -110`, `.art-figure` `y +90`, `.hero-content` keluar `y -200`/fade,
+  `.hero-flare` sweep, `end: +=110%`, `scrub: 1`), scroll reveal section, 3D tilt
+  kartu HoDS/What We Do, magnetic button, cursor glow, parallax pointer.
+- Karakter `.art-figure` hidup: entrance naik + idle loop (bob `yPercent`,
+  weight-shift `rotation` pivot kaki, breathing `scale`) + reaksi pointer
+  `rotationX/Y`; semua komposibel dengan `y` scroll.
+- Layer partikel Three.js di `Hero.astro` (canvas 700 titik + glow sprite,
+  `import('three')` dinamis supaya di luar bundle awal); `burst`-nya digerakkan
+  timeline lewat `window.__heroParticles`; tidak dibuat saat reduced motion.
+- Semua dibungkus `gsap.matchMedia('(prefers-reduced-motion: no-preference)')`,
+  jadi minta reduce = semua tween/ScrollTrigger di-revert + listener dibersihkan.
+- Entrance CSS hero (blur/zoom, veil, sweep, heading) tetap; wrapper
+  `.artwork-entrance` memisahkannya dari target GSAP supaya `fill: both` tidak
+  menimpa transform inline GSAP.
+- Verifikasi pakai `reducedMotion: 'reduce'` → diff tetap bersih
+  (`verify.mjs`, `responsive-audit.mjs` ALL PASS, 0 browser error).
+- Yang **tetap ada** (bukan bagian murni motion): navbar blur, panah carousel
+  HoDS, carousel project 3D.
 
 ---
 

@@ -44,10 +44,11 @@ The screenshot is the final visual authority when exported CSS differs.
 The standalone hero reference does not include the homepage's bottom fade;
 that transition belongs to the later full-page integration.
 
-### Hero motion layer (Tier 1)
+### Hero motion layer (GSAP + Three.js)
 
-All of the hero motion is added markup + CSS keyframes + one inline script
-(`src/scripts/hero-motion.ts`, no new dependencies):
+The homepage motion system runs from `src/components/Motion.astro` →
+`src/scripts/motion.ts` (GSAP + ScrollTrigger) plus a dynamically imported
+Three.js particle canvas in `Hero.astro`:
 
 - One orchestrated page-load moment, not scattered effects. An earlier pass had
   an ambient cursor spotlight (`.hero-aura`) and a violet ember canvas
@@ -57,18 +58,40 @@ All of the hero motion is added markup + CSS keyframes + one inline script
   the artwork blurs/zooms in, a dark `.hero-veil` lifts, one quiet `.hero-sweep`
   light streak crosses, the two `h1` lines rise out of a blur, then the paragraph
   and actions fade up.
-- Scroll parallax (JS, skipped entirely under reduced motion): `.artwork` and
-  `.hero-content` drift a few pixels via `translate3d` only. The artwork is given
-  extra bleed via `top/bottom: -6%` under `.is-motion` so the parallax never
-  reveals an edge; no `scale` is animated. It starts after the entrance so the
-  artwork never animates its transform while it is also blurring in.
-- Performance choices: the sweep animates `transform` (not `left`), DOM writes are
-  skipped when the parallax value has not changed, and the rAF loop is paused when
-  the hero is off-screen or the tab is hidden.
-- Reduced-motion contract: the script returns before adding `.is-motion`, so the
-  veil/sweep stay at `opacity: 0` and nothing is animated. The hero renders
-  pixel-identical to the static reference, which is why `verify.mjs` (reduce mode)
-  still passes with no new `setNavbarHidden` entries.
+- `.artwork-entrance` carries that CSS blur/zoom on its own wrapper; the GSAP
+  targets (`.artwork-stack`, `.art-figure`) sit below it so the keyframe's
+  `fill: both` end state can never override GSAP's inline transform.
+- Pinned scroll sequence (desktop ≥768px): a scrubbed timeline on `.hero`
+  (`start: top top`, `end: +=110%`, `scrub: 1`, `pin: true`). Over the sequence
+  `.artwork-stack` zooms `scale 1 → 1.35` while drifting `y: -110`, `.art-figure`
+  rises `y: +90` (nearer layer), and `.hero-content` lifts `y: -200` with
+  `autoAlpha: 0` / `scale: 0.94`. A `.hero-flare` light bar sweeps left→right
+  (`xPercent -160 → 520`, `skewX: -14`). Measured: at 50% scroll the stack is at
+  `scale 1.35`/`y -110`, copy opacity `0`, flare peaked — the hero stays pinned
+  for the full 993px before unpinning. Below 768px the pin is dropped for a
+  light scrub (`y/scale` only).
+- Character life: `.art-figure` gets its own entrance (rises `yPercent 7 → 0` +
+  fade, delayed after the plate) then a never-ending idle loop — bob
+  `yPercent 0 → 1.3` (2.6s), weight-shift `rotation 0 → 0.9°` (3.4s, pivot
+  `60% 88%` at the feet) and breathing `scale 1 → 1.015` (1.9s). The pointer adds
+  `rotationX/Y ±5°`. These compose with the scroll `y` because GSAP keeps `y`
+  (px) vs `yPercent` and `rotation` (Z) vs `rotationX/Y` as separate components.
+- Particle burst: the scrubbed timeline animates a `{ value }` proxy that writes
+  `window.__heroParticles.burst`, which the Three.js tick reads to accelerate
+  drift, enlarge the points (`size 0.14 → 0.30`), spin the field and dolly the
+  camera (`z 9 → 4.5`). Measured canvas contribution jumped from `MAE 0.05` (old
+  90-point layer, effectively invisible) to `~1.35` at mid-sequence.
+- Pointer parallax on `.artwork-stack` (`±3%`, `pointer: fine`), `.domain-card` /
+  `.pillar` 3D tilt (`rotationX/Y`), magnetic `.button` translate, and a
+  `.cursor-glow` that follows the pointer.
+- Everything is wrapped in
+  `gsap.matchMedia('(prefers-reduced-motion: no-preference)')`, so requesting
+  reduced motion reverts every tween/ScrollTrigger and runs the returned cleanup
+  (event listeners removed, glow removed). The Three.js layer is skipped under
+  reduced motion and is `import()`-ed so it never blocks the initial bundle.
+- Reduced-motion contract: under `verify.mjs`/`responsive-audit.mjs` (both use
+  `reducedMotion: 'reduce'`) nothing animates, so geometry/diff stay clean and
+  no new `setNavbarHidden` entries are needed.
 
 ### Hero layered scene (Option B, production pack)
 

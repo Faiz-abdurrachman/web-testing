@@ -106,11 +106,13 @@ npm run seo:audit      # validasi SEO/OG (setelah build)
 | Format     | **Prettier** + `prettier-plugin-astro`                | Konsisten.                                                  |
 | Gambar     | **sharp** (dev)                                       | Konversi/optimasi WebP, ekstraksi/pengukuran PNG referensi. |
 | Verifikasi | **Playwright + sharp** (`scripts/verify.mjs`)         | Screenshot + diff pixel vs PNG referensi.                   |
+| Animasi    | **GSAP** + **Three.js** (homepage, opsional)          | Scroll reveal, parallax, 3D tilt, partikel hero.            |
 | Runtime    | **Node 22.x**                                         | Dipakai Vercel juga.                                        |
 | Deploy     | **Vercel** (`vercel.json`)                            | Static, zero-config Astro.                                  |
 
-> **Aturan dependency**: runtime deps sengaja **cuma `astro`**. Jangan tambah
-> library (UI/animation/dll.) tanpa tanya dulu; kalau memang berat, lazy-import.
+> **Aturan dependency**: runtime deps sengaja **cuma `astro`** + `gsap` (dan
+> `three` untuk lab/motion). Jangan tambah library lain tanpa tanya dulu; kalau
+> memang berat, **lazy-import** (contoh: layer Three.js hero).
 
 ---
 
@@ -152,6 +154,22 @@ Selection Timeline → FAQ → Snippets of Life → CTA → Footer.
   klik/fokus dulu), berlaku di semua carousel/rail.
 - **Hover button** = swap warna (lihat §6).
 - Semua animasi punya fallback `prefers-reduced-motion`.
+
+### Motion (GSAP + Three.js)
+
+Homepage memakai GSAP (ScrollTrigger) + layer partikel Three.js di hero
+(`src/components/Motion.astro`, `src/scripts/motion.ts`, `Hero.astro`).
+Semuanya dibungkus `gsap.matchMedia('(prefers-reduced-motion: no-preference)')`
+— begitu pengguna minta reduced motion, semua tween/ScrollTrigger di-revert dan
+listener kustom dibersihkan:
+
+- scroll-reveal heading & kartu tiap section,
+- parallax hero saat scroll (plate `.artwork-stack` bergerak lebih jauh dari
+  cutout `.art-figure`) + parallax pointer,
+- 3D tilt kartu HoDS & What We Do,
+- magnetic button + cursor glow (khusus pointer halus / `pointer: fine`),
+- layer partikel Three.js di-`import()` dinamis (di luar bundle awal) dan tidak
+  dibuat sama sekali saat reduced motion.
 
 ---
 

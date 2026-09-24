@@ -89,3 +89,16 @@ summary:focus-visible {
 .skip-link:focus {
   transform: translateY(0);
 }
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 40;
+  width: 440px;
+  height: 440px;
+  margin: -220px 0 0 -220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(108 59 255 / 16%), transparent 62%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+}

@@ -45,8 +45,9 @@ or the dev server makes `waitUntil: networkidle` hang (see Verification workflow
 4. **Keep geometry exact.** Existing values are asserted in `verify.mjs`
    (`assert.deepEqual`). If a design change is intentional, update the assertion.
 5. **Always provide a `prefers-reduced-motion` fallback** for any animation.
-6. **Never break the bundle budget.** Runtime deps are intentionally just
-   `astro`. Do not add UI libraries without asking; lazy-import heavy code.
+6. **Never break the bundle budget.** Runtime deps are `astro` + `gsap` (approved)
+   and `three`. Do not add other UI libraries without asking; lazy-import heavy
+   code (the hero Three.js layer is a dynamic `import()`).
 7. **Commit per feature**, push to `main` (Vercel auto-deploys). Follow existing
    message style (`feat:`, `fix:`, `docs:`, `chore:`).
 
@@ -188,8 +189,17 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   sitemap (`@astrojs/sitemap`) + share card `public/og/og-default.jpg`. Origin
   dari `SITE_URL` (default `https://data-sorcerers-community-sigma.vercel.app`) — **ganti begitu
   domain final diketahui**. `npm run seo:audit` PASS.
-- Motion (GSAP + Three.js) masih **di-revert**: `5feea0d` → `f925e1d`. Kalau
-  dilanjutkan, pakai `gsap.matchMedia` + `prefers-reduced-motion` + re-verify.
+- **Motion (GSAP + Three.js) aktif lagi** (revisi `5feea0d`, pakai
+  `gsap.matchMedia` + cleanup listener): `src/components/Motion.astro` +
+  `src/scripts/motion.ts`. Hero punya **pinned scroll sequence** (≥768px:
+  zoom `.artwork-stack` 1→1.35, figure naik, copy keluar, `.hero-flare` sweep,
+  durasi `+=110%`), karakter `.art-figure` punya **idle sendiri** (bob `yPercent`,
+  sway `rotation`, breathing `scale`) + entrance + reaksi pointer, plus partikel
+  Three.js (700 titik, burst via `window.__heroParticles`) lazy di `Hero.astro`;
+  plus scroll reveal, parallax pointer, 3D tilt, magnetic button, cursor glow.
+  Catatan: `y` (scroll) vs `yPercent` (idle) komposibel di GSAP. `gsap` masuk dependencies
+  (disetujui); `three` sudah ada. Under reduce semuanya inert →
+  `verify.mjs`/`responsive-audit.mjs` tetap bersih.
 - Reference assets dikelompokkan per halaman di `assets/` (`assets home page/`,
   `assets recruitment page/`, `button/`); `assets/` di-`.vercelignore`.
 - **Konvensi tambahan** (detail di HANDOVER §16):
