@@ -142,6 +142,18 @@ tak tersentuh. Terverifikasi 568×320 / 600×343 / 540×300 / 900×400 / 1280×5
 fit + karakter utuh, portrait & 1440×903 tak berubah (sisa: 480×320 overflow 2px,
 kaki tetap terlihat).
 
+### Hero video animasi kepotong di 601–~730px (karakter jangan keluar frame)
+
+Video `hero-bg.webm/mp4` (1582×992) menggantikan layer statis di `≥601px`.
+Karakter di dalam video ada di ~62–78% lebar sumber (tongkat/kanan), sedang cutout
+`figure.webp` di 53.6–67.3%. Dengan `object-position` default (50%) + `object-fit:
+cover`, lebar portrait 601–~730px mencrop sisi kanan karakter ke luar layar
+("belum masuk frame"). Fix: `.art-video { object-position: 80% center }` di
+`Hero.astro` → karakter ~60–64% (selaras figure statis, fade mulus). Rule ini
+no-op saat tak ada crop horizontal (desktop), dan override `max-height:560px` /
+`min-width:1921px` tetap menang. Terverifikasi di Chromium 601×900, 675×900,
+733×900, 768×1024.
+
 ## Yang perlu kamu tahu soal motion
 
 - Hero: pinned scroll sequence (`≥768px`), karakter idle, parallax pointer,

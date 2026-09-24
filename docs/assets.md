@@ -134,6 +134,20 @@ The hero art is no longer one flattened image. It is split into two full-frame
   900×400 and 1280×500 keep the hero within the viewport with the full figure;
   390×844, 360×640, 320×568 and 1440×903 are byte-identical. The 480×320 case is
   322px vs a 320px viewport (2px overflow) but the feet remain visible.
+- **Animated video layer (`public/images/hero/hero-bg.webm` + `hero-bg.mp4`,
+  1582 × 992, 5 s / 120 frames, 24 fps)**: a full-scene clip (nebula, planet,
+  water and the sorcerer) that fades in over the static stack at `≥601 px`
+  only; `≤600 px` keeps the static `background.webp` + `figure.webp`. Its
+  character sits at **~62–78%** of the source width (measured off an ffmpeg
+  10×10 grid — `figure.webp`'s cutout is at 53.6–67.3%). With the default
+  `object-position: 50% 50%` and `object-fit: cover`, portrait widths between
+  601 and ~730px cropped the arm/staff against the right edge. `.art-video` now
+  sets `object-position: 80% center`, which shifts the clip's character to
+  ~60–64% screen — aligned with the static figure and fully in frame. The rule
+  is a no-op wherever there is no horizontal crop (desktop), and the
+  `max-height: 560px` / `min-width: 1921px` `object-position` overrides still
+  win for their layers. Verified in headed-reduced Chromium at 601×900,
+  675×900, 733×900 and 768×1024.
 
 ## Navbar
 
