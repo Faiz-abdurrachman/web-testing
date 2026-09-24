@@ -166,6 +166,16 @@ export function initMotion() {
         const figure = hero.querySelector<HTMLElement>('.art-figure');
         const content = hero.querySelector<HTMLElement>('.hero-content');
         const flare = hero.querySelector<HTMLElement>('.hero-flare');
+
+        // The pointer parallax below slides this full-bleed layer, so give it a
+        // little overscan: at scale 1 it is exactly the hero size, so any
+        // translation exposed a hard gap at the screen edge. A 4% scale leaves
+        // ~2% slack per edge, more than the ±1.5% travel. Set before the pinned
+        // timeline so ScrollTrigger records 1.04 as the tween's start. Under
+        // reduced motion nothing is scaled, so the hero still matches the
+        // reference frame pixel-for-pixel.
+        if (stack && finePointer()) gsap.set(stack, { scale: 1.04 });
+
         if (figure) animateFigure(figure, hero, cleanups, finePointer());
 
         if (desktop && stack && content) {

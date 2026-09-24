@@ -56,8 +56,12 @@ Three.js particle canvas in `Hero.astro`:
   drift, enlarge the points (`size 0.14 → 0.30`), spin the field and dolly the
   camera (`z 9 → 4.5`). Measured canvas contribution jumped from `MAE 0.05` (old
   90-point layer, effectively invisible) to `~1.35` at mid-sequence.
-- Pointer parallax on `.artwork-stack` (`±3%`, `pointer: fine`), `.domain-card` /
-  `.pillar` 3D tilt (`rotationX/Y`), and magnetic `.button` translate.
+- Pointer parallax on `.artwork-stack` (`±1.5%`) that requires a `pointer: fine`
+  overscan: the layer is scaled `1.04` under `(prefers-reduced-motion:
+no-preference)` so the ~2% edge slack per side absorbs the travel and the
+  screen edge never shows. Under reduced motion nothing is scaled, so the hero
+  still matches its reference frame. Plus `.domain-card` / `.pillar` 3D tilt
+  (`rotationX/Y`), and magnetic `.button` translate.
 - Everything is wrapped in
   `gsap.matchMedia('(prefers-reduced-motion: no-preference)')`, so requesting
   reduced motion reverts every tween/ScrollTrigger and runs the returned cleanup
