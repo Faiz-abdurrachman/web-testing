@@ -151,6 +151,15 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   looked fine. `astro.config.mjs` now sets `vite.build.cssMinify: 'esbuild'` so
   both prefixed and unprefixed survive. After adding modern CSS, verify it in
   `dist/` (or the deployed site), not only in `npm run dev`.
+- **Deep links / reload must land on their section.** The browser's initial
+  fragment scroll ran while the splash still had `overflow: hidden` on `<html>`
+  and before Motion installed the hero pin spacer, so the target moved afterwards
+  and `/#domains` etc. landed wrong; `history.scrollRestoration = 'manual'` also
+  stopped browser Back from restoring the section. `BaseLayout.astro` now
+  re-applies the hash target after `ds:splash-done` / `load` / `fonts.ready`,
+  `Splash.astro` hands scroll restoration back to `auto`, and `global.css` gives
+  `section[id]` / `main[id]` a 110px `scroll-margin-top`. Keep this when touching
+  the splash or motion init.
 
 ## Fonts
 

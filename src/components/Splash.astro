@@ -318,6 +318,16 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
     };
     var announce = function () {
       markDone();
+      // Hand history scroll restoration back to the browser now that the splash
+      // is gone, so Back/Forward returns to the section the user left.
+      try {
+        if (
+          'scrollRestoration' in history &&
+          history.scrollRestoration === 'manual'
+        ) {
+          history.scrollRestoration = 'auto';
+        }
+      } catch (e) {}
       try {
         window.dispatchEvent(new Event('ds:splash-done'));
       } catch (e) {}

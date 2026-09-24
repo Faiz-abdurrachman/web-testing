@@ -17,6 +17,22 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
   indikator tab aktif meluncur springy) + perf What We Do (starfield jadi tile
   gambar + `perf:audit`).
 
+## Baru saja: deep link / Back mendarat di section yang benar
+
+**Keluhan user (25 Sep 2026):** Back dari detail HoDS mendarat di section yang
+salah, dan refresh pada URL ber-hash tidak stay di section. **Akar:** fragment
+scroll browser jalan selagi splash masih `overflow: hidden` di `<html>` dan
+sebelum Motion memasang hero pin spacer, jadi target bergeser setelahnya; plus
+`history.scrollRestoration = 'manual'` mematikan restore posisi saat Back browser.
+
+**Fix:** `src/layouts/BaseLayout.astro` re-apply target `location.hash` setelah
+`ds:splash-done` / `load` / `fonts.ready` (beberapa kali singkat, biar layout
+berhenti bergeser); `src/components/Splash.astro` membalikkan
+`scrollRestoration = 'auto'` begitu splash selesai; `src/styles/global.css`
+memberi `section[id]` / `main[id]` `scroll-margin-top: 110px` (semua section, biar
+tidak tertutup navbar). Terukur: fresh `/#domains` → `domainsTop` 110 (dulu 1100),
+reload sama, dan browser Back dari detail kembali ke posisi section sebelumnya.
+
 ## Baru saja: Navbar "living HUD" (kaca melayang + flash + indikator meluncur)
 
 **Permintaan user (25 Sep 2026):** referensi gaya navbar magelang-ai-expo tapi

@@ -124,6 +124,46 @@ const structuredData = [
         }
       })();
     </script>
+    <script is:inline>
+      // Keep deep links (e.g. `/#domains` from a HoDS detail "Back") and reloads
+      // on the right section. The browser's initial fragment scroll happens
+      // before the splash lifts (`overflow: hidden` on <html>) and before Motion
+      // installs the hero pin spacer, so the target shifts and the jump lands in
+      // the wrong place. Re-apply it once the page has settled — briefly, so a
+      // user who starts scrolling immediately keeps control.
+      (function () {
+        var target = function () {
+          var hash = location.hash;
+          if (!hash || hash.length < 2) return null;
+          try {
+            return document.getElementById(decodeURIComponent(hash.slice(1)));
+          } catch (e) {
+            return null;
+          }
+        };
+        var jump = function () {
+          var el = target();
+          if (el) el.scrollIntoView({ block: 'start' });
+        };
+        var soon = function () {
+          window.requestAnimationFrame(jump);
+          window.setTimeout(jump, 250);
+          window.setTimeout(jump, 700);
+        };
+        window.addEventListener('ds:splash-done', soon);
+        window.addEventListener('load', function () {
+          window.setTimeout(jump, 0);
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+          window.setTimeout(jump, 0);
+        });
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(function () {
+            window.requestAnimationFrame(jump);
+          });
+        }
+      })();
+    </script>
   </head>
   <body>
     <Splash />

@@ -64,6 +64,10 @@ body {
   color: var(--color-text);
   font-family: var(--font-body);
 }
+/* Anchor targets sit clear of the fixed navbar on deep links / reloads. */
+:where(section[id], main[id]) {
+  scroll-margin-top: 110px;
+}
 button,
 a {
   -webkit-tap-highlight-color: transparent;
