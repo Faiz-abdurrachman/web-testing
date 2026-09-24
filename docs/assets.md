@@ -1,35 +1,10 @@
 # Asset provenance
 
-## Experimental 3D hero — `/lab/hero-3d/`
-
-- Separate, noindex art-direction study authorized after reviewing Igloo as an
-  experience reference. It has no Figma/PNG geometry target and does not replace
-  the homepage hero. Lab routes are excluded from the sitemap.
-- User-provided models: `assets/assets 3d/hunyuan.glb` (6,666,736 bytes;
-  370,732 triangles) and `assets/assets 3d/52d9eb5159991d577b002ecb1f6bed7b.glb`
-  (Hi3DGen, 8,756,372 bytes; 486,444 triangles). Served, byte-identical copies:
-  `public/models/hero/hunyuan.glb` and `public/models/hero/hi3dgen.glb`.
-- Both sources have positions/indices only: no UVs, textures, rig, animations,
-  or authored materials. Normals are computed at load time; original geometry
-  is preserved. Models are centered and normalized to height 3.2 scene units.
-- Comparison uses two scissored viewports, one shared orthographic camera and
-  identical neutral material/lights. Front/side/back presets rotate both models
-  equally; orbit/zoom applies to both. World mode uses a provisional obsidian
-  material, procedural portal shader, stars, rocks, platform and violet light.
-  These effects are code-generated, not AI bitmap assets or final character textures.
-- Existing hero WebP supplies the pre-load/error fallback. Typography and all
-  controls remain HTML/CSS. No new fonts are embedded.
-- Three.js is bundled only in a dynamically imported lab module, activated by
-  an explicit preview click. Models load on demand and are cached per session.
-  Pixel ratio caps at 1.5; animation pauses offscreen/in background and under
-  reduced motion. Original dense meshes are prototype assets, not the final
-  production geometry budget. No claim of Igloo-level final rendering quality.
-- Verification: `node scripts/verify-hero-lab.mjs` against the static preview
-  (default port 4331), separate from PNG-based `verify.mjs`. Checks homepage
-  isolation, click-to-load, first-click comparison, camera presets, model switch,
-  reduced-motion stable frames, pause/resume, 320–3840px containment and browser
-  errors. Screenshots/reports go to `artifacts/lab-*` and
-  `artifacts/hero-lab-verification.json`.
+> Note: raw `assets/` exports that no script reads were moved out of the repo to
+> `/home/faiz/ds/ds5opencode-assets-archive/` (see its `MOVE-MANIFEST*.md`) to
+> keep the working tree small. Only the PNGs read by `scripts/verify.mjs` /
+> `scripts/generate-*.mjs` remain in `assets/`. Paths below still name the
+> original locations; move a file back from the archive if you need it.
 
 ## Visual reference
 
@@ -155,9 +130,8 @@ saturate(140%)`. After an 8px scroll it keeps a **blur-only** treatment
 - Hero: the homepage hero now renders the layered production-pack scene (see
   "Hero layered scene" above). The earlier flattened art
   (`assets/background/hd/hero.png` ← `Gambar Hero Section.png`) is still the
-  source for the OG share card via `scripts/generate-og.mjs`, and
-  `public/images/hero-1440.webp` remains the `/lab/hero-3d` fallback background;
-  neither is used by the homepage hero anymore. Matching features against the PNG
+  source for the OG share card via `scripts/generate-og.mjs`; it is not used by
+  the homepage hero anymore. Matching features against the PNG
   reference identified a slightly zoomed fill: source crop approximately
   `(22.69, 0, 5725.3, 3576.0)` in the 5736 × 3600 source. This is important:
   simply stretching the full supplied background shifts the figure and horizon.

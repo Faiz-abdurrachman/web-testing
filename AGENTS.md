@@ -86,7 +86,7 @@ scripts/seo-audit.mjs    validates title/meta/OG/canonical/sitemap in dist/
 src/pages/robots.txt.ts  robots.txt endpoint (uses Astro.site)
 public/og/og-default.jpg share card (served)
 public/                  served assets (fonts, images)
-assets/<page>/           raw Figma PNG references, grouped per page (NOT served; large)
+assets/<page>/           raw PNGs read by verify/generate scripts (NOT served; unused ones archived outside repo)
 docs/assets.md           provenance per section (keep updated)
 artifacts/               verify output (git-ignored)
 ```
