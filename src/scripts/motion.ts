@@ -108,7 +108,7 @@ function animateFigure(
   });
 }
 
-function pillarIntro(whatWeDo: HTMLElement, opts: { pin: boolean }) {
+function pillarIntro(whatWeDo: HTMLElement) {
   const layout = whatWeDo.querySelector<HTMLElement>('.pillars-layout');
   const eyebrow = whatWeDo.querySelector<HTMLElement>(
     '.section-heading .eyebrow',
@@ -131,7 +131,7 @@ function pillarIntro(whatWeDo: HTMLElement, opts: { pin: boolean }) {
 
   if (eyebrow) gsap.set(eyebrow, { autoAlpha: 0, y: 14 });
   if (lines.length) gsap.set(lines, { yPercent: 115 });
-  if (opts.pin && layout) {
+  if (layout) {
     gsap.set(layout, {
       rotationX: 11,
       rotationY: -5,
@@ -151,26 +151,17 @@ function pillarIntro(whatWeDo: HTMLElement, opts: { pin: boolean }) {
     });
   });
 
+  // Auto-plays once when the section reaches the viewport — no pin, no scrub, so
+  // the reveal is time-based and completes on its own instead of tracking scroll.
   const tl = gsap.timeline({
     defaults: { ease: 'power3.out' },
-    scrollTrigger: opts.pin
-      ? {
-          trigger: whatWeDo,
-          start: 'top top',
-          end: '+=130%',
-          scrub: 1,
-          pin: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        }
-      : { trigger: whatWeDo, start: 'top 68%', once: true },
+    scrollTrigger: { trigger: whatWeDo, start: 'top 72%', once: true },
   });
 
-  if (eyebrow) tl.to(eyebrow, { autoAlpha: 1, y: 0, duration: 0.45 }, 0);
+  if (eyebrow) tl.to(eyebrow, { autoAlpha: 1, y: 0, duration: 0.5 }, 0);
   if (lines.length)
-    tl.to(lines, { yPercent: 0, duration: 0.85, stagger: 0.1 }, 0.08);
-  if (opts.pin && layout)
-    tl.to(layout, { rotationX: 0, rotationY: 0, duration: 1.3 }, 0);
+    tl.to(lines, { yPercent: 0, duration: 0.8, stagger: 0.1 }, 0.05);
+  if (layout) tl.to(layout, { rotationX: 0, rotationY: 0, duration: 1.1 }, 0);
   tl.to(
     pillars,
     {
@@ -179,10 +170,10 @@ function pillarIntro(whatWeDo: HTMLElement, opts: { pin: boolean }) {
       rotation: 0,
       scale: 1,
       autoAlpha: 1,
-      duration: 1,
+      duration: 0.9,
       stagger: 0.12,
     },
-    0.22,
+    0.18,
   );
 }
 
@@ -229,16 +220,14 @@ export function initMotion() {
     {
       reduce: '(prefers-reduced-motion: reduce)',
       desktop: '(min-width: 768px)',
-      wide: '(min-width: 1024px)',
       small: '(max-width: 760px)',
     },
     (context) => {
-      const { reduce, desktop, wide, small } = (
+      const { reduce, desktop, small } = (
         context as unknown as {
           conditions: {
             reduce: boolean;
             desktop: boolean;
-            wide: boolean;
             small: boolean;
           };
         }
@@ -386,9 +375,8 @@ export function initMotion() {
           reveal(whatWeDo, '.section-heading > *');
           reveal(whatWeDo, '.pillar', { y: 44, stagger: 0.1 });
         } else {
-          // Pinned 3D sequence on wide screens; a shorter, non-pinned build-up
-          // on tablets where the layout is only two columns.
-          pillarIntro(whatWeDo, { pin: wide });
+          // Heads-up "summon from the core" build-up that plays once on entry.
+          pillarIntro(whatWeDo);
         }
       }
 

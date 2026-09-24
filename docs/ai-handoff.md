@@ -14,20 +14,20 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 - Semua gate hijau: `format:check`, `build` (14 halaman), `verify.mjs`
   (`browserErrors: []`), `responsive-audit.mjs` (364 combos), `seo:audit`.
 
-## Baru saja: "Four Pillars" cinematic 3D pinned entrance
+## Baru saja: "Four Pillars" cinematic 3D entrance (auto-play, bukan pin)
 
 **Permintaan user (25 Sep 2026):** kartu section What We Do (`Four Pillars of
 Innovation`) harus "keluar" smooth pakai GSAP, ga boring / ga AI-slop.
 
 **Implementasi** (`src/components/WhatWeDo.astro` + `pillarIntro` di
-`src/scripts/motion.ts`): di `≥1024px` section di-**pin** (`start:'top top'`,
-`end:'+=130%'`, `scrub:1`) lalu timeline scrubbed jalan: eyebrow fade, 2 baris
-`h2` mask-up (wrapper `.line` `overflow:hidden`; gradient dipindah ke inner span
-biar clip-nya bekerja), `.pillars-layout` tilt `rotationX:11 / rotationY:-5 → 0`
-(kamera settle), 4 `.pillar` terbang keluar dari tengah (`x/y` ±70/±56,
-`scale .82`, `rotation ±4deg`, stagger 01→04). `<1024px` = build-up sekali tanpa
-pin/tilt; `≤760px` = `reveal` fade-up biasa. **Tanpa pin saat reduce** → gate
-tetap aman.
+`src/scripts/motion.ts`): di `≥761px` timeline **time-based auto-play sekali**
+pas section masuk viewport (`scrollTrigger: { start:'top 72%', once:true }` —
+**tanpa pin, tanpa scrub**, jadi selesai sendiri, bukan parallax/scroll-linked):
+eyebrow fade, 2 baris `h2` mask-up (wrapper `.line` `overflow:hidden`; gradient
+dipindah ke inner span biar clip-nya bekerja), `.pillars-layout` tilt
+`rotationX:11 / rotationY:-5 → 0` (kamera settle), 4 `.pillar` terbang keluar
+dari tengah (`x/y` ±70/±56, `scale .82`, `rotation ±4deg`, stagger 01→04, ~1.4s).
+`≤760px` = `reveal` fade-up biasa. Saat reduce tidak dipanggil → gate aman.
 **Terverifikasi:** `verify.mjs` PASS (whatWeDo geometry persis, MAE 2.04,
 `browserErrors: []`), `responsive-audit` 364 combos ALL PASS, build 14 halaman.
 Catatan: jangan animasikan `rotationX/Y` di `.pillar` (dipakai `tilt()` hover) —
@@ -202,8 +202,8 @@ no-op saat tak ada crop horizontal (desktop), dan override `max-height:560px` /
 
 - Hero: pinned scroll sequence (`≥768px`), karakter idle, parallax pointer,
   partikel Three.js lazy-import di `Hero.astro` (`window.__heroParticles`).
-- What We Do (`≥1024px`): pinned "summon from the core" (lihat bagian atas);
-  card `tilt()` hover jangan diadu dengan `rotationX/Y` entrance.
+- What We Do (`≥761px`): "summon from the core" auto-play sekali (lihat bagian
+  atas); card `tilt()` hover jangan diadu dengan `rotationX/Y` entrance.
 - Helper di `motion.ts`: `reveal`, `tilt` (3D, `finePointer`), magnetic button,
   cursor glow. Card tilt HoDS + `.pillar` ada; jangan buang tanpa alasan.
 - Under `prefers-reduced-motion: reduce` semua inert → `verify.mjs` bersih.

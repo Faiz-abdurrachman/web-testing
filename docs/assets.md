@@ -312,15 +312,16 @@ score were unchanged when this section was added.
   `prefers-reduced-motion: no-preference`; reduced motion still shows the hover
   state instantly.
 - **Pillars entrance — "summon from the core"** (`pillarIntro` in `motion.ts`):
-  on `≥1024px` the section is **pinned** (`start: 'top top'`, `end: '+=130%'`,
-  `scrub: 1`) and a scrubbed timeline runs — the eyebrow fades in, the two `h2`
-  lines mask up (`.line` wrapper with `overflow: hidden`; the gradient lives on
-  the inner span so the clip actually masks it), `.pillars-layout` tilts from
-  `rotationX: 11 / rotationY: -5` back to flat like a settling camera, and each
-  `.pillar` flies **outward from the heading** (`x/y` ±70/±56 toward centre,
-  `scale: 0.82`, `rotation: ±4deg`, staggered 01→02→03→04). Under `1024px` the
-  same build-up runs once (no pin, no camera tilt); `≤760px` keeps the simple
-  `reveal` fade-up. All transform/opacity only.
+  on `≥761px` a **time-based timeline auto-plays once** when the section reaches
+  the viewport (`scrollTrigger: { start: 'top 72%', once: true }` — no pin and no
+  `scrub`, so it completes on its own rather than tracking scroll). The eyebrow
+  fades in, the two `h2` lines mask up (`.line` wrapper with `overflow: hidden`;
+  the gradient lives on the inner span so the clip actually masks it),
+  `.pillars-layout` tilts from `rotationX: 11 / rotationY: -5` back to flat like
+  a settling camera, and each `.pillar` flies **outward from the heading**
+  (`x/y` ±70/±56 toward centre, `scale: 0.82`, `rotation: ±4deg`, staggered
+  01→02→03→04, ~1.4s total). `≤760px` keeps the simple `reveal` fade-up. All
+  transform/opacity only.
 - The old generic `reveal(whatWeDo, '.pillar', …)` is gone.
 - Every animation that remains (card hover) lives inside
   `@media (prefers-reduced-motion: no-preference)`; under reduced motion the hover
