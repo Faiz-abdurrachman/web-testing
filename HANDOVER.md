@@ -461,9 +461,14 @@ projects 5.104 recruitment 2.174 footer 2.666
   konten terpusat; `≥601px` tidak berubah). Dokumen (AGENTS/HANDOVER/assets/
   kickoff) disinkronkan di commit yang sama.
 - Pola commit: per fitur + aset referensi dipisah; push ke `main` (Vercel).
-- **Catatan aset lokal (untracked, sengaja)**: `assets/background/background/`
-  (~87 MB) dan `assets/card baru/` (6 PNG) ada di mesin dev tapi **tidak** di-commit
-  (ukuran + bukan milik repo/mentor). `.vercelignore` tetap mengecualikan `assets/`.
+- **Catatan aset lokal (untracked, sengaja)**: `assets/card baru/` (6 PNG) ada di
+  mesin dev tapi **tidak** di-commit (ukuran + bukan milik repo/mentor).
+  `.vercelignore` tetap mengecualikan `assets/`.
+- **Arsip aset berat (24 Sep 2026)**: aset tak terpakai (~532 MB) dipindah **keluar**
+  repo ke `/home/faiz/ds/ds5opencode-assets-archive/` (tidak dihapus; lihat
+  `MOVE-MANIFEST.md` di sana). Termasuk `assets/background/background/` yang dulu
+  ada di sini. Beberapa path di antaranya tadinya **tracked** → 74 file kini
+  berstatus `D` di `git status` sampai deletion-nya di-commit.
 
 ---
 
