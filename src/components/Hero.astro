@@ -23,6 +23,10 @@ import Button from './Button.astro';
           alt=""
           decoding="async"
         />
+        <video class="art-video" muted loop playsinline preload="none">
+          <source src="/images/hero/hero-bg.webm" type="video/webm" />
+          <source src="/images/hero/hero-bg.mp4" type="video/mp4" />
+        </video>
       </div>
     </div>
   </div>
@@ -53,6 +57,35 @@ import Button from './Button.astro';
   // scroll sequence in `motion.ts` drives `window.__heroParticles.burst` so the
   // field rushes toward the viewer as the hero zooms in.
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Animated background. Only fetched and played on larger, motion-OK
+  // viewports; under reduced motion (or ≤600px) the static art stays and the
+  // clip is never downloaded, so the fallback is always the reference art.
+  const video = document.querySelector<HTMLVideoElement>('.art-video');
+  if (video) {
+    const wide = window.matchMedia('(min-width: 601px)').matches;
+    if (!reduce && wide) {
+      const start = () => {
+        video.classList.add('is-ready');
+        void video.play().catch(() => {});
+      };
+      if (video.readyState >= 3) start();
+      else video.addEventListener('canplay', start, { once: true });
+
+      // Don't decode while the hero scrolls away or the tab is hidden.
+      new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) void video.play().catch(() => {});
+        else video.pause();
+      }).observe(video);
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) video.pause();
+        else void video.play().catch(() => {});
+      });
+
+      video.load();
+    }
+  }
+
   const canvas = document.querySelector<HTMLCanvasElement>('.hero-canvas');
   const host = canvas?.parentElement;
 
@@ -197,13 +230,20 @@ import Button from './Button.astro';
     position: absolute;
     inset: 0;
   }
-  .artwork img {
+  .artwork :is(img, video) {
     position: absolute;
     inset: 0;
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+  .art-video {
+    opacity: 0;
+    transition: opacity 700ms ease;
+  }
+  .art-video.is-ready {
+    opacity: 1;
   }
   .hero-content {
     display: flex;
@@ -403,7 +443,7 @@ import Button from './Button.astro';
         transparent
       );
     }
-    .artwork img {
+    .artwork :is(img, video) {
       object-position: center bottom;
     }
   }
@@ -424,7 +464,7 @@ import Button from './Button.astro';
       padding-bottom: clamp(64px, 9svh, 96px);
       align-items: center;
     }
-    .artwork img {
+    .artwork :is(img, video) {
       object-position: 61% center;
     }
     .artwork::after {
