@@ -40,11 +40,13 @@ referensi PNG. Akar masalah: `.aura` (conic 50%/42%) + `.pulse` (radial 55%)
 menumpuk di atas glow statis `glow.webp`.
 
 **Fix** (`src/components/Philosophy.astro`): aura `50%/42% → 20%/16%`, width
-`62% → 56%`; pulse `55% → 18%`, width `42% → 38%`. Spark a–g (7 biji) + orbit
-`cubic-bezier` cepat-lambat tetap. Terukur (aligned, float off): region glow REF
-84 vs cur 85; kontribusi aura p99 ≈ 15, pulse p99 ≈ 9; grid brightness kembali
-dalam ±2 (hanya core crystal +~10). Reduced-motion tetap identik (`.fx`
-`opacity: 0`).
+`62% → 56%`; pulse `55% → 18%`, width `42% → 38%`. Lalu (revisi lanjutan)
+**bulir ditambah 7 → 18** (spark `a–r`, `--s` 2–7px, `--r` 68–246px, durasi &
+twinkle bervariasi) **tanpa menyentuh aura/pulse** — glow tetap di level referensi.
+Orbit `cubic-bezier` cepat-lambat tetap. Terukur (aligned, float off): region glow
+REF 84 vs cur 85; kontribusi aura p99 ≈ 15, pulse p99 ≈ 9; grid brightness
+kembali dalam ±2 (hanya core crystal +~10). Reduced-motion tetap identik (`.fx`
+`opacity: 0`, spark tanpa animasi).
 
 ## Baru saja: background "What We Do" DIHIDUPKAN (revisi aman)
 

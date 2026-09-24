@@ -250,9 +250,11 @@ and do not match the heading reference.
 - Below desktop width, the content adapts; mobile places the illustration
   beneath the text. No mobile Figma reference was supplied.
 - **Crystal motion FX** (only under `prefers-reduced-motion: no-preference`):
-  a rotating conic `.aura`, a breathing radial `.pulse`, and seven orbiting
-  `.spark` dots (a–g) centred on the crystal (`--crystal-x/y`), all
-  `mix-blend-mode: screen` and compositor-only (`transform`/`opacity`). `.fx` is
+  a rotating conic `.aura`, a breathing radial `.pulse`, and eighteen orbiting
+  `.spark` dots (a–r, sizes 2–7px, radii 68–246px) centred on the crystal
+  (`--crystal-x/y`), all `mix-blend-mode: screen` and compositor-only
+  (`transform`/`opacity`). Extra bulir were added 2026-09-25 without touching the
+  aura/pulse, so the glow stays at reference level. `.fx` is
   `opacity: 0` by default so the reduced-motion render stays pixel-identical to
   the export. The static `glow.webp` carries the reference bloom; the dynamic
   layers stay subtle on purpose (tuned 2026-09-25 when the glow read too
