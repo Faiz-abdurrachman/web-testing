@@ -1,0 +1,372 @@
+---
+const cx = 120;
+const cy = 120;
+
+const ticks = Array.from({ length: 24 }, (_, i) => {
+  const a = (i * Math.PI * 2) / 24 - Math.PI / 2;
+  const major = i % 6 === 0;
+  const r1 = 108;
+  const r2 = major ? 119 : 114;
+  return {
+    major,
+    x1: (cx + Math.cos(a) * r1).toFixed(1),
+    y1: (cy + Math.sin(a) * r1).toFixed(1),
+    x2: (cx + Math.cos(a) * r2).toFixed(1),
+    y2: (cy + Math.sin(a) * r2).toFixed(1),
+  };
+});
+
+const starR = 74;
+const starPoints = Array.from({ length: 7 }, (_, i) => {
+  const a = (i * Math.PI * 4) / 7 - Math.PI / 2;
+  return `${(cx + Math.cos(a) * starR).toFixed(1)} ${(
+    cy +
+    Math.sin(a) * starR
+  ).toFixed(1)}`;
+});
+const starPath = `M${starPoints.join(' L')} Z`;
+
+const sparks = Array.from({ length: 16 }, (_, i) => ({
+  x: ((i * 61.8 + 7) % 100).toFixed(1),
+  y: ((i * 37.4 + 11) % 100).toFixed(1),
+  delay: ((i * 0.41) % 3.4).toFixed(2),
+  duration: (2.4 + (i % 5) * 0.55).toFixed(2),
+  size: (1.4 + (i % 4) * 0.6).toFixed(2),
+}));
+---
+
+<style is:inline>
+  .splash {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(24px, 5vh, 46px);
+    background: radial-gradient(
+      120% 90% at 50% 38%,
+      #1b1036 0%,
+      #0b0716 48%,
+      #050507 100%
+    );
+    opacity: 1;
+  }
+  html.splash-armed .splash {
+    display: flex;
+  }
+  .splash::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      42% 34% at 50% 42%,
+      rgba(155, 123, 255, 0.28) 0%,
+      rgba(155, 123, 255, 0) 70%
+    );
+  }
+  .splash-sky {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .splash-spark {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--s);
+    height: var(--s);
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 6px 1px rgba(205, 185, 255, 0.85);
+    opacity: 0;
+    animation: splash-twinkle var(--t) ease-in-out infinite;
+    animation-delay: var(--d);
+  }
+  .splash-stage {
+    position: relative;
+    width: min(300px, 64vw);
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    transition: transform 0.8s ease;
+  }
+  .splash-ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .splash-line {
+    fill: none;
+    stroke: rgba(232, 200, 119, 0.5);
+    stroke-width: 1;
+  }
+  .splash-line--inner {
+    stroke: rgba(155, 123, 255, 0.45);
+    stroke-dasharray: 2 7;
+  }
+  .splash-line--dash {
+    stroke: rgba(232, 200, 119, 0.38);
+    stroke-dasharray: 1 7;
+  }
+  .splash-tick {
+    stroke: rgba(232, 200, 119, 0.45);
+    stroke-width: 1;
+  }
+  .splash-tick--major {
+    stroke: rgba(232, 200, 119, 0.75);
+    stroke-width: 1.6;
+  }
+  .splash-star {
+    fill: none;
+    stroke: rgba(232, 200, 119, 0.32);
+    stroke-width: 1;
+  }
+  .splash-rot {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: splash-spin 34s linear infinite;
+  }
+  .splash-rot--reverse {
+    animation-duration: 22s;
+    animation-direction: reverse;
+  }
+  .splash-logo {
+    position: relative;
+    width: 92px;
+    height: auto;
+    filter: drop-shadow(0 0 16px rgba(155, 123, 255, 0.6));
+    animation: splash-breathe 2.8s ease-in-out infinite;
+  }
+  .splash-copy {
+    position: relative;
+    text-align: center;
+    animation: splash-in 0.9s ease 0.15s both;
+  }
+  .splash-word {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    text-indent: 0.3em;
+    font-size: clamp(15px, 2.4vw, 23px);
+    color: #f3ecff;
+  }
+  .splash-sub {
+    margin: 12px 0 0;
+    font-size: clamp(10px, 1.3vw, 12px);
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  .splash-bar {
+    position: relative;
+    width: min(210px, 52vw);
+    height: 2px;
+    border-radius: 2px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.12);
+    animation: splash-in 0.9s ease 0.3s both;
+  }
+  .splash-bar::after {
+    content: '';
+    display: block;
+    width: 42%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      rgba(232, 200, 119, 0),
+      #e8c877,
+      #9b7bff,
+      rgba(155, 123, 255, 0)
+    );
+    animation: splash-load 1.3s ease-in-out infinite;
+  }
+  .splash.is-leaving {
+    opacity: 0;
+    transition: opacity 0.7s ease;
+  }
+  .splash.is-leaving .splash-stage {
+    transform: scale(1.14);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .splash-spark,
+    .splash-rot,
+    .splash-logo,
+    .splash-bar::after {
+      animation: none;
+    }
+  }
+  @keyframes splash-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes splash-breathe {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.92;
+    }
+    50% {
+      transform: scale(1.045);
+      opacity: 1;
+    }
+  }
+  @keyframes splash-twinkle {
+    0%,
+    100% {
+      opacity: 0;
+      transform: translateY(0) scale(0.7);
+    }
+    50% {
+      opacity: 0.9;
+      transform: translateY(-10px) scale(1);
+    }
+  }
+  @keyframes splash-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes splash-load {
+    0% {
+      transform: translateX(-120%);
+    }
+    100% {
+      transform: translateX(320%);
+    }
+  }
+</style>
+
+<div
+  id="splash"
+  class="splash"
+  role="status"
+  aria-label="Loading Data Sorcerers"
+>
+  <div class="splash-sky" aria-hidden="true">
+    {sparks.map((spark) => (
+      <span
+        class="splash-spark"
+        style={`--x:${spark.x}%;--y:${spark.y}%;--d:${spark.delay}s;--t:${spark.duration}s;--s:${spark.size}px`}
+      />
+    ))}
+  </div>
+  <div class="splash-stage" aria-hidden="true">
+    <svg class="splash-ring" viewBox="0 0 240 240">
+      <g class="splash-rot">
+        <circle class="splash-line" cx="120" cy="120" r="114"></circle>
+        {ticks.map((tick) => (
+          <line
+            class={`splash-tick${tick.major ? ' splash-tick--major' : ''}`}
+            x1={tick.x1}
+            y1={tick.y1}
+            x2={tick.x2}
+            y2={tick.y2}
+          />
+        ))}
+      </g>
+      <g class="splash-rot splash-rot--reverse">
+        <circle
+          class="splash-line splash-line--inner"
+          cx="120"
+          cy="120"
+          r="94"
+        ></circle>
+        <path class="splash-star" d={starPath}></path>
+        <circle
+          class="splash-line splash-line--dash"
+          cx="120"
+          cy="120"
+          r="58"
+        ></circle>
+      </g>
+    </svg>
+    <img
+      class="splash-logo"
+      src="/images/logo.png"
+      width="192"
+      height="210"
+      alt=""
+      fetchpriority="high"
+    />
+  </div>
+  <div class="splash-copy" aria-hidden="true">
+    <p class="splash-word">DATA SORCERERS</p>
+    <p class="splash-sub">Sorcery in Data · Magic in AI</p>
+  </div>
+  <div class="splash-bar" aria-hidden="true"></div>
+</div>
+
+<script is:inline>
+  (function () {
+    var root = document.documentElement;
+    var el = document.getElementById('splash');
+    var markDone = function () {
+      root.classList.add('splash-done');
+    };
+    var announce = function () {
+      markDone();
+      try {
+        window.dispatchEvent(new Event('ds:splash-done'));
+      } catch (e) {}
+    };
+    if (!el) {
+      announce();
+      return;
+    }
+    if (!root.classList.contains('splash-armed')) {
+      if (el.parentNode) el.parentNode.removeChild(el);
+      announce();
+      return;
+    }
+    try {
+      sessionStorage.setItem('ds:splash', '1');
+    } catch (e) {}
+    // Lock scrolling while the overlay is up without shifting the layout: the
+    // hidden scrollbar is compensated by a matching right padding, so the hero
+    // is measured at the exact width it will have once the splash is gone.
+    var sbw = window.innerWidth - root.clientWidth;
+    if (sbw > 0) root.style.paddingRight = sbw + 'px';
+    root.style.overflow = 'hidden';
+
+    var done = false;
+    var MIN = 3000;
+    var MAX = 6000;
+    var start = performance.now();
+    function remove() {
+      if (el.parentNode) el.parentNode.removeChild(el);
+      root.classList.remove('splash-armed');
+      root.style.overflow = '';
+      root.style.paddingRight = '';
+    }
+    function finish() {
+      if (done) return;
+      done = true;
+      announce();
+      el.classList.add('is-leaving');
+      window.setTimeout(remove, 800);
+    }
+    function schedule() {
+      var wait = Math.max(0, MIN - (performance.now() - start));
+      window.setTimeout(finish, wait);
+    }
+    if (document.readyState === 'complete') schedule();
+    else window.addEventListener('load', schedule, { once: true });
+    window.setTimeout(finish, MAX);
+    ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function (type) {
+      window.addEventListener(type, finish, { once: true, passive: true });
+    });
+  })();
+</script>

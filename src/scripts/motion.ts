@@ -11,6 +11,8 @@ type Particles = { burst: number };
 const particles = () =>
   (window as unknown as { __heroParticles?: Particles }).__heroParticles;
 
+let inited = false;
+
 function reveal(
   scope: Element | null,
   selector: string,
@@ -138,6 +140,8 @@ function tilt(element: HTMLElement, max: number, cleanups: Cleanup[]) {
 }
 
 export function initMotion() {
+  if (inited) return;
+  inited = true;
   const mm = gsap.matchMedia();
 
   // `gsap.matchMedia` reverts every tween/ScrollTrigger it created when a query
@@ -365,4 +369,19 @@ export function initMotion() {
       return () => cleanups.forEach((fn) => fn());
     },
   );
+
+  const root = document.documentElement;
+  const armHero = () => {
+    if (root.classList.contains('hero-ready')) return;
+    root.classList.add('hero-ready');
+    window.setTimeout(() => root.classList.remove('hero-ready'), 3200);
+  };
+  if (document.readyState === 'complete') {
+    armHero();
+  } else {
+    window.addEventListener('load', () => window.setTimeout(armHero, 150), {
+      once: true,
+    });
+    window.setTimeout(armHero, 2500);
+  }
 }

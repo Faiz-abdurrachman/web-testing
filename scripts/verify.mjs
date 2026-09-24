@@ -31,6 +31,7 @@ const setNavbarHidden = (hidden) =>
       '.project-dots',
       '.project-card:not(.is-active)',
       '.snippet-arrow',
+      '.splash',
     ].join(',');
     document.querySelectorAll(selectors).forEach((element) => {
       element.style.visibility = value ? 'hidden' : '';

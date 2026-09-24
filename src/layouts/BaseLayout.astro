@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import Splash from '../components/Splash.astro';
 interface Props {
   title?: string;
   description?: string;
@@ -78,23 +79,23 @@ const structuredData = [
 
     <link
       rel="preload"
-      href="/fonts/manrope-400.ttf"
+      href="/fonts/manrope-400.woff2"
       as="font"
-      type="font/ttf"
+      type="font/woff2"
       crossorigin
     />
     <link
       rel="preload"
-      href="/fonts/manrope-500.ttf"
+      href="/fonts/manrope-500.woff2"
       as="font"
-      type="font/ttf"
+      type="font/woff2"
       crossorigin
     />
     <link
       rel="preload"
-      href="/fonts/manrope-600.ttf"
+      href="/fonts/manrope-600.woff2"
       as="font"
-      type="font/ttf"
+      type="font/woff2"
       crossorigin
     />
 
@@ -102,8 +103,30 @@ const structuredData = [
       type="application/ld+json"
       set:html={JSON.stringify(structuredData)}
     ></script>
+    <script is:inline>
+      (function () {
+        var root = document.documentElement;
+        try {
+          var seen = sessionStorage.getItem('ds:splash') === '1';
+          var reduce = window.matchMedia(
+            '(prefers-reduced-motion: reduce)',
+          ).matches;
+          if (!seen && !reduce) {
+            root.classList.add('splash-armed');
+            if ('scrollRestoration' in history) {
+              history.scrollRestoration = 'manual';
+            }
+          } else {
+            root.classList.add('splash-done');
+          }
+        } catch (e) {
+          root.classList.add('splash-done');
+        }
+      })();
+    </script>
   </head>
   <body>
+    <Splash />
     <a class="skip-link" href="#main">
       Skip to content
     </a>

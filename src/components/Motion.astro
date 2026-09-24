@@ -1,5 +1,21 @@
 <script>
   import { initMotion } from '../scripts/motion';
 
-  initMotion();
+  // Hold every entrance until the splash has revealed the page, so the hero
+  // intro plays once, in view, instead of finishing unseen behind the overlay.
+  // If there is no splash (repeat visit / reduced motion) the class is already
+  // on <html> and motion starts immediately.
+  const run = () => {
+    const w = window as unknown as { __dsMotionInit?: boolean };
+    if (w.__dsMotionInit) return;
+    w.__dsMotionInit = true;
+    initMotion();
+  };
+
+  if (document.documentElement.classList.contains('splash-done')) {
+    run();
+  } else {
+    window.addEventListener('ds:splash-done', run, { once: true });
+    window.setTimeout(run, 7000);
+  }
 </script>
