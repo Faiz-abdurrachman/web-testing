@@ -326,28 +326,12 @@ export function initMotion() {
               if (particlesApi) particlesApi.burst = 0;
             },
           });
-        } else if (stack && content) {
-          const scrub = {
-            trigger: hero,
-            start: 'top top',
-            end: 'bottom top',
-            scrub: true,
-          } as const;
-          gsap.to(stack, {
-            y: -70,
-            scale: 1.1,
-            ease: 'none',
-            scrollTrigger: scrub,
-          });
-          if (figure)
-            gsap.to(figure, { y: 30, ease: 'none', scrollTrigger: scrub });
-          gsap.to(content, {
-            y: 90,
-            autoAlpha: 0.15,
-            ease: 'none',
-            scrollTrigger: scrub,
-          });
         }
+        // Phones (<768px) get no scroll-driven hero zoom: scaling the full-bleed
+        // art as the hero left read as a grow/shrink glitch — the hero is
+        // 100dvh, so the collapsing address bar kept re-measuring the trigger —
+        // and it cost a transform on the largest layer every frame. Phones now
+        // scroll the hero away untouched; the figure keeps only its idle bob.
 
         if (stack && finePointer()) {
           const xTo = gsap.quickTo(stack, 'xPercent', {
