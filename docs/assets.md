@@ -1080,7 +1080,8 @@ figure's three `repeat: -1` idle tweens ran forever.
   scroll sequence in `motion.ts`); `≤600px` gets a stronger two-axis scrim, a
   `text-shadow` on the body copy, and smaller `object-fit` figure heights
   (74/70/68/64/60% by width bucket) so the copy stays legible over the sorcerer
-  at 320–390 without hiding the art. Mobile keeps `min-height: 100dvh`.
+  at 320–390 without hiding the art. Mobile uses `min-height: 100svh` (stable,
+  not `dvh` — see the follow-up below).
 - `motion.ts`: `animateFigure` takes `richIdle` (desktop = bob + sway +
   breathing; mobile = bob only) and pauses its tweens through an
   `IntersectionObserver` while the hero is off-screen.
@@ -1089,6 +1090,11 @@ figure's three `repeat: -1` idle tweens ran forever.
   address bar kept re-measuring the trigger, so the art visibly grew/shrank
   ("kek ketimpa") on real phones; phones now scroll the hero away untouched and
   keep only the figure's idle bob. The desktop pinned sequence is unchanged.
+- `motion.ts` follow-up 2: hero `min-height` switched `100dvh` → `100svh` (dvh
+  reflows with the collapsing address bar, which shifted the next section
+  mid-scroll) and ScrollTrigger is now `config({ ignoreMobileResize: true })`
+  so it stops re-measuring every trigger on the address-bar resize. Together
+  these remove the mobile hero→Philosophy "jump".
 - `Navbar.astro`: `backdrop-filter` moved to `.navbar.is-scrolled::before` (the
   top-of-page state owns no blur layer); `≤760px` drops to `blur(12px)` without
   `saturate`/`brightness`, and the morph is an instant class swap

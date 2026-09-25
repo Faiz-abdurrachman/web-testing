@@ -31,7 +31,8 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
   navbar "living HUD", perf What We Do (starfield tile + `perf:audit`).
 - **Pass responsive + performa mobile (25 Sep 2026):** particle Three.js kini
   desktop-only (`min-width: 768px`), navbar HP blur 12px tanpa morph layout 0.9s,
-  hero HP scrim/figur lebih kecil + `100dvh`, `viewport-fit=cover` + safe-area,
+  hero HP scrim/figur lebih kecil + `min-height: 100svh`, `viewport-fit=cover` +
+  safe-area,
   prefix `-webkit-background-clip`, chip role tidak lagi menggantung. Detail di
   `docs/assets.md` §"Mobile responsive + performance pass".
 
@@ -380,15 +381,16 @@ Keluhan: heading di HP bukan Nasalization (lisensi — jangan diakali, lihat
   `!reduce`, jadi ikut jalan di HP). Idle figur dapat `richIdle` (mobile = bob
   saja) + pause via `IntersectionObserver` saat hero off-screen (`motion.ts`).
 - Scroll-scrub hero di `<768px` **dihapus**: dulu `.artwork-stack` di-scale
-  1→1.1 saat hero keluar, dan karena hero `100dvh` address bar yang menciut bikin
-  trigger re-measure → gambar kelihatan ngebesar-ngecil ("kek ketimpa"). Sekarang
-  hero HP keluar natural (idle bob figur tetap); pinned sequence desktop tidak
-  diubah.
+  1→1.1 saat hero keluar. Ditambah `min-height` hero pindah `100dvh` → `100svh`
+  (dvh ikut reflow saat address bar HP sembunyi/muncul → section bawah "jump")
+  dan `ScrollTrigger.config({ ignoreMobileResize: true })` supaya trigger tidak
+  re-measure saat address bar berubah. Sekarang hero HP keluar natural (idle bob
+  figur tetap); pinned sequence desktop tidak diubah.
 - Navbar: `backdrop-filter` hanya saat `.is-scrolled::before` (tak ada layer blur
   di atas); `≤760px` blur 12px tanpa saturate/brightness dan morph jadi instant
   (bukan transisi layout 0.9s).
 - Hero HP: scrim dua arah + `text-shadow` + figur lebih kecil biar copy kebaca di
-  320–390; tetap `min-height: 100dvh`.
+  320–390; tetap `min-height: 100svh`.
 - Global: `viewport-fit=cover`, `env(safe-area-inset-top)` (navbar + halaman
   detail), prefix `-webkit-background-clip: text` di semua heading gradient.
 - `RoleDetail`: separator chip dibungkus `.chip` biar titik tidak menggantung

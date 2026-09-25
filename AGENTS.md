@@ -165,7 +165,10 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   navbar's `backdrop-filter` only paints on `.is-scrolled::before`, and `≤760px`
   uses a 12px blur with an instant morph — do not reintroduce the 28px
   `saturate`/`brightness` blur or the 0.9s layout transitions. Detail pages get
-  `env(safe-area-inset-top)`; keep `viewport-fit=cover` in `BaseLayout`.
+  `env(safe-area-inset-top)`; keep `viewport-fit=cover` in `BaseLayout`. The
+  mobile heroes use `min-height: 100svh` (not `dvh`) and `motion.ts` runs
+  `ScrollTrigger.config({ ignoreMobileResize: true })` — both are needed or the
+  hero→next-section "jump" returns as the address bar shows/hides.
 
 ## Fonts
 
