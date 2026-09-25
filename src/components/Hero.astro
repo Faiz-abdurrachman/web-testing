@@ -659,10 +659,9 @@ import Button from './Button.astro';
   }
   @media (max-width: 600px) {
     .hero {
+      /* svh, not dvh: dvh reflows with the mobile address bar and made the next section jump. */
       min-height: 100vh;
       min-height: 100svh;
-      /* Track the visible viewport so the next section cannot peek under the mobile address bar. */
-      min-height: 100dvh;
       padding-top: clamp(96px, 12svh, 120px);
       padding-bottom: clamp(64px, 9svh, 96px);
       align-items: center;

@@ -3,6 +3,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// On phones the address bar hides/shows as you scroll, firing a resize that would
+// otherwise make ScrollTrigger re-measure every trigger mid-scroll and shift the
+// page. Ignoring that delta keeps reveals (and anything scrubbed) stable.
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 const finePointer = () => window.matchMedia('(pointer: fine)').matches;
 
 type Cleanup = () => void;
