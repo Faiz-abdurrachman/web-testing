@@ -1004,16 +1004,39 @@ PNG comparisons and `verify.mjs` hero geometry stay valid.
   widths: no overflow, no clipped text, identical ≥601px geometry, and
   `responsive-audit.mjs` ALL PASS (364 combos).
 
-## Loading splash — magic circle (24 September 2026)
+## Loading splash — arcane-tech altar seal (25 September 2026)
 
-- New `src/components/Splash.astro`, mounted as the first child of `<body>` in
+- `src/components/Splash.astro`, mounted as the first child of `<body>` in
   `BaseLayout.astro`. Full-screen `position: fixed` overlay so the hero is not
   visible while its art loads.
-- Artwork is 100% CSS/SVG (no new dependency, no raster asset): a gold magic
-  circle (outer ring + 24 radial ticks, 7-point heptagram, dashed violet inner
-  ring) drawn over a dark violet nebula gradient, with the existing
-  `public/images/logo.png` glowing at the centre, 16 twinkling star sparks, the
-  wordmark (Nasalization fallback) and a shimmering progress bar.
+- **Redesign (Option A):** the splash is now a cinematic "altar seal" scene,
+  recreated as 100% CSS/SVG from the reference render
+  `assets/assets home page/loading.png` (1672×941) — the PNG is a **mood /
+  composition target only, never flattened into the UI** (rule #2). No new
+  dependency and no new raster asset; the only image is the existing
+  `public/images/logo.png` at the middle.
+- Seal (`.splash-stage`, `min(52vh, 500px, 40vw)`, viewBox `0 0 240 240`):
+  - progress arc `r=113` (`--splash-progress` set inline by the loader script) +
+    faint track; 36 ticks (major every 6°) in `.splash-rot--slow`;
+  - 12 abstract invented runes (`r=94`) in `.splash-rot--runes`;
+  - sacred geometry in `.splash-geo`: faint hexagram (`r=85`), inner circle
+    (`r=80`), bold **inverted gold triangle** (`r=72`, `.splash-tri`) and
+    pentagram (`r=74`);
+  - data constellation: 14 nodes (`r=54..72`), neighbour links and a dashed inner
+    ring in `.splash-rot--rev`;
+  - 6 chasing energy arcs (gold/violet, `r=117`/`104`) in two counter-spinning
+    groups, plus 4 axis ticks and 4 diamond glyphs.
+- Environment layers (all CSS/SVG gradients, no rasters): `.splash-beam` (3-layer
+  pillar + bloom), `.splash-smoke` (magenta/violet fog flanking the seal, 22s
+  drift), `.splash-sky` (30 twinkling sparks), `.splash-floor` (wet reflective
+  floor + 10 perspective ripple ellipses), `.splash-ground-haze`, `.splash-cliffs`
+  (back/front/rim silhouettes mirrored left/right), `.splash-rubble`, 7 floating
+  crystal shards, a horizontal `.splash-equator` gold beam through the seal centre
+  and a `.splash-vignette`. Copy = `DATA SORCERERS` wordmark + gold divider +
+  `SORCERY IN DATA · MAGIC IN AI` tagline.
+- All motion is disabled under `prefers-reduced-motion: reduce` and hidden on
+  `max-width: 760px` / `max-height: 560px` (floor, cliffs, rubble, shards and
+  ground haze `display: none`).
 - Shown **once per session** (`sessionStorage: ds:splash`); an inline `<head>`
   script arms it via `html.splash-armed` only when unseen **and** not
   `prefers-reduced-motion: reduce` (otherwise it adds `html.splash-done`). The

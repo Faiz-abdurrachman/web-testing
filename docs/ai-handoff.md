@@ -13,8 +13,39 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
   `src/scripts/motion.ts`).
 - Semua gate hijau: `format:check`, `build` (14 halaman), `verify.mjs`
   (`browserErrors: []`), `responsive-audit.mjs` (364 combos), `seo:audit`.
-- **Terbaru:** splash jadi **preloader asli** (nunggu three + video + fonts),
-  navbar "living HUD", perf What We Do (starfield tile + `perf:audit`).
+- **Terbaru:** splash dirombak jadi **altar seal sinematik (Option A)** dari
+  `assets/assets home page/loading.png` (direkonstruksi vektor, **bukan** flatten);
+  sebelumnya splash jadi **preloader asli** (nunggu three + video + fonts), navbar
+  "living HUD", perf What We Do (starfield tile + `perf:audit`).
+
+## Baru saja: splash dirombak jadi altar seal sinematik (Option A)
+
+**Permintaan user (25 Sep 2026):** ganti tampilan splash lama (magic circle 24 tick
+
+- heptagram + progress bar) dengan adegan seal yang jauh lebih megah mengikuti
+  render `assets/assets home page/loading.png`, "a penuh" (fidelity penuh), tetap
+  100% HTML/CSS/SVG (tidak menempel gambar render — aturan #2).
+
+**Referensi terukur** (`tmp-measure.mjs`, sharp; 1672×941): diameter cincin emas ≈
+**31.8% lebar**, pusat ≈ **(49.9%, 38.9%)**; baris-baris terang: judul `DATA
+SORCERERS` ≈ **68–69% tinggi**, tagline ≈ **73–74%**, horizon lantai ≈ **74–76%**.
+PNG ini **target mood/komposisi saja**, bukan spec UI.
+
+**Hasil (`src/components/Splash.astro`):** seal berisi progress arc `r=113`, 36
+tick, 12 rune (r=94), geometri sakral (hexagram samar, **segitiga emas terbalik**
+tebal `r=72`, pentagram), konstelasi 14 node + link, 6 busur energi emas/violet
+yang saling berputar; lingkungan = pilar cahaya 3 lapis, **kabut magenta/violet**
+mengapit seal, 30 spark, lantai basah + 10 cincin perspektif, tebing kiri/kanan
+(mirror), rubble, 7 serpihan kristal, **garis ekuator emas** menembus pusat, dan
+vignette. Judul + divider + tagline di bawah. Semua animasi mati saat
+`prefers-reduced-motion`; di `≤760px`/`≤560px` lantai, tebing, rubble, shard dan
+ground-haze disembunyikan. Logika preloader (min 3000 / cap 6000, skip setelah min,
+registry `__dsPreload`) **tidak diubah**.
+
+**Verifikasi:** `format:check` ✓, `build` 14 halaman ✓, `verify.mjs` exit 0
+(`browserErrors: []`), `responsive-audit.mjs` 364 combos ALL PASS. Screenshot
+desktop/mobile dicek vs referensi; CSS gradient tidak bisa meniru penuh tekstur
+asap volumetrik render AI — perbedaan yang tersisa bersifat artistik.
 
 ## Baru saja: splash jadi preloader asli
 

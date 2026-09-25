@@ -1,38 +1,141 @@
 ---
 const cx = 120;
 const cy = 120;
+const pt = (r: number, a: number): [number, number] => [
+  +(cx + Math.cos(a) * r).toFixed(2),
+  +(cy + Math.sin(a) * r).toFixed(2),
+];
 
-const ticks = Array.from({ length: 24 }, (_, i) => {
-  const a = (i * Math.PI * 2) / 24 - Math.PI / 2;
+// Outer ticked band: 12 major spokes every 30deg, with a fine tick between.
+const ticks = Array.from({ length: 36 }, (_, i) => {
+  const a = (i * Math.PI * 2) / 36 - Math.PI / 2;
   const major = i % 6 === 0;
-  const r1 = 108;
-  const r2 = major ? 119 : 114;
-  return {
-    major,
-    x1: (cx + Math.cos(a) * r1).toFixed(1),
-    y1: (cy + Math.sin(a) * r1).toFixed(1),
-    x2: (cx + Math.cos(a) * r2).toFixed(1),
-    y2: (cy + Math.sin(a) * r2).toFixed(1),
-  };
+  const [x1, y1] = pt(105, a);
+  const [x2, y2] = pt(major ? 112 : 109, a);
+  return { major, x1, y1, x2, y2 };
 });
 
-const starR = 74;
-const starPoints = Array.from({ length: 7 }, (_, i) => {
-  const a = (i * Math.PI * 4) / 7 - Math.PI / 2;
-  return `${(cx + Math.cos(a) * starR).toFixed(1)} ${(
-    cy +
-    Math.sin(a) * starR
-  ).toFixed(1)}`;
+// Abstract occult glyphs (invented, not a real alphabet) for the sigil band.
+const glyphs = [
+  'M-3 -4 L3 -4 M0 -4 L0 4 M-2.2 1 L2.2 1',
+  'M-3 4 L0 -4 L3 4 M-1.9 1 L1.9 1',
+  'M0 -4 L0 4 M-3 -1.2 L3 -1.2 M-2 -4 L2 -4',
+  'M-3 -3 L3 3 M3 -3 L-3 3',
+  'M-3 3 L0 -4 L3 3 Z',
+  'M-2.6 -3.4 L2.6 -3.4 L0 4 Z M-1.6 0.4 L1.6 0.4',
+];
+const runes = Array.from({ length: 12 }, (_, i) => {
+  const a = (i * Math.PI * 2) / 12 - Math.PI / 2 + Math.PI / 12;
+  const [x, y] = pt(94, a);
+  return { x, y, glyph: glyphs[i % glyphs.length] };
 });
-const starPath = `M${starPoints.join(' L')} Z`;
 
-const sparks = Array.from({ length: 16 }, (_, i) => ({
+// Data constellation: nodes on varied radii, linked to their neighbours.
+const nodes = Array.from({ length: 14 }, (_, i) => {
+  const a = (i * Math.PI * 2) / 14 + (i % 3) * 0.16 - Math.PI / 2;
+  const r = 54 + (i % 4) * 6;
+  const [x, y] = pt(r, a);
+  return { x, y, d: ((i * 0.41) % 3).toFixed(2), big: i % 3 === 0 };
+});
+const links = nodes.map((n, i) => {
+  const m = nodes[(i + 2) % nodes.length];
+  return { x1: n.x, y1: n.y, x2: m.x, y2: m.y };
+});
+
+// Sacred geometry: pentagram over a faint hexagram.
+const penta = Array.from({ length: 5 }, (_, i) =>
+  pt(74, (i * Math.PI * 4) / 5 - Math.PI / 2),
+);
+const pentaPath = `M${penta.map((p) => p.join(' ')).join(' L')} Z`;
+
+const hexaT = (rot: number) =>
+  Array.from({ length: 3 }, (_, i) =>
+    pt(85, (i * Math.PI * 2) / 3 + rot - Math.PI / 2),
+  );
+const hexaPath = `M${hexaT(0)
+  .map((p) => p.join(' '))
+  .join(' L')} Z M${hexaT(Math.PI / 3)
+  .map((p) => p.join(' '))
+  .join(' L')} Z`;
+
+// Bold inverted triangle, the dominant gold sigil in the reference render.
+const triPath = `M${[90, 210, 330]
+  .map((deg) => pt(72, (deg * Math.PI) / 180).join(' '))
+  .join(' L')} Z`;
+
+const diamonds = [
+  { x: 120, y: 7 },
+  { x: 233, y: 120 },
+  { x: 120, y: 233 },
+  { x: 7, y: 120 },
+];
+
+// Bright energy arcs that chase around the outer band (gold + violet).
+const DEG = Math.PI / 180;
+const arcPath = (r: number, a0: number, a1: number) => {
+  const [x0, y0] = pt(r, a0 * DEG);
+  const [x1, y1] = pt(r, a1 * DEG);
+  const large = Math.abs(a1 - a0) > 180 ? 1 : 0;
+  return `M${x0} ${y0} A${r} ${r} 0 ${large} 1 ${x1} ${y1}`;
+};
+const energy = [
+  { d: arcPath(117, -164, -112), cls: 'splash-energy--gold' },
+  { d: arcPath(117, -68, -16), cls: 'splash-energy--gold' },
+  { d: arcPath(117, 34, 84), cls: 'splash-energy--violet' },
+  { d: arcPath(117, 124, 168), cls: 'splash-energy--violet' },
+  {
+    d: arcPath(104, -128, -88),
+    cls: 'splash-energy--violet splash-energy--thin',
+  },
+  { d: arcPath(104, 92, 132), cls: 'splash-energy--gold splash-energy--thin' },
+];
+
+// Circumference of the r=113 progress arc (see .splash-arc).
+const R_ARC = 113;
+const ARC = (2 * Math.PI * R_ARC).toFixed(1);
+
+// Floating dust drifting through the void.
+const sparks = Array.from({ length: 30 }, (_, i) => ({
   x: ((i * 61.8 + 7) % 100).toFixed(1),
   y: ((i * 37.4 + 11) % 100).toFixed(1),
   delay: ((i * 0.41) % 3.4).toFixed(2),
-  duration: (2.4 + (i % 5) * 0.55).toFixed(2),
-  size: (1.4 + (i % 4) * 0.6).toFixed(2),
+  duration: (3.2 + (i % 5) * 0.7).toFixed(2),
+  size: (1.2 + (i % 4) * 0.7).toFixed(2),
 }));
+
+// Obsidian crystal shards levitating around the ritual.
+const shards = [
+  { x: 15, y: 32, s: 22, d: 0.0, t: 11, r: -14 },
+  { x: 82, y: 22, s: 15, d: 1.4, t: 9, r: 20 },
+  { x: 8, y: 56, s: 28, d: 2.6, t: 13, r: 8 },
+  { x: 90, y: 50, s: 18, d: 0.8, t: 10, r: -22 },
+  { x: 72, y: 12, s: 11, d: 2.1, t: 8, r: 12 },
+  { x: 26, y: 14, s: 11, d: 1.1, t: 12, r: -8 },
+  { x: 92, y: 70, s: 14, d: 1.9, t: 9, r: 30 },
+];
+const CRYSTAL = 'M16 0 L30 15 L25 33 L16 40 L7 33 L2 15 Z';
+
+// Wet-floor perspective rings, widest toward the viewer.
+const ripples = [
+  { cy: 22, rx: 46, ry: 4, cls: 'hot' },
+  { cy: 30, rx: 96, ry: 7, cls: '' },
+  { cy: 40, rx: 158, ry: 10, cls: 'violet' },
+  { cy: 52, rx: 232, ry: 14, cls: '' },
+  { cy: 66, rx: 316, ry: 18, cls: 'violet' },
+  { cy: 84, rx: 410, ry: 23, cls: 'hot' },
+  { cy: 104, rx: 510, ry: 28, cls: '' },
+  { cy: 128, rx: 620, ry: 34, cls: 'violet' },
+  { cy: 154, rx: 730, ry: 40, cls: '' },
+  { cy: 184, rx: 850, ry: 46, cls: 'violet' },
+];
+
+// Jagged cliff silhouettes: a lighter back layer and a dark front layer.
+const cliffBack =
+  'M0 400 L0 120 L18 96 L30 150 L48 118 L64 176 L86 140 L104 206 L128 168 L150 232 L176 196 L200 260 L228 224 L256 292 L288 258 L320 330 L352 300 L400 400 Z';
+const cliffFront =
+  'M0 400 L0 210 L26 186 L52 240 L82 210 L112 268 L146 238 L182 296 L216 268 L252 322 L292 296 L336 352 L400 340 L400 400 Z';
+const rubblePath =
+  'M0 120 L0 78 L34 58 L72 92 L110 72 L152 108 L196 90 L240 120 Z';
 ---
 
 <style is:inline>
@@ -44,34 +147,163 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: clamp(24px, 5vh, 46px);
+    overflow: hidden;
     background: radial-gradient(
-      120% 90% at 50% 38%,
-      #1b1036 0%,
-      #0b0716 48%,
-      #050507 100%
+      130% 112% at 50% 14%,
+      #241349 0%,
+      #150a30 30%,
+      #0a0519 58%,
+      #030206 100%
     );
     opacity: 1;
   }
   html.splash-armed .splash {
     display: flex;
   }
-  .splash::before {
+  .splash > * {
+    pointer-events: none;
+  }
+  .splash-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+  }
+
+  /* ---- environment ------------------------------------------------------ */
+  .splash-smoke {
+    position: absolute;
+    inset: -12%;
+    filter: blur(26px) saturate(1.1);
+    mix-blend-mode: screen;
+    animation: splash-haze 22s ease-in-out infinite alternate;
+  }
+  .splash-smoke::before,
+  .splash-smoke::after {
     content: '';
     position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: radial-gradient(
-      42% 34% at 50% 42%,
-      rgba(155, 123, 255, 0.28) 0%,
-      rgba(155, 123, 255, 0) 70%
+    border-radius: 50%;
+  }
+  .splash-smoke::before {
+    left: -10%;
+    top: 14%;
+    width: 54%;
+    height: 70%;
+    background:
+      radial-gradient(
+        closest-side,
+        rgba(178, 98, 255, 0.72),
+        rgba(178, 98, 255, 0) 72%
+      ),
+      radial-gradient(
+        closest-side at 62% 68%,
+        rgba(214, 84, 226, 0.5),
+        transparent 70%
+      );
+  }
+  .splash-smoke::after {
+    right: -10%;
+    top: 14%;
+    width: 56%;
+    height: 72%;
+    background:
+      radial-gradient(closest-side, rgba(168, 90, 248, 0.68), transparent 72%),
+      radial-gradient(
+        closest-side at 38% 68%,
+        rgba(206, 80, 220, 0.48),
+        transparent 70%
+      );
+  }
+
+  .splash-ground-haze {
+    position: absolute;
+    left: -10%;
+    right: -10%;
+    bottom: 2%;
+    height: 42%;
+    background:
+      radial-gradient(
+        60% 100% at 18% 100%,
+        rgba(158, 96, 255, 0.55),
+        transparent 70%
+      ),
+      radial-gradient(
+        60% 100% at 82% 100%,
+        rgba(146, 84, 240, 0.52),
+        transparent 70%
+      ),
+      radial-gradient(
+        80% 100% at 50% 100%,
+        rgba(178, 130, 255, 0.34),
+        transparent 72%
+      );
+    filter: blur(30px);
+    animation: splash-haze 16s ease-in-out infinite alternate-reverse;
+  }
+
+  /* ---- central pillar --------------------------------------------------- */
+  .splash-beam {
+    position: absolute;
+    left: 50%;
+    top: -6%;
+    width: clamp(120px, 22vw, 360px);
+    height: 96%;
+    transform: translateX(-50%);
+    background: linear-gradient(
+      to bottom,
+      rgba(214, 198, 255, 0) 0%,
+      rgba(214, 198, 255, 0.1) 14%,
+      rgba(200, 178, 255, 0.3) 34%,
+      rgba(178, 150, 255, 0.24) 48%,
+      rgba(150, 110, 255, 0.12) 62%,
+      rgba(232, 200, 119, 0.1) 72%,
+      transparent 84%
+    );
+    filter: blur(22px);
+    mask: linear-gradient(
+      to right,
+      transparent 0%,
+      #000 26%,
+      #000 74%,
+      transparent 100%
     );
   }
+  .splash-beam::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 22%;
+    height: 84%;
+    transform: translateX(-50%);
+    background: linear-gradient(
+      to bottom,
+      rgba(230, 220, 255, 0) 0%,
+      rgba(230, 220, 255, 0.5) 20%,
+      rgba(224, 206, 255, 0.8) 40%,
+      rgba(196, 160, 255, 0.32) 58%,
+      transparent 80%
+    );
+    filter: blur(10px);
+  }
+  .splash-beam::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 2%;
+    width: 48%;
+    height: 30%;
+    transform: translateX(-50%);
+    background: radial-gradient(
+      50% 100% at 50% 100%,
+      rgba(216, 190, 255, 0.5),
+      transparent 74%
+    );
+    filter: blur(16px);
+  }
+
   .splash-sky {
     position: absolute;
     inset: 0;
-    overflow: hidden;
-    pointer-events: none;
   }
   .splash-spark {
     position: absolute;
@@ -81,18 +313,265 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
     height: var(--s);
     border-radius: 50%;
     background: #fff;
-    box-shadow: 0 0 6px 1px rgba(205, 185, 255, 0.85);
+    box-shadow: 0 0 7px 1px rgba(205, 185, 255, 0.85);
     opacity: 0;
     animation: splash-twinkle var(--t) ease-in-out infinite;
     animation-delay: var(--d);
   }
+
+  /* ---- reflective ground ------------------------------------------------ */
+  .splash-floor {
+    position: absolute;
+    left: -6%;
+    right: -6%;
+    bottom: -2%;
+    height: 30%;
+    overflow: hidden;
+    background: linear-gradient(
+      to bottom,
+      rgba(44, 24, 88, 0.2) 0%,
+      rgba(14, 8, 30, 0.7) 45%,
+      rgba(6, 3, 14, 0.95) 82%,
+      #040209 100%
+    );
+  }
+  .splash-floor::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -8px;
+    width: 70%;
+    height: 60%;
+    transform: translateX(-50%);
+    background: radial-gradient(
+      60% 100% at 50% 0%,
+      rgba(190, 160, 255, 0.34),
+      transparent 74%
+    );
+    filter: blur(16px);
+  }
+  .splash-floor::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 1.5px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(232, 200, 119, 0.55) 30%,
+      rgba(226, 206, 255, 0.8) 50%,
+      rgba(232, 200, 119, 0.55) 70%,
+      transparent
+    );
+    box-shadow: 0 0 26px 5px rgba(155, 123, 255, 0.5);
+  }
+  .splash-reflection {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 34%;
+    height: 100%;
+    transform: translateX(-50%);
+    background: linear-gradient(
+      to bottom,
+      rgba(214, 196, 255, 0.34),
+      rgba(150, 110, 240, 0.14) 40%,
+      transparent 78%
+    );
+    filter: blur(12px);
+    mask: linear-gradient(to bottom, #000, transparent 90%);
+  }
+  .splash-ripples {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .splash-ripples ellipse {
+    fill: none;
+    stroke: rgba(238, 206, 128, 0.5);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+    filter: drop-shadow(0 0 4px rgba(232, 200, 119, 0.45));
+  }
+  .splash-ripples ellipse.violet {
+    stroke: rgba(176, 142, 255, 0.5);
+    filter: drop-shadow(0 0 4px rgba(155, 123, 255, 0.45));
+  }
+  .splash-ripples ellipse.hot {
+    stroke: rgba(246, 232, 255, 0.72);
+    filter: drop-shadow(0 0 6px rgba(255, 236, 190, 0.7));
+  }
+
+  /* ---- cliffs & rubble -------------------------------------------------- */
+  .splash-cliffs {
+    position: absolute;
+    inset: 0;
+  }
+  .splash-cliff {
+    position: absolute;
+    bottom: -1%;
+    height: 58%;
+  }
+  .splash-cliff--l {
+    left: -2%;
+    width: 34%;
+  }
+  .splash-cliff--r {
+    right: -2%;
+    width: 36%;
+    transform: scaleX(-1);
+  }
+  .splash-cliff svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .splash-cliff .back {
+    fill: #160b30;
+    opacity: 0.72;
+    filter: blur(2px);
+  }
+  .splash-cliff .front {
+    fill: #06030e;
+  }
+  .splash-cliff .rim {
+    fill: none;
+    stroke: rgba(160, 120, 255, 0.32);
+    stroke-width: 1.4;
+    filter: drop-shadow(0 0 6px rgba(140, 90, 240, 0.5));
+  }
+  .splash-rubble {
+    position: absolute;
+    inset: 0;
+  }
+  .splash-rubble svg {
+    position: absolute;
+    bottom: 0;
+    height: 15%;
+  }
+  .splash-rubble svg:first-child {
+    left: -1%;
+    width: 26%;
+  }
+  .splash-rubble svg:last-child {
+    right: -1%;
+    width: 28%;
+    transform: scaleX(-1);
+  }
+  .splash-rubble path {
+    fill: #05020c;
+    stroke: rgba(150, 110, 255, 0.22);
+    stroke-width: 1;
+  }
+
+  .splash-shard {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--s);
+    height: calc(var(--s) * 1.3);
+    transform: rotate(var(--r));
+    animation: splash-float var(--t) ease-in-out infinite;
+    animation-delay: var(--d);
+    filter: drop-shadow(0 0 10px rgba(150, 100, 255, 0.5));
+  }
+  .splash-shard svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+  }
+  .splash-shard .body {
+    fill: url(#splash-crystal-grad);
+    stroke: rgba(170, 132, 255, 0.6);
+    stroke-width: 0.8;
+  }
+  .splash-shard .facet {
+    fill: rgba(196, 168, 255, 0.22);
+  }
+  .splash-shard .peak {
+    fill: rgba(236, 224, 255, 0.55);
+  }
+
+  .splash-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      118% 96% at 50% 42%,
+      transparent 40%,
+      rgba(2, 1, 5, 0.5) 76%,
+      rgba(2, 1, 5, 0.88) 100%
+    );
+  }
+
+  /* ---- ritual ----------------------------------------------------------- */
+  .splash-ritual {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(18px, 3.4vh, 40px);
+    transform: translateY(-3vh);
+    transition: transform 0.8s ease;
+  }
   .splash-stage {
     position: relative;
-    width: min(300px, 64vw);
+    width: min(52vh, 500px, 40vw);
+    min-width: 190px;
     aspect-ratio: 1;
     display: grid;
     place-items: center;
-    transition: transform 0.8s ease;
+    --splash-progress: 0;
+  }
+  .splash-stage::before {
+    content: '';
+    position: absolute;
+    inset: 8%;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(155, 123, 255, 0.34),
+      rgba(155, 123, 255, 0) 68%
+    );
+    filter: blur(12px);
+    animation: splash-glow 3.6s ease-in-out infinite;
+  }
+  .splash-equator {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 152%;
+    height: 34px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(
+      50% 50% at 50% 50%,
+      rgba(255, 240, 200, 0.72),
+      rgba(232, 200, 119, 0.26) 42%,
+      transparent 72%
+    );
+    filter: blur(7px);
+    mix-blend-mode: screen;
+  }
+  .splash-equator::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1.5px;
+    transform: translateY(-50%);
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(255, 238, 190, 0.85) 50%,
+      transparent
+    );
+    box-shadow: 0 0 18px 3px rgba(232, 200, 119, 0.6);
   }
   .splash-ring {
     position: absolute;
@@ -103,45 +582,169 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
   }
   .splash-line {
     fill: none;
-    stroke: rgba(232, 200, 119, 0.5);
-    stroke-width: 1;
+    stroke: rgba(232, 200, 119, 0.42);
+    stroke-width: 0.9;
   }
-  .splash-line--inner {
-    stroke: rgba(155, 123, 255, 0.45);
-    stroke-dasharray: 2 7;
+  .splash-line--outer {
+    stroke: rgba(155, 123, 255, 0.4);
+    stroke-dasharray: 1 6;
   }
   .splash-line--dash {
-    stroke: rgba(232, 200, 119, 0.38);
-    stroke-dasharray: 1 7;
+    stroke: rgba(232, 200, 119, 0.34);
+    stroke-dasharray: 1 6;
   }
   .splash-tick {
-    stroke: rgba(232, 200, 119, 0.45);
-    stroke-width: 1;
+    stroke: rgba(232, 200, 119, 0.32);
+    stroke-width: 0.8;
   }
   .splash-tick--major {
-    stroke: rgba(232, 200, 119, 0.75);
+    stroke: rgba(232, 200, 119, 0.62);
+    stroke-width: 1.3;
+  }
+  .splash-sigil-ring {
+    fill: rgba(10, 6, 22, 0.55);
+    stroke: rgba(232, 200, 119, 0.42);
+    stroke-width: 0.9;
+  }
+  .splash-sigil-glyph {
+    fill: none;
+    stroke: rgba(232, 200, 119, 0.62);
+    stroke-width: 0.8;
+    stroke-linecap: round;
+  }
+  .splash-link {
+    stroke: rgba(155, 123, 255, 0.24);
+    stroke-width: 0.6;
+  }
+  .splash-node {
+    fill: #efe7ff;
+    animation: splash-node 2.8s ease-in-out infinite;
+    animation-delay: var(--d);
+  }
+  .splash-axis {
+    stroke: rgba(232, 200, 119, 0.5);
+    stroke-width: 0.8;
+  }
+  .splash-arc-track {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.07);
+    stroke-width: 2;
+  }
+  .splash-arc {
+    fill: none;
+    stroke: url(#splash-arc-grad);
+    stroke-width: 2.6;
+    stroke-linecap: round;
+    stroke-dasharray: var(--splash-arc);
+    stroke-dashoffset: calc(
+      var(--splash-arc) * (1 - var(--splash-progress, 0))
+    );
+    transform: rotate(-90deg);
+    transform-origin: 120px 120px;
+    filter: drop-shadow(0 0 6px rgba(155, 123, 255, 0.6))
+      drop-shadow(0 0 12px rgba(232, 200, 119, 0.35));
+  }
+  .splash-energy {
+    fill: none;
+    stroke-linecap: round;
+    stroke-width: 2.6;
+  }
+  .splash-energy--gold {
+    stroke: rgba(240, 206, 122, 0.95);
+    filter: drop-shadow(0 0 5px rgba(232, 200, 119, 0.9))
+      drop-shadow(0 0 12px rgba(232, 200, 119, 0.5));
+  }
+  .splash-energy--violet {
+    stroke: rgba(188, 152, 255, 0.9);
+    filter: drop-shadow(0 0 5px rgba(155, 123, 255, 0.9))
+      drop-shadow(0 0 12px rgba(155, 123, 255, 0.5));
+  }
+  .splash-energy--thin {
     stroke-width: 1.6;
   }
   .splash-star {
     fill: none;
-    stroke: rgba(232, 200, 119, 0.32);
-    stroke-width: 1;
+    stroke: rgba(240, 210, 130, 0.55);
+    stroke-width: 1.2;
+    filter: drop-shadow(0 0 5px rgba(232, 200, 119, 0.35));
+  }
+  .splash-tri {
+    fill: none;
+    stroke: rgba(244, 214, 136, 0.6);
+    stroke-width: 1.5;
+    filter: drop-shadow(0 0 6px rgba(232, 200, 119, 0.5));
+  }
+  .splash-geo-line {
+    fill: none;
+    stroke: rgba(232, 200, 119, 0.16);
+    stroke-width: 0.8;
+  }
+  .splash-diamond rect {
+    fill: rgba(10, 6, 22, 0.6);
+    stroke: rgba(232, 200, 119, 0.7);
+    stroke-width: 0.9;
+  }
+  .splash-diamond path {
+    fill: none;
+    stroke: rgba(232, 200, 119, 0.75);
+    stroke-width: 0.7;
+  }
+  .splash-geo {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: splash-spin 52s linear infinite reverse;
   }
   .splash-rot {
     transform-box: fill-box;
     transform-origin: center;
     animation: splash-spin 34s linear infinite;
   }
-  .splash-rot--reverse {
-    animation-duration: 22s;
+  .splash-rot--slow {
+    animation-duration: 58s;
+  }
+  .splash-rot--runes {
+    animation-duration: 44s;
     animation-direction: reverse;
+  }
+  .splash-rot--rev {
+    animation-duration: 26s;
+    animation-direction: reverse;
+  }
+  .splash-energy-spin {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: splash-spin 18s linear infinite;
+  }
+  .splash-energy-spin--rev {
+    animation-direction: reverse;
+    animation-duration: 24s;
+  }
+  .splash-logo-wrap {
+    position: relative;
+    display: grid;
+    place-items: center;
+    animation: splash-summon 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .splash-logo-wrap::before {
+    content: '';
+    position: absolute;
+    width: 152%;
+    height: 152%;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(5, 3, 12, 0.96) 0%,
+      rgba(9, 5, 20, 0.8) 44%,
+      rgba(9, 5, 20, 0) 74%
+    );
   }
   .splash-logo {
     position: relative;
-    width: 92px;
+    display: block;
+    width: clamp(70px, 15vh, 138px);
     height: auto;
-    filter: drop-shadow(0 0 16px rgba(155, 123, 255, 0.6));
-    animation: splash-breathe 2.8s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(155, 123, 255, 0.62));
+    animation: splash-breathe 3s ease-in-out infinite;
   }
   .splash-copy {
     position: relative;
@@ -154,49 +757,112 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
     font-weight: 400;
     letter-spacing: 0.3em;
     text-indent: 0.3em;
-    font-size: clamp(15px, 2.4vw, 23px);
-    color: #f3ecff;
+    font-size: clamp(18px, 3.4vw, 50px);
+    color: #f4eeff;
+    text-shadow: 0 0 26px rgba(155, 123, 255, 0.5);
+  }
+  .splash-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 14px 0 0;
+  }
+  .splash-divider::before,
+  .splash-divider::after {
+    content: '';
+    width: clamp(34px, 7vw, 74px);
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(232, 200, 119, 0.55)
+    );
+  }
+  .splash-divider::after {
+    background: linear-gradient(
+      to left,
+      transparent,
+      rgba(232, 200, 119, 0.55)
+    );
+  }
+  .splash-divider i {
+    width: 5px;
+    height: 5px;
+    transform: rotate(45deg);
+    background: rgba(232, 200, 119, 0.85);
+    box-shadow: 0 0 8px rgba(232, 200, 119, 0.6);
   }
   .splash-sub {
-    margin: 12px 0 0;
-    font-size: clamp(10px, 1.3vw, 12px);
-    letter-spacing: 0.24em;
+    margin: 10px 0 0;
+    font-size: clamp(10px, 1.3vw, 17px);
+    letter-spacing: 0.28em;
+    text-indent: 0.28em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(230, 222, 255, 0.58);
   }
-  .splash-bar {
-    position: relative;
-    width: min(210px, 52vw);
-    height: 2px;
-    border-radius: 2px;
-    overflow: hidden;
-    background: rgba(255, 255, 255, 0.12);
-    animation: splash-in 0.9s ease 0.3s both;
-  }
-  .splash-bar::after {
-    content: '';
-    display: block;
-    width: 100%;
-    height: 100%;
-    border-radius: inherit;
-    background: linear-gradient(90deg, #e8c877, #9b7bff);
-    transform: scaleX(var(--splash-progress, 0));
-    transform-origin: left center;
-  }
+
   .splash.is-leaving {
     opacity: 0;
-    transition: opacity 0.7s ease;
+    transition: opacity 0.75s ease;
   }
-  .splash.is-leaving .splash-stage {
-    transform: scale(1.14);
+  .splash.is-leaving .splash-ritual {
+    transform: translateY(-3vh) scale(1.12);
   }
+  .splash.is-leaving .splash-logo-wrap {
+    transform: scale(1.3);
+    transition: transform 0.75s ease;
+  }
+  .splash.is-leaving .splash-arc {
+    filter: drop-shadow(0 0 16px rgba(155, 123, 255, 0.95))
+      drop-shadow(0 0 26px rgba(232, 200, 119, 0.6));
+    transition: filter 0.75s ease;
+  }
+
+  @media (max-width: 760px), (max-height: 560px) {
+    .splash-ritual {
+      transform: translateY(-1vh);
+      gap: clamp(16px, 3vh, 28px);
+    }
+    .splash-stage {
+      width: min(78vw, 60vh, 440px);
+    }
+    .splash-floor,
+    .splash-cliffs,
+    .splash-rubble,
+    .splash-shard,
+    .splash-ground-haze {
+      display: none;
+    }
+    .splash-beam {
+      opacity: 0.7;
+    }
+    .splash-smoke {
+      opacity: 0.72;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .splash-spark,
+    .splash-smoke,
+    .splash-ground-haze,
+    .splash-stage::before,
     .splash-rot,
+    .splash-geo,
+    .splash-energy-spin,
+    .splash-node,
+    .splash-shard,
+    .splash-logo-wrap,
     .splash-logo {
       animation: none;
     }
+    .splash-logo-wrap {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
   }
+
   @keyframes splash-spin {
     to {
       transform: rotate(360deg);
@@ -217,11 +883,20 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
     0%,
     100% {
       opacity: 0;
-      transform: translateY(0) scale(0.7);
+      transform: translateY(4px) scale(0.7);
     }
     50% {
-      opacity: 0.9;
-      transform: translateY(-10px) scale(1);
+      opacity: 0.85;
+      transform: translateY(-12px) scale(1);
+    }
+  }
+  @keyframes splash-float {
+    0%,
+    100% {
+      transform: rotate(var(--r)) translateY(-6px);
+    }
+    50% {
+      transform: rotate(calc(var(--r) + 6deg)) translateY(6px);
     }
   }
   @keyframes splash-in {
@@ -234,6 +909,46 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
       transform: translateY(0);
     }
   }
+  @keyframes splash-node {
+    0%,
+    100% {
+      opacity: 0.28;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+  @keyframes splash-summon {
+    from {
+      opacity: 0;
+      transform: scale(0.82);
+      filter: blur(7px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+      filter: blur(0);
+    }
+  }
+  @keyframes splash-glow {
+    0%,
+    100% {
+      opacity: 0.7;
+      transform: scale(0.98);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+  }
+  @keyframes splash-haze {
+    from {
+      transform: translate3d(-1.5%, -1%, 0) scale(1.02);
+    }
+    to {
+      transform: translate3d(1.5%, 1.5%, 0) scale(1.06);
+    }
+  }
 </style>
 
 <div
@@ -242,6 +957,23 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
   role="status"
   aria-label="Loading Data Sorcerers"
 >
+  <svg class="splash-defs" width="0" height="0" aria-hidden="true">
+    <defs>
+      <linearGradient id="splash-arc-grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#e8c877"></stop>
+        <stop offset="0.55" stop-color="#c9a4ff"></stop>
+        <stop offset="1" stop-color="#9b7bff"></stop>
+      </linearGradient>
+      <linearGradient id="splash-crystal-grad" x1="0" y1="0" x2="0.6" y2="1">
+        <stop offset="0" stop-color="#6b3fd6"></stop>
+        <stop offset="0.42" stop-color="#2a1650"></stop>
+        <stop offset="1" stop-color="#0a0614"></stop>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <div class="splash-beam" aria-hidden="true"></div>
+  <div class="splash-smoke" aria-hidden="true"></div>
   <div class="splash-sky" aria-hidden="true">
     {sparks.map((spark) => (
       <span
@@ -250,50 +982,205 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
       />
     ))}
   </div>
-  <div class="splash-stage" aria-hidden="true">
-    <svg class="splash-ring" viewBox="0 0 240 240">
-      <g class="splash-rot">
-        <circle class="splash-line" cx="120" cy="120" r="114"></circle>
-        {ticks.map((tick) => (
-          <line
-            class={`splash-tick${tick.major ? ' splash-tick--major' : ''}`}
-            x1={tick.x1}
-            y1={tick.y1}
-            x2={tick.x2}
-            y2={tick.y2}
-          />
-        ))}
-      </g>
-      <g class="splash-rot splash-rot--reverse">
-        <circle
-          class="splash-line splash-line--inner"
-          cx="120"
-          cy="120"
-          r="94"
-        ></circle>
-        <path class="splash-star" d={starPath}></path>
-        <circle
-          class="splash-line splash-line--dash"
-          cx="120"
-          cy="120"
-          r="58"
-        ></circle>
-      </g>
+
+  <div class="splash-floor" aria-hidden="true">
+    <div class="splash-reflection"></div>
+    <svg
+      class="splash-ripples"
+      viewBox="0 0 1000 300"
+      preserveAspectRatio="none"
+    >
+      {ripples.map((ring) => (
+        <ellipse
+          class={ring.cls}
+          cx="500"
+          cy={ring.cy}
+          rx={ring.rx}
+          ry={ring.ry}
+        />
+      ))}
     </svg>
-    <img
-      class="splash-logo"
-      src="/images/logo.png"
-      width="192"
-      height="210"
-      alt=""
-      fetchpriority="high"
-    />
   </div>
-  <div class="splash-copy" aria-hidden="true">
-    <p class="splash-word">DATA SORCERERS</p>
-    <p class="splash-sub">Sorcery in Data · Magic in AI</p>
+  <div class="splash-ground-haze" aria-hidden="true"></div>
+
+  <div class="splash-cliffs" aria-hidden="true">
+    <div class="splash-cliff splash-cliff--l">
+      <svg viewBox="0 0 400 400" preserveAspectRatio="xMinYMax slice">
+        <path class="back" d={cliffBack}></path>
+        <path class="front" d={cliffFront}></path>
+        <path class="rim" d={cliffFront}></path>
+      </svg>
+    </div>
+    <div class="splash-cliff splash-cliff--r">
+      <svg viewBox="0 0 400 400" preserveAspectRatio="xMinYMax slice">
+        <path class="back" d={cliffBack}></path>
+        <path class="front" d={cliffFront}></path>
+        <path class="rim" d={cliffFront}></path>
+      </svg>
+    </div>
   </div>
-  <div class="splash-bar" aria-hidden="true"></div>
+  <div class="splash-rubble" aria-hidden="true">
+    <svg viewBox="0 0 240 120" preserveAspectRatio="xMinYMax slice">
+      <path d={rubblePath}></path>
+    </svg>
+    <svg viewBox="0 0 240 120" preserveAspectRatio="xMinYMax slice">
+      <path d={rubblePath}></path>
+    </svg>
+  </div>
+
+  <div class="splash-shards" aria-hidden="true">
+    {shards.map((shard) => (
+      <span
+        class="splash-shard"
+        style={`--x:${shard.x}%;--y:${shard.y}%;--s:${shard.s}px;--d:${shard.d}s;--t:${shard.t}s;--r:${shard.r}deg`}
+      >
+        <svg viewBox="0 0 32 40">
+          <path class="body" d={CRYSTAL} />
+          <path class="facet" d="M16 0 L16 40 L7 33 L2 15 Z" />
+          <path class="peak" d="M16 0 L24 9 L16 14 L8 9 Z" />
+        </svg>
+      </span>
+    ))}
+  </div>
+
+  <div class="splash-ritual">
+    <div class="splash-stage" aria-hidden="true">
+      <svg class="splash-ring" viewBox="0 0 240 240">
+        <circle class="splash-arc-track" cx="120" cy="120" r={R_ARC}></circle>
+        <circle
+          class="splash-arc"
+          cx="120"
+          cy="120"
+          r={R_ARC}
+          style={`--splash-arc:${ARC}`}
+        ></circle>
+
+        <g class="splash-energy-spin">
+          {energy
+            .filter((e) => e.cls.includes('gold'))
+            .map((e) => (
+              <path class={`splash-energy ${e.cls}`} d={e.d}></path>
+            ))}
+        </g>
+        <g class="splash-energy-spin splash-energy-spin--rev">
+          {energy
+            .filter((e) => e.cls.includes('violet'))
+            .map((e) => (
+              <path class={`splash-energy ${e.cls}`} d={e.d}></path>
+            ))}
+        </g>
+
+        <g class="splash-rot splash-rot--slow">
+          <circle
+            class="splash-line splash-line--outer"
+            cx="120"
+            cy="120"
+            r="118"
+          ></circle>
+          <circle class="splash-line" cx="120" cy="120" r="98"></circle>
+          {ticks.map((tick) => (
+            <line
+              class={`splash-tick${tick.major ? ' splash-tick--major' : ''}`}
+              x1={tick.x1}
+              y1={tick.y1}
+              x2={tick.x2}
+              y2={tick.y2}
+            />
+          ))}
+        </g>
+
+        <g class="splash-rot splash-rot--runes">
+          <circle
+            class="splash-line splash-line--dash"
+            cx="120"
+            cy="120"
+            r="96"
+          ></circle>
+          {runes.map((rune) => (
+            <g
+              class="splash-sigil"
+              transform={`translate(${rune.x} ${rune.y})`}
+            >
+              <circle class="splash-sigil-ring" r="5.4"></circle>
+              <path class="splash-sigil-glyph" d={rune.glyph}></path>
+            </g>
+          ))}
+        </g>
+
+        <g class="splash-geo">
+          <path class="splash-geo-line" d={hexaPath}></path>
+          <circle class="splash-line" cx="120" cy="120" r="80"></circle>
+          <path class="splash-tri" d={triPath}></path>
+          <path class="splash-star" d={pentaPath}></path>
+        </g>
+
+        <g class="splash-rot splash-rot--rev">
+          <circle
+            class="splash-line splash-line--dash"
+            cx="120"
+            cy="120"
+            r="38"
+          ></circle>
+          {links.map((link) => (
+            <line
+              class="splash-link"
+              x1={link.x1}
+              y1={link.y1}
+              x2={link.x2}
+              y2={link.y2}
+            />
+          ))}
+          {nodes.map((node) => (
+            <circle
+              class="splash-node"
+              cx={node.x}
+              cy={node.y}
+              r={node.big ? 1.5 : 1}
+              style={`--d:${node.d}s`}
+            />
+          ))}
+        </g>
+
+        <line class="splash-axis" x1="120" y1="2" x2="120" y2="30"></line>
+        <line class="splash-axis" x1="120" y1="210" x2="120" y2="238"></line>
+        <line class="splash-axis" x1="2" y1="120" x2="30" y2="120"></line>
+        <line class="splash-axis" x1="210" y1="120" x2="238" y2="120"></line>
+
+        {diamonds.map((diamond) => (
+          <g
+            class="splash-diamond"
+            transform={`translate(${diamond.x} ${diamond.y}) rotate(45)`}
+          >
+            <rect x="-4.6" y="-4.6" width="9.2" height="9.2" rx="1"></rect>
+            <path d="M0 -2.6 L0 2.6 M-2.6 0 L2.6 0"></path>
+          </g>
+        ))}
+      </svg>
+
+      <div class="splash-equator" aria-hidden="true"></div>
+
+      <div class="splash-logo-wrap">
+        <img
+          class="splash-logo"
+          src="/images/logo.png"
+          width="192"
+          height="210"
+          alt=""
+          fetchpriority="high"
+        />
+      </div>
+    </div>
+
+    <div class="splash-copy" aria-hidden="true">
+      <p class="splash-word">DATA SORCERERS</p>
+      <p class="splash-divider">
+        <i></i>
+      </p>
+      <p class="splash-sub">Sorcery in Data · Magic in AI</p>
+    </div>
+  </div>
+
+  <div class="splash-vignette" aria-hidden="true"></div>
 </div>
 
 <script is:inline>
@@ -338,7 +1225,7 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
     if (sbw > 0) root.style.paddingRight = sbw + 'px';
     root.style.overflow = 'hidden';
 
-    var bar = el.querySelector('.splash-bar');
+    var bar = el.querySelector('.splash-stage');
     var shown = 0;
 
     // The splash acts as a real loading screen: it stays until the page has
@@ -365,7 +1252,7 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
       render(true);
       announce();
       el.classList.add('is-leaving');
-      window.setTimeout(remove, 800);
+      window.setTimeout(remove, 850);
     }
     function markAssets() {
       if (assetsReady) return;
@@ -373,9 +1260,9 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
       render();
       check();
     }
-    // The bar fills once and never loops. It tracks the real deadline: while
-    // assets stream it fills across MAX; once everything is ready it closes on
-    // MIN, so the fill always completes right as the overlay lifts.
+    // The progress arc fills once and never loops. It tracks the real deadline:
+    // while assets stream it fills across MAX; once everything is ready it
+    // closes on MIN, so the fill always completes right as the overlay lifts.
     function render(force) {
       var elapsed = performance.now() - start;
       var ready = loadFired && assetsReady;
