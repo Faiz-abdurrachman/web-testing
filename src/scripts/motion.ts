@@ -37,9 +37,25 @@ function animateFigure(
   hero: HTMLElement,
   cleanups: Cleanup[],
   fine: boolean,
+  richIdle: boolean,
 ) {
   // Rotation pivots at the feet so the sway reads as weight shift.
   gsap.set(figure, { transformOrigin: '60% 88%', transformPerspective: 800 });
+
+  // The idle loop keeps the cutout alive, but three infinite transforms per
+  // frame are wasteful on phones. Mobile gets a single subtle bob; desktop gets
+  // the full bob + sway + breathing. Either way it is paused while the hero is
+  // off-screen so the compositor has nothing to animate further down the page.
+  const idles: gsap.core.Tween[] = [];
+  let heroVisible = true;
+  const resume = () =>
+    idles.forEach((tween) => (heroVisible ? tween.play() : tween.pause()));
+  const io = new IntersectionObserver(([entry]) => {
+    heroVisible = entry.isIntersecting;
+    resume();
+  });
+  io.observe(hero);
+  cleanups.push(() => io.disconnect());
 
   // Entrance: the sorcerer rises into place just after the plate.
   gsap.fromTo(
@@ -55,30 +71,41 @@ function animateFigure(
         // Idle loop: slow bob + breathing + weight-shift sway, so the cutout is
         // never a still image. `y` (px, scroll) and `yPercent` compose in GSAP,
         // and the sway uses `rotation` while the pointer uses `rotationX/Y`.
-        gsap.to(figure, {
-          yPercent: 1.3,
-          duration: 2.6,
-          ease: 'sine.inOut',
-          yoyo: true,
-          repeat: -1,
-        });
-        gsap.to(figure, {
-          rotation: 0.9,
-          duration: 3.4,
-          ease: 'sine.inOut',
-          yoyo: true,
-          repeat: -1,
-        });
-        gsap.to(figure, {
-          scale: 1.015,
-          duration: 1.9,
-          ease: 'sine.inOut',
-          yoyo: true,
-          repeat: -1,
-        });
+        idles.push(
+          gsap.to(figure, {
+            yPercent: 1.3,
+            duration: 2.6,
+            ease: 'sine.inOut',
+            yoyo: true,
+            repeat: -1,
+          }),
+        );
+        if (richIdle) {
+          idles.push(
+            gsap.to(figure, {
+              rotation: 0.9,
+              duration: 3.4,
+              ease: 'sine.inOut',
+              yoyo: true,
+              repeat: -1,
+            }),
+            gsap.to(figure, {
+              scale: 1.015,
+              duration: 1.9,
+              ease: 'sine.inOut',
+              yoyo: true,
+              repeat: -1,
+            }),
+          );
+        }
+        resume();
       },
     },
   );
+  cleanups.push(() => {
+    idles.forEach((tween) => tween.kill());
+    gsap.killTweensOf(figure);
+  });
 
   if (!fine) return;
   const rx = gsap.quickTo(figure, 'rotationX', {
@@ -245,7 +272,8 @@ export function initMotion() {
         // reference frame pixel-for-pixel.
         if (stack && finePointer()) gsap.set(stack, { scale: 1.04 });
 
-        if (figure) animateFigure(figure, hero, cleanups, finePointer());
+        if (figure)
+          animateFigure(figure, hero, cleanups, finePointer(), desktop);
 
         if (desktop && stack && content) {
           // Pinned scroll sequence: the plate zooms in, the sorcerer rises, the

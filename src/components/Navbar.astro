@@ -81,6 +81,9 @@ const destinations: Record<string, string> = {
     --nb-h-condensed: 72px;
     /* Floating-bar geometry: flush and invisible over the hero, then it detaches. */
     --nb-gap: 0px;
+    /* Lift the bar clear of the status bar / notch on installed PWAs. */
+    --nb-safe: env(safe-area-inset-top, 0px);
+    --nb-top: calc(var(--nb-gap) + var(--nb-safe));
     --nb-inset: 0px;
     --nb-radius: 0px;
     --nb-frame: 1600px;
@@ -108,7 +111,7 @@ const destinations: Record<string, string> = {
   .navbar::after {
     content: '';
     position: absolute;
-    top: var(--nb-gap);
+    top: var(--nb-top);
     right: max(var(--nb-inset), calc(50% - var(--nb-frame) / 2));
     bottom: 0;
     left: max(var(--nb-inset), calc(50% - var(--nb-frame) / 2));
@@ -134,7 +137,7 @@ const destinations: Record<string, string> = {
   /* One-shot diagonal glint that sweeps the capsule when it detaches. */
   .navbar-flash {
     position: absolute;
-    top: var(--nb-gap);
+    top: var(--nb-top);
     right: max(var(--nb-inset), calc(50% - var(--nb-frame) / 2));
     bottom: 0;
     left: max(var(--nb-inset), calc(50% - var(--nb-frame) / 2));
@@ -182,7 +185,7 @@ const destinations: Record<string, string> = {
   .navbar::before {
     content: '';
     position: absolute;
-    top: var(--nb-gap);
+    top: var(--nb-top);
     right: max(var(--nb-inset), calc(50% - var(--nb-frame) / 2));
     bottom: 0;
     left: max(var(--nb-inset), calc(50% - var(--nb-frame) / 2));
@@ -190,8 +193,6 @@ const destinations: Record<string, string> = {
     opacity: 0;
     border-radius: var(--nb-radius);
     background: rgb(12 8 20 / 34%);
-    backdrop-filter: blur(28px) saturate(180%) brightness(1.07);
-    -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(1.07);
     box-shadow:
       0 20px 44px -28px rgb(0 0 0 / 66%),
       inset 0 1px 0 rgb(255 255 255 / 8%),
@@ -204,8 +205,11 @@ const destinations: Record<string, string> = {
       right var(--nb-dur) var(--nb-ease),
       border-radius var(--nb-dur) var(--nb-ease);
   }
+  /* Blur only paints once the bar detaches, so the top state owns no layer. */
   .navbar.is-scrolled::before {
     opacity: 1;
+    backdrop-filter: blur(28px) saturate(180%) brightness(1.07);
+    -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(1.07);
   }
   .navbar-inner {
     position: relative;
@@ -217,7 +221,7 @@ const destinations: Record<string, string> = {
     /* At the top the bar breathes wider; on scroll it pulls back to the 1440 grid. */
     max-width: 1600px;
     height: var(--nb-h);
-    margin-top: var(--nb-gap);
+    margin-top: var(--nb-top);
     margin-inline: auto;
     padding: 24px clamp(56px, 4.5vw, 80px);
     transition:
@@ -495,8 +499,8 @@ const destinations: Record<string, string> = {
       gap: 4px;
       opacity: 1;
       transform: none;
-      padding: calc(94px + 32px) var(--page-gutter)
-        max(32px, env(safe-area-inset-bottom));
+      padding: calc(94px + 32px + env(safe-area-inset-top, 0px))
+        var(--page-gutter) max(32px, env(safe-area-inset-bottom));
       overflow-y: auto;
       overscroll-behavior: contain;
       background: rgb(5 5 7 / 94%);
@@ -550,6 +554,40 @@ const destinations: Record<string, string> = {
     .mobile-menu nav :global(.button) {
       width: 100%;
       margin-top: 32px;
+    }
+  }
+  /* Phones: a 28px glass blur plus a 0.9s morph of height/padding/max-width
+     re-rasterises the fixed bar on every scroll frame and reads as stutter.
+     Keep the glass look with a far cheaper blur, and let the capsule detach as
+     an instant class swap so scrolling never restarts a layout transition. */
+  @media (max-width: 760px) {
+    .navbar.is-scrolled::before {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition:
+        opacity 0.3s ease,
+        border-radius 0.3s ease;
+    }
+    .navbar-flash {
+      transition: border-radius 0.3s ease;
+    }
+    .navbar-inner,
+    .brand {
+      transition: none;
+    }
+    /* Desktop condensed padding (10px 80px) is too inset on a phone. */
+    .navbar.is-condensed .navbar-inner {
+      height: var(--nb-h-condensed);
+      padding: 18px var(--page-gutter);
+    }
+    summary {
+      transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease;
+    }
+    .mobile-menu nav {
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
     }
   }
   @media (prefers-reduced-motion: no-preference) {

@@ -114,10 +114,14 @@ import Button from './Button.astro';
 </section>
 <script>
   // Three.js particle field over the hero art. Dynamically imported so it stays
-  // out of the initial bundle, and skipped entirely under reduced motion. The
-  // scroll sequence in `motion.ts` drives `window.__heroParticles.burst` so the
-  // field rushes toward the viewer as the hero zooms in.
+  // out of the initial bundle, and skipped under reduced motion. The scroll
+  // sequence in `motion.ts` drives `window.__heroParticles.burst` so the field
+  // rushes toward the viewer as the hero zooms in. It only runs at the same
+  // `min-width: 768px` breakpoint as that pinned sequence — on phones the
+  // continuous WebGL render competed with scrolling and caused jank, so mobile
+  // keeps the static art instead.
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const particlesAllowed = window.matchMedia('(min-width: 768px)').matches;
   // Assets the splash should await before lifting (see Splash.astro).
   const preload = (window as unknown as { __dsPreload?: Promise<unknown>[] })
     .__dsPreload;
@@ -175,7 +179,7 @@ import Button from './Button.astro';
   const canvas = document.querySelector<HTMLCanvasElement>('.hero-canvas');
   const host = canvas?.parentElement;
 
-  if (canvas && host && !reduce) {
+  if (canvas && host && !reduce && particlesAllowed) {
     const threeImport = import('three');
     preload?.push(threeImport);
     const THREE = await threeImport;
