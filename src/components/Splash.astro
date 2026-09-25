@@ -176,16 +176,12 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
   .splash-bar::after {
     content: '';
     display: block;
-    width: 42%;
+    width: 100%;
     height: 100%;
-    background: linear-gradient(
-      90deg,
-      rgba(232, 200, 119, 0),
-      #e8c877,
-      #9b7bff,
-      rgba(155, 123, 255, 0)
-    );
-    animation: splash-load 1.3s ease-in-out infinite;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #e8c877, #9b7bff);
+    transform: scaleX(var(--splash-progress, 0));
+    transform-origin: left center;
   }
   .splash.is-leaving {
     opacity: 0;
@@ -197,8 +193,7 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
   @media (prefers-reduced-motion: reduce) {
     .splash-spark,
     .splash-rot,
-    .splash-logo,
-    .splash-bar::after {
+    .splash-logo {
       animation: none;
     }
   }
@@ -237,14 +232,6 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
     to {
       opacity: 1;
       transform: translateY(0);
-    }
-  }
-  @keyframes splash-load {
-    0% {
-      transform: translateX(-120%);
-    }
-    100% {
-      transform: translateX(320%);
     }
   }
 </style>
@@ -351,6 +338,9 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
     if (sbw > 0) root.style.paddingRight = sbw + 'px';
     root.style.overflow = 'hidden';
 
+    var bar = el.querySelector('.splash-bar');
+    var shown = 0;
+
     // The splash acts as a real loading screen: it stays until the page has
     // loaded *and* the heavy assets reported through `window.__dsPreload`
     // (three.js chunk, background video) plus fonts are settled. MIN keeps it
@@ -372,6 +362,7 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
     function finish() {
       if (done) return;
       done = true;
+      render(true);
       announce();
       el.classList.add('is-leaving');
       window.setTimeout(remove, 800);
@@ -379,12 +370,32 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
     function markAssets() {
       if (assetsReady) return;
       assetsReady = true;
+      render();
       check();
+    }
+    // The bar fills once and never loops. It tracks the real deadline: while
+    // assets stream it fills across MAX; once everything is ready it closes on
+    // MIN, so the fill always completes right as the overlay lifts.
+    function render(force) {
+      var elapsed = performance.now() - start;
+      var ready = loadFired && assetsReady;
+      var denom = ready || skipRequested ? MIN : MAX;
+      var target = force ? 1 : Math.min(elapsed / denom, 0.985);
+      if (target < shown) target = shown;
+      if (target > 0.985 && !force) target = 0.985;
+      shown = target;
+      if (bar) bar.style.setProperty('--splash-progress', shown.toFixed(4));
+    }
+    function tick() {
+      if (done) return;
+      render();
+      window.requestAnimationFrame(tick);
     }
     // Poll instead of relying on a single timer so a late asset can still let
     // the splash go early, while MAX always releases it.
     function check() {
       if (done) return;
+      render();
       var elapsed = performance.now() - start;
       if (loadFired && assetsReady) {
         if (elapsed >= MIN) finish();
@@ -402,6 +413,7 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
       if (document.fonts && document.fonts.ready)
         pending.push(document.fonts.ready);
       var total = pending.length;
+      render();
       if (!total) {
         markAssets();
       } else {
@@ -434,6 +446,7 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
         { passive: true },
       );
     });
+    tick();
     check();
   })();
 </script>
