@@ -1060,3 +1060,42 @@ PNG comparisons and `verify.mjs` hero geometry stay valid.
 - `.splash` added to `verify.mjs` `setNavbarHidden` for defence; because the
   verifiers run with `reducedMotion: 'reduce'` the overlay is never armed during
   audits.
+
+## Mobile responsive + performance pass (25 September 2026)
+
+User: on a phone the headings are not Nasalization (licence, see `AGENTS.md`) and
+the navbar feels heavy / stutters while scrolling up and down.
+
+**Root causes.** (1) The fixed navbar painted a `backdrop-filter: blur(28px)
+saturate(180%) brightness(1.07)` and the `is-condensed` morph transitioned
+layout properties (`height`, `padding`, `max-width`) over 0.9s — re-rasterised
+every scroll frame and restarted whenever the scroll crossed the 8/40px
+thresholds. (2) The Three.js particle field in `Hero.astro` ran on **every**
+viewport; the old gate was only `!reduce`, not a width check. (3) The hero
+figure's three `repeat: -1` idle tweens ran forever.
+
+**Changes.**
+
+- `Hero.astro`: particles gated to `(min-width: 768px)` (matching the pinned
+  scroll sequence in `motion.ts`); `≤600px` gets a stronger two-axis scrim, a
+  `text-shadow` on the body copy, and smaller `object-fit` figure heights
+  (74/70/68/64/60% by width bucket) so the copy stays legible over the sorcerer
+  at 320–390 without hiding the art. Mobile keeps `min-height: 100dvh`.
+- `motion.ts`: `animateFigure` takes `richIdle` (desktop = bob + sway +
+  breathing; mobile = bob only) and pauses its tweens through an
+  `IntersectionObserver` while the hero is off-screen.
+- `Navbar.astro`: `backdrop-filter` moved to `.navbar.is-scrolled::before` (the
+  top-of-page state owns no blur layer); `≤760px` drops to `blur(12px)` without
+  `saturate`/`brightness`, and the morph is an instant class swap
+  (`.navbar-inner` / `.brand` `transition: none`).
+- `BaseLayout.astro`: `viewport-fit=cover`; navbar and detail pages use
+  `env(safe-area-inset-top)`; every gradient heading also declares
+  `-webkit-background-clip: text`.
+- `RoleDetail.astro`: each separator dot is wrapped in `.chip` with its label, so
+  flex wrapping no longer strands a lone dot at the start/end of a line.
+
+**Measured (headless, relative).** mobile 390×844 ≈ 60fps (avg 16.7ms, 2 long
+tasks, max 76ms); desktop 1440 still runs the particles + pinned sequence.
+Gates: `format:check`, `build` 14/0, `responsive-audit` 364 ALL PASS,
+`verify-splash` PASS, `verify.mjs` `browserErrors: []`, `perf:audit` report-only
+(only the footer logs an 80ms task).

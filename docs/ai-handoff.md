@@ -15,7 +15,7 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
   mist, energy strands and particles in Canvas without image textures. Only the
   existing logo image remains. `loading.png` is a local reference, not served.
   Previous loader WebPs and their generator were removed. Preloader logic from
-  `606a6ab` is retained. Commit/push approval remains pending.
+  `606a6ab` is retained. Committed as `e01809a` and pushed.
 - Native revision validation: build 14 pages / 0 errors, format, SEO,
   `verify.mjs` with `browserErrors: []`, responsive audit 364/364, and native
   splash checks at 1440×900, 390×844, 320×568 plus reduced motion all passed.
@@ -29,6 +29,11 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
   (`browserErrors: []`), `responsive-audit.mjs` (364 combos), `seo:audit`.
 - **Terbaru:** splash jadi **preloader asli** (nunggu three + video + fonts),
   navbar "living HUD", perf What We Do (starfield tile + `perf:audit`).
+- **Pass responsive + performa mobile (25 Sep 2026):** particle Three.js kini
+  desktop-only (`min-width: 768px`), navbar HP blur 12px tanpa morph layout 0.9s,
+  hero HP scrim/figur lebih kecil + `100dvh`, `viewport-fit=cover` + safe-area,
+  prefix `-webkit-background-clip`, chip role tidak lagi menggantung. Detail di
+  `docs/assets.md` §"Mobile responsive + performance pass".
 
 ## Baru saja: splash jadi preloader asli
 
@@ -366,6 +371,27 @@ no-op saat tak ada crop horizontal (desktop), dan override `max-height:560px` /
   cursor glow. Card tilt HoDS + `.pillar` ada; jangan buang tanpa alasan.
 - Under `prefers-reduced-motion: reduce` semua inert → `verify.mjs` bersih.
 
+## Pass responsive + performa mobile (25 Sep 2026)
+
+Keluhan: heading di HP bukan Nasalization (lisensi — jangan diakali, lihat
+`AGENTS.md`) dan navbar berat/patah-patah saat scroll naik-turun.
+
+- Particle Three.js di `Hero.astro` di-gate `(min-width: 768px)` (dulu cuma
+  `!reduce`, jadi ikut jalan di HP). Idle figur dapat `richIdle` (mobile = bob
+  saja) + pause via `IntersectionObserver` saat hero off-screen (`motion.ts`).
+- Navbar: `backdrop-filter` hanya saat `.is-scrolled::before` (tak ada layer blur
+  di atas); `≤760px` blur 12px tanpa saturate/brightness dan morph jadi instant
+  (bukan transisi layout 0.9s).
+- Hero HP: scrim dua arah + `text-shadow` + figur lebih kecil biar copy kebaca di
+  320–390; tetap `min-height: 100dvh`.
+- Global: `viewport-fit=cover`, `env(safe-area-inset-top)` (navbar + halaman
+  detail), prefix `-webkit-background-clip: text` di semua heading gradient.
+- `RoleDetail`: separator chip dibungkus `.chip` biar titik tidak menggantung
+  saat wrap baris.
+- Ukur headless: mobile 390×844 ≈60fps (avg 16.7ms). Gate hijau: `format:check`,
+  `build` 14/0, `responsive-audit` 364 ALL PASS, `verify-splash` PASS,
+  `verify.mjs` `browserErrors: []`. Detail di `docs/assets.md`.
+
 ## Commands / gate (semua harus exit 0 sebelum commit)
 
 ```sh
@@ -390,7 +416,11 @@ Gotcha: `verify.mjs` bisa hang di `networkidle` melawan dev (Vite HMR) → build
 - **Hero di HP = statis by design**: gate `(min-width: 601px)` di `Hero.astro`
   bikin video `hero-bg` tidak pernah dimuat di `≤600px` (`preload="none"`,
   `opacity: 0`); yang tampil cuma `background.webp` + `figure.webp`. Jadi di HP
-  hero cuma gambar, bukan bug / bukan aset lama.
+  hero cuma gambar, bukan bug / bukan aset lama. Particle Three.js juga
+  desktop-only (`min-width: 768px`, sama dengan pinned sequence).
+- **Navbar HP** (`≤760px`): blur sengaja 12px tanpa `saturate`/`brightness` dan
+  morph instant. Jangan naikkan lagi ke 28px + transisi layout 0.9s — itu yang
+  bikin scroll patah-patah.
 - Aset hero lama `public/images/hero-2880.webp` (2880×1806, tak direferensikan
   sejak `c53d84d`) sudah dihapus; backup di
   `/home/faiz/ds/ds-backup/hero-2880.webp`.

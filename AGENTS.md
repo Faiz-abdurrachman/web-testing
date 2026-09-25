@@ -160,6 +160,12 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   `Splash.astro` hands scroll restoration back to `auto`, and `global.css` gives
   `section[id]` / `main[id]` a 110px `scroll-margin-top`. Keep this when touching
   the splash or motion init.
+- **Mobile perf is load-bearing.** The hero Three.js particles are gated to
+  `min-width: 768px` (they used to run on phones and janked scrolling). The
+  navbar's `backdrop-filter` only paints on `.is-scrolled::before`, and `≤760px`
+  uses a 12px blur with an instant morph — do not reintroduce the 28px
+  `saturate`/`brightness` blur or the 0.9s layout transitions. Detail pages get
+  `env(safe-area-inset-top)`; keep `viewport-fit=cover` in `BaseLayout`.
 
 ## Fonts
 
