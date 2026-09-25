@@ -125,6 +125,8 @@ import Button from './Button.astro';
     .recruitment-hero {
       min-height: 100vh;
       min-height: 100svh;
+      /* Track the visible viewport (see Hero.astro) so the next section cannot peek under the address bar. */
+      min-height: 100dvh;
       gap: clamp(28px, 7vw, 48px);
       justify-content: center;
       padding-top: clamp(96px, 12svh, 120px);
