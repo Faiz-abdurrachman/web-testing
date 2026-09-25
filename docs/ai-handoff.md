@@ -379,6 +379,11 @@ Keluhan: heading di HP bukan Nasalization (lisensi — jangan diakali, lihat
 - Particle Three.js di `Hero.astro` di-gate `(min-width: 768px)` (dulu cuma
   `!reduce`, jadi ikut jalan di HP). Idle figur dapat `richIdle` (mobile = bob
   saja) + pause via `IntersectionObserver` saat hero off-screen (`motion.ts`).
+- Scroll-scrub hero di `<768px` **dihapus**: dulu `.artwork-stack` di-scale
+  1→1.1 saat hero keluar, dan karena hero `100dvh` address bar yang menciut bikin
+  trigger re-measure → gambar kelihatan ngebesar-ngecil ("kek ketimpa"). Sekarang
+  hero HP keluar natural (idle bob figur tetap); pinned sequence desktop tidak
+  diubah.
 - Navbar: `backdrop-filter` hanya saat `.is-scrolled::before` (tak ada layer blur
   di atas); `≤760px` blur 12px tanpa saturate/brightness dan morph jadi instant
   (bukan transisi layout 0.9s).

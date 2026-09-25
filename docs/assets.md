@@ -1084,6 +1084,11 @@ figure's three `repeat: -1` idle tweens ran forever.
 - `motion.ts`: `animateFigure` takes `richIdle` (desktop = bob + sway +
   breathing; mobile = bob only) and pauses its tweens through an
   `IntersectionObserver` while the hero is off-screen.
+- `motion.ts` follow-up: the `<768px` scroll-scrub that scaled `.artwork-stack`
+  from 1 to 1.1 as the hero left was removed. On a `100dvh` hero the collapsing
+  address bar kept re-measuring the trigger, so the art visibly grew/shrank
+  ("kek ketimpa") on real phones; phones now scroll the hero away untouched and
+  keep only the figure's idle bob. The desktop pinned sequence is unchanged.
 - `Navbar.astro`: `backdrop-filter` moved to `.navbar.is-scrolled::before` (the
   top-of-page state owns no blur layer); `≤760px` drops to `blur(12px)` without
   `saturate`/`brightness`, and the morph is an instant class swap
