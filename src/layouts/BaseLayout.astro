@@ -104,6 +104,10 @@ const structuredData = [
       set:html={JSON.stringify(structuredData)}
     ></script>
     <script is:inline>
+      // Components push promises here for the splash to await (see Splash.astro):
+      // the heavy hero three.js chunk and the background video, so the overlay
+      // only lifts once the page can actually run without janking.
+      window.__dsPreload = window.__dsPreload || [];
       (function () {
         var root = document.documentElement;
         try {

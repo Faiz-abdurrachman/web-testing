@@ -1018,9 +1018,14 @@ PNG comparisons and `verify.mjs` hero geometry stay valid.
   script arms it via `html.splash-armed` only when unseen **and** not
   `prefers-reduced-motion: reduce` (otherwise it adds `html.splash-done`). The
   overlay defaults to `display: none`, so reduced-motion and no-JS visitors
-  never see it. Exit is `window.load` + min 3000ms / hard-cap 6000ms, skippable
-  by pointer/key/wheel/touch; scroll is locked for its duration with a
-  scrollbar-width `padding-right` compensation so the reveal does not shift.
+  never see it. It doubles as a **real preloader**: before lifting it waits for
+  `window.load` **and** the registry `window.__dsPreload` — the Hero pushes the
+  lazy `three` chunk (and, on desktop, a promise that resolves on the background
+  video's `loadeddata`) — plus `document.fonts.ready`, with min 3000ms / hard-cap
+  6000ms. A pointer/key/wheel/touch dismisses it only **after** the min, so the
+  preload always gets a head start; on a slow link it releases at the 6000ms cap.
+  Scroll is locked for its duration with a scrollbar-width `padding-right`
+  compensation so the reveal does not shift.
 - Hero entrance (CSS in `Hero.astro`, GSAP in `Motion.astro`) is gated on
   `html.hero-ready` so the intro plays **once, in view**, after the overlay and
   after ScrollTrigger has built its `.pin-spacer` (`:global(html.hero-ready)` is

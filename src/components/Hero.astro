@@ -118,6 +118,9 @@ import Button from './Button.astro';
   // scroll sequence in `motion.ts` drives `window.__heroParticles.burst` so the
   // field rushes toward the viewer as the hero zooms in.
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Assets the splash should await before lifting (see Splash.astro).
+  const preload = (window as unknown as { __dsPreload?: Promise<unknown>[] })
+    .__dsPreload;
 
   // Animated background. Only fetched on larger, motion-OK viewports; under
   // reduced motion (or ≤600px) the static art stays and the clip is never
@@ -147,7 +150,21 @@ import Button from './Button.astro';
         video.preload = 'auto';
         video.load();
       };
-      if (typeof window.requestIdleCallback === 'function') {
+      const armed = document.documentElement.classList.contains('splash-armed');
+      if (armed) {
+        // Fetch during the splash and let it wait for the first frame, so the
+        // clip is ready instead of competing with the reveal.
+        preload?.push(
+          new Promise<void>((resolve) => {
+            if (video.readyState >= 2) resolve();
+            else
+              video.addEventListener('loadeddata', () => resolve(), {
+                once: true,
+              });
+          }),
+        );
+        load();
+      } else if (typeof window.requestIdleCallback === 'function') {
         window.requestIdleCallback(load, { timeout: 2000 });
       } else {
         window.setTimeout(load, 300);
@@ -159,7 +176,9 @@ import Button from './Button.astro';
   const host = canvas?.parentElement;
 
   if (canvas && host && !reduce) {
-    const THREE = await import('three');
+    const threeImport = import('three');
+    preload?.push(threeImport);
+    const THREE = await threeImport;
     const renderer = new THREE.WebGLRenderer({
       canvas,
       alpha: true,

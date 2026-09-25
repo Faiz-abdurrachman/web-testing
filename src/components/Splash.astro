@@ -351,10 +351,18 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
     if (sbw > 0) root.style.paddingRight = sbw + 'px';
     root.style.overflow = 'hidden';
 
+    // The splash acts as a real loading screen: it stays until the page has
+    // loaded *and* the heavy assets reported through `window.__dsPreload`
+    // (three.js chunk, background video) plus fonts are settled. MIN keeps it
+    // visible long enough to read; MAX caps the wait on slow connections.
     var done = false;
     var MIN = 3000;
     var MAX = 6000;
     var start = performance.now();
+    var loadFired = false;
+    var assetsReady = false;
+    var skipRequested = false;
+
     function remove() {
       if (el.parentNode) el.parentNode.removeChild(el);
       root.classList.remove('splash-armed');
@@ -368,15 +376,64 @@ const sparks = Array.from({ length: 16 }, (_, i) => ({
       el.classList.add('is-leaving');
       window.setTimeout(remove, 800);
     }
-    function schedule() {
-      var wait = Math.max(0, MIN - (performance.now() - start));
-      window.setTimeout(finish, wait);
+    function markAssets() {
+      if (assetsReady) return;
+      assetsReady = true;
+      check();
     }
-    if (document.readyState === 'complete') schedule();
-    else window.addEventListener('load', schedule, { once: true });
-    window.setTimeout(finish, MAX);
+    // Poll instead of relying on a single timer so a late asset can still let
+    // the splash go early, while MAX always releases it.
+    function check() {
+      if (done) return;
+      var elapsed = performance.now() - start;
+      if (loadFired && assetsReady) {
+        if (elapsed >= MIN) finish();
+        else window.setTimeout(check, MIN - elapsed);
+      } else if (skipRequested || elapsed >= MAX) {
+        if (elapsed >= MIN) finish();
+        else window.setTimeout(check, MIN - elapsed);
+      } else {
+        window.setTimeout(check, 120);
+      }
+    }
+    function whenLoaded() {
+      loadFired = true;
+      var pending = (window.__dsPreload || []).slice();
+      if (document.fonts && document.fonts.ready)
+        pending.push(document.fonts.ready);
+      var total = pending.length;
+      if (!total) {
+        markAssets();
+      } else {
+        var settled = 0;
+        pending.forEach(function (p) {
+          Promise.resolve(p)
+            .catch(function () {})
+            .then(function () {
+              if (++settled === total) markAssets();
+            });
+        });
+        // Never hold the splash on a promise that misbehaves.
+        window.setTimeout(markAssets, MAX);
+      }
+      check();
+    }
+    if (document.readyState === 'complete') whenLoaded();
+    else window.addEventListener('load', whenLoaded, { once: true });
+    // A tap/scroll may dismiss the overlay, but only after MIN so the preload
+    // still gets a guaranteed head start.
     ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function (type) {
-      window.addEventListener(type, finish, { once: true, passive: true });
+      window.addEventListener(
+        type,
+        function () {
+          if (performance.now() - start >= MIN) {
+            skipRequested = true;
+            check();
+          }
+        },
+        { passive: true },
+      );
     });
+    check();
   })();
 </script>

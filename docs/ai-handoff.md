@@ -13,9 +13,27 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
   `src/scripts/motion.ts`).
 - Semua gate hijau: `format:check`, `build` (14 halaman), `verify.mjs`
   (`browserErrors: []`), `responsive-audit.mjs` (364 combos), `seo:audit`.
-- **Terbaru:** navbar "living HUD" (kaca melayang full-capsule, flash sweep,
-  indikator tab aktif meluncur springy) + perf What We Do (starfield jadi tile
-  gambar + `perf:audit`).
+- **Terbaru:** splash jadi **preloader asli** (nunggu three + video + fonts),
+  navbar "living HUD", perf What We Do (starfield tile + `perf:audit`).
+
+## Baru saja: splash jadi preloader asli
+
+**Keluhan user (25 Sep 2026):** splash di awal dimaksudkan buat "download webnya"
+biar tidak berat, tapi masih berat dan splash-nya malah keburu cepat hilang.
+
+**Akar:** splash lama cuma timer (`window.load` + min 3000ms / cap 6000ms) dan
+`finish()` langsung dipanggil oleh interaksi apa pun (`pointerdown`/`key`/`wheel`/
+`touch`) **tanpa menghormati min**, jadi satu scroll/klik menghilangkannya. Splash
+juga tidak memicu preload apa pun; video hero (~538 KB webm / 1 MB mp4) baru mulai
+di `requestIdleCallback`, dan chunk `three` (~185 KB gz) tak dijamin siap.
+
+**Fix:** registry `window.__dsPreload` di `BaseLayout` (head). `Hero.astro`
+mendorong promise `import('three')` dan (desktop) promise `loadeddata` video ke
+registry; video mulai di-fetch saat splash armed. `Splash.astro` sekarang menutup
+setelah `window.load` **dan** semua promise registry + `document.fonts.ready`
+selesai, min 3000ms / cap 6000ms; interaksi hanya boleh skip **setelah** min.
+Terukur: jaringan cepat → splash tutup ~3s dengan three/video sudah load (~240ms);
+500 kbps/400ms → tutup di cap ~6s (aset belum selesai, memang di-cap).
 
 ## Baru saja: deep link / Back mendarat di section yang benar
 
