@@ -32,10 +32,10 @@ const { role } = Astro.props;
             <h1>{role.title}</h1>
             <div class="chips">
               {role.chips.map((chip, index) => (
-                <>
+                <span class="chip">
                   {index > 0 && <span class="dot" aria-hidden="true" />}
                   <span class="chip-label">{chip}</span>
-                </>
+                </span>
               ))}
             </div>
             <div class="deadline">
@@ -170,6 +170,7 @@ const { role } = Astro.props;
     font-weight: 400;
     line-height: 1.225;
     background: linear-gradient(270deg, #fff, #ede8ff);
+    -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
@@ -177,6 +178,13 @@ const { role } = Astro.props;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+    gap: 12px 14px;
+  }
+  /* Each separator travels with the label it precedes, so wrapping never
+     strands a lone dot at the start or end of a line. */
+  .chip {
+    display: inline-flex;
+    align-items: center;
     gap: 14px;
   }
   .chip-label {
@@ -295,7 +303,7 @@ const { role } = Astro.props;
     .role-detail-inner {
       min-height: 0;
       gap: 40px;
-      padding: 40px 24px;
+      padding: calc(40px + env(safe-area-inset-top, 0px)) 24px 40px;
     }
     .role-card {
       height: auto;
@@ -315,6 +323,12 @@ const { role } = Astro.props;
       font-size: 32px;
     }
     .chips {
+      gap: 8px 12px;
+    }
+    .chip {
+      gap: 12px;
+    }
+    .deadline {
       gap: 10px;
     }
     .chip-label,

@@ -363,6 +363,7 @@ import Button from './Button.astro';
       #dfdfdf 46.05%,
       #dfdfdf 99.19%
     );
+    -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
@@ -669,16 +670,25 @@ import Button from './Button.astro';
     .artwork :is(img, video) {
       object-position: 61% center;
     }
+    /* Scrims keep the copy legible over the sorcerer on phones, then fade out. */
     .artwork::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(
-        180deg,
-        rgb(5 5 7 / 25%),
-        rgb(5 5 7 / 15%) 45%,
-        transparent 70%
-      );
+      background:
+        linear-gradient(
+          180deg,
+          rgb(5 5 7 / 52%) 0%,
+          rgb(5 5 7 / 22%) 40%,
+          rgb(5 5 7 / 6%) 62%,
+          transparent 80%
+        ),
+        linear-gradient(
+          90deg,
+          rgb(5 5 7 / 60%) 0%,
+          rgb(5 5 7 / 22%) 48%,
+          transparent 72%
+        );
     }
     .hero-content {
       gap: clamp(28px, 7vw, 48px);
@@ -694,6 +704,8 @@ import Button from './Button.astro';
       max-width: 380px;
       font-size: clamp(15px, 3.9vw, 16px);
       line-height: 1.5;
+      /* Keeps the copy legible where it crosses the sorcerer on small screens. */
+      text-shadow: 0 1px 16px rgb(5 5 7 / 85%);
     }
     .actions {
       gap: clamp(12px, 3.5vw, 20px);
@@ -703,25 +715,25 @@ import Button from './Button.astro';
     .artwork .art-figure {
       top: auto;
       bottom: 0;
-      height: 80%;
+      height: 74%;
       object-position: 50.5% bottom;
     }
   }
   @media (min-width: 400px) and (max-width: 600px) and (min-height: 561px) {
     .artwork .art-figure {
-      height: 74%;
+      height: 70%;
       object-position: 54% bottom;
     }
   }
   @media (min-width: 381px) and (max-width: 399px) and (min-height: 561px) {
     .artwork .art-figure {
-      height: 74%;
+      height: 68%;
       object-position: 52.5% bottom;
     }
   }
   @media (max-width: 360px) and (min-height: 561px) {
     .artwork .art-figure {
-      height: 72%;
+      height: 64%;
       object-position: 46% bottom;
     }
   }
@@ -732,7 +744,7 @@ import Button from './Button.astro';
   }
   @media (max-width: 340px) and (min-height: 561px) {
     .artwork .art-figure {
-      height: 72%;
+      height: 60%;
       object-position: 38.5% bottom;
     }
   }

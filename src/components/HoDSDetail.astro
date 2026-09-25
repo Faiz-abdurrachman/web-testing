@@ -194,6 +194,7 @@ const { hod } = Astro.props;
     font-weight: 400;
     line-height: 1.225;
     background: linear-gradient(270deg, #fff, #ede8ff);
+    -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
@@ -298,7 +299,7 @@ const { hod } = Astro.props;
   @media (max-width: 900px) {
     .hods-detail-inner {
       gap: 40px;
-      padding: 40px 24px;
+      padding: calc(40px + env(safe-area-inset-top, 0px)) 24px 40px;
     }
     .role-card {
       height: auto;
