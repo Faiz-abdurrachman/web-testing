@@ -43,6 +43,10 @@ visible gain. Measured MAE stays under 2/255 on the backgrounds.
   always encodes from there, so re-running never compounds loss; a file that
   would grow is left as its original. `philosophy/glow.webp` is downscaled to
   512px — a soft 980px glow, so the resize is invisible.
+- `philosophy/sorcerer-2x.webp` is downscaled to **1290w** (q82, 914KB → 481KB).
+  The 1722w source was only ever selected at DPR≥2; DPR1 still uses the 861w
+  `1x`, so the reference frame is unchanged. The width is pinned in the resize
+  map so re-running `assets:optimize` reproduces it.
 - `scripts/generate-backgrounds.mjs` writes the full-bleed backgrounds and role
   cards at q88 (from `assets/background/hd/*.png` and the pristine cards) and
   asserts MAE < 5 instead of bit-identical pixels.
@@ -52,6 +56,15 @@ visible gain. Measured MAE stays under 2/255 on the backgrounds.
   under `saveData`/2G, so the static art is the first paint.
 - Result: `dist` 56MB → 13MB; initial transfer `/` 2.37 → 1.72MB and
   `/recruitment` 3.37 → 0.59MB (full scroll 3.60/5.82 → 1.87/1.14MB).
+- **Dead asset cleanup (26 September 2026).** Removed 12 superseded files
+  (336KB): `public/images/recruitment/{hero-1440,hero-2880}.webp`,
+  `recruitment/who-should-join-background-{1440,2880}.webp`,
+  `recruitment/faq-background-{1440,2880}.webp`,
+  `what-you-will-do/background-{1440,2880}.webp`,
+  `footer/footer-bg-{1440,2880}.webp` and `projects/side-{left,right}.svg`.
+  The recruitment/footer sections now use the shared lossy
+  `public/images/backgrounds/{recruitment,stars,footer}.webp`, and the 3D
+  coverflow replaced the decorative side panels.
 
 ## Visual reference
 
@@ -477,7 +490,8 @@ score were unchanged when this section was added.
   positioned at x=78.5 and 998.5, y=286.5.
 - `public/images/projects/arutala-aksara.webp` is the original Figma image
   fill exported as lossless WebP; its crop and 80% opacity follow Figma.
-  `side-left.svg` and `side-right.svg` are original decorative vector exports.
+  The decorative `side-left.svg` / `side-right.svg` exports were removed on
+  26 Sep 2026 — the 3D coverflow replaced the side panels.
 - The section heading, project name, supplied Lorem ipsum copy, category
   tags, central card and border are HTML/CSS. No full-section or full-card
   screenshot is used as the interface.
@@ -533,12 +547,14 @@ score were unchanged when this section was added.
 - Row 2: 1px divider `rgb(203 197 255 / 30%)` at y=463.69, then the legal bar at
   y=484.69 — copyright at x=80 (320 wide) and Terms/Privacy/Cookies at x=640.72
   (218 wide), Manrope Regular 16/24.
-- The background is the supplied HD Figma image (`assets/assets home page/footer/Gambar Footer.png`,
-  5760 × 2224) encoded as **lossless** WebP at 1440 and 2880 under
-  `public/images/footer/`, so the footer art is not lossy-compressed. The
-  supplied artwork sits 2px (4px at 2×) right of the fill baked into
-  `Footer.png`; that sub-pixel-derived offset is baked into the export so the
-  HD art still aligns with the reference. `instagram.svg` and `linkedin.svg` are the Figma social vectors.
+- The background comes from the supplied HD Figma image (`assets/assets home page/footer/Gambar Footer.png`,
+  5760 × 2224) re-encoded to the shared lossy
+  `public/images/backgrounds/footer.webp` (q88) by
+  `scripts/generate-backgrounds.mjs`; the earlier lossless 1440/2880 exports
+  under `public/images/footer/` were removed on 26 Sep 2026. The supplied
+  artwork sits 2px (4px at 2×) right of the fill baked into `Footer.png`; that
+  sub-pixel-derived offset is baked into the export so the art still aligns
+  with the reference. `instagram.svg` and `linkedin.svg` are the Figma social vectors.
   Text, borders, divider, and social frames are HTML/CSS; no flattened
   screenshot is used as the interface.
 - Social, Navigation, Terms, Privacy, and Cookies destinations were not
@@ -593,10 +609,11 @@ Section.png`, 4320 × 2598 (1440 × 866 at 3×). The reference PNG **includes th
   top-aligned (`object-fit: cover; object-position: top`), so the lower ~35px is
   cropped. It is the decorative glow/arc layer with no text; the masked
   difference against the reference is ~1.2/255. The folder's `Background.png` is
-  effectively black and is unused. Served as
-  `public/images/recruitment/hero-1440.webp` and `hero-2880.webp` as
-  **lossless** WebP: the artwork carries fine grain that lossy WebP removes,
-  which visibly softens the glow (lossless restores the reference's
+  effectively black and is unused. Served as the shared lossy
+  `public/images/backgrounds/recruitment.webp` (q88); the earlier lossless
+  `recruitment/hero-{1440,2880}.webp` exports were removed on 26 Sep 2026. The
+  artwork carries fine grain, so it is encoded at the higher q88 end of the
+  range to keep the glow from softening (lossless restores the reference's
   high-frequency detail).
 - Navbar: the shared `Navbar.astro` with `active="Recruitment"`. The active
   underline is the Figma 106px gradient
@@ -633,10 +650,12 @@ Section.png`, 5760 × 3156 (1440 × 789 at 4×).
   plain `/hods/{id}` and "Back to HoDS". The detail pages are static, so the
   origin is applied on the client from the query (`HoDSDetail.astro`).
 - Background: `Background.png` is the Figma frame fill (a near-black starfield,
-  the same artwork as the What You Will Do fill). Exported lossless to
-  `public/images/recruitment/who-should-join-background-{1440,2880}.webp` and
-  painted with `background-size: cover`, centered. The card rail dominates the
-  difference (~3.0/255), so the starfield only moves it slightly.
+  the same artwork as the What You Will Do fill). Served as the shared lossy
+  `public/images/backgrounds/stars.webp` (q88) and painted with
+  `background-size: cover`, centered; the earlier lossless
+  `recruitment/who-should-join-background-{1440,2880}.webp` exports were
+  removed on 26 Sep 2026. The card rail dominates the difference (~3.0/255), so
+  the starfield only moves it slightly.
 - Measured layout at 1440: section `1440 × 789` at homepage y=866; heading
   `(80, 80, 1280 × 68)`; copy `(80, 172, 1280 × 27)`; cards at x 80 / 514 / 948
   / 1382, y 273, 394 × 436.
@@ -798,8 +817,10 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
   `assets/assets recruitment page/faq section/Frame 2495.png`, 5760 × 3944
   (1440 × 986 at 4×). The section sits at homepage y=4283.
 - Frame: 1440 × 986, `padding 80`, `gap 58`; the background is the supplied
-  `Background.png` (the same near-black starfield as Who Should Join), exported
-  lossless to `public/images/recruitment/faq-background-{1440,2880}.webp`.
+  `Background.png` (the same near-black starfield as Who Should Join), served as
+  the shared `public/images/backgrounds/stars.webp`; the earlier lossless
+  `recruitment/faq-background-{1440,2880}.webp` exports were removed on
+  26 Sep 2026.
 - Heading: "FAQ" (Figma "faq" with uppercase case), Nasalization Regular 400,
   56 / 68, **left**, gradient `linear-gradient(180deg, #fff 0%, #707070 74%)`,
   (80, 80, 1280 × 68). The 1280 content is centred on wide viewports.
