@@ -543,12 +543,12 @@ score were unchanged when this section was added.
 - Original decorative glow exported to `public/images/recruitment/glow.svg`.
   Its rotation and overflowing bounds follow Figma. Text, border and buttons
   are HTML/CSS; the shared Button component now supports a compact glass size.
-- **Living glow**: `.glow-art` flows one way (like a wave passing).
-  `cta-glow-flow` (7s `linear` infinite, **no alternate**) translates −240px →
-  +240px while fading in/out at the ends and peaking `scale 1.1` mid-pass, so
-  the loop seam is invisible and there is no back-and-forth or vertical bob. It
-  uses the `translate`/`scale` properties (base `rotate(-2.23deg)` kept), only
-  exists under `prefers-reduced-motion: no-preference` (static under reduce) and
+- **Living glow**: the glow itself stays put (always visible — so there is never
+  a gap or a fade), and a soft band of light sweeps across it
+  (`.glow-art::after`, a `linear-gradient` repeated off-canvas: `cta-glow-sweep`
+  5.5s `linear` infinite, 360px band, `rgb(198 178 255 / 26%)`). The band starts
+  and ends off the element so the loop has no visible seam. Only exists under
+  `prefers-reduced-motion: no-preference` (static under reduce) and
   `.recruitment.is-idle` pauses it off-screen.
 - The PNG/Figma description takes precedence over the stale filename/CSS
   description in the supplied folder. The heading spelling is preserved.

@@ -141,39 +141,33 @@ import Button from './Button.astro';
     height: 229.49%;
     max-width: none;
   }
-  /* The bottom glow drifts + breathes slowly so the CTA never reads as a
-     still image. `translate`/`scale` compose with the base `rotate`, and the
-     whole thing is inert under reduced motion (and paused off-screen). */
+  /* A soft light band sweeps the always-present glow (no seam/fade/gap). */
   @media (prefers-reduced-motion: no-preference) {
-    .glow-art {
-      animation: cta-glow-flow 7s linear infinite;
+    .glow-art::after {
+      content: '';
+      position: absolute;
+      inset: -40% -35%;
+      pointer-events: none;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgb(198 178 255 / 26%),
+        transparent
+      );
+      background-size: 360px 100%;
+      background-repeat: repeat-x;
+      animation: cta-glow-sweep 5.5s linear infinite;
     }
-    .recruitment.is-idle .glow-art {
+    .recruitment.is-idle .glow-art::after {
       animation-play-state: paused;
     }
   }
-  /* One-way flow: the wave crosses left -> right, fades as it leaves and a new
-     one enters from the left, so the loop seam is invisible (no back-and-forth,
-     no vertical bob). */
-  @keyframes cta-glow-flow {
-    0% {
-      translate: -240px 0;
-      scale: 0.98;
-      opacity: 0;
+  @keyframes cta-glow-sweep {
+    from {
+      background-position: -360px 0;
     }
-    10% {
-      opacity: 1;
-    }
-    50% {
-      scale: 1.1;
-    }
-    90% {
-      opacity: 1;
-    }
-    100% {
-      translate: 240px 0;
-      scale: 0.98;
-      opacity: 0;
+    to {
+      background-position: 2100px 0;
     }
   }
   @media (max-width: 1199px) {
