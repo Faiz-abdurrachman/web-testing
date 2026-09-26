@@ -263,11 +263,12 @@ const destinations: Record<string, string> = {
     width: 54px;
     height: 58.8px;
   }
+  /* Let the menu and the CTA become direct flex items of `.navbar-inner` so the
+     bar spreads logo | menu | CTA with equal gaps at every width, instead of
+     pinning the whole menu+CTA block to the right (which left a large, width-
+     dependent void between the logo and "Home"). */
   .desktop-menu {
-    display: flex;
-    align-items: center;
-    gap: 90px;
-    transition: gap var(--nb-dur) var(--nb-ease);
+    display: contents;
   }
   nav {
     position: relative;
@@ -394,12 +395,6 @@ const destinations: Record<string, string> = {
     display: none;
   }
   @media (min-width: 1301px) {
-    .desktop-menu {
-      gap: 130px;
-    }
-    .navbar.is-condensed .desktop-menu {
-      gap: 90px;
-    }
     .desktop-menu nav {
       width: 753px;
       height: 45px;
@@ -425,9 +420,6 @@ const destinations: Record<string, string> = {
     }
   }
   @media (max-width: 1300px) {
-    .desktop-menu {
-      gap: 30px;
-    }
     nav {
       gap: 8px;
     }
@@ -704,11 +696,13 @@ const destinations: Record<string, string> = {
   const syncScroll = () => {
     if (!navbar) return false;
     const y = window.scrollY;
-    const scrolled = y > 8;
-    const condensed = y > 40;
-    const changed =
-      navbar.classList.contains('is-scrolled') !== scrolled ||
-      navbar.classList.contains('is-condensed') !== condensed;
+    // Small hysteresis: resting right on a threshold (or rubber-band overscroll)
+    // must not chatter the classes, which would restart the morph and the glint.
+    const wasScrolled = navbar.classList.contains('is-scrolled');
+    const wasCondensed = navbar.classList.contains('is-condensed');
+    const scrolled = wasScrolled ? y > 6 : y > 10;
+    const condensed = wasCondensed ? y > 36 : y > 44;
+    const changed = wasScrolled !== scrolled || wasCondensed !== condensed;
     navbar.classList.toggle('is-scrolled', scrolled);
     navbar.classList.toggle('is-condensed', condensed);
     return changed;
@@ -749,21 +743,12 @@ const destinations: Record<string, string> = {
     moveIndicator(target);
   };
 
-  // While the bar morphs (is-scrolled / is-condensed change its padding and
-  // gap) the links slide, so follow them frame-by-frame for that transition
-  // instead of reading layout on every scroll event.
-  let followRaf = 0;
-  let followUntil = 0;
-  const follow = () => {
-    syncIndicator(true);
-    followRaf =
-      performance.now() < followUntil ? requestAnimationFrame(follow) : 0;
-  };
-  const followFor = (ms: number) => {
-    followUntil = performance.now() + ms;
-    if (!followRaf) followRaf = requestAnimationFrame(follow);
-  };
-
+  // The indicator sits inside `nav`, and the links keep the same offsets
+  // relative to it throughout the morph (only `nav`'s position inside the bar
+  // changes, and the indicator rides along). So there is nothing to follow
+  // frame-by-frame — reading layout on every scroll frame would only force a
+  // synchronous layout in the middle of the CSS transition. Fonts, resize and
+  // the `transitionend` listeners below re-measure once the bar settles.
   syncScroll();
   let scrollRaf = 0;
   addEventListener(
@@ -772,8 +757,8 @@ const destinations: Record<string, string> = {
       if (scrollRaf) return;
       scrollRaf = requestAnimationFrame(() => {
         scrollRaf = 0;
-        if (syncScroll()) followFor(1000);
-        else syncIndicator();
+        syncScroll();
+        syncIndicator();
       });
     },
     { passive: true },
@@ -803,8 +788,8 @@ const destinations: Record<string, string> = {
     syncIndicator();
   });
 
-  // While the bar morphs its padding/gap the links move, so re-measure once the
-  // transition settles.
+  // While the bar morphs its padding/max-width the links move, so re-measure
+  // once the transition settles.
   for (const el of [
     navbar?.querySelector('.desktop-menu'),
     navbar?.querySelector('.navbar-inner'),

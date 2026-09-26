@@ -36,6 +36,15 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 - **Kapsul navbar hug logo/CTA:** tepi kapsul `is-scrolled` gak lagi ikut frame
   konten penuh, tapi `--nb-frame-panel` (= frame − 2×(`--nb-pad` − `--nb-hug`,
   24px)) → ujung kapsul ~24–28px dari logo & tombol Join Community (dulu ~80px).
+- **Navbar proporsional + mulus (26 Sep 2026):** `.desktop-menu` jadi
+  `display: contents` → `nav` & CTA jadi anak flex langsung `.navbar-inner`, jadi
+  `space-between` membagi `logo | menu | CTA` dengan gap **sama** di semua lebar
+  (dulu blok menu+CTA dipaku ke kanan → jarak logo→Home 135–347px di atas,
+  215px saat scrolled). Sekarang ~150px scrolled di 1440/1456, simetris dua sisi,
+  responsif 58→239px. Plus **hysteresis** kelas scroll (`is-scrolled` 10 masuk/6
+  keluar, `is-condensed` 44/36) supaya tidak chatter di ambang, dan loop rAF
+  `followFor(1000)` **dihapus** (offset link relatif ke `nav` konstan). Audit baru
+  `scripts/navbar-audit.mjs` (`npm run audit:navbar`, 20 lebar).
 - **Pass responsive + performa mobile (25 Sep 2026):** particle Three.js kini
   desktop-only (`min-width: 768px`), navbar HP blur 12px tanpa morph layout 0.9s,
   scrim hero HP + figur satu aturan `height:72%; object-position:59% bottom`,

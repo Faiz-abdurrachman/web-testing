@@ -226,8 +226,15 @@ The hero art is no longer one flattened image. It is split into two full-frame
   tab exports and `assets/assets home page/hero section/Navbar.png` are all 5760 × 428 (the
   1440 × 107 navbar at 4×).
 - Frame: full-width, `padding 24px 80px`, `space-between`. The logo is
-  54 × 58.8; the menu group uses a 90px gap, the six tabs an 18px gap, and each
-  tab `padding 8px 14px`. The white CTA is Manrope SemiBold 18.
+  54 × 58.8; the six tabs use an 18px gap and each tab `padding 8px 14px`. The
+  white CTA is Manrope SemiBold 18. `.desktop-menu` is `display: contents`, so
+  the `nav` and the CTA are **direct flex children of `.navbar-inner`** and
+  `space-between` spreads `logo | menu | CTA` with equal gaps at every width
+  (user revision 26 Sep 2026: pinning the whole menu+CTA block to the right left
+  a large, width-dependent void between the logo and "Home" — measured 135–347px
+  at the top and 215px scrolled). At 1440/1456 the gap is now ~150px when
+  scrolled, symmetric on both sides, and responsive 58px (1051px) → 239px
+  (≥1600px top).
 - The header is `position: fixed`. Its inner content is locked to a
   `max-width: 1440px` container and centered, so on screens wider than the
   Figma frame the logo and CTA stay on the 1440 grid (brand x = 80 at 1440,
@@ -235,10 +242,9 @@ The hero art is no longer one flattened image. It is split into two full-frame
 - At the very top the bar is **fully transparent** (no background, no blur) so it
   reads as part of the hero, and its content **breathes wider** than the 1440
   grid: `.navbar-inner` caps at `max-width: 1600px` with
-  `padding-inline: clamp(56px, 4.5vw, 80px)` and the nav/CTA gap grows to 130px.
-  After an 8px scroll it **pulls back to the 1440 grid and detaches into a
-  floating glass capsule** (`max-width: 1440px`, `padding-inline: 80px`, gap
-  90px, `margin-top: 10px`, `--nb-inset: 14px`, `--nb-radius: 999px` — both top
+  `padding-inline: clamp(56px, 4.5vw, 80px)`. After an 8px scroll it **pulls
+  back to the 1440 grid and detaches into a floating glass capsule**
+  (`max-width: 1440px`, `padding-inline: 80px`, `margin-top: 10px`, `--nb-inset: 14px`, `--nb-radius: 999px` — both top
   and bottom fully rounded): `.navbar::before` fades in a light
   `rgb(12 8 20 / 34%)` tint with
   `backdrop-filter: blur(28px) saturate(180%) brightness(1.07)`, an inset top
@@ -260,11 +266,21 @@ The hero art is no longer one flattened image. It is split into two full-frame
   site.
 - **Living HUD additions** (interaction layer; the homepage PNG diff is
   unaffected because `verify.mjs` hides `.navbar` before section screenshots):
-  - `is-scrolled` (y > 8) reveals the glass capsule (above); `is-condensed`
-    (y > 40) shrinks the bar to 72px (`--nb-h-condensed`, 64px ≤1050px), pulls
-    the grid back and scales the logo to 0.86; `is-ready` runs a staggered
-    entrance after `ds:splash-done` (`.brand`, each `.desktop-menu .nav-link` at
-    `--i * 55ms + 80ms`, CTA 0.5s).
+  - `is-scrolled` (threshold `y > 10` entering, `y > 6` leaving) reveals the glass
+    capsule (above); `is-condensed` (`y > 44` entering, `y > 36` leaving) shrinks
+    the bar to 72px (`--nb-h-condensed`, 64px ≤1050px), pulls the grid back and
+    scales the logo to 0.86; `is-ready` runs a staggered entrance after
+    `ds:splash-done` (`.brand`, each `.desktop-menu .nav-link` at
+    `--i * 55ms + 80ms`, CTA 0.5s). The small hysteresis band stops a resting
+    scroll position (or rubber-band overscroll) from chattering the classes,
+    which would restart the morph and the glint (user revision 26 Sep 2026).
+  - The indicator re-measures on `resize`, fonts-ready, `load` and the
+    `.navbar-inner` `transitionend`. The old per-frame `followFor(1000)` rAF loop
+    was **removed** (26 Sep 2026): the links keep identical `offsetLeft/Width/Top`
+    relative to `nav` across the morph, so the loop only forced a synchronous
+    layout each frame — it is now unnecessary. `scripts/navbar-audit.mjs`
+    (`npm run audit:navbar`) verifies the states, capsule containment, hug and
+    reduced-motion across 20 widths.
   - **Springy, "agar-agar" transitions**: the bar geometry (top/left/right,
     border-radius, max-width, padding, height) eases with `--nb-dur: 0.9s` +
     `--nb-ease: cubic-bezier(0.16, 1, 0.3, 1)` (buttery ease-out-expo), so the
