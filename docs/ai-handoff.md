@@ -407,23 +407,24 @@ Dua akar masalah, dua perbaikan:
    load home, `performance.getEntriesByType('resource')` sudah memuat
    `/recruitment`.
 
-### Starfield hidup dipakai bareng Who Should Join + What You Will Do (26 Sep 2026)
+### Starfield hidup dipakai bareng Who Should Join + What You Will Do + FAQ (26 Sep 2026)
 
 Permintaan: bintang di recruitment section **Who Should Join** (`We welcome
-passionate individuals…`) dan **What You Will Do** (`Life inside the Data
-Sorcerers ecosystem`) harus hidup seperti section **Four Pillars of Innovation**
-di home — "background bintangnya di samain aja".
+passionate individuals…`), **What You Will Do** (`Life inside the Data
+Sorcerers ecosystem`) dan **FAQ** harus hidup seperti section **Four Pillars of
+Innovation** di home — "background bintangnya di samain aja".
 
 - Langit Four Pillars (base tile + `far` drift 12s + `near` drift 7s) diekstrak
   jadi `src/components/Starfield.astro`; tile dipindah ke
   `public/images/starfield/` (dulu `public/images/what-we-do/`).
-- Kedua section sekarang render `<Starfield />` sebagai child pertama, dan CSS-nya
-  dapat `position: relative; isolation: isolate` (layer-nya `position: absolute;
-inset: 0; z-index: -1; overflow: hidden`, jadi geometry section tidak berubah —
-  verify Who Should Join `1440×789` tetap). `backgrounds/stars.webp` dilepas dari
-  keduanya (`Faq.astro` masih pakai).
-- `motion.ts` menambah `.who-should-join` + `.what-you-will-do` ke observer
-  `is-idle` (bareng `.recruitment`/`.cta`) supaya drift pause saat off-screen.
+- Ketiga section (`WhoShouldJoin` → `.who-should-join`, `WhatYouWillDo` →
+  `.what-you-will-do`, `Faq` → `.faq`) render `<Starfield />` sebagai child
+  pertama, dan CSS-nya dapat `position: relative; isolation: isolate` (layer-nya
+  `position: absolute; inset: 0; z-index: -1; overflow: hidden`, jadi geometry
+  tidak berubah — verify Who Should Join `1440×789` & FAQ `1440×986` tetap).
+  `backgrounds/stars.webp` dihapus (tidak ada konsumen lagi).
+- `motion.ts` menambah ketiganya ke observer `is-idle` (bareng
+  `.recruitment`/`.cta`) supaya drift pause saat off-screen.
 - Terukur: dua frame jarak 2.2s beda (`frameMAE ≈ 0.04`) saat `no-preference`,
   `0.000` saat `reduce`. `perf-audit` semua section long task 0.
 

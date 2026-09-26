@@ -62,8 +62,10 @@ visible gain. Measured MAE stays under 2/255 on the backgrounds.
   `recruitment/faq-background-{1440,2880}.webp`,
   `what-you-will-do/background-{1440,2880}.webp`,
   `footer/footer-bg-{1440,2880}.webp` and `projects/side-{left,right}.svg`.
-  The recruitment/footer sections now use the shared lossy
-  `public/images/backgrounds/{recruitment,stars,footer}.webp`, and the 3D
+  The recruitment/footer sections use the shared lossy
+  `public/images/backgrounds/{recruitment,footer}.webp` (the flat
+  `backgrounds/stars.webp` was itself removed on 26 Sep 2026 when the
+  recruitment skies became the shared living `Starfield.astro`), and the 3D
   coverflow replaced the decorative side panels.
 
 ## Visual reference
@@ -445,15 +447,15 @@ score were unchanged when this section was added.
 - **Shared `Starfield.astro`** (recruitment revision, 26 Sep 2026): the same
   base tile + `starfield-far` (`440 × 360`, `0.8`, `12s`) + `starfield-near`
   (`520 × 400`, `0.85`, `7s`) drift is packaged as `src/components/Starfield.astro`
-  and dropped into the recruitment **Who Should Join** (`.who-should-join`) and
-  **What You Will Do** (`.what-you-will-do`) sections, which previously painted
-  the flat `backgrounds/stars.webp`. The component is `position: absolute; inset:
-0; z-index: -1; overflow: hidden`, so the parent must be `position: relative;
-isolation: isolate`; it never affects section geometry. `motion.ts` now toggles
-  `is-idle` on `.who-should-join` / `.what-you-will-do` (same observer list as the
-  CTA glow) to pause the drift off-screen. Measured: two frames 2.2 s apart differ
-  (`frameMAE ≈ 0.04`) with `no-preference`, `0.000` under `reduce`. `Faq.astro`
-  still uses `backgrounds/stars.webp`.
+  and dropped into the recruitment **Who Should Join** (`.who-should-join`),
+  **What You Will Do** (`.what-you-will-do`) and **FAQ** (`.faq`) sections, which
+  previously painted the flat `backgrounds/stars.webp` (that file is now removed).
+  The component is `position: absolute; inset: 0; z-index: -1; overflow: hidden`,
+  so the parent must be `position: relative; isolation: isolate`; it never affects
+  section geometry. `motion.ts` now toggles `is-idle` on those three sections
+  (same observer list as the CTA glow) to pause the drift off-screen. Measured:
+  two frames 2.2 s apart differ (`frameMAE ≈ 0.04`) with `no-preference`, `0.000`
+  under `reduce`.
 - **Card hover** (`.pillar:hover`, `@media (hover: hover)`): a violet spotlight
   follows the cursor (`.pillar::before` at `--mx/--my`, set by the existing 3D
   tilt), the gold hairline brightens, the drop shadow lifts and `.card-glow`
@@ -713,12 +715,12 @@ Section.png`, 5760 × 3156 (1440 × 789 at 4×).
   `src/components/Starfield.astro`, the same base tile + `far`/`near` drift as
   the home "Four Pillars of Innovation" section (`public/images/starfield/`),
   matching the mentor's "bikin hidup kayak section Four Pillars, background
-  bintangnya disamain" revision. It is an absolutely positioned, `overflow:
-hidden`, `z-index: -1` layer, so the section geometry is untouched. The
-  previously supplied `Background.png` frame fill (a near-black starfield) was
-  served as `public/images/backgrounds/stars.webp` (q88, `cover`, centered); the
-  lossless `recruitment/who-should-join-background-{1440,2880}.webp` exports were
-  removed on 26 Sep 2026. `stars.webp` is still used by `Faq.astro`.
+  bintangnya disamain" revision. It is an absolutely positioned, `overflow: hidden`,
+  `z-index: -1` layer, so the section geometry is untouched. The previously
+  supplied `Background.png` frame fill (a near-black starfield) was served as
+  `public/images/backgrounds/stars.webp` (q88, `cover`, centered); both that file
+  and the lossless `recruitment/who-should-join-background-{1440,2880}.webp`
+  exports were removed on 26 Sep 2026 once all its consumers migrated.
 - Measured layout at 1440: section `1440 × 789` at homepage y=866; heading
   `(80, 80, 1280 × 68)`; copy `(80, 172, 1280 × 27)`; cards at x 80 / 514 / 948
   / 1382, y 273, 394 × 436.
@@ -883,11 +885,14 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
 - Figma node: `661:1553`; reference
   `assets/assets recruitment page/faq section/Frame 2495.png`, 5760 × 3944
   (1440 × 986 at 4×). The section sits at homepage y=4283.
-- Frame: 1440 × 986, `padding 80`, `gap 58`; the background is the supplied
-  `Background.png` (the same near-black starfield as Who Should Join), served as
-  the shared `public/images/backgrounds/stars.webp`; the earlier lossless
-  `recruitment/faq-background-{1440,2880}.webp` exports were removed on
-  26 Sep 2026.
+- Frame: 1440 × 986, `padding 80`, `gap 58`. Background (26 Sep 2026): the
+  **shared living sky** (`src/components/Starfield.astro`, same base tile +
+  `far`/`near` drift as the home "Four Pillars" section), added when the mentor
+  asked for these recruitment backdrops to be alive too. The supplied
+  `Background.png` — the same near-black starfield as Who Should Join — was
+  previously served as the shared `public/images/backgrounds/stars.webp`; both it
+  and the earlier lossless `recruitment/faq-background-{1440,2880}.webp` exports
+  are removed, and the geometry is unchanged (`.faq` stays `1440 × 986`).
 - Heading: "FAQ" (Figma "faq" with uppercase case), Nasalization Regular 400,
   56 / 68, **left**, gradient `linear-gradient(180deg, #fff 0%, #707070 74%)`,
   (80, 80, 1280 × 68). The 1280 content is centred on wide viewports.

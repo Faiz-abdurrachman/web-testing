@@ -1,4 +1,6 @@
 ---
+import Starfield from './Starfield.astro';
+
 // Figma node 661:1553. The section lists six FAQ items (component set
 // 830:4263 / 830:4362 / 830:4367 / 830:4372 / 830:4377 / 830:4382). The
 // reference shows the closed (Q) state; the answers come from the open (A)
@@ -36,6 +38,7 @@ const items: FaqItem[] = [
 ---
 
 <section id="faq" class="faq" aria-labelledby="faq-title">
+  <Starfield />
   <h2 id="faq-title">FAQ</h2>
 
   <div class="faq-list">
@@ -66,12 +69,10 @@ const items: FaqItem[] = [
     align-items: center;
     gap: 58px;
     padding: 80px;
-    /* Supplied Background.png = the Figma frame fill (near-black starfield). */
+    /* Living star sky, same as the home "Four Pillars of Innovation" section. */
+    position: relative;
+    isolation: isolate;
     background-color: #000;
-    background-image: url('/images/backgrounds/stars.webp');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
   }
   h2 {
     margin: 0;

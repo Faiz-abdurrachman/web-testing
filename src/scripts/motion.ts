@@ -474,6 +474,7 @@ export function initMotion() {
         '.cta',
         '.who-should-join',
         '.what-you-will-do',
+        '.faq',
       ]) {
         const section = document.querySelector(selector);
         if (!section) continue;
