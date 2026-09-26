@@ -509,13 +509,13 @@ score were unchanged when this section was added.
 - **Phones ≤520px**: the coverflow is replaced by a single
   full-width card (no transform scaling) so the copy stays legible — the image
   becomes a top block (aspect 1799/1102), then tags/title/description flow with
-  normal type (h3 22/30, body 15/22). All four cards stay stacked and the switch
-  **crossfades + slides** (opacity/transform 0.45s) instead of swapping; the
-  stage height follows the active card (CSS `transition: height 0.4s`, JS sets
-  `${activeCard.offsetHeight}px`). `Projects.astro`'s `render()` clears the
-  inline coverflow styles and only swaps `is-active` below this breakpoint; the
-  desktop branch (and its asserted 549×567 card) is untouched. 600px still uses
-  the coverflow.
+  normal type (h3 22/30, body 15/22). The cards sit in a flex track one slot
+  wide and the switch **slides horizontally** (`transition: transform 0.5s`; JS
+  sets `translateX(-active*100%)`) — a smooth swipe, no fade. The stage keeps
+  `overflow: hidden` and its height follows the active card
+  (`${activeCard.offsetHeight}px`, 0.4s). `Projects.astro`'s `render()` clears
+  the inline coverflow styles below this breakpoint; the desktop branch (and its
+  asserted 549×567 card) is untouched. 600px still uses the coverflow.
 - The section is presented as a **3D coverflow** with left / centre / right
   slots: the highlighted card stays on the Figma grid (549 × 567 at
   (445.5,270)) while the neighbours sit at the reference's side-panel

@@ -93,6 +93,7 @@ import { projects } from '../data/projects';
         .closest('.projects')
         ?.querySelectorAll<HTMLButtonElement>('.project-dots .dot') ?? []),
     ];
+    const track = stage.querySelector<HTMLElement>('.project-track');
     if (!cards.length) return;
     const count = cards.length;
     let active = 0;
@@ -100,7 +101,7 @@ import { projects } from '../data/projects';
     const render = () => {
       // Below the phone breakpoint the coverflow is replaced by a single
       // full-width card (its own layout, no transform scaling) so the copy
-      // stays legible; JS only swaps which card is active.
+      // stays legible; the track slides horizontally between cards.
       if (matchMedia('(max-width: 520px)').matches) {
         cards.forEach((card, index) => {
           card.style.transform = '';
@@ -111,6 +112,7 @@ import { projects } from '../data/projects';
           card.classList.toggle('is-active', index === active);
           card.setAttribute('aria-hidden', index === active ? 'false' : 'true');
         });
+        if (track) track.style.transform = `translateX(${-active * 100}%)`;
         const activeCard = cards[active];
         if (activeCard) stage.style.height = `${activeCard.offsetHeight}px`;
         dots.forEach((dot, index) =>
@@ -118,6 +120,7 @@ import { projects } from '../data/projects';
         );
         return;
       }
+      if (track) track.style.transform = '';
       const width = 549;
       const stageWidth = stage.clientWidth || 1280;
       const base = Math.min(1, (stageWidth * 0.9) / width);
@@ -499,6 +502,7 @@ import { projects } from '../data/projects';
     .project-stage {
       height: 440px;
       margin-top: 40px;
+      overflow: hidden;
       perspective: none;
       transition: height 0.4s ease;
     }
@@ -506,27 +510,22 @@ import { projects } from '../data/projects';
       position: relative;
       inset: auto;
       height: 100%;
+      display: flex;
       transform-style: flat;
+      transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
     }
-    /* Cards stay stacked and crossfade / slide in, instead of swap-and-jump. */
+    /* One card per slide: the track translates between them (no fade). */
     .project-card {
-      top: 0;
-      left: 50%;
+      position: relative;
+      top: auto;
+      left: auto;
+      flex: 0 0 100%;
       width: min(88vw, 380px);
       height: auto;
-      margin: 0;
-      opacity: 0;
-      transform: translateX(-50%) translateY(10px);
-      filter: none;
-      pointer-events: none;
-      transition:
-        opacity 0.45s ease,
-        transform 0.45s ease;
-    }
-    .project-card.is-active {
+      margin-inline: auto;
       opacity: 1;
-      transform: translateX(-50%);
-      pointer-events: auto;
+      transform: none;
+      filter: none;
     }
     .project-card::before {
       display: none;
@@ -569,6 +568,7 @@ import { projects } from '../data/projects';
   }
   @media (prefers-reduced-motion: reduce) {
     .project-stage,
+    .project-track,
     .project-card,
     .project-card::before,
     .project-dots .dot {
