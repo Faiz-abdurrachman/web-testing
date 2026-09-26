@@ -47,7 +47,7 @@ const principles = [
     <div class="illustration" aria-hidden="true">
       <picture>
         <source
-          srcset="/images/philosophy/sorcerer-1x.webp 861w, /images/philosophy/sorcerer-2x.webp 1722w"
+          srcset="/images/philosophy/sorcerer-1x.webp 861w, /images/philosophy/sorcerer-2x.webp 1290w"
           sizes="(max-width: 760px) 100vw, 861px"
           type="image/webp"
         />
@@ -458,6 +458,13 @@ const principles = [
     }
     .illustration picture {
       animation: phil-float 7s ease-in-out infinite;
+    }
+    /* Park the aura/pulse/sparks/float while the section is off-screen. */
+    .philosophy.is-idle .aura,
+    .philosophy.is-idle .pulse,
+    .philosophy.is-idle .spark,
+    .philosophy.is-idle .illustration picture {
+      animation-play-state: paused;
     }
     .principles li {
       transition: transform 0.35s ease;

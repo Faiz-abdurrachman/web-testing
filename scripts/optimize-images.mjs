@@ -15,7 +15,11 @@ const groups = [
   { dir: 'recruitment', quality: 82 },
   { dir: 'footer', quality: 82 },
   { dir: 'what-you-will-do', quality: 82 },
-  { dir: 'philosophy', quality: 82, resize: { 'glow.webp': 512 } },
+  {
+    dir: 'philosophy',
+    quality: 82,
+    resize: { 'glow.webp': 512, 'sorcerer-2x.webp': 1290 },
+  },
   { dir: 'projects', quality: 82 },
   { dir: 'hods', quality: 85 },
 ];

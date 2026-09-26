@@ -395,6 +395,17 @@ export function initMotion() {
       reveal(philosophy, '.illustration');
       reveal(philosophy, '.principles > li', { y: 28, stagger: 0.1 });
 
+      // Park the aura/pulse/spark loops while the section is off-screen.
+      if (philosophy) {
+        const idle = new IntersectionObserver(
+          ([entry]) =>
+            philosophy.classList.toggle('is-idle', !entry.isIntersecting),
+          { rootMargin: '240px 0px' },
+        );
+        idle.observe(philosophy);
+        cleanups.push(() => idle.disconnect());
+      }
+
       const whatWeDo = document.querySelector<HTMLElement>('.what-we-do');
       if (whatWeDo) {
         if (small) {
