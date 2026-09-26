@@ -470,14 +470,20 @@ score were unchanged when this section was added.
 - Mobile adapts card width and heading size; no mobile reference was supplied.
 - Verification compares the section to its PNG, checks exact desktop card
   bounds and keyboard scrolling, and checks overflow at 320–1920px.
-- **Liveliness pass (`32e7491`).** Two motion-only additions, both skipped
-  under `prefers-reduced-motion: reduce` so the reduce frame stays exact:
-  (1) `DomainRail.astro` has an **attract mode** — when the section is at the
-  viewport centre and idle for ~3.5s the rail drifts at ~20px/s and reverses at
-  the ends; any hover/drag/wheel/touch/key/focus stops it, and `.is-gliding`
-  disables scroll-snap while drifting. (2) `motion.ts` `domainIntro()` replaces
-  the plain card reveal with a staggered lift + scale, with each card's `.glow`
-  igniting one beat later. No card markup/geometry changed.
+- **Liveliness pass (`32e7491`, revised `6ca5b1e`).** Two motion-only additions,
+  both skipped under `prefers-reduced-motion: reduce` so the reduce frame stays
+  exact: (1) `DomainRail.astro` has an **attract mode** — desktop-only
+  (`hover`+`pointer:fine`); when the section overlaps the viewport centre band
+  and is idle ~3.5s the rail **steps one card at a time** (smooth scroll onto
+  the snap points, ~2.8s dwell, reversing at the ends) — any
+  hover/drag/wheel/touch/key/focus takes over, and it re-checks reduced motion
+  per step and on the media-change event. (2) `motion.ts` `domainIntro()`
+  replaces the plain card reveal with a staggered lift + scale, with each card's
+  `.glow` igniting one beat later. No card markup/geometry changed.
+- **What We Do tilt (`08309c1`).** The card clip moved to an untransformed
+  `.pillar-inner` wrapper, so the 3-D hover tilt no longer squares the rounded
+  corners (the documented `overflow`+`radius`+`transform` gotcha). Pillar
+  geometry is unchanged.
 - Minor border, font rasterization, and blur differences remain; the comparison
   is evidence of visual alignment, not a zero-pixel-difference guarantee.
 

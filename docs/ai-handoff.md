@@ -440,8 +440,9 @@ Section.png` (5760×3376 → 1440×844). Patch glow terukur: center REF
 - **HoDS "hidup" (motion-only, `32e7491`).** Setelah 2 eksperimen dekoratif
   (sigil/ember di kartu & aura section) di-rollback karena user nggak suka, versi
   final = **motion saja tanpa mengubah tampilan statis**: (1) attract-mode rail
-  di `DomainRail.astro` (drift ~20px/s saat section di tengah viewport + idle
-  ~3.5s, berhenti saat interaksi, mati saat reduced/hidden), dan (2) entrance
+  di `DomainRail.astro` (sejak `6ca5b1e` **step satu kartu** via smooth-scroll ke
+  snap point, dwell ~2.8s, desktop-only; idle ~3.5s; berhenti saat interaksi;
+  re-cek reduced tiap step), dan (2) entrance
   `domainIntro()` di `motion.ts` (kartu lift+scale stagger, glow nyala). Semua
   di-skip saat `prefers-reduced-motion: reduce` → `verify.mjs` tetap exact.
   User menolak elemen dekoratif tambahan (sigil, ember, aura, indikator/dot) —
