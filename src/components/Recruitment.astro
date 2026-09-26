@@ -141,6 +141,27 @@ import Button from './Button.astro';
     height: 229.49%;
     max-width: none;
   }
+  /* The bottom glow drifts + breathes slowly so the CTA never reads as a
+     still image. `translate`/`scale` compose with the base `rotate`, and the
+     whole thing is inert under reduced motion (and paused off-screen). */
+  @media (prefers-reduced-motion: no-preference) {
+    .glow-art {
+      animation: cta-glow-drift 18s ease-in-out infinite alternate;
+    }
+    .recruitment.is-idle .glow-art {
+      animation-play-state: paused;
+    }
+  }
+  @keyframes cta-glow-drift {
+    from {
+      translate: -26px 3px;
+      scale: 1;
+    }
+    to {
+      translate: 26px -3px;
+      scale: 1.035;
+    }
+  }
   @media (max-width: 1199px) {
     .recruitment-panel {
       padding-inline: 24px;
