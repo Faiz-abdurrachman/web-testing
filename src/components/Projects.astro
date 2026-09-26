@@ -98,6 +98,25 @@ import { projects } from '../data/projects';
     let active = 0;
 
     const render = () => {
+      // Below the phone breakpoint the coverflow is replaced by a single
+      // full-width card (its own layout, no transform scaling) so the copy
+      // stays legible; JS only swaps which card is active.
+      if (matchMedia('(max-width: 520px)').matches) {
+        stage.style.height = '';
+        cards.forEach((card, index) => {
+          card.style.transform = '';
+          card.style.opacity = '';
+          card.style.filter = '';
+          card.style.zIndex = '';
+          card.style.pointerEvents = '';
+          card.classList.toggle('is-active', index === active);
+          card.setAttribute('aria-hidden', index === active ? 'false' : 'true');
+        });
+        dots.forEach((dot, index) =>
+          dot.setAttribute('aria-selected', String(index === active)),
+        );
+        return;
+      }
       const width = 549;
       const stageWidth = stage.clientWidth || 1280;
       const base = Math.min(1, (stageWidth * 0.9) / width);
@@ -473,6 +492,70 @@ import { projects } from '../data/projects';
     }
     .project-arrow.next {
       right: 0;
+    }
+  }
+  @media (max-width: 520px) {
+    .project-stage {
+      height: auto;
+      margin-top: 40px;
+      perspective: none;
+    }
+    .project-track {
+      position: relative;
+      inset: auto;
+      transform-style: flat;
+    }
+    .project-card {
+      position: relative;
+      top: auto;
+      left: auto;
+      width: min(88vw, 380px);
+      height: auto;
+      margin-inline: auto;
+      transform: none;
+      opacity: 1;
+      filter: none;
+    }
+    .project-card:not(.is-active) {
+      display: none;
+    }
+    .project-card::before {
+      display: none;
+    }
+    .project-inner {
+      position: relative;
+      inset: auto;
+      clip-path: inset(0 round 20px);
+    }
+    .project-image {
+      position: relative;
+      top: auto;
+      left: auto;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1799 / 1102;
+      opacity: 0.8;
+      border-radius: 20px 20px 0 0;
+    }
+    .project-tags {
+      position: static;
+      padding: 18px 22px 0;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .project-copy {
+      position: static;
+      width: auto;
+      padding: 12px 22px 24px;
+    }
+    h3 {
+      margin-bottom: 8px;
+      font-size: 22px;
+      line-height: 30px;
+    }
+    .project-copy p {
+      font-size: 15px;
+      line-height: 22px;
     }
   }
   @media (prefers-reduced-motion: reduce) {
