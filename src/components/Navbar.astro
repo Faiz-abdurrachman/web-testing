@@ -341,11 +341,12 @@ const destinations: Record<string, string> = {
       inset 0 1px 0 rgb(255 255 255 / 22%),
       0 8px 24px -12px rgb(108 59 255 / 80%);
     pointer-events: none;
+    transform: translateX(var(--nb-x, 0px));
     transition:
-      left 0.6s var(--nb-spring),
+      transform 0.6s var(--nb-spring),
       width 0.5s var(--nb-spring),
       opacity 0.4s ease;
-    will-change: left, width;
+    will-change: transform;
   }
   /* Gradient rim (not a flat line). */
   .nav-indicator::after {
@@ -504,8 +505,6 @@ const destinations: Record<string, string> = {
       overflow-y: auto;
       overscroll-behavior: contain;
       background: rgb(5 5 7 / 94%);
-      backdrop-filter: blur(30px) saturate(170%) brightness(1.05);
-      -webkit-backdrop-filter: blur(30px) saturate(170%) brightness(1.05);
       border: 0;
       border-radius: 0;
       box-shadow: none;
@@ -688,49 +687,85 @@ const destinations: Record<string, string> = {
   const finePointer = () => matchMedia('(pointer: fine)').matches;
 
   const syncScroll = () => {
-    if (!navbar) return;
+    if (!navbar) return false;
     const y = window.scrollY;
-    navbar.classList.toggle('is-scrolled', y > 8);
-    navbar.classList.toggle('is-condensed', y > 40);
+    const scrolled = y > 8;
+    const condensed = y > 40;
+    const changed =
+      navbar.classList.contains('is-scrolled') !== scrolled ||
+      navbar.classList.contains('is-condensed') !== condensed;
+    navbar.classList.toggle('is-scrolled', scrolled);
+    navbar.classList.toggle('is-condensed', condensed);
+    return changed;
   };
 
   // The active pill slides between links instead of popping. Hovering another
   // link pulls it there too, so the highlight feels alive.
   let hoverLink: HTMLElement | null = null;
+  // Last link the pill was placed on, so a scroll frame that does not change
+  // the target can skip the offsetLeft/offsetWidth reads entirely.
+  let indicatorTarget: HTMLElement | null = null;
 
   const moveIndicator = (el: HTMLElement) => {
     if (!indicator) return;
     indicator.style.opacity = '1';
-    indicator.style.left = `${el.offsetLeft}px`;
+    indicator.style.setProperty('--nb-x', `${el.offsetLeft}px`);
     indicator.style.top = `${el.offsetTop}px`;
     indicator.style.width = `${el.offsetWidth}px`;
     indicator.style.height = `${el.offsetHeight}px`;
   };
 
-  const syncIndicator = () => {
+  const syncIndicator = (force = false) => {
     if (!indicator || !navbar) return;
     if (innerWidth <= 1050) {
       indicator.style.opacity = '0';
+      indicatorTarget = null;
       return;
     }
     const target =
       hoverLink || navbar.querySelector<HTMLElement>('a.nav-link.active');
-    if (target) moveIndicator(target);
-    else indicator.style.opacity = '0';
+    if (!target) {
+      indicator.style.opacity = '0';
+      indicatorTarget = null;
+      return;
+    }
+    if (!force && target === indicatorTarget) return;
+    indicatorTarget = target;
+    moveIndicator(target);
+  };
+
+  // While the bar morphs (is-scrolled / is-condensed change its padding and
+  // gap) the links slide, so follow them frame-by-frame for that transition
+  // instead of reading layout on every scroll event.
+  let followRaf = 0;
+  let followUntil = 0;
+  const follow = () => {
+    syncIndicator(true);
+    followRaf =
+      performance.now() < followUntil ? requestAnimationFrame(follow) : 0;
+  };
+  const followFor = (ms: number) => {
+    followUntil = performance.now() + ms;
+    if (!followRaf) followRaf = requestAnimationFrame(follow);
   };
 
   syncScroll();
+  let scrollRaf = 0;
   addEventListener(
     'scroll',
     () => {
-      syncScroll();
-      syncIndicator();
+      if (scrollRaf) return;
+      scrollRaf = requestAnimationFrame(() => {
+        scrollRaf = 0;
+        if (syncScroll()) followFor(1000);
+        else syncIndicator();
+      });
     },
     { passive: true },
   );
   addEventListener('resize', () => {
     syncScroll();
-    syncIndicator();
+    syncIndicator(true);
   });
 
   desktopLinks.forEach((link) => {
@@ -759,12 +794,12 @@ const destinations: Record<string, string> = {
     navbar?.querySelector('.desktop-menu'),
     navbar?.querySelector('.navbar-inner'),
   ]) {
-    el?.addEventListener('transitionend', syncIndicator);
+    el?.addEventListener('transitionend', () => syncIndicator(true));
   }
 
-  requestAnimationFrame(syncIndicator);
-  document.fonts?.ready.then(syncIndicator).catch(() => {});
-  addEventListener('load', syncIndicator, { once: true });
+  requestAnimationFrame(() => syncIndicator(true));
+  document.fonts?.ready.then(() => syncIndicator(true)).catch(() => {});
+  addEventListener('load', () => syncIndicator(true), { once: true });
 
   const armNav = () => navbar?.classList.add('is-ready');
   if (document.documentElement.classList.contains('splash-done')) {
@@ -800,6 +835,7 @@ const destinations: Record<string, string> = {
     clearTimeout(closeTimer);
     menu.classList.remove('is-closing');
     menu.open = true;
+    nav?.querySelector<HTMLElement>('a')?.focus();
   };
 
   const closeMenu = () => {
@@ -843,8 +879,18 @@ const destinations: Record<string, string> = {
       closeMenu();
   });
 
-  const syncLock = () =>
-    document.body.classList.toggle('menu-open', !!menu?.open);
+  // Keep the obscured page out of the tab order while the full-screen menu is
+  // open, so keyboard focus cannot leak behind the overlay.
+  const background = [
+    document.querySelector('main'),
+    document.querySelector('.footer'),
+    document.querySelector('.skip-link'),
+  ].filter((el): el is HTMLElement => el instanceof HTMLElement);
+  const syncLock = () => {
+    const open = !!menu?.open;
+    document.body.classList.toggle('menu-open', open);
+    for (const el of background) el.toggleAttribute('inert', open);
+  };
   menu?.addEventListener('toggle', syncLock);
   addEventListener('resize', () => {
     if (menu?.open && innerWidth > 1050) {
