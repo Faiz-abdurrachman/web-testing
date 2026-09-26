@@ -437,15 +437,5 @@ Gotcha: `verify.mjs` bisa hang di `networkidle` melawan dev (Vite HMR) → build
 Section.png` (5760×3376 → 1440×844). Patch glow terukur: center REF
   `rgb(67,52,113)`, upper-right REF `rgb(24,14,54)`.
 - Font Nasalization belum di-bundle (lisensi) — jangan akali.
-- **Eksperimen "House of Data Sorcerers" (magic theme).** Checkpoint tag
-  `checkpoint-pre-hods-magic` (`9549424`) = titik aman sebelum eksperimen; kerja
-  langsung di `main` (tanpa branch) atas permintaan user. **Phase 1 selesai**
-  (`32df009`): sigil ring putar, ember naik, glow bernafas, chip float — semua
-  di-gate `prefers-reduced-motion: no-preference` + di-pause saat off-screen
-  (`.domains.is-idle`), jadi `verify.mjs`/`responsive-audit.mjs` tetap hijau.
-  Plan lanjutan: Phase 2 entrance "ignition", Phase 3 hover "chanting"
-  (spotlight `--mx/--my`), Phase 4 "The Choosing" (attract-mode + rune progress),
-  Phase 5 copy tema (opsional, divergen dari PNG). Aturan: hindari nama/aset IP
-  Harry Potter, jangan ubah geometry kartu, tanpa dependency baru.
 - TODO: webfont Nasalization, data project asli, tanggal recruitment, halaman
   About Us / Hall of Frames / Partners / Contact, dan lanjutan animasi What We Do.

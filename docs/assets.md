@@ -459,17 +459,6 @@ score were unchanged when this section was added.
   bounds and keyboard scrolling, and checks overflow at 320–1920px.
 - Minor border, font rasterization, and blur differences remain; the comparison
   is evidence of visual alignment, not a zero-pixel-difference guarantee.
-- **Magic experiment (Phase 1, commit `32df009`).** Cards gained a decorative
-  ambient layer in `DomainCard.astro`: a rotating `.sigil` ring (inline SVG,
-  `stroke: rgb(var(--tint))`, 340px, centered at y=250), seven `.embers`
-  spans, a breathing `.glow` and a floating `.cloud` cluster. Every loop is
-  hidden by default (`opacity: 0`) and only enabled inside
-  `@media (prefers-reduced-motion: no-preference)`, so the reduce render that
-  `verify.mjs` screenshots is unchanged (domains MAE and card geometry
-  identical). `motion.ts` toggles `.domains.is-idle` via IntersectionObserver
-  (`rootMargin: 240px`) to `animation-play-state: paused` off-screen. No
-  reference geometry changed — do not add transforms/scale to `.domain-card`
-  itself.
 
 ## Our Project
 
