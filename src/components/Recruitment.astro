@@ -146,7 +146,7 @@ import Button from './Button.astro';
      whole thing is inert under reduced motion (and paused off-screen). */
   @media (prefers-reduced-motion: no-preference) {
     .glow-art {
-      animation: cta-glow-drift 14s ease-in-out infinite alternate;
+      animation: cta-glow-drift 8s ease-in-out infinite alternate;
     }
     .recruitment.is-idle .glow-art {
       animation-play-state: paused;
@@ -154,12 +154,14 @@ import Button from './Button.astro';
   }
   @keyframes cta-glow-drift {
     from {
-      translate: -90px 6px;
+      translate: -120px 8px;
       scale: 1;
+      opacity: 0.82;
     }
     to {
-      translate: 90px -6px;
-      scale: 1.06;
+      translate: 120px -8px;
+      scale: 1.08;
+      opacity: 1;
     }
   }
   @media (max-width: 1199px) {
