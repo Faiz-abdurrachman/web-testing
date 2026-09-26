@@ -146,37 +146,34 @@ import Button from './Button.astro';
      whole thing is inert under reduced motion (and paused off-screen). */
   @media (prefers-reduced-motion: no-preference) {
     .glow-art {
-      animation: cta-glow-drift 5s ease-in-out infinite alternate;
+      animation: cta-glow-flow 7s linear infinite;
     }
     .recruitment.is-idle .glow-art {
       animation-play-state: paused;
     }
   }
-  @keyframes cta-glow-drift {
+  /* One-way flow: the wave crosses left -> right, fades as it leaves and a new
+     one enters from the left, so the loop seam is invisible (no back-and-forth,
+     no vertical bob). */
+  @keyframes cta-glow-flow {
     0% {
-      translate: -150px 14px;
-      scale: 1;
-      opacity: 0.8;
+      translate: -240px 0;
+      scale: 0.98;
+      opacity: 0;
     }
-    25% {
-      translate: -75px -18px;
-      scale: 1.06;
-      opacity: 0.9;
-    }
-    50% {
-      translate: 0px 14px;
-      scale: 1.12;
+    10% {
       opacity: 1;
     }
-    75% {
-      translate: 75px -18px;
-      scale: 1.06;
-      opacity: 0.9;
+    50% {
+      scale: 1.1;
+    }
+    90% {
+      opacity: 1;
     }
     100% {
-      translate: 150px 14px;
-      scale: 1;
-      opacity: 0.8;
+      translate: 240px 0;
+      scale: 0.98;
+      opacity: 0;
     }
   }
   @media (max-width: 1199px) {

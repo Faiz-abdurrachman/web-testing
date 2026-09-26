@@ -543,12 +543,13 @@ score were unchanged when this section was added.
 - Original decorative glow exported to `public/images/recruitment/glow.svg`.
   Its rotation and overflowing bounds follow Figma. Text, border and buttons
   are HTML/CSS; the shared Button component now supports a compact glass size.
-- **Living glow**: `.glow-art` sweeps in a wave
-  (`cta-glow-drift`, translate ±150px with two y-oscillations ±18px, scale
-  1→1.12, opacity 0.8→1, 5s alternate ≈ 60px/s) using the
-  `translate`/`scale` properties so the base `rotate(-2.23deg)` is kept. The
-  animation only exists under `prefers-reduced-motion: no-preference` (static
-  under reduce) and `.recruitment.is-idle` pauses it off-screen.
+- **Living glow**: `.glow-art` flows one way (like a wave passing).
+  `cta-glow-flow` (7s `linear` infinite, **no alternate**) translates −240px →
+  +240px while fading in/out at the ends and peaking `scale 1.1` mid-pass, so
+  the loop seam is invisible and there is no back-and-forth or vertical bob. It
+  uses the `translate`/`scale` properties (base `rotate(-2.23deg)` kept), only
+  exists under `prefers-reduced-motion: no-preference` (static under reduce) and
+  `.recruitment.is-idle` pauses it off-screen.
 - The PNG/Figma description takes precedence over the stale filename/CSS
   description in the supplied folder. The heading spelling is preserved.
 - No button URLs were supplied. Buttons retain the preview's existing
