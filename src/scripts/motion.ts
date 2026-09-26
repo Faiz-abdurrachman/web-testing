@@ -453,17 +453,6 @@ export function initMotion() {
       const recruitment = document.querySelector('.recruitment');
       reveal(recruitment, '.recruitment-panel > *', { y: 34 });
 
-      // Park the CTA glow drift while the section is off-screen.
-      if (recruitment) {
-        const idle = new IntersectionObserver(
-          ([entry]) =>
-            recruitment.classList.toggle('is-idle', !entry.isIntersecting),
-          { rootMargin: '240px 0px' },
-        );
-        idle.observe(recruitment);
-        cleanups.push(() => idle.disconnect());
-      }
-
       const footer = document.querySelector('.footer');
       reveal(footer, '.top > *', { y: 34 });
       reveal(footer, '.bottom');

@@ -141,35 +141,6 @@ import Button from './Button.astro';
     height: 229.49%;
     max-width: none;
   }
-  /* A soft light band sweeps the always-present glow (no seam/fade/gap). */
-  @media (prefers-reduced-motion: no-preference) {
-    .glow-art::after {
-      content: '';
-      position: absolute;
-      inset: -40% -35%;
-      pointer-events: none;
-      background: linear-gradient(
-        90deg,
-        transparent,
-        rgb(198 178 255 / 26%),
-        transparent
-      );
-      background-size: 360px 100%;
-      background-repeat: repeat-x;
-      animation: cta-glow-sweep 5.5s linear infinite;
-    }
-    .recruitment.is-idle .glow-art::after {
-      animation-play-state: paused;
-    }
-  }
-  @keyframes cta-glow-sweep {
-    from {
-      background-position: -360px 0;
-    }
-    to {
-      background-position: 2100px 0;
-    }
-  }
   @media (max-width: 1199px) {
     .recruitment-panel {
       padding-inline: 24px;
