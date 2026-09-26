@@ -197,35 +197,35 @@ The hero art is no longer one flattened image. It is split into two full-frame
   320/360/375/390/412/480 all zero overlap, character ~36% of screen height at
   ~62% width, fully in frame.
 - **Animated video layer (`public/images/hero/hero-bg.webm` + `hero-bg.mp4`,
-  1582 × 992, 10 s / 240 frames, 24 fps)**: a full-scene clip (nebula, planet,
+  1280 × 720, 10 s / 240 frames, 24 fps)**: a full-scene clip (nebula, planet,
   water and the sorcerer). **Source swapped 26 Sep 2026** to
   `assets/assets home page/hero section/hero.mp4` (1280 × 720, 24 fps, 10 s) —
   the calmer "clean plate": no baked lightning strike and no Gemini sparkle, and
   the composition holds across the whole clip (`signalstats` YAVG ~55–56 every
-  frame). The whole clip is ping-ponged (first 5 s forward + reverse) into a
-  seamless 10 s loop; grade is untouched ("pakai apa adanya"). Output is h264
-  crf21 (2.0 MB) + AV1 crf34 (0.78 MB) + `hero-poster.webp` (frame 0, 79 KB);
-  SSIM 0.981 / PSNR 44 dB vs the pre-encode ideal upscale. The old clip was
+  frame). **Crop removed (26 Sep 2026):** the export keeps the full native
+  1280 × 720 frame — no crop, no rescale — so no pixels are invented and the
+  whole scene stays visible; the earlier `1046×656+66+32 → scale=1582:992:lanczos`
+  window forced a ~1.5× upscale and threw away the edges. Only `unsharp` remains
+  in the filter chain. The whole clip is ping-ponged (first 5 s forward + reverse)
+  into a seamless 10 s loop; grade is untouched ("pakai apa adanya"). Output is
+  h264 crf21 (1.46 MB) + AV1 crf34 (0.72 MB) + `hero-poster.webp` (frame 0,
+  74 KB); SSIM ~0.99 vs the source frame at native scale. The old clip was
   1280 × 720 with a lighter/magenta grade and a baked lightning burst near
   t=3 s; it is no longer used. At `(prefers-reduced-motion: no-preference) and
 (min-width: 601px)` it is **visible from first paint** — `opacity: 1` — using
   `poster="/images/hero/hero-poster.webp"`, which is the clip's own frame 0
-  (written by `scripts/generate-hero-video.mjs` with the same crop/scale/unsharp
-  chain). The poster stands in until playback starts, so the hero never swaps
-  from the smaller static cutout to the clip's larger sorcerer mid-view (that
-  overlap read as a "double"). `≤600 px` and reduced motion keep `opacity: 0`
-  and the static `background.webp` + `figure.webp` reference render; once the
-  clip is live `.artwork-stack.is-video` hides `.art-figure`. Its character sits
-  at **~62–78%** of the source width (measured off an ffmpeg 10×10 grid —
-  `figure.webp`'s cutout is at 53.6–67.3%). With the default
-  `object-position: 50% 50%` and `object-fit: cover`, portrait widths between
-  601 and ~730px cropped the arm/staff against the right edge. `.art-video` now
-  sets `object-position: 80% center`, which shifts the clip's character to
-  ~60–64% screen — aligned with the static figure and fully in frame. The rule
-  is a no-op wherever there is no horizontal crop (desktop), and the
-  `max-height: 560px` / `min-width: 1921px` `object-position` overrides still
-  win for their layers. Verified in headed-reduced Chromium at 601×900,
-  675×900, 733×900 and 768×1024.
+  (written by `scripts/generate-hero-video.mjs` with the same sharpen pass). The
+  poster stands in until playback starts, so the hero never swaps from the
+  smaller static cutout to the clip's larger sorcerer mid-view (that overlap read
+  as a "double"). `≤600 px` and reduced motion keep `opacity: 0` and the static
+  `background.webp` + `figure.webp` reference render; once the clip is live
+  `.artwork-stack.is-video` hides `.art-figure`. Because the plate is now a
+  native 16:9 frame, `object-fit: cover` trims only the sides; `.art-video` sets
+  `object-position: 50% center`, which keeps the sorcerer's centre (~53% of
+  source) and the staff fully inside the frame down to the 601px gate — the
+  earlier `80% center` (tuned for the cropped clip) pushed the staff past the
+  right edge on narrow portrait widths. Verified in Chromium at 1440, 900, 768,
+  733, 675 and 601 px.
 
 ## Navbar
 

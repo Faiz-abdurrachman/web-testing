@@ -22,16 +22,19 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
   The splash test verifies that rings rotate, Canvas pixels evolve, and only
   the logo uses an image. Screenshot timing is isolated from production timers.
 
-- **Hero home ganti plate video (26 Sep 2026):** background hero home sekarang
-  pakai `assets/assets home page/hero section/hero.mp4` (1280×720, 24 fps, 10 s) —
-  "clean plate": **tanpa bolt terlukis, tanpa sparkle Gemini**, komposisi stabil
-  (`signalstats` YAVG ~55–56 tiap frame). `scripts/generate-hero-video.mjs`
-  diubah: `SRC` baru, `DURATION='5'` → boomerang (5 s depan + reverse) jadi loop
-  **10 s** mulus; crop `1046×656+66+32` + `scale=1582:992:lanczos` + `unsharp`
-  dipertahankan (frame tetap valid, tak ada watermark). Output **h264 crf21**
-  (2.0 MB) + **AV1 crf34** (0.78 MB) + `hero-poster.webp` frame 0 (79 KB);
-  SSIM 0.981 / PSNR 44 dB vs ideal sebelum-encode. Grade tanpa koreksi
-  ("pakai apa adanya"). `<video>`, gating ≥601px, dan fallback statis tak berubah
+- **Hero home ganti plate video + crop dilepas (26 Sep 2026):** background hero
+  home sekarang pakai `assets/assets home page/hero section/hero.mp4`
+  (1280×720, 24 fps, 10 s) — "clean plate": **tanpa bolt terlukis, tanpa sparkle
+  Gemini**, komposisi stabil (`signalstats` YAVG ~55–56 tiap frame).
+  `scripts/generate-hero-video.mjs` diubah: `SRC` baru, `DURATION='5'` →
+  boomerang (5 s depan + reverse) jadi loop **10 s** mulus; **crop + scale
+  dilepas** — ekspor frame native **1280×720** (dulu `1046×656+66+32` +
+  `scale=1582:992:lanczos`, ~1.5× upscale), sisa hanya `unsharp`.
+  `.art-video` `object-position` jadi **`50% center`** (dulu `80%` yang
+  di-tune untuk frame ter-crop; dengan frame 16:9 penuh `80%` mendorong staff
+  keluar sisi kanan di lebar sempit). Output **h264 crf21** (1.46 MB) +
+  **AV1 crf34** (0.72 MB) + `hero-poster.webp` frame 0 (74 KB). Grade tanpa
+  koreksi ("pakai apa adanya"). Gating ≥601px, dan fallback statis tak berubah
   (reduce/≤600px tetap `background.webp` + `figure.webp`; verify aman).
 - Branch `main`, fitur homepage + Recruitment + role detail + HoDS detail sudah
   jadi. Motion GSAP + Three.js **aktif** (`src/components/Motion.astro` →
@@ -438,15 +441,16 @@ bawah hero — landscape pendek tetap `100svh`. Selector wajib
 
 ### Hero video animasi kepotong di 601–~730px (karakter jangan keluar frame)
 
-Video `hero-bg.webm/mp4` (1582×992) menggantikan layer statis di `≥601px`.
-Karakter di dalam video ada di ~62–78% lebar sumber (tongkat/kanan), sedang cutout
-`figure.webp` di 53.6–67.3%. Dengan `object-position` default (50%) + `object-fit:
-cover`, lebar portrait 601–~730px mencrop sisi kanan karakter ke luar layar
-("belum masuk frame"). Fix: `.art-video { object-position: 80% center }` di
-`Hero.astro` → karakter ~60–64% (selaras figure statis, fade mulus). Rule ini
-no-op saat tak ada crop horizontal (desktop), dan override `max-height:560px` /
-`min-width:1921px` tetap menang. Terverifikasi di Chromium 601×900, 675×900,
-733×900, 768×1024.
+Video `hero-bg.webm/mp4` sekarang diekspor **native 1280×720** (crop/scale
+dilepas, 26 Sep 2026) dan menggantikan layer statis di `≥601px`. Karena platnya
+16:9 sementara hero-nya ~1.594 aspek, `object-fit: cover` hanya mencrop sisi
+kiri/kanan. Dengan `object-position` off-centre (`80%`) lebar portrait
+601–~730px mendorong tongkat/kanan karakter ke luar tepi kanan ("belum masuk
+frame"). Fix: `.art-video { object-position: 50% center }` di `Hero.astro` →
+pusat karakter (~53% sumber) + tongkat utuh sampai gate 601px. Rule ini no-op
+saat tak ada crop horizontal (desktop), dan override `max-height:560px` /
+`min-width:1921px` tetap menang. Terverifikasi di Chromium 1440, 900, 768, 733,
+675, 601 px.
 
 ### Hero "kek double / gambar lalu jadi video" saat pindah tab (26 Sep 2026)
 
@@ -463,7 +467,7 @@ Dua akar masalah, dua perbaikan:
    (adegan penuh, karakter lebih besar) itu komposisi yang berbeda, jadi fade 700ms
    lama memperlihatkan dua karakter = "double". Fix: `<video>` sekarang `poster`
    = `public/images/hero/hero-poster.webp` — **frame 0 dari clip itu sendiri**
-   (dibuat `scripts/generate-hero-video.mjs`, crop/scale/unsharp sama biar pas).
+   (dibuat `scripts/generate-hero-video.mjs`, sharpen pass sama biar pas).
    Di `(prefers-reduced-motion: no-preference) and (min-width: 601px)` video
    `opacity: 1` dari awal, jadi yang tergambar sejak paint pertama adalah poster
    (= komposisi video), dan begitu play tidak ada pergantian komposisi. Under

@@ -10,9 +10,12 @@ import { mkdir, stat } from 'node:fs/promises';
 //
 // Two decisions shape the export:
 //
-// 1. The frame is cut to 1046x656 — the same window as before, chosen so the
-//    crop keeps the hero art aspect (1583:993) and the sorcerer stays centred —
-//    then scaled to an even 1582x992 for yuv420p.
+// 1. The full frame is kept at its native 1280x720 — no crop, no rescale — so
+//    the whole scene stays visible and no pixels are invented. The earlier
+//    1046x656 window (which matched the hero art's 1583:993 aspect) forced a
+//    ~1.5x upscale and threw away the left/right edges; the user asked for the
+//    uncropped, sharpest plate instead. `object-fit: cover` on the `<video>`
+//    does the only remaining framing.
 // 2. The whole clip is used: the first 5s are ping-ponged (forward then reverse)
 //    into a seamless 10s cycle. Frame 0 and frame 239 differ, so a plain loop
 //    would seam; the boomerang avoids that without changing the grade (the user
@@ -21,28 +24,17 @@ import { mkdir, stat } from 'node:fs/promises';
 //    `background.webp` is the guaranteed fallback.
 const SRC = 'assets/assets home page/hero section/hero.mp4';
 const OUT_DIR = 'public/images/hero';
-const ART_W = 1582;
-const ART_H = 992;
-const CROP_W = 1046;
-const CROP_H = 656;
-const CROP_X = 66;
-const CROP_Y = 32;
 const DURATION = '5';
+const SHARPEN = 'unsharp=5:5:0.5:5:5:0.0';
 
 const chain =
-  `crop=${CROP_W}:${CROP_H}:${CROP_X}:${CROP_Y},` +
-  `scale=${ART_W}:${ART_H}:flags=lanczos,` +
-  `unsharp=5:5:0.5:5:5:0.0,` +
-  `split[a][b];[b]reverse[r];[a][r]concat=n=2:v=1[v]`;
+  `${SHARPEN},` + `split[a][b];[b]reverse[r];[a][r]concat=n=2:v=1[v]`;
 
 // Poster = the clip's own first frame, so the `<video>` can be shown before it
 // can play (and while it streams) without the static hero art swapping to a
-// different composition. Encoded from the same crop/scale/unsharp as the film
-// so poster and frame 0 line up exactly.
-const posterChain =
-  `crop=${CROP_W}:${CROP_H}:${CROP_X}:${CROP_Y},` +
-  `scale=${ART_W}:${ART_H}:flags=lanczos,` +
-  `unsharp=5:5:0.5:5:5:0.0`;
+// different composition. Encoded from the same sharpen pass as the film so
+// poster and frame 0 line up exactly.
+const posterChain = SHARPEN;
 
 execFileSync(
   'ffmpeg',

@@ -168,9 +168,13 @@ import Button from './Button.astro';
     height: 100%;
     object-fit: cover;
   }
+  /* The clip is the uncropped 1280x720 plate, so `cover` only trims the sides.
+     Centring keeps the sorcerer (source centre ~53%) inside the frame down to
+     the 601px gate; an off-centre position pushed the staff past the right edge
+     on narrow portrait widths. */
   .art-video {
     opacity: 0;
-    object-position: 80% center;
+    object-position: 50% center;
   }
   /* At ≥601px with motion allowed the plate owns the hero from the first paint:
      its poster (the clip's own frame 0) stands in until playback starts, so the
