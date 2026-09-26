@@ -201,6 +201,38 @@ function pillarIntro(whatWeDo: HTMLElement) {
   );
 }
 
+function domainIntro(domains: HTMLElement) {
+  const cards = gsap.utils.toArray<HTMLElement>('.domain-card', domains);
+  if (!cards.length) return;
+  const glows = cards
+    .map((card) => card.querySelector<HTMLElement>('.glow'))
+    .filter((el): el is HTMLElement => Boolean(el));
+
+  // Cards lift into place with a touch of scale, then each card's glow ignites
+  // a beat later — so the section assembles rather than just fading in. Under
+  // reduced motion this whole block is skipped, keeping the PNG frame exact.
+  gsap.set(cards, { y: 74, scale: 0.94, autoAlpha: 0 });
+  if (glows.length) gsap.set(glows, { autoAlpha: 0, scale: 0.9 });
+
+  const tl = gsap.timeline({
+    defaults: { ease: 'power3.out' },
+    scrollTrigger: { trigger: domains, start: 'top 78%', once: true },
+  });
+  tl.to(cards, {
+    y: 0,
+    scale: 1,
+    autoAlpha: 1,
+    duration: 0.95,
+    stagger: 0.09,
+  });
+  if (glows.length)
+    tl.to(
+      glows,
+      { autoAlpha: 1, scale: 1, duration: 0.9, stagger: 0.09 },
+      0.12,
+    );
+}
+
 function tilt(element: HTMLElement, max: number, cleanups: Cleanup[]) {
   gsap.set(element, { transformPerspective: 900 });
   const rx = gsap.quickTo(element, 'rotationX', {
@@ -386,9 +418,11 @@ export function initMotion() {
         cleanups.push(() => idle.disconnect());
       }
 
-      const domains = document.querySelector('.domains');
-      reveal(domains, 'header > *');
-      reveal(domains, '.domain-card', { y: 44, stagger: 0.07 });
+      const domains = document.querySelector<HTMLElement>('.domains');
+      if (domains) {
+        reveal(domains, 'header > *');
+        domainIntro(domains);
+      }
 
       const projects = document.querySelector('.projects');
       reveal(projects, '.projects-inner > header > *');

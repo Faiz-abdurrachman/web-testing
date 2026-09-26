@@ -157,6 +157,126 @@ const { base = '/hods', suffix = '' } = Astro.props;
         rail.scrollBy({ left: step(), behavior });
       }
     });
+
+    // Attract mode: once the section sits at the viewport centre and the visitor
+    // has been still for a few seconds, the rail drifts on its own (ping-ponging
+    // at either end) so it never reads as a frozen strip. Any interaction —
+    // hover, drag, wheel, touch, keyboard, focus — takes over instantly, and it
+    // stays parked for reduced motion, hidden tabs, or off-centre sections.
+    let hovering = false;
+    let focused = false;
+    let lastInteract = performance.now();
+    let raf = 0;
+    let last = 0;
+    let dir = 1;
+    const SPEED = 0.02; // px per ms (~20px/s)
+
+    const centered = () => {
+      const rect = section.getBoundingClientRect();
+      const middle = innerHeight / 2;
+      return rect.top < middle && rect.bottom > middle;
+    };
+    const reduced = () =>
+      matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const stop = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+      rail.classList.remove('is-gliding');
+    };
+    const markInteract = () => {
+      lastInteract = performance.now();
+      stop();
+    };
+
+    const tick = (now: number) => {
+      if (!raf) return;
+      const dt = Math.min(now - last, 48);
+      last = now;
+      const max = rail.scrollWidth - rail.clientWidth;
+      if (max <= 1) {
+        stop();
+        return;
+      }
+      let next = rail.scrollLeft + dir * dt * SPEED;
+      if (next >= max) {
+        next = max;
+        dir = -1;
+      } else if (next <= 0) {
+        next = 0;
+        dir = 1;
+      }
+      rail.scrollLeft = next;
+      raf = requestAnimationFrame(tick);
+    };
+
+    const start = () => {
+      if (raf || hovering || focused || document.hidden || reduced()) return;
+      if (!centered()) return;
+      const max = rail.scrollWidth - rail.clientWidth;
+      if (max <= 1) return;
+      if (rail.scrollLeft >= max - 1) dir = -1;
+      else if (rail.scrollLeft <= 1) dir = 1;
+      rail.classList.add('is-gliding');
+      last = performance.now();
+      raf = requestAnimationFrame(tick);
+    };
+
+    window.setInterval(() => {
+      if (raf) {
+        if (!centered() || document.hidden || hovering || focused) stop();
+        return;
+      }
+      if (
+        centered() &&
+        !document.hidden &&
+        !hovering &&
+        !focused &&
+        performance.now() - lastInteract > 3500
+      )
+        start();
+    }, 400);
+
+    rail.addEventListener('pointerenter', (event) => {
+      if (event.pointerType !== 'mouse') return;
+      hovering = true;
+      markInteract();
+    });
+    rail.addEventListener('pointerleave', (event) => {
+      if (event.pointerType !== 'mouse') return;
+      hovering = false;
+      lastInteract = performance.now();
+    });
+    ['pointerdown', 'wheel', 'touchstart', 'keydown'].forEach((type) =>
+      rail.addEventListener(type, markInteract, { passive: true }),
+    );
+    rail.addEventListener('focusin', () => {
+      focused = true;
+      markInteract();
+    });
+    rail.addEventListener('focusout', () => {
+      focused = false;
+      lastInteract = performance.now();
+    });
+    rail.addEventListener(
+      'scroll',
+      () => {
+        if (raf) return; // self-driven drift shouldn't reset the timer
+        markInteract();
+      },
+      { passive: true },
+    );
+    addEventListener(
+      'scroll',
+      () => {
+        if (raf && !centered()) stop();
+      },
+      { passive: true },
+    );
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stop();
+      else lastInteract = performance.now();
+    });
   });
 </script>
 <style>
@@ -184,6 +304,10 @@ const { base = '/hods', suffix = '' } = Astro.props;
     scroll-snap-type: none;
     user-select: none;
     cursor: grabbing;
+  }
+  .domain-rail.is-gliding {
+    scroll-snap-type: none;
+    cursor: default;
   }
   .domain-rail::-webkit-scrollbar {
     display: none;
