@@ -509,7 +509,10 @@ score were unchanged when this section was added.
 - **Phones ≤520px**: the coverflow is replaced by a single
   full-width card (no transform scaling) so the copy stays legible — the image
   becomes a top block (aspect 1799/1102), then tags/title/description flow with
-  normal type (h3 22/30, body 15/22). `Projects.astro`'s `render()` clears the
+  normal type (h3 22/30, body 15/22). All four cards stay stacked and the switch
+  **crossfades + slides** (opacity/transform 0.45s) instead of swapping; the
+  stage height follows the active card (CSS `transition: height 0.4s`, JS sets
+  `${activeCard.offsetHeight}px`). `Projects.astro`'s `render()` clears the
   inline coverflow styles and only swaps `is-active` below this breakpoint; the
   desktop branch (and its asserted 549×567 card) is untouched. 600px still uses
   the coverflow.

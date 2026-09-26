@@ -102,7 +102,6 @@ import { projects } from '../data/projects';
       // full-width card (its own layout, no transform scaling) so the copy
       // stays legible; JS only swaps which card is active.
       if (matchMedia('(max-width: 520px)').matches) {
-        stage.style.height = '';
         cards.forEach((card, index) => {
           card.style.transform = '';
           card.style.opacity = '';
@@ -112,6 +111,8 @@ import { projects } from '../data/projects';
           card.classList.toggle('is-active', index === active);
           card.setAttribute('aria-hidden', index === active ? 'false' : 'true');
         });
+        const activeCard = cards[active];
+        if (activeCard) stage.style.height = `${activeCard.offsetHeight}px`;
         dots.forEach((dot, index) =>
           dot.setAttribute('aria-selected', String(index === active)),
         );
@@ -496,28 +497,36 @@ import { projects } from '../data/projects';
   }
   @media (max-width: 520px) {
     .project-stage {
-      height: auto;
+      height: 440px;
       margin-top: 40px;
       perspective: none;
+      transition: height 0.4s ease;
     }
     .project-track {
       position: relative;
       inset: auto;
+      height: 100%;
       transform-style: flat;
     }
+    /* Cards stay stacked and crossfade / slide in, instead of swap-and-jump. */
     .project-card {
-      position: relative;
-      top: auto;
-      left: auto;
+      top: 0;
+      left: 50%;
       width: min(88vw, 380px);
       height: auto;
-      margin-inline: auto;
-      transform: none;
-      opacity: 1;
+      margin: 0;
+      opacity: 0;
+      transform: translateX(-50%) translateY(10px);
       filter: none;
+      pointer-events: none;
+      transition:
+        opacity 0.45s ease,
+        transform 0.45s ease;
     }
-    .project-card:not(.is-active) {
-      display: none;
+    .project-card.is-active {
+      opacity: 1;
+      transform: translateX(-50%);
+      pointer-events: auto;
     }
     .project-card::before {
       display: none;
@@ -559,6 +568,7 @@ import { projects } from '../data/projects';
     }
   }
   @media (prefers-reduced-motion: reduce) {
+    .project-stage,
     .project-card,
     .project-card::before,
     .project-dots .dot {
