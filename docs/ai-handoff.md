@@ -153,13 +153,15 @@ alasan baru.
 Innovation`) harus "keluar" smooth pakai GSAP, ga boring / ga AI-slop.
 
 **Implementasi** (`src/components/WhatWeDo.astro` + `pillarIntro` di
-`src/scripts/motion.ts`): di `≥761px` timeline **time-based auto-play sekali**
+`src/scripts/motion.ts`): di `≥1051px` timeline **time-based auto-play sekali**
 pas section masuk viewport (`scrollTrigger: { start:'top 72%', once:true }` —
 **tanpa pin, tanpa scrub**, jadi selesai sendiri, bukan parallax/scroll-linked):
 eyebrow fade, 2 baris `h2` mask-up (wrapper `.line` `overflow:hidden`; gradient
 dipindah ke inner span biar clip-nya bekerja), 4 `.pillar` terbang keluar dari
 tengah (`x/y` ±70/±56, `scale .82`, `rotation ±4deg`, stagger 01→04, ~1.4s).
-`≤760px` = `reveal` fade-up biasa. Saat reduce tidak dipanggil → gate aman.
+`≤1050px` = `reveal` fade-up **lurus** (tanpa rotasi) — semua lebar yang memakai
+menu mobile/tablet, supaya di HP/tablet kartunya tidak terbang miring. Saat
+reduce tidak dipanggil → gate aman.
 
 **Revisi (25 Sep 2026) — dibikin lebih ringan:** user minta "jangan terlalu
 berat". 3D camera tilt di `.pillars-layout` (`rotationX:11 / rotationY:-5 → 0`)

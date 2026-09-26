@@ -276,15 +276,17 @@ export function initMotion() {
     {
       reduce: '(prefers-reduced-motion: reduce)',
       desktop: '(min-width: 768px)',
-      small: '(max-width: 760px)',
+      // Everything that shows the mobile/tablet menu (≤1050) gets the straight
+      // pillar reveal; only the full desktop grid uses the diagonal intro.
+      compact: '(max-width: 1050px)',
     },
     (context) => {
-      const { reduce, desktop, small } = (
+      const { reduce, desktop, compact } = (
         context as unknown as {
           conditions: {
             reduce: boolean;
             desktop: boolean;
-            small: boolean;
+            compact: boolean;
           };
         }
       ).conditions;
@@ -415,11 +417,12 @@ export function initMotion() {
 
       const whatWeDo = document.querySelector<HTMLElement>('.what-we-do');
       if (whatWeDo) {
-        if (small) {
+        if (compact) {
+          // Phone and tablet: straight, non-rotated reveal.
           reveal(whatWeDo, '.section-heading > *');
           reveal(whatWeDo, '.pillar', { y: 44, stagger: 0.1 });
         } else {
-          // Heads-up "summon from the core" build-up that plays once on entry.
+          // Desktop only: "summon from the core" build-up that plays once.
           pillarIntro(whatWeDo);
         }
       }
