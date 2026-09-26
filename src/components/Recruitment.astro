@@ -141,6 +141,38 @@ import Button from './Button.astro';
     height: 229.49%;
     max-width: none;
   }
+  /* Diagonal undulation: the glow drifts left/right while riding up and down,
+     back and forth, at full opacity — no fade, never a gap. */
+  @media (prefers-reduced-motion: no-preference) {
+    .glow-art {
+      animation: cta-glow-roll 7s ease-in-out infinite alternate;
+    }
+    .recruitment.is-idle .glow-art {
+      animation-play-state: paused;
+    }
+  }
+  @keyframes cta-glow-roll {
+    0% {
+      translate: -140px 12px;
+      scale: 1;
+    }
+    25% {
+      translate: -70px -14px;
+      scale: 1.03;
+    }
+    50% {
+      translate: 0px 12px;
+      scale: 1.05;
+    }
+    75% {
+      translate: 70px -14px;
+      scale: 1.03;
+    }
+    100% {
+      translate: 140px 12px;
+      scale: 1;
+    }
+  }
   @media (max-width: 1199px) {
     .recruitment-panel {
       padding-inline: 24px;
