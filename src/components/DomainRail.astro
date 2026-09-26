@@ -25,8 +25,12 @@ const { base = '/hods', suffix = '' } = Astro.props;
     role="region"
     aria-label="Domains — scroll horizontally to explore all six"
   >
-    {domains.map((domain) => (
-      <DomainCard domain={domain} href={`${base}/${domain.id}${suffix}`} />
+    {domains.map((domain, index) => (
+      <DomainCard
+        domain={domain}
+        href={`${base}/${domain.id}${suffix}`}
+        index={index}
+      />
     ))}
   </div>
   <button
