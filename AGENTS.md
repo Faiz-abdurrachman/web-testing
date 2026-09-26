@@ -204,7 +204,12 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   `basil:arrow-right-solid` inline. Judul **Title Case** dari `domains.ts`; tagline
   dari `roles.ts` `tagline` (bukan `about`). Grid 3/2/1, `gap 40px 20px`. Geometri
   di-assert di `verify.mjs` (section `851.375`, list `518.375`, kartu
-  `413.33 × 239.19`). Sumber referensi:
+  `413.33 × 239.19`). Glow kini di layer sendiri `.role-glow` yang **beranimasi
+  gelombang** (drift horizontal `±6%` + swell `scale 1.15→1.22`, `alternate` 9s,
+  `transform-origin: 50% 100%` supaya selalu overfill → tidak ada edge keras; tanpa
+  gerak naik-turun) — di-gate `prefers-reduced-motion: no-preference` dan
+  di-pause off-screen via `.available-roles.is-idle` (observer di `motion.ts`).
+  Statis (reduce) tetap persis referensi. Sumber referensi:
   `assets/assets recruitment page/available roles/Card Role *.png`.
 - **Hero mobile fluid (≤600px)**: h1/body/gap/padding pakai `clamp()` fluid +
   `min-height: 100svh` dengan konten dipusatkan vertikal;

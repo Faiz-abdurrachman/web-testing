@@ -581,6 +581,7 @@ export function initMotion() {
         '.who-should-join',
         '.what-you-will-do',
         '.faq',
+        '.available-roles',
       ]) {
         const section = document.querySelector(selector);
         if (!section) continue;

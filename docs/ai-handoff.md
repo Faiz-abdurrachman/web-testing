@@ -46,7 +46,12 @@ Card Role *.png`, 1652×956). Base `#2a2a2c`, glow violet kanan-bawah
   divider gradient → `View Details` + panah `basil:arrow-right-solid` (inline).
   Sparkle, nomor `01 / OPEN ROLE`, chip, dan frame emas **dibuang**. Grid 3/2/1
   `gap 40px 20px`. Geometri `verify.mjs` kini section `851.375`, list `518.375`,
-  kartu `413.33 × 239.19`, plus cek overflow konten kartu 320–1920px.
+  kartu `413.33 × 239.19`, plus cek overflow konten kartu 320–1920px. Glow
+  dipindah ke layer `.role-glow` yang **hidup** — gelombang horizontal (`±6%` +
+  `scale 1.15→1.22`, `alternate` 9s, `transform-origin: 50% 100%` → selalu
+  overfill, tanpa hard edge, tanpa naik-turun); gate `no-preference`, pause
+  off-screen via `.available-roles.is-idle` (observer `motion.ts`). Statis =
+  persis referensi.
 - Branch `main`, fitur homepage + Recruitment + role detail + HoDS detail sudah
   jadi. Motion GSAP + Three.js **aktif** (`src/components/Motion.astro` →
   `src/scripts/motion.ts`).
