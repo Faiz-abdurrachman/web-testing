@@ -309,7 +309,14 @@ export function initMotion() {
         // reference frame pixel-for-pixel.
         if (stack && finePointer()) gsap.set(stack, { scale: 1.04 });
 
-        if (figure)
+        // At ≥601px the animated `.art-video` layer fades in over the static
+        // stack, so the cutout's own idle/pointer work would only ever animate a
+        // hidden layer. Skip it there; ≤600px (and the no-video fallback) keeps
+        // the figure alive.
+        const coveredByVideo =
+          Boolean(hero.querySelector('.art-video')) &&
+          window.matchMedia('(min-width: 601px)').matches;
+        if (figure && !coveredByVideo)
           animateFigure(figure, hero, cleanups, finePointer(), desktop);
 
         if (desktop && stack && content) {
