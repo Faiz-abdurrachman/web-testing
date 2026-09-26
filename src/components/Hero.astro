@@ -29,7 +29,7 @@ import Button from './Button.astro';
           loop
           playsinline
           preload="none"
-          poster="/images/hero/background.webp"
+          poster="/images/hero/hero-poster.webp"
         >
           <source src="/images/hero/hero-bg.webm" type="video/webm" />
           <source src="/images/hero/hero-bg.mp4" type="video/mp4" />
@@ -144,7 +144,13 @@ import Button from './Button.astro';
       conn?.effectiveType === 'slow-2g' ||
       conn?.effectiveType === '2g';
     if (!reduce && wide && !constrained) {
+      const stack = video.closest('.artwork-stack');
       const start = () => {
+        // The clip is a full scene with its own (larger) sorcerer baked in, so
+        // drop the static cutout in the same frame instead of crossfading two
+        // characters — that overlap read as a "double". The plate then fades in
+        // over the static background only.
+        stack?.classList.add('is-video');
         video.classList.add('is-ready');
         void video.play().catch(() => {});
       };
@@ -155,6 +161,7 @@ import Button from './Button.astro';
         video.load();
       };
       const armed = document.documentElement.classList.contains('splash-armed');
+      const warm = document.documentElement.classList.contains('nav-warm');
       if (armed) {
         // Fetch during the splash and let it wait for the first frame, so the
         // clip is ready instead of competing with the reveal.
@@ -167,6 +174,12 @@ import Button from './Button.astro';
               });
           }),
         );
+        load();
+      } else if (warm) {
+        // Warm, in-session navigation: the clip is normally still in the HTTP
+        // cache, so fetch it now and swap as soon as it can paint. The old idle
+        // wait pushed the image->video swap seconds down the line, which is what
+        // made a Home visit look like it "becomes" the video.
         load();
       } else if (typeof window.requestIdleCallback === 'function') {
         window.requestIdleCallback(load, { timeout: 2000 });
@@ -358,10 +371,20 @@ import Button from './Button.astro';
   .art-video {
     opacity: 0;
     object-position: 80% center;
-    transition: opacity 700ms ease;
   }
-  .art-video.is-ready {
-    opacity: 1;
+  /* At ≥601px with motion allowed the plate owns the hero from the first paint:
+     its poster (the clip's own frame 0) stands in until playback starts, so the
+     static art never swaps to a different composition mid-view. Under reduced
+     motion, or ≤600px, the video stays hidden and `background.webp` +
+     `figure.webp` remain the reference render. */
+  @media (prefers-reduced-motion: no-preference) and (min-width: 601px) {
+    .art-video {
+      opacity: 1;
+    }
+  }
+  /* Once the clip is live, drop the static cutout underneath it. */
+  .artwork-stack.is-video .art-figure {
+    opacity: 0;
   }
   .hero-content {
     display: flex;

@@ -21,7 +21,12 @@ const destinations: Record<string, string> = {
 
 <header class="navbar">
   <div class="navbar-inner">
-    <a class="brand" href="/" aria-label="Data Sorcerers home">
+    <a
+      class="brand"
+      href="/"
+      aria-label="Data Sorcerers home"
+      data-astro-prefetch
+    >
       <img src="/images/logo.png" width="54" height="59" alt="Data Sorcerers" />
     </a>
     <div class="desktop-menu">
@@ -33,6 +38,7 @@ const destinations: Record<string, string> = {
               href={destinations[label]}
               aria-current={label === active ? 'page' : undefined}
               style={`--i:${i + 1}`}
+              data-astro-prefetch
             >
               {label}
             </a>
@@ -60,6 +66,7 @@ const destinations: Record<string, string> = {
               href={destinations[label]}
               aria-current={label === active ? 'page' : undefined}
               style={`--i:${i + 1}`}
+              data-astro-prefetch
             >
               {label}
             </a>

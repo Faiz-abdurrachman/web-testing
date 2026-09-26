@@ -43,6 +43,7 @@ function animateFigure(
   cleanups: Cleanup[],
   fine: boolean,
   richIdle: boolean,
+  settled: boolean,
 ) {
   // Rotation pivots at the feet so the sway reads as weight shift.
   gsap.set(figure, { transformOrigin: '60% 88%', transformPerspective: 800 });
@@ -62,51 +63,60 @@ function animateFigure(
   io.observe(hero);
   cleanups.push(() => io.disconnect());
 
-  // Entrance: the sorcerer rises into place just after the plate.
-  gsap.fromTo(
-    figure,
-    { yPercent: 7, autoAlpha: 0 },
-    {
-      yPercent: 0,
-      autoAlpha: 1,
-      duration: 1.2,
-      delay: 0.5,
-      ease: 'power3.out',
-      onComplete: () => {
-        // Idle loop: slow bob + breathing + weight-shift sway, so the cutout is
-        // never a still image. `y` (px, scroll) and `yPercent` compose in GSAP,
-        // and the sway uses `rotation` while the pointer uses `rotationX/Y`.
-        idles.push(
-          gsap.to(figure, {
-            yPercent: 1.3,
-            duration: 2.6,
-            ease: 'sine.inOut',
-            yoyo: true,
-            repeat: -1,
-          }),
-        );
-        if (richIdle) {
-          idles.push(
-            gsap.to(figure, {
-              rotation: 0.9,
-              duration: 3.4,
-              ease: 'sine.inOut',
-              yoyo: true,
-              repeat: -1,
-            }),
-            gsap.to(figure, {
-              scale: 1.015,
-              duration: 1.9,
-              ease: 'sine.inOut',
-              yoyo: true,
-              repeat: -1,
-            }),
-          );
-        }
-        resume();
+  // Idle loop: slow bob + breathing + weight-shift sway, so the cutout is never
+  // a still image. `y` (px, scroll) and `yPercent` compose in GSAP, and the sway
+  // uses `rotation` while the pointer uses `rotationX/Y`.
+  const startIdle = () => {
+    idles.push(
+      gsap.to(figure, {
+        yPercent: 1.3,
+        duration: 2.6,
+        ease: 'sine.inOut',
+        yoyo: true,
+        repeat: -1,
+      }),
+    );
+    if (richIdle) {
+      idles.push(
+        gsap.to(figure, {
+          rotation: 0.9,
+          duration: 3.4,
+          ease: 'sine.inOut',
+          yoyo: true,
+          repeat: -1,
+        }),
+        gsap.to(figure, {
+          scale: 1.015,
+          duration: 1.9,
+          ease: 'sine.inOut',
+          yoyo: true,
+          repeat: -1,
+        }),
+      );
+    }
+    resume();
+  };
+
+  if (settled) {
+    // Warm, in-session navigation: skip the rise-in and just keep the idle, so
+    // the character does not replay its entrance on every tab switch.
+    gsap.set(figure, { yPercent: 0, autoAlpha: 1 });
+    startIdle();
+  } else {
+    // Entrance: the sorcerer rises into place just after the plate.
+    gsap.fromTo(
+      figure,
+      { yPercent: 7, autoAlpha: 0 },
+      {
+        yPercent: 0,
+        autoAlpha: 1,
+        duration: 1.2,
+        delay: 0.5,
+        ease: 'power3.out',
+        onComplete: startIdle,
       },
-    },
-  );
+    );
+  }
   cleanups.push(() => {
     idles.forEach((tween) => tween.kill());
     gsap.killTweensOf(figure);
@@ -269,6 +279,10 @@ export function initMotion() {
   inited = true;
   const mm = gsap.matchMedia();
 
+  // Warm, in-session navigation: the splash already played, so entrances that
+  // would replay the "loading" sequence on every page switch are skipped.
+  const warm = document.documentElement.classList.contains('nav-warm');
+
   // `gsap.matchMedia` reverts every tween/ScrollTrigger it created when a query
   // stops matching, so enabling reduced motion at runtime tears the whole system
   // down; custom listeners are cleaned up via the returned function.
@@ -319,7 +333,7 @@ export function initMotion() {
           Boolean(hero.querySelector('.art-video')) &&
           window.matchMedia('(min-width: 601px)').matches;
         if (figure && !coveredByVideo)
-          animateFigure(figure, hero, cleanups, finePointer(), desktop);
+          animateFigure(figure, hero, cleanups, finePointer(), desktop, warm);
 
         if (desktop && stack && content) {
           // Pinned scroll sequence: the plate zooms in, the sorcerer rises, the
@@ -518,6 +532,10 @@ export function initMotion() {
     root.classList.add('hero-ready');
     window.setTimeout(() => root.classList.remove('hero-ready'), 3200);
   };
+  // Warm navigation: the hero is already assembled, so do not replay the
+  // entrance blur/sweep/text reveal (that replayed on every Home <-> Recruitment
+  // switch and read as a fresh page load).
+  if (warm) return;
   if (document.readyState === 'complete') {
     armHero();
   } else {

@@ -38,6 +38,41 @@ const chain =
   `unsharp=5:5:0.5:5:5:0.0,` +
   `split[a][b];[b]reverse[r];[a][r]concat=n=2:v=1[v]`;
 
+// Poster = the clip's own first frame, so the `<video>` can be shown before it
+// can play (and while it streams) without the static hero art swapping to a
+// different composition. Encoded from the same crop/scale/unsharp as the film
+// so poster and frame 0 line up exactly.
+const posterChain =
+  `crop=${CROP_W}:${CROP_H}:${CROP_X}:${CROP_Y},` +
+  `scale=${ART_W}:${ART_H}:flags=lanczos,` +
+  `unsharp=5:5:0.5:5:5:0.0`;
+
+execFileSync(
+  'ffmpeg',
+  [
+    '-v',
+    'error',
+    '-t',
+    '1',
+    '-i',
+    SRC,
+    '-vf',
+    posterChain,
+    '-frames:v',
+    '1',
+    '-c:v',
+    'libwebp',
+    '-quality',
+    '82',
+    '-y',
+    `${OUT_DIR}/hero-poster.webp`,
+  ],
+  { stdio: 'inherit' },
+);
+console.log(
+  `hero-poster.webp: ${((await stat(`${OUT_DIR}/hero-poster.webp`)).size / 1024).toFixed(0)} KB`,
+);
+
 const encodes = [
   {
     name: 'hero-bg.mp4',

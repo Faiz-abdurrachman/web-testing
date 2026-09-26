@@ -377,6 +377,35 @@ no-op saat tak ada crop horizontal (desktop), dan override `max-height:560px` /
 `min-width:1921px` tetap menang. Terverifikasi di Chromium 601×900, 675×900,
 733×900, 768×1024.
 
+### Hero "kek double / gambar lalu jadi video" saat pindah tab (26 Sep 2026)
+
+Dua akar masalah, dua perbaikan:
+
+1. **Entrance hero replay tiap navigasi.** Hero meng-arm `html.hero-ready` (blur +
+   veil + sweep + teks naik + kilat) di setiap document load, jadi setiap pindah
+   Home ↔ Recruitment terasa seperti loading. Fix: `BaseLayout` menandai
+   `html.nav-warm` di head kalau `sessionStorage ds:splash === '1'` (splash sudah
+   pernah main = kunjungan hangat dalam sesi). `motion.ts` lalu **tidak** menambah
+   `hero-ready` dan memanggil `animateFigure(..., settled=true)` (karakter langsung
+   diam-idle, tanpa rise-in). Load dingin (tab baru / pertama) tetap animasi penuh.
+2. **Layer statis → video (potret beda).** `figure.webp` (cutout kecil) dan video
+   (adegan penuh, karakter lebih besar) itu komposisi yang berbeda, jadi fade 700ms
+   lama memperlihatkan dua karakter = "double". Fix: `<video>` sekarang `poster`
+   = `public/images/hero/hero-poster.webp` — **frame 0 dari clip itu sendiri**
+   (dibuat `scripts/generate-hero-video.mjs`, crop/scale/unsharp sama biar pas).
+   Di `(prefers-reduced-motion: no-preference) and (min-width: 601px)` video
+   `opacity: 1` dari awal, jadi yang tergambar sejak paint pertama adalah poster
+   (= komposisi video), dan begitu play tidak ada pergantian komposisi. Under
+   reduce / `≤600px` video tetap `opacity: 0` → `background.webp` + `figure.webp`
+   tetap render referensi (verify aman). `.artwork-stack.is-video` juga
+   menyembunyikan `.art-figure` begitu clip live.
+3. **Navigasi MPA tetap full load.** Tambah prefetch Astro:
+   `astro.config.mjs` `prefetch: { defaultStrategy: 'viewport' }` + atribut
+   `data-astro-prefetch` di link navbar (brand + Home + Recruitment, desktop &
+   mobile) → dokumen tujuan sudah ter-cache sebelum diklik. Verifikasi: setelah
+   load home, `performance.getEntriesByType('resource')` sudah memuat
+   `/recruitment`.
+
 ## Yang perlu kamu tahu soal motion
 
 - Hero: pinned scroll sequence (`≥768px`), karakter idle, parallax pointer,

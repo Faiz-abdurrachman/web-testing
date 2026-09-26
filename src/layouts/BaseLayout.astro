@@ -125,6 +125,10 @@ const structuredData = [
             }
           } else {
             root.classList.add('splash-done');
+            // Warm, in-session navigation (the splash already played): tell the
+            // hero to present itself settled instead of replaying its entrance
+            // blur/sweep on every Home <-> Recruitment switch.
+            if (seen) root.classList.add('nav-warm');
           }
         } catch (e) {
           root.classList.add('splash-done');

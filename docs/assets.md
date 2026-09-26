@@ -198,10 +198,17 @@ The hero art is no longer one flattened image. It is split into two full-frame
   ~62% width, fully in frame.
 - **Animated video layer (`public/images/hero/hero-bg.webm` + `hero-bg.mp4`,
   1582 × 992, 5 s / 120 frames, 24 fps)**: a full-scene clip (nebula, planet,
-  water and the sorcerer) that fades in over the static stack at `≥601 px`
-  only; `≤600 px` keeps the static `background.webp` + `figure.webp`. Its
-  character sits at **~62–78%** of the source width (measured off an ffmpeg
-  10×10 grid — `figure.webp`'s cutout is at 53.6–67.3%). With the default
+  water and the sorcerer). At `(prefers-reduced-motion: no-preference) and
+(min-width: 601px)` it is **visible from first paint** — `opacity: 1` — using
+  `poster="/images/hero/hero-poster.webp"`, which is the clip's own frame 0
+  (written by `scripts/generate-hero-video.mjs` with the same crop/scale/unsharp
+  chain). The poster stands in until playback starts, so the hero never swaps
+  from the smaller static cutout to the clip's larger sorcerer mid-view (that
+  overlap read as a "double"). `≤600 px` and reduced motion keep `opacity: 0`
+  and the static `background.webp` + `figure.webp` reference render; once the
+  clip is live `.artwork-stack.is-video` hides `.art-figure`. Its character sits
+  at **~62–78%** of the source width (measured off an ffmpeg 10×10 grid —
+  `figure.webp`'s cutout is at 53.6–67.3%). With the default
   `object-position: 50% 50%` and `object-fit: cover`, portrait widths between
   601 and ~730px cropped the arm/staff against the right edge. `.art-video` now
   sets `object-position: 80% center`, which shifts the clip's character to
