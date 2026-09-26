@@ -141,36 +141,34 @@ import Button from './Button.astro';
     height: 229.49%;
     max-width: none;
   }
-  /* Diagonal undulation: the glow drifts left/right while riding up and down,
-     back and forth, at full opacity — no fade, never a gap. */
+  /* One-way sweep: the glow drifts left -> right and repeats, fading only at the seam so the reset is invisible (full opacity across the middle, no up/down). */
   @media (prefers-reduced-motion: no-preference) {
     .glow-art {
-      animation: cta-glow-roll 7s ease-in-out infinite alternate;
+      animation: cta-glow-sweep 6.5s linear infinite;
     }
     .recruitment.is-idle .glow-art {
       animation-play-state: paused;
     }
   }
-  @keyframes cta-glow-roll {
+  @keyframes cta-glow-sweep {
     0% {
-      translate: -140px 12px;
+      translate: -150px 0;
       scale: 1;
+      opacity: 0.5;
     }
     25% {
-      translate: -70px -14px;
-      scale: 1.03;
+      opacity: 1;
     }
     50% {
-      translate: 0px 12px;
-      scale: 1.05;
+      scale: 1.04;
     }
     75% {
-      translate: 70px -14px;
-      scale: 1.03;
+      opacity: 1;
     }
     100% {
-      translate: 140px 12px;
+      translate: 150px 0;
       scale: 1;
+      opacity: 0.5;
     }
   }
   @media (max-width: 1199px) {

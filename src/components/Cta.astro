@@ -108,6 +108,36 @@ import Button from './Button.astro';
     height: 229.49%;
     max-width: none;
   }
+  /* Same one-way sweep as the homepage/recruitment CTA, so both glows read as one direction. */
+  @media (prefers-reduced-motion: no-preference) {
+    .glow-art {
+      animation: cta-glow-sweep 6.5s linear infinite;
+    }
+    .cta.is-idle .glow-art {
+      animation-play-state: paused;
+    }
+  }
+  @keyframes cta-glow-sweep {
+    0% {
+      translate: -150px 0;
+      scale: 1;
+      opacity: 0.5;
+    }
+    25% {
+      opacity: 1;
+    }
+    50% {
+      scale: 1.04;
+    }
+    75% {
+      opacity: 1;
+    }
+    100% {
+      translate: 150px 0;
+      scale: 1;
+      opacity: 0.5;
+    }
+  }
   @media (max-width: 1199px) {
     .glow-frame {
       left: calc(100% - 1010px);

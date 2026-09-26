@@ -29,6 +29,10 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
   (`browserErrors: []`), `responsive-audit.mjs` (364 combos), `seo:audit`.
 - **Terbaru:** splash jadi **preloader asli** (nunggu three + video + fonts),
   navbar "living HUD", perf What We Do (starfield tile + `perf:audit`).
+- **Glow CTA (home + recruitment page) satu arah:** `cta-glow-sweep` — glow
+  geser kiri→kanan terus berulang (bukan ayun/ombak), opacity turun cuma ke
+  `0.5` di seam jadi tak pernah hilang; dipakai di `Recruitment.astro` dan
+  `Cta.astro`, pause lewat `.is-idle` saat off-screen.
 - **Pass responsive + performa mobile (25 Sep 2026):** particle Three.js kini
   desktop-only (`min-width: 768px`), navbar HP blur 12px tanpa morph layout 0.9s,
   scrim hero HP + figur satu aturan `height:72%; object-position:59% bottom`,

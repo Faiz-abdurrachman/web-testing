@@ -453,14 +453,16 @@ export function initMotion() {
       const recruitment = document.querySelector('.recruitment');
       reveal(recruitment, '.recruitment-panel > *', { y: 34 });
 
-      // Park the CTA glow undulation while the section is off-screen.
-      if (recruitment) {
+      // Park the CTA glow sweep while the section is off-screen.
+      for (const selector of ['.recruitment', '.cta']) {
+        const section = document.querySelector(selector);
+        if (!section) continue;
         const idle = new IntersectionObserver(
           ([entry]) =>
-            recruitment.classList.toggle('is-idle', !entry.isIntersecting),
+            section.classList.toggle('is-idle', !entry.isIntersecting),
           { rootMargin: '240px 0px' },
         );
-        idle.observe(recruitment);
+        idle.observe(section);
         cleanups.push(() => idle.disconnect());
       }
 

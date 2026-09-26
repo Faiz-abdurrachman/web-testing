@@ -547,14 +547,16 @@ score were unchanged when this section was added.
 - Original decorative glow exported to `public/images/recruitment/glow.svg`.
   Its rotation and overflowing bounds follow Figma. Text, border and buttons
   are HTML/CSS; the shared Button component now supports a compact glass size.
-- **Living glow**: `.glow-art` undulates diagonally — it drifts left/right
-  (`translate` ±140px) while riding up and down (`y` ±14px, two oscillations)
-  and breathing `scale 1 → 1.05`, at **full opacity** (no fade, so the glow is
-  always present and never leaves a gap). `cta-glow-roll`, 7s `ease-in-out`
-  `alternate`; uses the `translate`/`scale` properties so the base
-  `rotate(-2.23deg)` is kept. Only exists under
+- **Living glow (one-way sweep)**: `.glow-art` drifts left -> right only
+  (`translate` -150px -> +150px) and repeats, with a gentle breathing
+  `scale 1 -> 1.04`. Opacity dips to 0.5 only at the loop seam (never 0) so the
+  glow is always present and there is no gap; there is no up/down motion.
+  `cta-glow-sweep`, 6.5s `linear` `infinite`; uses the `translate`/`scale`
+  properties so the base `rotate(-2.23deg)` is kept. Only exists under
   `prefers-reduced-motion: no-preference` (static under reduce) and
-  `.recruitment.is-idle` pauses it off-screen.
+  `.recruitment.is-idle` / `.cta.is-idle` pause it off-screen. The same
+  `cta-glow-sweep` is duplicated in `Cta.astro` so the recruitment-page CTA
+  reads as one direction with this one.
 - The PNG/Figma description takes precedence over the stale filename/CSS
   description in the supplied folder. The heading spelling is preserved.
 - No button URLs were supplied. Buttons retain the preview's existing
@@ -933,7 +935,9 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
 - Decorative glow: Figma `IMAGE-SVG` `839:4672`, 1000.33 × 271.5 at (269.83, 271) inside the panel. It reuses the homepage CTA's treatment
   (`public/images/recruitment/glow.svg`, rotated -2.23deg and oversized inside a
   1000.331 × 271.502 frame), which matches the reference far better than the raw
-  Figma SVG/PNG export (browser blur rasterization differs).
+  Figma SVG/PNG export (browser blur rasterization differs). It now shares the
+  homepage CTA's one-way `cta-glow-sweep` (left -> right, 6.5s linear, opacity
+  never below 0.5), paused via `.cta.is-idle` when off-screen.
 - Note: `Frame 2393.png` is a **transparent** export (the panel fill is
   `rgba(98,80,255,.1)`); comparisons must composite it over `#050507`.
 - Verification: `scripts/verify.mjs` asserts the section, panel, actions and
