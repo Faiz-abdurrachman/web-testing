@@ -742,6 +742,15 @@ generate-recruitment-hero-video.mjs` → `public/images/recruitment/`
     1.04 overscan means the scaled art still covers the viewport below the
     866px section, so no seam shows while pinned. Phones/tablets (<768px) get no
     pin.
+  - **Particle field (Phase 3, 26 Sep 2026):** the home hero's Three.js field is
+    now a shared module `src/scripts/hero-particles.ts`
+    (`mountHeroParticles(canvas, host, preload)`), mounted by both `Hero.astro`
+    and `RecruitmentHero.astro` (`.hero-canvas` at `z-index: 0`; `.hero-content`
+    and the CTA sit above at `z-index: 1`). The pinned timeline scrubs
+    `window.__heroParticles.burst` 0→1 (with an `onLeaveBack` reset), so the
+    field rushes the camera as the plate zooms. Desktop-only (`≥768px`), inert
+    under reduced motion, paused off-screen; a WebGL/`three` failure is swallowed
+    so the static art stays.
 - Navbar: the shared `Navbar.astro` with `active="Recruitment"`. The active
   underline is the Figma 106px gradient
   `linear-gradient(163deg, #9b7bff, #ede8ff, #9b7bff)`; the Home underline keeps

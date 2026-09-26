@@ -231,7 +231,12 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   **Hero recruitment ikut motion (Phase 2, 26 Sep 2026):** `/recruitment` kini
   include `<Motion />`; blok `.recruitment-hero` = entrance copy (tunggu
   `ds:splash-done`, skip `nav-warm`) + pointer parallax + pinned zoom ≥768px
-  (`scale 1.04→1.35`, copy naik, `end +=110%`).
+  (`scale 1.04→1.35`, copy naik, `end +=110%`). **Phase 3 (26 Sep 2026):** field
+  partikel Three.js diekstrak ke `src/scripts/hero-particles.ts`
+  (`mountHeroParticles(canvas, host, preload)`, dipakai `Hero.astro` +
+  `RecruitmentHero.astro`, canvas `.hero-canvas`), burst digerakkan pinned
+  timeline lewat `window.__heroParticles.burst`; desktop-only ≥768px, inert di
+  reduce/mobile.
   Catatan: `y` (scroll) vs `yPercent` (idle) komposibel di GSAP. `gsap` masuk dependencies
   (disetujui); `three` sudah ada. Under reduce semuanya inert →
   `verify.mjs`/`responsive-audit.mjs` tetap bersih.

@@ -71,7 +71,12 @@ hero-bg.webm` (0.51 MB) + `hero-bg.mp4` (1.32 MB) + `hero-poster.webp` (48 KB),
   `scale 1.04→1.35`, copy naik `y:-200` + fade). Inert di reduce → `verify.mjs`
   tetap 866/geometri. Pin pakai `scale` di `.artwork`; overscan 1.04 bikin art
   tetap nutup viewport 903 selagi section-nya cuma 866 (tidak ada seam). Mobile
-  <768px tanpa pin. Phase 3 (3D/particles) di-skip dulu.
+  <768px tanpa pin. **Phase 3 (26 Sep 2026):** field partikel Three.js
+  diekstrak ke `src/scripts/hero-particles.ts`
+  (`mountHeroParticles(canvas, host, preload)`, sekarang dipakai `Hero.astro` +
+  `RecruitmentHero.astro`, canvas `.hero-canvas`), burst digerakkan timeline
+  pinned via `window.__heroParticles.burst`. Desktop-only ≥768px, inert di
+  reduce/mobile, error WebGL di-swallow biar art statis tetap tampil.
 - **Pass responsive + performa mobile (25 Sep 2026):** particle Three.js kini
   desktop-only (`min-width: 768px`), navbar HP blur 12px tanpa morph layout 0.9s,
   scrim hero HP + figur satu aturan `height:72%; object-position:59% bottom`,

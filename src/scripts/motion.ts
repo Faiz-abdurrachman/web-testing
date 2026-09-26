@@ -473,6 +473,7 @@ export function initMotion() {
           const lift = [content, button].filter((el): el is HTMLElement =>
             Boolean(el),
           );
+          const burst = { value: 0 };
           const tl = gsap.timeline({
             scrollTrigger: {
               trigger: recruitHero,
@@ -490,6 +491,30 @@ export function initMotion() {
               { y: -200, autoAlpha: 0, scale: 0.94, ease: 'none', duration: 1 },
               0,
             );
+          // Drive the particle field (Hero-mirroring) so motes rush the camera
+          // as the plate zooms.
+          tl.to(
+            burst,
+            {
+              value: 1,
+              ease: 'none',
+              duration: 1,
+              onUpdate: () => {
+                const particlesApi = particles();
+                if (particlesApi) particlesApi.burst = burst.value;
+              },
+            },
+            0,
+          );
+          ScrollTrigger.create({
+            trigger: recruitHero,
+            start: 'top top',
+            end: '+=110%',
+            onLeaveBack: () => {
+              const particlesApi = particles();
+              if (particlesApi) particlesApi.burst = 0;
+            },
+          });
         }
       }
 
