@@ -447,5 +447,13 @@ Section.png` (5760×3376 → 1440×844). Patch glow terukur: center REF
   di-skip saat `prefers-reduced-motion: reduce` → `verify.mjs` tetap exact.
   User menolak elemen dekoratif tambahan (sigil, ember, aura, indikator/dot) —
   jangan tambah bentuk baru tanpa izin. Checkpoint `checkpoint-pre-hods-magic`.
+- **Perf & robustness pass (26 Sep 2026).** Dari audit home per-section:
+  Batch 1 (`ef4a870`–`147a258`) — Philosophy pause off-screen + `sorcerer-2x`
+  1722→1290w (HP DPR3 1.76→1.32MB), Hero rAF hanya saat terlihat, Projects buang
+  `will-change` permanen, hapus 12 aset mati (336KB). Batch 2 (`6ca5b1e`–`f8ab577`)
+  — rail attract-mode jadi step, fix sudut tilt WhatWeDo (`.pillar-inner`), gate
+  figure Hero. Batch 3 (`090b059`) — Navbar indicator pakai `transform` +
+  rAF-throttle + short-circuit, buang blur 30px menu HP, `inert` latar saat menu
+  terbuka. Tampilan statis tidak berubah; semua gate tetap hijau.
 - TODO: webfont Nasalization, data project asli, tanggal recruitment, halaman
   About Us / Hall of Frames / Partners / Contact, dan lanjutan animasi What We Do.
