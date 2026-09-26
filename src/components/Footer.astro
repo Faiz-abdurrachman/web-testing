@@ -75,15 +75,20 @@ const legal = ['Terms', 'Privacy', 'Cookies'];
     <div class="footer-contact">
       <h2>Contact</h2>
       <ul>
-        <li>Contact Person: +62 8572 -7246-733</li>
-        <li>Email: datasorcerers@gmail.com</li>
+        <li>
+          Contact Person: <a href="tel:+6285727246733">+62 8572 -7246-733</a>
+        </li>
+        <li>
+          Email:{' '}
+          <a href="mailto:datasorcerers@gmail.com">datasorcerers@gmail.com</a>
+        </li>
       </ul>
     </div>
   </div>
   <div class="bottom">
     <hr class="divider" />
     <div class="legal">
-      <p>© DATA SORCERERS 2026. All right reserved</p>
+      <p>© DATA SORCERERS 2026. All rights reserved</p>
       <div class="legal-links">
         {legal.map((label) => (
           <span aria-disabled="true">{label}</span>
@@ -215,6 +220,14 @@ const legal = ['Terms', 'Privacy', 'Cookies'];
     letter-spacing: -0.176px;
     color: #fff;
     white-space: nowrap;
+  }
+  .footer-contact a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .footer-contact a:hover,
+  .footer-contact a:focus-visible {
+    text-decoration: underline;
   }
   .bottom {
     display: flex;
