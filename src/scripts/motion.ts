@@ -390,17 +390,6 @@ export function initMotion() {
       reveal(domains, 'header > *');
       reveal(domains, '.domain-card', { y: 44, stagger: 0.07 });
 
-      // Park the sigil/ember/glow/cloud loops while the section is off-screen.
-      if (domains) {
-        const idle = new IntersectionObserver(
-          ([entry]) =>
-            domains.classList.toggle('is-idle', !entry.isIntersecting),
-          { rootMargin: '240px 0px' },
-        );
-        idle.observe(domains);
-        cleanups.push(() => idle.disconnect());
-      }
-
       const projects = document.querySelector('.projects');
       reveal(projects, '.projects-inner > header > *');
       reveal(projects, '.project-stage', { y: 30 });
