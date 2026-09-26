@@ -125,11 +125,11 @@ const { base = '/hods', suffix = '' } = Astro.props;
         ArrowLeft: rail.scrollLeft - step(),
         ArrowRight: rail.scrollLeft + step(),
         Home: 0,
-        End: rail.scrollWidth,
+        End: rail.scrollWidth - rail.clientWidth,
       };
       if (event.key in positions) {
         event.preventDefault();
-        rail.scrollTo({ left: positions[event.key], behavior: 'instant' });
+        rail.scrollTo({ left: positions[event.key], behavior: 'auto' });
       }
     });
 
@@ -159,124 +159,107 @@ const { base = '/hods', suffix = '' } = Astro.props;
     });
 
     // Attract mode: once the section sits at the viewport centre and the visitor
-    // has been still for a few seconds, the rail drifts on its own (ping-ponging
-    // at either end) so it never reads as a frozen strip. Any interaction —
-    // hover, drag, wheel, touch, keyboard, focus — takes over instantly, and it
-    // stays parked for reduced motion, hidden tabs, or off-centre sections.
-    let hovering = false;
-    let focused = false;
-    let lastInteract = performance.now();
-    let raf = 0;
-    let last = 0;
-    let dir = 1;
-    const SPEED = 0.02; // px per ms (~20px/s)
+    // has been still for a few seconds, the rail advances one card at a time
+    // (smooth-scrolled onto the snap points, ping-ponging at the ends) so it
+    // never reads as a frozen strip. Any interaction — hover, drag, wheel,
+    // touch, keyboard, focus — takes over instantly. Desktop-only (hover + fine
+    // pointer, where an auto-advancing rail reads as alive rather than fighting
+    // a thumb), and parked for reduced motion, hidden tabs or an off-centre
+    // section. Stepping (not a rAF drift) lands on snap points, so there is no
+    // snap-jump when the visitor takes over.
+    if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      let hovering = false;
+      let focused = false;
+      let visible = false;
+      let dir = 1;
+      let timer = 0;
+      const IDLE_MS = 3500;
+      const STEP_MS = 2800;
 
-    const centered = () => {
-      const rect = section.getBoundingClientRect();
-      const middle = innerHeight / 2;
-      return rect.top < middle && rect.bottom > middle;
-    };
-    const reduced = () =>
-      matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const reduced = () =>
+        matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const free = () =>
+        visible && !hovering && !focused && !document.hidden && !reduced();
 
-    const stop = () => {
-      if (raf) cancelAnimationFrame(raf);
-      raf = 0;
-      rail.classList.remove('is-gliding');
-    };
-    const markInteract = () => {
-      lastInteract = performance.now();
-      stop();
-    };
+      const stop = () => {
+        clearTimeout(timer);
+        timer = 0;
+        rail.classList.remove('is-gliding');
+      };
 
-    const tick = (now: number) => {
-      if (!raf) return;
-      const dt = Math.min(now - last, 48);
-      last = now;
-      const max = rail.scrollWidth - rail.clientWidth;
-      if (max <= 1) {
+      const advance = () => {
+        if (!free()) {
+          stop();
+          return;
+        }
+        const card = rail.querySelector('.domain-card');
+        const s =
+          (card?.getBoundingClientRect().width ?? 394) +
+          (parseFloat(getComputedStyle(rail).columnGap) || 0);
+        const maxIndex = Math.max(
+          0,
+          Math.round((rail.scrollWidth - rail.clientWidth) / s),
+        );
+        if (!s || maxIndex <= 0) {
+          stop();
+          return;
+        }
+        let next = Math.round(rail.scrollLeft / s) + dir;
+        if (next > maxIndex) {
+          dir = -1;
+          next = maxIndex - 1;
+        } else if (next < 0) {
+          dir = 1;
+          next = 1;
+        }
+        rail.classList.add('is-gliding');
+        rail.scrollTo({ left: next * s, behavior: 'smooth' });
+        timer = window.setTimeout(advance, STEP_MS);
+      };
+
+      const reset = () => {
         stop();
-        return;
-      }
-      let next = rail.scrollLeft + dir * dt * SPEED;
-      if (next >= max) {
-        next = max;
-        dir = -1;
-      } else if (next <= 0) {
-        next = 0;
-        dir = 1;
-      }
-      rail.scrollLeft = next;
-      raf = requestAnimationFrame(tick);
-    };
+        if (free()) timer = window.setTimeout(advance, IDLE_MS);
+      };
 
-    const start = () => {
-      if (raf || hovering || focused || document.hidden || reduced()) return;
-      if (!centered()) return;
-      const max = rail.scrollWidth - rail.clientWidth;
-      if (max <= 1) return;
-      if (rail.scrollLeft >= max - 1) dir = -1;
-      else if (rail.scrollLeft <= 1) dir = 1;
-      rail.classList.add('is-gliding');
-      last = performance.now();
-      raf = requestAnimationFrame(tick);
-    };
+      // The section is "centred" while it overlaps the middle 10% band of the
+      // viewport — an observer instead of a polling getBoundingClientRect.
+      new IntersectionObserver(
+        ([entry]) => {
+          visible = entry.isIntersecting;
+          if (visible) reset();
+          else stop();
+        },
+        { rootMargin: '-45% 0px -45% 0px' },
+      ).observe(section);
 
-    window.setInterval(() => {
-      if (raf) {
-        if (!centered() || document.hidden || hovering || focused) stop();
-        return;
-      }
-      if (
-        centered() &&
-        !document.hidden &&
-        !hovering &&
-        !focused &&
-        performance.now() - lastInteract > 3500
-      )
-        start();
-    }, 400);
-
-    rail.addEventListener('pointerenter', (event) => {
-      if (event.pointerType !== 'mouse') return;
-      hovering = true;
-      markInteract();
-    });
-    rail.addEventListener('pointerleave', (event) => {
-      if (event.pointerType !== 'mouse') return;
-      hovering = false;
-      lastInteract = performance.now();
-    });
-    ['pointerdown', 'wheel', 'touchstart', 'keydown'].forEach((type) =>
-      rail.addEventListener(type, markInteract, { passive: true }),
-    );
-    rail.addEventListener('focusin', () => {
-      focused = true;
-      markInteract();
-    });
-    rail.addEventListener('focusout', () => {
-      focused = false;
-      lastInteract = performance.now();
-    });
-    rail.addEventListener(
-      'scroll',
-      () => {
-        if (raf) return; // self-driven drift shouldn't reset the timer
-        markInteract();
-      },
-      { passive: true },
-    );
-    addEventListener(
-      'scroll',
-      () => {
-        if (raf && !centered()) stop();
-      },
-      { passive: true },
-    );
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) stop();
-      else lastInteract = performance.now();
-    });
+      rail.addEventListener('pointerenter', (event) => {
+        if (event.pointerType !== 'mouse') return;
+        hovering = true;
+        reset();
+      });
+      rail.addEventListener('pointerleave', (event) => {
+        if (event.pointerType !== 'mouse') return;
+        hovering = false;
+        reset();
+      });
+      ['pointerdown', 'wheel', 'touchstart', 'keydown'].forEach((type) =>
+        rail.addEventListener(type, reset, { passive: true }),
+      );
+      rail.addEventListener('focusin', () => {
+        focused = true;
+        reset();
+      });
+      rail.addEventListener('focusout', () => {
+        focused = false;
+        reset();
+      });
+      document.addEventListener('visibilitychange', reset);
+      matchMedia('(prefers-reduced-motion: reduce)').addEventListener(
+        'change',
+        reset,
+      );
+    }
   });
 </script>
 <style>
@@ -306,7 +289,6 @@ const { base = '/hods', suffix = '' } = Astro.props;
     cursor: grabbing;
   }
   .domain-rail.is-gliding {
-    scroll-snap-type: none;
     cursor: default;
   }
   .domain-rail::-webkit-scrollbar {
