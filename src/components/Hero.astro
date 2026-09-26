@@ -736,40 +736,17 @@ import Button from './Button.astro';
     }
   }
   @media (max-width: 600px) and (min-height: 561px) {
+    /* Fill the LARGE viewport (lvh, a constant unit) so retracting the address bar never leaves a gap under the hero — the "too small / tidak nge-pas" report. Scoped to portrait phones so short landscape stays on 100svh. */
+    .hero {
+      min-height: 100svh;
+      min-height: 100lvh;
+    }
+    /* One rule for every phone: the old per-width buckets were non-monotonic and their object-position pushed the sorcerer right on narrow screens, so 360/375px read as "too small". 72% keeps the character the same share of the screen everywhere; 59% centres it (art centre is ~60.5%). */
     .artwork .art-figure {
       top: auto;
       bottom: 0;
-      height: 74%;
-      object-position: 50.5% bottom;
-    }
-  }
-  @media (min-width: 400px) and (max-width: 600px) and (min-height: 561px) {
-    .artwork .art-figure {
-      height: 70%;
-      object-position: 54% bottom;
-    }
-  }
-  @media (min-width: 381px) and (max-width: 399px) and (min-height: 561px) {
-    .artwork .art-figure {
-      height: 68%;
-      object-position: 52.5% bottom;
-    }
-  }
-  @media (max-width: 360px) and (min-height: 561px) {
-    .artwork .art-figure {
-      height: 64%;
-      object-position: 46% bottom;
-    }
-  }
-  @media (min-width: 341px) and (max-width: 360px) and (min-height: 561px) {
-    .artwork .art-figure {
-      object-position: 47% bottom;
-    }
-  }
-  @media (max-width: 340px) and (min-height: 561px) {
-    .artwork .art-figure {
-      height: 60%;
-      object-position: 38.5% bottom;
+      height: 72%;
+      object-position: 59% bottom;
     }
   }
   @media (max-width: 480px) {

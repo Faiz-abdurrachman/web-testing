@@ -31,10 +31,11 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
   navbar "living HUD", perf What We Do (starfield tile + `perf:audit`).
 - **Pass responsive + performa mobile (25 Sep 2026):** particle Three.js kini
   desktop-only (`min-width: 768px`), navbar HP blur 12px tanpa morph layout 0.9s,
-  hero HP scrim/figur lebih kecil + `min-height: 100svh`, `viewport-fit=cover` +
-  safe-area,
-  prefix `-webkit-background-clip`, chip role tidak lagi menggantung. Detail di
-  `docs/assets.md` §"Mobile responsive + performance pass".
+  scrim hero HP + figur satu aturan `height:72%; object-position:59% bottom`,
+  hero portrait `min-height:100lvh` supaya tidak kekecilan saat address bar
+  sembunyi, `viewport-fit:cover` + safe-area, prefix `-webkit-background-clip`,
+  chip role tidak lagi menggantung. Detail di `docs/assets.md` §"Mobile
+  responsive + performance pass".
 
 ## Baru saja: splash jadi preloader asli
 
@@ -342,16 +343,20 @@ kaki tetap terlihat).
 
 ### Hero portrait: figur statis jangan menutupi CTA / mepet tepi kanan
 
-Di HP portrait (≤600px), `figure.webp` dijangkar bawah lewat `@media
-(max-width: 600px) and (min-height: 561px)` (`.artwork .art-figure { top:auto;
-bottom:0; height:74%; object-position:50.5% bottom }`). Tier per-lebar lalu
-menjaga cutout tetap punya celah dari tombol stacked tanpa menempel tepi kanan:
-`400–600px` → `height:70%; 54% bottom`; `381–399px` → `height:68%; 52.5%`;
-`≤360px` → `height:64%` (`341–360px` `47%`, `≤340px` `46%`); `≤340px` →
-`height:60%`. Selector wajib
+Di HP portrait (≤600px, tinggi >560px), `figure.webp` dijangkar bawah lewat
+`@media (max-width: 600px) and (min-height: 561px)`
+(`.artwork .art-figure { top:auto; bottom:0; height:72%;
+object-position:59% bottom }`). Dulu ada tier tinggi per-lebar (60/64/74/68/70%)
+yang **non-monoton** (lebar 361–380px jatuh ke default 74%) dan `object-position`
+menarik karakter ke kanan → HP 360/375px kelihatan "kekecilan". Karena pusat
+cutout `figure.webp` ada di ~60.5% sumber, satu `59% bottom` menaruh karakter di
+~62% lebar layar konsisten dan `height:72%` menjaga porsinya tetap terhadap
+viewport. Blok yang sama juga mengganti hero ke `min-height:100lvh` (unit
+konstan) supaya address bar yang menyembunyikan diri tidak menyisakan celah di
+bawah hero — landscape pendek tetap `100svh`. Selector wajib
 `.artwork .art-figure` (0,2,0) supaya menang atas `.artwork :is(img,video)`
-(0,1,1). Terukur reduced-motion: 412×915 figur x 218–366 (celah 10px, margin
-kanan 46px); 320/360/390/430/540/580 overlap 0 & utuh.
+(0,1,1). Terukur reduced-motion: 320/360/375/390/412/480 overlap 0, karakter
+~36% tinggi layar di ~62% lebar, utuh.
 
 ### Hero video animasi kepotong di 601–~730px (karakter jangan keluar frame)
 
@@ -392,8 +397,9 @@ Keluhan: heading di HP bukan Nasalization (lisensi — jangan diakali, lihat
 - Navbar: `backdrop-filter` hanya saat `.is-scrolled::before` (tak ada layer blur
   di atas); `≤760px` blur 12px tanpa saturate/brightness dan morph jadi instant
   (bukan transisi layout 0.9s).
-- Hero HP: scrim dua arah + `text-shadow` + figur lebih kecil biar copy kebaca di
-  320–390; tetap `min-height: 100svh`.
+- Hero HP: scrim dua arah + `text-shadow` + figur satu aturan (`height:72%`,
+  `object-position:59% bottom`) biar copy kebaca di 320–390 tanpa bikin karakter
+  kecil/geser; hero portrait `min-height:100lvh` supaya selalu mengisi layar.
 - Global: `viewport-fit=cover`, `env(safe-area-inset-top)` (navbar + halaman
   detail), prefix `-webkit-background-clip: text` di semua heading gradient.
 - `RoleDetail`: separator chip dibungkus `.chip` biar titik tidak menggantung

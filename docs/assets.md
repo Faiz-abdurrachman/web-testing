@@ -182,16 +182,20 @@ The hero art is no longer one flattened image. It is split into two full-frame
   322px vs a 320px viewport (2px overflow) but the feet remain visible.
 - **Portrait phones (width ≤ 600px, height > 560px)**: the static `figure.webp` is
   bottom-anchored via `@media (max-width: 600px) and (min-height: 561px)`
-  (`.artwork .art-figure { top: auto; bottom: 0; height: 74%; object-position:
-50.5% bottom }`). Width-scoped tiers then keep the cutout clear of the stacked
-  CTA pills without pressing the right edge: `400–600px` → `height: 70%;
-object-position: 54% bottom`; `381–399px` → `height: 68%; 52.5% bottom`;
-  `≤360px` → `height: 64%` (`341–360px` keeps `47% bottom`, `≤340px` → `46%`);
-  `≤340px` → `height: 60%`. The
+  (`.artwork .art-figure { top: auto; bottom: 0; height: 72%; object-position:
+59% bottom }`). The earlier width-scoped height buckets (60/64/74/68/70%) were
+  non-monotonic — 361–380px fell through to the 74% default — and their
+  `object-position` pulled the sorcerer to the right on narrow screens, so
+  360/375px phones read as "kekecilan". `figure.webp`'s cutout centre is at
+  ~60.5% of the source, so a single `59% bottom` keeps the character at ~62% of
+  the screen on every width and `height: 72%` keeps it the same share of the
+  viewport. The same media block also swaps the hero to `min-height: 100lvh`
+  (constant unit) so retracting the address bar never leaves a gap below the
+  hero; short landscape keeps `100svh`. The
   selector must be `.artwork .art-figure` (specificity 0,2,0) to beat the base
   `.artwork :is(img, video)` (0,1,1). Measured in reduced-motion Chromium:
-  412×915 figure x 218–366 (10 px clear of the buttons, 46 px right margin);
-  320/360/390/430/540/580 all zero overlap and fully in frame.
+  320/360/375/390/412/480 all zero overlap, character ~36% of screen height at
+  ~62% width, fully in frame.
 - **Animated video layer (`public/images/hero/hero-bg.webm` + `hero-bg.mp4`,
   1582 × 992, 5 s / 120 frames, 24 fps)**: a full-scene clip (nebula, planet,
   water and the sorcerer) that fades in over the static stack at `≥601 px`
@@ -1132,10 +1136,12 @@ figure's three `repeat: -1` idle tweens ran forever.
 
 - `Hero.astro`: particles gated to `(min-width: 768px)` (matching the pinned
   scroll sequence in `motion.ts`); `≤600px` gets a stronger two-axis scrim, a
-  `text-shadow` on the body copy, and smaller `object-fit` figure heights
-  (74/70/68/64/60% by width bucket) so the copy stays legible over the sorcerer
-  at 320–390 without hiding the art. Mobile uses `min-height: 100svh` (stable,
-  not `dvh` — see the follow-up below).
+  `text-shadow` on the body copy, and a single bottom-anchored figure rule
+  (`height: 72%; object-position: 59% bottom` — see §Portrait phones above) so
+  the copy stays legible over the sorcerer at 320–390 without hiding the art.
+  Mobile uses `min-height: 100svh` for layout and `100lvh` on portrait phones so
+  the section still fills when the address bar retracts (stable, not `dvh` — see
+  the follow-up below).
 - `motion.ts`: `animateFigure` takes `richIdle` (desktop = bob + sway +
   breathing; mobile = bob only) and pauses its tweens through an
   `IntersectionObserver` while the hero is off-screen.
