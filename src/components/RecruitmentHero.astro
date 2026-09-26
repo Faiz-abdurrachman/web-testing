@@ -122,14 +122,18 @@ import Button from './Button.astro';
     }
   }
 
-  // Particle field over the plate, shared with the home hero. Mounts only at
-  // >=768px with motion allowed; on phones the static/video plate stays.
+  // Ember field over the plate — the shared particle module on its `embers`
+  // preset (rising, warmer, no camera rush) so this hero reads differently from
+  // the home one. Mounts only at >=768px with motion allowed; below that, and
+  // under reduced motion, the static/video plate stays.
   const canvas = document.querySelector<HTMLCanvasElement>(
     '.recruitment-hero .hero-canvas',
   );
   const host = canvas?.parentElement;
   if (canvas && host)
-    void mountHeroParticles(canvas, host, preload).catch(() => {});
+    void mountHeroParticles(canvas, host, preload, { preset: 'embers' }).catch(
+      () => {},
+    );
 </script>
 <style>
   .recruitment-hero {

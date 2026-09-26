@@ -491,8 +491,8 @@ export function initMotion() {
               { y: -200, autoAlpha: 0, scale: 0.94, ease: 'none', duration: 1 },
               0,
             );
-          // Drive the particle field (Hero-mirroring) so motes rush the camera
-          // as the plate zooms.
+          // Nudge the ember field so the sparks rise a touch faster as the
+          // plate zooms (the preset maps burst to speed only — no camera rush).
           tl.to(
             burst,
             {

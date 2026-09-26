@@ -750,13 +750,17 @@ generate-recruitment-hero-video.mjs` → `public/images/recruitment/`
     pin.
   - **Particle field (Phase 3, 26 Sep 2026):** the home hero's Three.js field is
     now a shared module `src/scripts/hero-particles.ts`
-    (`mountHeroParticles(canvas, host, preload)`), mounted by both `Hero.astro`
-    and `RecruitmentHero.astro` (`.hero-canvas` at `z-index: 0`; `.hero-content`
-    and the CTA sit above at `z-index: 1`). The pinned timeline scrubs
-    `window.__heroParticles.burst` 0→1 (with an `onLeaveBack` reset), so the
-    field rushes the camera as the plate zooms. Desktop-only (`≥768px`), inert
-    under reduced motion, paused off-screen; a WebGL/`three` failure is swallowed
-    so the static art stays.
+    (`mountHeroParticles(canvas, host, preload, { preset })`), mounted by both
+    `Hero.astro` and `RecruitmentHero.astro` (`.hero-canvas` at `z-index: 0`;
+    `.hero-content` and the CTA sit above at `z-index: 1`). Two presets keep the
+    heroes distinct: **`motes`** (home, default) is the original 700-spec field
+    that drifts and rushes the camera; **`embers`** (recruitment, 26 Sep 2026) is
+    220 larger, warmer sparks that rise from the horizon with a gentle sway and
+    fade in/out near the floor/ceiling, mapping `burst` to a mild speed-up only
+    (no camera rush, no size morph). The pinned timeline scrubs
+    `window.__heroParticles.burst` 0→1 (with an `onLeaveBack` reset). Desktop-only
+    (`≥768px`), inert under reduced motion, paused off-screen; a WebGL/`three`
+    failure is swallowed so the static art stays.
 - Navbar: the shared `Navbar.astro` with `active="Recruitment"`. The active
   underline is the Figma 106px gradient
   `linear-gradient(163deg, #9b7bff, #ede8ff, #9b7bff)`; the Home underline keeps

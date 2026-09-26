@@ -2,17 +2,66 @@
 // Dynamically imported so it stays out of the initial bundle; the caller passes
 // the canvas plus the host whose box the renderer fills (the hero section). The
 // scroll sequence in `motion.ts` drives `window.__heroParticles.burst` so the
-// field rushes toward the viewer as the hero zooms in.
+// field reacts as the hero zooms in.
+//
+// Two presets keep the heroes from looking identical while sharing one import:
+//
+// - `motes` (home): the original field. Slow-drifting specks across the whole
+//   plate that rush toward the camera on the pinned zoom — the "sorcery" read.
+// - `embers` (recruitment): fewer, larger, warmer sparks that rise from the
+//   horizon and sway, fading in/out at the edges. A quieter "rise / next
+//   chapter" read that does not compete with the planet's own stars or the CTA.
 //
 // It only runs at the same `min-width: 768px` breakpoint as those pinned
 // sequences — on phones the continuous WebGL render competed with scrolling and
 // caused jank, so mobile keeps the static art instead. Under reduced motion
 // nothing mounts, keeping `verify.mjs` pixel-exact.
+export type ParticlePreset = 'motes' | 'embers';
+
+const PRESETS = {
+  motes: {
+    count: 700,
+    size: 0.14,
+    opacity: 0.85,
+    spread: [20, 11, 8],
+    speed: [0.002, 0.01],
+    palette: [0x9b7bff, 0xd9c7ff, 0xffffff, 0x6c3bff],
+    sway: 0,
+    fadeTop: false,
+    rotationDrift: 0.12,
+    pointerRotation: [0.25, 0.18],
+    burstSpeed: 7,
+    burstSize: 0.16,
+    burstOpacity: -0.15,
+    burstCamera: 4.5,
+    burstRotation: 1.1,
+  },
+  embers: {
+    count: 220,
+    size: 0.24,
+    opacity: 0.5,
+    spread: [18, 11, 6],
+    speed: [0.004, 0.013],
+    palette: [0xffffff, 0xe8dcff, 0xcdb8ff, 0x9b7bff],
+    sway: 0.16,
+    fadeTop: true,
+    rotationDrift: 0.05,
+    pointerRotation: [0.08, 0.05],
+    burstSpeed: 1.8,
+    burstSize: 0,
+    burstOpacity: 0,
+    burstCamera: 0,
+    burstRotation: 0.15,
+  },
+} as const;
+
 export async function mountHeroParticles(
   canvas: HTMLCanvasElement,
   host: HTMLElement,
   preload?: Promise<unknown>[],
+  options: { preset?: ParticlePreset } = {},
 ): Promise<void> {
+  const config = PRESETS[options.preset ?? 'motes'];
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const allowed = window.matchMedia('(min-width: 768px)').matches;
   if (reduce || !allowed) return;
@@ -32,21 +81,23 @@ export async function mountHeroParticles(
   const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
   camera.position.z = 9;
 
-  const count = 700;
+  const count = config.count;
+  const halfY = config.spread[1] / 2;
   const positions = new Float32Array(count * 3);
   const colors = new Float32Array(count * 3);
+  const baseX = new Float32Array(count);
+  const phases = new Float32Array(count);
   const speeds = new Float32Array(count);
-  const palette = [
-    new THREE.Color(0x9b7bff),
-    new THREE.Color(0xd9c7ff),
-    new THREE.Color(0xffffff),
-    new THREE.Color(0x6c3bff),
-  ];
+  const palette = config.palette.map((hex) => new THREE.Color(hex));
   for (let i = 0; i < count; i++) {
-    positions[i * 3] = (Math.random() - 0.5) * 20;
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 11;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 8;
-    speeds[i] = 0.002 + Math.random() * 0.008;
+    const x = (Math.random() - 0.5) * config.spread[0];
+    positions[i * 3] = x;
+    positions[i * 3 + 1] = (Math.random() - 0.5) * config.spread[1];
+    positions[i * 3 + 2] = (Math.random() - 0.5) * config.spread[2];
+    baseX[i] = x;
+    phases[i] = Math.random() * Math.PI * 2;
+    speeds[i] =
+      config.speed[0] + Math.random() * (config.speed[1] - config.speed[0]);
     const color = palette[i % palette.length];
     colors[i * 3] = color.r;
     colors[i * 3 + 1] = color.g;
@@ -55,6 +106,7 @@ export async function mountHeroParticles(
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
   geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+  const baseColors = config.fadeTop ? colors.slice() : null;
 
   // A soft radial sprite so points read as glowing motes, not squares.
   const sprite = (() => {
@@ -80,11 +132,11 @@ export async function mountHeroParticles(
   })();
 
   const material = new THREE.PointsMaterial({
-    size: 0.14,
+    size: config.size,
     map: sprite,
     vertexColors: true,
     transparent: true,
-    opacity: 0.85,
+    opacity: config.opacity,
     depthWrite: false,
     blending: THREE.AdditiveBlending,
   });
@@ -134,19 +186,44 @@ export async function mountHeroParticles(
   const tick = () => {
     if (!running) return;
     const t = performance.now() / 1000;
-    const boost = 1 + state.burst * 7;
+    const boost = 1 + state.burst * config.burstSpeed;
     const attr = geometry.attributes.position;
     for (let i = 0; i < count; i++) {
       const y = attr.getY(i) + speeds[i] * boost;
-      attr.setY(i, y > 5.5 ? -5.5 : y);
+      attr.setY(i, y > halfY ? -halfY : y);
+      if (config.sway > 0)
+        attr.setX(i, baseX[i] + Math.sin(t * 0.6 + phases[i]) * config.sway);
     }
     attr.needsUpdate = true;
+
+    // Fade embers in near the floor and out near the ceiling so they neither
+    // pop into existence nor pile up behind the headline.
+    if (baseColors) {
+      const colorAttr = geometry.attributes.color;
+      for (let i = 0; i < count; i++) {
+        const y = attr.getY(i);
+        const fade = Math.max(
+          0,
+          Math.min(1, Math.min((halfY - y) / 1.6, (y + halfY) / 1.6)),
+        );
+        colorAttr.setXYZ(
+          i,
+          baseColors[i * 3] * fade,
+          baseColors[i * 3 + 1] * fade,
+          baseColors[i * 3 + 2] * fade,
+        );
+      }
+      colorAttr.needsUpdate = true;
+    }
+
     points.rotation.y =
-      Math.sin(t * 0.1) * 0.12 + pointerX * 0.25 + state.burst * 1.1;
-    points.rotation.x = pointerY * 0.18;
-    material.size = 0.14 + state.burst * 0.16;
-    material.opacity = 0.85 - state.burst * 0.15;
-    camera.position.z = 9 - state.burst * 4.5;
+      Math.sin(t * 0.1) * config.rotationDrift +
+      pointerX * config.pointerRotation[0] +
+      state.burst * config.burstRotation;
+    points.rotation.x = pointerY * config.pointerRotation[1];
+    material.size = config.size + state.burst * config.burstSize;
+    material.opacity = config.opacity + state.burst * config.burstOpacity;
+    camera.position.z = 9 - state.burst * config.burstCamera;
     renderer.render(scene, camera);
     requestAnimationFrame(tick);
   };
