@@ -412,6 +412,87 @@ export function initMotion() {
         }
       }
 
+      // Recruitment hero: a quieter echo of the home hero. The copy settles in
+      // once the splash hands over, the plate drifts with the pointer, then a
+      // pinned scroll scrubs a zoom while the next section rises over it.
+      // Phones/tablets (<768px) keep only the video plate — no pin, no zoom.
+      const recruitHero =
+        document.querySelector<HTMLElement>('.recruitment-hero');
+      if (recruitHero) {
+        const artwork = recruitHero.querySelector<HTMLElement>('.artwork');
+        const content = recruitHero.querySelector<HTMLElement>('.hero-content');
+        const button = recruitHero.querySelector<HTMLElement>('.button');
+
+        // Entrance, skipped on warm navigation so a Home <-> Recruitment switch
+        // does not replay it. Held hidden until the splash lifts so the reveal
+        // is actually seen instead of finishing behind the overlay.
+        if (!warm && content) {
+          const bits = [
+            ...content.querySelectorAll<HTMLElement>('h1 span, p'),
+            ...(button ? [button] : []),
+          ];
+          gsap.set(bits, { autoAlpha: 0, y: 34 });
+          const play = () =>
+            gsap.to(bits, {
+              autoAlpha: 1,
+              y: 0,
+              duration: 0.8,
+              ease: 'power3.out',
+              stagger: 0.09,
+              clearProps: 'transform,opacity,visibility',
+            });
+          if (document.documentElement.classList.contains('splash-done'))
+            play();
+          else window.addEventListener('ds:splash-done', play, { once: true });
+        }
+
+        if (artwork && finePointer()) {
+          // Overscan so the pointer travel never exposes a hard edge; the pinned
+          // scrub tween below starts from this scale.
+          gsap.set(artwork, { scale: 1.04 });
+          const xTo = gsap.quickTo(artwork, 'xPercent', {
+            duration: 0.6,
+            ease: 'power3',
+          });
+          const yTo = gsap.quickTo(artwork, 'yPercent', {
+            duration: 0.6,
+            ease: 'power3',
+          });
+          const onMove = (event: MouseEvent) => {
+            const rect = recruitHero.getBoundingClientRect();
+            xTo(((event.clientX - rect.left) / rect.width - 0.5) * -3);
+            yTo(((event.clientY - rect.top) / rect.height - 0.5) * -3);
+          };
+          recruitHero.addEventListener('mousemove', onMove);
+          cleanups.push(() =>
+            recruitHero.removeEventListener('mousemove', onMove),
+          );
+        }
+
+        if (desktop && artwork) {
+          const lift = [content, button].filter((el): el is HTMLElement =>
+            Boolean(el),
+          );
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: recruitHero,
+              start: 'top top',
+              end: '+=110%',
+              scrub: 1,
+              pin: true,
+              anticipatePin: 1,
+            },
+          });
+          tl.to(artwork, { scale: 1.35, ease: 'none', duration: 1 }, 0);
+          if (lift.length)
+            tl.to(
+              lift,
+              { y: -200, autoAlpha: 0, scale: 0.94, ease: 'none', duration: 1 },
+              0,
+            );
+        }
+      }
+
       // Scroll reveals per section.
       const philosophy = document.querySelector('.philosophy');
       reveal(philosophy, '.heading > *');

@@ -228,6 +228,10 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   sway `rotation`, breathing `scale`) + entrance + reaksi pointer, plus partikel
   Three.js (700 titik, burst via `window.__heroParticles`) lazy di `Hero.astro`;
   plus scroll reveal, parallax pointer, 3D tilt, magnetic button, cursor glow.
+  **Hero recruitment ikut motion (Phase 2, 26 Sep 2026):** `/recruitment` kini
+  include `<Motion />`; blok `.recruitment-hero` = entrance copy (tunggu
+  `ds:splash-done`, skip `nav-warm`) + pointer parallax + pinned zoom ≥768px
+  (`scale 1.04→1.35`, copy naik, `end +=110%`).
   Catatan: `y` (scroll) vs `yPercent` (idle) komposibel di GSAP. `gsap` masuk dependencies
   (disetujui); `three` sudah ada. Under reduce semuanya inert →
   `verify.mjs`/`responsive-audit.mjs` tetap bersih.

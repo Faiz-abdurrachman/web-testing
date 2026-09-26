@@ -62,6 +62,16 @@ hero-bg.webm` (0.51 MB) + `hero-bg.mp4` (1.32 MB) + `hero-poster.webp` (48 KB),
   `footer-mobile.webp` (1170×3450, q84, 86 KB) — langit bintang + landscape
   di-anchor bawah (`object-position: center bottom`). Desktop tetap landscape
   native, geometri/diff `verify.mjs` tidak berubah.
+- **Hero recruitment jadi motion penuh (26 Sep 2026, Phase 2):** halaman
+  `/recruitment` sekarang meng-include `<Motion />` (sebelumnya hanya home, jadi
+  GSAP tidak jalan di sana sama sekali). Di `src/scripts/motion.ts` ditambah blok
+  `.recruitment-hero`: **entrance** copy/CTA (tunggu `ds:splash-done`, skip saat
+  `nav-warm`), **pointer parallax** plate (`scale 1.04` overscan + `xPercent`/
+  `yPercent` ±1.5%), dan **pinned scroll zoom** ≥768px (`end +=110%`, `scrub 1`,
+  `scale 1.04→1.35`, copy naik `y:-200` + fade). Inert di reduce → `verify.mjs`
+  tetap 866/geometri. Pin pakai `scale` di `.artwork`; overscan 1.04 bikin art
+  tetap nutup viewport 903 selagi section-nya cuma 866 (tidak ada seam). Mobile
+  <768px tanpa pin. Phase 3 (3D/particles) di-skip dulu.
 - **Pass responsive + performa mobile (25 Sep 2026):** particle Three.js kini
   desktop-only (`min-width: 768px`), navbar HP blur 12px tanpa morph layout 0.9s,
   scrim hero HP + figur satu aturan `height:72%; object-position:59% bottom`,

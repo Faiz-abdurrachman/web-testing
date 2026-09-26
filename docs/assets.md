@@ -726,6 +726,22 @@ generate-recruitment-hero-video.mjs` → `public/images/recruitment/`
     pauses off-screen (`IntersectionObserver`) and on `visibilitychange`.
   - Poster/loop diff vs reference: composition is close (planet rim ~5% higher
     than the static render).
+- **Hero motion (Phase 2, 26 Sep 2026):** `src/pages/recruitment.astro` now
+  includes `<Motion />`, and `src/scripts/motion.ts` gained a `.recruitment-hero`
+  block (inside the same `gsap.matchMedia`, so it is inert under reduced motion →
+  the `verify.mjs` geometry/PNG diff is untouched). Three layers, mirroring the
+  home hero at a smaller scale:
+  - **Entrance:** `h1 span`, `p` and the CTA are held at `autoAlpha: 0, y: 34`
+    and revealed (`power3.out`, stagger 0.09) once `ds:splash-done` fires;
+    skipped on warm (`nav-warm`) navigation.
+  - **Pointer parallax:** `.artwork` gets a 1.04 overscan, then `quickTo`
+    `xPercent`/`yPercent` ±1.5% on fine pointers.
+  - **Pinned scroll zoom (≥768px):** `start: 'top top'`, `end: '+=110%'`,
+    `scrub: 1`, `pin: true` — the plate scrubs `scale 1.04 → 1.35` while the
+    `.hero-content` and CTA lift `y: -200`, fade out and scale to 0.94. The
+    1.04 overscan means the scaled art still covers the viewport below the
+    866px section, so no seam shows while pinned. Phones/tablets (<768px) get no
+    pin.
 - Navbar: the shared `Navbar.astro` with `active="Recruitment"`. The active
   underline is the Figma 106px gradient
   `linear-gradient(163deg, #9b7bff, #ede8ff, #9b7bff)`; the Home underline keeps
