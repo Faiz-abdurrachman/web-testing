@@ -916,6 +916,11 @@ z-index: -1`, so nothing about the section geometry changes.
 
 ## Recruitment page — Available Roles
 
+> The **card grid** described here (six `1280 × 77` rows) is historical: it was
+> replaced by the 23 September then the **26 September 2026** card design — see
+> "Available Roles — card redesign (26 September 2026)" below. The heading, copy,
+> frame and section position below are still current.
+
 - Figma node: `661:1510`; reference
   `assets/assets recruitment page/available roles section/Available Roles
 Section.png`, 5760 × 3640 (1440 × 910 at 4×). The section sits at homepage
@@ -1157,49 +1162,54 @@ fonts and unrelated section geometry are retained.
   card/back navigation, rail clipping geometry, footer alignment, hero viewport
   bounds and screenshots at DPR 1/2. Output: `artifacts/feedback/`.
 
-## Available Roles — card redesign (23 September 2026)
+## Available Roles — card redesign (26 September 2026)
 
-The mentor supplied new per-role card artwork that supersedes the earlier
-Available Roles preview card. The design is adopted, but its baked-in Figma
-typography is **not** used: the text is rebuilt in HTML/CSS with the site fonts.
+The card grid was redesigned from Figma `1184:1475` (single card) and `1218:1385`
+(6-card container), reference PNGs
+`assets/assets recruitment page/available roles/Card Role {1..6}.png`
+(1652 × 956, transparent corners, ratio ≈ 1.728:1). This supersedes the
+23 September gold-frame/sparkle card (kept below for provenance).
+
+- Card: `#2a2a2c` (= `rgba(255,255,255,.15)` over the `#050507` section), a
+  violet glow art anchored bottom-right, a 1px gradient ring, `border-radius 20px`
+  (at the 413px reference width), `padding 18px 28px`, `aspect-ratio: 1652 / 956`.
+- Content is a flex column: title (Manrope 700, 26 / 39, `#fff`, Title Case from
+  `domains.ts`) → tagline (`roles.ts` `tagline`, Manrope 400, 16 / 24, `#ede8ff`,
+  3 lines) → divider (`linear-gradient(90deg, #fff 0 50%, transparent)`, 0.5px) →
+  `View Details` (Manrope 500, 16 / 32, `#fff`) + the Figma
+  `basil:arrow-right-solid` (20 × 20, inlined SVG). Grid is **3 / 2 / 1** columns
+  with `gap 40px 20px`; 3 × 413.33 + 2 × 20 = 1280, matching the reference width.
+- Every inner metric is a `cqw` of the card (`container-type: inline-size` +
+  `aspect-ratio`) so the whole card scales with the column width.
+- The only extracted asset is the glow:
+  `public/images/recruitment/role-glow.webp` (413 × 239, 8 KB). It is derived from
+  `Card Role 1.png` — base `rgb(42,42,44)` subtracted, text bands vertically
+  inpainted, then box-downscaled (mitchell). Composited over the CSS base it
+  reproduces the reference at **MAE ≈ 2.5/255** (excluding text). No PNG is
+  flattened into the UI: title, tagline, divider, ring and arrow are HTML/CSS.
+- The ring gradient angle is `150deg`, not the Figma-exported `135deg`: a true CSS
+  `135deg` on the 413 × 239 box shifts the mid-edge tone away from the PNG, while
+  `150deg` reproduces the symmetric mid-edges measured in the reference.
+- The tagline is deliberately shorter than the detail page's `about` and is
+  written to wrap to three lines. Titles follow `domains.ts` Title Case.
+- Verification: `scripts/verify.mjs` asserts the section/list/row geometry
+  (section `851.375`, list `518.375`, rows `413.33 × 239.19`) plus the hrefs, text
+  containment and card-content overflow from 320–1920px. There is no PNG pixel
+  diff for the section (the card text is rebuilt); `role-glow.webp` is validated
+  separately at MAE 2.5 against the reference crop.
+
+## Available Roles — card redesign (23 September 2026, superseded)
+
+The mentor supplied per-role card artwork that superseded the earlier
+Available Roles preview card. Its baked-in Figma typography was **not** used: the
+text was rebuilt in HTML/CSS with the site fonts.
 
 - Sources: `assets/card baru/{data intelligence,core ai,language,vision,product,growth}.png`,
   1448 × 1086 canvas with the card alpha-bbox ≈ 1358 × 797 (ratio ≈ 1.70:1).
   Supplied as a per-page reference group, not served.
-- Measured from the PNGs (card width 1350):
-  - corner radius ≈ 46px ≈ 3.4% of the card width;
-  - a **gold gradient frame inset** ≈ 16px (≈1.2% of width) with a ~4px stroke —
-    brighter at the top, rgb(248,212,121), fading to rgb(150,110,65) lower;
-  - a **4-point sparkle** at each corner (≈40 × 50px), a white core with a warm
-    gold glow, ≈20–30px inside the corner;
-  - card fill is a dark violet gradient (top rgb(41,30,47) → bottom rgb(23,16,27))
-    over a soft violet glow.
-- The sparkle is the only extracted asset: `public/images/recruitment/card-sparkle.svg`
-  (decorative vector). Border, fill, chips and text are HTML/CSS; the PNG is never
-  flattened into the UI.
-- Layout follows the supplied card fully (number, title, summary, chips,
-  `View role`) with the grid kept at **3 / 2 / 1** columns. The card is a fixed
-  `aspect-ratio: 1350 / 795` with `container-type: inline-size`, and every inner
-  metric is expressed in `cqw`, so the whole composition scales with the column
-  width exactly like the reference. Positions (in `cqw`): number `top 7.85 /
-left 7.41`, title `top 14.37`, summary `top 23.85 / width 56.2`, chips
-  `top 38.52`, `View role` `top 51.04` (icon at the content-left, label at
-  `left 13.6`). Chips are parenthesised labels, matching the reference, not pills.
-- The only intentional deviation is the **typeface**: the reference uses the
-  Figma font, which is replaced with the site fonts (title Manrope 700, body
-  Manrope). Because glyph metrics differ, text widths and line breaks are not
-  pixel-identical; the summary is clamped to the reference's three lines.
-- Titles are shown in the site's **Title Case** (`domains.ts`, e.g.
-  "Core AI & Engineering") instead of the reference's all-caps, and the card
-  fill/glow and title colour are tinted violet (`#6c3bff` / `#9b7bff` /
-  `#ede8ff`) so the card sits with the rest of the site palette.
-- Behaviour is proportional at **all** breakpoints (chosen option): on phones the
-  card is faithful to the reference but the type is small. This is a deliberate
-  trade-off, not a bug.
-- Verification: `scripts/verify.mjs` asserts the new section/list/card geometry
-  (section `840.65625`, list `507.65625`; all cards `241.828125` high) and checks
-  text containment from 320–1920px. There is no PNG pixel diff for this section
-  because the supplied card text is intentionally replaced.
+- The only extracted asset was `public/images/recruitment/card-sparkle.svg`,
+  removed with the 26 September redesign. Border, fill, chips and text were
+  HTML/CSS; the PNG was never flattened into the UI.
 
 ## Hero mobile fluid scale (23 September 2026)
 

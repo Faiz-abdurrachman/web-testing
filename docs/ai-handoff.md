@@ -36,6 +36,17 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
   **AV1 crf34** (0.72 MB) + `hero-poster.webp` frame 0 (74 KB). Grade tanpa
   koreksi ("pakai apa adanya"). Gating ≥601px, dan fallback statis tak berubah
   (reduce/≤600px tetap `background.webp` + `figure.webp`; verify aman).
+- **Available Roles cards redesign (26 Sep 2026):** kartu diganti dari Figma
+  `1184:1475` / `1218:1385` (ref `assets/assets recruitment page/available roles/
+Card Role *.png`, 1652×956). Base `#2a2a2c`, glow violet kanan-bawah
+  (`public/images/recruitment/role-glow.webp`, diekstrak dari `Card Role 1.png`,
+  MAE ≈ 2.5), ring gradient **`150deg`** (bukan `135deg` Figma — supaya mid-edge
+  cocok dengan PNG), radius `20px`, `aspect-ratio 1652/956`, semua ukuran `cqw`.
+  Isi: judul Title Case (`domains.ts`) → tagline baru `roles.ts` `tagline` →
+  divider gradient → `View Details` + panah `basil:arrow-right-solid` (inline).
+  Sparkle, nomor `01 / OPEN ROLE`, chip, dan frame emas **dibuang**. Grid 3/2/1
+  `gap 40px 20px`. Geometri `verify.mjs` kini section `851.375`, list `518.375`,
+  kartu `413.33 × 239.19`, plus cek overflow konten kartu 320–1920px.
 - Branch `main`, fitur homepage + Recruitment + role detail + HoDS detail sudah
   jadi. Motion GSAP + Three.js **aktif** (`src/components/Motion.astro` →
   `src/scripts/motion.ts`).

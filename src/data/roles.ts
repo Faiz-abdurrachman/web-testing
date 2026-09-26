@@ -1,6 +1,9 @@
 export interface RoleDetail {
   id: string;
   title: string;
+  // Short card tagline for the Available Roles grid (Figma node 1218:1385),
+  // deliberately different from `about`, which the detail page renders.
+  tagline: string;
   chips: string[];
   deadline: string;
   about: string;
@@ -25,6 +28,8 @@ export const roles: RoleDetail[] = [
   {
     id: 'data',
     title: 'DATA INTELLIGENCE',
+    tagline:
+      'Transforming raw data into meaningful insights and building a solid analytical infrastructure for AI development.',
     chips: [
       'Data Science',
       'Data Analytics',
@@ -48,6 +53,8 @@ export const roles: RoleDetail[] = [
   {
     id: 'core',
     title: 'CORE AI & ENGINEERING',
+    tagline:
+      'Designing, training, and optimizing Machine Learning algorithms into functional, deploy-ready AI systems.',
     chips: ['Machine Learning', 'Deep Learning', 'AI Engineering', 'MLOps'],
     deadline: 'Deadline: 20 Oktober 2026',
     about:
@@ -64,6 +71,8 @@ export const roles: RoleDetail[] = [
   {
     id: 'language',
     title: 'LANGUAGE & REASONING',
+    tagline:
+      'Exploring NLP and Generative AI to build systems capable of processing human language and performing complex reasoning.',
     chips: ['NLP', 'Generative AI', 'LLM', 'RAG', 'AI Agents', 'Reasoning'],
     deadline: 'Deadline: 20 Oktober 2026',
     about:
@@ -80,6 +89,8 @@ export const roles: RoleDetail[] = [
   {
     id: 'vision',
     title: 'VISION & MULTIMODEL',
+    tagline:
+      'Empowering machines with visual capabilities to detect, understand, and process images, video, and multimodal data.',
     chips: ['Computer Vision', 'OCR', 'Video Understanding', 'Multimodal AI'],
     deadline: 'Deadline: 20 Oktober 2026',
     about:
@@ -96,6 +107,8 @@ export const roles: RoleDetail[] = [
   {
     id: 'product',
     title: 'PRODUCT & SOFTWARE',
+    tagline:
+      'Transforming AI research and experiments into functional, interactive, and user-centric software products.',
     chips: ['UI/UX', 'Front-end', 'Back-end', 'DevOps'],
     deadline: 'Deadline: 20 Oktober 2026',
     about:
@@ -112,6 +125,8 @@ export const roles: RoleDetail[] = [
   {
     id: 'growth',
     title: 'GROWTH & COMMUNITY',
+    tagline:
+      "The driving force behind visual communication, partnerships, and expansion strategies to amplify Data Sorcerers' impact.",
     chips: ['Public Relations', 'Creative', 'Community & Partnership'],
     deadline: 'Deadline: 20 Oktober 2026',
     about:

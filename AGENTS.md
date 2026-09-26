@@ -196,14 +196,16 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   plus hover pill membulat; panah carousel **kiri-kanan di desktop, bawah di
   mobile**; skrip `scripts/responsive-audit.mjs` (14 halaman × 26 lebar) ALL PASS.
   Lihat `git log`.
-- **Available Roles cards (redesign)**: proporsional penuh — `aspect-ratio:
-1350 / 795` + `container-type: inline-size`, semua ukuran dalam `cqw`; border
-  emas inset via CSS `::after` + `mask-composite`; sparkle SVG 4 sudut
-  (`public/images/recruitment/card-sparkle.svg`). Judul memakai **Title Case** dari
-  `domains.ts` (bukan all-caps dari `roles.ts`); latar/teks bertint violet
-  (`#6c3bff`/`#9b7bff`/`#ede8ff`). Chip = label dalam tanda kurung. Geometri
-  di-assert di `verify.mjs` (section `840.65625`, list `507.65625`, kartu
-  `241.828125`). Sumber referensi: `assets/card baru/*.png` (lokal, **untracked**).
+- **Available Roles cards (redesign 26 Sep 2026)**: proporsional penuh —
+  `aspect-ratio: 1652 / 956` + `container-type: inline-size`, semua ukuran `cqw`;
+  base `#2a2a2c`, glow violet kanan-bawah (`public/images/recruitment/role-glow.webp`,
+  diekstrak dari `Card Role 1.png`, MAE ≈ 2.5), ring gradient `150deg` via CSS
+  `::after` + `mask-composite`, divider gradient, `View Details` + panah
+  `basil:arrow-right-solid` inline. Judul **Title Case** dari `domains.ts`; tagline
+  dari `roles.ts` `tagline` (bukan `about`). Grid 3/2/1, `gap 40px 20px`. Geometri
+  di-assert di `verify.mjs` (section `851.375`, list `518.375`, kartu
+  `413.33 × 239.19`). Sumber referensi:
+  `assets/assets recruitment page/available roles/Card Role *.png`.
 - **Hero mobile fluid (≤600px)**: h1/body/gap/padding pakai `clamp()` fluid +
   `min-height: 100svh` dengan konten dipusatkan vertikal;
   judul konsisten 2 baris sampai 320px; tombol home stack ≤480px. **≥601px tidak

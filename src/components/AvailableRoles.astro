@@ -18,65 +18,30 @@ const domainTitle = Object.fromEntries(domains.map((d) => [d.id, d.title]));
     </p>
   </header>
   <div class="role-list">
-    {roles.map((role, index) => (
+    {roles.map((role) => (
       <a class="role-row" href={`/recruitment/roles/${role.id}`}>
         <div class="role-card">
-          <img
-            class="sparkle sparkle-tl"
-            src="/images/recruitment/card-sparkle.svg"
-            alt=""
-            aria-hidden="true"
-            width="44"
-            height="52"
-            loading="lazy"
-            decoding="async"
-          />
-          <img
-            class="sparkle sparkle-tr"
-            src="/images/recruitment/card-sparkle.svg"
-            alt=""
-            aria-hidden="true"
-            width="44"
-            height="52"
-            loading="lazy"
-            decoding="async"
-          />
-          <img
-            class="sparkle sparkle-bl"
-            src="/images/recruitment/card-sparkle.svg"
-            alt=""
-            aria-hidden="true"
-            width="44"
-            height="52"
-            loading="lazy"
-            decoding="async"
-          />
-          <img
-            class="sparkle sparkle-br"
-            src="/images/recruitment/card-sparkle.svg"
-            alt=""
-            aria-hidden="true"
-            width="44"
-            height="52"
-            loading="lazy"
-            decoding="async"
-          />
-          <span class="role-number" aria-hidden="true">
-            0{index + 1} / OPEN ROLE
-          </span>
-          <h3 class="role-name">{domainTitle[role.id] ?? role.title}</h3>
-          <p class="role-summary">{role.about.split(/(?<=\.)\s/)[0]}</p>
-          <ul class="role-tags" aria-label="Areas of focus">
-            {role.chips.slice(0, 3).map((chip) => (
-              <li>{chip}</li>
-            ))}
-          </ul>
-          <span class="role-link">
-            <span class="role-link-mark" aria-hidden="true">
-              ↗
+          <div class="role-head">
+            <h3 class="role-name">{domainTitle[role.id] ?? role.title}</h3>
+            <p class="role-summary">{role.tagline}</p>
+          </div>
+          <div class="role-foot">
+            <span class="role-divider" aria-hidden="true" />
+            <span class="role-link">
+              View Details
+              <svg
+                class="role-link-icon"
+                viewBox="0 0 20 20"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M11.2248 7.10967C11.1144 6.99119 11.0543 6.83449 11.0572 6.67257C11.06 6.51065 11.1256 6.35616 11.2402 6.24165C11.3547 6.12714 11.5092 6.06155 11.6711 6.05869C11.833 6.05583 11.9897 6.11594 12.1082 6.22634L15.4415 9.55967C15.5585 9.67686 15.6243 9.83571 15.6243 10.0013C15.6243 10.167 15.5585 10.3258 15.4415 10.443L12.1082 13.7763C12.051 13.8377 11.982 13.887 11.9053 13.9212C11.8286 13.9553 11.7459 13.9737 11.6619 13.9752C11.578 13.9766 11.4947 13.9612 11.4168 13.9298C11.339 13.8983 11.2683 13.8516 11.209 13.7922C11.1496 13.7329 11.1028 13.6622 11.0714 13.5843C11.04 13.5065 11.0245 13.4232 11.026 13.3392C11.0275 13.2553 11.0459 13.1726 11.08 13.0959C11.1142 13.0192 11.1634 12.9502 11.2248 12.893L13.4915 10.6263H5.4165C5.25074 10.6263 5.09177 10.5605 4.97456 10.4433C4.85735 10.3261 4.7915 10.1671 4.7915 10.0013C4.7915 9.83558 4.85735 9.67661 4.97456 9.5594C5.09177 9.44219 5.25074 9.37634 5.4165 9.37634H13.4915L11.2248 7.10967Z"
+                  fill="currentColor"
+                />
+              </svg>
             </span>
-            View role
-          </span>
+          </div>
         </div>
       </a>
     ))}
@@ -108,156 +73,113 @@ const domainTitle = Object.fromEntries(domains.map((d) => [d.id, d.title]));
     line-height: 27px;
     color: #ede8ff;
   }
+  /* 3 x 413.33px cards + 2 x 20px gutters = 1280px, matching the Figma grid. */
   .role-list {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 24px;
+    gap: 40px 20px;
   }
   /* Proportional card: the container drives every inner size via cqw so the
-     layout tracks the 1350x795 reference at any column width. */
+     layout tracks the 1652x956 reference at any column width. */
   .role-row {
     position: relative;
     display: block;
     align-self: start;
-    aspect-ratio: 1350 / 795;
+    aspect-ratio: 1652 / 956;
     min-width: 0;
+    color: inherit;
+    text-decoration: none;
     container-type: inline-size;
   }
   .role-card {
     position: absolute;
     inset: 0;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
-    border-radius: 3.4cqw;
-    border: 1px solid rgb(255 255 255 / 7%);
+    /* cqw resolves against .role-row (the container) here, not the viewport. */
+    border-radius: 4.843cqw;
+    padding: 4.358cqw 6.78cqw;
+    /* rgba(255,255,255,0.15) over the #050507 section resolves to #2a2a2c. */
     background:
-      radial-gradient(
-        58% 52% at 78% 28%,
-        rgb(108 59 255 / 34%),
-        transparent 72%
-      ),
-      radial-gradient(
-        52% 56% at 16% 92%,
-        rgb(155 123 255 / 16%),
-        transparent 76%
-      ),
-      linear-gradient(160deg, #1c1533 0%, #130d20 100%);
+      url('/images/recruitment/role-glow.webp') center / 100% 100% no-repeat,
+      #2a2a2c;
   }
-  /* Inset gold frame from the new card design. */
+  /* 1px gradient ring (150deg) drawn on the card edge. */
   .role-card::after {
     content: '';
     position: absolute;
-    inset: 1.19cqw;
-    border-radius: 2.22cqw;
-    padding: max(1px, 0.3cqw);
-    background: linear-gradient(
-      178deg,
-      #ffe6a3 0%,
-      #f4cd80 26%,
-      #a97a50 58%,
-      #e9bd71 100%
-    );
+    inset: 0;
+    border-radius: inherit;
+    padding: max(1px, 0.242cqw);
+    background: linear-gradient(150deg, #ede8ff 0%, #46276c 50%, #ede8ff 100%);
     mask:
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0);
     mask-composite: exclude;
     pointer-events: none;
   }
-  .sparkle {
-    position: absolute;
-    width: 2.9cqw;
-    height: auto;
-    pointer-events: none;
-  }
-  .sparkle-tl {
-    top: 1.5cqw;
-    left: 2.1cqw;
-  }
-  .sparkle-tr {
-    top: 1.5cqw;
-    right: 2.1cqw;
-  }
-  .sparkle-bl {
-    bottom: 1.5cqw;
-    left: 2.1cqw;
-  }
-  .sparkle-br {
-    bottom: 1.5cqw;
-    right: 2.1cqw;
-  }
-  .role-number {
-    position: absolute;
-    top: 7.85cqw;
-    left: 7.41cqw;
-    color: #f4db98;
-    font-size: 2.05cqw;
-    font-weight: 600;
-    letter-spacing: 0.12em;
+  .role-head {
+    display: flex;
+    flex-direction: column;
+    gap: 4.843cqw;
   }
   .role-name {
-    position: absolute;
-    top: 14.37cqw;
-    left: 7.41cqw;
-    right: 7.41cqw;
     margin: 0;
-    color: #ede8ff;
-    font-size: 6cqw;
+    color: #fff;
+    font-size: 6.295cqw;
     font-weight: 700;
-    line-height: 1;
+    line-height: 9.443cqw;
   }
   .role-summary {
-    position: absolute;
-    top: 23.85cqw;
-    left: 7.41cqw;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-    overflow: hidden;
-    width: 56.2cqw;
     margin: 0;
-    color: #d8d4e5;
-    font-size: 2.75cqw;
-    line-height: 1.45;
+    color: #ede8ff;
+    font-size: 3.874cqw;
+    line-height: 5.811cqw;
   }
-  .role-tags {
-    position: absolute;
-    top: 38.52cqw;
-    left: 7.41cqw;
-    right: 7.41cqw;
+  .role-foot {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.6cqw 2.2cqw;
-    padding: 0;
-    margin: 0;
-    list-style: none;
+    flex-direction: column;
+    gap: 3.39cqw;
+    margin-top: auto;
   }
-  .role-tags li {
-    color: #dccae1;
-    font-size: 2.1cqw;
-    line-height: 1.3;
-  }
-  .role-tags li::before {
-    content: '(';
-  }
-  .role-tags li::after {
-    content: ')';
+  .role-divider {
+    height: max(1px, 0.121cqw);
+    background: linear-gradient(
+      90deg,
+      #fff 0%,
+      #fff 50%,
+      rgb(255 255 255 / 0%) 100%
+    );
   }
   .role-link {
-    position: absolute;
-    top: 51.04cqw;
-    left: 7.41cqw;
     display: flex;
     align-items: center;
-    gap: 4.7cqw;
-    color: #f5d28d;
-    font-size: 2.3cqw;
-    font-weight: 600;
+    gap: 1.937cqw;
+    color: #fff;
+    font-size: 3.874cqw;
+    font-weight: 500;
+    line-height: 7.748cqw;
   }
-  .role-link-mark {
-    font-size: 2.5cqw;
+  .role-link-icon {
+    flex: none;
+    width: 4.843cqw;
+    height: 4.843cqw;
   }
-  .role-card:is(:hover, :focus-visible) {
-    border-color: rgb(255 224 160 / 45%);
+  .role-row:is(:hover, :focus-visible) .role-card::after {
+    background: linear-gradient(150deg, #fff 0%, #6c3bff 50%, #fff 100%);
+  }
+  .role-row:focus-visible {
+    outline: 2px solid #9b7bff;
+    outline-offset: 4px;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .role-link-icon {
+      transition: transform 0.25s ease;
+    }
+    .role-row:is(:hover, :focus-visible) .role-link-icon {
+      transform: translateX(3px);
+    }
   }
   @media (max-width: 1100px) {
     .role-list {

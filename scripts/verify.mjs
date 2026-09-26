@@ -1406,17 +1406,17 @@ try {
     });
   assert.deepEqual(availableRolesGeometry, {
     width: 1440,
-    height: 840.65625,
+    height: 851.375,
     top: 2558,
     heading: { x: 80, y: 80, width: 1280, height: 68 },
     copy: { x: 80, y: 168, width: 1280, height: 27 },
-    list: { x: 80, y: 253, width: 1280, height: 507.65625 },
-    rows: [253, 518.828125].flatMap((y) =>
-      [80, 514.65625, 949.328125].map((x, col) => ({
+    list: { x: 80, y: 253, width: 1280, height: 518.375 },
+    rows: [253, 532.1875].flatMap((y) =>
+      [80, 513.328125, 946.65625].map((x, col) => ({
         x,
         y,
-        width: col === 1 ? 410.671875 : 410.65625,
-        height: 241.828125,
+        width: col === 2 ? 413.34375 : 413.328125,
+        height: 239.1875,
       })),
     ),
   });
@@ -1433,10 +1433,10 @@ try {
   await page
     .locator('.available-roles')
     .screenshot({ path: 'artifacts/available-roles-desktop.png' });
-  // Mentor-approved redesign: the old six-row PNG is no longer its reference.
-  // The 23 Sep 2026 card design (assets/card baru/) drives the border/fill;
-  // its text is rebuilt in HTML/CSS with the site fonts, so this checks the
-  // new geometry and containment rather than a pixel diff.
+  // The 26 Sep 2026 redesign (Figma 1184:1475 / 1218:1385, ref
+  // assets/assets recruitment page/available roles/Card Role *.png) drives the
+  // card; its text is rebuilt in HTML/CSS with the site fonts, so this checks
+  // the new geometry and containment rather than a pixel diff.
   const availableRolesSizes = [320, 390, 768, 1024, 1440, 1680, 1920];
   const availableRolesResponsive = [];
   for (const width of availableRolesSizes) {
@@ -1456,7 +1456,7 @@ try {
       .evaluate((section) =>
         [
           ...section.querySelectorAll(
-            'h2, p, .role-name, .role-tags li, .role-link',
+            'h2, p, .role-name, .role-summary, .role-link',
           ),
         ]
           .filter((element) => {
@@ -1473,6 +1473,18 @@ try {
       availableRolesIssues,
       [],
       `Available Roles text clipped at ${width}px`,
+    );
+    const availableRolesOverflow = await page
+      .locator('.available-roles .role-card')
+      .evaluateAll((cards) =>
+        cards
+          .filter((card) => card.scrollHeight > card.clientHeight + 1)
+          .map((card) => card.querySelector('.role-name')?.textContent),
+      );
+    assert.deepEqual(
+      availableRolesOverflow,
+      [],
+      `Available Roles card content overflows at ${width}px`,
     );
   }
   // Use a consistent desktop viewport: hero height now follows viewport height.
@@ -1519,7 +1531,7 @@ try {
   assert.deepEqual(selectionTimelineGeometry, {
     width: 1440,
     height: 815,
-    top: 3398.65625,
+    top: 3409.375,
     heading: { x: 80, y: 80, width: 1280, height: 68 },
     head: { x: 80, y: 206, width: 1280, height: 78 },
     body: { x: 80, y: 284, width: 1280, height: 451 },
@@ -1646,7 +1658,7 @@ try {
   assert.deepEqual(faqGeometry, {
     width: 1440,
     height: 986,
-    top: 4213.65625,
+    top: 4224.375,
     heading: { x: 80, y: 80, width: 1280, height: 68 },
     list: { x: 80, y: 206, width: 1280, height: 700 },
     items: [
@@ -1764,7 +1776,7 @@ try {
   assert.deepEqual(snippetsGeometry, {
     width: 1440,
     height: 900,
-    top: 5199.65625,
+    top: 5210.375,
     heading: { x: 80, y: 40, width: 1280, height: 68 },
     gallery: { x: 80, y: 166, width: 1280, height: 694 },
     hero: { x: 80, y: 166, width: 1280, height: 556 },
@@ -1887,7 +1899,7 @@ try {
     {
       width: 1440,
       height: 537,
-      top: 6099.65625,
+      top: 6110.375,
       panel: { x: 80, y: 80, width: 1280, height: 377 },
       actions: { x: 617.5, y: 327, width: 205, height: 51 },
       glow: { x: 349.828125, y: 351, width: 1000.328125, height: 271.5 },
@@ -1984,7 +1996,7 @@ try {
   assert.deepEqual(recruitFooterGeometry, {
     width: 1440,
     height: 556,
-    top: 6636.65625,
+    top: 6647.375,
   });
   await page.locator('.footer').scrollIntoViewIfNeeded();
   await page
