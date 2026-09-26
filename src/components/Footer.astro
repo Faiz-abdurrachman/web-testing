@@ -12,6 +12,10 @@ const legal = ['Terms', 'Privacy', 'Cookies'];
 
 <footer class="footer">
   <picture class="backdrop">
+    <source
+      media="(max-width: 600px)"
+      srcset="/images/backgrounds/footer-mobile.webp"
+    />
     <img
       src="/images/backgrounds/footer.webp"
       width="1440"
@@ -292,6 +296,10 @@ const legal = ['Terms', 'Privacy', 'Cookies'];
     .footer {
       gap: 40px;
       padding-top: 56px;
+    }
+    /* Portrait backdrop: the landscape is anchored at the bottom edge. */
+    .backdrop img {
+      object-position: center bottom;
     }
     .top {
       flex-direction: column;

@@ -625,16 +625,29 @@ score were unchanged when this section was added.
 - Row 2: 1px divider `rgb(203 197 255 / 30%)` at y=463.69, then the legal bar at
   y=484.69 — copyright at x=80 (320 wide) and Terms/Privacy/Cookies at x=640.72
   (218 wide), Manrope Regular 16/24.
-- The background comes from the supplied HD Figma image (`assets/assets home page/footer/Gambar Footer.png`,
-  5760 × 2224) re-encoded to the shared lossy
-  `public/images/backgrounds/footer.webp` (q88) by
-  `scripts/generate-backgrounds.mjs`; the earlier lossless 1440/2880 exports
-  under `public/images/footer/` were removed on 26 Sep 2026. The supplied
-  artwork sits 2px (4px at 2×) right of the fill baked into `Footer.png`; that
-  sub-pixel-derived offset is baked into the export so the art still aligns
-  with the reference. `instagram.svg` and `linkedin.svg` are the Figma social vectors.
-  Text, borders, divider, and social frames are HTML/CSS; no flattened
-  screenshot is used as the interface.
+- The background comes from the supplied HD Figma image
+  (`assets/assets home page/footer/footerhd.png`, 2017 × 780 — same composition
+  as `assets/background/hd/footer.png` but a sharper, brighter render). It is
+  encoded by `scripts/generate-footer-background.mjs` (`npm run assets:footer`)
+  to the shared lossy `public/images/backgrounds/footer.webp` (q88, MAE 1.21);
+  the earlier lossless 1440/2880 exports under `public/images/footer/` were
+  removed on 26 Sep 2026. `scripts/generate-backgrounds.mjs` no longer touches
+  the footer. The supplied artwork sits 2px (4px at 2×) right of the fill baked
+  into `Footer.png`; that sub-pixel-derived offset is baked into the export so
+  the art still aligns with the reference. `instagram.svg` and `linkedin.svg`
+  are the Figma social vectors. Text, borders, divider, and social frames are
+  HTML/CSS; no flattened screenshot is used as the interface.
+- **Phone portrait backdrop (26 Sep 2026):** the 2.59:1 landscape cannot cover a
+  portrait footer (≈390 × 1033 at ≤600px) without `object-fit: cover` zooming
+  ~1.33× and stretching to 1170 device px at DPR 3 (~4× upscale → visibly soft).
+  `Footer.astro` now has a `<source media="(max-width: 600px)">` swapping to a
+  generated portrait derivative `public/images/backgrounds/footer-mobile.webp`
+  (1170 × 3450, q84, 86 KB): an extended star sky (gradient zenith→seam with
+  ±1 dither, the site's `starfield-base.png` tiled in `screen`) with the
+  landscape scaled `MW × 1.35` and anchored to the bottom edge
+  (`.backdrop img { object-position: center bottom }` ≤600px). Desktop keeps the
+  full landscape at native resolution, so `verify.mjs` footer geometry/diff is
+  unchanged.
 - Social, Navigation, Terms, Privacy, and Cookies destinations were not
   supplied, so they keep the preview's unavailable state. Below desktop width
   the columns wrap and then stack; no mobile Figma reference was supplied.

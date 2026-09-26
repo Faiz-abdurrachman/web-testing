@@ -89,6 +89,7 @@ scripts/generate-star-tiles.mjs  What We Do starfield tiles (Chromium)
 scripts/starfield-patterns.mjs   gradient source for the starfield tiles
 scripts/generate-hero-video.mjs  home hero bg clip (boomerang webm/mp4 + poster)
 scripts/generate-recruitment-hero-video.mjs  recruitment hero bg (crossfade loop)
+scripts/generate-footer-background.mjs  footer bg: sharp desktop + portrait phone variant
 scripts/navbar-audit.mjs  navbar states/containment/hug across widths
 scripts/perf-audit.mjs   scroll-jank + long-task report per section
 scripts/seo-audit.mjs    validates title/meta/OG/canonical/sitemap in dist/

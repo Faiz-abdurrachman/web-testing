@@ -53,6 +53,15 @@ hero-bg.webm` (0.51 MB) + `hero-bg.mp4` (1.32 MB) + `hero-poster.webp` (48 KB),
   audio dibuang. Loop **crossfade circular** 1s (seam 7.24 → 1.18/255, tanpa
   membalik aurora). Gating ≥601px + no-preference + bukan saveData; reduce/≤600px
   tetap statis (gate `verify` aman). Pause off-screen + tab hidden.
+- **Footer HD + backdrop portrait HP (26 Sep 2026):** background pakai
+  `footerhd.png` yang lebih tajam/terang lewat
+  `scripts/generate-footer-background.mjs` (`npm run assets:footer`) →
+  `footer.webp` (q88, MAE 1.21). Di mobile landscape 2.59:1 tak bisa nutup footer
+  portrait tanpa zoom `cover` ~1.33× → upscale ~4× @DPR3 (itu penyebab "burik").
+  `Footer.astro` sekarang punya `<source media="(max-width:600px)">` ke
+  `footer-mobile.webp` (1170×3450, q84, 86 KB) — langit bintang + landscape
+  di-anchor bawah (`object-position: center bottom`). Desktop tetap landscape
+  native, geometri/diff `verify.mjs` tidak berubah.
 - **Pass responsive + performa mobile (25 Sep 2026):** particle Three.js kini
   desktop-only (`min-width: 768px`), navbar HP blur 12px tanpa morph layout 0.9s,
   scrim hero HP + figur satu aturan `height:72%; object-position:59% bottom`,
