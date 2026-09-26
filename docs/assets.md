@@ -199,8 +199,17 @@ The hero art is no longer one flattened image. It is split into two full-frame
   320/360/375/390/412/480 all zero overlap, character ~36% of screen height at
   ~62% width, fully in frame.
 - **Animated video layer (`public/images/hero/hero-bg.webm` + `hero-bg.mp4`,
-  1582 × 992, 5 s / 120 frames, 24 fps)**: a full-scene clip (nebula, planet,
-  water and the sorcerer). At `(prefers-reduced-motion: no-preference) and
+  1582 × 992, 10 s / 240 frames, 24 fps)**: a full-scene clip (nebula, planet,
+  water and the sorcerer). **Source swapped 26 Sep 2026** to
+  `assets/assets home page/hero section/hero.mp4` (1280 × 720, 24 fps, 10 s) —
+  the calmer "clean plate": no baked lightning strike and no Gemini sparkle, and
+  the composition holds across the whole clip (`signalstats` YAVG ~55–56 every
+  frame). The whole clip is ping-ponged (first 5 s forward + reverse) into a
+  seamless 10 s loop; grade is untouched ("pakai apa adanya"). Output is h264
+  crf21 (2.0 MB) + AV1 crf34 (0.78 MB) + `hero-poster.webp` (frame 0, 79 KB);
+  SSIM 0.981 / PSNR 44 dB vs the pre-encode ideal upscale. The old clip was
+  1280 × 720 with a lighter/magenta grade and a baked lightning burst near
+  t=3 s; it is no longer used. At `(prefers-reduced-motion: no-preference) and
 (min-width: 601px)` it is **visible from first paint** — `opacity: 1` — using
   `poster="/images/hero/hero-poster.webp"`, which is the clip's own frame 0
   (written by `scripts/generate-hero-video.mjs` with the same crop/scale/unsharp

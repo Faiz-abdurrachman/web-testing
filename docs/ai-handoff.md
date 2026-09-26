@@ -22,6 +22,17 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
   The splash test verifies that rings rotate, Canvas pixels evolve, and only
   the logo uses an image. Screenshot timing is isolated from production timers.
 
+- **Hero home ganti plate video (26 Sep 2026):** background hero home sekarang
+  pakai `assets/assets home page/hero section/hero.mp4` (1280×720, 24 fps, 10 s) —
+  "clean plate": **tanpa bolt terlukis, tanpa sparkle Gemini**, komposisi stabil
+  (`signalstats` YAVG ~55–56 tiap frame). `scripts/generate-hero-video.mjs`
+  diubah: `SRC` baru, `DURATION='5'` → boomerang (5 s depan + reverse) jadi loop
+  **10 s** mulus; crop `1046×656+66+32` + `scale=1582:992:lanczos` + `unsharp`
+  dipertahankan (frame tetap valid, tak ada watermark). Output **h264 crf21**
+  (2.0 MB) + **AV1 crf34** (0.78 MB) + `hero-poster.webp` frame 0 (79 KB);
+  SSIM 0.981 / PSNR 44 dB vs ideal sebelum-encode. Grade tanpa koreksi
+  ("pakai apa adanya"). `<video>`, gating ≥601px, dan fallback statis tak berubah
+  (reduce/≤600px tetap `background.webp` + `figure.webp`; verify aman).
 - Branch `main`, fitur homepage + Recruitment + role detail + HoDS detail sudah
   jadi. Motion GSAP + Three.js **aktif** (`src/components/Motion.astro` →
   `src/scripts/motion.ts`).
