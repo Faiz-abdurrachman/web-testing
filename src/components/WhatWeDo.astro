@@ -45,6 +45,16 @@ const pillars = [
         class:list={['pillar', `pillar-${number}`]}
         aria-labelledby={`pillar-${number}-title`}
       >
+        <div class="pillar-inner">
+          <img
+            class="card-glow"
+            src="/images/what-we-do/card-glow.svg"
+            width="1231"
+            height="357"
+            alt=""
+            loading="lazy"
+          />
+        </div>
         <div class="pillar-copy">
           <div class="pillar-heading">
             <span class="number">{number}</span>
@@ -52,14 +62,6 @@ const pillars = [
           </div>
           <p>{description}</p>
         </div>
-        <img
-          class="card-glow"
-          src="/images/what-we-do/card-glow.svg"
-          width="1231"
-          height="357"
-          alt=""
-          loading="lazy"
-        />
       </article>
     ))}
   </div>
@@ -319,9 +321,18 @@ const pillars = [
     position: relative;
     isolation: isolate;
     height: 254px;
-    overflow: hidden;
     border-radius: 20px 0;
     background: rgb(255 255 255 / 15%);
+  }
+  /* The clipping lives on this untransformed wrapper: `.pillar` carries the 3-D
+     tilt, and `overflow:hidden` + radius + a transform on the same element
+     renders square corners. */
+  .pillar-inner {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: inherit;
+    pointer-events: none;
   }
   .pillar::after {
     content: '';
