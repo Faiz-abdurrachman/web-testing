@@ -506,6 +506,13 @@ score were unchanged when this section was added.
   carousel controls or destination links were supplied.
 - Mobile hides the decorative side panels and fits the featured project to
   available width. This is an adaptation, not a supplied mobile design.
+- **Phones ≤520px**: the coverflow is replaced by a single
+  full-width card (no transform scaling) so the copy stays legible — the image
+  becomes a top block (aspect 1799/1102), then tags/title/description flow with
+  normal type (h3 22/30, body 15/22). `Projects.astro`'s `render()` clears the
+  inline coverflow styles and only swaps `is-active` below this breakpoint; the
+  desktop branch (and its asserted 549×567 card) is untouched. 600px still uses
+  the coverflow.
 - The section is presented as a **3D coverflow** with left / centre / right
   slots: the highlighted card stays on the Figma grid (549 × 567 at
   (445.5,270)) while the neighbours sit at the reference's side-panel
