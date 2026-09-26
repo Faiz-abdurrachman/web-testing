@@ -244,7 +244,15 @@ bagus, jauh lebih murah. Jangan animasikan `rotationX/Y` di `.pillar` (dipakai
 **Terverifikasi:** `verify.mjs` PASS (whatWeDo geometry persis, MAE 2.04,
 `browserErrors: []`), `responsive-audit` 364 combos ALL PASS, build 14 halaman.
 
-## Baru saja: Hero headline "strike" (kilatan petir, ringan)
+## Hero headline "strike" — DIHAPUS (26 Sep 2026)
+
+**Status:** efek kilatan petir di headline **sudah dihapus** dari
+`src/components/Hero.astro` atas permintaan user ("ilangin efek petir").
+Markup `.strike`, CSS `.bolt`/`.bolt-*`/`.strike-burst`, rule `.bolt path` di
+blok `hero-ready`, dan keyframes `strike-draw`/`strike-burst` dibuang; tidak ada
+referensi `bolt`/`strike` yang tersisa (`.title-wrap` + `h1 { position:relative;
+z-index:1 }` dipertahankan, no-op). Deskripsi di bawah = riwayat implementasi
+25 Sep 2026.
 
 **Permintaan user (25 Sep 2026):** headline hero (`SORCERY IN DATA` / `MAGIC IN
 AI`) munculnya seperti **disamber petir / ada kilatan**, jangan lebay, tetap

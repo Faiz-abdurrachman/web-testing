@@ -95,15 +95,13 @@ Three.js particle canvas in `Hero.astro`:
   the artwork blurs/zooms in, a dark `.hero-veil` lifts, one quiet `.hero-sweep`
   light streak crosses, the two `h1` lines rise out of a blur, then the paragraph
   and actions fade up.
-- Headline "strike": as each `h1` line resolves, a sharp diagonal zig-zag
-  lightning strike (`.bolt` — `.halo` + `.core` SVG polylines with
-  `pathLength="100"`, single dash-draw, no fork) is drawn behind the text,
-  synced to the `hero-line` delays (0.42s / 0.57s). The crisp white core
-  (`stroke-width: 2`, barely blurred) over a wider soft violet halo reads as
-  lightning rather than a smooth tube/worm. A soft `.strike-burst` radial bloom
-  pops at the arc's far end (0.58s). Uses `stroke-dashoffset` / `opacity` /
-  `transform`; `opacity: 0` at rest and gated to `no-preference`, so the
-  reduced-motion frame is unchanged.
+- Headline "strike" — **REMOVED 26 Sep 2026** at the user's request ("remove the
+  lightning"): the two zig-zag `.bolt` SVGs, the `.strike` wrapper, the
+  `.strike-burst` bloom, their `hero-ready` animation rules and the
+  `strike-draw` / `strike-burst` keyframes were all deleted. The `h1` now just
+  rises out of a blur (`.hero-line`). (History: a diagonal zig-zag lightning
+  drawn behind the text — white core over a soft violet halo — synced to the
+  `hero-line` delays.)
 - `.artwork-entrance` carries that CSS blur/zoom on its own wrapper; the GSAP
   targets (`.artwork-stack`, `.art-figure`) sit below it so the keyframe's
   `fill: both` end state can never override GSAP's inline transform.
