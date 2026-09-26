@@ -49,10 +49,16 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
   (1920×1080, 10s) jadi plate hero hidup di atas fallback statis
   `recruitment.webp`, pola sama dengan `Hero.astro`. Diencode lewat
   `scripts/generate-recruitment-hero-video.mjs` → `public/images/recruitment/
-hero-bg.webm` (0.51 MB) + `hero-bg.mp4` (1.32 MB) + `hero-poster.webp` (48 KB),
+hero-bg.webm` (1.66 MB) + `hero-bg.mp4` (2.38 MB) + `hero-poster.webp` (64 KB),
   audio dibuang. Loop **crossfade circular** 1s (seam 7.24 → 1.18/255, tanpa
   membalik aurora). Gating ≥601px + no-preference + bukan saveData; reduce/≤600px
   tetap statis (gate `verify` aman). Pause off-screen + tab hidden.
+  - **Quality pass (26 Sep 2026):** semula 1920×1080 AV1 **crf44** (~450 kbps)
+    → blok 8×8/16×16 kelihatan di langit gelap (yang dikeluhkan "burik"),
+    diperparah crop `cover` + pinned zoom 1.35× (≈2× upscale device px di
+    retina). Sekarang disajikan **2560×1440** (lanczos + `unsharp`) dengan AV1
+    crf34 / x264 crf24; blocking hilang, bintang tetap tajam saat zoom. Cuma
+    satu codec di-fetch per browser (Chrome/Edge webm dulu, Safari mp4).
 - **Footer HD + backdrop portrait HP (26 Sep 2026):** background pakai
   `footerhd.png` yang lebih tajam/terang lewat
   `scripts/generate-footer-background.mjs` (`npm run assets:footer`) →

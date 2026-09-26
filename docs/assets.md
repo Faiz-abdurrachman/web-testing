@@ -711,8 +711,8 @@ Section.png`, 4320 × 2598 (1440 × 866 at 3×). The reference PNG **includes th
   `Hero.astro`. Source `assets/assets recruitment page/hero section/
 recruitment-hero1.mp4` (1920 × 1080, 24fps, 10s) → `scripts/
 generate-recruitment-hero-video.mjs` → `public/images/recruitment/`
-  `hero-bg.webm` (AV1 crf44, 0.51 MB) + `hero-bg.mp4` (h264 crf26, 1.32 MB) +
-  `hero-poster.webp` (frame 0, 48 KB). Audio is dropped (`-an`).
+  `hero-bg.webm` (AV1 crf34, 1.66 MB) + `hero-bg.mp4` (h264 crf24, 2.38 MB) +
+  `hero-poster.webp` (frame 0, 64 KB). Audio is dropped (`-an`).
   - The source does **not** loop seamlessly (frame 0 vs 239 differ ~7/255), so a
     plain loop seamed. The export uses a **circular crossfade**: the last 1s is
     blended into the first 1s via `xfade=...:offset=0` and the clip is trimmed to
@@ -726,6 +726,12 @@ generate-recruitment-hero-video.mjs` → `public/images/recruitment/`
     pauses off-screen (`IntersectionObserver`) and on `visibilitychange`.
   - Poster/loop diff vs reference: composition is close (planet rim ~5% higher
     than the static render).
+  - **Quality pass (26 Sep 2026):** the clip is now served at 2560 × 1440
+    (lanczos + `unsharp`) with AV1 crf34 / x264 crf24. The earlier 1920 × 1080
+    AV1 webm at crf44 (~450 kbps) carried visible 8 × 8/16 × 16 blocking across
+    the dark sky, compounded by the hero's `cover` crop plus pinned 1.35× zoom
+    (≈2× upscale in device pixels on retina). Only one codec is ever fetched —
+    Chrome/Edge take the webm (listed first), Safari the mp4.
 - **Hero motion (Phase 2, 26 Sep 2026):** `src/pages/recruitment.astro` now
   includes `<Motion />`, and `src/scripts/motion.ts` gained a `.recruitment-hero`
   block (inside the same `gsap.matchMedia`, so it is inert under reduced motion →
