@@ -693,6 +693,26 @@ Section.png`, 4320 × 2598 (1440 × 866 at 3×). The reference PNG **includes th
   artwork carries fine grain, so it is encoded at the higher q88 end of the
   range to keep the glow from softening (lossless restores the reference's
   high-frequency detail).
+- **Animated background (26 Sep 2026):** the hero plate is now a looping video
+  layer over the static `recruitment.webp` fallback, same contract as the home
+  `Hero.astro`. Source `assets/assets recruitment page/hero section/
+recruitment-hero1.mp4` (1920 × 1080, 24fps, 10s) → `scripts/
+generate-recruitment-hero-video.mjs` → `public/images/recruitment/`
+  `hero-bg.webm` (AV1 crf44, 0.51 MB) + `hero-bg.mp4` (h264 crf26, 1.32 MB) +
+  `hero-poster.webp` (frame 0, 48 KB). Audio is dropped (`-an`).
+  - The source does **not** loop seamlessly (frame 0 vs 239 differ ~7/255), so a
+    plain loop seamed. The export uses a **circular crossfade**: the last 1s is
+    blended into the first 1s via `xfade=...:offset=0` and the clip is trimmed to
+    9s, which drops the seam to ~1.2/255 without reversing the aurora (a
+    ping-pong boomerang would; this clip visibly builds up). Poster = the
+    export's own frame 0 so the static art never swaps composition mid-view.
+  - Playback is gated to `(prefers-reduced-motion: no-preference) and
+(min-width: 601px)` and skipped under `saveData`/2G. Under reduced motion
+    (and ≤600px) the video stays `opacity: 0` and `recruitment.webp` is the
+    reference render, so `verify.mjs` geometry + PNG diff are unchanged. The clip
+    pauses off-screen (`IntersectionObserver`) and on `visibilitychange`.
+  - Poster/loop diff vs reference: composition is close (planet rim ~5% higher
+    than the static render).
 - Navbar: the shared `Navbar.astro` with `active="Recruitment"`. The active
   underline is the Figma 106px gradient
   `linear-gradient(163deg, #9b7bff, #ede8ff, #9b7bff)`; the Home underline keeps

@@ -3,8 +3,9 @@ import Button from './Button.astro';
 ---
 
 <section class="recruitment-hero" aria-labelledby="recruitment-hero-title">
-  <picture class="artwork">
+  <div class="artwork" aria-hidden="true">
     <img
+      class="art-fallback"
       src="/images/backgrounds/recruitment.webp"
       width="1440"
       height="901"
@@ -12,7 +13,18 @@ import Button from './Button.astro';
       fetchpriority="high"
       decoding="async"
     />
-  </picture>
+    <video
+      class="art-video"
+      muted
+      loop
+      playsinline
+      preload="none"
+      poster="/images/recruitment/hero-poster.webp"
+    >
+      <source src="/images/recruitment/hero-bg.webm" type="video/webm" />
+      <source src="/images/recruitment/hero-bg.mp4" type="video/mp4" />
+    </video>
+  </div>
   <div class="hero-content">
     <h1 id="recruitment-hero-title">
       <span>YOUR NEXT CHAPTER</span>
@@ -25,6 +37,88 @@ import Button from './Button.astro';
   </div>
   <Button variant="secondary">Apply Now</Button>
 </section>
+<script>
+  // Animated hero plate. Same contract as `Hero.astro`: only fetched on larger,
+  // motion-OK viewports, and the clip keeps its own frame 0 as the poster so the
+  // static `recruitment.webp` never swaps to a different composition mid-view.
+  // Under reduced motion (or <=600px) playback never starts and the static art
+  // stays the reference render.
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const preload = (window as unknown as { __dsPreload?: Promise<unknown>[] })
+    .__dsPreload;
+  const video = document.querySelector<HTMLVideoElement>(
+    '.recruitment-hero .art-video',
+  );
+  if (video) {
+    const wide = window.matchMedia('(min-width: 601px)').matches;
+    const conn = (
+      navigator as unknown as {
+        connection?: { saveData?: boolean; effectiveType?: string };
+      }
+    ).connection;
+    const constrained =
+      conn?.saveData === true ||
+      conn?.effectiveType === 'slow-2g' ||
+      conn?.effectiveType === '2g';
+    if (!reduce && wide && !constrained) {
+      const artwork = video.closest('.artwork');
+      const start = () => {
+        artwork?.classList.add('is-video');
+        video.classList.add('is-ready');
+        void video.play().catch(() => {});
+      };
+      if (video.readyState >= 2) start();
+      else video.addEventListener('loadeddata', start, { once: true });
+
+      // The clip loops forever, so stop decoding once the hero scrolls away
+      // (this page is long) and restart it when it comes back.
+      const section = video.closest('.recruitment-hero');
+      if (section) {
+        new IntersectionObserver(
+          ([entry]) => {
+            if (!artwork?.classList.contains('is-video')) return;
+            if (entry.isIntersecting) void video.play().catch(() => {});
+            else video.pause();
+          },
+          { rootMargin: '160px' },
+        ).observe(section);
+        document.addEventListener('visibilitychange', () => {
+          if (!artwork?.classList.contains('is-video')) return;
+          if (document.hidden) video.pause();
+          else if (section.getBoundingClientRect().bottom > 0)
+            void video.play().catch(() => {});
+        });
+      }
+
+      const load = () => {
+        video.preload = 'auto';
+        video.load();
+      };
+      const armed = document.documentElement.classList.contains('splash-armed');
+      const warm = document.documentElement.classList.contains('nav-warm');
+      if (armed) {
+        // Fetch during the splash (Vite HMR: see Hero.astro) so the clip is
+        // ready instead of competing with the reveal.
+        preload?.push(
+          new Promise<void>((resolve) => {
+            if (video.readyState >= 2) resolve();
+            else
+              video.addEventListener('loadeddata', () => resolve(), {
+                once: true,
+              });
+          }),
+        );
+        load();
+      } else if (warm) {
+        load();
+      } else if (typeof window.requestIdleCallback === 'function') {
+        window.requestIdleCallback(load, { timeout: 2000 });
+      } else {
+        window.setTimeout(load, 300);
+      }
+    }
+  }
+</script>
 <style>
   .recruitment-hero {
     position: relative;
@@ -44,12 +138,30 @@ import Button from './Button.astro';
     inset: 0;
     z-index: -1;
   }
-  .artwork img {
+  .artwork :is(img, video) {
+    position: absolute;
+    inset: 0;
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
+  }
+  .art-video {
+    opacity: 0;
+  }
+  /* At >=601px with motion allowed the clip's own frame 0 (poster) owns the hero
+     from the first paint, so the static art never swaps mid-view. Under reduced
+     motion, or <=600px, the video stays hidden and `recruitment.webp` remains
+     the reference render. */
+  @media (prefers-reduced-motion: no-preference) and (min-width: 601px) {
+    .art-video {
+      opacity: 1;
+    }
+  }
+  /* Once the clip is live, drop the static layer underneath it. */
+  .artwork.is-video .art-fallback {
+    opacity: 0;
   }
   .artwork::after {
     content: '';
@@ -108,7 +220,7 @@ import Button from './Button.astro';
         transparent
       );
     }
-    .artwork img {
+    .artwork :is(img, video) {
       object-position: center bottom;
     }
   }

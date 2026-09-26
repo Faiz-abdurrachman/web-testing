@@ -45,6 +45,14 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
   keluar, `is-condensed` 44/36) supaya tidak chatter di ambang, dan loop rAF
   `followFor(1000)` **dihapus** (offset link relatif ke `nav` konstan). Audit baru
   `scripts/navbar-audit.mjs` (`npm run audit:navbar`, 20 lebar).
+- **Hero recruitment pakai video (26 Sep 2026, Phase 1):** `recruitment-hero1.mp4`
+  (1920×1080, 10s) jadi plate hero hidup di atas fallback statis
+  `recruitment.webp`, pola sama dengan `Hero.astro`. Diencode lewat
+  `scripts/generate-recruitment-hero-video.mjs` → `public/images/recruitment/
+hero-bg.webm` (0.51 MB) + `hero-bg.mp4` (1.32 MB) + `hero-poster.webp` (48 KB),
+  audio dibuang. Loop **crossfade circular** 1s (seam 7.24 → 1.18/255, tanpa
+  membalik aurora). Gating ≥601px + no-preference + bukan saveData; reduce/≤600px
+  tetap statis (gate `verify` aman). Pause off-screen + tab hidden.
 - **Pass responsive + performa mobile (25 Sep 2026):** particle Three.js kini
   desktop-only (`min-width: 768px`), navbar HP blur 12px tanpa morph layout 0.9s,
   scrim hero HP + figur satu aturan `height:72%; object-position:59% bottom`,

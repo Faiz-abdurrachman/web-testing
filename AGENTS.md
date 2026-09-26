@@ -87,6 +87,9 @@ scripts/responsive-audit.mjs  per-page × per-width responsive audit
 scripts/generate-og.mjs  og share card + favicons + manifest (sharp)
 scripts/generate-star-tiles.mjs  What We Do starfield tiles (Chromium)
 scripts/starfield-patterns.mjs   gradient source for the starfield tiles
+scripts/generate-hero-video.mjs  home hero bg clip (boomerang webm/mp4 + poster)
+scripts/generate-recruitment-hero-video.mjs  recruitment hero bg (crossfade loop)
+scripts/navbar-audit.mjs  navbar states/containment/hug across widths
 scripts/perf-audit.mjs   scroll-jank + long-task report per section
 scripts/seo-audit.mjs    validates title/meta/OG/canonical/sitemap in dist/
 src/pages/robots.txt.ts  robots.txt endpoint (uses Astro.site)
