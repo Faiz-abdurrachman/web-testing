@@ -33,6 +33,9 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
   geser kiri→kanan terus berulang (bukan ayun/ombak), opacity turun cuma ke
   `0.5` di seam jadi tak pernah hilang; dipakai di `Recruitment.astro` dan
   `Cta.astro`, pause lewat `.is-idle` saat off-screen.
+- **Kapsul navbar hug logo/CTA:** tepi kapsul `is-scrolled` gak lagi ikut frame
+  konten penuh, tapi `--nb-frame-panel` (= frame − 2×(`--nb-pad` − `--nb-hug`,
+  24px)) → ujung kapsul ~24–28px dari logo & tombol Join Community (dulu ~80px).
 - **Pass responsive + performa mobile (25 Sep 2026):** particle Three.js kini
   desktop-only (`min-width: 768px`), navbar HP blur 12px tanpa morph layout 0.9s,
   scrim hero HP + figur satu aturan `height:72%; object-position:59% bottom`,

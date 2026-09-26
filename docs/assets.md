@@ -234,10 +234,16 @@ The hero art is no longer one flattened image. It is split into two full-frame
   `rgb(12 8 20 / 34%)` tint with
   `backdrop-filter: blur(28px) saturate(180%) brightness(1.07)`, an inset top
   highlight, an inset bottom highlight and a soft drop shadow. The panel edges
-  track the content frame
-  (`left/right: max(--nb-inset, calc(50% - --nb-frame/2))`, `--nb-frame` = 1600px
-  → 1440px once condensed) so at wide viewports it stays on the 1440 grid instead
-  of stretching. The earlier bottom-edge feather (`mask-image`) was **removed** so
+  **hug the logo and the CTA** instead of tracking the full content frame
+  (`left/right: max(--nb-inset, calc(50% - --nb-frame-panel/2))`, where
+  `--nb-frame-panel = --nb-frame - 2 * (--nb-pad - --nb-hug)` with
+  `--nb-hug: 24px`), so the capsule's rounded ends sit ~24–28px from the logo
+  (`brand x = 80`) and the Join Community button instead of ~80px (user revision
+  26 Sep 2026: the old ends read "agak jauh"). `--nb-pad` mirrors the
+  `.navbar-inner` padding (`clamp(56px, 4.5vw, 80px)` → 80px condensed →
+  `--page-gutter` ≤1050px) so the hug survives every breakpoint; `--nb-frame` =
+  1600px → 1440px once condensed. The earlier bottom-edge feather (`mask-image`)
+  was **removed** so
   the capsule reads as a complete rounded pill (user revision 25 Sep 2026). The
   production build keeps **both** `backdrop-filter` and `-webkit-backdrop-filter`
   (esbuild `cssMinify` in `astro.config.mjs`); the default Lightning CSS pass
