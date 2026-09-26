@@ -151,7 +151,9 @@ try {
       for (const route of ['/', '/recruitment']) {
         await p.goto(base + route);
         await p.evaluate(() => document.fonts.ready);
-        const img = p.locator('.artwork .art-bg');
+        const img = p.locator(
+          route === '/' ? '.artwork .art-bg' : '.recruitment-hero .artwork img',
+        );
         await img.evaluate((i) => i.decode());
         images.push({
           route,
