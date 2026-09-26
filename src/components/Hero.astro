@@ -266,23 +266,35 @@ import Button from './Button.astro';
       camera.updateProjectionMatrix();
     };
     resize();
-    window.addEventListener('resize', resize);
+    let resizeRaf = 0;
+    window.addEventListener(
+      'resize',
+      () => {
+        if (resizeRaf) return;
+        resizeRaf = requestAnimationFrame(() => {
+          resizeRaf = 0;
+          resize();
+        });
+      },
+      { passive: true },
+    );
 
     let pointerX = 0;
     let pointerY = 0;
-    window.addEventListener('mousemove', (event) => {
-      pointerX = event.clientX / window.innerWidth - 0.5;
-      pointerY = event.clientY / window.innerHeight - 0.5;
-    });
+    window.addEventListener(
+      'mousemove',
+      (event) => {
+        pointerX = event.clientX / window.innerWidth - 0.5;
+        pointerY = event.clientY / window.innerHeight - 0.5;
+      },
+      { passive: true },
+    );
 
-    let visible = true;
-    new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting;
-    }).observe(host);
-
+    // Only step the particle loop while the hero is on-screen: the compositor
+    // then has nothing to animate for the rest of the page.
+    let running = false;
     const tick = () => {
-      requestAnimationFrame(tick);
-      if (!visible) return;
+      if (!running) return;
       const t = performance.now() / 1000;
       const boost = 1 + state.burst * 7;
       const attr = geometry.attributes.position;
@@ -298,8 +310,21 @@ import Button from './Button.astro';
       material.opacity = 0.85 - state.burst * 0.15;
       camera.position.z = 9 - state.burst * 4.5;
       renderer.render(scene, camera);
+      requestAnimationFrame(tick);
     };
-    tick();
+    const start = () => {
+      if (running) return;
+      running = true;
+      requestAnimationFrame(tick);
+    };
+    new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) start();
+        else running = false;
+      },
+      { rootMargin: '120px' },
+    ).observe(host);
+    start();
   }
 </script>
 <style>
