@@ -397,7 +397,7 @@ score were unchanged when this section was added.
 - Card titles: Nasalization Regular 24/36; numbers and descriptions:
   Manrope Regular 16/24, letter spacing -0.176px.
 - Background is a **generated periodic star tile**:
-  `public/images/what-we-do/starfield-base.png` (520 × 440, transparent, tiled
+  `public/images/starfield/starfield-base.png` (520 × 440, transparent, tiled
   with `background-repeat: repeat`) on `.what-we-do`, plus the purple glows —
   upper-right and center on `.what-we-do::before`. Colour values (`#6C3BFF` /
   `#9B7BFF`) and positions were measured from the reference PNG. The tile is
@@ -406,7 +406,11 @@ score were unchanged when this section was added.
   `scripts/starfield-patterns.mjs`), so it is pixel-identical to the CSS version
   (baseline MAE 0 / max 1) while costing one small texture blit instead of 42
   gradient evaluations per tile. The former star/glow background exports
-  (`stars-*.webp`, `center-glow.webp`, `corner-glow.svg`) stay removed.
+  (`stars-*.webp`, `center-glow.webp`, `corner-glow.svg`) stay removed. The
+  tiles live in a shared `public/images/starfield/` folder (moved from
+  `public/images/what-we-do/`) because the recruitment **Who Should Join** and
+  **What You Will Do** sections reuse the same living sky through
+  `src/components/Starfield.astro`.
 - The **card glow is unchanged**: still the supplied SVG export
   `public/images/what-we-do/card-glow.svg`, positioned by `.card-glow`. Only the
   background was converted to CSS; card markup, borders, typography and the glow
@@ -438,6 +442,18 @@ score were unchanged when this section was added.
   and every layer defaults to `opacity: 0`, so under reduced motion the section
   is still pixel-identical to the reference PNG (verification runs with
   `reducedMotion: 'reduce'`).
+- **Shared `Starfield.astro`** (recruitment revision, 26 Sep 2026): the same
+  base tile + `starfield-far` (`440 × 360`, `0.8`, `12s`) + `starfield-near`
+  (`520 × 400`, `0.85`, `7s`) drift is packaged as `src/components/Starfield.astro`
+  and dropped into the recruitment **Who Should Join** (`.who-should-join`) and
+  **What You Will Do** (`.what-you-will-do`) sections, which previously painted
+  the flat `backgrounds/stars.webp`. The component is `position: absolute; inset:
+0; z-index: -1; overflow: hidden`, so the parent must be `position: relative;
+isolation: isolate`; it never affects section geometry. `motion.ts` now toggles
+  `is-idle` on `.who-should-join` / `.what-you-will-do` (same observer list as the
+  CTA glow) to pause the drift off-screen. Measured: two frames 2.2 s apart differ
+  (`frameMAE ≈ 0.04`) with `no-preference`, `0.000` under `reduce`. `Faq.astro`
+  still uses `backgrounds/stars.webp`.
 - **Card hover** (`.pillar:hover`, `@media (hover: hover)`): a violet spotlight
   follows the cursor (`.pillar::before` at `--mx/--my`, set by the existing 3D
   tilt), the gold hairline brightens, the drop shadow lifts and `.card-glow`
@@ -693,13 +709,16 @@ Section.png`, 5760 × 3156 (1440 × 789 at 4×).
   `/recruitment#who-should-join` ("Back to Open Roles"); the homepage rail keeps
   plain `/hods/{id}` and "Back to HoDS". The detail pages are static, so the
   origin is applied on the client from the query (`HoDSDetail.astro`).
-- Background: `Background.png` is the Figma frame fill (a near-black starfield,
-  the same artwork as the What You Will Do fill). Served as the shared lossy
-  `public/images/backgrounds/stars.webp` (q88) and painted with
-  `background-size: cover`, centered; the earlier lossless
-  `recruitment/who-should-join-background-{1440,2880}.webp` exports were
-  removed on 26 Sep 2026. The card rail dominates the difference (~3.0/255), so
-  the starfield only moves it slightly.
+- Background (26 Sep 2026): now the **shared living sky** —
+  `src/components/Starfield.astro`, the same base tile + `far`/`near` drift as
+  the home "Four Pillars of Innovation" section (`public/images/starfield/`),
+  matching the mentor's "bikin hidup kayak section Four Pillars, background
+  bintangnya disamain" revision. It is an absolutely positioned, `overflow:
+hidden`, `z-index: -1` layer, so the section geometry is untouched. The
+  previously supplied `Background.png` frame fill (a near-black starfield) was
+  served as `public/images/backgrounds/stars.webp` (q88, `cover`, centered); the
+  lossless `recruitment/who-should-join-background-{1440,2880}.webp` exports were
+  removed on 26 Sep 2026. `stars.webp` is still used by `Faq.astro`.
 - Measured layout at 1440: section `1440 × 789` at homepage y=866; heading
   `(80, 80, 1280 × 68)`; copy `(80, 172, 1280 × 27)`; cards at x 80 / 514 / 948
   / 1382, y 273, 394 × 436.
@@ -765,11 +784,15 @@ role/Detile Roles - …png` (5760 × 5120, i.e. 1440 × 1280 at 4×). Note the
   5760 × 3612 (1440 × 903 at 4×). The section sits at homepage y=1655.
 - Frame: 1440 × 903, `padding 80 80 63` (the bottom is 63, not 80, so the
   section matches the reference height), column, centered, `gap 20`.
-- Background: the supplied `Background.png` is the Figma frame fill (a
-  near-black starfield; it matches the fill exported from Figma, MAD 0.11). It
-  is exported lossless to `public/images/what-you-will-do/background-{1440,
-2880}.webp` and painted with `background-size: cover` (Figma `scaleMode:
-FILL`). Including it drops the section difference from ~1.83 to ~1.45/255.
+- Background (26 Sep 2026): the **shared living sky** —
+  `src/components/Starfield.astro`, same base tile + `far`/`near` drift as the
+  home "Four Pillars of Innovation" section (`public/images/starfield/`). The
+  supplied `Background.png` frame fill (a near-black starfield, MAD 0.11 vs the
+  Figma export) previously shipped as `public/images/what-you-will-do/background-
+{1440,2880}.webp` / `backgrounds/stars.webp` painted `cover` (Figma
+  `scaleMode: FILL`); that flat fill is superseded by the drifting sky the mentor
+  requested. The component is `position: absolute; inset: 0; overflow: hidden;
+z-index: -1`, so nothing about the section geometry changes.
 - Heading: "What You Will Do", Nasalization Regular 400, 56 / 68, centered in a
   1280px box, gradient `linear-gradient(180deg, #fff 0%, #707070 78%)`.
 - Copy: "Life inside the Data Sorcerers ecosystem", Manrope Medium 500, 18 / 27,

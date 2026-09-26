@@ -61,7 +61,7 @@ Kondisi sekarang (detail di docs/ai-handoff.md):
   (`--nb-radius: 999px`), flash sweep, indikator tab aktif meluncur springy,
   hamburger mobile. Tanpa auto-hide, tanpa petir, tanpa garis progress.
 - What We Do: starfield di-raster jadi tile PNG periodik
-  (`public/images/what-we-do/starfield-*.png`, regen `npm run assets:starfield`)
+  (`public/images/starfield/starfield-*.png`, regen `npm run assets:starfield`)
   supaya scroll tidak berat; `will-change` hanya saat section dekat viewport.
 - Deep link / Back: `BaseLayout.astro` re-apply target hash setelah splash selesai
   (`section[id]`/`main[id]` punya `scroll-margin-top: 110px`). Jangan diubah tanpa

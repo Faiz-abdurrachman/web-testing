@@ -467,8 +467,14 @@ export function initMotion() {
       const recruitment = document.querySelector('.recruitment');
       reveal(recruitment, '.recruitment-panel > *', { y: 34 });
 
-      // Park the CTA glow sweep while the section is off-screen.
-      for (const selector of ['.recruitment', '.cta']) {
+      // Park the CTA glow sweep and the recruitment star skies while their
+      // section is off-screen.
+      for (const selector of [
+        '.recruitment',
+        '.cta',
+        '.who-should-join',
+        '.what-you-will-do',
+      ]) {
         const section = document.querySelector(selector);
         if (!section) continue;
         const idle = new IntersectionObserver(

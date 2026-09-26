@@ -1,0 +1,77 @@
+---
+// Living star sky, shared with the home "Four Pillars of Innovation" section:
+// a tiled base plus two drifting star layers (`assets:starfield` writes the
+// tiles). The glowing/drifting layers are opt-in inside the `no-preference`
+// media query so reduced motion stays a static render. The parent section must
+// be `position: relative`; `motion.ts` toggles its `is-idle` class off-screen to
+// pause the drift and drop the compositor layers.
+---
+
+<div class="starfield" aria-hidden="true"></div>
+
+<style>
+  .starfield {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    background-color: #000;
+    background-image: url('/images/starfield/starfield-base.png');
+    background-repeat: repeat;
+    background-size: 520px 440px;
+  }
+  .starfield::before,
+  .starfield::after {
+    content: '';
+    position: absolute;
+    /* Larger than the section and one drift tile, so the sliding box always covers it. */
+    inset: -560px;
+    pointer-events: none;
+    background-repeat: repeat;
+    opacity: 0;
+  }
+  .starfield::before {
+    background-image: url('/images/starfield/starfield-far.png');
+    background-size: 440px 360px;
+  }
+  .starfield::after {
+    background-image: url('/images/starfield/starfield-near.png');
+    background-size: 520px 400px;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    /* One full tile per loop, linear → seamless outer-space drift. */
+    .starfield::before {
+      opacity: 0.8;
+      animation: sf-drift-far 12s linear infinite;
+      will-change: transform;
+    }
+    .starfield::after {
+      opacity: 0.85;
+      animation: sf-drift-near 7s linear infinite;
+      will-change: transform;
+    }
+    /* Off-screen the section keeps no compositor layer or resident texture. */
+    :global(.is-idle) .starfield::before,
+    :global(.is-idle) .starfield::after {
+      will-change: auto;
+      animation-play-state: paused;
+    }
+  }
+  @keyframes sf-drift-far {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-440px, -360px, 0);
+    }
+  }
+  @keyframes sf-drift-near {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-520px, -400px, 0);
+    }
+  }
+</style>

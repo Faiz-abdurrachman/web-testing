@@ -1,4 +1,6 @@
 ---
+import Starfield from './Starfield.astro';
+
 // Layout comes from Figma node 770:16251. The Body is a fixed 1312x625 collage
 // and the eight labels live in the 1125x409 "Content" frame; offsets below are
 // the Figma values (Content at 94,130 inside the Body).
@@ -23,6 +25,7 @@ const gradient = (stop: number | null) =>
   class="what-you-will-do"
   aria-labelledby="what-you-will-do-title"
 >
+  <Starfield />
   <h2 id="what-you-will-do-title">What You Will Do</h2>
   <p>Life inside the Data Sorcerers ecosystem</p>
 
@@ -85,12 +88,10 @@ const gradient = (stop: number | null) =>
     gap: 20px;
     height: 903px;
     padding: 80px;
-    /* Supplied Background.png = the Figma frame fill (near-black starfield). */
+    /* Living star sky, same as the home "Four Pillars of Innovation" section. */
+    position: relative;
+    isolation: isolate;
     background-color: #000;
-    background-image: url('/images/backgrounds/stars.webp');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
     overflow: clip;
   }
   h2,

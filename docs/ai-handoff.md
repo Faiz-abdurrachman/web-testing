@@ -127,8 +127,9 @@ layer, dua layer bintang animasi 4.16 MP & 3.88 MP.
   jadi **tile PNG periodik** yang di-render persis oleh Chromium:
   `scripts/generate-star-tiles.mjs` (`npm run assets:starfield`), pola sumber di
   `scripts/starfield-patterns.mjs` (di-ekstrak dari CSS lama). Output
-  `public/images/what-we-do/starfield-{base,far,near}.png`
-  (520×440 / 440×360 / 520×400). Tampilan **pixel-identical** ke versi CSS
+  `public/images/starfield/starfield-{base,far,near}.png`
+  (520×440 / 440×360 / 520×400) — dipindah dari `public/images/what-we-do/`
+  karena dipakai bersama. Tampilan **pixel-identical** ke versi CSS
   (MAE 0 / max 1 di mode reduce).
 - `will-change` sekarang **hanya saat section dekat viewport**
   (`.what-we-do:not(.is-idle)`), biar off-screen tidak menyimpan texture raksasa.
@@ -405,6 +406,26 @@ Dua akar masalah, dua perbaikan:
    mobile) → dokumen tujuan sudah ter-cache sebelum diklik. Verifikasi: setelah
    load home, `performance.getEntriesByType('resource')` sudah memuat
    `/recruitment`.
+
+### Starfield hidup dipakai bareng Who Should Join + What You Will Do (26 Sep 2026)
+
+Permintaan: bintang di recruitment section **Who Should Join** (`We welcome
+passionate individuals…`) dan **What You Will Do** (`Life inside the Data
+Sorcerers ecosystem`) harus hidup seperti section **Four Pillars of Innovation**
+di home — "background bintangnya di samain aja".
+
+- Langit Four Pillars (base tile + `far` drift 12s + `near` drift 7s) diekstrak
+  jadi `src/components/Starfield.astro`; tile dipindah ke
+  `public/images/starfield/` (dulu `public/images/what-we-do/`).
+- Kedua section sekarang render `<Starfield />` sebagai child pertama, dan CSS-nya
+  dapat `position: relative; isolation: isolate` (layer-nya `position: absolute;
+inset: 0; z-index: -1; overflow: hidden`, jadi geometry section tidak berubah —
+  verify Who Should Join `1440×789` tetap). `backgrounds/stars.webp` dilepas dari
+  keduanya (`Faq.astro` masih pakai).
+- `motion.ts` menambah `.who-should-join` + `.what-you-will-do` ke observer
+  `is-idle` (bareng `.recruitment`/`.cta`) supaya drift pause saat off-screen.
+- Terukur: dua frame jarak 2.2s beda (`frameMAE ≈ 0.04`) saat `no-preference`,
+  `0.000` saat `reduce`. `perf-audit` semua section long task 0.
 
 ## Yang perlu kamu tahu soal motion
 

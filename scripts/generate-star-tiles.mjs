@@ -13,7 +13,7 @@ import { starfieldPatterns } from './starfield-patterns.mjs';
 //
 // Run with: npm run assets:starfield
 const CHROMIUM = process.env.CHROMIUM_PATH || '/usr/bin/chromium';
-const OUT_DIR = 'public/images/what-we-do';
+const OUT_DIR = 'public/images/starfield';
 
 await mkdir(OUT_DIR, { recursive: true });
 

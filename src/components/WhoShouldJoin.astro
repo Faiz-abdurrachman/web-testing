@@ -1,5 +1,6 @@
 ---
 import DomainRail from './DomainRail.astro';
+import Starfield from './Starfield.astro';
 ---
 
 <section
@@ -7,6 +8,7 @@ import DomainRail from './DomainRail.astro';
   class="who-should-join"
   aria-labelledby="who-should-join-title"
 >
+  <Starfield />
   <header>
     <h2 id="who-should-join-title">Who Should Join?</h2>
     <p>
@@ -20,12 +22,10 @@ import DomainRail from './DomainRail.astro';
   .who-should-join {
     scroll-margin-top: 110px;
     padding-block: 80px;
-    /* Supplied Background.png = the Figma frame fill (near-black starfield). */
+    /* Living star sky, same as the home "Four Pillars of Innovation" section. */
+    position: relative;
+    isolation: isolate;
     background-color: #000;
-    background-image: url('/images/backgrounds/stars.webp');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
   }
   header {
     padding-inline: var(--page-gutter);
