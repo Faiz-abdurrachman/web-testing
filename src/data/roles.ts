@@ -15,8 +15,10 @@ export interface RoleDetail {
   tight?: boolean;
 }
 
-// The role-detail card art is the Figma "card detile role (HoDS)" fill
-// (Property 1=1..6), which differs from the homepage's card-*.webp exports.
+// The role-detail card art is artwork-only, re-encoded (q88, 1280/2560) from
+// the clean card fills `assets/image-src/hods/card-{id}.webp` (fallback
+// `public/images/hods/card-{id}.webp`) by `scripts/generate-backgrounds.mjs`.
+// The old Figma role exports carried baked titles/buttons and are not used.
 const cardImage = (id: string) => `/images/roles/role-${id}-1280.webp`;
 
 export const roles: RoleDetail[] = [

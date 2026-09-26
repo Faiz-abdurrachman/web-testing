@@ -342,10 +342,11 @@ kaki tetap terlihat).
 
 Di HP portrait (≤600px), `figure.webp` dijangkar bawah lewat `@media
 (max-width: 600px) and (min-height: 561px)` (`.artwork .art-figure { top:auto;
-bottom:0; height:80%; object-position:50.5% bottom }`). Tier per-lebar lalu
+bottom:0; height:74%; object-position:50.5% bottom }`). Tier per-lebar lalu
 menjaga cutout tetap punya celah dari tombol stacked tanpa menempel tepi kanan:
-`400–600px` → `height:74%; 54% bottom`; `381–399px` → `height:74%; 52.5%`;
-`341–360px` → `47%`; `≤340px` → `height:72%; 38.5%`. Selector wajib
+`400–600px` → `height:70%; 54% bottom`; `381–399px` → `height:68%; 52.5%`;
+`≤360px` → `height:64%` (`341–360px` `47%`, `≤340px` `46%`); `≤340px` →
+`height:60%`. Selector wajib
 `.artwork .art-figure` (0,2,0) supaya menang atas `.artwork :is(img,video)`
 (0,1,1). Terukur reduced-motion: 412×915 figur x 218–366 (celah 10px, margin
 kanan 46px); 320/360/390/430/540/580 overlap 0 & utuh.

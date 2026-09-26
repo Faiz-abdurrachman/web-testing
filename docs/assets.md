@@ -182,11 +182,12 @@ The hero art is no longer one flattened image. It is split into two full-frame
   322px vs a 320px viewport (2px overflow) but the feet remain visible.
 - **Portrait phones (width ≤ 600px, height > 560px)**: the static `figure.webp` is
   bottom-anchored via `@media (max-width: 600px) and (min-height: 561px)`
-  (`.artwork .art-figure { top: auto; bottom: 0; height: 80%; object-position:
+  (`.artwork .art-figure { top: auto; bottom: 0; height: 74%; object-position:
 50.5% bottom }`). Width-scoped tiers then keep the cutout clear of the stacked
-  CTA pills without pressing the right edge: `400–600px` → `height: 74%;
-object-position: 54% bottom`; `381–399px` → `height: 74%; 52.5% bottom`;
-  `341–360px` → `47% bottom`; `≤340px` → `height: 72%; 38.5% bottom`. The
+  CTA pills without pressing the right edge: `400–600px` → `height: 70%;
+object-position: 54% bottom`; `381–399px` → `height: 68%; 52.5% bottom`;
+  `≤360px` → `height: 64%` (`341–360px` keeps `47% bottom`, `≤340px` → `46%`);
+  `≤340px` → `height: 60%`. The
   selector must be `.artwork .art-figure` (specificity 0,2,0) to beat the base
   `.artwork :is(img, video)` (0,1,1). Measured in reduced-motion Chromium:
   412×915 figure x 218–366 (10 px clear of the buttons, 46 px right margin);
