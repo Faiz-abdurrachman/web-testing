@@ -455,10 +455,9 @@ export function initMotion() {
       reveal(footer, '.bottom');
 
       if (finePointer()) {
-        // 3D tilt on the HoDS and What We Do cards.
-        document
-          .querySelectorAll<HTMLElement>('.domain-card')
-          .forEach((card) => tilt(card, 6, cleanups));
+        // 3D tilt on the What We Do cards only. The HoDS domain cards opt out:
+        // their 1298px glow is expensive to re-rasterise on every hover frame
+        // and the `--mx/--my` the tilt wrote was never consumed there.
         document
           .querySelectorAll<HTMLElement>('.pillar')
           .forEach((card) => tilt(card, 5, cleanups));
