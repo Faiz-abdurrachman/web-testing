@@ -8,6 +8,7 @@ const { role } = Astro.props;
 ---
 
 <main class="role-detail">
+  <span class="detail-wave" aria-hidden="true" />
   <div class:list={['role-detail-inner', { centered: role.centered }]}>
     <div class:list={['role-head', { tight: role.tight }]}>
       <a class="back" href="/recruitment#available-roles">
@@ -78,10 +79,53 @@ const { role } = Astro.props;
 <style>
   /* The gradient is full-bleed; the content stays on the 1440 grid. */
   .role-detail {
+    position: relative;
     width: 100%;
     background: linear-gradient(-9deg, rgb(108 59 255 / 50%) 0%, #050507 19%);
   }
+  /* One-way glow wave along the bottom edge: the same oversized glow.svg sweep
+     as the CTA, so there is no tiling seam. Hidden under reduced motion so the
+     static page stays pixel-identical to the reference. */
+  .detail-wave {
+    position: absolute;
+    inset: auto 0 0 0;
+    z-index: 0;
+    height: 150px;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .detail-wave::before {
+    content: '';
+    position: absolute;
+    left: -6%;
+    bottom: -330px;
+    width: 112%;
+    height: 480px;
+    background: url('/images/recruitment/glow.svg') center bottom / 100% 100%
+      no-repeat;
+    opacity: 0;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .detail-wave::before {
+      animation: detail-wave-drift 12s linear infinite;
+    }
+  }
+  @keyframes detail-wave-drift {
+    0% {
+      translate: -60px 0;
+      opacity: 0.35;
+    }
+    50% {
+      opacity: 0.6;
+    }
+    100% {
+      translate: 60px 0;
+      opacity: 0.35;
+    }
+  }
   .role-detail-inner {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     gap: 58px;
