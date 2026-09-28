@@ -21,16 +21,16 @@ disintesis saat dipanggil. Dokumen ini acuan kalau nambah/mengubah bunyi.
 
 ## 2. Palet cue
 
-| Cue          | Dipakai untuk                        | Karakter                                   |
-| ------------ | ------------------------------------ | ------------------------------------------ |
-| `hover`      | hover link/kartu/tombol              | tick kaca 1.56 kHz + sparkle tipis         |
-| `click`      | tombol/kartu/dot                     | pluck arcane 430 Hz + bell partials        |
-| `select`     | nav, tab, panah carousel, orb unmute | pluck lebih terang 620/1710 Hz             |
-| `transition` | navigasi internal (klik link)        | seal whoosh naik 0.28 s + pluck 392→660 Hz |
-| `open`       | menu buka, kartu role, FAQ buka      | whoosh naik + riser + shimmer              |
-| `close`      | menu tutup, FAQ tutup                | whoosh turun + nada turun                  |
-| `success`    | splash selesai, apply                | arpeggio Cmaj7 + sparkle + shimmer         |
-| `error`      | tombol `aria-disabled`, invalid      | thud 233→155 Hz (tanpa sparkle)            |
+| Cue          | Dipakai untuk                                                  | Karakter                                   |
+| ------------ | -------------------------------------------------------------- | ------------------------------------------ |
+| `hover`      | hover link/kartu/tombol                                        | tick kaca 1.56 kHz + sparkle tipis         |
+| `click`      | tombol/kartu/dot                                               | pluck arcane 430 Hz + bell partials        |
+| `select`     | nav, tab, panah carousel (termasuk panah keyboard), orb unmute | pluck lebih terang 620/1710 Hz             |
+| `transition` | navigasi internal (klik link)                                  | seal whoosh naik 0.28 s + pluck 392→660 Hz |
+| `open`       | menu buka, kartu role, FAQ buka                                | whoosh naik + riser + shimmer              |
+| `close`      | menu tutup, FAQ tutup                                          | whoosh turun + nada turun                  |
+| `success`    | splash selesai, apply                                          | arpeggio Cmaj7 + sparkle + shimmer         |
+| `error`      | tombol `aria-disabled`, invalid                                | thud 233→155 Hz (tanpa sparkle)            |
 
 Magic layer: tiap cue ditambah **bell partials inharmonik** (ratio `2.0 / 3.01 /
 4.24 / 5.43`, detune ±7 cent, pan kiri/kanan) lewat `sparkle()`, dan `open`/
@@ -73,7 +73,9 @@ Magic layer: tiap cue ditambah **bell partials inharmonik** (ratio `2.0 / 3.01 /
    window.dispatchEvent(new CustomEvent('ds:sfx', { detail: { cue: 'open' } }));
    ```
    Dipakai di: Navbar (menu mobile `open`/`close`), Faq (`open`/`close`),
-   HoDSDetail (tab `select`), Splash (`success`).
+   HoDSDetail (tab `select`), Splash (`success`), DomainRail/Projects/Snippets
+   (panah keyboard → `select`, karena input keyboard tidak lewat wiring
+   hover/click).
 4. **Jangan** pasang handler `play()` langsung di komponen — biar gate reduced
    motion & mute tetap terpusat di `Sound.astro`.
 5. **Audisi:** buka `/lab/sound` (dev: http://localhost:4321/lab/sound/).
