@@ -111,17 +111,21 @@ Kalau bikin/ubah section: update `docs/assets.md` + `docs/ai-handoff.md` dan
 tambah/cek assertion di `scripts/verify.mjs`.
 
 TODO utama: **ikuti `docs/ai-handoff.md` §"Next plan — untuk AI berikutnya"**.
-Prioritas sekarang = **Perf P0 sisa**: re-encode video hero, kompres
-`sorcerer-2x.webp` (481 KB, penyumbang terbesar Home mobile), hindari
-`hero-poster` (74 KB) di HP — target Home mobile ≤800 KB. **Sudah selesai:** VT
-hardening (`verify-vt.mjs` uji Back/Forward + reload + reduce; sisa device nyata),
-OG hardening, dan P0(a)+(d) (`sizes` Snippets + varian 960w, `logo.png` 14 KB,
-hero bg/fig 180/86 KB → Recruitment mobile 2.09→1.15 MB). **P0(b) "splash jangan
-nunggu `three`" = BATAL** (HP memang tidak menunggu `three`; desktop sengaja).
-Berikutnya: konten asli (project/tanggal recruitment), halaman About Us / Hall of
-Frames / Partners / Contact (nav `aria-disabled` — jangan bikin URL palsu),
-webfont Nasalization (berlisensi — jangan diakali). Sound selesai
-(`docs/sound-sop.md`).
+**Perf P0 SELESAI (28 Sep 2026, HEAD `4fe4c19`):** Home mobile 1.33→0.98 MB —
+sorcerer → AVIF (`sorcerer-2x` 481→196 KB), video hero di-re-encode (home webm
+0.38 MB, recruitment 0.76 MB), poster tak di-fetch di HP, `sizes` Snippets +
+960w, `logo.png` 14 KB, hero bg/fig 180/86 KB. Sudah live juga: VT hardening
+(`verify-vt.mjs` uji Back/Forward + reload + reduce; sisa device nyata), OG
+hardening, hover kartu (domain/project/snippet) + hover cue project, keyboard
+carousel cues, dan fix parity hover home + rail edge fade (`6c79831`–`4fe4c19`).
+**P0(b) "splash jangan nunggu `three`" = BATAL** (HP memang tidak menunggu
+`three`; desktop sengaja).
+
+Prioritas berikutnya (opsional, urut): (a) AVIF hero art + ikon philosophy/glow
+kalau mau tembus Home ≤800 KB; (b) konten asli (project/tanggal recruitment);
+(c) halaman About Us / Hall of Frames / Partners / Contact (nav `aria-disabled` —
+jangan bikin URL palsu); (d) webfont Nasalization (berlisensi — jangan diakali).
+Sound selesai (`docs/sound-sop.md`).
 
 Sebelum mulai task di bawah: ringkas dulu pemahamanmu + rencana singkat, lalu kerjakan.
 

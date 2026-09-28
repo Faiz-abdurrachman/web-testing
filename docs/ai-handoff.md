@@ -6,7 +6,7 @@ harus menebak dari git log. Ini dokumen hidup — update kalau ada perubahan bes
 Baca dulu, urut: `AGENTS.md` (aturan operasional) → `HANDOVER.md` (konteks
 panjang) → `docs/assets.md` (provenance per section) → file ini.
 
-## Ringkasan cepat (untuk AI baru) — HEAD `c3b122c`, 28 Sep 2026
+## Ringkasan cepat (untuk AI baru) — HEAD `4fe4c19`, 28 Sep 2026
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
 
@@ -16,7 +16,7 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   referensi**, HTML/CSS ringan (bukan flatten screenshot).
 - **Runtime deps sengaja cuma** `astro` + `gsap` + `three`. Jangan tambah library
   lain tanpa tanya; lazy-import yang berat.
-- **Commit terbaru (live di testing + production, HEAD `c3b122c`):**
+- **Commit terbaru (live di testing + production, HEAD `4fe4c19`):**
   - `fe71b27` **VT hardening + OG hardening** — `verify-vt.mjs` kini uji
     Back/Forward lewat client router, reload deep-link `/#domains`, dan reduce
     benar-benar inert (tanpa `hero-ready`/`.pin-spacer`); `BaseLayout` dapat
@@ -26,14 +26,15 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   - `c3b122c` **Perf P0(a)+(d)** — `sizes` Snippets jujur + varian 960w (HP
     berhenti ambil 2560w), `logo.png` 40→14 KB, hero `background`/`figure`
     180/86 KB. Recruitment mobile 2.09→1.15 MB. **Sisa P0 = tugas berikutnya.**
-  - **Perf P0(b) (28 Sep 2026, di atas `294d172`)** — **sorcerer → AVIF**
+  - `473ca00` **Perf P0(b)** — **sorcerer → AVIF**
     (`sorcerer-2x` 481→196 KB, 1x 200→89 KB), **video hero di-re-encode** (home
     webm 0.74→0.38 MB / mp4 1.46→0.72 MB; recruitment webm 1.66→0.76 MB / mp4
     2.38→1.00 MB), **poster tak lagi di-fetch di HP** (dipasang via JS hanya saat
     video main). Home mobile 1.33→0.98 MB, recruitment 0.64→0.57 MB. P0 sisa
     tinggal opsional: AVIF hero art + ikon philosophy/glow kalau mau tembus
     ≤800 KB.
-  - **Card hover (28 Sep 2026, di atas `473ca00`)** — kartu yang sudah bersound
+  - **Card hover (`6c79831` → `7821e87` → `4fe4c19`, 28 Sep 2026)** — kartu yang
+    sudah bersound
     kini punya hover visual subtle (angkat + glow + ring menyala):
     `.domain-card`, `.project-card.is-active`, `.thumb`. Kartu Project juga
     opt-in `data-sfx-hover` (sebelumnya section Projects cuma panah/dot yang
@@ -48,19 +49,19 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
     di `.domain-card`/`.glow` (menang atas CSS `:hover`) → cuma rail recruitment
     yang terangkat; `motion.ts` sekarang `clearProps: 'transform'` di akhir
     entrance. Terukur dua rail: `rest: none` / `hover: translateY(-10px)`.
-    Commit fitur `6c79831`; fix parity (`motion.ts` `clearProps`) **menyusul**.
+    Commit: `6c79831` (fitur) → `7821e87` (parity `clearProps` + edge fade awal)
+    → `4fe4c19` (edge fade kondisional).
     **Rail edge fade:** saat rail bergeser, kartu tepi dulu terpotong keras;
     `DomainRail` sekarang toggle `is-clip-left` / `is-clip-right` di `sync()`
     (dihitung dari apakah tepi rail jatuh di dalam kartu) + `mask-image` fade
     120px (gate `no-preference`). Kartu penuh tak pernah diredupkan (rail pas
     2/3 kartu saat diam) → `verify.mjs` tetap. Detail §"Rail edge fade" di
     `docs/assets.md`.
-  - **Keyboard carousel cues (28 Sep 2026, di atas `473ca00`)** — panah keyboard
+  - **Keyboard carousel cues (`6c79831`, 28 Sep 2026)** — panah keyboard
     di `DomainRail` (Choose Your Domain / Who Should Join), `Projects`, dan
     `Snippets` sekarang dispatch `ds:sfx` cue `select` tiap kali menGeser
     carousel (input keyboard tidak lewat wiring hover/click delegated); di-drop
     saat reduced motion. Detail di `docs/assets.md` §"Keyboard carousel cues".
-    Commit `6c79831`.
 - **Latar yang tetap berlaku:** `450833a` migrasi View Transitions
   (`<ClientRouter />`, `AudioContext` persist; tiap komponen re-init lewat
   `astro:page-load` + cleanup `astro:before-swap` — aturan di
@@ -88,10 +89,12 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
 
 ## Checkpoint terakhir (28 Sep 2026) — detail
 
-- **HEAD `c3b122c` (28 Sep 2026).** Di atas migration VT + sound: `fe71b27`
+- **HEAD `4fe4c19` (28 Sep 2026).** Di atas migration VT + sound: `fe71b27`
   (VT + OG hardening), `6aefa49` (re-encode `sorcerer-2x`), `c3b122c` (Perf P0
-  a+d). Ringkasan tiap perubahan ada di section "Baru saja" di bawah; sisa P0
-  ada di "Next plan".
+  a+d), `473ca00` (Perf P0 b: AVIF sorcerer + video + poster), `6c79831` (hover
+  kartu + keyboard cues), `7821e87` (parity hover home + edge fade awal),
+  `4fe4c19` (edge fade kondisional). Ringkasan tiap perubahan ada di section
+  "Baru saja" di bawah; sisa P0 ada di "Next plan".
 - **Repo + deploy GANDA (penting).** `origin` =
   `github.com/Faiz-abdurrachman/web-testing` (testing) dan setelannya sudah
   **push ke production sekaligus**: `origin` punya dua push URL → `git push
@@ -99,8 +102,8 @@ origin main` mengirim ke **testing + production**
   (`github.com/Web-Data-Sorcerers/community-web`, remote `production`).
   Jalankan `git push origin main` seperti biasa; kalau perlu cek sinkron pakai
   `git fetch production -q && git rev-parse --short main origin/main
-production/main`. Production sempat ketinggalan dan sudah disinkronkan; HEAD
-  terakhir `601107b` (`main` = `origin/main` = `production/main`).
+production/main`. HEAD terakhir `4fe4c19` (`main` = `origin/main` =
+  `production/main`).
 - **Available Roles glow wave DIPERKECIL.** `@keyframes role-glow-wave` sekarang
   cuma `scale: 1 → 1.04` (drift `translate ±6%` dibuang) supaya ukuran glow
   balik ke frame statis. Hover kartu dapat "pointer pool" radial violet (ikut
@@ -121,13 +124,14 @@ production/main`. Production sempat ketinggalan dan sudah disinkronkan; HEAD
 - **Perf: detail ringan, Home/Recruitment berat.** Detail 0.20–0.33 MB, LCP
   ~0.6–1.0 s. Home desktop ~2.1 MB + LCP tinggi; Recruitment ~3.1 MB. Akar utama:
   splash nunggu `three` (181 KB gz) + video, `sizes="1280px"` di Snippets bikin
-  HP ambil varian 2560w, video hero 0.6–1.6 MB, gambar kebesaran. **Audit +
-  rencana P0–P2 belum dieksekusi** — lihat "## Perf audit & rencana".
+  HP ambil varian 2560w, video hero 0.6–1.6 MB, gambar kebesaran. **P0 sudah
+  dieksekusi** (Home mobile 1.33→0.98 MB); sisa opsional + P1/P2 — lihat
+  "## Perf audit & rencana".
 - **OG/share WhatsApp.** Tag OG di server sudah benar & kebaca crawler
   (diverifikasi via UA WhatsApp/Facebook + Microlink). WhatsApp nggak nampilin
   preview = cache Meta, bukan bug kode → refresh lewat Facebook Sharing Debugger.
   Hardening `og:image:secure_url` + `<html prefix="og: https://ogp.me/ns#">`
-  belum diterapkan.
+  **sudah diterapkan** (`fe71b27`).
 - **Sound system selesai (`66b284e`, 28 Sep 2026).** SFX prosedural + backsound
   ambient (Web Audio, **0 aset, 0 dependency**), orb mute melayang, wiring
   komponen, halaman audisi `/lab/sound`. Detail lengkap + SOP di
@@ -874,14 +878,15 @@ Bundle: `three.module` **181 KB gz**, `Motion`/GSAP **45 KB gz**.
 2. ~~**`Snippets.astro` `sizes="1280px"`**~~ **FIXED (28 Sep 2026):** `sizes`
    kini jujur + varian **960w**; HP pilih 1280w (DPR3) / 960w (DPR2), bukan
    `-2x` 2560w (358–562 KB).
-3. **Video hero:** recruitment `hero-bg.webm` 1.6 MB, home 0.58 MB (desktop saja;
-   HP sudah di-gate ≥601px).
+3. **Video hero (DONE 28 Sep 2026):** ~~recruitment `hero-bg.webm` 1.6 MB, home
+   0.58 MB~~ → di-re-encode jadi home webm 0.38 MB / mp4 0.72 MB, recruitment
+   webm 0.76 MB / mp4 1.00 MB (desktop saja; HP sudah di-gate ≥601px).
 4. **`three` 181 KB gz** untuk 700 partikel → long-task ~1 s saat init.
-5. **Gambar kebesaran (sebagian DONE 28 Sep 2026):** ~~`logo.png` 40 KB → 14 KB~~
+5. **Gambar kebesaran (DONE 28 Sep 2026):** ~~`logo.png` 40 KB → 14 KB~~
    (192×210, tampil 54×59, tiap halaman), ~~hero `background.webp` 219 → 180 KB,
-   `figure.webp` 128 → 86 KB~~. **Sisa:** philosophy `sorcerer-2x.webp` **481 KB**
-   (HP DPR3 ambil ini), `hero-poster.webp` 74 KB (ikut ke-fetch di HP walau video
-   tak tampil), font 120 KB (4 bobot di-preload).
+   `figure.webp` 128 → 86 KB~~, ~~philosophy `sorcerer-2x.webp` 481 → 196 KB
+   (AVIF)~~, ~~`hero-poster.webp` 74 KB~~ (tak lagi di-fetch di HP). **Sisa:** font
+   120 KB (4 bobot di-preload) + opsional AVIF hero art/ikon.
 6. Jank scroll minor: `.domains` task ~55 ms, frame terburuk ~117 ms
    (`perf:audit`, headless software-render).
 

@@ -235,20 +235,22 @@ When adding/changing a section, update `docs/assets.md` and the relevant
 
 ## Current checkpoint
 
-- **HEAD `c3b122c` (28 Sep 2026).** Situs pakai Astro **`<ClientRouter />`**
+- **HEAD `4fe4c19` (28 Sep 2026).** Situs pakai Astro **`<ClientRouter />`**
   (navigasi klien + `AudioContext` persist; semua komponen re-init
   `astro:page-load` + cleanup `astro:before-swap` — gotcha di atas +
-  `docs/sound-sop.md` §9). Sudah live: **VT hardening** (`fe71b27`;
-  `verify-vt.mjs` uji Back/Forward + reload deep-link + inert saat reduce),
-  **OG hardening** (`og:image:secure_url` + `<html prefix="og:…">`), dan
-  **Perf P0(a)+(d)** (`c3b122c`: `sizes` Snippets + varian 960w, `logo.png`
-  14 KB, hero bg/fig 180/86 KB → Recruitment mobile 2.09→1.15 MB). **Deploy
-  GANDA**: `git push origin main` → testing + production.
-- **Next plan (prioritas): Perf P0 sisa** — re-encode video hero, kompres
-  `sorcerer-2x.webp` (481 KB), hindari `hero-poster` (74 KB) di HP; target Home
-  mobile ≤800 KB. Detail: `docs/ai-handoff.md` §"Next plan — untuk AI
-  berikutnya". **P0(b) "splash jangan nunggu `three`" = BATAL** (HP memang tidak
-  menunggu `three`; desktop sengaja — jangan diubah).
+  `docs/sound-sop.md` §9). Sudah live: **VT hardening** (`fe71b27`), **OG
+  hardening**, **Perf P0(a)+(d)** (`c3b122c`), **Perf P0(b)** (`473ca00`:
+  sorcerer → AVIF, video hero di-re-encode, poster tak di-fetch di HP), **hover
+  kartu + keyboard carousel cues** (`6c79831`), **fix parity hover home +
+  rail edge fade** (`7821e87`, `4fe4c19`). **Deploy GANDA**:
+  `git push origin main` → testing + production.
+- **Next plan (prioritas).** Perf P0 inti **selesai** (Home mobile 1.33→0.98 MB).
+  Sisa: opsional AVIF hero art + ikon philosophy/glow (biar tembus ≤800 KB);
+  konten asli (`projects.ts`, tanggal recruitment); halaman About Us / Hall of
+  Frames / Partners / Contact (nav masih `aria-disabled`, jangan bikin URL
+  palsu); webfont Nasalization (berlisensi). Detail: `docs/ai-handoff.md`
+  §"Next plan — untuk AI berikutnya". **P0(b) "splash jangan nunggu `three`" =
+  BATAL** (HP memang tidak menunggu `three`; desktop sengaja — jangan diubah).
 - **Available Roles hover (`f92b88a`).** Kartu reaktif pointer: pool radial violet
   ikut kursor (`--mx/--my`), ember lean (`--gx/--gy` ±22/16px + `scale(1.06)`),
   divider draw dari kiri, panah overshoot. Gate `(pointer: fine)` +
@@ -263,8 +265,9 @@ role-glow-wave` = `scale: 1 → 1.04` saja (drift `translate ±6%` dibuang) →
   (`glow.svg` satu arah) + `main` `min-height: 100vh`/`100lvh` **khusus ≤900px**
   supaya gradient mentok bawah. Jangan naikkan ke base: `verify.mjs` assert
   `.role-detail` height `1280` di viewport `1440×1400`.
-- **Perf:** detail ringan; Home/Recruitment berat. Audit + rencana P0–P2 di
-  `docs/ai-handoff.md` §"Perf audit & rencana" (belum dieksekusi).
+- **Perf:** detail ringan; Home/Recruitment berat. **P0 sudah dieksekusi**
+  (Home mobile 1.33→0.98 MB); audit + rencana P0–P2 di
+  `docs/ai-handoff.md` §"Perf audit & rencana".
 - **OG/share:** tag di server OK; WhatsApp kosong = cache Meta (refresh lewat
   Facebook Sharing Debugger), bukan bug kode.
 - `main` HEAD (lihat `git log`; checkpoint fitur recruitment = `ff7fe20`) = homepage + **halaman Recruitment lengkap** (hero →

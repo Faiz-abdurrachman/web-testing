@@ -499,12 +499,16 @@ projects 5.104 recruitment 2.174 footer 2.666
   `c53d84d`, `06586ac` = **mentor revision 23 Sep 2026** (rail bounded, background
   HD native, Available Roles preview grid, hero viewport-aware). `51d565a` =
   balance tinggi hero mobile.
-- **Checkpoint terbaru (HEAD `c3b122c`, 28 Sep 2026).** Setelah VT + sound:
+- **Checkpoint terbaru (HEAD `4fe4c19`, 28 Sep 2026).** Setelah VT + sound:
   `fe71b27` VT + OG hardening (`verify-vt.mjs` uji Back/Forward + reload +
   reduce; `og:image:secure_url` + `<html prefix="og:…">`), `6aefa49` re-encode
   `sorcerer-2x`, `c3b122c` **Perf P0(a)+(d)** (`sizes` Snippets + varian 960w,
-  `logo.png` 14 KB, hero bg/fig 180/86 KB; Recruitment mobile 2.09→1.15 MB).
-  **Sisa P0** ada di `docs/ai-handoff.md` §"Next plan". Gate semua hijau.
+  `logo.png` 14 KB, hero bg/fig 180/86 KB), lalu `473ca00` **Perf P0(b)**
+  (sorcerer → AVIF 481→196 KB, video hero di-re-encode, poster tak di-fetch di
+  HP; Home mobile 1.33→0.98 MB), `6c79831` **hover kartu + keyboard carousel
+  cues**, `7821e87` + `4fe4c19` **fix parity hover home (GSAP `clearProps`) +
+  rail edge fade**. Sisa P0 (opsional) + rencana ada di `docs/ai-handoff.md`
+  §"Next plan". Gate semua hijau.
 - **Checkpoint sebelumnya (HEAD `d0fd3be`, 28 Sep 2026)**: setelah hero plate
   uncropped (`74a78e0`), redesign Available Roles (`aa3d228`) + glow wave
   (`d16542b`), datang serangkaian polish: hover pointer-reactive kartu role
