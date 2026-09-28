@@ -210,6 +210,17 @@ When adding/changing a section, update `docs/assets.md` and the relevant
 - **`sizes` on responsive `<img>` matters as much as `srcset`.** `Snippets.astro`
   shipped `sizes="1280px"`, so phones assumed a 1280 CSS-px slot and downloaded
   the 2560w `-2x` files (~1.9 MB). When adding images, give an honest `sizes`.
+- **The site uses Astro `<ClientRouter />` (View Transitions).** Navigation is
+  client-side, so **bundled component scripts do not re-run on a swap**. Every
+  script that touches the DOM must re-init via
+  `document.addEventListener('astro:page-load', init)` and tear down window/
+  document/matchMedia listeners, observers and GSAP in `astro:before-swap` (see
+  `destroyMotion()`, `mountHeroParticles()`'s `dispose()`, and the
+  `AbortController` pattern in `Navbar`/`DomainRail`/`Projects`/`Snippets`).
+  `<html>` runtime classes (`splash-done`, `nav-warm`) are wiped by the swap and
+  re-applied in `astro:after-swap`; the hash is re-applied in `astro:page-load`.
+  `verify.mjs` uses full `page.goto` so it does not exercise client nav — use
+  `tmp-detail/vt-smoke.mjs` for that. Full migration notes: `docs/sound-sop.md` §9.
 
 ## Fonts
 
@@ -222,9 +233,14 @@ When adding/changing a section, update `docs/assets.md` and the relevant
 
 ## Current checkpoint
 
+- **View Transitions + sound Fase 2 (28 Sep 2026, belum di-commit).** Situs pindah
+  ke Astro **`<ClientRouter />`** (navigasi klien halus + `AudioContext` persist →
+  sound tidak putus) dan sound dapat cue `transition` pada link internal tanpa
+  delay. Semua komponen re-init lewat `astro:page-load`; lihat gotcha di atas +
+  `docs/sound-sop.md` §9. **Deploy GANDA**: `git push origin main` → testing +
+  production (lihat "Git & deploy").
 - **HEAD `66b284e` (28 Sep 2026).** Semua di bawah + **sound system** (SFX
-  prosedural + ambient, orb mute, SOP `docs/sound-sop.md`). **Deploy GANDA**:
-  `git push origin main` → testing + production (lihat "Git & deploy"). Next plan
+  prosedural + ambient, orb mute, SOP `docs/sound-sop.md`). Next plan
   untuk agent berikutnya: `docs/ai-handoff.md` §"Next plan — untuk AI berikutnya".
 - **Available Roles hover (`f92b88a`).** Kartu reaktif pointer: pool radial violet
   ikut kursor (`--mx/--my`), ember lean (`--gx/--gy` ±22/16px + `scale(1.06)`),

@@ -5,6 +5,11 @@ const cues = [
   { id: 'hover', label: 'Hover', hint: 'Airy glass tick — links, cards' },
   { id: 'click', label: 'Click', hint: 'Arcane pluck — buttons, tabs' },
   { id: 'select', label: 'Select', hint: 'Brighter pluck — nav, toggles' },
+  {
+    id: 'transition',
+    label: 'Transition',
+    hint: 'Seal whoosh — internal page navigation',
+  },
   { id: 'open', label: 'Open', hint: 'Rising whoosh — menu, role card' },
   { id: 'close', label: 'Close', hint: 'Falling whoosh — menu, FAQ' },
   { id: 'success', label: 'Success', hint: 'Rising chime — apply, confirm' },
@@ -128,10 +133,16 @@ const cues = [
 <script>
   import sound, { type Cue } from '../../scripts/sound';
 
-  document.querySelectorAll<HTMLButtonElement>('[data-cue]').forEach((el) => {
-    el.addEventListener('click', () => {
-      sound.unlock();
-      sound.play((el.dataset.cue as Cue) ?? 'click');
+  const initLab = () => {
+    document.querySelectorAll<HTMLButtonElement>('[data-cue]').forEach((el) => {
+      if (el.dataset.dsCueBound) return;
+      el.dataset.dsCueBound = '1';
+      el.addEventListener('click', () => {
+        sound.unlock();
+        sound.play((el.dataset.cue as Cue) ?? 'click');
+      });
     });
-  });
+  };
+
+  document.addEventListener('astro:page-load', initLab);
 </script>

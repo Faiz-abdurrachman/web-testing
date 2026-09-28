@@ -74,8 +74,9 @@ visible gain. Measured MAE stays under 2/255 on the backgrounds.
   every cue with the Web Audio API, and a runtime `ConvolverNode` impulse
   response gives a long (1.5 s), high-passed "cathedral" tail. Palette: `hover`
   (1.56 kHz glass tick), `click` (430 Hz arcane pluck), `select` (620/1710 Hz),
-  `open`/`close` (band-pass sweep 420↔2400 Hz), `success` (rising Cmaj7 chime),
-  `error` (233→155 Hz thud).
+  `transition` (short 0.28 s rising seal whoosh + 392→660 Hz pluck, played before
+  an internal page navigation), `open`/`close` (band-pass sweep 420↔2400 Hz),
+  `success` (rising Cmaj7 chime), `error` (233→155 Hz thud).
 - **Magic layer (28 Sep 2026):** every cue is rounded out with inharmonic bell
   partials (ratios 2.0 / 3.01 / 4.24 / 5.43, detuned ±7 cents and panned L/R)
   plus a short high band-passed "fairy-dust" shimmer noise; `open`/`success` also
@@ -101,6 +102,14 @@ visible gain. Measured MAE stays under 2/255 on the backgrounds.
   gesture while sound is on and fades out on mute, hidden tab or reduced motion.
   No per-frame JS and no audio files; the floating orb controls it together with
   the one-shot cues.
+- **Page-transition (Fase 2, 28 Sep 2026):** a delegated click listener in
+  `Sound.astro` plays the short `transition` cue on same-origin internal links.
+  It is pointer-only, skips modifiers/new-tab/download/tel/mailto and same-page
+  hash jumps, and it replaces (not adds to) the link's `data-sfx` cue so a link
+  never plays twice. Because the site now uses Astro's `<ClientRouter />`
+  (View Transitions) the document and the AudioContext survive the navigation, so
+  the cue plays in full with no navigation delay — and the ambient drone no
+  longer stops between pages.
 - `verify.mjs` hides `.sound-toggle` with an `addInitScript` style (overlay UI
   absent from every reference PNG) and lists it in `setNavbarHidden`.
 

@@ -50,6 +50,31 @@ production/main`. Production sempat ketinggalan dan sudah disinkronkan; HEAD
   **`docs/sound-sop.md`**; ringkasan agent di skill
   `.agents/skills/data-sorcerers-sound/SKILL.md`. Section "## Sound system" di
   bawah merinci arsitektur.
+- **View Transitions aktif (28 Sep 2026).** `<ClientRouter />` (`astro:transitions`)
+  di `BaseLayout` → navigasi antar-halaman **klien** (cross-fade, tanpa reload),
+  dan `AudioContext` **persist** sehingga ambient + cue `transition` tidak putus
+  (keluhan user "suara kepotong + pindah tab ga smooth"). Efek berantai:
+  script bundled **tidak** re-run saat swap, jadi tiap komponen di-re-init lewat
+  `astro:page-load` + cleanup (`AbortController`/observer/timer); `motion.ts`
+  dapat `destroyMotion()` (revert `gsap.matchMedia` + kill ScrollTrigger) yang
+  dipanggil di `astro:before-swap`; `mountHeroParticles()` mengembalikan
+  `dispose()` (renderer/geometry/texture/rAF/listener) dipanggil juga di
+  `before-swap`; class runtime `<html>` (`splash-done`/`nav-warm`) di-re-apply di
+  `astro:after-swap`; hash di-re-apply di `astro:page-load`. Smoke VT:
+  `tmp-detail/vt-smoke.mjs` (tidak di-commit) hijau (konteks JS persist, FAQ/
+  Snippets re-init, cue tepat satu, deep-link `#domains` top≈110). **Detail §9
+  `docs/sound-sop.md`.**
+- **Sound Fase 2 — page-transition cue (28 Sep 2026).** Cue baru `transition`
+  (~0.28 s "seal" whoosh + pluck) dimainkan saat klik link **internal**
+  (Navbar, kartu role/HoDS, back link ber-hash). Intercept ada di `Sound.astro`
+  (delegated, satu listener, `document` persist): main `transition` tanpa
+  `preventDefault`/delay (ClientRouter yang navigasi). Pointer-only
+  (`event.detail > 0`), hormati modifier/`target`/`download`/`tel:`/`mailto:`/
+  hash same-page/link URL saat ini; reduce = wiring mati. Cue transisi
+  **menggantikan** cue `data-sfx` link (tidak dobel). `whoosh(dir, duration)` +
+  `isReady` ditambah di `sound.ts`; `transition` masuk audisi `/lab/sound`.
+  Smoke: `tmp-detail/transition-smoke.mjs` hijau (normal/reduce/modifier/
+  kartu-`open`/back-hash). Tuning level cue (Bagian B) **ditunda**.
 - **Gate terakhir (HEAD `66b284e`) hijau:** `format:check`, `build` 15 halaman
   (14 + `/lab/sound`), `verify.mjs` (`EXIT 0`, `browserErrors: []`),
   `responsive-audit` 364 combos ALL PASS, `seo:audit` PASS (sitemap tetap 14),
@@ -578,6 +603,11 @@ Innovation** di home — "background bintangnya di samain aja".
   atas); card `tilt()` hover jangan diadu dengan `rotationX/Y` entrance.
 - Helper di `motion.ts`: `reveal`, `tilt` (3D, `finePointer`), magnetic button,
   cursor glow. Card tilt HoDS + `.pillar` ada; jangan buang tanpa alasan.
+- **Client-side navigation (ClientRouter):** `Motion.astro` memanggil
+  `initMotion()` di `astro:page-load` dan `destroyMotion()` di
+  `astro:before-swap` (revert `gsap.matchMedia` + kill ScrollTrigger). Karena
+  listener `astro:page-load` persist, `initMotion` juga jalan di halaman detail
+  (tanpa hero) — praktis no-op kecuali magnetic `.button`; inert saat reduce.
 - Under `prefers-reduced-motion: reduce` semua inert → `verify.mjs` bersih.
 
 ## Pass responsive + performa mobile (25 Sep 2026)
@@ -637,6 +667,15 @@ URL untuk `seo:audit`).
   Footer. Cue stateful dikirim lewat event `ds:sfx` (`detail.cue`): menu mobile
   `open`/`close` (Navbar), FAQ `open`/`close`, tab `select`, splash selesai
   `success`. Hover di-gate `(hover: hover)` supaya HP tidak berisik.
+- **Fase 2 (28 Sep 2026) — page-transition cue:** delegated `click` di
+  `Sound.astro` mendeteksi link internal same-origin (pointer-only, tanpa
+  modifier/target/download/tel/mailto, bukan hash same-page) → main cue
+  `transition` **tanpa delay** (ClientRouter yang melakukan navigasi klien).
+  Menggantikan cue `data-sfx` link itu supaya tidak dobel; reduce = wiring mati.
+  `whoosh(dir, duration)` + `isReady` ditambah di `sound.ts`; cue `transition`
+  tampil di `/lab/sound`. Wiring delegated dipasang sekali (guard
+  `window.__dsSoundWired`) karena `document` persist; orb di-rebind per
+  `astro:page-load`.
 - **Fase 3 (28 Sep 2026) — backsound ambient:** `sound.ts` punya drone
   prosedural ("pad") — 4 sine detuned (A2/E3/A3/E4) + noise lowpass dengan LFO
   napas & sweep cutoff lambat, di-route ke reverb, **tanpa aset & tanpa JS
@@ -782,7 +821,8 @@ Urutan yang disarankan. Baca `docs/sound-sop.md` kalau menyentuh sound; baca
 4. **Nasalization webfont:** butuh file berlisensi dari manusia — **jangan
    diakali**. Taruh `.woff2` di `public/fonts/`, update `@font-face` di
    `global.css` (pertahankan `local()`).
-5. **Sound (opsional):** Fase 2 page-transition; tuning level/ambient; atau ganti
-   ke sample AI lewat MCP ElevenLabs kalau mau non-prosedural.
+5. **Sound:** Fase 2 page-transition **selesai**. Sisa opsional: tuning level
+   cue/ambient (Bagian B, ditunda), pisah kontrol SFX vs ambient, atau ganti ke
+   sample AI lewat MCP ElevenLabs kalau mau non-prosedural.
 6. **OG hardening (kecil):** `og:image:secure_url` + `<html prefix="og:
 https://ogp.me/ns#">`.

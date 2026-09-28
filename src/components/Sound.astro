@@ -205,7 +205,50 @@
         );
       }
 
+      // Page transition: internal links get the short "seal" cue instead of
+      // their normal `data-sfx` cue. The ClientRouter keeps the document (and
+      // the AudioContext) alive, so the cue plays in full while the new page
+      // cross-fades in — no navigation delay needed. Pointer activation only
+      // (keyboard Enter fires a click with `detail === 0`), no modifiers, no
+      // new tab/download, no same-page hash jump.
+      const internalLink = (event: MouseEvent): HTMLAnchorElement | null => {
+        // NOTE: no `defaultPrevented` check — the ClientRouter preventDefaults
+        // the click itself while it performs the client-side navigation, and we
+        // still want the transition cue. Component-owned clicks are not anchors.
+        if (event.button !== 0) return null;
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+          return null;
+        if (event.detail === 0) return null;
+        const anchor = (event.target as Element | null)?.closest?.('a[href]');
+        if (!(anchor instanceof HTMLAnchorElement)) return null;
+        if (anchor.hasAttribute('download')) return null;
+        const target = anchor.getAttribute('target');
+        if (target && target !== '_self') return null;
+        const href = anchor.getAttribute('href');
+        if (!href || href.startsWith('#')) return null;
+        let url: URL;
+        try {
+          url = new URL(anchor.href, location.href);
+        } catch {
+          return null;
+        }
+        if (url.origin !== location.origin) return null;
+        if (url.protocol !== 'http:' && url.protocol !== 'https:') return null;
+        if (url.href === location.href) return null;
+        if (
+          url.pathname === location.pathname &&
+          url.search === location.search &&
+          url.hash
+        )
+          return null;
+        return anchor;
+      };
+
       document.addEventListener('click', (event) => {
+        if (internalLink(event)) {
+          sound.play('transition');
+          return;
+        }
         const el = (event.target as Element | null)?.closest?.('[data-sfx]');
         if (!el) return;
         sound.play((el.getAttribute('data-sfx') as Cue) || 'click');

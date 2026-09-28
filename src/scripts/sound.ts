@@ -4,7 +4,14 @@
 // (browser autoplay policy), and it is a no-op while muted.
 
 export type Cue =
-  'hover' | 'click' | 'open' | 'close' | 'select' | 'success' | 'error';
+  | 'hover'
+  | 'click'
+  | 'open'
+  | 'close'
+  | 'select'
+  | 'success'
+  | 'error'
+  | 'transition';
 
 const MASTER_GAIN = 0.75;
 const AMBIENT_GAIN = 0.28;
@@ -34,6 +41,12 @@ class SoundEngine {
 
   get isMuted(): boolean {
     return this.muted;
+  }
+
+  // True once a gesture has unlocked the context and sound is on. Used by the
+  // page-transition wiring to decide whether it is worth delaying navigation.
+  get isReady(): boolean {
+    return !this.muted && !!this.ctx && this.ctx.state === 'running';
   }
 
   setMuted(muted: boolean): void {
@@ -188,6 +201,29 @@ class SoundEngine {
           sweepTo: 146,
           detune: -8,
         });
+        break;
+      case 'transition':
+        // A brief "seal opens" gesture played before an internal navigation.
+        // Kept short on purpose: the page unloads ~110ms later, so only the
+        // attack and the rising body are meant to be heard.
+        this.whoosh(1, 0.28);
+        this.note({
+          freq: 392,
+          type: 'triangle',
+          attack: 0.006,
+          decay: 0.24,
+          gain: 0.3,
+          sweepTo: 660,
+        });
+        this.note({
+          freq: 196,
+          type: 'sine',
+          attack: 0.008,
+          decay: 0.26,
+          gain: 0.16,
+          sweepTo: 240,
+        });
+        this.sparkle(587.33, 0.09, 0.02);
         break;
     }
   }
@@ -441,10 +477,9 @@ class SoundEngine {
     osc.stop(start + attack + decay + 0.03);
   }
 
-  private whoosh(direction: 1 | -1): void {
+  private whoosh(direction: 1 | -1, duration = 0.42): void {
     const ctx = this.ctx;
     if (!ctx || !this.master) return;
-    const duration = 0.42;
     const length = Math.floor(ctx.sampleRate * duration);
     const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
     const data = buffer.getChannelData(0);

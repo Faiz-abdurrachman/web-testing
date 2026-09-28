@@ -21,9 +21,16 @@ wiring, tuning knobs, gotchas). This skill is the quick operating summary.
 
 ## Cues
 
-`hover`, `click`, `select`, `open`, `close`, `success`, `error`. Each is a
-oscillator/envelope recipe plus inharmonic bell partials (`sparkle()`) and, for
-`open`/`success`, a high-band noise `shimmer()`. Long procedural reverb tail.
+`hover`, `click`, `select`, `transition`, `open`, `close`, `success`, `error`.
+Each is an oscillator/envelope recipe plus inharmonic bell partials (`sparkle()`)
+and, for `open`/`success`, a high-band noise `shimmer()`. Long procedural reverb
+tail. `transition` is the short (0.28 s) seal whoosh played on internal links.
+
+The site uses Astro **`<ClientRouter />` (View Transitions)**, so the
+`AudioContext` persists across pages (no cut) and bundled scripts do **not**
+re-run on a swap. `Sound.astro` therefore re-binds the orb on `astro:page-load`
+and registers its delegated wiring once (guard `window.__dsSoundWired`). See
+`docs/sound-sop.md` §9.
 
 ## How to wire a component
 
