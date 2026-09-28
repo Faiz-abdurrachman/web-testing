@@ -19,6 +19,10 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   transform; halo luar memakai radial gradient blur, outer card tetap memegang
   lift, grounding shadow, dan ring. Lihat
   `docs/assets.md` §"Domain card hover corner fix".
+- **Footer background lokal 29 Sep 2026:** gambar baru `Gambar Footer(2).png`
+  (7200×2780) menggantikan `footerhd.png`. `npm run assets:footer` menghasilkan
+  WebP q90 responsif 1440/2880/5760/7200w + varian portrait HP 1170×3450;
+  footer memakai `srcset`, layout teks tetap. Lihat `docs/assets.md` §Footer.
 - **Runtime deps sengaja cuma** `astro` + `gsap` + `three`. Jangan tambah library
   lain tanpa tanya; lazy-import yang berat.
 - **Commit terbaru (live di testing + production, HEAD `4fe4c19`):**

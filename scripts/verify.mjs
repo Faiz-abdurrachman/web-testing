@@ -509,6 +509,13 @@ try {
       }),
     );
   });
+  const footerSource = await page
+    .locator('.footer .backdrop img')
+    .evaluate((image) => image.currentSrc);
+  assert.ok(
+    footerSource.endsWith('/images/backgrounds/footer-1440.webp'),
+    'Desktop footer must select the 1440w WebP at DPR 1',
+  );
   await page
     .locator('.footer')
     .screenshot({ path: 'artifacts/footer-desktop.png' });
@@ -731,6 +738,15 @@ try {
         .map((element) => element.textContent),
     );
     assert.deepEqual(footerIssues, [], `Footer text clipped at ${width}px`);
+    if (width === 390) {
+      const mobileFooterSource = await page
+        .locator('.footer .backdrop img')
+        .evaluate((image) => image.currentSrc);
+      assert.ok(
+        mobileFooterSource.endsWith('/images/backgrounds/footer-mobile.webp'),
+        'Phone footer must select the portrait WebP',
+      );
+    }
     const illustrationLeft = await page
       .locator('.philosophy .illustration')
       .evaluate((image) => image.getBoundingClientRect().left);

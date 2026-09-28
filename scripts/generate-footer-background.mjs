@@ -2,14 +2,12 @@ import sharp from 'sharp';
 import assert from 'node:assert/strict';
 import { mkdir } from 'node:fs/promises';
 
-// Footer backdrop. The supplied `footerhd.png` is the same composition as the
-// old `assets/background/hd/footer.png` but a sharper, brighter render, so all
-// paths now derive from it. Desktop keeps the full 2.59:1 landscape; phones get
-// a portrait derivative (extended star sky + the landscape anchored at the
-// bottom) because a wide landscape cannot cover a portrait footer without a
-// ~4x zoom that turns it to mush at DPR 3. See docs/assets.md §Footer.
-const SRC = 'assets/assets home page/footer/footerhd.png';
+// Footer backdrop. The 7200 x 2780 source matches the footer's 1440 x 556
+// aspect ratio. Responsive desktop WebPs preserve its detail without making
+// standard screens download the full export. Phones use a portrait derivative.
+const SRC = 'assets/assets home page/footer/Gambar Footer(2).png';
 const OUT_DIR = 'public/images/backgrounds';
+const DESKTOP_WIDTHS = [1440, 2880, 5760, 7200];
 
 await mkdir(OUT_DIR, { recursive: true });
 
@@ -21,6 +19,7 @@ function lerp(a, b, t) {
 // dark sky from banding once it is encoded to WebP.
 function skyGradient(width, height, from, to) {
   const buf = Buffer.alloc(width * height * 3);
+  let noise = 0x6d2b79f5;
   for (let y = 0; y < height; y++) {
     const t = height === 1 ? 0 : y / (height - 1);
     const r = lerp(from[0], to[0], t);
@@ -28,7 +27,10 @@ function skyGradient(width, height, from, to) {
     const b = lerp(from[2], to[2], t);
     for (let x = 0; x < width; x++) {
       const i = (y * width + x) * 3;
-      const d = ((Math.random() * 3) | 0) - 1;
+      noise ^= noise << 13;
+      noise ^= noise >>> 17;
+      noise ^= noise << 5;
+      const d = ((noise >>> 0) % 3) - 1;
       buf[i] = Math.max(0, Math.min(255, r + d));
       buf[i + 1] = Math.max(0, Math.min(255, g + d));
       buf[i + 2] = Math.max(0, Math.min(255, b + d));
@@ -46,10 +48,13 @@ async function average(input, region) {
   return [data[0], data[1], data[2]];
 }
 
-// Lossy WebP with a mean-absolute-error guard, matching
-// scripts/generate-backgrounds.mjs.
-async function encode(input, output, { quality }) {
-  const reference = await sharp(input).png().toBuffer();
+// Compare each WebP with the source resized to that variant's dimensions.
+async function encode(width, output, quality) {
+  const reference = await sharp(SRC)
+    .removeAlpha()
+    .resize({ width, kernel: 'lanczos3' })
+    .png()
+    .toBuffer();
   await sharp(reference)
     .webp({ quality, effort: 6, smartSubsample: true })
     .toFile(output);
@@ -63,10 +68,14 @@ async function encode(input, output, { quality }) {
   return mae;
 }
 
-// Desktop / tablet: the sharp full landscape.
-{
-  const mae = await encode(SRC, `${OUT_DIR}/footer.webp`, { quality: 88 });
-  console.log(`footer: webp q88 (MAE ${mae.toFixed(2)})`);
+// Desktop / tablet: 1x, 2x, 4x and the original 5x export.
+for (const width of DESKTOP_WIDTHS) {
+  const output =
+    width === 2880
+      ? `${OUT_DIR}/footer.webp`
+      : `${OUT_DIR}/footer-${width}.webp`;
+  const mae = await encode(width, output, 90);
+  console.log(`footer ${width}w: webp q90 (MAE ${mae.toFixed(2)})`);
 }
 
 // Phones: portrait canvas so `object-fit: cover` fits the width instead of
@@ -77,7 +86,7 @@ async function encode(input, output, { quality }) {
 {
   const meta = await sharp(SRC).metadata();
   const artW = meta.width;
-  const artH = meta.height; // 2017 x 780
+  const artH = meta.height; // 7200 x 2780
   const MW = 1170; // 3x a 390px viewport
   const MH = 3450; // taller than any phone footer → `cover` + bottom anchor
   const ZOOM = 1.35;
@@ -125,11 +134,11 @@ async function encode(input, output, { quality }) {
       },
       { input: landscape, top: skyH, left: 0 },
     ])
-    .webp({ quality: 84, effort: 6, smartSubsample: true })
+    .webp({ quality: 90, effort: 6, smartSubsample: true })
     .toFile(`${OUT_DIR}/footer-mobile.webp`);
 
   console.log(
-    `footer-mobile: webp q84 ${mobile.width}x${mobile.height} ` +
+    `footer-mobile: webp q90 ${mobile.width}x${mobile.height} ` +
       `(${(mobile.size / 1024).toFixed(1)}KB, landscape ${landscapeH}px)`,
   );
 }
