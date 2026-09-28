@@ -83,46 +83,52 @@ const { hod } = Astro.props;
 </main>
 
 <script>
-  // The card that opened this page decides where "back" returns to. The pages
-  // are static, so the `from` query is applied on the client.
-  if (new URLSearchParams(location.search).get('from') === 'recruitment') {
-    const back =
-      document.querySelector<HTMLAnchorElement>('.hods-detail .back');
-    if (back) {
-      back.href = '/recruitment#who-should-join';
-      const label = back.querySelector('span');
-      if (label) label.textContent = 'Back to Who Should Join';
+  // Re-run after every client-side navigation: the DOM and the `from` query are
+  // both new, so the back link and the tabs must be (re)wired each time.
+  const initHoDSDetail = () => {
+    // The card that opened this page decides where "back" returns to. The pages
+    // are static, so the `from` query is applied on the client.
+    if (new URLSearchParams(location.search).get('from') === 'recruitment') {
+      const back =
+        document.querySelector<HTMLAnchorElement>('.hods-detail .back');
+      if (back) {
+        back.href = '/recruitment#who-should-join';
+        const label = back.querySelector('span');
+        if (label) label.textContent = 'Back to Who Should Join';
+      }
     }
-  }
 
-  document.querySelectorAll<HTMLElement>('.hods-detail').forEach((root) => {
-    const tabs = [...root.querySelectorAll<HTMLButtonElement>('.tab')];
-    const panels = [...root.querySelectorAll<HTMLElement>('.panel')];
-    const select = (index: number) => {
-      tabs.forEach((tab, i) => {
-        const active = i === index;
-        tab.classList.toggle('active', active);
-        tab.setAttribute('aria-selected', String(active));
-        tab.tabIndex = active ? 0 : -1;
-        panels[i].hidden = !active;
-      });
-      window.dispatchEvent(
-        new CustomEvent('ds:sfx', { detail: { cue: 'select' } }),
-      );
-    };
-    tabs.forEach((tab, index) => {
-      tab.addEventListener('click', () => select(index));
-      tab.addEventListener('keydown', (event) => {
-        if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
-        event.preventDefault();
-        const next =
-          (index + (event.key === 'ArrowRight' ? 1 : tabs.length - 1)) %
-          tabs.length;
-        select(next);
-        tabs[next].focus();
+    document.querySelectorAll<HTMLElement>('.hods-detail').forEach((root) => {
+      const tabs = [...root.querySelectorAll<HTMLButtonElement>('.tab')];
+      const panels = [...root.querySelectorAll<HTMLElement>('.panel')];
+      const select = (index: number) => {
+        tabs.forEach((tab, i) => {
+          const active = i === index;
+          tab.classList.toggle('active', active);
+          tab.setAttribute('aria-selected', String(active));
+          tab.tabIndex = active ? 0 : -1;
+          panels[i].hidden = !active;
+        });
+        window.dispatchEvent(
+          new CustomEvent('ds:sfx', { detail: { cue: 'select' } }),
+        );
+      };
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => select(index));
+        tab.addEventListener('keydown', (event) => {
+          if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+          event.preventDefault();
+          const next =
+            (index + (event.key === 'ArrowRight' ? 1 : tabs.length - 1)) %
+            tabs.length;
+          select(next);
+          tabs[next].focus();
+        });
       });
     });
-  });
+  };
+
+  document.addEventListener('astro:page-load', initHoDSDetail);
 </script>
 
 <style>

@@ -106,12 +106,9 @@
 
   // The ambient pad is skipped under reduced motion; one-shot cues stay manual.
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
-  sound.setAmbientAllowed(!reduceMotion.matches);
+  const wired = window as unknown as { __dsSoundWired?: boolean };
 
   const KEY = 'ds:sound';
-  const toggle = document.querySelector<HTMLElement>('[data-sound-toggle]');
-  const button = toggle?.querySelector<HTMLButtonElement>('.sound-button');
-
   const readMuted = (): boolean => {
     try {
       return localStorage.getItem(KEY) === 'off';
@@ -120,74 +117,99 @@
     }
   };
 
+  // The engine (and its AudioContext) lives for the whole client-side session,
+  // so `muted` persists across navigations; only the orb element is re-bound.
   let muted = readMuted();
 
-  const sync = (): void => {
-    sound.setMuted(muted);
-    if (!button) return;
-    button.setAttribute('aria-pressed', String(!muted));
-    button.setAttribute('aria-label', muted ? 'Sound off' : 'Sound on');
-    button.title = muted ? 'Sound off' : 'Sound on';
-    toggle?.classList.toggle('is-muted', muted);
-  };
-  sync();
+  const setupOrb = (): void => {
+    const toggle = document.querySelector<HTMLElement>('[data-sound-toggle]');
+    const button = toggle?.querySelector<HTMLButtonElement>('.sound-button');
+    if (!button || button.dataset.dsSoundBound) return;
+    button.dataset.dsSoundBound = '1';
 
-  button?.addEventListener('click', () => {
-    muted = !muted;
-    try {
-      localStorage.setItem(KEY, muted ? 'off' : 'on');
-    } catch {
-      /* storage unavailable: preference stays for this session only */
-    }
+    const sync = (): void => {
+      sound.setMuted(muted);
+      button.setAttribute('aria-pressed', String(!muted));
+      button.setAttribute('aria-label', muted ? 'Sound off' : 'Sound on');
+      button.title = muted ? 'Sound off' : 'Sound on';
+      toggle?.classList.toggle('is-muted', muted);
+    };
     sync();
-    if (!muted) {
-      sound.unlock();
-      sound.play('select');
-    }
-  });
 
-  // First real gesture unlocks the context so later hover cues can play.
-  const unlock = (): void => sound.unlock();
-  window.addEventListener('pointerdown', unlock, { once: true, capture: true });
-  window.addEventListener('keydown', unlock, { once: true, capture: true });
+    button.addEventListener('click', () => {
+      muted = !muted;
+      try {
+        localStorage.setItem(KEY, muted ? 'off' : 'on');
+      } catch {
+        /* storage unavailable: preference stays for this session only */
+      }
+      sync();
+      if (!muted) {
+        sound.unlock();
+        sound.play('select');
+      }
+    });
+  };
 
-  // Delegated wiring: components opt in with data-sfx / data-sfx-hover, and
-  // stateful ones request a cue via `ds:sfx` (e.g. menu open/close). All gated
-  // off under reduced motion so audits (which force `reduce`) stay silent.
-  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    window.addEventListener('ds:sfx', (event) => {
-      const cue = (event as CustomEvent<{ cue?: Cue }>).detail?.cue;
-      if (cue) sound.play(cue);
+  // Re-bind the floating orb after every client-side navigation; the first call
+  // covers the initial load in case `astro:page-load` has already fired.
+  document.addEventListener('astro:page-load', setupOrb);
+  setupOrb();
+
+  // Everything below is registered once and works by delegation on `document`
+  // (which the ClientRouter keeps alive), so it survives swaps without piling up.
+  if (!wired.__dsSoundWired) {
+    wired.__dsSoundWired = true;
+    sound.setAmbientAllowed(!reduceMotion.matches);
+
+    // First real gesture unlocks the context so later hover cues can play.
+    window.addEventListener('pointerdown', () => sound.unlock(), {
+      once: true,
+      capture: true,
+    });
+    window.addEventListener('keydown', () => sound.unlock(), {
+      once: true,
+      capture: true,
     });
 
-    // Hover cues only where hovering is a real interaction.
-    if (matchMedia('(hover: hover)').matches) {
-      let hovered: Element | null = null;
-      document.addEventListener(
-        'pointerenter',
-        (event) => {
-          const el = (event.target as Element | null)?.closest?.(
-            '[data-sfx-hover]',
-          );
-          if (!el || el === hovered) return;
-          hovered = el;
-          sound.play((el.getAttribute('data-sfx-hover') as Cue) || 'hover');
-        },
-        true,
-      );
-      document.addEventListener(
-        'pointerleave',
-        (event) => {
-          if (event.target === hovered) hovered = null;
-        },
-        true,
-      );
-    }
+    // Delegated wiring: components opt in with data-sfx / data-sfx-hover, and
+    // stateful ones request a cue via `ds:sfx` (e.g. menu open/close). All gated
+    // off under reduced motion so audits (which force `reduce`) stay silent.
+    if (!reduceMotion.matches) {
+      window.addEventListener('ds:sfx', (event) => {
+        const cue = (event as CustomEvent<{ cue?: Cue }>).detail?.cue;
+        if (cue) sound.play(cue);
+      });
 
-    document.addEventListener('click', (event) => {
-      const el = (event.target as Element | null)?.closest?.('[data-sfx]');
-      if (!el) return;
-      sound.play((el.getAttribute('data-sfx') as Cue) || 'click');
-    });
+      // Hover cues only where hovering is a real interaction.
+      if (matchMedia('(hover: hover)').matches) {
+        let hovered: Element | null = null;
+        document.addEventListener(
+          'pointerenter',
+          (event) => {
+            const el = (event.target as Element | null)?.closest?.(
+              '[data-sfx-hover]',
+            );
+            if (!el || el === hovered) return;
+            hovered = el;
+            sound.play((el.getAttribute('data-sfx-hover') as Cue) || 'hover');
+          },
+          true,
+        );
+        document.addEventListener(
+          'pointerleave',
+          (event) => {
+            if (event.target === hovered) hovered = null;
+          },
+          true,
+        );
+      }
+
+      document.addEventListener('click', (event) => {
+        const el = (event.target as Element | null)?.closest?.('[data-sfx]');
+        if (!el) return;
+        sound.play((el.getAttribute('data-sfx') as Cue) || 'click');
+      });
+    }
   }
 </script>

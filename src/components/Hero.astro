@@ -67,18 +67,24 @@ import Button from './Button.astro';
   // motion. The scroll sequence in `motion.ts` drives
   // `window.__heroParticles.burst` so the field rushes toward the viewer as the
   // hero zooms in.
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // Assets the splash should await before lifting (see Splash.astro).
-  const preload = (window as unknown as { __dsPreload?: Promise<unknown>[] })
-    .__dsPreload;
+  let disposeParticles: (() => void) | void;
+  let currentHero: HTMLElement | null = null;
 
-  // Animated background. Only fetched on larger, motion-OK viewports; under
-  // reduced motion (or ≤600px) the static art stays and the clip is never
-  // downloaded, so the fallback is always the reference art. It plays on a
-  // continuous loop (the clip is a seamless ping-pong boomerang), and is never
-  // scrubbed by scroll, so it keeps moving whether or not the visitor scrolls.
-  const video = document.querySelector<HTMLVideoElement>('.art-video');
-  if (video) {
+  const initHeroVideo = (hero: HTMLElement) => {
+    const reduce = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
+    // Assets the splash should await before lifting (see Splash.astro).
+    const preload = (window as unknown as { __dsPreload?: Promise<unknown>[] })
+      .__dsPreload;
+
+    // Animated background. Only fetched on larger, motion-OK viewports; under
+    // reduced motion (or ≤600px) the static art stays and the clip is never
+    // downloaded, so the fallback is always the reference art. It plays on a
+    // continuous loop (the clip is a seamless ping-pong boomerang), and is never
+    // scrubbed by scroll, so it keeps moving whether or not the visitor scrolls.
+    const video = hero.querySelector<HTMLVideoElement>('.art-video');
+    if (!video) return;
     const wide = window.matchMedia('(min-width: 601px)').matches;
     const conn = (
       navigator as unknown as {
@@ -89,56 +95,83 @@ import Button from './Button.astro';
       conn?.saveData === true ||
       conn?.effectiveType === 'slow-2g' ||
       conn?.effectiveType === '2g';
-    if (!reduce && wide && !constrained) {
-      const stack = video.closest('.artwork-stack');
-      const start = () => {
-        // The clip is a full scene with its own (larger) sorcerer baked in, so
-        // drop the static cutout in the same frame instead of crossfading two
-        // characters — that overlap read as a "double". The plate then fades in
-        // over the static background only.
-        stack?.classList.add('is-video');
-        video.classList.add('is-ready');
-        void video.play().catch(() => {});
-      };
-      if (video.readyState >= 2) start();
-      else video.addEventListener('loadeddata', start, { once: true });
-      const load = () => {
-        video.preload = 'auto';
-        video.load();
-      };
-      const armed = document.documentElement.classList.contains('splash-armed');
-      const warm = document.documentElement.classList.contains('nav-warm');
-      if (armed) {
-        // Fetch during the splash and let it wait for the first frame, so the
-        // clip is ready instead of competing with the reveal.
-        preload?.push(
-          new Promise<void>((resolve) => {
-            if (video.readyState >= 2) resolve();
-            else
-              video.addEventListener('loadeddata', () => resolve(), {
-                once: true,
-              });
-          }),
-        );
-        load();
-      } else if (warm) {
-        // Warm, in-session navigation: the clip is normally still in the HTTP
-        // cache, so fetch it now and swap as soon as it can paint. The old idle
-        // wait pushed the image->video swap seconds down the line, which is what
-        // made a Home visit look like it "becomes" the video.
-        load();
-      } else if (typeof window.requestIdleCallback === 'function') {
-        window.requestIdleCallback(load, { timeout: 2000 });
-      } else {
-        window.setTimeout(load, 300);
-      }
+    if (reduce || !wide || constrained) return;
+    const stack = video.closest('.artwork-stack');
+    const start = () => {
+      // The clip is a full scene with its own (larger) sorcerer baked in, so
+      // drop the static cutout in the same frame instead of crossfading two
+      // characters — that overlap read as a "double". The plate then fades in
+      // over the static background only.
+      stack?.classList.add('is-video');
+      video.classList.add('is-ready');
+      void video.play().catch(() => {});
+    };
+    if (video.readyState >= 2) start();
+    else video.addEventListener('loadeddata', start, { once: true });
+    const load = () => {
+      video.preload = 'auto';
+      video.load();
+    };
+    const armed = document.documentElement.classList.contains('splash-armed');
+    const warm = document.documentElement.classList.contains('nav-warm');
+    if (armed) {
+      // Fetch during the splash and let it wait for the first frame, so the
+      // clip is ready instead of competing with the reveal.
+      preload?.push(
+        new Promise<void>((resolve) => {
+          if (video.readyState >= 2) resolve();
+          else
+            video.addEventListener('loadeddata', () => resolve(), {
+              once: true,
+            });
+        }),
+      );
+      load();
+    } else if (warm) {
+      // Warm, in-session navigation: the clip is normally still in the HTTP
+      // cache, so fetch it now and swap as soon as it can paint. The old idle
+      // wait pushed the image->video swap seconds down the line, which is what
+      // made a Home visit look like it "becomes" the video.
+      load();
+    } else if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(load, { timeout: 2000 });
+    } else {
+      window.setTimeout(load, 300);
     }
-  }
+  };
 
-  const canvas = document.querySelector<HTMLCanvasElement>('.hero-canvas');
-  const host = canvas?.parentElement;
-  if (canvas && host)
-    void mountHeroParticles(canvas, host, preload).catch(() => {});
+  const initHeroParticles = (hero: HTMLElement) => {
+    const preload = (window as unknown as { __dsPreload?: Promise<unknown>[] })
+      .__dsPreload;
+    const canvas =
+      hero.querySelector<HTMLCanvasElement>('.hero-canvas') ?? undefined;
+    const host = canvas?.parentElement;
+    if (!canvas || !host) return;
+    void mountHeroParticles(canvas, host, preload)
+      .then((dispose) => {
+        disposeParticles = dispose;
+      })
+      .catch(() => {});
+  };
+
+  // Init per page: the first parse still runs this before `load` (so the splash
+  // awaits the video/three promises as before), and `astro:page-load` re-inits
+  // after client-side navigation. The element identity guard stops the initial
+  // `astro:page-load` from double-binding the same hero.
+  const initHero = () => {
+    const hero = document.querySelector<HTMLElement>('.hero');
+    if (!hero || hero === currentHero) return;
+    currentHero = hero;
+    initHeroVideo(hero);
+    initHeroParticles(hero);
+  };
+
+  initHero();
+  document.addEventListener('astro:page-load', initHero);
+  document.addEventListener('astro:before-swap', () => {
+    if (typeof disposeParticles === 'function') disposeParticles();
+    disposeParticles = undefined;
+  });
 </script>
 <style>
   .hero {

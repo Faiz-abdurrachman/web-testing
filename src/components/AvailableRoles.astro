@@ -298,15 +298,17 @@ const domainTitle = Object.fromEntries(domains.map((d) => [d.id, d.title]));
 <script>
   // Pointer-only, motion-on: the card's ember leans toward the cursor by
   // publishing a small --gx/--gy offset the CSS reads. Skipped entirely for
-  // touch and reduced motion, so those stay static.
-  const rows = document.querySelectorAll<HTMLElement>(
-    '.available-roles .role-row',
-  );
-  const enabled =
-    window.matchMedia('(pointer: fine)').matches &&
-    !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // touch and reduced motion, so those stay static. Re-run after each
+  // client-side navigation because the cards are replaced by the swap.
+  const initAvailableRoles = () => {
+    const rows = document.querySelectorAll<HTMLElement>(
+      '.available-roles .role-row',
+    );
+    const enabled =
+      window.matchMedia('(pointer: fine)').matches &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!enabled) return;
 
-  if (enabled) {
     const reset = (row: HTMLElement) => {
       row.style.removeProperty('--gx');
       row.style.removeProperty('--gy');
@@ -324,5 +326,7 @@ const domainTitle = Object.fromEntries(domains.map((d) => [d.id, d.title]));
       row.addEventListener('pointerleave', () => reset(row));
       row.addEventListener('blur', () => reset(row));
     });
-  }
+  };
+
+  document.addEventListener('astro:page-load', initAvailableRoles);
 </script>

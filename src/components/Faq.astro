@@ -201,53 +201,57 @@ const items: FaqItem[] = [
   const DURATION = 320;
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
-  document
-    .querySelectorAll<HTMLDetailsElement>('details.faq-item')
-    .forEach((details) => {
-      const summary = details.querySelector('summary');
-      const panel = details.querySelector<HTMLElement>('.faq-a-wrap');
-      if (!summary || !panel) return;
+  const initFaq = () => {
+    document
+      .querySelectorAll<HTMLDetailsElement>('details.faq-item')
+      .forEach((details) => {
+        const summary = details.querySelector('summary');
+        const panel = details.querySelector<HTMLElement>('.faq-a-wrap');
+        if (!summary || !panel) return;
 
-      let version = 0;
+        let version = 0;
 
-      summary.addEventListener('click', (event) => {
-        event.preventDefault();
+        summary.addEventListener('click', (event) => {
+          event.preventDefault();
 
-        const opening = !details.open;
-        const token = ++version;
-        details.classList.toggle('is-open', opening);
-        window.dispatchEvent(
-          new CustomEvent('ds:sfx', {
-            detail: { cue: opening ? 'open' : 'close' },
-          }),
-        );
+          const opening = !details.open;
+          const token = ++version;
+          details.classList.toggle('is-open', opening);
+          window.dispatchEvent(
+            new CustomEvent('ds:sfx', {
+              detail: { cue: opening ? 'open' : 'close' },
+            }),
+          );
 
-        if (reduceMotion.matches) {
-          details.open = opening;
-          panel.style.height = '';
-          return;
-        }
+          if (reduceMotion.matches) {
+            details.open = opening;
+            panel.style.height = '';
+            return;
+          }
 
-        const settle = () => {
-          if (token !== version) return;
-          panel.style.height = '';
-          if (!opening) details.open = false;
-        };
+          const settle = () => {
+            if (token !== version) return;
+            panel.style.height = '';
+            if (!opening) details.open = false;
+          };
 
-        if (opening) {
-          details.open = true;
-          const target = panel.scrollHeight;
-          panel.style.height = '0px';
-          void panel.offsetHeight;
-          panel.style.height = `${target}px`;
-        } else {
-          panel.style.height = `${panel.scrollHeight}px`;
-          void panel.offsetHeight;
-          panel.style.height = '0px';
-        }
+          if (opening) {
+            details.open = true;
+            const target = panel.scrollHeight;
+            panel.style.height = '0px';
+            void panel.offsetHeight;
+            panel.style.height = `${target}px`;
+          } else {
+            panel.style.height = `${panel.scrollHeight}px`;
+            void panel.offsetHeight;
+            panel.style.height = '0px';
+          }
 
-        panel.addEventListener('transitionend', settle, { once: true });
-        setTimeout(settle, DURATION + 80);
+          panel.addEventListener('transitionend', settle, { once: true });
+          setTimeout(settle, DURATION + 80);
+        });
       });
-    });
+  };
+
+  document.addEventListener('astro:page-load', initFaq);
 </script>

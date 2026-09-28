@@ -60,7 +60,7 @@ export async function mountHeroParticles(
   host: HTMLElement,
   preload?: Promise<unknown>[],
   options: { preset?: ParticlePreset } = {},
-): Promise<void> {
+): Promise<(() => void) | void> {
   const config = PRESETS[options.preset ?? 'motes'];
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const allowed = window.matchMedia('(min-width: 768px)').matches;
@@ -69,6 +69,13 @@ export async function mountHeroParticles(
   const threeImport = import('three');
   preload?.push(threeImport);
   const THREE = await threeImport;
+
+  // Client-side navigation swaps the canvas out; everything below registers via
+  // this controller so a single `dispose()` (called on `astro:before-swap`)
+  // releases the WebGL context and the window listeners instead of leaking one
+  // per page.
+  const ac = new AbortController();
+  const { signal } = ac;
 
   const renderer = new THREE.WebGLRenderer({
     canvas,
@@ -166,7 +173,7 @@ export async function mountHeroParticles(
         resize();
       });
     },
-    { passive: true },
+    { passive: true, signal },
   );
 
   let pointerX = 0;
@@ -177,12 +184,13 @@ export async function mountHeroParticles(
       pointerX = event.clientX / window.innerWidth - 0.5;
       pointerY = event.clientY / window.innerHeight - 0.5;
     },
-    { passive: true },
+    { passive: true, signal },
   );
 
   // Only step the particle loop while the hero is on-screen: the compositor
   // then has nothing to animate for the rest of the page.
   let running = false;
+  let rafId = 0;
   const tick = () => {
     if (!running) return;
     const t = performance.now() / 1000;
@@ -225,19 +233,34 @@ export async function mountHeroParticles(
     material.opacity = config.opacity + state.burst * config.burstOpacity;
     camera.position.z = 9 - state.burst * config.burstCamera;
     renderer.render(scene, camera);
-    requestAnimationFrame(tick);
+    rafId = requestAnimationFrame(tick);
   };
   const start = () => {
     if (running) return;
     running = true;
-    requestAnimationFrame(tick);
+    rafId = requestAnimationFrame(tick);
   };
-  new IntersectionObserver(
+  const observer = new IntersectionObserver(
     ([entry]) => {
       if (entry.isIntersecting) start();
       else running = false;
     },
     { rootMargin: '120px' },
-  ).observe(host);
+  );
+  observer.observe(host);
   start();
+
+  return () => {
+    running = false;
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = 0;
+    ac.abort();
+    observer.disconnect();
+    geometry.dispose();
+    material.dispose();
+    sprite?.dispose();
+    renderer.dispose();
+    const w = window as unknown as { __heroParticles?: unknown };
+    if (w.__heroParticles === state) delete w.__heroParticles;
+  };
 }

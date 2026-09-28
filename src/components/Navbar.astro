@@ -694,225 +694,252 @@ const destinations: Record<string, string> = {
   }
 </style>
 <script>
-  const navbar = document.querySelector<HTMLElement>('.navbar');
-  const indicator = navbar?.querySelector<HTMLElement>('.nav-indicator');
-  const desktopLinks = navbar
-    ? [...navbar.querySelectorAll<HTMLElement>('.desktop-menu a.nav-link')]
-    : [];
-  const reduceMotion = () =>
-    matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const finePointer = () => matchMedia('(pointer: fine)').matches;
+  // Re-initialised after every client-side navigation: the navbar element is
+  // replaced by the swap, and the `window`/`document` listeners must not pile up.
+  let navController: AbortController | undefined;
+  const initNavbar = () => {
+    navController?.abort();
+    navController = new AbortController();
+    const { signal } = navController;
 
-  const syncScroll = () => {
-    if (!navbar) return false;
-    const y = window.scrollY;
-    // Small hysteresis: resting right on a threshold (or rubber-band overscroll)
-    // must not chatter the classes, which would restart the morph and the glint.
-    const wasScrolled = navbar.classList.contains('is-scrolled');
-    const wasCondensed = navbar.classList.contains('is-condensed');
-    const scrolled = wasScrolled ? y > 6 : y > 10;
-    const condensed = wasCondensed ? y > 36 : y > 44;
-    const changed = wasScrolled !== scrolled || wasCondensed !== condensed;
-    navbar.classList.toggle('is-scrolled', scrolled);
-    navbar.classList.toggle('is-condensed', condensed);
-    return changed;
-  };
+    const navbar = document.querySelector<HTMLElement>('.navbar');
+    const indicator = navbar?.querySelector<HTMLElement>('.nav-indicator');
+    const desktopLinks = navbar
+      ? [...navbar.querySelectorAll<HTMLElement>('.desktop-menu a.nav-link')]
+      : [];
+    const reduceMotion = () =>
+      matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const finePointer = () => matchMedia('(pointer: fine)').matches;
 
-  // The active pill slides between links instead of popping. Hovering another
-  // link pulls it there too, so the highlight feels alive.
-  let hoverLink: HTMLElement | null = null;
-  // Last link the pill was placed on, so a scroll frame that does not change
-  // the target can skip the offsetLeft/offsetWidth reads entirely.
-  let indicatorTarget: HTMLElement | null = null;
+    const syncScroll = () => {
+      if (!navbar) return false;
+      const y = window.scrollY;
+      // Small hysteresis: resting right on a threshold (or rubber-band overscroll)
+      // must not chatter the classes, which would restart the morph and the glint.
+      const wasScrolled = navbar.classList.contains('is-scrolled');
+      const wasCondensed = navbar.classList.contains('is-condensed');
+      const scrolled = wasScrolled ? y > 6 : y > 10;
+      const condensed = wasCondensed ? y > 36 : y > 44;
+      const changed = wasScrolled !== scrolled || wasCondensed !== condensed;
+      navbar.classList.toggle('is-scrolled', scrolled);
+      navbar.classList.toggle('is-condensed', condensed);
+      return changed;
+    };
 
-  const moveIndicator = (el: HTMLElement) => {
-    if (!indicator) return;
-    indicator.style.opacity = '1';
-    indicator.style.setProperty('--nb-x', `${el.offsetLeft}px`);
-    indicator.style.top = `${el.offsetTop}px`;
-    indicator.style.width = `${el.offsetWidth}px`;
-    indicator.style.height = `${el.offsetHeight}px`;
-  };
+    // The active pill slides between links instead of popping. Hovering another
+    // link pulls it there too, so the highlight feels alive.
+    let hoverLink: HTMLElement | null = null;
+    // Last link the pill was placed on, so a scroll frame that does not change
+    // the target can skip the offsetLeft/offsetWidth reads entirely.
+    let indicatorTarget: HTMLElement | null = null;
 
-  const syncIndicator = (force = false) => {
-    if (!indicator || !navbar) return;
-    if (innerWidth <= 1050) {
-      indicator.style.opacity = '0';
-      indicatorTarget = null;
-      return;
-    }
-    const target =
-      hoverLink || navbar.querySelector<HTMLElement>('a.nav-link.active');
-    if (!target) {
-      indicator.style.opacity = '0';
-      indicatorTarget = null;
-      return;
-    }
-    if (!force && target === indicatorTarget) return;
-    indicatorTarget = target;
-    moveIndicator(target);
-  };
+    const moveIndicator = (el: HTMLElement) => {
+      if (!indicator) return;
+      indicator.style.opacity = '1';
+      indicator.style.setProperty('--nb-x', `${el.offsetLeft}px`);
+      indicator.style.top = `${el.offsetTop}px`;
+      indicator.style.width = `${el.offsetWidth}px`;
+      indicator.style.height = `${el.offsetHeight}px`;
+    };
 
-  // The indicator sits inside `nav`, and the links keep the same offsets
-  // relative to it throughout the morph (only `nav`'s position inside the bar
-  // changes, and the indicator rides along). So there is nothing to follow
-  // frame-by-frame — reading layout on every scroll frame would only force a
-  // synchronous layout in the middle of the CSS transition. Fonts, resize and
-  // the `transitionend` listeners below re-measure once the bar settles.
-  syncScroll();
-  let scrollRaf = 0;
-  addEventListener(
-    'scroll',
-    () => {
-      if (scrollRaf) return;
-      scrollRaf = requestAnimationFrame(() => {
-        scrollRaf = 0;
+    const syncIndicator = (force = false) => {
+      if (!indicator || !navbar) return;
+      if (innerWidth <= 1050) {
+        indicator.style.opacity = '0';
+        indicatorTarget = null;
+        return;
+      }
+      const target =
+        hoverLink || navbar.querySelector<HTMLElement>('a.nav-link.active');
+      if (!target) {
+        indicator.style.opacity = '0';
+        indicatorTarget = null;
+        return;
+      }
+      if (!force && target === indicatorTarget) return;
+      indicatorTarget = target;
+      moveIndicator(target);
+    };
+
+    // The indicator sits inside `nav`, and the links keep the same offsets
+    // relative to it throughout the morph (only `nav`'s position inside the bar
+    // changes, and the indicator rides along). So there is nothing to follow
+    // frame-by-frame — reading layout on every scroll frame would only force a
+    // synchronous layout in the middle of the CSS transition. Fonts, resize and
+    // the `transitionend` listeners below re-measure once the bar settles.
+    syncScroll();
+    let scrollRaf = 0;
+    addEventListener(
+      'scroll',
+      () => {
+        if (scrollRaf) return;
+        scrollRaf = requestAnimationFrame(() => {
+          scrollRaf = 0;
+          syncScroll();
+          syncIndicator();
+        });
+      },
+      { passive: true, signal },
+    );
+    addEventListener(
+      'resize',
+      () => {
         syncScroll();
+        syncIndicator(true);
+      },
+      { signal },
+    );
+
+    desktopLinks.forEach((link) => {
+      link.addEventListener('mouseenter', () => {
+        hoverLink = link;
         syncIndicator();
       });
-    },
-    { passive: true },
-  );
-  addEventListener('resize', () => {
-    syncScroll();
-    syncIndicator(true);
-  });
-
-  desktopLinks.forEach((link) => {
-    link.addEventListener('mouseenter', () => {
-      hoverLink = link;
+      link.addEventListener('focus', () => {
+        hoverLink = link;
+        syncIndicator();
+      });
+    });
+    const desktopNav = navbar?.querySelector<HTMLElement>('.desktop-menu nav');
+    desktopNav?.addEventListener('mouseleave', () => {
+      hoverLink = null;
       syncIndicator();
     });
-    link.addEventListener('focus', () => {
-      hoverLink = link;
+    desktopNav?.addEventListener('blur', () => {
+      hoverLink = null;
       syncIndicator();
     });
-  });
-  const desktopNav = navbar?.querySelector<HTMLElement>('.desktop-menu nav');
-  desktopNav?.addEventListener('mouseleave', () => {
-    hoverLink = null;
-    syncIndicator();
-  });
-  desktopNav?.addEventListener('blur', () => {
-    hoverLink = null;
-    syncIndicator();
-  });
 
-  // While the bar morphs its padding/max-width the links move, so re-measure
-  // once the transition settles.
-  for (const el of [
-    navbar?.querySelector('.desktop-menu'),
-    navbar?.querySelector('.navbar-inner'),
-  ]) {
-    el?.addEventListener('transitionend', () => syncIndicator(true));
-  }
-
-  requestAnimationFrame(() => syncIndicator(true));
-  document.fonts?.ready.then(() => syncIndicator(true)).catch(() => {});
-  addEventListener('load', () => syncIndicator(true), { once: true });
-
-  const armNav = () => navbar?.classList.add('is-ready');
-  if (document.documentElement.classList.contains('splash-done')) {
-    armNav();
-  } else {
-    addEventListener('ds:splash-done', armNav, { once: true });
-    setTimeout(armNav, 7000);
-  }
-
-  if (navbar && finePointer() && !reduceMotion()) {
-    navbar.addEventListener(
-      'pointermove',
-      (event) => {
-        const rect = navbar.getBoundingClientRect();
-        navbar.style.setProperty('--mx', `${event.clientX - rect.left}px`);
-        navbar.classList.add('is-glowing');
-      },
-      { passive: true },
-    );
-    navbar.addEventListener('mouseleave', () =>
-      navbar.classList.remove('is-glowing'),
-    );
-  }
-
-  const menu = document.querySelector<HTMLDetailsElement>('.mobile-menu');
-  const nav = menu?.querySelector<HTMLElement>('nav');
-  const summary = menu?.querySelector<HTMLElement>('summary');
-
-  let closeTimer: ReturnType<typeof setTimeout> | undefined;
-
-  const openMenu = () => {
-    if (!menu) return;
-    clearTimeout(closeTimer);
-    menu.classList.remove('is-closing');
-    menu.open = true;
-    window.dispatchEvent(
-      new CustomEvent('ds:sfx', { detail: { cue: 'open' } }),
-    );
-    nav?.querySelector<HTMLElement>('a')?.focus();
-  };
-
-  const closeMenu = () => {
-    if (!menu?.open) return;
-    window.dispatchEvent(
-      new CustomEvent('ds:sfx', { detail: { cue: 'close' } }),
-    );
-    if (reduceMotion() || !nav) {
-      menu.classList.remove('is-closing');
-      menu.open = false;
-      return;
+    // While the bar morphs its padding/max-width the links move, so re-measure
+    // once the transition settles.
+    for (const el of [
+      navbar?.querySelector('.desktop-menu'),
+      navbar?.querySelector('.navbar-inner'),
+    ]) {
+      el?.addEventListener('transitionend', () => syncIndicator(true));
     }
-    if (menu.classList.contains('is-closing')) return;
-    menu.classList.add('is-closing');
-    const finish = (event?: Event) => {
-      if (event && event.target !== nav) return;
-      nav.removeEventListener('transitionend', finish);
+
+    requestAnimationFrame(() => syncIndicator(true));
+    document.fonts?.ready.then(() => syncIndicator(true)).catch(() => {});
+    addEventListener('load', () => syncIndicator(true), { once: true, signal });
+
+    const armNav = () => navbar?.classList.add('is-ready');
+    if (document.documentElement.classList.contains('splash-done')) {
+      armNav();
+    } else {
+      addEventListener('ds:splash-done', armNav, { once: true });
+      setTimeout(armNav, 7000);
+    }
+
+    if (navbar && finePointer() && !reduceMotion()) {
+      navbar.addEventListener(
+        'pointermove',
+        (event) => {
+          const rect = navbar.getBoundingClientRect();
+          navbar.style.setProperty('--mx', `${event.clientX - rect.left}px`);
+          navbar.classList.add('is-glowing');
+        },
+        { passive: true },
+      );
+      navbar.addEventListener('mouseleave', () =>
+        navbar.classList.remove('is-glowing'),
+      );
+    }
+
+    const menu = document.querySelector<HTMLDetailsElement>('.mobile-menu');
+    const nav = menu?.querySelector<HTMLElement>('nav');
+    const summary = menu?.querySelector<HTMLElement>('summary');
+
+    let closeTimer: ReturnType<typeof setTimeout> | undefined;
+
+    const openMenu = () => {
+      if (!menu) return;
       clearTimeout(closeTimer);
       menu.classList.remove('is-closing');
-      menu.open = false;
+      menu.open = true;
+      window.dispatchEvent(
+        new CustomEvent('ds:sfx', { detail: { cue: 'open' } }),
+      );
+      nav?.querySelector<HTMLElement>('a')?.focus();
     };
-    nav.addEventListener('transitionend', finish);
-    closeTimer = setTimeout(finish, 450);
+
+    const closeMenu = () => {
+      if (!menu?.open) return;
+      window.dispatchEvent(
+        new CustomEvent('ds:sfx', { detail: { cue: 'close' } }),
+      );
+      if (reduceMotion() || !nav) {
+        menu.classList.remove('is-closing');
+        menu.open = false;
+        return;
+      }
+      if (menu.classList.contains('is-closing')) return;
+      menu.classList.add('is-closing');
+      const finish = (event?: Event) => {
+        if (event && event.target !== nav) return;
+        nav.removeEventListener('transitionend', finish);
+        clearTimeout(closeTimer);
+        menu.classList.remove('is-closing');
+        menu.open = false;
+      };
+      nav.addEventListener('transitionend', finish);
+      closeTimer = setTimeout(finish, 450);
+    };
+
+    summary?.addEventListener('click', (event) => {
+      event.preventDefault();
+      if (menu?.open) closeMenu();
+      else openMenu();
+    });
+
+    document.addEventListener(
+      'keydown',
+      (event) => {
+        if (event.key === 'Escape' && menu?.open) {
+          closeMenu();
+          summary?.focus();
+        }
+      },
+      { signal },
+    );
+    document.addEventListener(
+      'click',
+      (event) => {
+        if (
+          menu?.open &&
+          event.target instanceof Node &&
+          !menu.contains(event.target)
+        )
+          closeMenu();
+      },
+      { signal },
+    );
+
+    // Keep the obscured page out of the tab order while the full-screen menu is
+    // open, so keyboard focus cannot leak behind the overlay.
+    const background = [
+      document.querySelector('main'),
+      document.querySelector('.footer'),
+      document.querySelector('.skip-link'),
+    ].filter((el): el is HTMLElement => el instanceof HTMLElement);
+    const syncLock = () => {
+      const open = !!menu?.open;
+      document.body.classList.toggle('menu-open', open);
+      for (const el of background) el.toggleAttribute('inert', open);
+    };
+    menu?.addEventListener('toggle', syncLock);
+    addEventListener(
+      'resize',
+      () => {
+        if (menu?.open && innerWidth > 1050) {
+          clearTimeout(closeTimer);
+          menu.classList.remove('is-closing');
+          menu.open = false;
+        }
+      },
+      { signal },
+    );
   };
 
-  summary?.addEventListener('click', (event) => {
-    event.preventDefault();
-    if (menu?.open) closeMenu();
-    else openMenu();
-  });
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && menu?.open) {
-      closeMenu();
-      summary?.focus();
-    }
-  });
-  document.addEventListener('click', (event) => {
-    if (
-      menu?.open &&
-      event.target instanceof Node &&
-      !menu.contains(event.target)
-    )
-      closeMenu();
-  });
-
-  // Keep the obscured page out of the tab order while the full-screen menu is
-  // open, so keyboard focus cannot leak behind the overlay.
-  const background = [
-    document.querySelector('main'),
-    document.querySelector('.footer'),
-    document.querySelector('.skip-link'),
-  ].filter((el): el is HTMLElement => el instanceof HTMLElement);
-  const syncLock = () => {
-    const open = !!menu?.open;
-    document.body.classList.toggle('menu-open', open);
-    for (const el of background) el.toggleAttribute('inert', open);
-  };
-  menu?.addEventListener('toggle', syncLock);
-  addEventListener('resize', () => {
-    if (menu?.open && innerWidth > 1050) {
-      clearTimeout(closeTimer);
-      menu.classList.remove('is-closing');
-      menu.open = false;
-    }
-  });
+  document.addEventListener('astro:page-load', initNavbar);
 </script>

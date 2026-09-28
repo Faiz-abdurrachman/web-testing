@@ -1,21 +1,26 @@
 <script>
-  import { initMotion } from '../scripts/motion';
+  import { initMotion, destroyMotion } from '../scripts/motion';
 
   // Hold every entrance until the splash has revealed the page, so the hero
   // intro plays once, in view, instead of finishing unseen behind the overlay.
   // If there is no splash (repeat visit / reduced motion) the class is already
-  // on <html> and motion starts immediately.
-  const run = () => {
-    const w = window as unknown as { __dsMotionInit?: boolean };
-    if (w.__dsMotionInit) return;
-    w.__dsMotionInit = true;
-    initMotion();
+  // on <html> and motion starts immediately. `initMotion` is guarded internally,
+  // so calling it again is a no-op.
+  const start = () => {
+    if (document.documentElement.classList.contains('splash-done')) {
+      initMotion();
+    } else {
+      window.addEventListener('ds:splash-done', () => initMotion(), {
+        once: true,
+      });
+      window.setTimeout(() => initMotion(), 7000);
+    }
   };
 
-  if (document.documentElement.classList.contains('splash-done')) {
-    run();
-  } else {
-    window.addEventListener('ds:splash-done', run, { once: true });
-    window.setTimeout(run, 7000);
-  }
+  // Runs on the first load and after every client-side navigation (the old
+  // document listeners persist because the ClientRouter keeps one document).
+  document.addEventListener('astro:page-load', start);
+  // Tear down the previous page's ScrollTriggers/tweens before its nodes are
+  // swapped out, then the next `astro:page-load` builds the new page's motion.
+  document.addEventListener('astro:before-swap', () => destroyMotion());
 </script>

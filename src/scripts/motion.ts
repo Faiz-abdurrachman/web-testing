@@ -17,6 +17,19 @@ const particles = () =>
   (window as unknown as { __heroParticles?: Particles }).__heroParticles;
 
 let inited = false;
+// Kept so client-side navigation can tear the whole system down before the old
+// page's nodes are swapped out (otherwise ScrollTriggers keep pointing at
+// removed elements and the hero pin spacer geometry leaks into the next page).
+let mm: ReturnType<typeof gsap.matchMedia> | null = null;
+
+export function destroyMotion() {
+  if (!inited) return;
+  inited = false;
+  mm?.revert();
+  mm = null;
+  ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+  document.documentElement.classList.remove('hero-ready');
+}
 
 function reveal(
   scope: Element | null,
@@ -277,7 +290,7 @@ function tilt(element: HTMLElement, max: number, cleanups: Cleanup[]) {
 export function initMotion() {
   if (inited) return;
   inited = true;
-  const mm = gsap.matchMedia();
+  mm = gsap.matchMedia();
 
   // Warm, in-session navigation: the splash already played, so entrances that
   // would replay the "loading" sequence on every page switch are skipped.
