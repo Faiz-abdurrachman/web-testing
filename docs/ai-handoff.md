@@ -43,13 +43,22 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
     `margin-block: -26px` dan `.domain-carousel { display: flow-root }` supaya
     lift `-10px` tidak kepotong (scroll container clip 2 axis); geometri tetap
     (verify assert section `826` / card `y 310`). Detail di `docs/assets.md`
-    §"Card hover on Domain / Project / Snippet cards". **Belum di-commit.**
+    §"Card hover on Domain / Project / Snippet cards". **Home/recruitment
+    parity:** entrance GSAP `domainIntro()` dulu meninggalkan inline `transform`
+    di `.domain-card`/`.glow` (menang atas CSS `:hover`) → cuma rail recruitment
+    yang terangkat; `motion.ts` sekarang `clearProps: 'transform'` di akhir
+    entrance. Terukur dua rail: `rest: none` / `hover: translateY(-10px)`.
+    Commit fitur `6c79831`; fix parity (`motion.ts` `clearProps`) **menyusul**.
+    **Rail edge fade:** saat rail bergeser, kartu tepi dulu terpotong keras;
+    `DomainRail` sekarang nambah class `is-scrolling` (dibuang 140ms setelah
+    berhenti) + `mask-image` fade 120px (gate `no-preference`) → state istirahat
+    & `verify.mjs` tetap. Detail §"Rail edge fade" di `docs/assets.md`.
   - **Keyboard carousel cues (28 Sep 2026, di atas `473ca00`)** — panah keyboard
     di `DomainRail` (Choose Your Domain / Who Should Join), `Projects`, dan
     `Snippets` sekarang dispatch `ds:sfx` cue `select` tiap kali menGeser
     carousel (input keyboard tidak lewat wiring hover/click delegated); di-drop
     saat reduced motion. Detail di `docs/assets.md` §"Keyboard carousel cues".
-    **Belum di-commit.**
+    Commit `6c79831`.
 - **Latar yang tetap berlaku:** `450833a` migrasi View Transitions
   (`<ClientRouter />`, `AudioContext` persist; tiap komponen re-init lewat
   `astro:page-load` + cleanup `astro:before-swap` — aturan di

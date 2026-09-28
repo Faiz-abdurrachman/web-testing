@@ -234,6 +234,9 @@ function domainIntro(domains: HTMLElement) {
   // Cards lift into place with a touch of scale, then each card's glow ignites
   // a beat later — so the section assembles rather than just fading in. Under
   // reduced motion this whole block is skipped, keeping the PNG frame exact.
+  // `clearProps: 'transform'` hands the inline transform back to CSS when the
+  // entrance ends, otherwise it would out-rank the `.domain-card:hover` lift
+  // (home only — recruitment never runs domainIntro, so its hover worked).
   gsap.set(cards, { y: 74, scale: 0.94, autoAlpha: 0 });
   if (glows.length) gsap.set(glows, { autoAlpha: 0, scale: 0.9 });
 
@@ -247,11 +250,18 @@ function domainIntro(domains: HTMLElement) {
     autoAlpha: 1,
     duration: 0.95,
     stagger: 0.09,
+    clearProps: 'transform',
   });
   if (glows.length)
     tl.to(
       glows,
-      { autoAlpha: 1, scale: 1, duration: 0.9, stagger: 0.09 },
+      {
+        autoAlpha: 1,
+        scale: 1,
+        duration: 0.9,
+        stagger: 0.09,
+        clearProps: 'transform',
+      },
       0.12,
     );
 }

@@ -580,11 +580,22 @@ score were unchanged when this section was added.
   `.domain-carousel`): a horizontal scroll container clips on both axes, so the
   lift was being cut at the rail's top edge; the equal negative margin keeps the
   geometry identical (`verify.mjs` still asserts section `826` / card `y 310`).
+  **Home/recruitment parity:** the home `domainIntro()` entrance (GSAP) used to
+  leave an inline `transform` on `.domain-card`/`.glow` that out-ranked the CSS
+  `:hover`, so only the recruitment rail lifted; the entrance now ends with
+  `clearProps: 'transform'` (in `motion.ts`), handing the transform back to CSS.
+  Measured: both rails `rest: none` / `hover: translateY(-10px)`.
 - **Keyboard carousel cues (28 Sep 2026).** Arrow-key navigation on
   `DomainRail`, `Projects` and `Snippets` now dispatches `ds:sfx` with the
   `select` cue (same as their arrow buttons) whenever a key actually moves the
   carousel — keyboard input bypasses the delegated hover/click wiring.
   `Sound.astro` drops it under reduced motion, so the audits stay silent.
+- **Rail edge fade (28 Sep 2026).** While a domain rail glides, its partial
+  edge cards used to be hard-cut at the rail bounds. `DomainRail.astro` now adds
+  `is-scrolling` to the rail on scroll (dropped 140ms after it settles) and, under
+  `prefers-reduced-motion: no-preference`, a `mask-image` fades the first/last
+  `120px`. At rest and at snap points no mask applies, so the reference frame and
+  `verify.mjs` stay unchanged (fade is invisible under `reduce`).
 - **Pillars entrance — "summon from the core"** (`pillarIntro` in `motion.ts`):
   on `≥761px` a **time-based timeline auto-plays once** when the section reaches
   the viewport (`scrollTrigger: { start: 'top 72%', once: true }` — no pin and no

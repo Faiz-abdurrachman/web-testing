@@ -87,6 +87,23 @@ const { base = '/hods', suffix = '' } = Astro.props;
         if (arrows[0]) arrows[0].disabled = rail.scrollLeft <= 1;
         if (arrows[1]) arrows[1].disabled = rail.scrollLeft >= max - 1;
       };
+      // While the rail glides, its edge cards are only partially visible; a soft
+      // mask (added only during the scroll) fades them instead of a hard cut.
+      // It is dropped once motion settles, so the rest/snap frame stays exact.
+      let scrollEndTimer = 0;
+      const markScrolling = () => {
+        rail.classList.add('is-scrolling');
+        clearTimeout(scrollEndTimer);
+        scrollEndTimer = window.setTimeout(
+          () => rail.classList.remove('is-scrolling'),
+          140,
+        );
+      };
+      rail.addEventListener('scroll', markScrolling, {
+        passive: true,
+        signal,
+      });
+      railCleanups.push(() => clearTimeout(scrollEndTimer));
       rail.addEventListener('scroll', sync, { passive: true, signal });
       sync();
       const resizeObserver = new ResizeObserver(sync);
@@ -336,6 +353,25 @@ const { base = '/hods', suffix = '' } = Astro.props;
   }
   .domain-rail.is-gliding {
     cursor: default;
+  }
+  /* Edge fade only while gliding (class added by JS on scroll), so a partial edge card dissolves instead of being hard-cut; reduced motion never applies it. */
+  @media (prefers-reduced-motion: no-preference) {
+    .domain-rail.is-scrolling {
+      -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        #000 120px,
+        #000 calc(100% - 120px),
+        transparent 100%
+      );
+      mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        #000 120px,
+        #000 calc(100% - 120px),
+        transparent 100%
+      );
+    }
   }
   .domain-rail::-webkit-scrollbar {
     display: none;
