@@ -66,6 +66,26 @@ visible gain. Measured MAE stays under 2/255 on the backgrounds.
   `node scripts/generate-hero-layers.mjs` (hero layers; the `background_clean` /
   `sorcerer_primary` pack now lives in the assets archive — restore it under
   `assets/background/hero/data-sorcerers-hero-production-pack/` first).
+- **P0(b) pass (28 Sep 2026).** Philosophy sorcerer + hero video + poster:
+  - **Sorcerer scene → AVIF first.** `npm run assets:optimize` now also writes
+    `philosophy/sorcerer-{1x,2x}.avif` (q58, effort 4) from the same pristine
+    sources; `Philosophy.astro` lists the AVIF `<source>` first with the WebP
+    source as fallback. `sorcerer-2x` drops **481 → 196KB** (1x 200 → 89KB) with
+    opaque MAE ≈ 3.6 / 3.1 vs pristine (invisible at display size). Home mobile
+    1335 → 976KB (DPR3).
+  - **Hero video re-encode.** `generate-hero-video.mjs` x264 crf 21 → 25 and AV1
+    crf 34 → 43 (home webm 0.74 → 0.38MB, mp4 1.46 → 0.72MB);
+    `generate-recruitment-hero-video.mjs` x264 crf 24 → 30 and AV1 crf 34 → 43
+    (recruitment webm 1.66 → 0.76MB, mp4 2.38 → 1.00MB). SSIM ≈ 0.983 / 0.989 vs
+    a near-lossless reference of the same filter chain — no visible blocking.
+  - **Poster off mobile.** `Hero`/`RecruitmentHero` no longer put `poster` in the
+    markup; it is attached in JS inside `load()`, which only runs on
+    wide/motion-OK viewports, so phones and reduced-motion never fetch the
+    `hero-poster.webp` (74/65KB). Desktop keeps poster-first behaviour.
+  - Re-measure: `/` mobile **1.33 → 0.98MB** (DPR3), `/recruitment` **0.64 →
+    0.57MB**. Reproduce with `npm run assets:optimize`,
+    `node scripts/generate-hero-video.mjs`,
+    `node scripts/generate-recruitment-hero-video.mjs`.
 - **Dead asset cleanup (26 September 2026).** Removed 12 superseded files
   (336KB): `public/images/recruitment/{hero-1440,hero-2880}.webp`,
   `recruitment/who-should-join-background-{1440,2880}.webp`,

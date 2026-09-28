@@ -13,14 +13,7 @@ import Button from './Button.astro';
       fetchpriority="high"
       decoding="async"
     />
-    <video
-      class="art-video"
-      muted
-      loop
-      playsinline
-      preload="none"
-      poster="/images/recruitment/hero-poster.webp"
-    >
+    <video class="art-video" muted loop playsinline preload="none">
       <source src="/images/recruitment/hero-bg.webm" type="video/webm" />
       <source src="/images/recruitment/hero-bg.mp4" type="video/mp4" />
     </video>
@@ -105,6 +98,9 @@ import Button from './Button.astro';
     }
 
     const load = () => {
+      // Attach the poster only when the clip is actually about to load, so
+      // phones and reduced-motion never fetch the extra frame.
+      if (!video.poster) video.poster = '/images/recruitment/hero-poster.webp';
       video.preload = 'auto';
       video.load();
     };

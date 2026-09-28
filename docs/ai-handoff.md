@@ -26,6 +26,13 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   - `c3b122c` **Perf P0(a)+(d)** — `sizes` Snippets jujur + varian 960w (HP
     berhenti ambil 2560w), `logo.png` 40→14 KB, hero `background`/`figure`
     180/86 KB. Recruitment mobile 2.09→1.15 MB. **Sisa P0 = tugas berikutnya.**
+  - **Perf P0(b) (28 Sep 2026, di atas `294d172`)** — **sorcerer → AVIF**
+    (`sorcerer-2x` 481→196 KB, 1x 200→89 KB), **video hero di-re-encode** (home
+    webm 0.74→0.38 MB / mp4 1.46→0.72 MB; recruitment webm 1.66→0.76 MB / mp4
+    2.38→1.00 MB), **poster tak lagi di-fetch di HP** (dipasang via JS hanya saat
+    video main). Home mobile 1.33→0.98 MB, recruitment 0.64→0.57 MB. P0 sisa
+    tinggal opsional: AVIF hero art + ikon philosophy/glow kalau mau tembus
+    ≤800 KB.
 - **Latar yang tetap berlaku:** `450833a` migrasi View Transitions
   (`<ClientRouter />`, `AudioContext` persist; tiap komponen re-init lewat
   `astro:page-load` + cleanup `astro:before-swap` — aturan di
@@ -819,6 +826,14 @@ Bundle: `three.module` **181 KB gz**, `Motion`/GSAP **45 KB gz**.
 > `/recruitment` mobile **2.09 → 1.15 MB** (DPR3) / **0.93 MB** (DPR2);
 > `/` mobile **1.40 MB**. Sisa berat HP: `sorcerer-2x.webp` 481 KB +
 > `hero-poster.webp` 74 KB (lihat "Rencana").
+>
+> **Sesudah P0(b) (28 Sep 2026, `transferSize`, DPR3):** `/` mobile
+> **1.33 → 0.98 MB** (`sorcerer-2x.avif` 196 KB, poster tak di-fetch),
+> `/recruitment` **0.64 → 0.57 MB**. Video (desktop-only) home webm 0.38 MB,
+> recruitment webm 0.76 MB. Sisa untuk tembus **≤800 KB** di Home mobile:
+> hero art (`background` 180 + `figure` 87 KB) + ikon philosophy (`impact` 49,
+> `experiment` 44, `research` 40, `ship` 37, `learn` 28) + `glow` 54 KB —
+> kandidat AVIF berikutnya (belum dikerjakan).
 
 **Akar (urut dampak):**
 
@@ -844,13 +859,15 @@ Bundle: `three.module` **181 KB gz**, `Motion`/GSAP **45 KB gz**.
 
 **Rencana (prioritas):**
 
-- **P0 — (a) DONE, (d) sebagian DONE (28 Sep 2026):** `sizes` Snippets responsif +
-  varian 960w; kompres `logo.png` (14 KB) + hero `background`/`figure` (180/86 KB).
-  **Sisa:** (c) re-encode video hero (target home ≤400 KB, recruitment ≤900 KB);
-  kompres `sorcerer-2x` (~150 KB) + hindari fetch `hero-poster.webp` di HP.
-  **(b) DIBATALKAN/direvisi:** jangan keluarkan `three` dari preload — HP memang
-  tidak menunggu `three`, desktop sengaja menunggu (jangan diubah); paling banter
-  tambah _timeout_ preload.
+- **P0 — DONE (28 Sep 2026).** (a) `sizes` Snippets responsif + varian 960w;
+  (d) kompres `logo.png` (14 KB) + hero `background`/`figure` (180/86 KB);
+  (b) **sorcerer → AVIF** (`sorcerer-2x` 481→196 KB, 1x 200→89 KB); (c) **video
+  hero di-re-encode** (home webm 0.74→0.38 MB / mp4 1.46→0.72 MB; recruitment
+  webm 1.66→0.76 MB / mp4 2.38→1.00 MB, SSIM ≈ 0.983/0.989); **poster tak
+  di-fetch di HP** (JS-only, desktop tetap poster-first). Home mobile
+  1.33→0.98 MB. **Sisa opsional** kalau mau tembus ≤800 KB: AVIF hero art +
+  ikon philosophy + `glow`. (Catatan: "splash nunggu `three`" tetap **batal** —
+  HP tidak menunggu `three`, desktop sengaja menunggu; jangan diubah.)
 - **P1**: perkecil/ganti `three` (partikel → canvas 2D) — **butuh izin** (`three`
   sudah disetujui; jangan hapus tanpa tanya); preload 2 bobot font + subset.
 - **P2**: investigasi jank `.domains`.
@@ -913,27 +930,21 @@ Section.png` (5760×3376 → 1440×844). Patch glow terukur: center REF
 Urutan yang disarankan. Baca `docs/sound-sop.md` (khususnya §9) kalau menyentuh
 sound atau navigasi; detail P0–P2 ada di "Perf audit & rencana" di atas.
 
-1. **Perf P0 — SISA (tugas utama berikutnya).** P0(a) `sizes` Snippets + P0(d)
-   kompres `logo.png`/hero `background`/`figure` **sudah DONE** (lihat
-   "## Baru saja: Perf P0 — Snippets sizes + aset ringan"). Yang tersisa, urut
-   dampak:
-   - **(c) Re-encode video hero** (paling bawah dampak). Skrip: home pakai
-     `scripts/generate-hero-video.mjs` (target ≤400 KB), recruitment pakai
-     `scripts/generate-recruitment-hero-video.mjs` (≤900 KB). Hati-hati kualitas
-     (jangan "burik"); video hanya tampil ≥601px + no-reduce. Sumber:
-     `assets/assets home page/hero section/hero.mp4` dan
-     `assets/assets recruitment page/hero section/recruitment-hero1.mp4`.
-   - **Kompres `sorcerer-2x.webp`** (481 KB, penyumbang terbesar Home mobile):
-     turunkan q/width di resize map `scripts/optimize-images.mjs`; ukur MAE
-     (opaque) vs pristine, target ~150 KB (sesuai P0(d) asli). **Jaga kualitas.**
-   - **Hindari `hero-poster.webp` (74 KB) di HP:** atribut `poster` ke-fetch walau
-     video tak tampil (≤600px/reduce). Opsi: set poster via JS di `Hero`/
-     `RecruitmentHero` hanya saat video akan main, atau lepas dari markup. Pastikan
-     desktop tetap poster-first (anti "double").
-   - Ukur ulang mobile 390 `transferSize` `/` & `/recruitment`, lalu semua gate.
-     Target: **Home mobile ≤ ~800 KB** & LCP <2.5 s (4G). Recruitment sudah
-     tercapai (1.15/0.93 MB). **Catatan:** P0(b) "splash jangan nunggu `three`"
-     **dibatalkan** — HP memang tidak menunggu `three`; desktop sengaja menunggu.
+1. **Perf P0 — SELESAI (28 Sep 2026).** (a) `sizes` Snippets + 960w, (d)
+   `logo.png`/hero `background`/`figure` (lihat "P0 pass"), lalu (b) **sorcerer →
+   AVIF** (`sorcerer-2x` 481→196 KB), (c) **video hero di-re-encode** (home webm
+   0.38 MB, recruitment webm 0.76 MB; SSIM ≈ 0.983/0.989), dan **poster tak lagi
+   di-fetch di HP** (dipasang via JS hanya saat video main; desktop tetap
+   poster-first). Terukur: **Home mobile 1.33 → 0.98 MB**, Recruitment 0.64 →
+   0.57 MB (DPR3). Gate hijau. Reproduce: `npm run assets:optimize`,
+   `node scripts/generate-hero-video.mjs`,
+   `node scripts/generate-recruitment-hero-video.mjs`.
+   - **Sisa opsional (kalau mau tembus Home ≤800 KB):** AVIF hero art
+     (`background` 180 + `figure` 87 KB) dan ikon philosophy (`impact` 49,
+     `experiment` 44, `research` 40, `ship` 37, `learn` 28) + `glow` 54 KB —
+     teknik yang sama (AVIF + webp fallback), ukur MAE dulu. **Catatan:** P0(b)
+     "splash jangan nunggu `three`" tetap **dibatalkan** — HP memang tidak
+     menunggu `three`; desktop sengaja menunggu (jangan diubah).
 2. **View Transitions (DONE; sisa device nyata).** `verify-vt.mjs` sudah menguji
    Back/Forward, reload deep-link, dan inert saat reduce. Sisa: uji Safari/Firefox
    & perangkat asli (Playwright firefox belum terpasang). `transition:persist`

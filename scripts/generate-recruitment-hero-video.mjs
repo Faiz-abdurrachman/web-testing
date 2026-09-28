@@ -16,13 +16,15 @@ import { mkdir, stat } from 'node:fs/promises';
 //    `[tail][body]xfade=...:offset=0` does exactly that.
 // 2. Audio is dropped. `prefers-reduced-motion` (and <=600px) never start
 //    playback, so the static `recruitment.webp` stays the reference fallback.
-// 3. The clip is served at 2560x1440 and encoded generously. At 1920x1080 the
-//    AV1 webm (crf 44, ~450 kbps) carried visible 8x8/16x16 blocking through
-//    the dark sky, and the hero crops (`object-fit: cover`) then zooms (pinned
-//    to 1.35x), so a 1080p source is upscaled ~2x in device pixels on retina.
-//    The larger canvas plus crf 34 (AV1) / crf 24 (x264) removes the blocking
-//    and keeps the star field crisp through the zoom. Chrome/Edge get the webm
-//    (listed first), Safari the mp4 — only one is ever fetched.
+// 3. The clip is served at 2560x1440. At 1920x1080 the AV1 webm carried visible
+//    8x8/16x16 blocking through the dark sky, and the hero crops (`object-fit:
+//    cover`) then zooms (pinned to 1.35x), so a 1080p source is upscaled ~2x in
+//    device pixels on retina. The larger canvas keeps the star field crisp
+//    through the zoom. Encoding budget (Perf P0): crf 43 (AV1) / 30 (x264)
+//    brings the webm 1.66 -> 0.78 MB and the mp4 2.38 -> 1.03 MB with ~0.1%
+//    SSIM loss against a near-lossless reference — the aurora stays smooth
+//    without the old crf-44 blocking. Chrome/Edge get the webm (listed first),
+//    Safari the mp4 — only one is ever fetched.
 const SRC = 'assets/assets recruitment page/hero section/recruitment-hero1.mp4';
 const OUT_DIR = 'public/images/recruitment';
 const ART_W = 2560;
@@ -77,7 +79,7 @@ const encodes = [
       '-c:v',
       'libx264',
       '-crf',
-      '24',
+      '30',
       '-preset',
       'slow',
       '-pix_fmt',
@@ -92,7 +94,7 @@ const encodes = [
       '-c:v',
       'libsvtav1',
       '-crf',
-      '34',
+      '43',
       '-preset',
       '8',
       '-pix_fmt',

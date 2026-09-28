@@ -22,6 +22,10 @@ import { mkdir, stat } from 'node:fs/promises';
 //    asked to keep the source look as-is). Audio is dropped, and
 //    `prefers-reduced-motion` never starts playback, so the static
 //    `background.webp` is the guaranteed fallback.
+// 3. Encoding budget (Perf P0). The old crf 34 (AV1) / 21 (x264) cost 0.74/1.46
+//    MB. crf 43 / 25 cuts that to ~0.39/0.74 MB with only ~0.5% SSIM loss
+//    against a near-lossless reference of the same filter chain — the plate is a
+//    soft, dark nebula, so the extra quantization is not visible at hero size.
 const SRC = 'assets/assets home page/hero section/hero.mp4';
 const OUT_DIR = 'public/images/hero';
 const DURATION = '5';
@@ -69,7 +73,7 @@ const encodes = [
       '-c:v',
       'libx264',
       '-crf',
-      '21',
+      '25',
       '-preset',
       'slow',
       '-pix_fmt',
@@ -84,7 +88,7 @@ const encodes = [
       '-c:v',
       'libsvtav1',
       '-crf',
-      '34',
+      '43',
       '-preset',
       '8',
       '-pix_fmt',

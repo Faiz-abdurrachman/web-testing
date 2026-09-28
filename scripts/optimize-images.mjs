@@ -92,6 +92,27 @@ for (const n of [1, 2, 3, 4, 5]) {
   );
 }
 
+// Philosophy sorcerer scene is served as AVIF first (the component keeps the
+// WebP as a fallback source). Both densities are re-encoded from the pristine
+// sources at the same display widths, so the `<picture>` srcset stays valid
+// while AVIF cuts the file ~2.5x at equal measured error (opaque MAE < 4).
+// `sorcerer-2x.webp` is by far the heaviest request on Home mobile.
+for (const { name, width, quality } of [
+  { name: 'sorcerer-1x', width: 861, quality: 58 },
+  { name: 'sorcerer-2x', width: 1290, quality: 58 },
+]) {
+  const src = join(SRC, 'philosophy', `${name}.webp`);
+  if (!existsSync(src)) continue;
+  const out = join(PUB, 'philosophy', `${name}.avif`);
+  await sharp(src)
+    .resize({ width, withoutEnlargement: true })
+    .avif({ quality, effort: 4 })
+    .toFile(out);
+  console.log(
+    `${name}.avif: ${((await stat(out)).size / 1024).toFixed(0)}KB (q${quality})`,
+  );
+}
+
 // Logo is served on every page at ~54x59 from a 192x210 PNG; palette-quantising
 // it cuts ~40KB to ~14KB with an opaque-pixel MAE of ~1.4 (invisible at display
 // size). The pristine original is kept under assets/image-src/ for repeatability.

@@ -23,14 +23,7 @@ import Button from './Button.astro';
           alt=""
           decoding="async"
         />
-        <video
-          class="art-video"
-          muted
-          loop
-          playsinline
-          preload="none"
-          poster="/images/hero/hero-poster.webp"
-        >
+        <video class="art-video" muted loop playsinline preload="none">
           <source src="/images/hero/hero-bg.webm" type="video/webm" />
           <source src="/images/hero/hero-bg.mp4" type="video/mp4" />
         </video>
@@ -109,6 +102,10 @@ import Button from './Button.astro';
     if (video.readyState >= 2) start();
     else video.addEventListener('loadeddata', start, { once: true });
     const load = () => {
+      // Attach the poster only when the clip is actually about to load, so
+      // phones and reduced-motion never fetch the extra frame. The static
+      // background.webp + figure.webp already cover the fallback.
+      if (!video.poster) video.poster = '/images/hero/hero-poster.webp';
       video.preload = 'auto';
       video.load();
     };
