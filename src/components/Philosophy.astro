@@ -170,6 +170,7 @@ const principles = [
     --u: 1;
     position: absolute;
     inset: 0;
+    contain: paint;
     opacity: 0;
     pointer-events: none;
   }
@@ -461,14 +462,21 @@ const principles = [
         phil-orbit var(--dur) cubic-bezier(0.5, 0, 0.5, 1) infinite,
         phil-twinkle var(--tw) ease-in-out infinite;
     }
-    .illustration picture {
-      animation: phil-float 7s ease-in-out infinite;
+    .illustration picture,
+    .illustration .fx {
+      animation: phil-float 3.5s cubic-bezier(0.37, 0, 0.63, 1) infinite
+        alternate;
+    }
+    .philosophy:not(.is-idle) .illustration picture,
+    .philosophy:not(.is-idle) .illustration .fx {
+      will-change: transform;
     }
     /* Park the aura/pulse/sparks/float while the section is off-screen. */
     .philosophy.is-idle .aura,
     .philosophy.is-idle .pulse,
     .philosophy.is-idle .spark,
-    .philosophy.is-idle .illustration picture {
+    .philosophy.is-idle .illustration picture,
+    .philosophy.is-idle .fx {
       animation-play-state: paused;
     }
     .principles li {
@@ -555,12 +563,11 @@ const principles = [
     }
   }
   @keyframes phil-float {
-    0%,
-    100% {
-      transform: translateY(0);
+    from {
+      transform: translate3d(0, 0, 0);
     }
-    50% {
-      transform: translateY(-10px);
+    to {
+      transform: translate3d(0, -10px, 0);
     }
   }
   @media (min-width: 761px) and (max-width: 1399px) {

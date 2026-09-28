@@ -23,6 +23,12 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   (7200×2780) menggantikan `footerhd.png`. `npm run assets:footer` menghasilkan
   WebP q90 responsif 1440/2880/5760/7200w + varian portrait HP 1170×3450;
   footer memakai `srcset`, layout teks tetap. Lihat `docs/assets.md` §Footer.
+- **Philosophy float lokal 29 Sep 2026:** gambar sorcerer + FX kristal memakai
+  dua lapisan komposit yang tersinkron (`translate3d()` 10px / 7s bolak-balik),
+  sehingga spark mengikuti gambar sementara gambar bisa bergerak terpisah dari
+  repaint FX. Promosi
+  layer hanya saat section terlihat; FX dibatasi `contain: paint`. Frame
+  reduced-motion tetap. Lihat `docs/assets.md` §Our Philosophy.
 - **Runtime deps sengaja cuma** `astro` + `gsap` + `three`. Jangan tambah library
   lain tanpa tanya; lazy-import yang berat.
 - **Commit terbaru (live di testing + production, HEAD `4fe4c19`):**

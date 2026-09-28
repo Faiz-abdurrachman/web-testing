@@ -480,6 +480,14 @@ and do not match the heading reference.
   dominant — aura `50%/42% → 20%/16%`, width `62% → 56%`; pulse `55% → 18%`,
   width `42% → 38%`). Aligned grid check now matches the reference within ±2
   brightness (only the crystal core sits ~+10), versus the previous wash-out.
+- **Float smoothness pass (29 Sep 2026).** The illustration picture and crystal
+  FX use two synchronized compositor layers, so the glow and spark positions
+  stay locked to the artwork during the 10px bob while the image can move
+  independently of the 18 sparks. The same 7s round trip uses alternating
+  `translate3d()` tweens with eased turns. `will-change: transform` applies only
+  while the section is near the viewport, and `contain: paint` on `.fx` bounds
+  spark/aura repaints to the illustration. Both layers pause off-screen and are
+  inert under reduced motion; the reference geometry stays unchanged.
 
 Desktop comparison on the development machine verified the section, heading,
 and principles coordinates exactly. The image comparison still contains minor
