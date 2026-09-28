@@ -14,6 +14,11 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   `/recruitment/roles/{6}` 6 halaman, `/hods/{6}` 6 halaman) + `/lab/sound`
   internal (`noindex`, di luar sitemap). Target: **pixel-accurate ke PNG
   referensi**, HTML/CSS ringan (bukan flatten screenshot).
+- **Perbaikan lokal 29 Sep 2026:** sudut glow kartu HoDS yang menjadi kotak
+  saat hover diperbaiki dengan `.domain-card-inner` sebagai clip wrapper tanpa
+  transform; halo luar memakai radial gradient blur, outer card tetap memegang
+  lift, grounding shadow, dan ring. Lihat
+  `docs/assets.md` §"Domain card hover corner fix".
 - **Runtime deps sengaja cuma** `astro` + `gsap` + `three`. Jangan tambah library
   lain tanpa tanya; lazy-import yang berat.
 - **Commit terbaru (live di testing + production, HEAD `4fe4c19`):**

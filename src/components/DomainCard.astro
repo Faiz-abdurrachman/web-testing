@@ -16,45 +16,47 @@ const large = ['product', 'growth'].includes(domain.id);
   data-sfx="open"
   data-sfx-hover="hover"
 >
-  <h3 id={`domain-${domain.id}`}>{domain.title}</h3>
-  <p>{domain.description}</p>
-  <img
-    class="glow"
-    src={`/images/domains/${domain.id}.svg`}
-    alt=""
-    loading="lazy"
-  />
-  <div class="cloud-frame">
-    <div class="cloud">
-      {!large &&
-        [
-          [0, 59.85],
-          [-22.49, 126.57],
-          [553.5, 59.85],
-          [563.48, 121.92],
-          ...(domain.id === 'vision' ? [] : [[402.85, 243.58]]),
-        ].map(([x, y]) => (
-          <span
-            class="blank extra"
-            aria-hidden="true"
-            style={`left:${x}px;top:${y}px`}
-          />
-        ))}
-      {domain.rows.map((row, i) => (
-        <div
-          class:list={['chip-row', `row-${i}`]}
-          style={`left:${row.x}px;top:${row.y}px;gap:${row.gap}px`}
-        >
-          {row.labels.map((label) => (
+  <div class="domain-card-inner">
+    <h3 id={`domain-${domain.id}`}>{domain.title}</h3>
+    <p>{domain.description}</p>
+    <img
+      class="glow"
+      src={`/images/domains/${domain.id}.svg`}
+      alt=""
+      loading="lazy"
+    />
+    <div class="cloud-frame">
+      <div class="cloud">
+        {!large &&
+          [
+            [0, 59.85],
+            [-22.49, 126.57],
+            [553.5, 59.85],
+            [563.48, 121.92],
+            ...(domain.id === 'vision' ? [] : [[402.85, 243.58]]),
+          ].map(([x, y]) => (
             <span
-              class:list={[label ? 'chip' : 'blank']}
-              aria-hidden={label ? undefined : 'true'}
-            >
-              {label}
-            </span>
+              class="blank extra"
+              aria-hidden="true"
+              style={`left:${x}px;top:${y}px`}
+            />
           ))}
-        </div>
-      ))}
+        {domain.rows.map((row, i) => (
+          <div
+            class:list={['chip-row', `row-${i}`]}
+            style={`left:${row.x}px;top:${row.y}px;gap:${row.gap}px`}
+          >
+            {row.labels.map((label) => (
+              <span
+                class:list={[label ? 'chip' : 'blank']}
+                aria-hidden={label ? undefined : 'true'}
+              >
+                {label}
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   </div>
 </a>
@@ -65,9 +67,16 @@ const large = ['product', 'growth'].includes(domain.id);
     isolation: isolate;
     flex: 0 0 394px;
     height: 436px;
-    overflow: hidden;
     border-radius: 20px 0;
     background: rgb(var(--tint) / 10%);
+  }
+  .domain-card-inner {
+    position: relative;
+    isolation: isolate;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: inherit;
   }
   .domain-card::after {
     content: '';
@@ -232,10 +241,25 @@ const large = ['product', 'growth'].includes(domain.id);
     width: 1256.04px;
     height: 439.876px;
   }
-  /* Subtle hover: lift + tinted glow + brighter ring, matching the sound cue.
-     Desktop pointers only and off under reduced motion, so the rest state (and
-     `verify.mjs`) stays pixel-identical. */
+  /* Hover lift and glow stay inside the rail padding; the inner wrapper clips rounded corners without a transform. */
   @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .domain-card::before {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      inset: -12px;
+      border-radius: 50%;
+      background: radial-gradient(
+        ellipse at 68% 72%,
+        rgb(var(--tint) / 42%),
+        rgb(var(--tint) / 20%) 36%,
+        transparent 72%
+      );
+      filter: blur(12px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
     .domain-card {
       transition:
         transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1),
@@ -252,10 +276,11 @@ const large = ['product', 'growth'].includes(domain.id);
     .domain-card:focus-visible {
       transform: translateY(-10px);
       background-color: rgb(var(--tint) / 16%);
-      /* Grounding shadow + tinted halo: reads as floating; both stay inside the rail's 26px padding so nothing gets clipped. */
-      box-shadow:
-        0 16px 30px -18px rgb(0 0 0 / 75%),
-        0 0 24px rgb(var(--tint) / 45%);
+      box-shadow: 0 16px 30px -18px rgb(0 0 0 / 75%);
+    }
+    .domain-card:hover::before,
+    .domain-card:focus-visible::before {
+      opacity: 1;
     }
     .domain-card:hover::after,
     .domain-card:focus-visible::after {

@@ -585,6 +585,13 @@ score were unchanged when this section was added.
   `:hover`, so only the recruitment rail lifted; the entrance now ends with
   `clearProps: 'transform'` (in `motion.ts`), handing the transform back to CSS.
   Measured: both rails `rest: none` / `hover: translateY(-10px)`.
+- **Domain card hover corner fix (29 Sep 2026).** The lifted `.domain-card` no
+  longer combines its own `transform` with `overflow: hidden` and a rounded
+  border. A full-size, untransformed `.domain-card-inner` clips the glow and chip
+  artwork to `border-radius: inherit`. The outer hover halo is now a blurred
+  radial gradient instead of a rectangular box shadow; the grounding shadow and
+  gradient ring remain on the outer card. This removes hard glow corners during
+  hover without changing the resting card geometry.
 - **Keyboard carousel cues (28 Sep 2026).** Arrow-key navigation on
   `DomainRail`, `Projects` and `Snippets` now dispatches `ds:sfx` with the
   `select` cue (same as their arrow buttons) whenever a key actually moves the
