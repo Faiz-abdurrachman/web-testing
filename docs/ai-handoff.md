@@ -56,7 +56,10 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
     (dihitung dari apakah tepi rail jatuh di dalam kartu) + `mask-image` fade
     120px (gate `no-preference`). Kartu penuh tak pernah diredupkan (rail pas
     2/3 kartu saat diam) → `verify.mjs` tetap. Detail §"Rail edge fade" di
-    `docs/assets.md`.
+    `docs/assets.md`. **Terbuka:** user sempat lihat "kartu tepi kepotong" dan
+    minta reproduce — sudah dicek: saat diam tak ada kartu separuh di lebar mana
+    pun (390–1600), jadi partial hanya saat rail bergeser dan kini memudar.
+    Belum dikonfirmasi user pakai screenshot penuh + lebar window.
   - **Keyboard carousel cues (`6c79831`, 28 Sep 2026)** — panah keyboard
     di `DomainRail` (Choose Your Domain / Who Should Join), `Projects`, dan
     `Snippets` sekarang dispatch `ds:sfx` cue `select` tiap kali menGeser
