@@ -111,13 +111,17 @@ Kalau bikin/ubah section: update `docs/assets.md` + `docs/ai-handoff.md` dan
 tambah/cek assertion di `scripts/verify.mjs`.
 
 TODO utama: **ikuti `docs/ai-handoff.md` §"Next plan — untuk AI berikutnya"**.
-Ringkasnya: (1) hardening View Transitions (device/browser nyata, reduced-motion,
-perf) — baru; (2) Perf P0 (Snippets `sizes`, splash jangan nunggu `three`,
-re-encode video hero, kompres `sorcerer-2x`/`logo.png`/hero mobile); (3) data
-project asli + tanggal recruitment; (4) halaman About Us / Hall of Frames /
-Partners / Contact (nav masih `aria-disabled`, jangan bikin URL palsu); (5) webfont
-Nasalization (berlisensi — jangan diakali). Sound system sudah selesai dan
-disukai user (`docs/sound-sop.md`).
+Prioritas sekarang = **Perf P0 sisa**: re-encode video hero, kompres
+`sorcerer-2x.webp` (481 KB, penyumbang terbesar Home mobile), hindari
+`hero-poster` (74 KB) di HP — target Home mobile ≤800 KB. **Sudah selesai:** VT
+hardening (`verify-vt.mjs` uji Back/Forward + reload + reduce; sisa device nyata),
+OG hardening, dan P0(a)+(d) (`sizes` Snippets + varian 960w, `logo.png` 14 KB,
+hero bg/fig 180/86 KB → Recruitment mobile 2.09→1.15 MB). **P0(b) "splash jangan
+nunggu `three`" = BATAL** (HP memang tidak menunggu `three`; desktop sengaja).
+Berikutnya: konten asli (project/tanggal recruitment), halaman About Us / Hall of
+Frames / Partners / Contact (nav `aria-disabled` — jangan bikin URL palsu),
+webfont Nasalization (berlisensi — jangan diakali). Sound selesai
+(`docs/sound-sop.md`).
 
 Sebelum mulai task di bawah: ringkas dulu pemahamanmu + rencana singkat, lalu kerjakan.
 

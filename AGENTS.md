@@ -235,15 +235,20 @@ When adding/changing a section, update `docs/assets.md` and the relevant
 
 ## Current checkpoint
 
-- **View Transitions + sound Fase 2 (28 Sep 2026, belum di-commit).** Situs pindah
-  ke Astro **`<ClientRouter />`** (navigasi klien halus + `AudioContext` persist →
-  sound tidak putus) dan sound dapat cue `transition` pada link internal tanpa
-  delay. Semua komponen re-init lewat `astro:page-load`; lihat gotcha di atas +
-  `docs/sound-sop.md` §9. **Deploy GANDA**: `git push origin main` → testing +
-  production (lihat "Git & deploy").
-- **HEAD `66b284e` (28 Sep 2026).** Semua di bawah + **sound system** (SFX
-  prosedural + ambient, orb mute, SOP `docs/sound-sop.md`). Next plan
-  untuk agent berikutnya: `docs/ai-handoff.md` §"Next plan — untuk AI berikutnya".
+- **HEAD `c3b122c` (28 Sep 2026).** Situs pakai Astro **`<ClientRouter />`**
+  (navigasi klien + `AudioContext` persist; semua komponen re-init
+  `astro:page-load` + cleanup `astro:before-swap` — gotcha di atas +
+  `docs/sound-sop.md` §9). Sudah live: **VT hardening** (`fe71b27`;
+  `verify-vt.mjs` uji Back/Forward + reload deep-link + inert saat reduce),
+  **OG hardening** (`og:image:secure_url` + `<html prefix="og:…">`), dan
+  **Perf P0(a)+(d)** (`c3b122c`: `sizes` Snippets + varian 960w, `logo.png`
+  14 KB, hero bg/fig 180/86 KB → Recruitment mobile 2.09→1.15 MB). **Deploy
+  GANDA**: `git push origin main` → testing + production.
+- **Next plan (prioritas): Perf P0 sisa** — re-encode video hero, kompres
+  `sorcerer-2x.webp` (481 KB), hindari `hero-poster` (74 KB) di HP; target Home
+  mobile ≤800 KB. Detail: `docs/ai-handoff.md` §"Next plan — untuk AI
+  berikutnya". **P0(b) "splash jangan nunggu `three`" = BATAL** (HP memang tidak
+  menunggu `three`; desktop sengaja — jangan diubah).
 - **Available Roles hover (`f92b88a`).** Kartu reaktif pointer: pool radial violet
   ikut kursor (`--mx/--my`), ember lean (`--gx/--gy` ±22/16px + `scale(1.06)`),
   divider draw dari kiri, panah overshoot. Gate `(pointer: fine)` +

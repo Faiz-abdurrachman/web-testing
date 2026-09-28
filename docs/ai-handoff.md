@@ -6,7 +6,7 @@ harus menebak dari git log. Ini dokumen hidup — update kalau ada perubahan bes
 Baca dulu, urut: `AGENTS.md` (aturan operasional) → `HANDOVER.md` (konteks
 panjang) → `docs/assets.md` (provenance per section) → file ini.
 
-## Ringkasan cepat (untuk AI baru) — HEAD `601107b`, 28 Sep 2026
+## Ringkasan cepat (untuk AI baru) — HEAD `c3b122c`, 28 Sep 2026
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
 
@@ -16,16 +16,21 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   referensi**, HTML/CSS ringan (bukan flatten screenshot).
 - **Runtime deps sengaja cuma** `astro` + `gsap` + `three`. Jangan tambah library
   lain tanpa tanya; lazy-import yang berat.
-- **Dua commit terbaru (sudah live di testing + production):**
-  1. `450833a` **Migrasi ke Astro View Transitions** (`<ClientRouter />`):
-     navigasi antar-halaman kini **klien** (cross-fade, tanpa reload) dan
-     `AudioContext` **persist** (sound tidak putus). Karena Astro **tidak**
-     menjalankan ulang script bundled saat swap, **semua komponen re-init lewat
-     `astro:page-load`** dan membersihkan listener/observer/GSAP di
-     `astro:before-swap`. Aturan lengkap: `docs/sound-sop.md` §9; ringkas di
-     gotcha `AGENTS.md`.
-  2. `601107b` **Sound Fase 2** — cue `transition` saat klik link internal
-     (tanpa delay, karena context persist).
+- **Commit terbaru (live di testing + production, HEAD `c3b122c`):**
+  - `fe71b27` **VT hardening + OG hardening** — `verify-vt.mjs` kini uji
+    Back/Forward lewat client router, reload deep-link `/#domains`, dan reduce
+    benar-benar inert (tanpa `hero-ready`/`.pin-spacer`); `BaseLayout` dapat
+    `<html prefix="og: https://ogp.me/ns#">` + `og:image:secure_url`.
+  - `6aefa49` **perf** — `philosophy/sorcerer-2x.webp` di-re-encode 1290w
+    (936→492 KB).
+  - `c3b122c` **Perf P0(a)+(d)** — `sizes` Snippets jujur + varian 960w (HP
+    berhenti ambil 2560w), `logo.png` 40→14 KB, hero `background`/`figure`
+    180/86 KB. Recruitment mobile 2.09→1.15 MB. **Sisa P0 = tugas berikutnya.**
+- **Latar yang tetap berlaku:** `450833a` migrasi View Transitions
+  (`<ClientRouter />`, `AudioContext` persist; tiap komponen re-init lewat
+  `astro:page-load` + cleanup `astro:before-swap` — aturan di
+  `docs/sound-sop.md` §9) dan `601107b` sound Fase 2 (cue `transition` link
+  internal).
 - **Sound system (Fase 0–3) SELESAI dan disukai user** → SOP portable yang bisa
   dipakai ulang di project lain: **`docs/sound-sop.md`** (lihat §1–§3 + §10
   "Porting"). Ringkasan agent: `.agents/skills/data-sorcerers-sound/SKILL.md`.
@@ -41,11 +46,17 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   (`scripts/verify-vt.mjs`): cek konteks JS persist, komponen re-init, cue
   `transition` tepat satu, modifier tidak di-intercept, dan deep-link hash.
 - **Deploy GANDA:** `git push origin main` → testing **dan** production.
-- **Next:** baca §"Next plan — untuk AI berikutnya" di bawah (Perf P0, konten
-  asli, halaman baru, webfont Nasalization, OG hardening).
+- **Next:** §"Next plan — untuk AI berikutnya" di bawah. Prioritas **Perf P0
+  sisa** (re-encode video hero, kompres `sorcerer-2x`, hindari `hero-poster` di
+  HP — target Home mobile ≤800 KB), lalu konten asli / halaman baru / Nasalization.
+  VT hardening & OG **sudah selesai**.
 
 ## Checkpoint terakhir (28 Sep 2026) — detail
 
+- **HEAD `c3b122c` (28 Sep 2026).** Di atas migration VT + sound: `fe71b27`
+  (VT + OG hardening), `6aefa49` (re-encode `sorcerer-2x`), `c3b122c` (Perf P0
+  a+d). Ringkasan tiap perubahan ada di section "Baru saja" di bawah; sisa P0
+  ada di "Next plan".
 - **Repo + deploy GANDA (penting).** `origin` =
   `github.com/Faiz-abdurrachman/web-testing` (testing) dan setelannya sudah
   **push ke production sekaligus**: `origin` punya dua push URL → `git push
@@ -902,23 +913,33 @@ Section.png` (5760×3376 → 1440×844). Patch glow terukur: center REF
 Urutan yang disarankan. Baca `docs/sound-sop.md` (khususnya §9) kalau menyentuh
 sound atau navigasi; detail P0–P2 ada di "Perf audit & rencana" di atas.
 
-1. **View Transitions — hardening (Back/Forward + reload + reduce: DONE;
-   device nyata: pending).** `scripts/verify-vt.mjs` sekarang juga menguji
-   Back/Forward lewat client router, reload deep-link `/#domains`, dan inert-nya
-   motion saat reduce (tanpa `hero-ready`/`.pin-spacer`) — lihat
-   "## Baru saja: View Transitions hardening + OG hardening". **Sisa:** uji
-   Safari/Firefox & perangkat asli (Playwright firefox belum terpasang di mesin
-   ini). Perf client-nav terukur lebih berat dari full reload di halaman berat →
-   masuk P0/P1 (butuh acc). `transition:persist` belum perlu. Smoke:
-   **`npm run verify:vt`**.
-2. **Perf P0 — (a)+(d) DONE, sisa (c) + 2 item; (b) dibatalkan.** Lihat
-   "## Baru saja: Perf P0 — Snippets sizes + aset ringan". Sisa: re-encode video
-   hero (home ≤400 KB, recruitment ≤900 KB); kompres `sorcerer-2x` (~150 KB) +
-   hindari fetch `hero-poster` di HP. Target Recruitment mobile ≤1.2 MB sudah
-   tercapai (1.15/0.93 MB); Home mobile masih 1.40 MB (sorcerer-2x + poster).
-3. **Konten:** data project asli (`src/data/projects.ts` masih 4 placeholder
-   dengan gambar sama) dan tanggal recruitment (`SelectionTimeline.astro` masih
-   placeholder "Date").
+1. **Perf P0 — SISA (tugas utama berikutnya).** P0(a) `sizes` Snippets + P0(d)
+   kompres `logo.png`/hero `background`/`figure` **sudah DONE** (lihat
+   "## Baru saja: Perf P0 — Snippets sizes + aset ringan"). Yang tersisa, urut
+   dampak:
+   - **(c) Re-encode video hero** (paling bawah dampak). Skrip: home pakai
+     `scripts/generate-hero-video.mjs` (target ≤400 KB), recruitment pakai
+     `scripts/generate-recruitment-hero-video.mjs` (≤900 KB). Hati-hati kualitas
+     (jangan "burik"); video hanya tampil ≥601px + no-reduce. Sumber:
+     `assets/assets home page/hero section/hero.mp4` dan
+     `assets/assets recruitment page/hero section/recruitment-hero1.mp4`.
+   - **Kompres `sorcerer-2x.webp`** (481 KB, penyumbang terbesar Home mobile):
+     turunkan q/width di resize map `scripts/optimize-images.mjs`; ukur MAE
+     (opaque) vs pristine, target ~150 KB (sesuai P0(d) asli). **Jaga kualitas.**
+   - **Hindari `hero-poster.webp` (74 KB) di HP:** atribut `poster` ke-fetch walau
+     video tak tampil (≤600px/reduce). Opsi: set poster via JS di `Hero`/
+     `RecruitmentHero` hanya saat video akan main, atau lepas dari markup. Pastikan
+     desktop tetap poster-first (anti "double").
+   - Ukur ulang mobile 390 `transferSize` `/` & `/recruitment`, lalu semua gate.
+     Target: **Home mobile ≤ ~800 KB** & LCP <2.5 s (4G). Recruitment sudah
+     tercapai (1.15/0.93 MB). **Catatan:** P0(b) "splash jangan nunggu `three`"
+     **dibatalkan** — HP memang tidak menunggu `three`; desktop sengaja menunggu.
+2. **View Transitions (DONE; sisa device nyata).** `verify-vt.mjs` sudah menguji
+   Back/Forward, reload deep-link, dan inert saat reduce. Sisa: uji Safari/Firefox
+   & perangkat asli (Playwright firefox belum terpasang). `transition:persist`
+   belum perlu. Smoke: **`npm run verify:vt`**.
+3. **Konten:** data project asli (`src/data/projects.ts` masih 4 placeholder) dan
+   tanggal recruitment (`SelectionTimeline.astro` masih "Date"). Butuh material user.
 4. **Halaman baru:** About Us / Hall of Frames / Partners / Contact. Nav-nya sudah
    ada tapi `aria-disabled` — **jangan bikin URL palsu**, konfirmasi ke user dulu.
 5. **Nasalization webfont:** butuh file berlisensi dari manusia — **jangan
