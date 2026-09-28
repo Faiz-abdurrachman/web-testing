@@ -9,7 +9,11 @@
 //   - components re-init on the new DOM (FAQ accordion, Snippets + DomainRail
 //     carousels, Projects, Navbar scroll state);
 //   - an internal link plays exactly one `transition` cue (no data-sfx double),
-//     modifiers are not intercepted, and a cross-document hash link lands right.
+//     modifiers are not intercepted, and a cross-document hash link lands right;
+//   - browser Back/Forward and a reload go through the client router without a
+//     full reload, and a reloaded deep link still lands on its section;
+//   - under reduced motion the client router still works and leaves no GSAP
+//     entrance/pin behind.
 //
 // Run against a static preview (recommended) with the server already up:
 //   npm run build && npx astro preview --port 4333
@@ -241,12 +245,26 @@ const spyPlays = (page) =>
   page.on('pageerror', (e) => errors.push(`reduce: ${e.message}`));
   await page.goto(`${BASE}/`, { waitUntil: 'load' });
   await page.waitForSelector('.hero', { timeout: 8000 });
+  assert(
+    'reduce: no hero entrance class (hero-ready absent)',
+    await page.evaluate(
+      () => !document.documentElement.classList.contains('hero-ready'),
+    ),
+  );
+  assert(
+    'reduce: no GSAP pin spacer on /',
+    await page.evaluate(() => !document.querySelector('.pin-spacer')),
+  );
   await page.click('a.nav-link[href="/recruitment"]');
   await page.waitForSelector('.recruitment-hero', { timeout: 8000 });
   assert(
     'reduce: client nav lands on /recruitment',
     page.url().replace(/\/$/, '').endsWith('/recruitment'),
     page.url(),
+  );
+  assert(
+    'reduce: no GSAP pin spacer on /recruitment',
+    await page.evaluate(() => !document.querySelector('.pin-spacer')),
   );
   const faq = page.locator('details.faq-item').first();
   await faq.scrollIntoViewIfNeeded();
@@ -293,6 +311,78 @@ const spyPlays = (page) =>
     'hash: Back lands on #domains (top ≈ scroll-margin)',
     top !== null && top > -5 && top < 200,
     `top=${top}`,
+  );
+  await context.close();
+}
+
+// --- 5. Browser Back/Forward go through the client router (no full reload). --
+{
+  const context = await browser.newContext({
+    viewport: { width: 1440, height: 900 },
+  });
+  await warm(context);
+  const page = await context.newPage();
+  page.on('pageerror', (e) => errors.push(`history: ${e.message}`));
+  await page.goto(`${BASE}/`, { waitUntil: 'load' });
+  await page.waitForSelector('.hero', { timeout: 8000 });
+  await page.evaluate(() => {
+    window.__vtToken = { t: 2 };
+  });
+  await page.click('a.nav-link[href="/recruitment"]');
+  await page.waitForSelector('.recruitment-hero', { timeout: 8000 });
+
+  await page.evaluate(() => history.back());
+  await page.waitForSelector('.hero', { timeout: 8000 });
+  assert(
+    'history back: lands on /',
+    page.url().replace(/\/$/, '') === BASE.replace(/\/$/, ''),
+    page.url(),
+  );
+  assert(
+    'history back: JS context persisted',
+    await page.evaluate(() => window.__vtToken?.t === 2),
+  );
+
+  await page.evaluate(() => history.forward());
+  await page.waitForSelector('.recruitment-hero', { timeout: 8000 });
+  assert(
+    'history forward: lands on /recruitment',
+    page.url().replace(/\/$/, '').endsWith('/recruitment'),
+    page.url(),
+  );
+  assert(
+    'history forward: JS context persisted',
+    await page.evaluate(() => window.__vtToken?.t === 2),
+  );
+  await context.close();
+}
+
+// --- 6. A reloaded deep link still lands on its section. ---------------------
+{
+  const context = await browser.newContext({
+    viewport: { width: 1440, height: 900 },
+  });
+  await warm(context);
+  const page = await context.newPage();
+  page.on('pageerror', (e) => errors.push(`reload: ${e.message}`));
+  await page.goto(`${BASE}/#domains`, { waitUntil: 'load' });
+  await page.waitForSelector('.domain-card', { timeout: 8000 });
+  await page.waitForTimeout(1000);
+  const before = await page.evaluate(
+    () =>
+      document.getElementById('domains')?.getBoundingClientRect().top ?? null,
+  );
+  await page.reload({ waitUntil: 'load' });
+  await page.waitForSelector('.domain-card', { timeout: 8000 });
+  await page.waitForTimeout(1200);
+  const after = await page.evaluate(
+    () =>
+      document.getElementById('domains')?.getBoundingClientRect().top ?? null,
+  );
+  assert(
+    'reload: /#domains still lands on the section',
+    after !== null && after > -5 && after < 200,
+    `before=${before} after=${after}`,
   );
   await context.close();
 }

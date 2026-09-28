@@ -158,6 +158,10 @@ klik link asli (navigasi klien) dan mengecek:
   tetap ada setelah swap;
 - komponen re-init (FAQ, Snippets, DomainRail, Navbar) dan deep-link `#domains`
   mendarat di `top ≈ 110`;
+- browser Back/Forward lewat client router (konteks tetap), dan **reload** pada
+  deep-link `/#domains` tetap mendarat di `top ≈ 110`;
+- saat reduce: tidak ada `hero-ready` maupun `.pin-spacer` (motion benar-benar
+  inert) di home maupun recruitment;
 - tepat **satu** cue `transition` per link internal (kartu role `data-sfx="open"`
   tidak dobel), modifier tidak di-intercept (tetap `select`), reduce tetap jalan.
 

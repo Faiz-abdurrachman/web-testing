@@ -118,6 +118,28 @@ production/main`. Production sempat ketinggalan dan sudah disinkronkan; HEAD
   `responsive-audit` 364 combos ALL PASS, `seo:audit` PASS (sitemap tetap 14),
   `audit:navbar` ALL PASS.
 
+## Baru saja: View Transitions hardening + OG hardening (28 Sep 2026, di atas `b4a8b80`)
+
+- **OG:** `BaseLayout.astro` kini `<html prefix="og: https://ogp.me/ns#">` dan
+  punya `og:image:secure_url`; `npm run seo:audit` PASS (15 halaman, sitemap 14).
+- **`scripts/verify-vt.mjs` diperluas** — semua hijau, `pageerrors: none`:
+  browser **Back/Forward** lewat client router (konteks JS persist, tanpa
+  reload), **reload** deep-link `/#domains` tetap mendarat `top ≈ 110`, dan saat
+  **reduce** tidak ada `hero-ready` maupun `.pin-spacer` di home/recruitment.
+  Uji lama (cue `transition` tunggal, komponen re-init, modifier) tetap lolos.
+- **Perf client-nav (report-only).** Chromium software-render + CPU 4×: warm
+  client-nav home→recruit ~9 long task / 1566 ms, recruit→home ~10 / 1540 ms
+  (max 720 ms); full reload home 981 ms, recruitment 871 ms. Jadi VT menambah
+  kerja di halaman berat (GSAP pin + Three particles + re-init komponen) —
+  optimasinya bagian **Perf P0/P1** (butuh acc), bukan regresi baru. Angka
+  inflasi (software render) → bandingkan relatif.
+- **Gate hijau (di atas `b4a8b80`):** `format:check`, `build` 15 halaman 0 error,
+  `verify.mjs` `EXIT 0` (`browserErrors: []`), `responsive-audit` 364 ALL PASS,
+  `seo:audit` PASS, `verify:vt` `EXIT 0`.
+- **Sisa (manual, tidak di mesin ini):** uji Safari/Firefox & perangkat asli
+  (Playwright firefox belum terpasang). Fallback non-View-Transitions ditangani
+  Astro; belum diverifikasi langsung.
+
 ## Status singkat
 
 - **Latest splash revision (25 Sep 2026): native SVG + Canvas.** User rejected
@@ -846,14 +868,15 @@ Section.png` (5760×3376 → 1440×844). Patch glow terukur: center REF
 Urutan yang disarankan. Baca `docs/sound-sop.md` (khususnya §9) kalau menyentuh
 sound atau navigasi; detail P0–P2 ada di "Perf audit & rencana" di atas.
 
-1. **View Transitions — hardening (prioritas, baru).** Uji di device/browser
-   nyata (Safari/Firefox fallback, Back/Forward, reload) dan pastikan
-   `prefers-reduced-motion` benar-benar tanpa animasi. Periksa perf (VT + GSAP/
-   Three di halaman berat). Catatan: `motion.ts` juga jalan di halaman detail
-   (tanpa hero) — praktis no-op kecuali magnetic `.button`; boleh dibiarkan atau
-   di-skip. Tambah `transition:persist` hanya kalau ada elemen yang memang tak
-   perlu di-swap. Smoke: **`npm run verify:vt`** (`scripts/verify-vt.mjs`, sudah
-   di-commit — regen kalau nambah komponen ber-script).
+1. **View Transitions — hardening (Back/Forward + reload + reduce: DONE;
+   device nyata: pending).** `scripts/verify-vt.mjs` sekarang juga menguji
+   Back/Forward lewat client router, reload deep-link `/#domains`, dan inert-nya
+   motion saat reduce (tanpa `hero-ready`/`.pin-spacer`) — lihat
+   "## Baru saja: View Transitions hardening + OG hardening". **Sisa:** uji
+   Safari/Firefox & perangkat asli (Playwright firefox belum terpasang di mesin
+   ini). Perf client-nav terukur lebih berat dari full reload di halaman berat →
+   masuk P0/P1 (butuh acc). `transition:persist` belum perlu. Smoke:
+   **`npm run verify:vt`**.
 2. **Perf P0** (paling berdampak; **butuh acc user**): (a) `sizes` Snippets
    responsif + varian ~640w; (b) splash jangan nunggu `three` + timeout video;
    (c) re-encode video hero (home ≤400 KB, recruitment ≤900 KB); (d) kompres
@@ -871,5 +894,5 @@ sound atau navigasi; detail P0–P2 ada di "Perf audit & rencana" di atas.
 6. **Sound (opsional):** tuning level cue/ambient (Bagian B, ditunda), pisah
    kontrol SFX vs ambient, atau ganti ke sample AI lewat MCP ElevenLabs kalau mau
    non-prosedural.
-7. **OG hardening (kecil):** `og:image:secure_url` + `<html prefix="og:
-https://ogp.me/ns#">`.
+7. ~~**OG hardening**~~ — **DONE:** `<html prefix="og: https://ogp.me/ns#">` +
+   `og:image:secure_url` di `BaseLayout.astro`, `seo:audit` PASS.

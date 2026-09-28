@@ -1163,6 +1163,8 @@ unchanged, so the section comparisons are unaffected.
   canvas, not composited on a dark fill).
 - `BaseLayout` points every page's canonical, Open Graph and Twitter tags at this
   card; the canonical origin comes from `site` (`SITE_URL`) in `astro.config.mjs`.
+  Since 28 Sep 2026 `<html>` carries `prefix="og: https://ogp.me/ns#"` and the
+  image also emits `og:image:secure_url` (crawler hardening; `seo:audit` PASS).
 
 ## Mentor feedback revision — 23 September 2026
 

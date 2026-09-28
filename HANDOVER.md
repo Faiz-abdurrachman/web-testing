@@ -542,9 +542,9 @@ projects 5.104 recruitment 2.174 footer 2.666
       `docs/ai-handoff.md` §"Perf audit & rencana". Ringkas: `sizes` Snippets,
       splash jangan nunggu `three`, re-encode video hero, kompres
       `sorcerer-2x`/`logo.png`/hero bg/figure, font subset. **Belum dieksekusi.**
-- [ ] **OG/share WhatsApp**: server sudah benar; tempel
-      `og:image:secure_url` + `<html prefix="og: https://ogp.me/ns#">` lalu
-      refresh cache via Facebook Sharing Debugger. **Belum diterapkan.**
+- [x] ~~OG hardening~~: `og:image:secure_url` + `<html prefix="og: https://ogp.me/ns#">`
+      **sudah diterapkan** (28 Sep 2026, `BaseLayout.astro`). Sisa manual:
+      refresh cache Meta via Facebook Sharing Debugger.
 - [ ] Opsional: lanjutkan motion (lihat §10) & optimasi bundle.
 
 ---
@@ -661,7 +661,7 @@ git log --oneline            # lihat checkpoint
   Microlink: `og:image` 1200×630 `image/jpeg` 200 OK). Kalau WhatsApp tetap
   menampilkan link polos, itu **cache Meta**. Refresh lewat Facebook Sharing
   Debugger (`developers.facebook.com/tools/debug/` → paste URL → "Scrape Again").
-  Hardening opsional kalau masih bandel: `og:image:secure_url` +
+  Hardening sudah diterapkan (28 Sep 2026): `og:image:secure_url` +
   `<html prefix="og: https://ogp.me/ns#">`.
 
 ## 20. Mentor feedback revision (23 September 2026)
