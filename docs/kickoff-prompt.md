@@ -44,6 +44,7 @@ Commands:
 - node scripts/verify.mjs               → verifikasi visual + geometri (HARUS exit 0)
 - node scripts/responsive-audit.mjs     → 14 rute × 26 lebar (320–3840; HARUS exit 0)
 - npm run perf:audit         → scroll-jank + long-task per section (set PERF_MAX_TASK untuk fail)
+- npm run verify:vt          → smoke View Transitions + cue sound (navigasi klien; butuh preview)
 - npm run seo:audit          → validasi meta/OG/canonical/sitemap di dist (setelah build)
 - npm run assets:og          → regen og image + favicon + manifest
 - npm run assets:starfield   → regen tile bintang What We Do (Chromium)
@@ -58,7 +59,14 @@ setNavbarHidden). Fitur CSS modern (mis. `backdrop-filter`): cek di `dist/`/live
 bukan cuma dev.
 
 Kondisi sekarang (detail di docs/ai-handoff.md):
-- 14 rute: `/`, `/recruitment`, `/recruitment/roles/{id}` (6), `/hods/{id}` (6).
+- 14 rute: `/`, `/recruitment`, `/recruitment/roles/{id}` (6), `/hods/{id}` (6)
+  (+ `/lab/sound` internal, noindex).
+- **View Transitions AKTIF** (`<ClientRouter />` di `BaseLayout`): navigasi
+  antar-halaman klien (cross-fade) + `AudioContext` persist. Karena Astro tidak
+  menjalankan ulang script bundled saat swap, **tiap komponen re-init lewat
+  `astro:page-load`** dan cleanup di `astro:before-swap` (AbortController/
+  observer/GSAP). Aturan lengkap: `docs/sound-sop.md` §9. Kalau bikin komponen
+  baru yang menyentuh DOM, WAJIB ikut pola ini.
 - Motion GSAP + Three.js AKTIF (`src/components/Motion.astro` +
   `src/scripts/motion.ts`): hero pinned scroll + partikel Three.js (lazy), idle
   karakter, scroll reveal, 3D tilt, magnetic button, cursor glow. Semua inert saat
@@ -91,8 +99,10 @@ Kondisi sekarang (detail di docs/ai-handoff.md):
   JSON-LD, robots, sitemap, share card. Ganti origin kalau domain final beda.
 - Sound: SFX prosedural + ambient (Web Audio, 0 aset/0 dependency), orb mute
   melayang (`src/components/Sound.astro` di `BaseLayout`), cue per-komponen via
-  `data-sfx` / `data-sfx-hover` / event `ds:sfx`, halaman audisi `/lab/sound`.
-  SOP: `docs/sound-sop.md`. Jangan tambah dependency/file audio tanpa izin.
+  `data-sfx` / `data-sfx-hover` / event `ds:sfx`, cue `transition` pada link
+  internal, halaman audisi `/lab/sound`. **SOP portable (disukai user, bakal
+  dipakai ulang): `docs/sound-sop.md`** (§10 cara porting ke project lain).
+  Jangan tambah dependency/file audio tanpa izin.
 - Konvensi: carousel/rail pakai ←/→ saat section-nya di tengah viewport (Projects &
   DomainRail ganti di 1050px, Snippets di 760px); button hover = swap warna; jangan
   pakai lebar fixed-px yang bisa overflow (tes 320–3840px).
@@ -101,11 +111,13 @@ Kalau bikin/ubah section: update `docs/assets.md` + `docs/ai-handoff.md` dan
 tambah/cek assertion di `scripts/verify.mjs`.
 
 TODO utama: **ikuti `docs/ai-handoff.md` §"Next plan — untuk AI berikutnya"**.
-Ringkasnya: Perf P0 (Snippets `sizes`, splash jangan nunggu `three`, re-encode
-video hero, kompres `sorcerer-2x`/`logo.png`/hero mobile), data project asli,
-tanggal recruitment, halaman About Us / Hall of Frames / Partners / Contact, dan
-webfont Nasalization (berlisensi — jangan diakali). Sound system sudah selesai
-(`docs/sound-sop.md`).
+Ringkasnya: (1) hardening View Transitions (device/browser nyata, reduced-motion,
+perf) — baru; (2) Perf P0 (Snippets `sizes`, splash jangan nunggu `three`,
+re-encode video hero, kompres `sorcerer-2x`/`logo.png`/hero mobile); (3) data
+project asli + tanggal recruitment; (4) halaman About Us / Hall of Frames /
+Partners / Contact (nav masih `aria-disabled`, jangan bikin URL palsu); (5) webfont
+Nasalization (berlisensi — jangan diakali). Sound system sudah selesai dan
+disukai user (`docs/sound-sop.md`).
 
 Sebelum mulai task di bawah: ringkas dulu pemahamanmu + rencana singkat, lalu kerjakan.
 

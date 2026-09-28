@@ -6,7 +6,45 @@ harus menebak dari git log. Ini dokumen hidup — update kalau ada perubahan bes
 Baca dulu, urut: `AGENTS.md` (aturan operasional) → `HANDOVER.md` (konteks
 panjang) → `docs/assets.md` (provenance per section) → file ini.
 
-## Checkpoint terakhir (28 Sep 2026) — BACA INI DULU
+## Ringkasan cepat (untuk AI baru) — HEAD `601107b`, 28 Sep 2026
+
+Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
+
+- **Situs:** static **Astro 7** — 14 rute publik (`/`, `/recruitment`,
+  `/recruitment/roles/{6}` 6 halaman, `/hods/{6}` 6 halaman) + `/lab/sound`
+  internal (`noindex`, di luar sitemap). Target: **pixel-accurate ke PNG
+  referensi**, HTML/CSS ringan (bukan flatten screenshot).
+- **Runtime deps sengaja cuma** `astro` + `gsap` + `three`. Jangan tambah library
+  lain tanpa tanya; lazy-import yang berat.
+- **Dua commit terbaru (sudah live di testing + production):**
+  1. `450833a` **Migrasi ke Astro View Transitions** (`<ClientRouter />`):
+     navigasi antar-halaman kini **klien** (cross-fade, tanpa reload) dan
+     `AudioContext` **persist** (sound tidak putus). Karena Astro **tidak**
+     menjalankan ulang script bundled saat swap, **semua komponen re-init lewat
+     `astro:page-load`** dan membersihkan listener/observer/GSAP di
+     `astro:before-swap`. Aturan lengkap: `docs/sound-sop.md` §9; ringkas di
+     gotcha `AGENTS.md`.
+  2. `601107b` **Sound Fase 2** — cue `transition` saat klik link internal
+     (tanpa delay, karena context persist).
+- **Sound system (Fase 0–3) SELESAI dan disukai user** → SOP portable yang bisa
+  dipakai ulang di project lain: **`docs/sound-sop.md`** (lihat §1–§3 + §10
+  "Porting"). Ringkasan agent: `.agents/skills/data-sorcerers-sound/SKILL.md`.
+  Aturan: **0 dependency, 0 file audio**, gate reduced-motion.
+- **Motion GSAP + Three.js aktif** (`Motion.astro` → `motion.ts`): hero pinned +
+  partikel, idle karakter, scroll reveal, tilt, magnetic. Semua **inert saat
+  `prefers-reduced-motion: reduce`**.
+- **Gate sebelum commit (semua harus exit 0):** `npm run format:check`,
+  `npm run build` (0 error, 15 halaman), `PREVIEW_URL=… node scripts/verify.mjs`
+  (`browserErrors: []`), `node scripts/responsive-audit.mjs` (364 combos),
+  `npm run seo:audit`. **Penting:** `verify.mjs` pakai `page.goto` penuh, jadi
+  **tidak menguji navigasi klien** — pakai **`npm run verify:vt`**
+  (`scripts/verify-vt.mjs`): cek konteks JS persist, komponen re-init, cue
+  `transition` tepat satu, modifier tidak di-intercept, dan deep-link hash.
+- **Deploy GANDA:** `git push origin main` → testing **dan** production.
+- **Next:** baca §"Next plan — untuk AI berikutnya" di bawah (Perf P0, konten
+  asli, halaman baru, webfont Nasalization, OG hardening).
+
+## Checkpoint terakhir (28 Sep 2026) — detail
 
 - **Repo + deploy GANDA (penting).** `origin` =
   `github.com/Faiz-abdurrachman/web-testing` (testing) dan setelannya sudah
@@ -16,7 +54,7 @@ origin main` mengirim ke **testing + production**
   Jalankan `git push origin main` seperti biasa; kalau perlu cek sinkron pakai
   `git fetch production -q && git rev-parse --short main origin/main
 production/main`. Production sempat ketinggalan dan sudah disinkronkan; HEAD
-  terakhir `d0fd3be`.
+  terakhir `601107b` (`main` = `origin/main` = `production/main`).
 - **Available Roles glow wave DIPERKECIL.** `@keyframes role-glow-wave` sekarang
   cuma `scale: 1 → 1.04` (drift `translate ±6%` dibuang) supaya ukuran glow
   balik ke frame statis. Hover kartu dapat "pointer pool" radial violet (ikut
@@ -60,10 +98,10 @@ production/main`. Production sempat ketinggalan dan sudah disinkronkan; HEAD
   dipanggil di `astro:before-swap`; `mountHeroParticles()` mengembalikan
   `dispose()` (renderer/geometry/texture/rAF/listener) dipanggil juga di
   `before-swap`; class runtime `<html>` (`splash-done`/`nav-warm`) di-re-apply di
-  `astro:after-swap`; hash di-re-apply di `astro:page-load`. Smoke VT:
-  `tmp-detail/vt-smoke.mjs` (tidak di-commit) hijau (konteks JS persist, FAQ/
-  Snippets re-init, cue tepat satu, deep-link `#domains` top≈110). **Detail §9
-  `docs/sound-sop.md`.**
+  `astro:after-swap`; hash di-re-apply di `astro:page-load`. Verifikasi:
+  **`npm run verify:vt`** (`scripts/verify-vt.mjs`, sudah di-commit) hijau
+  (konteks JS persist, FAQ/Snippets/DomainRail re-init, cue tepat satu, deep-link
+  `#domains` top≈110). **Detail §9 `docs/sound-sop.md`.**
 - **Sound Fase 2 — page-transition cue (28 Sep 2026).** Cue baru `transition`
   (~0.28 s "seal" whoosh + pluck) dimainkan saat klik link **internal**
   (Navbar, kartu role/HoDS, back link ber-hash). Intercept ada di `Sound.astro`
@@ -73,8 +111,8 @@ production/main`. Production sempat ketinggalan dan sudah disinkronkan; HEAD
   hash same-page/link URL saat ini; reduce = wiring mati. Cue transisi
   **menggantikan** cue `data-sfx` link (tidak dobel). `whoosh(dir, duration)` +
   `isReady` ditambah di `sound.ts`; `transition` masuk audisi `/lab/sound`.
-  Smoke: `tmp-detail/transition-smoke.mjs` hijau (normal/reduce/modifier/
-  kartu-`open`/back-hash). Tuning level cue (Bagian B) **ditunda**.
+  Smoke: `npm run verify:vt` hijau (normal/reduce/modifier/kartu-`open`/
+  back-hash). Tuning level cue (Bagian B) **ditunda**.
 - **Gate terakhir (HEAD `66b284e`) hijau:** `format:check`, `build` 15 halaman
   (14 + `/lab/sound`), `verify.mjs` (`EXIT 0`, `browserErrors: []`),
   `responsive-audit` 364 combos ALL PASS, `seo:audit` PASS (sitemap tetap 14),
@@ -805,24 +843,33 @@ Section.png` (5760×3376 → 1440×844). Patch glow terukur: center REF
 
 ## Next plan — untuk AI berikutnya (28 Sep 2026)
 
-Urutan yang disarankan. Baca `docs/sound-sop.md` kalau menyentuh sound; baca
-"Perf audit & rencana" di atas untuk detail P0–P2.
+Urutan yang disarankan. Baca `docs/sound-sop.md` (khususnya §9) kalau menyentuh
+sound atau navigasi; detail P0–P2 ada di "Perf audit & rencana" di atas.
 
-1. **Perf P0** (paling berdampak; **butuh acc user**): (a) `sizes` Snippets
+1. **View Transitions — hardening (prioritas, baru).** Uji di device/browser
+   nyata (Safari/Firefox fallback, Back/Forward, reload) dan pastikan
+   `prefers-reduced-motion` benar-benar tanpa animasi. Periksa perf (VT + GSAP/
+   Three di halaman berat). Catatan: `motion.ts` juga jalan di halaman detail
+   (tanpa hero) — praktis no-op kecuali magnetic `.button`; boleh dibiarkan atau
+   di-skip. Tambah `transition:persist` hanya kalau ada elemen yang memang tak
+   perlu di-swap. Smoke: **`npm run verify:vt`** (`scripts/verify-vt.mjs`, sudah
+   di-commit — regen kalau nambah komponen ber-script).
+2. **Perf P0** (paling berdampak; **butuh acc user**): (a) `sizes` Snippets
    responsif + varian ~640w; (b) splash jangan nunggu `three` + timeout video;
    (c) re-encode video hero (home ≤400 KB, recruitment ≤900 KB); (d) kompres
    `sorcerer-2x.webp`, `logo.png`, varian mobile hero `background`/`figure`.
    Target: Home mobile ≤ ~800 KB & LCP < 2.5 s (4G); Recruitment mobile ≤ ~1.2 MB.
-2. **Konten:** data project asli (`src/data/projects.ts` masih 4 placeholder
+   **Catat:** VT menambah JS router + mengubah timing splash/preload → ukur ulang.
+3. **Konten:** data project asli (`src/data/projects.ts` masih 4 placeholder
    dengan gambar sama) dan tanggal recruitment (`SelectionTimeline.astro` masih
    placeholder "Date").
-3. **Halaman baru:** About Us / Hall of Frames / Partners / Contact. Nav-nya sudah
+4. **Halaman baru:** About Us / Hall of Frames / Partners / Contact. Nav-nya sudah
    ada tapi `aria-disabled` — **jangan bikin URL palsu**, konfirmasi ke user dulu.
-4. **Nasalization webfont:** butuh file berlisensi dari manusia — **jangan
+5. **Nasalization webfont:** butuh file berlisensi dari manusia — **jangan
    diakali**. Taruh `.woff2` di `public/fonts/`, update `@font-face` di
    `global.css` (pertahankan `local()`).
-5. **Sound:** Fase 2 page-transition **selesai**. Sisa opsional: tuning level
-   cue/ambient (Bagian B, ditunda), pisah kontrol SFX vs ambient, atau ganti ke
-   sample AI lewat MCP ElevenLabs kalau mau non-prosedural.
-6. **OG hardening (kecil):** `og:image:secure_url` + `<html prefix="og:
+6. **Sound (opsional):** tuning level cue/ambient (Bagian B, ditunda), pisah
+   kontrol SFX vs ambient, atau ganti ke sample AI lewat MCP ElevenLabs kalau mau
+   non-prosedural.
+7. **OG hardening (kecil):** `og:image:secure_url` + `<html prefix="og:
 https://ogp.me/ns#">`.

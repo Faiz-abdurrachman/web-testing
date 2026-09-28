@@ -150,16 +150,19 @@ Sound tidak mengubah piksel, jadi diff tetap bersih selama orb ter-hide.
 Kalau ragu, smoke test headless: klik tiap `[data-cue]` di `/lab/sound` dan
 pastikan `pageerror` kosong.
 
-Untuk page-transition, dua skrip smoke headless (di `tmp-detail/`, tidak
-di-commit) memverifikasi:
-`transition-smoke.mjs` — klik nav memainkan tepat **satu** cue `transition`
-(tanpa cue link dobel), modifier tidak di-intercept (tetap `select`), kartu role
-`data-sfx="open"` tidak dobel, back link ber-hash mendarat di
-`/recruitment#available-roles`. `vt-smoke.mjs` — navigasi klien View Transitions:
-konteks JS & `AudioContext` persist (tanpa reload), `splash-done`/`nav-warm` tetap
-ada setelah swap, komponen re-init (FAQ, Snippets), cue tepat satu setelah
-beberapa navigasi, dan deep-link `#domains` mendarat di `top ≈ 110`. Instrumentasi
-memakai binding Node `exposeFunction` (global hilang saat dokumen penuh berganti).
+Untuk page-transition + View Transitions, jalankan **`npm run verify:vt`**
+(`scripts/verify-vt.mjs`, sudah di-commit; butuh preview jalan). Skrip ini menekan
+klik link asli (navigasi klien) dan mengecek:
+
+- konteks JS & `AudioContext` persist (tanpa reload), `splash-done`/`nav-warm`
+  tetap ada setelah swap;
+- komponen re-init (FAQ, Snippets, DomainRail, Navbar) dan deep-link `#domains`
+  mendarat di `top ≈ 110`;
+- tepat **satu** cue `transition` per link internal (kartu role `data-sfx="open"`
+  tidak dobel), modifier tidak di-intercept (tetap `select`), reduce tetap jalan.
+
+Instrumentasi memakai binding Node `exposeFunction` (`window.__dsRecordCue`),
+karena global hilang saat dokumen penuh berganti.
 
 ## 8. Gotcha
 
@@ -174,11 +177,10 @@ memakai binding Node `exposeFunction` (global hilang saat dokumen penuh berganti
 - **Page-transition cue bisa tak terdengar pada interaksi pertama.** AudioContext
   belum `running` sampai gesture pertama (autoplay). Setelah itu context tetap
   hidup (View Transitions), jadi cue `transition` main penuh.
-- **Smoke test: jangan baca state dari `window` setelah navigasi klien** — kalau
-  pakai `page.goto` penuh, dokumen baru menghapus global itu. Kirim cue ke Node
-  via `page.exposeFunction` (lihat `tmp-detail/transition-smoke.mjs`); untuk VT,
-  pakai token di `window` untuk membuktikan konteks JS tidak reload
-  (`tmp-detail/vt-smoke.mjs`).
+- **Smoke test: baca state setelah navigasi klien dengan hati-hati** — dengan
+  `page.goto` penuh, dokumen baru menghapus global itu. Kirim cue ke Node via
+  `page.exposeFunction` dan pakai token di `window` untuk membuktikan konteks JS
+  tidak reload — lihat `scripts/verify-vt.mjs`.
 
 ## 9. View Transitions (ClientRouter) — aturan migrasi
 
@@ -205,4 +207,65 @@ Situs memakai `import { ClientRouter } from 'astro:transitions'` di
   (guard `window.__dsSoundWired`).
 
 Editor `verify.mjs`/`responsive-audit.mjs` memakai `page.goto` (full load) jadi
-tidak menghukum, tapi uji navigasi klien perlu `tmp-detail/vt-smoke.mjs`.
+tidak menghukum, tapi uji navigasi klien perlu **`npm run verify:vt`**
+(`scripts/verify-vt.mjs`).
+
+## 10. Porting ke project lain (reuse)
+
+Sistem bunyi ini **dirancang untuk dipakai ulang**: Web Audio prosedural, **0
+dependency, 0 file audio**, semua disintesis saat runtime.
+
+**File yang dipakai:**
+
+| File                         | Wajib?   | Isi                                                                |
+| ---------------------------- | -------- | ------------------------------------------------------------------ |
+| `src/scripts/sound.ts`       | ya       | Engine (singleton `sound`). **Tanpa `import` apa pun** → portable. |
+| `src/components/Sound.astro` | ya       | Orb mute + wiring delegated + persistensi.                         |
+| `src/pages/lab/sound.astro`  | opsional | Halaman audisi semua cue (`noindex`).                              |
+
+`sound.ts` benar-benar standalone, jadi bisa dicopy ke project
+vanilla/React/Vue/Svelte tanpa perubahan. `Sound.astro` cuma wrapper (markup orb
+
+- `<style>` + `<script>`); padanannya bisa dipindah ke HTML/JS biasa.
+
+**Langkah minimal (Astro):**
+
+1. Copy `src/scripts/sound.ts` + `src/components/Sound.astro`.
+2. Mount `<Sound />` **sekali** di layout root (mis. setelah `<slot />`).
+3. (Opsional) copy `src/pages/lab/sound.astro` untuk audisi cue.
+4. Wire elemen: `data-sfx="select"` (klik), `data-sfx-hover="hover"` (hover), atau
+   dispatch event stateful:
+   `window.dispatchEvent(new CustomEvent('ds:sfx', { detail: { cue: 'open' } }))`.
+5. Selesai — orb muncul kanan-bawah, pref mute disimpan di
+   `localStorage['ds:sound']` (default **on**).
+
+**Non-Astro:** tempel markup orb dari `Sound.astro` ke HTML, bundle `sound.ts`,
+lalu pasang wiring sederhana (§4). Gate reduced-motion + autoplay tetap sama.
+
+**Yang disesuaikan per project:**
+
+- `MASTER_GAIN` (0.75) & `AMBIENT_GAIN` (0.28) — level keseluruhan.
+- Resep cue di `play()` kalau mau warna bunyi berbeda.
+- `KEY = 'ds:sound'` kalau storage bentrok.
+- Cue `transition` + helper `internalLink` di `Sound.astro` khusus navigasi
+  internal; **buang** kalau project bukan multi-halaman / tak pakai ClientRouter.
+- Selector orb `.sound-toggle` → update hide-list di `verify` kalau perlu.
+
+**Kontrak wajib saat reuse:**
+
+- **0 dependency & 0 aset audio** — jangan tambah Howler/Tone/.mp3.
+- Reduced motion → `setAmbientAllowed(false)` + **jangan** pasang wiring apa pun.
+- Autoplay: bunyi baru keluar setelah gesture pertama (`unlock()`).
+- **Jangan** panggil `sound.play()` langsung dari komponen — lewat wiring terpusat.
+
+## 11. Menambah / mengubah cue
+
+1. Tambah id ke union `Cue` di `src/scripts/sound.ts`.
+2. Tambah `case` di `play()` — resep = kombinasi `note()` / `sparkle()` /
+   `shimmer()` / `whoosh()`. Contoh karakter tiap cue ada di §2.
+3. (Opsional) daftarkan di array `cues` `/lab/sound.astro` supaya bisa diaudisi.
+4. Cek: klik tiap `[data-cue]` di `/lab/sound` — `pageerror` harus kosong.
+
+**Cheatsheet knob:** `MASTER_GAIN`, `AMBIENT_GAIN`, gain per-cue di `play()`,
+peak `sparkle()`, durasi & `wet.gain` di `buildReverb()`, array `voices` di
+`buildAmbient()`. Semua di `src/scripts/sound.ts`.

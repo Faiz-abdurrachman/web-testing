@@ -15,6 +15,10 @@ production/main`. Kredensial lewat helper `store` (`~/.git-credentials`).
   (file `Web Community DS`)
 - **Deploy**: Vercel (auto dari branch `main`, dua project: testing & production)
 - **Buat AI agent**: baca juga `AGENTS.md` (operating manual ringkas buat AI).
+- **STATE PALING TERKINI**: `docs/ai-handoff.md` — **baca ini lebih dulu** sebelum
+  dokumen ini. Di situ ada checkpoint terbaru (View Transitions + sound system),
+  gotcha, dan next plan.
+- **SOP sound (portable, bisa dipakai ulang)**: `docs/sound-sop.md`.
 - **Prompt buat AI baru**: `docs/kickoff-prompt.md` (copy-paste starter).
 - **Prompt bikin halaman baru presisi**: `docs/page-build-prompt.md`.
 
@@ -354,6 +358,21 @@ ulang** dengan pendekatan yang lebih aman:
   (`verify.mjs`, `responsive-audit.mjs` ALL PASS, 0 browser error).
 - Yang **tetap ada** (bukan bagian murni motion): navbar blur, panah carousel
   HoDS, carousel project 3D.
+- **View Transitions (28 Sep 2026):** situs kini pakai `<ClientRouter />`, jadi
+  navigasi klien tanpa reload. `motion.ts` mengekspor `destroyMotion()` (revert
+  `gsap.matchMedia` + kill ScrollTrigger) yang dipanggil di `astro:before-swap`,
+  dan `Motion.astro` memanggil `initMotion()` di `astro:page-load`. Partikel
+  Three.js punya `dispose()`. **Semua** komponen yang menyentuh DOM ikut pola
+  re-init `astro:page-load` ini — detail + aturan di `docs/sound-sop.md` §9.
+
+---
+
+## 10b. Sound system (STATUS: SELESAI, disukai user)
+
+Prosedural Web Audio (0 dependency, 0 aset): SFX + ambient + orb mute, cue via
+`data-sfx`/`data-sfx-hover`/event `ds:sfx`, halaman audisi `/lab/sound`. **SOP
+lengkap + cara port ke project lain** di `docs/sound-sop.md` (ringkasan agent:
+`.agents/skills/data-sorcerers-sound/SKILL.md`).
 
 ---
 

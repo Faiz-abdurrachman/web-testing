@@ -27,6 +27,7 @@ npm run assets:footer     # footer bg: sharp desktop + portrait phone variant
 npm run seo:audit         # validate meta/OG/canonical/sitemap in dist (after build)
 npm run perf:audit        # scroll-jank report per section (set PERF_MAX_TASK to fail)
 npm run audit:navbar      # navbar states/containment/hug across widths
+npm run verify:vt         # View Transitions + sound-cue smoke (client-side nav)
 ```
 
 `scripts/verify.mjs` uses Chromium at `/usr/bin/chromium` (override with
@@ -219,8 +220,9 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   `AbortController` pattern in `Navbar`/`DomainRail`/`Projects`/`Snippets`).
   `<html>` runtime classes (`splash-done`, `nav-warm`) are wiped by the swap and
   re-applied in `astro:after-swap`; the hash is re-applied in `astro:page-load`.
-  `verify.mjs` uses full `page.goto` so it does not exercise client nav — use
-  `tmp-detail/vt-smoke.mjs` for that. Full migration notes: `docs/sound-sop.md` §9.
+  `verify.mjs` uses full `page.goto` so it does not exercise client nav — run
+  `npm run verify:vt` (`scripts/verify-vt.mjs`) for that. Full migration notes:
+  `docs/sound-sop.md` §9.
 
 ## Fonts
 
