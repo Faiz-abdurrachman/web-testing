@@ -118,6 +118,7 @@ public/og/og-default.jpg share card (served)
 public/                  served assets (fonts, images)
 assets/<page>/           raw PNGs read by verify/generate scripts (NOT served; unused ones archived outside repo)
 docs/assets.md           provenance per section (keep updated)
+docs/sound-sop.md        sound system SOP (procedural Web Audio SFX + ambient)
 docs/ai-handoff.md       live "where we are now" handoff for the next AI agent
 artifacts/               verify output (git-ignored)
 ```
@@ -221,10 +222,10 @@ When adding/changing a section, update `docs/assets.md` and the relevant
 
 ## Current checkpoint
 
-- **HEAD `d0fd3be` (28 Sep 2026).** Homepage + Recruitment lengkap + detail role +
-  detail HoDS + hover/glow kartu Available Roles + fix navbar & detail mobile.
-  **Deploy GANDA**: `git push origin main` → testing + production (lihat
-  "Git & deploy").
+- **HEAD `66b284e` (28 Sep 2026).** Semua di bawah + **sound system** (SFX
+  prosedural + ambient, orb mute, SOP `docs/sound-sop.md`). **Deploy GANDA**:
+  `git push origin main` → testing + production (lihat "Git & deploy"). Next plan
+  untuk agent berikutnya: `docs/ai-handoff.md` §"Next plan — untuk AI berikutnya".
 - **Available Roles hover (`f92b88a`).** Kartu reaktif pointer: pool radial violet
   ikut kursor (`--mx/--my`), ember lean (`--gx/--gy` ±22/16px + `scale(1.06)`),
   divider draw dari kiri, panah overshoot. Gate `(pointer: fine)` +

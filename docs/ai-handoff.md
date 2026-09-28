@@ -44,8 +44,15 @@ production/main`. Production sempat ketinggalan dan sudah disinkronkan; HEAD
   preview = cache Meta, bukan bug kode → refresh lewat Facebook Sharing Debugger.
   Hardening `og:image:secure_url` + `<html prefix="og: https://ogp.me/ns#">`
   belum diterapkan.
-- **Gate terakhir (HEAD `d0fd3be`) hijau:** `format:check`, `build` 14 halaman,
-  `verify.mjs` (`browserErrors: []`), `responsive-audit` 364 combos ALL PASS,
+- **Sound system selesai (`66b284e`, 28 Sep 2026).** SFX prosedural + backsound
+  ambient (Web Audio, **0 aset, 0 dependency**), orb mute melayang, wiring
+  komponen, halaman audisi `/lab/sound`. Detail lengkap + SOP di
+  **`docs/sound-sop.md`**; ringkasan agent di skill
+  `.agents/skills/data-sorcerers-sound/SKILL.md`. Section "## Sound system" di
+  bawah merinci arsitektur.
+- **Gate terakhir (HEAD `66b284e`) hijau:** `format:check`, `build` 15 halaman
+  (14 + `/lab/sound`), `verify.mjs` (`EXIT 0`, `browserErrors: []`),
+  `responsive-audit` 364 combos ALL PASS, `seo:audit` PASS (sitemap tetap 14),
   `audit:navbar` ALL PASS.
 
 ## Status singkat
@@ -711,6 +718,11 @@ Bundle: `three.module` **181 KB gz**, `Motion`/GSAP **45 KB gz**.
 - **Splash memblok interaksi 3–6 s** (cap). HP + jaringan lambat → splash nutup
   seluruh layar (termasuk navbar) sekitar ~5.4 s sebelum bisa ditekan; bagian dari
   item P0(b) di atas.
+- **DEV: GSAP/Three mati dengan `504 Outdated Optimize Dep`.** Kalau semua animasi
+  (hero pin/zoom, reveal) hilang di `npm run dev` tapi build/preview normal, itu
+  cache Vite basi — **bukan** kode. Fix: `npx astro dev stop && rm -rf
+node_modules/.vite && npx astro dev`, lalu hard refresh tab. Dev server Astro
+  sekarang daemon (`astro dev stop|status|logs`).
 - `scripts/verify-feedback.mjs` **gagal pre-existing**: timeout di
   `locator('.artwork .art-bg')` untuk route `/recruitment` (hero recruitment pakai
   `.artwork img`, bukan `.art-bg`). Tidak terkait What We Do.
@@ -751,3 +763,26 @@ Section.png` (5760×3376 → 1440×844). Patch glow terukur: center REF
   terbuka. Tampilan statis tidak berubah; semua gate tetap hijau.
 - TODO: webfont Nasalization, data project asli, tanggal recruitment, halaman
   About Us / Hall of Frames / Partners / Contact, dan lanjutan animasi What We Do.
+
+## Next plan — untuk AI berikutnya (28 Sep 2026)
+
+Urutan yang disarankan. Baca `docs/sound-sop.md` kalau menyentuh sound; baca
+"Perf audit & rencana" di atas untuk detail P0–P2.
+
+1. **Perf P0** (paling berdampak; **butuh acc user**): (a) `sizes` Snippets
+   responsif + varian ~640w; (b) splash jangan nunggu `three` + timeout video;
+   (c) re-encode video hero (home ≤400 KB, recruitment ≤900 KB); (d) kompres
+   `sorcerer-2x.webp`, `logo.png`, varian mobile hero `background`/`figure`.
+   Target: Home mobile ≤ ~800 KB & LCP < 2.5 s (4G); Recruitment mobile ≤ ~1.2 MB.
+2. **Konten:** data project asli (`src/data/projects.ts` masih 4 placeholder
+   dengan gambar sama) dan tanggal recruitment (`SelectionTimeline.astro` masih
+   placeholder "Date").
+3. **Halaman baru:** About Us / Hall of Frames / Partners / Contact. Nav-nya sudah
+   ada tapi `aria-disabled` — **jangan bikin URL palsu**, konfirmasi ke user dulu.
+4. **Nasalization webfont:** butuh file berlisensi dari manusia — **jangan
+   diakali**. Taruh `.woff2` di `public/fonts/`, update `@font-face` di
+   `global.css` (pertahankan `local()`).
+5. **Sound (opsional):** Fase 2 page-transition; tuning level/ambient; atau ganti
+   ke sample AI lewat MCP ElevenLabs kalau mau non-prosedural.
+6. **OG hardening (kecil):** `og:image:secure_url` + `<html prefix="og:
+https://ogp.me/ns#">`.

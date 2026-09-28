@@ -15,6 +15,8 @@ Sebelum ngapa-ngapain, WAJIB baca dulu (urut, jangan skip):
                          sebelum nebak dari git log
 3. HANDOVER.md         → konteks panjang: stack, struktur, status, TODO
 4. docs/assets.md      → provenance tiap section + node Figma
+5. docs/sound-sop.md   → SOP sound system (Web Audio prosedural) + tuning + gotcha
+                         (skill `.agents/skills/data-sorcerers-sound/SKILL.md`)
 
 Aturan inti (patuhi):
 - PNG referensi = sumber kebenaran; CSS export Figma cuma hint. Kalau beda → ikut PNG.
@@ -87,6 +89,10 @@ Kondisi sekarang (detail di docs/ai-handoff.md):
 - SEO/OG: origin dari `SITE_URL` (default
   `https://data-sorcerers-community-sigma.vercel.app`) → canonical/OG/Twitter/
   JSON-LD, robots, sitemap, share card. Ganti origin kalau domain final beda.
+- Sound: SFX prosedural + ambient (Web Audio, 0 aset/0 dependency), orb mute
+  melayang (`src/components/Sound.astro` di `BaseLayout`), cue per-komponen via
+  `data-sfx` / `data-sfx-hover` / event `ds:sfx`, halaman audisi `/lab/sound`.
+  SOP: `docs/sound-sop.md`. Jangan tambah dependency/file audio tanpa izin.
 - Konvensi: carousel/rail pakai ←/→ saat section-nya di tengah viewport (Projects &
   DomainRail ganti di 1050px, Snippets di 760px); button hover = swap warna; jangan
   pakai lebar fixed-px yang bisa overflow (tes 320–3840px).
@@ -94,11 +100,12 @@ Kondisi sekarang (detail di docs/ai-handoff.md):
 Kalau bikin/ubah section: update `docs/assets.md` + `docs/ai-handoff.md` dan
 tambah/cek assertion di `scripts/verify.mjs`.
 
-TODO utama: font Nasalization (webfont berlisensi — jangan diakali), data project
-asli, tanggal recruitment, halaman About Us / Hall of Frames / Partners / Contact,
-dan **optimasi berat web** (lihat `docs/ai-handoff.md` §"Perf audit & rencana":
-`sizes` Snippets, splash jangan nunggu `three`, re-encode video hero, kompres
-gambar/logo/font — belum dieksekusi).
+TODO utama: **ikuti `docs/ai-handoff.md` §"Next plan — untuk AI berikutnya"**.
+Ringkasnya: Perf P0 (Snippets `sizes`, splash jangan nunggu `three`, re-encode
+video hero, kompres `sorcerer-2x`/`logo.png`/hero mobile), data project asli,
+tanggal recruitment, halaman About Us / Hall of Frames / Partners / Contact, dan
+webfont Nasalization (berlisensi — jangan diakali). Sound system sudah selesai
+(`docs/sound-sop.md`).
 
 Sebelum mulai task di bawah: ringkas dulu pemahamanmu + rencana singkat, lalu kerjakan.
 
