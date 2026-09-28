@@ -232,6 +232,40 @@ const large = ['product', 'growth'].includes(domain.id);
     width: 1256.04px;
     height: 439.876px;
   }
+  /* Subtle hover: lift + tinted glow + brighter ring, matching the sound cue.
+     Desktop pointers only and off under reduced motion, so the rest state (and
+     `verify.mjs`) stays pixel-identical. */
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .domain-card {
+      transition:
+        transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1),
+        box-shadow 0.4s ease,
+        background-color 0.4s ease;
+    }
+    .domain-card::after {
+      transition: filter 0.4s ease;
+    }
+    .domain-card .glow {
+      transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+    .domain-card:hover,
+    .domain-card:focus-visible {
+      transform: translateY(-10px);
+      background-color: rgb(var(--tint) / 16%);
+      /* Grounding shadow + tinted halo: reads as floating; both stay inside the rail's 26px padding so nothing gets clipped. */
+      box-shadow:
+        0 16px 30px -18px rgb(0 0 0 / 75%),
+        0 0 24px rgb(var(--tint) / 45%);
+    }
+    .domain-card:hover::after,
+    .domain-card:focus-visible::after {
+      filter: brightness(1.5);
+    }
+    .domain-card:hover .glow,
+    .domain-card:focus-visible .glow {
+      transform: scale(1.045);
+    }
+  }
   @media (max-width: 600px) {
     .domain-card {
       flex-basis: calc(100vw - 48px);

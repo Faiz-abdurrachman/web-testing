@@ -90,6 +90,12 @@ const photos = [1, 2, 3, 4, 5];
 </section>
 <script>
   let snippetController: AbortController | undefined;
+  // Keyboard navigation bypasses the pointer wiring, so ask the sound system
+  // for the same "select" cue the arrow buttons use (ignored under reduce).
+  const keyCue = () =>
+    window.dispatchEvent(
+      new CustomEvent('ds:sfx', { detail: { cue: 'select' } }),
+    );
   const initSnippets = () => {
     snippetController?.abort();
     const ac = new AbortController();
@@ -204,9 +210,11 @@ const photos = [1, 2, 3, 4, 5];
         gallery.addEventListener('keydown', (event) => {
           if (event.key === 'ArrowRight') {
             event.preventDefault();
+            keyCue();
             go(1);
           } else if (event.key === 'ArrowLeft') {
             event.preventDefault();
+            keyCue();
             go(-1);
           }
         });
@@ -229,9 +237,11 @@ const photos = [1, 2, 3, 4, 5];
             if (rect.top > center || rect.bottom < center) return;
             if (event.key === 'ArrowRight') {
               event.preventDefault();
+              keyCue();
               go(1);
             } else if (event.key === 'ArrowLeft') {
               event.preventDefault();
+              keyCue();
               go(-1);
             }
           },
@@ -369,6 +379,29 @@ const photos = [1, 2, 3, 4, 5];
     object-fit: cover;
     user-select: none;
     -webkit-user-drag: none;
+  }
+  /* Subtle hover: lift + violet glow/ring + a gentle image zoom. Desktop
+     pointers only and off under reduced motion (rest state unchanged). */
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .thumb {
+      transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    }
+    .thumb img {
+      transition: transform 0.4s ease;
+    }
+    .thumb:hover,
+    .thumb:focus-visible {
+      transform: translateY(-4px);
+      box-shadow:
+        0 0 0 1px rgb(203 197 255 / 55%),
+        0 16px 32px -18px rgb(155 123 255 / 90%);
+    }
+    .thumb:hover img,
+    .thumb:focus-visible img {
+      transform: scale(1.06);
+    }
   }
   /* The active slide is shown by the hero; the thumbnails stay neutral. */
   @media (max-width: 760px) {

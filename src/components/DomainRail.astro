@@ -48,6 +48,13 @@ const { base = '/hods', suffix = '' } = Astro.props;
   // Re-initialised on every client-side navigation; the previous page's global
   // listeners, observers and attract-mode timers are torn down first.
   let railCleanups: (() => void)[] = [];
+  // Keyboard navigation moves the rail without a pointer, so it never reaches
+  // the delegated hover/click wiring — ask the sound system for the same
+  // "select" cue the arrow buttons use (Sound.astro ignores it under reduce).
+  const keyCue = () =>
+    window.dispatchEvent(
+      new CustomEvent('ds:sfx', { detail: { cue: 'select' } }),
+    );
   const initDomainRails = () => {
     railCleanups.forEach((fn) => fn());
     railCleanups = [];
@@ -145,6 +152,7 @@ const { base = '/hods', suffix = '' } = Astro.props;
         };
         if (event.key in positions) {
           event.preventDefault();
+          keyCue();
           rail.scrollTo({ left: positions[event.key], behavior: 'auto' });
         }
       });
@@ -171,9 +179,11 @@ const { base = '/hods', suffix = '' } = Astro.props;
             : 'smooth';
           if (event.key === 'ArrowLeft') {
             event.preventDefault();
+            keyCue();
             rail.scrollBy({ left: -step(), behavior });
           } else if (event.key === 'ArrowRight') {
             event.preventDefault();
+            keyCue();
             rail.scrollBy({ left: step(), behavior });
           }
         },
@@ -298,6 +308,7 @@ const { base = '/hods', suffix = '' } = Astro.props;
 <style>
   .domain-carousel {
     position: relative;
+    display: flow-root;
     margin: 74px auto 0;
     width: min(1280px, calc(100% - 2 * var(--page-gutter)));
   }
@@ -306,7 +317,9 @@ const { base = '/hods', suffix = '' } = Astro.props;
     gap: 40px;
     overflow-x: auto;
     overscroll-behavior-x: contain;
-    padding: 0;
+    /* Scroll containers clip on both axes; padding gives the hover lift vertical room and the equal negative margin keeps section geometry identical. */
+    padding-block: 26px;
+    margin-block: -26px;
     scroll-snap-type: x mandatory;
     scroll-padding-inline: 0;
     scrollbar-width: none;

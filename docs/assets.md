@@ -562,6 +562,29 @@ score were unchanged when this section was added.
   scales/brightens. Transitions are gated to
   `prefers-reduced-motion: no-preference`; reduced motion still shows the hover
   state instantly.
+- **Card hover on Domain / Project / Snippet cards (28 Sep 2026).** The cards
+  that carry the `data-sfx-hover` cue now also answer the pointer:
+  `.domain-card` (`DomainCard.astro`) floats up `translateY(-10px)` with a
+  grounding shadow + tinted halo, a brighter gradient ring
+  (`::after { filter: brightness(1.5) }`), a slight background lift and the
+  artwork `.glow` scaling `1.045`; `.project-card.is-active`
+  (`Projects.astro`) brightens its ring and zooms the artwork `scale(1.05)` with a
+  larger under-glow (the coverflow sets the card transform inline, so the effect
+  lives on its children); `.thumb` (`Snippets.astro`) lifts and gains a violet
+  ring plus a gentle image zoom. Project cards also opt into the hover cue now
+  (`data-sfx-hover`). All gated
+  `(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)`,
+  so the rest state (and `verify.mjs`) is unchanged and reduced motion gets no
+  transition or transform. `.domain-rail` also gets
+  `padding-block: 26px; margin-block: -26px` (and `display: flow-root` on
+  `.domain-carousel`): a horizontal scroll container clips on both axes, so the
+  lift was being cut at the rail's top edge; the equal negative margin keeps the
+  geometry identical (`verify.mjs` still asserts section `826` / card `y 310`).
+- **Keyboard carousel cues (28 Sep 2026).** Arrow-key navigation on
+  `DomainRail`, `Projects` and `Snippets` now dispatches `ds:sfx` with the
+  `select` cue (same as their arrow buttons) whenever a key actually moves the
+  carousel — keyboard input bypasses the delegated hover/click wiring.
+  `Sound.astro` drops it under reduced motion, so the audits stay silent.
 - **Pillars entrance — "summon from the core"** (`pillarIntro` in `motion.ts`):
   on `≥761px` a **time-based timeline auto-plays once** when the section reaches
   the viewport (`scrollTrigger: { start: 'top 72%', once: true }` — no pin and no

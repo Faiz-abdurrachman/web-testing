@@ -33,6 +33,23 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
     video main). Home mobile 1.33→0.98 MB, recruitment 0.64→0.57 MB. P0 sisa
     tinggal opsional: AVIF hero art + ikon philosophy/glow kalau mau tembus
     ≤800 KB.
+  - **Card hover (28 Sep 2026, di atas `473ca00`)** — kartu yang sudah bersound
+    kini punya hover visual subtle (angkat + glow + ring menyala):
+    `.domain-card`, `.project-card.is-active`, `.thumb`. Kartu Project juga
+    opt-in `data-sfx-hover` (sebelumnya section Projects cuma panah/dot yang
+    bersound). Semua di-gate `(hover: hover) and (pointer: fine) and
+(prefers-reduced-motion: no-preference)` → state istirahat & `verify.mjs`
+    tidak berubah. `.domain-rail` dapat `padding-block: 26px` +
+    `margin-block: -26px` dan `.domain-carousel { display: flow-root }` supaya
+    lift `-10px` tidak kepotong (scroll container clip 2 axis); geometri tetap
+    (verify assert section `826` / card `y 310`). Detail di `docs/assets.md`
+    §"Card hover on Domain / Project / Snippet cards". **Belum di-commit.**
+  - **Keyboard carousel cues (28 Sep 2026, di atas `473ca00`)** — panah keyboard
+    di `DomainRail` (Choose Your Domain / Who Should Join), `Projects`, dan
+    `Snippets` sekarang dispatch `ds:sfx` cue `select` tiap kali menGeser
+    carousel (input keyboard tidak lewat wiring hover/click delegated); di-drop
+    saat reduced motion. Detail di `docs/assets.md` §"Keyboard carousel cues".
+    **Belum di-commit.**
 - **Latar yang tetap berlaku:** `450833a` migrasi View Transitions
   (`<ClientRouter />`, `AudioContext` persist; tiap komponen re-init lewat
   `astro:page-load` + cleanup `astro:before-swap` — aturan di

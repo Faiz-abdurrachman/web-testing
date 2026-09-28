@@ -22,6 +22,7 @@ import { projects } from '../data/projects';
             data-index={index}
             aria-hidden={index === 0 ? undefined : 'true'}
             aria-labelledby={`project-${project.id}`}
+            data-sfx-hover="hover"
           >
             <div class="project-inner">
               <div class="project-image">
@@ -90,6 +91,12 @@ import { projects } from '../data/projects';
 </section>
 <script>
   let projectController: AbortController | undefined;
+  // Keyboard navigation bypasses the pointer wiring, so ask the sound system
+  // for the same "select" cue the arrow buttons use (ignored under reduce).
+  const keyCue = () =>
+    window.dispatchEvent(
+      new CustomEvent('ds:sfx', { detail: { cue: 'select' } }),
+    );
   const initProjects = () => {
     projectController?.abort();
     const ac = new AbortController();
@@ -206,9 +213,11 @@ import { projects } from '../data/projects';
         stage.addEventListener('keydown', (event) => {
           if (event.key === 'ArrowLeft') {
             event.preventDefault();
+            keyCue();
             go(-1);
           } else if (event.key === 'ArrowRight') {
             event.preventDefault();
+            keyCue();
             go(1);
           }
         });
@@ -232,9 +241,11 @@ import { projects } from '../data/projects';
             if (rect.top > center || rect.bottom < center) return;
             if (event.key === 'ArrowLeft') {
               event.preventDefault();
+              keyCue();
               go(-1);
             } else if (event.key === 'ArrowRight') {
               event.preventDefault();
+              keyCue();
               go(1);
             }
           },
@@ -597,6 +608,35 @@ import { projects } from '../data/projects';
     .project-copy p {
       font-size: 15px;
       line-height: 22px;
+    }
+  }
+  /* Subtle hover on the active card: brighter ring, a soft zoom of the artwork
+     and a larger under-glow. The card's own transform is set inline by the
+     coverflow JS, so the effect lives on its children. Desktop pointers only
+     and off under reduced motion (rest state unchanged). */
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .project-card.is-active .project-image img {
+      transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+    .project-card.is-active::before {
+      transition:
+        opacity 0.5s ease,
+        transform 0.5s ease;
+    }
+    .project-card.is-active .project-inner::after {
+      transition: filter 0.5s ease;
+    }
+    .project-card.is-active:hover .project-image img,
+    .project-card.is-active:focus-within .project-image img {
+      transform: scale(1.05);
+    }
+    .project-card.is-active:hover::before,
+    .project-card.is-active:focus-within::before {
+      transform: translateX(-50%) scale(1.12);
+    }
+    .project-card.is-active:hover .project-inner::after,
+    .project-card.is-active:focus-within .project-inner::after {
+      filter: brightness(1.5);
     }
   }
   @media (prefers-reduced-motion: reduce) {
