@@ -19,7 +19,12 @@ const domainTitle = Object.fromEntries(domains.map((d) => [d.id, d.title]));
   </header>
   <div class="role-list">
     {roles.map((role) => (
-      <a class="role-row" href={`/recruitment/roles/${role.id}`}>
+      <a
+        class="role-row"
+        href={`/recruitment/roles/${role.id}`}
+        data-sfx="open"
+        data-sfx-hover="hover"
+      >
         <div class="role-card">
           <span class="role-glow" aria-hidden="true" />
           <div class="role-head">

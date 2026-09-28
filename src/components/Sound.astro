@@ -1,0 +1,193 @@
+---
+// Floating sound control + global SFX wiring. Mounted once in BaseLayout so
+// every route gets the toggle. Components opt into cues with `data-sfx`
+// (click) or `data-sfx-hover` (pointer enter); no per-component listeners.
+---
+
+<div class="sound-toggle" data-sound-toggle>
+  <button
+    type="button"
+    class="sound-button"
+    aria-pressed="false"
+    aria-label="Sound off"
+  >
+    <svg
+      class="sound-icon sound-icon-on"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M4 9v6h3.2L12 19V5L7.2 9H4Z"></path>
+      <path class="wave" d="M15.5 8.5a5 5 0 0 1 0 7"></path>
+      <path class="wave" d="M18.2 6a9 9 0 0 1 0 12"></path>
+    </svg>
+    <svg
+      class="sound-icon sound-icon-off"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M4 9v6h3.2L12 19V5L7.2 9H4Z"></path>
+      <path d="m16 9 5 6M21 9l-5 6"></path>
+    </svg>
+  </button>
+</div>
+<style>
+  /* Kept below the navbar/mobile menu (z-index 50) so the full-screen menu
+     covers it; above normal content so it stays reachable. */
+  .sound-toggle {
+    position: fixed;
+    right: max(20px, env(safe-area-inset-right));
+    bottom: max(20px, env(safe-area-inset-bottom));
+    z-index: 40;
+  }
+  .sound-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    border: 1px solid rgb(203 197 255 / 45%);
+    border-radius: 50%;
+    background: rgb(16 9 35 / 72%);
+    backdrop-filter: blur(8px);
+    color: #ede8ff;
+    cursor: pointer;
+    transition:
+      border-color 0.3s ease,
+      color 0.3s ease,
+      background 0.3s ease;
+  }
+  .sound-button:hover,
+  .sound-button:focus-visible {
+    border-color: #9b7bff;
+    color: #fff;
+    background: rgb(40 20 80 / 82%);
+  }
+  .sound-button:focus-visible {
+    outline: 2px solid #9b7bff;
+    outline-offset: 3px;
+  }
+  .sound-icon {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .sound-icon-on path:first-child,
+  .sound-icon-off path:first-child {
+    fill: currentColor;
+    stroke: none;
+  }
+  .sound-icon-off {
+    display: none;
+  }
+  .sound-toggle.is-muted .sound-icon-on {
+    display: none;
+  }
+  .sound-toggle.is-muted .sound-icon-off {
+    display: block;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sound-button {
+      transition: none;
+    }
+  }
+</style>
+<script>
+  import sound, { type Cue } from '../scripts/sound';
+
+  // Debug handle so the /lab/sound page (or a console) can audition cues.
+  (window as unknown as { __dsSound?: unknown }).__dsSound = sound;
+
+  // The ambient pad is skipped under reduced motion; one-shot cues stay manual.
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  sound.setAmbientAllowed(!reduceMotion.matches);
+
+  const KEY = 'ds:sound';
+  const toggle = document.querySelector<HTMLElement>('[data-sound-toggle]');
+  const button = toggle?.querySelector<HTMLButtonElement>('.sound-button');
+
+  const readMuted = (): boolean => {
+    try {
+      return localStorage.getItem(KEY) === 'off';
+    } catch {
+      return false;
+    }
+  };
+
+  let muted = readMuted();
+
+  const sync = (): void => {
+    sound.setMuted(muted);
+    if (!button) return;
+    button.setAttribute('aria-pressed', String(!muted));
+    button.setAttribute('aria-label', muted ? 'Sound off' : 'Sound on');
+    button.title = muted ? 'Sound off' : 'Sound on';
+    toggle?.classList.toggle('is-muted', muted);
+  };
+  sync();
+
+  button?.addEventListener('click', () => {
+    muted = !muted;
+    try {
+      localStorage.setItem(KEY, muted ? 'off' : 'on');
+    } catch {
+      /* storage unavailable: preference stays for this session only */
+    }
+    sync();
+    if (!muted) {
+      sound.unlock();
+      sound.play('select');
+    }
+  });
+
+  // First real gesture unlocks the context so later hover cues can play.
+  const unlock = (): void => sound.unlock();
+  window.addEventListener('pointerdown', unlock, { once: true, capture: true });
+  window.addEventListener('keydown', unlock, { once: true, capture: true });
+
+  // Delegated wiring: components opt in with data-sfx / data-sfx-hover, and
+  // stateful ones request a cue via `ds:sfx` (e.g. menu open/close). All gated
+  // off under reduced motion so audits (which force `reduce`) stay silent.
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    window.addEventListener('ds:sfx', (event) => {
+      const cue = (event as CustomEvent<{ cue?: Cue }>).detail?.cue;
+      if (cue) sound.play(cue);
+    });
+
+    // Hover cues only where hovering is a real interaction.
+    if (matchMedia('(hover: hover)').matches) {
+      let hovered: Element | null = null;
+      document.addEventListener(
+        'pointerenter',
+        (event) => {
+          const el = (event.target as Element | null)?.closest?.(
+            '[data-sfx-hover]',
+          );
+          if (!el || el === hovered) return;
+          hovered = el;
+          sound.play((el.getAttribute('data-sfx-hover') as Cue) || 'hover');
+        },
+        true,
+      );
+      document.addEventListener(
+        'pointerleave',
+        (event) => {
+          if (event.target === hovered) hovered = null;
+        },
+        true,
+      );
+    }
+
+    document.addEventListener('click', (event) => {
+      const el = (event.target as Element | null)?.closest?.('[data-sfx]');
+      if (!el) return;
+      sound.play((el.getAttribute('data-sfx') as Cue) || 'click');
+    });
+  }
+</script>

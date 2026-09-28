@@ -1,0 +1,137 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const cues = [
+  { id: 'hover', label: 'Hover', hint: 'Airy glass tick — links, cards' },
+  { id: 'click', label: 'Click', hint: 'Arcane pluck — buttons, tabs' },
+  { id: 'select', label: 'Select', hint: 'Brighter pluck — nav, toggles' },
+  { id: 'open', label: 'Open', hint: 'Rising whoosh — menu, role card' },
+  { id: 'close', label: 'Close', hint: 'Falling whoosh — menu, FAQ' },
+  { id: 'success', label: 'Success', hint: 'Rising chime — apply, confirm' },
+  { id: 'error', label: 'Error', hint: 'Soft thud — disabled, invalid' },
+] as const;
+---
+
+<BaseLayout
+  title="Sound Lab — Data Sorcerers"
+  description="Internal audition page for the procedural arcane sound palette used across the Data Sorcerers site."
+  noindex
+>
+  <main class="lab">
+    <header>
+      <p class="eyebrow">Internal · noindex</p>
+      <h1>Sound Lab</h1>
+      <p class="lead">
+        Tap a cue to audition the procedural arcane palette. Toggle the floating
+        orb (bottom-right) to mute. Every sound is synthesised in the browser —
+        no audio files.
+      </p>
+    </header>
+    <div class="cue-grid">
+      {cues.map((cue) => (
+        <button class="cue" type="button" data-cue={cue.id}>
+          <span class="cue-label">{cue.label}</span>
+          <span class="cue-hint">{cue.hint}</span>
+        </button>
+      ))}
+    </div>
+  </main>
+</BaseLayout>
+<style>
+  .lab {
+    min-height: 100svh;
+    padding: 120px var(--page-gutter) 120px;
+    background: radial-gradient(
+        120% 80% at 20% 0%,
+        #241046 0%,
+        #0a0713 55%,
+        #050507 100%
+      )
+      #050507;
+    color: #ede8ff;
+  }
+  .lab > * {
+    max-width: 1080px;
+    margin-inline: auto;
+  }
+  .eyebrow {
+    margin: 0 0 12px;
+    font-size: 13px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: #9b7bff;
+  }
+  h1 {
+    margin: 0;
+    font: 400 64px/72px var(--font-heading);
+  }
+  .lead {
+    max-width: 640px;
+    margin: 20px 0 0;
+    font-size: 18px;
+    line-height: 27px;
+    color: #cfc4e6;
+  }
+  .cue-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    margin-top: 56px;
+  }
+  .cue {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 28px 24px;
+    border: 1px solid rgb(203 197 255 / 30%);
+    border-radius: 20px;
+    background: rgb(255 255 255 / 5%);
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition:
+      border-color 0.3s ease,
+      background 0.3s ease;
+  }
+  .cue:hover,
+  .cue:focus-visible {
+    border-color: #9b7bff;
+    background: rgb(155 123 255 / 12%);
+  }
+  .cue:focus-visible {
+    outline: 2px solid #9b7bff;
+    outline-offset: 3px;
+  }
+  .cue-label {
+    font-size: 22px;
+    font-weight: 600;
+  }
+  .cue-hint {
+    font-size: 14px;
+    line-height: 20px;
+    color: #b6a8c6;
+  }
+  @media (max-width: 760px) {
+    .lab {
+      padding-block: 88px;
+    }
+    h1 {
+      font-size: 40px;
+      line-height: 48px;
+    }
+    .cue-grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+  }
+</style>
+<script>
+  import sound, { type Cue } from '../../scripts/sound';
+
+  document.querySelectorAll<HTMLButtonElement>('[data-cue]').forEach((el) => {
+    el.addEventListener('click', () => {
+      sound.unlock();
+      sound.play((el.dataset.cue as Cue) ?? 'click');
+    });
+  });
+</script>

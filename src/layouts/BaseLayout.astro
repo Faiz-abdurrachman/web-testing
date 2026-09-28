@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Splash from '../components/Splash.astro';
+import Sound from '../components/Sound.astro';
 interface Props {
   title?: string;
   description?: string;
@@ -182,5 +183,6 @@ const structuredData = [
       Skip to content
     </a>
     <slot />
+    <Sound />
   </body>
 </html>

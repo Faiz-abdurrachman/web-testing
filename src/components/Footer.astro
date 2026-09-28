@@ -68,7 +68,9 @@ const legal = ['Terms', 'Privacy', 'Cookies'];
         {navigation.map((label, index) => (
           <li>
             {index === 0 ? (
-              <a href="/">{label}</a>
+              <a href="/" data-sfx="select" data-sfx-hover="hover">
+                {label}
+              </a>
             ) : (
               <span aria-disabled="true">{label}</span>
             )}
@@ -80,11 +82,20 @@ const legal = ['Terms', 'Privacy', 'Cookies'];
       <h2>Contact</h2>
       <ul>
         <li>
-          Contact Person: <a href="tel:+6285727246733">+62 8572 -7246-733</a>
+          Contact Person:{' '}
+          <a href="tel:+6285727246733" data-sfx="click" data-sfx-hover="hover">
+            +62 8572 -7246-733
+          </a>
         </li>
         <li>
           Email:{' '}
-          <a href="mailto:datasorcerers@gmail.com">datasorcerers@gmail.com</a>
+          <a
+            href="mailto:datasorcerers@gmail.com"
+            data-sfx="click"
+            data-sfx-hover="hover"
+          >
+            datasorcerers@gmail.com
+          </a>
         </li>
       </ul>
     </div>

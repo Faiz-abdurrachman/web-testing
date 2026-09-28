@@ -20,6 +20,19 @@ page.on('response', (response) => {
   if (response.status() >= 400)
     errors.push(`${response.status()} ${response.url()}`);
 });
+// The sound orb is overlay UI that is not part of any reference PNG; hide it on
+// every document (its own style tag survives navigations) so diffs stay clean.
+await page.addInitScript(() => {
+  const style = document.createElement('style');
+  style.textContent = '.sound-toggle{visibility:hidden !important}';
+  if (document.head) document.head.appendChild(style);
+  else
+    document.addEventListener(
+      'DOMContentLoaded',
+      () => document.head?.appendChild(style),
+      { once: true },
+    );
+});
 // The navbar is fixed, so hide it while screenshotting the sections below the
 // hero; their reference PNGs do not contain it. Geometry stays measurable.
 const setNavbarHidden = (hidden) =>
@@ -32,6 +45,7 @@ const setNavbarHidden = (hidden) =>
       '.project-card:not(.is-active)',
       '.snippet-arrow',
       '.splash',
+      '.sound-toggle',
     ].join(',');
     document.querySelectorAll(selectors).forEach((element) => {
       element.style.visibility = value ? 'hidden' : '';

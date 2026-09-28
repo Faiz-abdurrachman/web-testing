@@ -68,6 +68,42 @@ visible gain. Measured MAE stays under 2/255 on the backgrounds.
   recruitment skies became the shared living `Starfield.astro`), and the 3D
   coverflow replaced the decorative side panels.
 
+## Sound — procedural arcane palette (28 September 2026)
+
+- No audio assets are downloaded or licensed: `src/scripts/sound.ts` synthesises
+  every cue with the Web Audio API, and a runtime `ConvolverNode` impulse
+  response gives a long (1.5 s), high-passed "cathedral" tail. Palette: `hover`
+  (1.56 kHz glass tick), `click` (430 Hz arcane pluck), `select` (620/1710 Hz),
+  `open`/`close` (band-pass sweep 420↔2400 Hz), `success` (rising Cmaj7 chime),
+  `error` (233→155 Hz thud).
+- **Magic layer (28 Sep 2026):** every cue is rounded out with inharmonic bell
+  partials (ratios 2.0 / 3.01 / 4.24 / 5.43, detuned ±7 cents and panned L/R)
+  plus a short high band-passed "fairy-dust" shimmer noise; `open`/`success` also
+  get an upward riser sweep. Master gain 0.75 through a gentle
+  `DynamicsCompressor` limiter so the levels stay clean.
+- `src/components/Sound.astro` mounts once in `BaseLayout`, so all 14 routes get
+  it: a floating glass/violet mute orb bottom-right (`.sound-toggle`,
+  `z-index: 40`, below the navbar/mobile menu at 50) and a delegated wiring for
+  `data-sfx` (click) / `data-sfx-hover` (pointer enter). The preference persists
+  in `localStorage['ds:sound']`.
+- Autoplay: the `AudioContext` unlocks on the first user gesture; hover cues
+  (not gestures) only sound afterwards. SFX wiring is skipped under
+  `prefers-reduced-motion: reduce`, so the audits stay silent.
+- `/lab/sound` is an internal `noindex` audition page (excluded from the sitemap
+  via `sitemap({ filter })`). Phase 1 is wired: `data-sfx` / `data-sfx-hover` on
+  Button, Navbar (brand, nav links, hamburger), DomainCard/rail arrows,
+  AvailableRoles, Projects/Snippets controls, FAQ, HoDS tabs, back links and
+  Footer; stateful cues (menu open/close, FAQ, tabs, splash finish) dispatch a
+  `ds:sfx` window event. Hover is gated to `(hover: hover)`.
+- **Ambient pad (Phase 3, 28 Sep 2026):** a procedural drone bed in the same
+  engine — four detuned sines (A2/E3/A3/E4) plus a low-passed noise wind, both
+  breathing on slow LFOs, routed to the reverb. It fades in after the first
+  gesture while sound is on and fades out on mute, hidden tab or reduced motion.
+  No per-frame JS and no audio files; the floating orb controls it together with
+  the one-shot cues.
+- `verify.mjs` hides `.sound-toggle` with an `addInitScript` style (overlay UI
+  absent from every reference PNG) and lists it in `setNavbarHidden`.
+
 ## Visual reference
 
 - Figma file: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=755-15215

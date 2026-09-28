@@ -9,7 +9,7 @@ const { hod } = Astro.props;
 <main class="hods-detail">
   <span class="detail-wave" aria-hidden="true" />
   <div class="hods-detail-inner">
-    <a class="back" href="/#domains">
+    <a class="back" href="/#domains" data-sfx="select" data-sfx-hover="hover">
       <img src="/images/hods/arrow.svg" width="24" height="24" alt="" />
       <span>Back to HoDS</span>
     </a>
@@ -42,6 +42,7 @@ const { hod } = Astro.props;
             aria-selected={index === 0}
             tabindex={index === 0 ? 0 : -1}
             data-index={index}
+            data-sfx-hover="hover"
           >
             {tab.label}
           </button>
@@ -105,6 +106,9 @@ const { hod } = Astro.props;
         tab.tabIndex = active ? 0 : -1;
         panels[i].hidden = !active;
       });
+      window.dispatchEvent(
+        new CustomEvent('ds:sfx', { detail: { cue: 'select' } }),
+      );
     };
     tabs.forEach((tab, index) => {
       tab.addEventListener('click', () => select(index));

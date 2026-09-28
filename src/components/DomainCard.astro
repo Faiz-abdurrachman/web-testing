@@ -13,6 +13,8 @@ const large = ['product', 'growth'].includes(domain.id);
   style={`--tint:${domain.tint}`}
   href={href}
   aria-labelledby={`domain-${domain.id}`}
+  data-sfx="open"
+  data-sfx-hover="hover"
 >
   <h3 id={`domain-${domain.id}`}>{domain.title}</h3>
   <p>{domain.description}</p>

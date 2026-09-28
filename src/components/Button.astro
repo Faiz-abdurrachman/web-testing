@@ -8,7 +8,12 @@ const { href, variant = 'primary', compact = false } = Astro.props;
 ---
 
 {href ? (
-  <a class:list={['button', variant, { compact }]} href={href}>
+  <a
+    class:list={['button', variant, { compact }]}
+    href={href}
+    data-sfx="click"
+    data-sfx-hover="hover"
+  >
     <slot />
   </a>
 ) : (
@@ -16,6 +21,8 @@ const { href, variant = 'primary', compact = false } = Astro.props;
     class:list={['button', variant, { compact }]}
     type="button"
     aria-disabled="true"
+    data-sfx="error"
+    data-sfx-hover="hover"
   >
     <slot />
   </button>

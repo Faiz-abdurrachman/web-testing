@@ -601,6 +601,46 @@ Keluhan: heading di HP bukan Nasalization (lisensi — jangan diakali, lihat
   `build` 14/0, `responsive-audit` 364 ALL PASS, `verify-splash` PASS,
   `verify.mjs` `browserErrors: []`. Detail di `docs/assets.md`.
 
+## Sound system — Fase 0 (28 Sep 2026)
+
+SFX prosedural lewat **Web Audio API**, tanpa aset audio & tanpa dependency baru.
+`src/scripts/sound.ts` (singleton `sound`) mensintesis 7 cue (`hover`, `click`,
+`select`, `open`, `close`, `success`, `error`) + reverb impulse yang digenerate di
+runtime. `src/components/Sound.astro` di-mount **sekali di `BaseLayout`** (semua
+14 rute) dan:
+
+- merender **orb mute melayang pojok kanan-bawah** (`.sound-toggle`, `z-index: 40`
+  — di bawah navbar/menu HP `z 50`), menyimpan preferensi di
+  `localStorage['ds:sound']`;
+- memasang **delegated listener**: elemen ber-atribut `data-sfx` → cue klik,
+  `data-sfx-hover` → cue pointer-enter (tanpa handler per komponen);
+- autoplay: `AudioContext` di-`unlock()` pada gesture pertama; `play()` diam
+  kalau context belum `running` / sedang mute;
+- gate: wiring tidak dipasang saat `prefers-reduced-motion: reduce` → audit
+  (force reduce) tetap senyap & `browserErrors: []`.
+
+Audisi palet: **`/lab/sound`** (7 tombol cue; noindex, dikecualikan dari sitemap
+lewat `sitemap({ filter })` di `astro.config.mjs` — jaga agar sitemap tetap 14
+URL untuk `seo:audit`).
+
+- **Fase 1 (28 Sep 2026) — komponen sudah di-wire:** `data-sfx` (klik) /
+  `data-sfx-hover` (pointer-enter) ada di Button, brand + nav-link + hamburger
+  Navbar, DomainCard, rail arrow, AvailableRoles, Projects (arrow/dot),
+  Snippets (arrow/thumb), FAQ summary, tab HoDSDetail, back link Role/HoDS,
+  Footer. Cue stateful dikirim lewat event `ds:sfx` (`detail.cue`): menu mobile
+  `open`/`close` (Navbar), FAQ `open`/`close`, tab `select`, splash selesai
+  `success`. Hover di-gate `(hover: hover)` supaya HP tidak berisik.
+- **Fase 3 (28 Sep 2026) — backsound ambient:** `sound.ts` punya drone
+  prosedural ("pad") — 4 sine detuned (A2/E3/A3/E4) + noise lowpass dengan LFO
+  napas & sweep cutoff lambat, di-route ke reverb, **tanpa aset & tanpa JS
+  per-frame**. Mulai otomatis setelah gesture pertama (saat sound on), fade
+  `setTargetAtTime` 1.2s biar tidak nge-click; mati saat mute, tab `hidden`,
+  atau `prefers-reduced-motion` (`setAmbientAllowed(false)` dari `Sound.astro`).
+  Gain target `0.28`. Tidak ada tombol terpisah — orb mengontrol SFX + ambient.
+- `verify.mjs` mem-hide `.sound-toggle` via `addInitScript` (overlay bukan
+  bagian PNG referensi) + masuk daftar `setNavbarHidden`. Semua non-visual:
+  `responsive-audit` & `verify.mjs` tetap bersih.
+
 ## Commands / gate (semua harus exit 0 sebelum commit)
 
 ```sh

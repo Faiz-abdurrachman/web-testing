@@ -11,7 +11,12 @@ const { role } = Astro.props;
   <span class="detail-wave" aria-hidden="true" />
   <div class:list={['role-detail-inner', { centered: role.centered }]}>
     <div class:list={['role-head', { tight: role.tight }]}>
-      <a class="back" href="/recruitment#available-roles">
+      <a
+        class="back"
+        href="/recruitment#available-roles"
+        data-sfx="select"
+        data-sfx-hover="hover"
+      >
         <img src="/images/hods/arrow.svg" width="24" height="24" alt="" />
         <span>Back to Open Roles</span>
       </a>

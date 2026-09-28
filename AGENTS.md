@@ -93,12 +93,15 @@ Section.png` + logo + the `SORCERY IN DATA MAGIC IN AI.png` headline. Re-run
 
 ```
 src/components/*.astro   one section per file; scoped CSS inside
+src/components/Sound.astro  floating mute orb + delegated data-sfx wiring
 src/data/domains.ts      6 HoDS cards (title/desc/tint/chips)
 src/data/hods.ts         6 detail categories → 22 tabs (LEARNING/…/OUTPUT)
 src/data/projects.ts     4 placeholder projects (swap for real data)
 src/pages/index.astro    homepage composition
 src/pages/hods/[id].astro detail route (getStaticPaths over hods.ts)
+src/pages/lab/sound.astro internal sound audition page (noindex, not in sitemap)
 src/styles/global.css    @font-face, tokens, reset
+src/scripts/sound.ts     procedural Web Audio SFX engine (no assets, no deps)
 scripts/verify.mjs       visual + geometry + responsive verification
 scripts/responsive-audit.mjs  per-page × per-width responsive audit
 scripts/generate-og.mjs  og share card + favicons + manifest (sharp)
@@ -129,7 +132,8 @@ artifacts/               verify output (git-ignored)
 - `setNavbarHidden(true)` hides elements that are **not in the reference PNG**
   before section screenshots: `.navbar`, `.rail-arrow`, `.project-arrow`,
   `.project-dots`, `.project-card:not(.is-active)`. If you add new overlay UI,
-  add it to that list.
+  add it to that list. The sound orb `.sound-toggle` is also hidden by an
+  `addInitScript` style so it never reaches any screenshot.
 - The report writes `artifacts/verification.json` plus `*-diff.png` /
   `*-overlay.png`. There is **no MAE threshold assertion** — geometry, responsive
   overflow, clipping, interactions, and `browserErrors` are what fail.

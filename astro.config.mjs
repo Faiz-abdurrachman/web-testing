@@ -14,7 +14,8 @@ export default defineConfig({
   // viewport, so Home <-> Recruitment switches paint almost instantly instead of
   // waiting on a cold document fetch.
   prefetch: { defaultStrategy: 'viewport' },
-  integrations: [sitemap()],
+  // Keep the internal sound audition page out of the public sitemap.
+  integrations: [sitemap({ filter: (page) => !page.includes('/lab/') })],
   // Keep both `backdrop-filter` and `-webkit-backdrop-filter` in the built CSS
   // (the default Lightning CSS pass dropped the unprefixed one, so the navbar
   // blur disappeared in Firefox on the deployed site).

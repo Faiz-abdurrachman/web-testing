@@ -45,6 +45,8 @@ const photos = [1, 2, 3, 4, 5];
           type="button"
           data-thumb={index}
           aria-label={`Show snippet ${index + 1}`}
+          data-sfx="click"
+          data-sfx-hover="hover"
         >
           <img
             src={`/images/recruitment/snippet-thumb-${n}.webp`}
@@ -65,6 +67,8 @@ const photos = [1, 2, 3, 4, 5];
       type="button"
       data-prev
       aria-label="Previous snippet"
+      data-sfx="select"
+      data-sfx-hover="hover"
     >
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M15 5l-7 7 7 7"></path>
@@ -75,6 +79,8 @@ const photos = [1, 2, 3, 4, 5];
       type="button"
       data-next
       aria-label="Next snippet"
+      data-sfx="select"
+      data-sfx-hover="hover"
     >
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M9 5l7 7-7 7"></path>

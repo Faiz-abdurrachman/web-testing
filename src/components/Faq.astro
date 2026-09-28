@@ -44,7 +44,7 @@ const items: FaqItem[] = [
   <div class="faq-list">
     {items.map((item) => (
       <details class="faq-item">
-        <summary>
+        <summary data-sfx-hover="hover">
           <span class="faq-q">{item.q}</span>
           <img
             class="faq-arrow"
@@ -216,6 +216,11 @@ const items: FaqItem[] = [
         const opening = !details.open;
         const token = ++version;
         details.classList.toggle('is-open', opening);
+        window.dispatchEvent(
+          new CustomEvent('ds:sfx', {
+            detail: { cue: opening ? 'open' : 'close' },
+          }),
+        );
 
         if (reduceMotion.matches) {
           details.open = opening;
