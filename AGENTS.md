@@ -23,8 +23,10 @@ node scripts/responsive-audit.mjs  # responsive audit: all pages × 26 widths
 npm run assets:og         # regenerate og image + favicons + manifest
 npm run assets:optimize   # re-encode heavy webp (lossy q82/85/88) from assets/image-src
 npm run assets:starfield  # regenerate What We Do starfield tiles (Chromium)
+npm run assets:footer     # footer bg: sharp desktop + portrait phone variant
 npm run seo:audit         # validate meta/OG/canonical/sitemap in dist (after build)
 npm run perf:audit        # scroll-jank report per section (set PERF_MAX_TASK to fail)
+npm run audit:navbar      # navbar states/containment/hug across widths
 ```
 
 `scripts/verify.mjs` uses Chromium at `/usr/bin/chromium` (override with
@@ -36,6 +38,20 @@ all 14 routes × 26 widths (320 → 3840). It checks horizontal overflow, clippe
 text, carousel-arrow/card overlap and the navbar breakpoint, and writes
 `artifacts/responsive-audit.json`. Use it when the full `verify.mjs` is too slow
 or the dev server makes `waitUntil: networkidle` hang (see Verification workflow).
+
+## Git & deploy
+
+- `origin` = **testing**: `https://github.com/Faiz-abdurrachman/web-testing.git`.
+- `production` remote = `https://github.com/Web-Data-Sorcerers/community-web.git`.
+- **`origin` has TWO push URLs** — a plain `git push origin main` deploys to
+  **both** testing and production. Do not add another remote or push URL; just
+  push `origin main` as usual.
+- Verify both are in sync: `git fetch production -q && git rev-parse --short main
+origin/main production/main` (all three should match).
+- Git creds live in the `store` helper (`~/.git-credentials`) — no token needed in
+  commands. Never print the token.
+- Production was behind testing before this was set up; keep it in sync on every
+  feature push.
 
 ## Non-negotiable rules
 
@@ -51,8 +67,9 @@ or the dev server makes `waitUntil: networkidle` hang (see Verification workflow
 6. **Never break the bundle budget.** Runtime deps are `astro` + `gsap` (approved)
    and `three`. Do not add other UI libraries without asking; lazy-import heavy
    code (the hero Three.js layer is a dynamic `import()`).
-7. **Commit per feature**, push to `main` (Vercel auto-deploys). Follow existing
-   message style (`feat:`, `fix:`, `docs:`, `chore:`).
+7. **Commit per feature**, push to `main`. `origin` has **two push URLs**
+   (testing + production) — see "Git & deploy". Follow existing message style
+   (`feat:`, `fix:`, `docs:`, `chore:`).
 
 ## SEO & sharing
 
@@ -173,6 +190,21 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   mobile heroes use `min-height: 100svh` (not `dvh`) and `motion.ts` runs
   `ScrollTrigger.config({ ignoreMobileResize: true })` — both are needed or the
   hero→next-section "jump" returns as the address bar shows/hides.
+- **Multi-line CSS comments break Prettier idempotency.** A `/* ... */` block
+  whose continuation lines Prettier wants to re-indent never stabilises, so
+  `format:check` keeps failing. Keep CSS comments on **one line**.
+- **Custom-property specificity trap.** `.navbar.is-condensed { --nb-pad: 80px }`
+  (0,2,0) beats `@media (max-width:1050px) { .navbar { --nb-pad: … } }` (0,1,0),
+  so the desktop 80px leaked onto phones once the capsule condensed. Reset the
+  variable inside the media query at equal specificity (later wins).
+- **Detail `<main>` shorter than the viewport leaks the body colour** as a black
+  strip under the gradient (phones with the browser chrome hidden). Fix with
+  `min-height: 100vh/100lvh` **only at `≤900px`** — `verify.mjs` sets the viewport
+  to `1440×1400` and asserts `.role-detail` height `1280`, so a base min-height
+  fails the suite.
+- **`sizes` on responsive `<img>` matters as much as `srcset`.** `Snippets.astro`
+  shipped `sizes="1280px"`, so phones assumed a 1280 CSS-px slot and downloaded
+  the 2560w `-2x` files (~1.9 MB). When adding images, give an honest `sizes`.
 
 ## Fonts
 
@@ -185,6 +217,28 @@ When adding/changing a section, update `docs/assets.md` and the relevant
 
 ## Current checkpoint
 
+- **HEAD `d0fd3be` (28 Sep 2026).** Homepage + Recruitment lengkap + detail role +
+  detail HoDS + hover/glow kartu Available Roles + fix navbar & detail mobile.
+  **Deploy GANDA**: `git push origin main` → testing + production (lihat
+  "Git & deploy").
+- **Available Roles hover (`f92b88a`).** Kartu reaktif pointer: pool radial violet
+  ikut kursor (`--mx/--my`), ember lean (`--gx/--gy` ±22/16px + `scale(1.06)`),
+  divider draw dari kiri, panah overshoot. Gate `(pointer: fine)` +
+  `no-preference`; state istirahat = identik referensi.
+- **Available Roles glow wave diperkecil (`d26f81e`).** `@keyframes
+role-glow-wave` = `scale: 1 → 1.04` saja (drift `translate ±6%` dibuang) →
+  ukuran glow balik mendekati frame statis (sebelumnya `1.15 → 1.22`).
+- **Navbar mobile proporsional (`12c683d`).** Di `@media (max-width:1050px)`
+  tambah `.navbar.is-condensed { --nb-pad: var(--page-gutter) }` — aturan base
+  (80px) menang specificity, bikin logo/burger kedorong 80px saat scroll.
+- **Detail role/HoDS mobile (`3dc3432`, `d0fd3be`).** Bottom glow wave baru
+  (`glow.svg` satu arah) + `main` `min-height: 100vh`/`100lvh` **khusus ≤900px**
+  supaya gradient mentok bawah. Jangan naikkan ke base: `verify.mjs` assert
+  `.role-detail` height `1280` di viewport `1440×1400`.
+- **Perf:** detail ringan; Home/Recruitment berat. Audit + rencana P0–P2 di
+  `docs/ai-handoff.md` §"Perf audit & rencana" (belum dieksekusi).
+- **OG/share:** tag di server OK; WhatsApp kosong = cache Meta (refresh lewat
+  Facebook Sharing Debugger), bukan bug kode.
 - `main` HEAD (lihat `git log`; checkpoint fitur recruitment = `ff7fe20`) = homepage + **halaman Recruitment lengkap** (hero →
   Who Should Join → What You Will Do �� Available Roles → Selection Timeline →
   FAQ → Snippets → CTA → Footer) + halaman detail role
@@ -204,12 +258,13 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   `basil:arrow-right-solid` inline. Judul **Title Case** dari `domains.ts`; tagline
   dari `roles.ts` `tagline` (bukan `about`). Grid 3/2/1, `gap 40px 20px`. Geometri
   di-assert di `verify.mjs` (section `851.375`, list `518.375`, kartu
-  `413.33 × 239.19`). Glow kini di layer sendiri `.role-glow` yang **beranimasi
-  gelombang** (drift horizontal `±6%` + swell `scale 1.15→1.22`, `alternate` 9s,
-  `transform-origin: 50% 100%` supaya selalu overfill → tidak ada edge keras; tanpa
-  gerak naik-turun) — di-gate `prefers-reduced-motion: no-preference` dan
-  di-pause off-screen via `.available-roles.is-idle` (observer di `motion.ts`).
-  Statis (reduce) tetap persis referensi. Sumber referensi:
+  `413.33 × 239.19`). Glow di layer sendiri `.role-glow` yang **beranimasi halus**
+  (`scale 1 → 1.04` saja sejak `d26f81e`; drift `translate ±6%` dibuang supaya
+  tidak terlihat kegedean), `alternate` 9s, `transform-origin: 50% 100%` → selalu
+  overfill, tanpa edge keras; hover menambah pool radial ikut kursor + ember lean
+  (`f92b88a`). Di-gate `prefers-reduced-motion: no-preference` dan di-pause
+  off-screen via `.available-roles.is-idle` (observer di `motion.ts`). Statis
+  (reduce) tetap persis referensi. Sumber referensi:
   `assets/assets recruitment page/available roles/Card Role *.png`.
 - **Hero mobile fluid (≤600px)**: h1/body/gap/padding pakai `clamp()` fluid +
   `min-height: 100svh` dengan konten dipusatkan vertikal;

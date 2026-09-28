@@ -4,10 +4,16 @@ Dokumen ini rangkuman lengkap project buat serah-terima ke tim: stack, struktur,
 konvensi, status tiap section, cara verifikasi, checkpoint commit, jebakan, dan
 yang masih pending.
 
-- **Repo**: https://github.com/Web-Data-Sorcerers/community-web
+- **Repo production**: https://github.com/Web-Data-Sorcerers/community-web
+- **Repo testing**: https://github.com/Faiz-abdurrachman/web-testing
+- **Push GANDA (penting)**: remote `origin` = repo **testing** dan punya **dua
+  push URL** (testing + production). Jadi `git push origin main` mengirim ke
+  **dua-duanya** sekaligus. Remote `production` juga ada kalau perlu fetch/cek.
+  Cek sinkron: `git fetch production -q && git rev-parse --short main origin/main
+production/main`. Kredensial lewat helper `store` (`~/.git-credentials`).
 - **Figma**: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS
   (file `Web Community DS`)
-- **Deploy**: Vercel (auto dari branch `main`)
+- **Deploy**: Vercel (auto dari branch `main`, dua project: testing & production)
 - **Buat AI agent**: baca juga `AGENTS.md` (operating manual ringkas buat AI).
 - **Prompt buat AI baru**: `docs/kickoff-prompt.md` (copy-paste starter).
 - **Prompt bikin halaman baru presisi**: `docs/page-build-prompt.md`.
@@ -369,7 +375,13 @@ Self-host: taruh `.woff2` di `public/fonts/`, update `@font-face` Nasalization d
 
 ## 12. Deploy
 
-- **GitHub** → **Vercel** (import repo, branch `main`, auto-deploy).
+- **Dua remote, satu perintah push.** `origin` (= testing,
+  `Faiz-abdurrachman/web-testing`) punya **dua push URL**: testing +
+  `Web-Data-Sorcerers/community-web` (production). `git push origin main`
+  mengirim ke keduanya. Jangan tambah remote/push URL lain. Production sempat
+  ketinggalan, sudah disinkronkan (HEAD sama di testing & production).
+- **GitHub** → **Vercel** (import repo, branch `main`, auto-deploy), satu project
+  untuk testing dan satu untuk production.
 - `vercel.json`: `framework: astro`, `installCommand: npm ci`,
   `buildCommand: npm run build`, `outputDirectory: dist`.
 - `engines.node: "22.x"`.
@@ -468,11 +480,18 @@ projects 5.104 recruitment 2.174 footer 2.666
   `c53d84d`, `06586ac` = **mentor revision 23 Sep 2026** (rail bounded, background
   HD native, Available Roles preview grid, hero viewport-aware). `51d565a` =
   balance tinggi hero mobile.
-- **Checkpoint terbaru (HEAD, lihat `git log`)**: **redesign kartu Available Roles**
-  (proporsional `cqw` + border emas + sparkle SVG + judul Title Case + tint violet)
-  dan **hero mobile fluid** (`≤600px` clamp + `min-height: 100svh`,
-  konten terpusat; `≥601px` tidak berubah). Dokumen (AGENTS/HANDOVER/assets/
-  kickoff) disinkronkan di commit yang sama.
+- **Checkpoint terbaru (HEAD `d0fd3be`, 28 Sep 2026)**: setelah hero plate
+  uncropped (`74a78e0`), redesign Available Roles (`aa3d228`) + glow wave
+  (`d16542b`), datang serangkaian polish: hover pointer-reactive kartu role
+  (`f92b88a`), glow wave diperkecil ke `scale 1→1.04` (`d26f81e`), bottom glow
+  wave detail role/HoDS (`3dc3432`), navbar mobile proporsional (`12c683d`),
+  detail role/HoDS mobile tanpa celah hitam (`d0fd3be`). **Push pertama ke
+  production** + disinkronkan. Detail rentetan + rencana perf ada di
+  `docs/ai-handoff.md` §"Checkpoint terakhir" & §"Perf audit & rencana".
+- **Checkpoint sebelumnya**: **redesign kartu Available Roles** (proporsional
+  `cqw` + glow violet kanan-bawah + ring gradient, judul Title Case + tagline)
+  dan **hero mobile fluid** (`≤600px` clamp + `min-height: 100svh`, konten
+  terpusat; `≥601px` tidak berubah).
 - Pola commit: per fitur + aset referensi dipisah; push ke `main` (Vercel).
 - **Catatan aset lokal (untracked, sengaja)**: `assets/card baru/` (6 PNG) ada di
   mesin dev tapi **tidak** di-commit (ukuran + bukan milik repo/mentor).
@@ -500,6 +519,13 @@ projects 5.104 recruitment 2.174 footer 2.666
 - [ ] Halaman lain yang ada di Figma tapi belum dibuat: **About Us,
       Hall of Frames, Partners, Contact**.
 - [ ] Audit tiap halaman detail HoDS / detail role kalau ada pembaruan Figma.
+- [ ] **Optimasi berat web (P0–P2)** — detail & angka di
+      `docs/ai-handoff.md` §"Perf audit & rencana". Ringkas: `sizes` Snippets,
+      splash jangan nunggu `three`, re-encode video hero, kompres
+      `sorcerer-2x`/`logo.png`/hero bg/figure, font subset. **Belum dieksekusi.**
+- [ ] **OG/share WhatsApp**: server sudah benar; tempel
+      `og:image:secure_url` + `<html prefix="og: https://ogp.me/ns#">` lalu
+      refresh cache via Facebook Sharing Debugger. **Belum diterapkan.**
 - [ ] Opsional: lanjutkan motion (lihat §10) & optimasi bundle.
 
 ---
@@ -611,6 +637,13 @@ git log --oneline            # lihat checkpoint
   unik, description, canonical absolut, OG/Twitter lengkap, `og:image` ada &
   1200×630, JSON-LD valid, `robots.txt`, dan 14 URL sitemap. **PASS.**
 - Validasi share asli (Facebook Debugger / X Card Validator) butuh domain live.
+- **Preview WhatsApp kosong bukan bug kode.** Tag OG di server sudah benar &
+  kebaca crawler (diverifikasi pakai UA `WhatsApp`/`facebookexternalhit` +
+  Microlink: `og:image` 1200×630 `image/jpeg` 200 OK). Kalau WhatsApp tetap
+  menampilkan link polos, itu **cache Meta**. Refresh lewat Facebook Sharing
+  Debugger (`developers.facebook.com/tools/debug/` → paste URL → "Scrape Again").
+  Hardening opsional kalau masih bandel: `og:image:secure_url` +
+  `<html prefix="og: https://ogp.me/ns#">`.
 
 ## 20. Mentor feedback revision (23 September 2026)
 

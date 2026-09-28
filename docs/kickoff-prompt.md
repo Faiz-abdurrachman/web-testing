@@ -29,6 +29,10 @@ Aturan inti (patuhi):
   tanpa tanya; lazy-import yang berat.
 - Commit per fitur, gaya `feat:`/`fix:`/`docs:`/`chore:`. Konfirmasi dulu ke user
   sebelum push (Vercel auto-deploy dari `main`).
+- **Push GANDA**: remote `origin` (= testing) punya **dua push URL** (testing +
+  production `Web-Data-Sorcerers/community-web`). `git push origin main` mengirim
+  ke dua-duanya — jangan tambah remote lain. Cek sinkron: `git fetch production
+  -q && git rev-parse --short main origin/main production/main`.
 
 Commands:
 - npm ci                     → install (Node 22.x)
@@ -66,9 +70,18 @@ Kondisi sekarang (detail di docs/ai-handoff.md):
 - Deep link / Back: `BaseLayout.astro` re-apply target hash setelah splash selesai
   (`section[id]`/`main[id]` punya `scroll-margin-top: 110px`). Jangan diubah tanpa
   alasan — pernah bug Back mendarat di section salah.
-- Available Roles card redesign: `aspect-ratio: 1350/795` + `container-type:
-  inline-size`, semua metrik `cqw`, border emas inset (`mask-composite`), sparkle
-  SVG 4 sudut. Judul Title Case dari `domains.ts`; geometri di-assert di `verify.mjs`.
+- Available Roles card: `aspect-ratio: 1652/956` + `container-type: inline-size`,
+  semua metrik `cqw`, base `#2a2a2c`, glow violet kanan-bawah (`role-glow.webp`) +
+  ring gradient `150deg` via `mask-composite`. Judul Title Case dari `domains.ts`,
+  tagline dari `roles.ts`. Glow wave halus `scale 1→1.04` (di-pause off-screen).
+  Hover pointer-reactive: pool radial ikut kursor + ember lean + divider draw +
+  panah overshoot (gate `(pointer: fine)` + `no-preference`). Geometri di-assert
+  di `verify.mjs` (section `851.375`, list `518.375`, kartu `413.33 × 239.19`).
+- Navbar mobile: `is-condensed` wajib `--nb-pad: var(--page-gutter)` di
+  `@media (max-width:1050px)` (kalau tidak, logo/burger kedorong 80px).
+- Detail role/HoDS: `main` `min-height: 100vh/100lvh` **hanya ≤900px** biar
+  gradient mentok bawah (desktop tetap frame 1280 — `verify.mjs` assert di
+  1440×1400); jangan naikkan ke base.
 - Hero mobile fluid (≤600px) pakai `clamp()` + `min-height: 100svh`; ≥601px jangan
   diubah (tablet/desktop + diff PNG 1440 tetap).
 - SEO/OG: origin dari `SITE_URL` (default
@@ -82,7 +95,10 @@ Kalau bikin/ubah section: update `docs/assets.md` + `docs/ai-handoff.md` dan
 tambah/cek assertion di `scripts/verify.mjs`.
 
 TODO utama: font Nasalization (webfont berlisensi — jangan diakali), data project
-asli, tanggal recruitment, halaman About Us / Hall of Frames / Partners / Contact.
+asli, tanggal recruitment, halaman About Us / Hall of Frames / Partners / Contact,
+dan **optimasi berat web** (lihat `docs/ai-handoff.md` §"Perf audit & rencana":
+`sizes` Snippets, splash jangan nunggu `three`, re-encode video hero, kompres
+gambar/logo/font — belum dieksekusi).
 
 Sebelum mulai task di bawah: ringkas dulu pemahamanmu + rencana singkat, lalu kerjakan.
 

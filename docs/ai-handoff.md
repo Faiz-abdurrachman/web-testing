@@ -6,6 +6,48 @@ harus menebak dari git log. Ini dokumen hidup — update kalau ada perubahan bes
 Baca dulu, urut: `AGENTS.md` (aturan operasional) → `HANDOVER.md` (konteks
 panjang) → `docs/assets.md` (provenance per section) → file ini.
 
+## Checkpoint terakhir (28 Sep 2026) — BACA INI DULU
+
+- **Repo + deploy GANDA (penting).** `origin` =
+  `github.com/Faiz-abdurrachman/web-testing` (testing) dan setelannya sudah
+  **push ke production sekaligus**: `origin` punya dua push URL → `git push
+origin main` mengirim ke **testing + production**
+  (`github.com/Web-Data-Sorcerers/community-web`, remote `production`).
+  Jalankan `git push origin main` seperti biasa; kalau perlu cek sinkron pakai
+  `git fetch production -q && git rev-parse --short main origin/main
+production/main`. Production sempat ketinggalan dan sudah disinkronkan; HEAD
+  terakhir `d0fd3be`.
+- **Available Roles glow wave DIPERKECIL.** `@keyframes role-glow-wave` sekarang
+  cuma `scale: 1 → 1.04` (drift `translate ±6%` dibuang) supaya ukuran glow
+  balik ke frame statis. Hover kartu dapat "pointer pool" radial violet (ikut
+  kursor via `--mx/--my`) + ember lean (`--gx/--gy`) + divider yang tergambar +
+  panah overshoot; semuanya di-gate `no-preference` + `(pointer: fine)`. Commit
+  `f92b88a` (hover) & `d26f81e` (glow tune).
+- **Navbar mobile proporsional (`12c683d`).** Saat `is-condensed`, aturan base
+  `.navbar.is-condensed { --nb-pad: 80px }` menang specificity atas
+  `--nb-pad: var(--page-gutter)` di `@media (max-width:1050px)` → logo/burger
+  kedorong 80px dari tepi. Fix: reset `--nb-pad` ke page gutter di media ≤1050.
+- **Detail role/HoDS mobile tanpa celah hitam (`d0fd3be`).** Kalau konten lebih
+  pendek dari layar (HP + browser chrome sembunyi), body `#050507` tampak sebagai
+  strip hitam di bawah gradient. Fix: `main` dapat `min-height: 100vh` +
+  `100lvh` **khusus `@media (max-width:900px)`** supaya gradient mentok ke bawah.
+  **Jangan naikkan ke base:** `verify.mjs` men-set viewport `1440×1400` dan
+  meng-assert `.role-detail` height **1280** — ngasih min-height di desktop bikin
+  test gagal.
+- **Perf: detail ringan, Home/Recruitment berat.** Detail 0.20–0.33 MB, LCP
+  ~0.6–1.0 s. Home desktop ~2.1 MB + LCP tinggi; Recruitment ~3.1 MB. Akar utama:
+  splash nunggu `three` (181 KB gz) + video, `sizes="1280px"` di Snippets bikin
+  HP ambil varian 2560w, video hero 0.6–1.6 MB, gambar kebesaran. **Audit +
+  rencana P0–P2 belum dieksekusi** — lihat "## Perf audit & rencana".
+- **OG/share WhatsApp.** Tag OG di server sudah benar & kebaca crawler
+  (diverifikasi via UA WhatsApp/Facebook + Microlink). WhatsApp nggak nampilin
+  preview = cache Meta, bukan bug kode → refresh lewat Facebook Sharing Debugger.
+  Hardening `og:image:secure_url` + `<html prefix="og: https://ogp.me/ns#">`
+  belum diterapkan.
+- **Gate terakhir (HEAD `d0fd3be`) hijau:** `format:check`, `build` 14 halaman,
+  `verify.mjs` (`browserErrors: []`), `responsive-audit` 364 combos ALL PASS,
+  `audit:navbar` ALL PASS.
+
 ## Status singkat
 
 - **Latest splash revision (25 Sep 2026): native SVG + Canvas.** User rejected
@@ -47,11 +89,14 @@ Card Role *.png`, 1652×956). Base `#2a2a2c`, glow violet kanan-bawah
   Sparkle, nomor `01 / OPEN ROLE`, chip, dan frame emas **dibuang**. Grid 3/2/1
   `gap 40px 20px`. Geometri `verify.mjs` kini section `851.375`, list `518.375`,
   kartu `413.33 × 239.19`, plus cek overflow konten kartu 320–1920px. Glow
-  dipindah ke layer `.role-glow` yang **hidup** — gelombang horizontal (`±6%` +
-  `scale 1.15→1.22`, `alternate` 9s, `transform-origin: 50% 100%` → selalu
-  overfill, tanpa hard edge, tanpa naik-turun); gate `no-preference`, pause
-  off-screen via `.available-roles.is-idle` (observer `motion.ts`). Statis =
-  persis referensi.
+  dipindah ke layer `.role-glow` yang **hidup** (`transform-origin: 50% 100%`,
+  `alternate` 9s, stagger per kolom). **DIREVISI 26 Sep (`d26f81e`):** `scale`
+  hanya `1 → 1.04` dan drift `translate ±6%` **dibuang** — user bilang glow
+  terlihat kegedean, jadi ukurannya dibuat mendekati frame statis. Gate
+  `no-preference`, pause off-screen via `.available-roles.is-idle` (observer
+  `motion.ts`). Statis (reduce) = persis referensi. Ditambah hover
+  pointer-reactive (`f92b88a`): pool radial ikut kursor, ember lean, divider
+  draw, panah overshoot.
 - Branch `main`, fitur homepage + Recruitment + role detail + HoDS detail sudah
   jadi. Motion GSAP + Three.js **aktif** (`src/components/Motion.astro` →
   `src/scripts/motion.ts`).
@@ -572,8 +617,60 @@ Gotcha: `verify.mjs` bisa hang di `networkidle` melawan dev (Vite HMR) → build
 `npx astro preview --port 4331`. Kalau Chromium OOM (mesin RAM kecil), pakai
 `responsive-audit.mjs` atau skrip Playwright per-section ringan.
 
+## Perf audit & rencana (28 Sep 2026)
+
+Diukur Playwright + CDP (Chromium, throttle **4G + CPU 4×**, preview lokal; angka
+absolut inflasi karena throttle + software render → bandingkan **relatif**):
+
+| Route                             | Berat        | LCP       | Long-task         |
+| --------------------------------- | ------------ | --------- | ----------------- |
+| Home desktop                      | 2.10 MB      | 11.4 s    | 5.9 s (max 1.0 s) |
+| Home mobile                       | 1.51 MB      | 2.1 s     | 1.7 s             |
+| Recruitment desktop               | 3.11 MB      | 1.2 s     | 3.4 s             |
+| Recruitment mobile                | 2.09 MB      | 8.5 s     | 0.8 s             |
+| `/hods/*`, `/recruitment/roles/*` | 0.20–0.33 MB | 0.6–1.0 s | 0 ms              |
+
+Bundle: `three.module` **181 KB gz**, `Motion`/GSAP **45 KB gz**.
+
+**Akar (urut dampak):**
+
+1. **Splash nunggu aset berat.** `src/scripts/hero-particles.ts` push
+   `import('three')` ke `window.__dsPreload`; `Hero.astro` push promise video.
+   Splash nutup UI sampai `three` + video + fonts siap (min 3 s / cap 6 s).
+   Terukur di HP (4G+CPU4×): splash nutup **~5.4 s** → selama itu **semua tap
+   diblok** (`elementFromPoint` = `.splash`, termasuk hamburger). Ini juga yang
+   bikin LCP tinggi.
+2. **`Snippets.astro` `sizes="1280px"`** (salah). Browser dikira gambar selalu
+   1280 CSS px → DPR3 minta 3840w → ambil `snippet-hero-*-2x.webp` (2560w,
+   358–562 KB). Recruitment mobile jadi ~1.9 MB gambar; harusnya ~400 KB.
+3. **Video hero:** recruitment `hero-bg.webm` 1.6 MB, home 0.58 MB (desktop saja;
+   HP sudah di-gate ≥601px).
+4. **`three` 181 KB gz** untuk 700 partikel → long-task ~1 s saat init.
+5. **Gambar kebesaran:** philosophy `sorcerer-2x.webp` 481 KB (HP DPR3 ambil ini),
+   hero `background.webp` 219 KB + `figure.webp` 128 KB (dipakai HP juga),
+   `snippet-thumb-*-2x`, `logo.png` 40 KB (192×210, tampil 54×59, **tiap
+   halaman**), font 120 KB (4 bobot di-preload).
+6. Jank scroll minor: `.domains` task ~55 ms, frame terburuk ~117 ms
+   (`perf:audit`, headless software-render).
+
+**Rencana (prioritas; BELUM dieksekusi — tunggu acc user):**
+
+- **P0** (cepat, aman, tanpa ubah desain): (a) `sizes` Snippets jadi responsif +
+  varian ~640w; (b) splash **jangan** nunggu `three` (keluarkan dari
+  `__dsPreload`, mount partikel setelah paint/idle) + timeout video; (c)
+  re-encode video hero lebih kecil (target home ≤400 KB, recruitment ≤900 KB);
+  (d) kompres `sorcerer-2x` (~150 KB), `logo.png` (~6 KB), varian mobile hero
+  bg/figure.
+- **P1**: perkecil/ganti `three` (partikel → canvas 2D) — **butuh izin** (`three`
+  sudah disetujui; jangan hapus tanpa tanya); preload 2 bobot font + subset.
+- **P2**: investigasi jank `.domains`.
+- Target: Home mobile ≤ ~800 KB & LCP < 2.5 s (4G); Recruitment mobile ≤ ~1.2 MB.
+
 ## Known issues / catatan
 
+- **Splash memblok interaksi 3–6 s** (cap). HP + jaringan lambat → splash nutup
+  seluruh layar (termasuk navbar) sekitar ~5.4 s sebelum bisa ditekan; bagian dari
+  item P0(b) di atas.
 - `scripts/verify-feedback.mjs` **gagal pre-existing**: timeout di
   `locator('.artwork .art-bg')` untuk route `/recruitment` (hero recruitment pakai
   `.artwork img`, bukan `.art-bg`). Tidak terkait What We Do.
