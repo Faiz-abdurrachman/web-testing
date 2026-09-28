@@ -434,6 +434,10 @@ const destinations: Record<string, string> = {
       --nb-h-condensed: 64px;
       --nb-pad: var(--page-gutter);
     }
+    /* The base .is-condensed rule (desktop 80px) outranks the --nb-pad above by specificity, so once the capsule floated the logo/burger sat 80px in from the edges. Keep the page gutter while condensed on tablets and phones. */
+    .navbar.is-condensed {
+      --nb-pad: var(--page-gutter);
+    }
     .navbar-inner {
       height: var(--nb-h);
       padding: 18px var(--nb-pad);
