@@ -591,11 +591,12 @@ score were unchanged when this section was added.
   carousel — keyboard input bypasses the delegated hover/click wiring.
   `Sound.astro` drops it under reduced motion, so the audits stay silent.
 - **Rail edge fade (28 Sep 2026).** While a domain rail glides, its partial
-  edge cards used to be hard-cut at the rail bounds. `DomainRail.astro` now adds
-  `is-scrolling` to the rail on scroll (dropped 140ms after it settles) and, under
-  `prefers-reduced-motion: no-preference`, a `mask-image` fades the first/last
-  `120px`. At rest and at snap points no mask applies, so the reference frame and
-  `verify.mjs` stay unchanged (fade is invisible under `reduce`).
+  edge cards used to be hard-cut at the rail bounds. `DomainRail.astro` now
+  toggles `is-clip-left` / `is-clip-right` in `sync()` — computed from whether
+  the rail's left/right edge lands **inside a card** — and, under
+  `prefers-reduced-motion: no-preference`, a `mask-image` fades that edge by
+  `120px`. Full cards are never dimmed (the rail exactly fits 2 or 3 cards at
+  rest, so no edge class applies then) and `verify.mjs` stays unchanged.
 - **Pillars entrance — "summon from the core"** (`pillarIntro` in `motion.ts`):
   on `≥761px` a **time-based timeline auto-plays once** when the section reaches
   the viewport (`scrollTrigger: { start: 'top 72%', once: true }` — no pin and no

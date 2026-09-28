@@ -82,31 +82,43 @@ const { base = '/hods', suffix = '' } = Astro.props;
         }),
       );
 
+      // Cached card stride so the edge-clip test in `sync` stays cheap on every
+      // scroll frame.
+      let cardWidth = 0;
+      let cardStride = 0;
+      const measure = () => {
+        cardWidth =
+          rail.querySelector('.domain-card')?.getBoundingClientRect().width ??
+          394;
+        cardStride =
+          cardWidth + (parseFloat(getComputedStyle(rail).columnGap) || 0);
+      };
+
       const sync = () => {
         const max = rail.scrollWidth - rail.clientWidth;
         if (arrows[0]) arrows[0].disabled = rail.scrollLeft <= 1;
         if (arrows[1]) arrows[1].disabled = rail.scrollLeft >= max - 1;
-      };
-      // While the rail glides, its edge cards are only partially visible; a soft
-      // mask (added only during the scroll) fades them instead of a hard cut.
-      // It is dropped once motion settles, so the rest/snap frame stays exact.
-      let scrollEndTimer = 0;
-      const markScrolling = () => {
-        rail.classList.add('is-scrolling');
-        clearTimeout(scrollEndTimer);
-        scrollEndTimer = window.setTimeout(
-          () => rail.classList.remove('is-scrolling'),
-          140,
+        // Fade an edge only when it actually lands inside a card (a partial card
+        // is visible there). Full cards are never dimmed, and the mask also
+        // covers a partial that stays visible while the rail rests.
+        if (!cardStride) measure();
+        const partial = (edge: number) => {
+          const offset = ((edge % cardStride) + cardStride) % cardStride;
+          return offset > 1 && offset < cardWidth - 1;
+        };
+        rail.classList.toggle('is-clip-left', partial(rail.scrollLeft));
+        rail.classList.toggle(
+          'is-clip-right',
+          partial(rail.scrollLeft + rail.clientWidth),
         );
       };
-      rail.addEventListener('scroll', markScrolling, {
-        passive: true,
-        signal,
-      });
-      railCleanups.push(() => clearTimeout(scrollEndTimer));
+      measure();
       rail.addEventListener('scroll', sync, { passive: true, signal });
       sync();
-      const resizeObserver = new ResizeObserver(sync);
+      const resizeObserver = new ResizeObserver(() => {
+        measure();
+        sync();
+      });
       resizeObserver.observe(rail);
       railCleanups.push(() => resizeObserver.disconnect());
 
@@ -354,9 +366,9 @@ const { base = '/hods', suffix = '' } = Astro.props;
   .domain-rail.is-gliding {
     cursor: default;
   }
-  /* Edge fade only while gliding (class added by JS on scroll), so a partial edge card dissolves instead of being hard-cut; reduced motion never applies it. */
+  /* Edge fade only when a partial card is actually at that edge (classes toggled in JS `sync`), so full cards are never dimmed and reduced motion never applies it. */
   @media (prefers-reduced-motion: no-preference) {
-    .domain-rail.is-scrolling {
+    .domain-rail.is-clip-left.is-clip-right {
       -webkit-mask-image: linear-gradient(
         to right,
         transparent 0,
@@ -368,6 +380,34 @@ const { base = '/hods', suffix = '' } = Astro.props;
         to right,
         transparent 0,
         #000 120px,
+        #000 calc(100% - 120px),
+        transparent 100%
+      );
+    }
+    .domain-rail.is-clip-left {
+      -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        #000 120px,
+        #000 100%
+      );
+      mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        #000 120px,
+        #000 100%
+      );
+    }
+    .domain-rail.is-clip-right {
+      -webkit-mask-image: linear-gradient(
+        to right,
+        #000 0,
+        #000 calc(100% - 120px),
+        transparent 100%
+      );
+      mask-image: linear-gradient(
+        to right,
+        #000 0,
         #000 calc(100% - 120px),
         transparent 100%
       );

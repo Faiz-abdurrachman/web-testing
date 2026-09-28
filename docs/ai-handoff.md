@@ -50,9 +50,11 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
     entrance. Terukur dua rail: `rest: none` / `hover: translateY(-10px)`.
     Commit fitur `6c79831`; fix parity (`motion.ts` `clearProps`) **menyusul**.
     **Rail edge fade:** saat rail bergeser, kartu tepi dulu terpotong keras;
-    `DomainRail` sekarang nambah class `is-scrolling` (dibuang 140ms setelah
-    berhenti) + `mask-image` fade 120px (gate `no-preference`) → state istirahat
-    & `verify.mjs` tetap. Detail §"Rail edge fade" di `docs/assets.md`.
+    `DomainRail` sekarang toggle `is-clip-left` / `is-clip-right` di `sync()`
+    (dihitung dari apakah tepi rail jatuh di dalam kartu) + `mask-image` fade
+    120px (gate `no-preference`). Kartu penuh tak pernah diredupkan (rail pas
+    2/3 kartu saat diam) → `verify.mjs` tetap. Detail §"Rail edge fade" di
+    `docs/assets.md`.
   - **Keyboard carousel cues (28 Sep 2026, di atas `473ca00`)** — panah keyboard
     di `DomainRail` (Choose Your Domain / Who Should Join), `Projects`, dan
     `Snippets` sekarang dispatch `ds:sfx` cue `select` tiap kali menGeser
