@@ -344,6 +344,11 @@ const { role } = Astro.props;
     height: 24px;
   }
   @media (max-width: 900px) {
+    /* Fill the viewport so the gradient never leaves a body-coloured gap below it when the content is shorter than the screen (phones with the browser chrome hidden). Desktop keeps the exact 1280px reference frame. */
+    .role-detail {
+      min-height: 100vh;
+      min-height: 100lvh;
+    }
     .role-detail-inner {
       min-height: 0;
       gap: 40px;

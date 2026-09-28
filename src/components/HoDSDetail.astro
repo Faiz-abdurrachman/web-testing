@@ -341,6 +341,11 @@ const { hod } = Astro.props;
     background: linear-gradient(135deg, #6c3bff 17%, #ede8ff 50%, #6c3bff 83%);
   }
   @media (max-width: 900px) {
+    /* Fill the viewport so the gradient never leaves a body-coloured gap below it when the content is shorter than the screen (phones with the browser chrome hidden). Desktop is unchanged. */
+    .hods-detail {
+      min-height: 100vh;
+      min-height: 100lvh;
+    }
     .hods-detail-inner {
       gap: 40px;
       padding: calc(40px + env(safe-area-inset-top, 0px)) 24px 40px;
