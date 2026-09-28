@@ -113,6 +113,21 @@ const domainTitle = Object.fromEntries(domains.map((d) => [d.id, d.title]));
       no-repeat;
     pointer-events: none;
   }
+  /* Soft violet pool that follows the pointer; invisible until hover. */
+  .role-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: radial-gradient(
+      260px circle at var(--mx, 50%) var(--my, 50%),
+      rgb(155 123 255 / 38%) 0%,
+      rgb(108 59 255 / 14%) 45%,
+      transparent 72%
+    );
+    opacity: 0;
+    pointer-events: none;
+  }
   /* 1px gradient ring (150deg) drawn on the card edge. */
   .role-card::after {
     content: '';
@@ -156,6 +171,8 @@ const domainTitle = Object.fromEntries(domains.map((d) => [d.id, d.title]));
     margin-top: auto;
   }
   .role-divider {
+    position: relative;
+    display: block;
     height: max(1px, 0.121cqw);
     background: linear-gradient(
       90deg,
@@ -163,6 +180,17 @@ const domainTitle = Object.fromEntries(domains.map((d) => [d.id, d.title]));
       #fff 50%,
       rgb(255 255 255 / 0%) 100%
     );
+  }
+  /* Bright segment that draws in from the left on hover; scaleX(0) keeps the
+     resting card identical to the reference frame. */
+  .role-divider::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, #9b7bff 0%, #fff 100%);
+    transform: scaleX(0);
+    transform-origin: left center;
+    pointer-events: none;
   }
   .role-link {
     display: flex;
@@ -187,15 +215,33 @@ const domainTitle = Object.fromEntries(domains.map((d) => [d.id, d.title]));
   }
   @media (prefers-reduced-motion: no-preference) {
     .role-link-icon {
-      transition: transform 0.25s ease;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .role-row:is(:hover, :focus-visible) .role-link-icon {
-      transform: translateX(3px);
+      transform: translateX(6px);
+    }
+    .role-divider::after {
+      transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+    .role-row:is(:hover, :focus-visible) .role-divider::after {
+      transform: scaleX(1);
     }
     /* Slow bottom wave; scaled from bottom-centre it overfills so no edge shows. */
     .role-glow {
       transform-origin: 50% 100%;
       animation: role-glow-wave 9s ease-in-out infinite alternate;
+      transition: transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+    /* The ember leans toward the pointer (--gx/--gy come from the script). */
+    .role-row:is(:hover, :focus-visible) .role-glow {
+      transform: translate(var(--gx, 0px), var(--gy, 0px)) scale(1.06);
+    }
+    /* Pointer pool ignites on hover and tracks --mx/--my. */
+    .role-card::before {
+      transition: opacity 0.35s ease;
+    }
+    .role-row:is(:hover, :focus-visible) .role-card::before {
+      opacity: 1;
     }
     /* Stagger the columns so the glow flows across the row. */
     .role-row:nth-child(3n + 2) .role-glow {
@@ -246,3 +292,34 @@ const domainTitle = Object.fromEntries(domains.map((d) => [d.id, d.title]));
     }
   }
 </style>
+<script>
+  // Pointer-only, motion-on: the card's ember leans toward the cursor by
+  // publishing a small --gx/--gy offset the CSS reads. Skipped entirely for
+  // touch and reduced motion, so those stay static.
+  const rows = document.querySelectorAll<HTMLElement>(
+    '.available-roles .role-row',
+  );
+  const enabled =
+    window.matchMedia('(pointer: fine)').matches &&
+    !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (enabled) {
+    const reset = (row: HTMLElement) => {
+      row.style.removeProperty('--gx');
+      row.style.removeProperty('--gy');
+    };
+    rows.forEach((row) => {
+      row.addEventListener('pointermove', (event) => {
+        const rect = row.getBoundingClientRect();
+        const px = (event.clientX - rect.left) / rect.width;
+        const py = (event.clientY - rect.top) / rect.height;
+        row.style.setProperty('--gx', `${((px - 0.5) * 22).toFixed(2)}px`);
+        row.style.setProperty('--gy', `${((py - 0.5) * 16).toFixed(2)}px`);
+        row.style.setProperty('--mx', `${(px * 100).toFixed(2)}%`);
+        row.style.setProperty('--my', `${(py * 100).toFixed(2)}%`);
+      });
+      row.addEventListener('pointerleave', () => reset(row));
+      row.addEventListener('blur', () => reset(row));
+    });
+  }
+</script>
