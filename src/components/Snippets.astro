@@ -24,8 +24,8 @@ const photos = [1, 2, 3, 4, 5];
             <div class="hero-slide">
               <img
                 src={`/images/recruitment/snippet-hero-${n}.webp`}
-                srcset={`/images/recruitment/snippet-hero-${n}.webp 1280w, /images/recruitment/snippet-hero-${n}-2x.webp 2560w`}
-                sizes="1280px"
+                srcset={`/images/recruitment/snippet-hero-${n}-960.webp 960w, /images/recruitment/snippet-hero-${n}.webp 1280w, /images/recruitment/snippet-hero-${n}-2x.webp 2560w`}
+                sizes="(max-width: 760px) calc(100vw - 48px), (max-width: 1440px) calc(100vw - 160px), 1280px"
                 width="1280"
                 height="556"
                 alt=""

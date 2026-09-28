@@ -538,10 +538,12 @@ projects 5.104 recruitment 2.174 footer 2.666
 - [ ] Halaman lain yang ada di Figma tapi belum dibuat: **About Us,
       Hall of Frames, Partners, Contact**.
 - [ ] Audit tiap halaman detail HoDS / detail role kalau ada pembaruan Figma.
-- [ ] **Optimasi berat web (P0–P2)** — detail & angka di
-      `docs/ai-handoff.md` §"Perf audit & rencana". Ringkas: `sizes` Snippets,
-      splash jangan nunggu `three`, re-encode video hero, kompres
-      `sorcerer-2x`/`logo.png`/hero bg/figure, font subset. **Belum dieksekusi.**
+- [~] **Optimasi berat web (P0–P2)** — detail di `docs/ai-handoff.md` §"Perf
+      audit & rencana". **P0(a)+(d) selesai 28 Sep 2026:** `sizes` Snippets +
+      varian 960w (Recruitment mobile 2.09→1.15MB), `logo.png` 14KB, hero
+      bg/fig 180/86KB. **Sisa:** re-encode video hero, kompres `sorcerer-2x`
+      (~481KB), hindari `hero-poster` di HP, font subset. Catatan: splash
+      **tidak** menunggu `three` di HP (desktop ya, sengaja dipertahankan).
 - [x] ~~OG hardening~~: `og:image:secure_url` + `<html prefix="og: https://ogp.me/ns#">`
       **sudah diterapkan** (28 Sep 2026, `BaseLayout.astro`). Sisa manual:
       refresh cache Meta via Facebook Sharing Debugger.

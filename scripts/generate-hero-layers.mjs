@@ -69,11 +69,14 @@ const figure = await sharp({
   .png()
   .toBuffer();
 
+// Background q82 (MAE ~1.6 vs the q86 render) and cutout near-lossless q60
+// (opaque MAE ~1.6, from 128KB to ~86KB) — both materially smaller with no
+// visible loss at display size, and the cutout keeps its lossless alpha edge.
 await sharp(bg)
-  .webp({ quality: 86, effort: 6 })
+  .webp({ quality: 82, effort: 6 })
   .toFile('public/images/hero/background.webp');
 await sharp(figure)
-  .webp({ lossless: true, effort: 6 })
+  .webp({ nearLossless: true, quality: 60, effort: 6 })
   .toFile('public/images/hero/figure.webp');
 
 for (const [name, file, hasAlpha] of [

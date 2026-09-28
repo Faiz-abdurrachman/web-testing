@@ -140,6 +140,32 @@ production/main`. Production sempat ketinggalan dan sudah disinkronkan; HEAD
   (Playwright firefox belum terpasang). Fallback non-View-Transitions ditangani
   Astro; belum diverifikasi langsung.
 
+## Baru saja: Perf P0 — Snippets sizes + aset ringan (28 Sep 2026)
+
+Scope yang disetujui: (a) `sizes` Snippets + (d) kompres logo/mobile hero.
+
+- **(a) Snippets.** `Snippets.astro` `sizes` dibuat jujur
+  (`(max-width:760px) calc(100vw - 48px)` → `(max-width:1440px) calc(100vw - 160px)`
+  → `1280px`) + varian **960w** baru (`npm run assets:optimize`). HP berhenti
+  mengunduh `-2x` 2560w: DPR3 390 pilih `snippet-hero-N.webp` (1280w), DPR2 390
+  pilih `snippet-hero-N-960.webp`.
+- **(d) Aset.** `logo.png` palette → **40 → 14 KB** (opaque-MAE 1.4); hero
+  `background.webp` q86→q82 → **219 → 180 KB** (MAE 1.6); hero `figure.webp`
+  lossless→nearLossless q60 → **128 → 86 KB** (opaque-MAE 1.6). Diubah di
+  `scripts/optimize-images.mjs` (logo + 960 variant) & `generate-hero-layers.mjs`
+  (bg/fig); reproducible (pristine di `assets/image-src/`; pack hero di arsip).
+- **Terukur (mobile 390, `transferSize`):** `/recruitment` **2.09 → 1.15 MB**
+  (DPR3) / **0.93 MB** (DPR2); `/` **1.40 MB**. `verify.mjs` before→after delta
+  **0.000** untuk semua section (hero −0.03), `browserErrors: []`.
+- **Koreksi dokumen:** splash **tidak** menunggu `three` di HP —
+  `hero-particles.ts` `return` sebelum push di `<768px`; hanya desktop (≥768)
+  yang preload `three`+video, sesuai tujuan splash (**jangan dihapus**). Jadi
+  mengecilkan byte gambar langsung memperpendek splash HP.
+- **Gate hijau:** `format:check`, `build` 15 halaman 0 error, `verify.mjs`
+  `EXIT 0`, `responsive-audit` 364 ALL PASS, `seo:audit` PASS, `verify:vt` `EXIT 0`.
+- **Sisa P0:** (c) re-encode video hero; kompres `sorcerer-2x.webp` (481 KB,
+  target ~150 KB); hindari `hero-poster.webp` (74 KB) ke-fetch di HP.
+
 ## Status singkat
 
 - **Latest splash revision (25 Sep 2026): native SVG + Canvas.** User rejected
@@ -778,45 +804,53 @@ absolut inflasi karena throttle + software render → bandingkan **relatif**):
 
 Bundle: `three.module` **181 KB gz**, `Motion`/GSAP **45 KB gz**.
 
+> **Sesudah P0(a)+(d) (28 Sep 2026, `transferSize`, tanpa throttle):**
+> `/recruitment` mobile **2.09 → 1.15 MB** (DPR3) / **0.93 MB** (DPR2);
+> `/` mobile **1.40 MB**. Sisa berat HP: `sorcerer-2x.webp` 481 KB +
+> `hero-poster.webp` 74 KB (lihat "Rencana").
+
 **Akar (urut dampak):**
 
-1. **Splash nunggu aset berat.** `src/scripts/hero-particles.ts` push
-   `import('three')` ke `window.__dsPreload`; `Hero.astro` push promise video.
-   Splash nutup UI sampai `three` + video + fonts siap (min 3 s / cap 6 s).
-   Terukur di HP (4G+CPU4×): splash nutup **~5.4 s** → selama itu **semua tap
-   diblok** (`elementFromPoint` = `.splash`, termasuk hamburger). Ini juga yang
-   bikin LCP tinggi.
-2. **`Snippets.astro` `sizes="1280px"`** (salah). Browser dikira gambar selalu
-   1280 CSS px → DPR3 minta 3840w → ambil `snippet-hero-*-2x.webp` (2560w,
-   358–562 KB). Recruitment mobile jadi ~1.9 MB gambar; harusnya ~400 KB.
+1. ~~**Splash nunggu aset berat.**~~ **Koreksi (28 Sep 2026, diukur):
+   HP tidak menunggu `three`.** `hero-particles.ts` `return` di `<768px`
+   **sebelum** push `import('three')` ke `window.__dsPreload` (dan `Hero.astro`
+   hanya push video ≥601px), jadi splash HP diukur ~4.5 s dari `window.load`
+   (gambar) + font — bukan `three`. Desktop (≥768px) **memang** menunggu
+   `three`+video (~4.2 s) — itu tujuan splash, jangan dihapus.
+2. ~~**`Snippets.astro` `sizes="1280px"`**~~ **FIXED (28 Sep 2026):** `sizes`
+   kini jujur + varian **960w**; HP pilih 1280w (DPR3) / 960w (DPR2), bukan
+   `-2x` 2560w (358–562 KB).
 3. **Video hero:** recruitment `hero-bg.webm` 1.6 MB, home 0.58 MB (desktop saja;
    HP sudah di-gate ≥601px).
 4. **`three` 181 KB gz** untuk 700 partikel → long-task ~1 s saat init.
-5. **Gambar kebesaran:** philosophy `sorcerer-2x.webp` 481 KB (HP DPR3 ambil ini),
-   hero `background.webp` 219 KB + `figure.webp` 128 KB (dipakai HP juga),
-   `snippet-thumb-*-2x`, `logo.png` 40 KB (192×210, tampil 54×59, **tiap
-   halaman**), font 120 KB (4 bobot di-preload).
+5. **Gambar kebesaran (sebagian DONE 28 Sep 2026):** ~~`logo.png` 40 KB → 14 KB~~
+   (192×210, tampil 54×59, tiap halaman), ~~hero `background.webp` 219 → 180 KB,
+   `figure.webp` 128 → 86 KB~~. **Sisa:** philosophy `sorcerer-2x.webp` **481 KB**
+   (HP DPR3 ambil ini), `hero-poster.webp` 74 KB (ikut ke-fetch di HP walau video
+   tak tampil), font 120 KB (4 bobot di-preload).
 6. Jank scroll minor: `.domains` task ~55 ms, frame terburuk ~117 ms
    (`perf:audit`, headless software-render).
 
-**Rencana (prioritas; BELUM dieksekusi — tunggu acc user):**
+**Rencana (prioritas):**
 
-- **P0** (cepat, aman, tanpa ubah desain): (a) `sizes` Snippets jadi responsif +
-  varian ~640w; (b) splash **jangan** nunggu `three` (keluarkan dari
-  `__dsPreload`, mount partikel setelah paint/idle) + timeout video; (c)
-  re-encode video hero lebih kecil (target home ≤400 KB, recruitment ≤900 KB);
-  (d) kompres `sorcerer-2x` (~150 KB), `logo.png` (~6 KB), varian mobile hero
-  bg/figure.
+- **P0 — (a) DONE, (d) sebagian DONE (28 Sep 2026):** `sizes` Snippets responsif +
+  varian 960w; kompres `logo.png` (14 KB) + hero `background`/`figure` (180/86 KB).
+  **Sisa:** (c) re-encode video hero (target home ≤400 KB, recruitment ≤900 KB);
+  kompres `sorcerer-2x` (~150 KB) + hindari fetch `hero-poster.webp` di HP.
+  **(b) DIBATALKAN/direvisi:** jangan keluarkan `three` dari preload — HP memang
+  tidak menunggu `three`, desktop sengaja menunggu (jangan diubah); paling banter
+  tambah _timeout_ preload.
 - **P1**: perkecil/ganti `three` (partikel → canvas 2D) — **butuh izin** (`three`
   sudah disetujui; jangan hapus tanpa tanya); preload 2 bobot font + subset.
 - **P2**: investigasi jank `.domains`.
-- Target: Home mobile ≤ ~800 KB & LCP < 2.5 s (4G); Recruitment mobile ≤ ~1.2 MB.
+- Target: Home mobile ≤ ~800 KB & LCP < 2.5 s (4G); Recruitment mobile ≤ ~1.2 MB
+  (**sudah tercapai: 1.15 MB DPR3 / 0.93 MB DPR2**).
 
 ## Known issues / catatan
 
-- **Splash memblok interaksi 3–6 s** (cap). HP + jaringan lambat → splash nutup
-  seluruh layar (termasuk navbar) sekitar ~5.4 s sebelum bisa ditekan; bagian dari
-  item P0(b) di atas.
+- **Splash memblok interaksi 3–6 s** (cap). Di HP splash tutup ~4.5 s, terutama
+  menunggu `window.load` (gambar) + font — **bukan** `three` (tak difetch di
+  `<768px`). Memperkecil byte gambar (P0 a/d) langsung memperpendek ini.
 - **DEV: GSAP/Three mati dengan `504 Outdated Optimize Dep`.** Kalau semua animasi
   (hero pin/zoom, reveal) hilang di `npm run dev` tapi build/preview normal, itu
   cache Vite basi — **bukan** kode. Fix: `npx astro dev stop && rm -rf
@@ -877,12 +911,11 @@ sound atau navigasi; detail P0–P2 ada di "Perf audit & rencana" di atas.
    ini). Perf client-nav terukur lebih berat dari full reload di halaman berat →
    masuk P0/P1 (butuh acc). `transition:persist` belum perlu. Smoke:
    **`npm run verify:vt`**.
-2. **Perf P0** (paling berdampak; **butuh acc user**): (a) `sizes` Snippets
-   responsif + varian ~640w; (b) splash jangan nunggu `three` + timeout video;
-   (c) re-encode video hero (home ≤400 KB, recruitment ≤900 KB); (d) kompres
-   `sorcerer-2x.webp`, `logo.png`, varian mobile hero `background`/`figure`.
-   Target: Home mobile ≤ ~800 KB & LCP < 2.5 s (4G); Recruitment mobile ≤ ~1.2 MB.
-   **Catat:** VT menambah JS router + mengubah timing splash/preload → ukur ulang.
+2. **Perf P0 — (a)+(d) DONE, sisa (c) + 2 item; (b) dibatalkan.** Lihat
+   "## Baru saja: Perf P0 — Snippets sizes + aset ringan". Sisa: re-encode video
+   hero (home ≤400 KB, recruitment ≤900 KB); kompres `sorcerer-2x` (~150 KB) +
+   hindari fetch `hero-poster` di HP. Target Recruitment mobile ≤1.2 MB sudah
+   tercapai (1.15/0.93 MB); Home mobile masih 1.40 MB (sorcerer-2x + poster).
 3. **Konten:** data project asli (`src/data/projects.ts` masih 4 placeholder
    dengan gambar sama) dan tanggal recruitment (`SelectionTimeline.astro` masih
    placeholder "Date").
