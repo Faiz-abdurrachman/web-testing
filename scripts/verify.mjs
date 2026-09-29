@@ -1459,6 +1459,28 @@ try {
     ),
     'Available Roles rows must link to the role detail pages',
   );
+  const roleDividerScale = () =>
+    page
+      .locator('.available-roles .role-divider')
+      .evaluateAll((dividers) =>
+        dividers.map(
+          (divider) => getComputedStyle(divider, '::after').transform,
+        ),
+      );
+  assert.deepEqual(
+    await roleDividerScale(),
+    Array(6).fill('matrix(0, 0, 0, 1, 0, 0)'),
+    'All Available Roles dividers must be hidden at rest',
+  );
+  for (const index of [0, 3]) {
+    await page.locator('.available-roles .role-row').nth(index).hover();
+    assert.equal(
+      (await roleDividerScale())[index],
+      'matrix(1, 0, 0, 1, 0, 0)',
+      `Available Roles row ${index + 1} must show its divider on hover`,
+    );
+  }
+  await page.mouse.move(0, 0);
   await page.locator('.available-roles').scrollIntoViewIfNeeded();
   await page
     .locator('.available-roles')

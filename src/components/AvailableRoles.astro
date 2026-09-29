@@ -179,15 +179,8 @@ const domainTitle = Object.fromEntries(domains.map((d) => [d.id, d.title]));
     position: relative;
     display: block;
     height: max(1px, 0.121cqw);
-    background: linear-gradient(
-      90deg,
-      #fff 0%,
-      #fff 50%,
-      rgb(255 255 255 / 0%) 100%
-    );
   }
-  /* Bright segment that draws in from the left on hover; scaleX(0) keeps the
-     resting card identical to the reference frame. */
+  /* The divider is drawn only while the card is hovered or keyboard focused. */
   .role-divider::after {
     content: '';
     position: absolute;
@@ -196,6 +189,9 @@ const domainTitle = Object.fromEntries(domains.map((d) => [d.id, d.title]));
     transform: scaleX(0);
     transform-origin: left center;
     pointer-events: none;
+  }
+  .role-row:is(:hover, :focus-visible) .role-divider::after {
+    transform: scaleX(1);
   }
   .role-link {
     display: flex;
@@ -227,9 +223,6 @@ const domainTitle = Object.fromEntries(domains.map((d) => [d.id, d.title]));
     }
     .role-divider::after {
       transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
-    }
-    .role-row:is(:hover, :focus-visible) .role-divider::after {
-      transform: scaleX(1);
     }
     /* Slow bottom wave; scaled from bottom-centre it overfills so no edge shows. */
     .role-glow {

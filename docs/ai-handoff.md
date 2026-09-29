@@ -29,6 +29,10 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   repaint FX. Promosi
   layer hanya saat section terlihat; FX dibatasi `contain: paint`. Frame
   reduced-motion tetap. Lihat `docs/assets.md` §Our Philosophy.
+- **Available Roles divider 29 Sep 2026:** enam kartu kini menyembunyikan garis
+  saat diam dan menggambarnya saat hover/fokus keyboard. Garis putih permanen di
+  bawah animasi dihapus; `verify.mjs` cek keenam state diam dan hover pada dua
+  baris. Geometri kartu tetap. Lihat `docs/assets.md` §Available Roles.
 - **Runtime deps sengaja cuma** `astro` + `gsap` + `three`. Jangan tambah library
   lain tanpa tanya; lazy-import yang berat.
 - **Commit terbaru (live di testing + production, HEAD `4fe4c19`):**

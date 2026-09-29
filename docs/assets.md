@@ -1297,6 +1297,14 @@ fonts and unrelated section geometry are retained.
 
 ## Available Roles — card redesign (26 September 2026)
 
+**Divider interaction update (29 September 2026):** The six cards now hide the
+divider at rest and reveal it from the left on hover or keyboard focus. The
+divider previously had a permanent white gradient underneath the animated
+segment, which made the two rows appear inconsistent. Reduced motion reveals it
+instantly. Card geometry is unchanged; `verify.mjs` checks all six resting states
+and hover on a card in each row. This user-approved interaction supersedes the
+static divider shown in the original PNG.
+
 The card grid was redesigned from Figma `1184:1475` (single card) and `1218:1385`
 (6-card container), reference PNGs
 `assets/assets recruitment page/available roles/Card Role {1..6}.png`
