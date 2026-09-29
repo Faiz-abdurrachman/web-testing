@@ -306,105 +306,58 @@ The hero art is no longer one flattened image. It is split into two full-frame
 
 ## Navbar
 
-- Figma node: `755:15219` (component set `530:13894`). The `assets/assets home page/navbar/`
-  tab exports and `assets/assets home page/hero section/Navbar.png` are all 5760 × 428 (the
-  1440 × 107 navbar at 4×).
-- Frame: full-width, `padding 24px 80px`, `space-between`. The logo is
-  54 × 58.8; the six tabs use an 18px gap and each tab `padding 8px 14px`. The
-  white CTA is Manrope SemiBold 18. `.desktop-menu` is `display: contents`, so
-  the `nav` and the CTA are **direct flex children of `.navbar-inner`** and
-  `space-between` spreads `logo | menu | CTA` with equal gaps at every width
-  (user revision 26 Sep 2026: pinning the whole menu+CTA block to the right left
-  a large, width-dependent void between the logo and "Home" — measured 135–347px
-  at the top and 215px scrolled). At 1440/1456 the gap is now ~150px when
-  scrolled, symmetric on both sides, and responsive 58px (1051px) → 239px
-  (≥1600px top).
-- The header is `position: fixed`. Its inner content is locked to a
-  `max-width: 1440px` container and centered, so on screens wider than the
-  Figma frame the logo and CTA stay on the 1440 grid (brand x = 80 at 1440,
-  320 at 1920, 640 at 2560) instead of stretching to the viewport edges.
-- At the very top the bar is **fully transparent** (no background, no blur) so it
-  reads as part of the hero, and its content **breathes wider** than the 1440
-  grid: `.navbar-inner` caps at `max-width: 1600px` with
-  `padding-inline: clamp(56px, 4.5vw, 80px)`. After an 8px scroll it **pulls
-  back to the 1440 grid and detaches into a floating glass capsule**
-  (`max-width: 1440px`, `padding-inline: 80px`, `margin-top: 10px`, `--nb-inset: 14px`, `--nb-radius: 999px` — both top
-  and bottom fully rounded): `.navbar::before` fades in a light
-  `rgb(12 8 20 / 34%)` tint with
-  `backdrop-filter: blur(28px) saturate(180%) brightness(1.07)`, an inset top
-  highlight, an inset bottom highlight and a soft drop shadow. The panel edges
-  **hug the logo and the CTA** instead of tracking the full content frame
-  (`left/right: max(--nb-inset, calc(50% - --nb-frame-panel/2))`, where
-  `--nb-frame-panel = --nb-frame - 2 * (--nb-pad - --nb-hug)` with
-  `--nb-hug: 24px`), so the capsule's rounded ends sit ~24–28px from the logo
-  (`brand x = 80`) and the Join Community button instead of ~80px (user revision
-  26 Sep 2026: the old ends read "agak jauh"). `--nb-pad` mirrors the
-  `.navbar-inner` padding (`clamp(56px, 4.5vw, 80px)` → 80px condensed →
-  `--page-gutter` ≤1050px) so the hug survives every breakpoint; `--nb-frame` =
-  1600px → 1440px once condensed. The earlier bottom-edge feather (`mask-image`)
-  was **removed** so
-  the capsule reads as a complete rounded pill (user revision 25 Sep 2026). The
-  production build keeps **both** `backdrop-filter` and `-webkit-backdrop-filter`
-  (esbuild `cssMinify` in `astro.config.mjs`); the default Lightning CSS pass
-  dropped the unprefixed one, which removed the blur in Firefox on the deployed
-  site.
-- **Living HUD additions** (interaction layer; the homepage PNG diff is
-  unaffected because `verify.mjs` hides `.navbar` before section screenshots):
-  - `is-scrolled` (threshold `y > 10` entering, `y > 6` leaving) reveals the glass
-    capsule (above); `is-condensed` (`y > 44` entering, `y > 36` leaving) shrinks
-    the bar to 72px (`--nb-h-condensed`, 64px ≤1050px), pulls the grid back and
-    scales the logo to 0.86; `is-ready` runs a staggered entrance after
-    `ds:splash-done` (`.brand`, each `.desktop-menu .nav-link` at
-    `--i * 55ms + 80ms`, CTA 0.5s). The small hysteresis band stops a resting
-    scroll position (or rubber-band overscroll) from chattering the classes,
-    which would restart the morph and the glint (user revision 26 Sep 2026).
-  - The indicator re-measures on `resize`, fonts-ready, `load` and the
-    `.navbar-inner` `transitionend`. The old per-frame `followFor(1000)` rAF loop
-    was **removed** (26 Sep 2026): the links keep identical `offsetLeft/Width/Top`
-    relative to `nav` across the morph, so the loop only forced a synchronous
-    layout each frame — it is now unnecessary. `scripts/navbar-audit.mjs`
-    (`npm run audit:navbar`) verifies the states, capsule containment, hug and
-    reduced-motion across 20 widths.
-  - **Springy, "agar-agar" transitions**: the bar geometry (top/left/right,
-    border-radius, max-width, padding, height) eases with `--nb-dur: 0.9s` +
-    `--nb-ease: cubic-bezier(0.16, 1, 0.3, 1)` (buttery ease-out-expo), so the
-    landing is soft rather than snapping.
-  - **No auto-hide**: the bar never slides away (the earlier hero-aware
-    hide-on-scroll-down was removed 25 Sep 2026 per user feedback — it made the
-    navbar vanish mid-hero). It only fades from transparent to glass.
-  - **Active tab** is a sliding `.nav-indicator` capsule (an absolutely positioned
-    `<span>` moved by JS between links): violet radial fill, inset top highlight,
-    outer violet glow and a 1px gradient rim (`mask-composite: exclude`). It
-    travels with a **jelly-spring** easing
-    (`--nb-spring: cubic-bezier(0.34, 1.56, 0.64, 1)`; `left 0.6s`, `width 0.5s`)
-    and tracks hover/focus before settling on `a.nav-link.active`; it is re-synced
-    on resize, `transitionend` and font load. The old 1px underline, the per-link
-    hover bolt and the anchored lightning bolt were all removed (user: no "garis
-    doang" / no bolt badge).
-  - **Navbar flash**: `.navbar-flash` runs a one-shot diagonal white sweep
-    (`nav-flash` keyframe, clipped to the capsule radius) when the bar first turns
-    `is-scrolled`. The hero's old white flare was **removed** and its glow moved
-    here (user: glow on the navbar, not the hero).
-  - **Cursor bloom** `.navbar::after` (radial violet, follows `--mx`) fades in on
-    fine pointers **once scrolled** (`is-scrolled.is-glowing`), so it never breaks
-    the transparent hero state.
-  - **Hover sheen**: `a.nav-link:not(.active)::before` sweeps a soft diagonal
-    highlight (animated `background-position`, clipped to the pill radius) via the
-    shared `nav-sheen` keyframe.
-  - **Navbar CTA only** (`:global(.navbar .button.white)`, so other white buttons
-    are untouched): on hover it lifts `translateY(-1px)`, adds a violet drop-glow,
-    and runs the same `nav-sheen` sweep; the white→violet colour swap from
-    `Button.astro` still applies.
-  - All of the above are inert under `prefers-reduced-motion: reduce` (no sheen,
-    no lift, no flash; geometry snaps), so `verify.mjs` / `responsive-audit.mjs`
-    stay clean.
-- Below 1050px the desktop menu is replaced by a full-screen `<details>` menu: a
-  borderless blurred overlay with a soft edge, JS-animated open/close, a
-  hamburger that morphs into an X, body scroll lock and a reduced-motion
-  fallback. Nav links get a rounded hover pill on both menus. In the floating
-  capsule the hamburger is a 44 × 44 rounded square (`border-radius: 14px`) that
-  gains a glass background + border once `is-scrolled`, with springy
-  (`cubic-bezier(0.68, -0.6, 0.32, 1.6)`) bar-to-X lines.
+- Figma node: `755:15178` (component set `530:13894`). Reference PNG:
+  `assets/Navbar.png` (7200 × 534 = the 1440 × 106.8 navbar at **5×**). The older
+  `assets/assets home page/hero section/Navbar.png` (5760 × 428, 4×) is the same
+  component set.
+- **Exact Figma reproduction (28 Sep 2026).** `Navbar.astro` was rewritten to the
+  reference. The bar is `position: fixed`; its content is locked to a centered
+  `max-width: 1440px` frame with `padding: 24px 80px` (logo 54 × 58.8 at x = 80,
+  y = 24). Layout is `space-between` between the logo and a **right group**
+  (`nav` + CTA). Measured off the PNG: "Home" label x ≈ 359.6, menu width ≈ 751,
+  menu→CTA gap **90px**, CTA right edge **1360** (width ≈ 173, height **42.1**).
+  On screens wider than 1440 the frame stays centered (brand x = 320 at 1920,
+  640 at 2560).
+- **Tabs.** Each tab `padding 8px 14px`, `gap 2px` between label and underline,
+  `gap 18px` between tabs, Manrope Medium 18/27. Inactive `#707070`
+  (Figma `fill_c809fc54`); active `#fff` with a **1px gradient underline**
+  `linear-gradient(163deg, #9b7bff 0%, #ede8ff 0%, #9b7bff 100%)` whose width
+  equals the label (`align-self: stretch` inside a hug column — Home 49px,
+  Recruitment = its label width). Non-active tabs keep an invisible underline so
+  every item shares one height. At **≥1301px** the tab frame widths are hardcoded
+  to the Figma component set (`Home 78, About Us 106, Recruitment 134, Hall of
+Frames 146, Partners 101, Contact 98`), so the menu is exactly **753px** (gap 18)
+  and nothing depends on font rasterisation; between 1051–1300px the gaps,
+  padding, font and menu→CTA gap scale fluidly with `clamp()` so the bar never
+  overflows.
+- **CTA.** `Button variant="white"` now mirrors Figma component set `97:483`: it
+  hugs its label, is pinned to `width 173px` + `height 42.1px` (so its left edge
+  lands at x = 1187 and right at 1360, matching the PNG), `padding 4px 16px`,
+  white fill, Manrope SemiBold 18 `#1e1e1e`, with a **2px gradient rim**
+  `148deg rgba(203,197,255,.5) → rgba(47,90,255,.5) → rgba(238,245,255,.5)` (via
+  `::after` + `mask-composite`), replacing the old flat `#cbc5ff` outline.
+- **Background.** At the top `.navbar::before` paints Figma's own fill
+  `linear-gradient(180deg, rgba(108,59,255,.1), rgba(11,7,18,0))`. Once scrolled
+  (`y > 10` entering, `y > 6` leaving) it cross-fades to `.navbar::after`, a
+  **translucent glass** backing (`rgb(6 5 10 / 45%)` + `backdrop-filter: blur(12px)
+saturate(130%)`) so the page shows through blurred instead of a solid box; both
+  pseudo-elements sit at `z-index: -1` behind the content. The production build
+  keeps both `backdrop-filter` and `-webkit-backdrop-filter` (esbuild
+  `cssMinify`).
+- **Removed in this revision:** the floating glass capsule, the `is-condensed`
+  morph, the sliding `.nav-indicator` capsule, the one-shot `.navbar-flash` sweep,
+  the cursor bloom and the per-link sheen. The bar no longer changes geometry on
+  scroll — only the backing fades in. `is-ready` still runs the staggered entrance
+  after `ds:splash-done` (`.brand`, each `.desktop-menu .nav-link` at
+  `--i * 55ms + 80ms`, CTA 0.5s), inert under reduced motion.
+- `scripts/navbar-audit.mjs` (`npm run audit:navbar`) was rewritten: it asserts the
+  exact 1440 geometry (logo 80/24, CTA right 1360 & height 42.1, menu→CTA gap 90,
+  underline width = label width), that the backing toggles on/off with no document
+  overflow across 20 widths, and that reduced motion is instant.
+- Below 1050px the desktop menu is replaced by the full-screen `<details>`
+  hamburger menu (JS-animated open/close, hamburger→X, body scroll lock,
+  reduced-motion fallback). Mobile link colours are aligned to Figma (`#707070`
+  inactive, `#fff` active with a violet gradient row).
 
 ## Images
 
@@ -1407,6 +1360,9 @@ PNG comparisons and `verify.mjs` hero geometry stay valid.
   audits.
 
 ## Mobile responsive + performance pass (25 September 2026)
+
+> Catatan navbar di section ini **sudah digantikan 28 Sep 2026** — lihat §Navbar
+> di atas (navbar persis Figma, backing kaca transparan, tanpa kapsul/morph).
 
 User: on a phone the headings are not Nasalization (licence, see `AGENTS.md`) and
 the navbar feels heavy / stutters while scrolling up and down.

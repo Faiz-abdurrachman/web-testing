@@ -1,19 +1,20 @@
 import { chromium } from '@playwright/test';
 import { mkdir, writeFile } from 'node:fs/promises';
 
-// Navbar scroll-transition audit. `responsive-audit.mjs` runs in reduced motion
-// and never scrolls, so it cannot see the `is-scrolled` / `is-condensed` states.
-// This one runs with motion enabled, drives the bar up and down at every
-// breakpoint (including the 760/761, 1050/1051, 1300/1301 and ~1356 hug edges)
+// Navbar audit. `responsive-audit.mjs` runs in reduced motion and never scrolls,
+// so it cannot see the `is-scrolled` backing. This one runs with motion enabled,
+// drives the bar up and down at every breakpoint (including the 1050/1051 edge)
 // and asserts:
-//   - the state classes toggle, and at the top the glass panel is fully hidden;
-//   - the floating capsule contains every bar item (no clipped logo/CTA/menu);
-//   - nothing overflows the viewport in the scrolled state;
-//   - reduced motion still toggles the state but with all transitions off.
-// It also records long tasks and frame deltas during the morph (report-only —
+//   - the Figma resting state: no backing at the top, exact 1440 geometry
+//     (logo 80/24, nav group right edge 1360, 90px menu→CTA gap, 42.1px CTA,
+//     active tab underlined by a 1px line matching the label width);
+//   - the scrolled state only adds a solid backing (no capsule, no morph);
+//   - the right menu shows for the breakpoint and nothing overflows;
+//   - reduced motion still toggles the state with all transitions off.
+// It also records long tasks and frame deltas during the scroll (report-only —
 // headless software rendering is noisy, use the numbers as relative signals).
 //
-// Usage: PREVIEW_URL=http://localhost:4321 node scripts/navbar-audit.mjs
+// Usage: PREVIEW_URL=http://localhost:4331 node scripts/navbar-audit.mjs
 const BASE = process.env.PREVIEW_URL || 'http://localhost:4321';
 const WIDTHS = [
   320, 360, 390, 480, 600, 760, 761, 820, 900, 1024, 1050, 1051, 1200, 1300,
@@ -35,56 +36,48 @@ const probe = (page) =>
     const nav = document.querySelector('.navbar');
     if (!nav) return { missing: true };
     const navRect = nav.getBoundingClientRect();
-    const before = getComputedStyle(nav, '::before');
-    const inner = getComputedStyle(nav.querySelector('.navbar-inner'));
     const px = (v) => parseFloat(v) || 0;
-    const capsule = {
-      top: navRect.top + px(before.top),
-      bottom: navRect.top + (navRect.height - px(before.bottom)),
-      left: navRect.left + px(before.left),
-      right: navRect.left + (navRect.width - px(before.right)),
+    const box = (el) => {
+      const r = el.getBoundingClientRect();
+      return {
+        x: +r.x.toFixed(1),
+        y: +r.y.toFixed(1),
+        w: +r.width.toFixed(1),
+        h: +r.height.toFixed(1),
+        right: +r.right.toFixed(1),
+        bottom: +r.bottom.toFixed(1),
+      };
     };
-    const children = [];
-    for (const sel of [
-      '.brand',
-      '.desktop-menu nav',
-      '.mobile-menu summary',
-      '.navbar .button.white',
-    ]) {
-      const el = document.querySelector(sel);
-      if (!el) continue;
+    const active = nav.querySelector('.desktop-menu a.nav-link.active');
+    const underline = active?.querySelector('.nav-underline');
+    const label = active?.querySelector('.nav-label');
+    const desktop = nav.querySelector('.desktop-menu');
+    const mobile = nav.querySelector('.mobile-menu');
+    const navGroup = nav.querySelector('.desktop-menu nav');
+    const button = nav.querySelector('.desktop-menu .button.white');
+    const vis = (el) => {
+      if (!el) return false;
       const st = getComputedStyle(el);
-      const rect = el.getBoundingClientRect();
-      if (st.display === 'none' || st.visibility === 'hidden') continue;
-      if (el.offsetParent === null || rect.width === 0 || rect.height === 0)
-        continue;
-      children.push({
-        sel,
-        top: +rect.top.toFixed(1),
-        bottom: +rect.bottom.toFixed(1),
-        left: +rect.left.toFixed(1),
-        right: +rect.right.toFixed(1),
-      });
-    }
+      return st.display !== 'none' && st.visibility !== 'hidden';
+    };
     return {
       isScrolled: nav.classList.contains('is-scrolled'),
-      isCondensed: nav.classList.contains('is-condensed'),
-      panelOpacity: before.opacity,
-      panelBlur: before.backdropFilter || before.webkitBackdropFilter || 'none',
-      panelRadius: +px(before.borderRadius).toFixed(0),
-      innerMaxWidth: Math.round(parseFloat(inner.maxWidth)),
+      navHeight: +navRect.height.toFixed(2),
+      beforeOpacity: getComputedStyle(nav, '::before').opacity,
+      afterOpacity: getComputedStyle(nav, '::after').opacity,
       docOverflow: document.documentElement.scrollWidth - innerWidth,
-      capsule: {
-        top: +capsule.top.toFixed(1),
-        bottom: +capsule.bottom.toFixed(1),
-        left: +capsule.left.toFixed(1),
-        right: +capsule.right.toFixed(1),
-      },
-      children,
+      desktopVisible: vis(desktop),
+      mobileVisible: vis(mobile),
+      brand: box(nav.querySelector('.brand')),
+      navGroup: navGroup ? box(navGroup) : null,
+      button: button ? box(button) : null,
+      activeText: active?.textContent.trim() ?? null,
+      underline: underline ? box(underline) : null,
+      label: label ? box(label) : null,
     };
   });
 
-async function morph(page, target) {
+async function glide(page, target) {
   await page.evaluate(
     (t) =>
       new Promise((resolve) => {
@@ -112,6 +105,22 @@ async function morph(page, target) {
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const close = (a, b, tol = 1) => Math.abs(a - b) <= tol;
+// The scroll listener is rAF-throttled and the backing fades over 0.3s, so wait
+// for both the class and the transitioned opacity instead of a fixed sleep.
+const settle = (page, scrolled) =>
+  page
+    .waitForFunction(
+      (want) => {
+        const nav = document.querySelector('.navbar');
+        if (!nav) return false;
+        if (nav.classList.contains('is-scrolled') !== want) return false;
+        return getComputedStyle(nav, '::after').opacity === (want ? '1' : '0');
+      },
+      scrolled,
+      { timeout: 2500 },
+    )
+    .catch(() => {});
 
 for (const route of ROUTES) {
   for (const width of WIDTHS) {
@@ -149,59 +158,103 @@ for (const route of ROUTES) {
       await context.close();
       continue;
     }
-    if (top.isScrolled || top.isCondensed)
-      failures.push(`${route}@${width}: classes set at the top`);
-    if (top.panelOpacity !== '0')
+    if (top.isScrolled)
+      failures.push(`${route}@${width}: is-scrolled set at the top`);
+    if (top.afterOpacity !== '0')
       failures.push(
-        `${route}@${width}: panel visible at top (${top.panelOpacity})`,
+        `${route}@${width}: backing visible at top (${top.afterOpacity})`,
+      );
+    if (top.beforeOpacity !== '1')
+      failures.push(
+        `${route}@${width}: top gradient missing (${top.beforeOpacity})`,
       );
 
-    const down = await morph(page, 700);
-    await sleep(1100);
-    const scrolled = await probe(page);
+    const expectedDesktop = width > 1050;
+    if (top.desktopVisible !== expectedDesktop)
+      failures.push(
+        `${route}@${width}: desktop menu visible=${top.desktopVisible} (want ${expectedDesktop})`,
+      );
+    if (top.mobileVisible !== !expectedDesktop)
+      failures.push(
+        `${route}@${width}: mobile menu visible=${top.mobileVisible} (want ${!expectedDesktop})`,
+      );
 
+    if (expectedDesktop) {
+      if (!top.button || !top.navGroup)
+        failures.push(`${route}@${width}: desktop pieces missing`);
+      else {
+        if (top.button.right > width + 1)
+          failures.push(
+            `${route}@${width}: CTA overflows (${top.button.right} > ${width})`,
+          );
+        if (top.brand.x < 0)
+          failures.push(
+            `${route}@${width}: logo overflows left (${top.brand.x})`,
+          );
+      }
+    } else if (!top.mobileVisible) {
+      failures.push(`${route}@${width}: no menu visible`);
+    }
+
+    // Exact Figma geometry at the reference width.
+    if (width === 1440) {
+      if (!close(top.navHeight, 106.8, 0.5))
+        failures.push(`1440: navbar height ${top.navHeight} (want 106.8)`);
+      if (!close(top.brand.x, 80) || !close(top.brand.y, 24))
+        failures.push(
+          `1440: logo at ${top.brand.x}/${top.brand.y} (want 80/24)`,
+        );
+      if (!close(top.brand.w, 54) || !close(top.brand.h, 58.8))
+        failures.push(
+          `1440: logo ${top.brand.w}×${top.brand.h} (want 54×58.8)`,
+        );
+      if (!top.button) failures.push('1440: CTA missing in the desktop menu');
+      else {
+        if (!close(top.button.right, 1360))
+          failures.push(`1440: CTA right ${top.button.right} (want 1360)`);
+        if (!close(top.button.h, 42.1, 0.6))
+          failures.push(`1440: CTA height ${top.button.h} (want 42.1)`);
+      }
+      if (top.navGroup && top.button) {
+        const gap = top.button.x - top.navGroup.right;
+        if (!close(gap, 90))
+          failures.push(`1440: menu→CTA gap ${gap.toFixed(1)} (want 90)`);
+      }
+      if (!top.underline || !top.label)
+        failures.push('1440: active tab has no underline');
+      else {
+        if (!close(top.underline.w, top.label.w, 0.6))
+          failures.push(
+            `1440: underline ${top.underline.w} vs label ${top.label.w}`,
+          );
+        if (!close(top.underline.h, 1, 0.5))
+          failures.push(`1440: underline height ${top.underline.h} (want 1)`);
+      }
+    }
+
+    const down = await glide(page, 700);
+    await settle(page, true);
+    const scrolled = await probe(page);
     if (!scrolled.isScrolled)
       failures.push(`${route}@${width}: is-scrolled missing after scroll`);
-    if (!scrolled.isCondensed)
-      failures.push(`${route}@${width}: is-condensed missing after scroll`);
-    if (scrolled.panelOpacity !== '1')
-      failures.push(`${route}@${width}: panel not opaque when scrolled`);
-    if (!/blur\(/.test(scrolled.panelBlur))
-      failures.push(`${route}@${width}: panel has no backdrop blur`);
-    if (scrolled.panelRadius < 100)
-      failures.push(
-        `${route}@${width}: panel not a capsule (${scrolled.panelRadius})`,
-      );
+    if (scrolled.afterOpacity !== '1')
+      failures.push(`${route}@${width}: backing not opaque when scrolled`);
+    if (scrolled.beforeOpacity !== '0')
+      failures.push(`${route}@${width}: top gradient still on when scrolled`);
     if (scrolled.docOverflow > 1)
       failures.push(
         `${route}@${width}: document overflows by ${scrolled.docOverflow}`,
       );
-    for (const child of scrolled.children) {
-      const out = {
-        top: +Math.max(0, scrolled.capsule.top - child.top).toFixed(1),
-        bottom: +Math.max(0, child.bottom - scrolled.capsule.bottom).toFixed(1),
-        left: +Math.max(0, scrolled.capsule.left - child.left).toFixed(1),
-        right: +Math.max(0, child.right - scrolled.capsule.right).toFixed(1),
-      };
-      if (Object.values(out).some((v) => v > 1))
-        failures.push(
-          `${route}@${width}: ${child.sel} escapes the capsule ${JSON.stringify(out)}`,
-        );
-    }
-    if (width >= 1440) {
-      const brand = scrolled.children.find((c) => c.sel === '.brand');
-      if (brand) {
-        const gap = +(brand.left - scrolled.capsule.left).toFixed(1);
-        if (Math.abs(gap - 24) > 2)
-          failures.push(`${route}@${width}: capsule hug gap ${gap} (want 24)`);
-      }
-    }
 
-    const up = await morph(page, 0);
-    await sleep(1100);
+    const up = await glide(page, 0);
+    await settle(page, false);
     const back = await probe(page);
-    if (back.isScrolled || back.isCondensed)
-      failures.push(`${route}@${width}: classes stuck after scrolling back`);
+    if (back.isScrolled)
+      failures.push(
+        `${route}@${width}: is-scrolled stuck after scrolling back`,
+      );
+    if (back.afterOpacity !== '0')
+      failures.push(`${route}@${width}: backing stuck after scrolling back`);
 
     rows.push({
       route,
@@ -235,19 +288,24 @@ for (const route of ROUTES) {
   await sleep(150);
   const reduce = await page.evaluate(() => {
     const nav = document.querySelector('.navbar');
-    const inner = document.querySelector('.navbar-inner');
+    const navLink = document.querySelector('.desktop-menu .nav-link');
     return {
       isScrolled: nav.classList.contains('is-scrolled'),
-      innerTransition: getComputedStyle(inner).transitionDuration,
-      panelTransition: getComputedStyle(nav, '::before').transitionDuration,
+      navTransition: getComputedStyle(nav).transitionDuration,
+      linkTransition: getComputedStyle(navLink).transitionDuration,
+      backingTransition: getComputedStyle(nav, '::after').transitionDuration,
     };
   });
   await context.close();
   if (!reduce.isScrolled) failures.push('reduce@1440: is-scrolled missing');
-  if (reduce.innerTransition !== '0s')
-    failures.push(`reduce@1440: inner transition ${reduce.innerTransition}`);
-  if (reduce.panelTransition !== '0s')
-    failures.push(`reduce@1440: panel transition ${reduce.panelTransition}`);
+  for (const [name, value] of Object.entries({
+    navbar: reduce.navTransition,
+    link: reduce.linkTransition,
+    backing: reduce.backingTransition,
+  })) {
+    if (value !== '0s')
+      failures.push(`reduce@1440: ${name} transition ${value}`);
+  }
   rows.push({ route: '/', width: 1440, reducedMotion: reduce });
 }
 
@@ -264,13 +322,13 @@ console.log(
 for (const r of rows) {
   if (r.reducedMotion) continue;
   console.log(
-    `  ${String(r.width).padStart(4)}  morph↓ max=${String(r.downMax).padStart(5)} p95=${String(r.downP95).padStart(5)}` +
-      ` long=${JSON.stringify(r.downLong)}  morph↑ max=${String(r.upMax).padStart(5)} p95=${String(r.upP95).padStart(5)} long=${JSON.stringify(r.upLong)}`,
+    `  ${String(r.width).padStart(4)}  glide↓ max=${String(r.downMax).padStart(5)} p95=${String(r.downP95).padStart(5)}` +
+      ` long=${JSON.stringify(r.downLong)}  glide↑ max=${String(r.upMax).padStart(5)} p95=${String(r.upP95).padStart(5)} long=${JSON.stringify(r.upLong)}`,
   );
 }
 if (failures.length === 0) {
   console.log(
-    'ALL PASS — states toggle, capsule contains every item, no overflow, reduced motion instant.',
+    'ALL PASS — Figma geometry exact at 1440, backing toggles, no overflow, reduced motion instant.',
   );
 } else {
   console.log(`FAILURES (${failures.length}):`);

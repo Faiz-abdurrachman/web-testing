@@ -162,17 +162,19 @@ Frame 1440, gutter 80. Skor = mean absolute channel difference vs PNG referensi
 \* Naik karena carousel project 3D (kartu tetangga menggantikan panel samping
 dekoratif — lihat §9).
 
-**Navbar** (`530:13894` / `755:15219`): fixed, inner `max-width:1440px` di-center,
-`padding 24px 80px`, tinggi 106.8. Di atas halaman transparan (`blur(8px)
-saturate(140%)`). Setelah scroll tetap **blur-only**: `blur(28px) saturate(180%)
-brightness(1.07)` dengan mask fade
-ke bawah, **tanpa** background panel dan **tanpa** garis tepi (dulu ada panel
-`rgb(5 5 7 / 58%)` + hairline; dihapus agar tidak terlihat seperti kotak).
-Hover link nav = pill membulat (`border-radius:999px`, bg putih 10%) dengan
-transisi. Menu mobile (≤1050) = **full-screen** dengan animasi buka/tutup
-(lihat §8b). Build memakai `vite.build.cssMinify: 'esbuild'` supaya
-`backdrop-filter` **unprefixed + `-webkit-`** dua-duanya ikut ke CSS produksi
-(lihat §16.17).
+**Navbar** (`755:15178` / component set `530:13894`; ref `assets/Navbar.png` = 5× of
+1440×106.8): fixed, inner `max-width:1440px` di-center, `padding 24px 80px`, tinggi
+106.8. Persis Figma: logo 54×58.8 di 80/24, grup kanan `menu (gap 18) → 90px → CTA`,
+link non-aktif `#707070`, aktif `#fff` + underline gradient 1px selebar label (Home
+49px), CTA putih `173 × 42.1` dengan rim gradient `148deg` 2px (`.button.white`). Di
+atas halaman ada wash gradient `180deg rgba(108,59,255,.1) → transparent`. Setelah
+scroll (`y > 10`) cuma cross-fade ke backing **kaca transparan**
+(`rgb(6 5 10 / 45%)` + `blur(12px) saturate(130%)`) — **tanpa** kapsul/flash/
+indikator/morph; ukuran bar tidak berubah. ≥1301px lebar tab di-hardcode ke Figma
+(menu 753) supaya geometri 1440 persis. Menu mobile (≤1050) = **full-screen** dengan
+animasi buka/tutup (lihat §8b), warna link diselaraskan. Build memakai
+`vite.build.cssMinify: 'esbuild'` supaya `backdrop-filter` **unprefixed + `-webkit-`**
+dua-duanya ikut ke CSS produksi (lihat §16.17). Audit: `npm run audit:navbar`.
 
 ---
 
@@ -485,10 +487,11 @@ projects 5.104 recruitment 2.174 footer 2.666
   hover button). Pola: `feat:` section didahului `chore: … reference assets`.
 - Checkpoint fitur recruitment = `ff7fe20` (recruitment lengkap + hover button);
   HEAD nambah commit docs setelahnya (`git log`).
-- Setelah checkpoint recruitment: polish navbar/menu + carousel — state scroll
-  navbar **blur-only** (tanpa panel/garis), menu mobile **full-screen** + animasi
-  buka/tutup, hover pill membulat, panah carousel **desktop kiri-kanan / mobile
-  bawah**, plus `scripts/responsive-audit.mjs`. Lihat `git log`.
+- Setelah checkpoint recruitment: polish menu + carousel — menu mobile
+  **full-screen** + animasi buka/tutup, panah carousel **desktop kiri-kanan / mobile
+  bawah**, plus `scripts/responsive-audit.mjs`. Navbar desktop **dirombak 28 Sep 2026
+  jadi persis Figma** (link `#707070`, underline aktif, kaca transparan saat scroll;
+  lihat `docs/assets.md` §Navbar + `docs/ai-handoff.md`). Lihat `git log`.
 - SEO/OG: origin `site` dari `SITE_URL` (default
   `https://data-sorcerers-community-sigma.vercel.app`); canonical + OG/Twitter + JSON-LD di
   `BaseLayout`; `robots.txt` (endpoint `src/pages/robots.txt.ts`); sitemap

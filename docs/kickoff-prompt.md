@@ -5,7 +5,7 @@ Copy-paste ini ke AI baru sebelum ngasih task. Ganti bagian `TASK` di bawah.
 ---
 
 ```text
-Kamu lanjut kerja di repo "Data Sorcerers" — static Astro site: homepage +
+Kamu lanjut kerja di rep^o "Data Sorcerers" — static Astro site: homepage +
 halaman Recruitment (+ 6 halaman detail role) + 6 halaman detail HoDS.
 Target: pixel-accurate ke Figma/PNG, HTML/CSS ringan.
 
@@ -71,9 +71,14 @@ Kondisi sekarang (detail di docs/ai-handoff.md):
   `src/scripts/motion.ts`): hero pinned scroll + partikel Three.js (lazy), idle
   karakter, scroll reveal, 3D tilt, magnetic button, cursor glow. Semua inert saat
   reduced motion.
-- Navbar "living HUD": transparan di hero → kapsul kaca melayang saat scroll
-  (`--nb-radius: 999px`), flash sweep, indikator tab aktif meluncur springy,
-  hamburger mobile. Tanpa auto-hide, tanpa petir, tanpa garis progress.
+- Navbar = **persis Figma** (`Navbar.astro`, node `755:15178` / `assets/Navbar.png`
+  = 5× frame 1440×106.8): `padding 24px 80px`, logo 54×58.8 di 80/24, grup kanan
+  `menu (gap 18) → 90px → CTA`, link non-aktif `#707070`, aktif `#fff` + underline
+  gradient 1px selebar label (Home 49px), CTA putih `173 × 42.1` rim `148deg` 2px.
+  ≥1301px lebar tab di-hardcode ke Figma (menu **753**) biar persis; saat scroll
+  cuma cross-fade ke backing kaca transparan (`rgb(6 5 10 / 45%)` + `blur(12px)`),
+  **tanpa** kapsul/indikator/flash/morph. Mobile ≤1050 = hamburger full-screen,
+  warna link diselaraskan. Audit: `npm run audit:navbar` (assert geometri 1440).
 - What We Do: starfield di-raster jadi tile PNG periodik
   (`public/images/starfield/starfield-*.png`, regen `npm run assets:starfield`)
   supaya scroll tidak berat; `will-change` hanya saat section dekat viewport.
@@ -87,8 +92,6 @@ Kondisi sekarang (detail di docs/ai-handoff.md):
   Hover pointer-reactive: pool radial ikut kursor + ember lean + divider draw +
   panah overshoot (gate `(pointer: fine)` + `no-preference`). Geometri di-assert
   di `verify.mjs` (section `851.375`, list `518.375`, kartu `413.33 × 239.19`).
-- Navbar mobile: `is-condensed` wajib `--nb-pad: var(--page-gutter)` di
-  `@media (max-width:1050px)` (kalau tidak, logo/burger kedorong 80px).
 - Detail role/HoDS: `main` `min-height: 100vh/100lvh` **hanya ≤900px** biar
   gradient mentok bawah (desktop tetap frame 1280 — `verify.mjs` assert di
   1440×1400); jangan naikkan ke base.

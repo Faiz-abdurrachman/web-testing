@@ -6,9 +6,17 @@ harus menebak dari git log. Ini dokumen hidup — update kalau ada perubahan bes
 Baca dulu, urut: `AGENTS.md` (aturan operasional) → `HANDOVER.md` (konteks
 panjang) → `docs/assets.md` (provenance per section) → file ini.
 
-## Ringkasan cepat (untuk AI baru) — HEAD `4fe4c19`, 28 Sep 2026
+## Ringkasan cepat (untuk AI baru) — 28 Sep 2026
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
+
+- **Navbar (PALING BARU, 28 Sep 2026):** `Navbar.astro` + `.button.white` dirombak
+  jadi **persis Figma** node `755:15178` / `assets/Navbar.png`. Ini **menggantikan**
+  desain "living HUD" — baca section "Baru saja: Navbar exact Figma redesign" di
+  bawah dulu. Ringkas: link `#707070`/aktif `#fff` + underline gradient 1px,
+  grup kanan `menu (gap 18) → 90px → CTA` (CTA `173×42.1`), tab di-hardcode di
+  ≥1301px (menu 753), scroll = backing kaca transparan `rgb(6 5 10 / 45%)` +
+  `blur(12px)`. `npm run audit:navbar` assert geometri 1440.
 
 - **Situs:** static **Astro 7** — 14 rute publik (`/`, `/recruitment`,
   `/recruitment/roles/{6}` 6 halaman, `/hods/{6}` 6 halaman) + `/lab/sound`
@@ -104,10 +112,46 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   (`scripts/verify-vt.mjs`): cek konteks JS persist, komponen re-init, cue
   `transition` tepat satu, modifier tidak di-intercept, dan deep-link hash.
 - **Deploy GANDA:** `git push origin main` → testing **dan** production.
-- **Next:** §"Next plan — untuk AI berikutnya" di bawah. Prioritas **Perf P0
-  sisa** (re-encode video hero, kompres `sorcerer-2x`, hindari `hero-poster` di
-  HP — target Home mobile ≤800 KB), lalu konten asli / halaman baru / Nasalization.
-  VT hardening & OG **sudah selesai**.
+- **Next:** §"Next plan — untuk AI berikutnya" di bawah. Perf P0 **selesai**
+  (Home mobile 0.98 MB); sisa **opsional** (AVIF hero art + ikon philosophy/glow),
+  konten asli, halaman baru, webfont Nasalization. VT hardening & OG **selesai**.
+
+## Baru saja: Navbar exact Figma redesign (28 Sep 2026)
+
+- **User minta `Navbar.astro` sama persis dengan Figma node `755:15178`
+  (component set `530:13894`) / `assets/Navbar.png` (7200×534 = frame
+  1440×106.8 @5×), konsisten di semua layar.** Ini **menggantikan** desain
+  "living HUD" (kapsul kaca melayang + indikator meluncur + flash + cursor bloom)
+  — section lama di bawah kini sejarah.
+- Perubahan `Navbar.astro`:
+  - Bar default = gradient Figma `180deg rgba(108,59,255,.1) → transparent`
+    (`.navbar::before`), bukan transparan polos.
+  - Link non-aktif `#707070` (Figma `fill_c809fc54`), aktif `#fff` + **underline
+    gradient 1px** `163deg #9b7bff → #ede8ff → #9b7bff` selebar label (Home 49px;
+    `align-self: stretch` dalam kolom hug). Item lain simpan underline tak
+    terlihat agar tinggi seragam.
+  - Layout = **grup kanan** (`nav` + CTA): tab `gap 18px`, **gap 90px** ke CTA,
+    `padding 24px 80px`, frame `max-width: 1440px`, tab `padding 8px 14px`,
+    Manrope Medium 18/27. **≥1301px lebar tab di-hardcode ke Figma** (Home 78,
+    About Us 106, Recruitment 134, Hall of Frames 146, Partners 101, Contact 98 →
+    menu **753**), CTA `width 173px` → geometri 1440 persis tanpa tergantung
+    rasterisasi font; 1051–1300px tetap fluid `clamp()`.
+  - `is-condensed` **dihapus**; scroll hanya cross-fade ke backing **kaca
+    transparan** `rgb(6 5 10 / 45%)` + `blur(12px) saturate(130%)`
+    (`.navbar::after`) — bukan solid gelap, jadi tidak terlihat kotak pekat.
+    `is-ready` entrance tetap.
+  - CTA `Button variant="white"` = Figma `97:483`: `width 173px`,
+    `height 42.1px`, `padding 4px 16px`, rim gradient `148deg` 2px via `::after` +
+    `mask-composite` (menggantikan outline rata `#cbc5ff`).
+  - Mobile: hamburger full-screen tetap; warna link diselaraskan (`#707070`
+    non-aktif, `#fff` aktif + baris gradient violet).
+- `scripts/navbar-audit.mjs` **ditulis ulang**: assert geometri persis di 1440
+  (logo 80/24, CTA kanan 1360 & tinggi 42.1, gap menu→CTA 90, underline = lebar
+  label), backing toggle + tanpa overflow di 20 lebar, reduce instant. Gate
+  hijau: `format:check`, `build` 15 halaman, `verify.mjs` (`browserErrors: []`),
+  `responsive-audit` 364 ALL PASS, `verify:vt` PASS, `seo:audit` PASS,
+  `audit:navbar` ALL PASS.
+- Referensi `assets/Navbar.png` (root `assets/`, belum di-track).
 
 ## Checkpoint terakhir (28 Sep 2026) — detail
 
@@ -293,12 +337,13 @@ Card Role *.png`, 1652×956). Base `#2a2a2c`, glow violet kanan-bawah
 - Semua gate hijau: `format:check`, `build` (14 halaman), `verify.mjs`
   (`browserErrors: []`), `responsive-audit.mjs` (364 combos), `seo:audit`.
 - **Terbaru:** splash jadi **preloader asli** (nunggu three + video + fonts),
-  navbar "living HUD", perf What We Do (starfield tile + `perf:audit`).
+  perf What We Do (starfield tile + `perf:audit`). Navbar "living HUD" →
+  **digantikan 28 Sep 2026** oleh navbar persis Figma (lihat section di atas).
 - **Glow CTA (home + recruitment page) satu arah:** `cta-glow-sweep` — glow
   geser kiri→kanan terus berulang (bukan ayun/ombak), opacity turun cuma ke
   `0.5` di seam jadi tak pernah hilang; dipakai di `Recruitment.astro` dan
   `Cta.astro`, pause lewat `.is-idle` saat off-screen.
-- **Kapsul navbar hug logo/CTA:** tepi kapsul `is-scrolled` gak lagi ikut frame
+- **(LAMA — digantikan 28 Sep 2026) Kapsul navbar hug logo/CTA:** tepi kapsul `is-scrolled` gak lagi ikut frame
   konten penuh, tapi `--nb-frame-panel` (= frame − 2×(`--nb-pad` − `--nb-hug`,
   24px)) → ujung kapsul ~24–28px dari logo & tombol Join Community (dulu ~80px).
 - **Navbar proporsional + mulus (26 Sep 2026):** `.desktop-menu` jadi
@@ -395,7 +440,7 @@ memberi `section[id]` / `main[id]` `scroll-margin-top: 110px` (semua section, bi
 tidak tertutup navbar). Terukur: fresh `/#domains` → `domainsTop` 110 (dulu 1100),
 reload sama, dan browser Back dari detail kembali ke posisi section sebelumnya.
 
-## Baru saja: Navbar "living HUD" (kaca melayang + flash + indikator meluncur)
+## Baru saja: Navbar "living HUD" (kaca melayang + flash + indikator meluncur) — DIGANTIKAN 28 Sep 2026
 
 **Permintaan user (25 Sep 2026):** referensi gaya navbar magelang-ai-expo tapi
 lebih glass/blur; di paling atas transparan menyatu hero, saat scroll jadi
@@ -782,9 +827,9 @@ Keluhan: heading di HP bukan Nasalization (lisensi — jangan diakali, lihat
   dan `ScrollTrigger.config({ ignoreMobileResize: true })` supaya trigger tidak
   re-measure saat address bar berubah. Sekarang hero HP keluar natural (idle bob
   figur tetap); pinned sequence desktop tidak diubah.
-- Navbar: `backdrop-filter` hanya saat `.is-scrolled::before` (tak ada layer blur
-  di atas); `≤760px` blur 12px tanpa saturate/brightness dan morph jadi instant
-  (bukan transisi layout 0.9s).
+- Navbar (pass 25 Sep 2026 — **digantikan 28 Sep 2026**): dulu `backdrop-filter`
+  hanya saat `.is-scrolled::before`, `≤760px` blur 12px tanpa saturate/brightness
+  dan morph instant. Sekarang lihat §"Baru saja: Navbar exact Figma redesign".
 - Hero HP: scrim dua arah + `text-shadow` + figur satu aturan (`height:72%`,
   `object-position:59% bottom`) biar copy kebaca di 320–390 tanpa bikin karakter
   kecil/geser; hero portrait `min-height:100lvh` supaya selalu mengisi layar.
@@ -947,9 +992,10 @@ node_modules/.vite && npx astro dev`, lalu hard refresh tab. Dev server Astro
   `opacity: 0`); yang tampil cuma `background.webp` + `figure.webp`. Jadi di HP
   hero cuma gambar, bukan bug / bukan aset lama. Particle Three.js juga
   desktop-only (`min-width: 768px`, sama dengan pinned sequence).
-- **Navbar HP** (`≤760px`): blur sengaja 12px tanpa `saturate`/`brightness` dan
-  morph instant. Jangan naikkan lagi ke 28px + transisi layout 0.9s — itu yang
-  bikin scroll patah-patah.
+- **Navbar:** blur backing sengaja cukup 12px tanpa `saturate`/`brightness` dan
+  **tanpa morph layout** (revisi 28 Sep 2026: kapsul/`is-condensed` dihapus).
+  Jangan tambah lagi 28px blur + transisi layout 0.9s — itu yang bikin scroll
+  patah-patah.
 - Aset hero lama `public/images/hero-2880.webp` (2880×1806, tak direferensikan
   sejak `c53d84d`) sudah dihapus; backup di
   `/home/faiz/ds/ds-backup/hero-2880.webp`.

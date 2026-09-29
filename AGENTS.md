@@ -189,9 +189,9 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   the splash or motion init.
 - **Mobile perf is load-bearing.** The hero Three.js particles are gated to
   `min-width: 768px` (they used to run on phones and janked scrolling). The
-  navbar's `backdrop-filter` only paints on `.is-scrolled::before`, and `≤760px`
-  uses a 12px blur with an instant morph — do not reintroduce the 28px
-  `saturate`/`brightness` blur or the 0.9s layout transitions. Detail pages get
+  navbar's `backdrop-filter` only paints on `.is-scrolled::after` (a 12px blur;
+  there is no layout morph any more) — do not reintroduce a 28px
+  `saturate`/`brightness` blur or 0.9s height/padding transitions. Detail pages get
   `env(safe-area-inset-top)`; keep `viewport-fit=cover` in `BaseLayout`. The
   mobile heroes use `min-height: 100svh` (not `dvh`) and `motion.ts` runs
   `ScrollTrigger.config({ ignoreMobileResize: true })` — both are needed or the
@@ -199,10 +199,19 @@ When adding/changing a section, update `docs/assets.md` and the relevant
 - **Multi-line CSS comments break Prettier idempotency.** A `/* ... */` block
   whose continuation lines Prettier wants to re-indent never stabilises, so
   `format:check` keeps failing. Keep CSS comments on **one line**.
-- **Custom-property specificity trap.** `.navbar.is-condensed { --nb-pad: 80px }`
-  (0,2,0) beats `@media (max-width:1050px) { .navbar { --nb-pad: … } }` (0,1,0),
-  so the desktop 80px leaked onto phones once the capsule condensed. Reset the
-  variable inside the media query at equal specificity (later wins).
+- **Navbar mirrors Figma exactly (`Navbar.astro`).** It reproduces node
+  `755:15178` (component set `530:13894`) / `assets/Navbar.png` (5×): 1440 frame,
+  `padding 24px 80px`, logo 54×58.8 at 80/24, a right group `menu → 90px → CTA`,
+  inactive links `#707070`, active link `#fff` with a 1px gradient underline whose
+  width equals the label (`align-self: stretch` inside a hug column), CTA `42.1px`
+  tall with a `148deg` 2px gradient rim. Desktop `≥1301px` hardcodes the Figma tab
+  widths (Home 78, About Us 106, Recruitment 134, Hall of Frames 146, Partners 101,
+  Contact 98 → menu 753, gap 18) and the CTA `173px`, so the 1440 geometry is exact
+  regardless of font rasterisation. There is **no** floating glass capsule,
+  sliding indicator, flash or `is-condensed` morph — scrolling only fades in a
+  translucent glass backing (`rgb(6 5 10 / 45%)` + `blur(12px)` on
+  `.is-scrolled::after`). `scripts/navbar-audit.mjs` (`npm run audit:navbar`)
+  asserts the exact 1440 geometry; update it if the design intentionally changes.
 - **Detail `<main>` shorter than the viewport leaks the body colour** as a black
   strip under the gradient (phones with the browser chrome hidden). Fix with
   `min-height: 100vh/100lvh` **only at `≤900px`** — `verify.mjs` sets the viewport
@@ -258,9 +267,16 @@ When adding/changing a section, update `docs/assets.md` and the relevant
 - **Available Roles glow wave diperkecil (`d26f81e`).** `@keyframes
 role-glow-wave` = `scale: 1 → 1.04` saja (drift `translate ±6%` dibuang) →
   ukuran glow balik mendekati frame statis (sebelumnya `1.15 → 1.22`).
-- **Navbar mobile proporsional (`12c683d`).** Di `@media (max-width:1050px)`
-  tambah `.navbar.is-condensed { --nb-pad: var(--page-gutter) }` — aturan base
-  (80px) menang specificity, bikin logo/burger kedorong 80px saat scroll.
+- **Navbar redesign → exact Figma (28 Sep 2026).** `Navbar.astro` rewritten to
+  match node `755:15178` / `assets/Navbar.png`: gradient top wash
+  (`180deg rgba(108,59,255,.1) → transparent`), inactive links `#707070`, active
+  link `#fff` + a 1px gradient underline (Home `49px`; width = label width),
+  right-aligned `menu → 90px → CTA`, CTA `42.1px` with a `148deg` 2px gradient rim
+  (`.button.white`), and **no** glass capsule / sliding indicator / `is-condensed`
+  morph. Desktop `≥1301px` hardcodes the tab widths + CTA `173px` for an exact
+  `menu 753`; scrolled state only fades in a translucent `rgb(6 5 10 / 45%)` +
+  `blur(12px)` glass backing. `scripts/navbar-audit.mjs` rewritten to assert this
+  geometry. Mobile keeps the full-screen hamburger, link colours aligned to Figma.
 - **Detail role/HoDS mobile (`3dc3432`, `d0fd3be`).** Bottom glow wave baru
   (`glow.svg` satu arah) + `main` `min-height: 100vh`/`100lvh` **khusus ≤900px**
   supaya gradient mentok bawah. Jangan naikkan ke base: `verify.mjs` assert
@@ -275,8 +291,7 @@ role-glow-wave` = `scale: 1 → 1.04` saja (drift `translate ±6%` dibuang) →
   FAQ → Snippets → CTA → Footer) + halaman detail role
   (`/recruitment/roles/{id}`, di-link dari Available Roles) + hover button.
   Detail HoDS (home) tetap.
-- Polish terakhir (setelah checkpoint recruitment): navbar state scroll jadi
-  **blur-only** (tanpa panel gelap / garis kotak), menu hamburger **full-screen**
+- Polish terakhir (setelah checkpoint recruitment): menu hamburger **full-screen**
   dengan animasi buka/tutup JS (fallback instant saat `prefers-reduced-motion`)
   plus hover pill membulat; panah carousel **kiri-kanan di desktop, bawah di
   mobile**; skrip `scripts/responsive-audit.mjs` (14 halaman × 26 lebar) ALL PASS.
