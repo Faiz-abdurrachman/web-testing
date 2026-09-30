@@ -57,19 +57,26 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   baris. Geometri kartu tetap. Lihat `docs/assets.md` §Available Roles.
 - **Runtime deps sengaja cuma** `astro` + `gsap` + `three`. Jangan tambah library
   lain tanpa tanya; lazy-import yang berat.
-- **Commit terbaru (30 Sep 2026; pastikan `main` = `origin/main` = `production/main` — `git log`):**
-  - `fbc440f` **Partners page** — rute `/partners` + `PartnersHero`/`OurPartners`/
+- **Commit terbaru (30 Sep 2026; `main` = `origin/main` = `production/main` =
+  `5329a4a`, sudah sinkron):**
+  - `5329a4a` **hapus token Figma hardcoded** — `scripts/figma.mjs` dulu punya
+    PAT di fallback; push ke production ditolak GitHub Push Protection. Fix:
+    token dibuang (pakai env `FIGMA_API_KEY` / config MCP) + history
+    `86b49c6..HEAD` di-rewrite (`git filter-branch`) membuang secret. **SHA lama
+    di dokumen ini tidak berlaku lagi — pakai `git log` sebagai acuan.** Token
+    lama **wajib di-revoke** di Figma (Settings → Personal access tokens).
+  - `68b57d5` **Partners page** — rute `/partners` + `PartnersHero`/`OurPartners`/
     `WhyPartners` + `data/partners.ts`; nav "Partners" aktif; aset via
     `npm run assets:partners`; assertion `partnersGeometry` di `verify.mjs`.
-  - `4f4954c` **About Philosophy/Ecosystem wide-screen** — hapus cap zoom 2×
+  - `72a2cbf` **About Philosophy/Ecosystem wide-screen** — hapus cap zoom 2×
     (canvas selalu isi viewport), gradient About pindah ke canvas; lihat
     "Baru saja" di bawah.
-  - `781278e` **docs** — handoff About Us + gotcha gradient Figma MCP.
-  - `28ce3b8` **glow About = fill per-section Figma** — `Philosophy`/`Ecosystem`
+  - `c0ee241` **docs** — handoff About Us + gotcha gradient Figma MCP.
+  - `5e52601` **glow About = fill per-section Figma** — `Philosophy`/`Ecosystem`
     pakai `linear-gradient(...)` hasil fit PNG (lihat "Baru saja" di bawah),
     plus `OurEcosystem` (baseline SVG) + assertion `aboutEcosystem` di
     `verify.mjs`.
-  - `dd87041` **About Us page sections 1–4** — `AboutHero`, `VisiMisi`,
+  - `f693196` **About Us page sections 1–4** — `AboutHero`, `VisiMisi`,
     `Philosophy` (`variant="about"`), `OurEcosystem` (pipeline
     `align-items: flex-end`, inset header 10px).
   - `52e815a` **Navbar persis Figma** (`755:15178`) — lihat section "Navbar".
