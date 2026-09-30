@@ -1,5 +1,39 @@
 # Asset provenance
 
+## Partners page (30 September 2026)
+
+- Route `/partners`, composed of `PartnersHero`, `OurPartners`, `WhyPartners`
+  (+ the shared `Footer`). Figma file `RntmRWAgLrh5utgzcjrUik`, page node
+  `1331:15712`, 1440 design. Section heights: Hero `1301:3740` **665**, Our
+  Partners `1297:3541` **1075**, Why DS `1331:15711` **670**, Footer **556** —
+  total **2966** (`assets/partners page/Partners Page.png` 7200×14830 @5×).
+- Hero: `padding 242px 80px 160px`, gap 14, centred; pill `rgba(255,255,255,.15)`
+  radius 32 (Manrope 400 12/18); headline Nasalization 400 **80/102**
+  ("Let's Build Something / Meaningful Together."). Background = the two-hand
+  artwork `Hero Section - Partners1.png` (5760×2660, the clean art the user
+  supplied; the earlier imageRef `e79b1f65…` export was a different render).
+- Our Partners: `padding 80px`, gap 100, `#050507`. Three groups (gap 42) —
+  Industry (2×5 cards), Academia (1×5), Community (1×5). Group header = a radial
+  pill (`circle at 8% 19%, #6C3BFF → #3C2188`) + a 1px `90deg #9B7BFF → transparent`
+  rule. Cards: 5-column grid, gap 20, **240×116**, radius 20. The card art is the
+  reference card itself (`Frame 2655.png` → `partner-card-bg.webp`): the Figma
+  "swoosh" IMAGE-SVG export did **not** reproduce the full violet gradient, so the
+  rendered card is used directly. Logos are **placeholders** (the Data Sorcerers
+  mark, `partner-logo.webp` from `Logo_transparan (1) 4.png`) for all 20 slots.
+- Why DS: `padding 80px`, gap 58, top-aligned 263px header (pill + 80/102
+  headline) then a 4×309.5px card row (gap 14, max-width 1280). Card: `padding 28`,
+  gap 20, `#262626`, 1px `135deg #EDE8FF → #2E276C → #EDE8FF` rim (mask-composite)
+  and a bottom-right violet glow (`radial-gradient(108% 48% at 100% 100%)`, fitted
+  from the reference pixels). Icons from the four `ChatGPT Image … 2*.png` marks
+  (Talent/Research/Innovation/Community).
+- Responsive: `WhyPartners` uses 4 columns ≥1366px, 3 at 1051–1365, 2 at
+  701–1050, 1 below; `OurPartners` 5 → 3 (≤1050) → 2 (≤700). Nav "Partners" is now
+  a real link (`/partners`); the navbar tab widths stay the Figma values.
+- Regenerate served art with `npm run assets:partners`
+  (`scripts/generate-partners-assets.mjs`). `verify.mjs` asserts the section
+  heights (665/1075/670), card sizes (240×116, 309.5×189), 3 group pills and 20
+  cards at 1440.
+
 ## About Us — Philosophy & Our Ecosystem (30 September 2026)
 
 - Figma file `RntmRWAgLrh5utgzcjrUik`, section `1331:15784` and pipeline
@@ -27,10 +61,24 @@
 - Pipeline header padding was restored to the Figma 10px inset, moving the
   pipeline down 20px to y=374 without changing the 880px section height.
 - Wide viewport pass: the inner canvases of Philosophy and Ecosystem scale
-  continuously from a 1456px viewport, capped at 2×. Their section gradients
-  remain full viewport width; scaling the whole `body` created black gutters and
-  misaligned the section edge at browser zoom levels. The 1440px Figma geometry
-  stays unchanged.
+  continuously from a 1441px viewport with an **uncapped** `zoom: calc(100vw /
+1440px)`, so the canvas always fills the viewport width. The 1440px Figma
+  geometry stays unchanged. Scaling the whole `body` created black gutters and
+  misaligned the section edge at browser zoom levels.
+- **Philosophy wide-screen fix (30 September 2026).** The About variant's
+  `linear-gradient` was moved from `.philosophy.is-about` onto its **zoomed
+  canvas**, so the glow, artwork and content scale together from the 1440px
+  reference instead of the artwork growing while the full-viewport gradient
+  stayed put. The old `.illustration { left: calc((1440px - 100cqw) / 2) }`
+  anchor (which multiplied with the canvas `zoom`) pushed the artwork off the
+  left edge above 1920px; for the About variant it is now pinned to `left: 0`.
+  The `zoom` was originally capped at 2×, which froze the canvas at 2880px and
+  left `#050507` gutters on the edges once the CSS viewport exceeded 2880px
+  (e.g. browser zoom-out); the cap was removed so the glow reaches the edges at
+  any width (verified gutter 0 from 1440 to 5120px). The
+  Philosophy↔Ecosystem seam stays continuous (channel Δ ≤ 2 at 1440/1920/2560).
+  `verify.mjs` asserts the zoom, canvas width, artwork left/right containment at
+  1920px and full-bleed (left 0 / right = clientWidth) at 3200px.
 - At 1051–1284px the five columns shrink proportionally within the section,
   while the pipeline keeps its 426px frame: all connector bottoms remain at
   y=782 and the baseline at y=799. At 701–1050px the

@@ -6,11 +6,17 @@ harus menebak dari git log. Ini dokumen hidup — update kalau ada perubahan bes
 Baca dulu, urut: `AGENTS.md` (aturan operasional) → `HANDOVER.md` (konteks
 panjang) → `docs/assets.md` (provenance per section) → file ini.
 
-## Ringkasan cepat (untuk AI baru) — 28 Sep 2026
+## Ringkasan cepat (untuk AI baru) — 30 Sep 2026
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
 
-- **About Us Page (PALING BARU, 30 Sep 2026):** `/about` telah diimplementasikan
+- **Partners Page (PALING BARU, 30 Sep 2026):** `/partners` (`PartnersHero` +
+  `OurPartners` + `WhyPartners`, komponen & `data/partners.ts` baru). Nav
+  "Partners" kini link asli. Geometri persis referensi (halaman 1440×2966: hero
+  665 / Our Partners 1075 / Why 670 / footer 556), kartu partner 240×116 (grid 5) & kartu Why 309.5×189 (baris 4). **Logo partner masih placeholder DS**
+  (20 slot). Aset: `npm run assets:partners`. Figma page `1331:15712`. Detail:
+  §"Baru saja: Partners page" + `docs/assets.md` §Partners page.
+- **About Us Page (selesai 30 Sep 2026):** `/about` telah diimplementasikan
   dari Hero sampai Section 4 secara presisi ke Figma (`RntmRWAgLrh5utgzcjrUik`):
   - Section 1: `AboutHero.astro` (`Hero Section - About Us`).
   - Section 2: `VisiMisi.astro` (`1248:14797`, tarot card, deskripsi, checklist misi).
@@ -26,10 +32,10 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   ≥1301px (menu 753), scroll = backing kaca transparan `rgb(6 5 10 / 45%)` +
   `blur(12px)`. `npm run audit:navbar` assert geometri 1440.
 
-- **Situs:** static **Astro 7** — 15 rute publik (`/`, `/about`, `/recruitment`,
-  `/recruitment/roles/{6}` 6 halaman, `/hods/{6}` 6 halaman) + `/lab/sound`
-  internal (`noindex`, di luar sitemap). Target: **pixel-accurate ke PNG
-  referensi**, HTML/CSS ringan (bukan flatten screenshot).
+- **Situs:** static **Astro 7** — 16 rute publik (`/`, `/about`, `/recruitment`,
+  `/partners`, `/recruitment/roles/{6}` 6 halaman, `/hods/{6}` 6 halaman) +
+  `/lab/sound` internal (`noindex`, di luar sitemap). Target: **pixel-accurate ke
+  PNG referensi**, HTML/CSS ringan (bukan flatten screenshot).
 - **Perbaikan lokal 29 Sep 2026:** sudut glow kartu HoDS yang menjadi kotak
   saat hover diperbaiki dengan `.domain-card-inner` sebagai clip wrapper tanpa
   transform; halo luar memakai radial gradient blur, outer card tetap memegang
@@ -51,7 +57,13 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   baris. Geometri kartu tetap. Lihat `docs/assets.md` §Available Roles.
 - **Runtime deps sengaja cuma** `astro` + `gsap` + `three`. Jangan tambah library
   lain tanpa tanya; lazy-import yang berat.
-- **Commit terbaru (30 Sep 2026; `main` lokal unggul beberapa commit dari `origin`/production `86b49c6`, belum di-push — lihat `git log`):**
+- **Commit terbaru (30 Sep 2026; pastikan `main` = `origin/main` = `production/main` — `git log`):**
+  - `fbc440f` **Partners page** — rute `/partners` + `PartnersHero`/`OurPartners`/
+    `WhyPartners` + `data/partners.ts`; nav "Partners" aktif; aset via
+    `npm run assets:partners`; assertion `partnersGeometry` di `verify.mjs`.
+  - `4f4954c` **About Philosophy/Ecosystem wide-screen** — hapus cap zoom 2×
+    (canvas selalu isi viewport), gradient About pindah ke canvas; lihat
+    "Baru saja" di bawah.
   - `781278e` **docs** — handoff About Us + gotcha gradient Figma MCP.
   - `28ce3b8` **glow About = fill per-section Figma** — `Philosophy`/`Ecosystem`
     pakai `linear-gradient(...)` hasil fit PNG (lihat "Baru saja" di bawah),
@@ -124,17 +136,65 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   `prefers-reduced-motion: reduce`**.
 - **Gate sebelum commit (semua harus exit 0):** `npm run format:check`,
   `npm run build` (0 error, **16 halaman**), `PREVIEW_URL=… node scripts/verify.mjs`
-  (`browserErrors: []`), `node scripts/responsive-audit.mjs` (**15 rute × 26 lebar
-  = 390 combos**), `npm run seo:audit`. **Penting:** `verify.mjs` pakai `page.goto` penuh, jadi
+  (`browserErrors: []`), `node scripts/responsive-audit.mjs` (**16 rute × 26 lebar
+  = 416 combos**), `npm run seo:audit` (17 halaman, sitemap 16). **Penting:** `verify.mjs` pakai `page.goto` penuh, jadi
   **tidak menguji navigasi klien** — pakai **`npm run verify:vt`**
   (`scripts/verify-vt.mjs`): cek konteks JS persist, komponen re-init, cue
   `transition` tepat satu, modifier tidak di-intercept, dan deep-link hash.
 - **Deploy GANDA:** `git push origin main` → testing **dan** production.
 - **Next:** §"Next plan — untuk AI berikutnya" di bawah. **About Us sections 1–4
-  selesai** (`/about`, 15 rute publik); Perf P0 **selesai** (Home mobile 0.98 MB);
-  sisa **opsional** (AVIF hero art + ikon philosophy/glow), konten asli, halaman
-  **Hall of Frames / Partners / Contact** (nav masih `aria-disabled`), webfont
-  Nasalization. VT hardening & OG **selesai**.
+  selesai**; **Partners page selesai** (`/partners`, 16 rute publik); Perf P0
+  **selesai** (Home mobile 0.98 MB); sisa **opsional** (AVIF hero art + ikon
+  philosophy/glow), konten asli, halaman **Hall of Frames / Contact** (nav masih
+  `aria-disabled`), webfont Nasalization. VT hardening & OG **selesai**.
+
+## Baru saja: Partners page (30 Sep 2026)
+
+- **Rute baru `/partners`** (`src/pages/partners.astro`) — komponen
+  `PartnersHero`, `OurPartners`, `WhyPartners` + `data/partners.ts` + Footer/
+  Motion. Figma `RntmRWAgLrh5utgzcjrUik` page `1331:15712` (hero `1301:3740`,
+  Our Partners `1297:3541`, Why DS `1331:15711`).
+- **Geometri persis referensi** (full page 1440×**2966**): hero **665**, Our
+  Partners **1075**, Why DS **670**, Footer 556. Kartu partner 240×116 (grid 5),
+  kartu Why 309.5×189 (baris 4). Di-assert di `verify.mjs` (`partnersGeometry`).
+- **Aset** (`npm run assets:partners`, `scripts/generate-partners-assets.mjs`):
+  hero bg dari `Hero Section - Partners1.png` (art tangan bersih dari user,
+  5760×2660); **kartu partner memakai artwork referensi `Frame 2655.png`**
+  karena export swoosh Figma tidak mereproduksi gradient penuh; ikon Why dari 4
+  `ChatGPT Image … 2*.png`; logo partner = **placeholder** DS
+  (`Logo_transparan (1) 4.png`) untuk 20 slot.
+- **Glow Why card** di-fit dari piksel referensi: `radial-gradient(108% 48% at
+100% 100%)`; header 263px **top-align** (bukan center).
+- Nav "Partners" kini link asli (bukan `aria-disabled`); label lain tak berubah.
+  `responsive-audit` +1 rute (16×26=416 ALL PASS), `seo:audit` 17 halaman
+  (sitemap 16). Detail: `docs/assets.md` §Partners page.
+
+## Baru saja: About Philosophy wide-screen composition fix (30 Sep 2026)
+
+- **Keluhan user:** di section Our Philosophy (`/about`), artwork menyentuh glow /
+  terpotong di lebar desktop. Referensinya = komposisi 1440 (artikel punya jarak
+  tetap ke glow). Saat zoom out kelihatan benar, di 100% "mepet".
+- **Akar masalah:** `zoom` pada `.canvas` menskalakan artwork + konten, tapi
+  `linear-gradient` section ada di `.philosophy` (full-viewport) sehingga tidak
+  ikut berskala. Ditambah `.illustration { left: calc((1440px - 100cqw) / 2) }`
+  di ≥1441px yang **dikalikan `zoom`** → artwork terdorong keluar kiri (di 2560
+  tinggal sliver, di 3440 sudah hilang).
+- **Fix:** gradient About dipindah ke `.philosophy.is-about .canvas` (ikut
+  `zoom`), jadi glow + artwork + konten berskala seragam dari referensi 1440;
+  breakpoint `zoom` 1456 → **1441** supaya canvas mengisi viewport tepat; dan
+  `.philosophy.is-about .illustration { left: 0 }` menetralkan anchor `cqw`.
+- **Tindak lanjut — bar hitam kiri-kanan (30 Sep 2026).** `zoom` masih di-cap
+  `min(2, …)`, jadi di CSS viewport > 2880px (mis. browser zoom-out) canvas
+  beku di 2880 dan tersisa gutter `#050507` di pinggir (≈7px di 2894, 480px di
+  3840). **Cap dihapus** di Philosophy About **dan** Our Ecosystem
+  (`zoom: calc(100vw / 1440px)`) → gutter 0 di 1440–5120px. `verify.mjs` cek
+  full-bleed di 3200px.
+- **Hasil terukur:** art-right→h2 gap konsisten −6…−12px sama seperti referensi
+  di 1440–2880; seam Philosophy↔Ecosystem tetap nyambung (Δ ≤ 2/kanal di
+  1440/1920/2560); 1440 MAE vs PNG 1.42. `verify.mjs` nambah assertion (zoom
+  canvas, lebar canvas, containment artwork) di blok `aboutWide` (1920px).
+  `responsive-audit` 390 combos ALL PASS, `verify.mjs` EXIT 0.
+  Detail: `docs/assets.md` §About Us — Philosophy & Our Ecosystem.
 
 ## Baru saja: About Us glow = fill per-section Figma (30 Sep 2026)
 
@@ -1107,9 +1167,10 @@ sound atau navigasi; detail P0–P2 ada di "Perf audit & rencana" di atas.
    belum perlu. Smoke: **`npm run verify:vt`**.
 3. **Konten:** data project asli (`src/data/projects.ts` masih 4 placeholder) dan
    tanggal recruitment (`SelectionTimeline.astro` masih "Date"). Butuh material user.
-4. **Halaman baru:** ~~About Us~~ **DONE** (sections 1–4). Sisa: **Hall of Frames
-   / Partners / Contact**. Nav-nya sudah ada tapi `aria-disabled` — **jangan bikin
-   URL palsu**, konfirmasi ke user dulu.
+4. **Halaman baru:** ~~About Us~~ **DONE**, ~~Partners~~ **DONE** (`/partners`).
+   Sisa: **Hall of Frames / Contact**. Nav-nya sudah ada tapi `aria-disabled` —
+   **jangan bikin URL palsu**, konfirmasi ke user dulu. Logo partner asli (20
+   slot) juga masih ditunggu (sekarang placeholder DS).
 5. **Nasalization webfont:** butuh file berlisensi dari manusia — **jangan
    diakali**. Taruh `.woff2` di `public/fonts/`, update `@font-face` di
    `global.css` (pertahankan `local()`).
