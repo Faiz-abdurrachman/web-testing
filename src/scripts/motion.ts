@@ -541,6 +541,51 @@ export function initMotion() {
         }
       }
 
+      // About Us hero: subtle copy entrance + pointer plate drift.
+      const aboutHero = document.querySelector<HTMLElement>('.about-hero');
+      if (aboutHero) {
+        const artwork = aboutHero.querySelector<HTMLElement>('.artwork');
+        const content = aboutHero.querySelector<HTMLElement>('.hero-content');
+
+        if (!warm && content) {
+          const bits = content.querySelectorAll<HTMLElement>('h1 span, p');
+          gsap.set(bits, { autoAlpha: 0, y: 34 });
+          const play = () =>
+            gsap.to(bits, {
+              autoAlpha: 1,
+              y: 0,
+              duration: 0.8,
+              ease: 'power3.out',
+              stagger: 0.09,
+              clearProps: 'transform,opacity,visibility',
+            });
+          if (document.documentElement.classList.contains('splash-done'))
+            play();
+          else window.addEventListener('ds:splash-done', play, { once: true });
+        }
+
+        if (artwork && finePointer()) {
+          gsap.set(artwork, { scale: 1.04 });
+          const xTo = gsap.quickTo(artwork, 'xPercent', {
+            duration: 0.6,
+            ease: 'power3',
+          });
+          const yTo = gsap.quickTo(artwork, 'yPercent', {
+            duration: 0.6,
+            ease: 'power3',
+          });
+          const onMove = (event: MouseEvent) => {
+            const rect = aboutHero.getBoundingClientRect();
+            xTo(((event.clientX - rect.left) / rect.width - 0.5) * -3);
+            yTo(((event.clientY - rect.top) / rect.height - 0.5) * -3);
+          };
+          aboutHero.addEventListener('mousemove', onMove);
+          cleanups.push(() =>
+            aboutHero.removeEventListener('mousemove', onMove),
+          );
+        }
+      }
+
       // Scroll reveals per section.
       const philosophy = document.querySelector('.philosophy');
       reveal(philosophy, '.heading > *');

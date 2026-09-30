@@ -1,4 +1,9 @@
 ---
+interface Props {
+  variant?: 'home' | 'about';
+}
+const { variant = 'home' } = Astro.props;
+
 const principles = [
   {
     icon: 'learn',
@@ -40,7 +45,7 @@ const principles = [
 
 <section
   id="our-philosophy"
-  class="philosophy"
+  class:list={['philosophy', { 'is-about': variant === 'about' }]}
   aria-labelledby="philosophy-title"
 >
   <div class="canvas">
@@ -126,6 +131,12 @@ const principles = [
     isolation: isolate;
     overflow: clip;
     background: var(--color-background);
+  }
+  .philosophy.is-about {
+    background: linear-gradient(152.43deg, #050507 63.34%, #6c3bff 126.04%);
+  }
+  .philosophy.is-about .canvas::before {
+    display: none;
   }
   .canvas {
     position: relative;

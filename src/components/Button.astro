@@ -99,31 +99,31 @@ const { href, variant = 'primary', compact = false } = Astro.props;
       inset -8px -6px 8px rgb(226 202 255 / 25%),
       inset -2px -2px 4px rgb(178 211 255 / 90%);
   }
-  /* Figma CTA Navbar (component set 97:483): white pill that hugs its label,
-     4px/16px padding, 2px gradient rim (148deg). */
+  /* Figma CTA Navbar (component set 97:483 / Component 5): white pill,
+     4px/16px padding, 2px gradient rim (148deg), 172x43px. */
   .white {
-    width: 173px;
-    height: 42.1px;
+    width: 172px;
+    height: 43px;
     padding: 4px 16px;
-    background: white;
+    background: #ffffff;
     color: #1e1e1e;
     box-shadow:
-      inset -2px -2px 4px rgb(178 211 255 / 90%),
-      inset -8px -6px 8px rgb(226 202 255 / 25%),
-      inset -2px -2px 1.4px #97bfff,
-      inset 0 2px 1.2px #cfdfff;
+      inset 0 1.5px 1px #cfdfff,
+      inset -1px -1px 1px #97bfff,
+      inset -4px -3px 6px rgba(226, 202, 255, 0.25),
+      inset -1px -1px 2px rgba(178, 211, 255, 0.6);
   }
   .white::after {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    padding: 2px;
+    padding: 1px;
     background: linear-gradient(
       148deg,
-      rgb(203 197 255 / 50%) 0%,
-      rgb(47 90 255 / 50%) 50%,
-      rgb(238 245 255 / 50%) 100%
+      rgba(203, 197, 255, 0.65) 0%,
+      rgba(47, 90, 255, 0.45) 50%,
+      rgba(238, 245, 255, 0.65) 100%
     );
     mask:
       linear-gradient(#000 0 0) content-box,

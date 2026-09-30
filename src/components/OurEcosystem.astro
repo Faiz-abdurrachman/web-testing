@@ -1,0 +1,322 @@
+---
+interface Step {
+  number: string;
+  title: string;
+  description: string;
+  width: number;
+  lineHeight: number; // Vertical connecting line height in desktop px
+}
+
+const steps: Step[] = [
+  {
+    number: '01',
+    title: 'COMMUNITY',
+    description: 'Entry point, shared culture, and talent gathering',
+    width: 188,
+    lineHeight: 188,
+  },
+  {
+    number: '02',
+    title: 'LEARNING + HoDS',
+    description:
+      '4 House Domains (Data Intelligence, Core AI, Language & Reasoning, Vision)',
+    width: 175,
+    lineHeight: 116,
+  },
+  {
+    number: '03',
+    title: 'EXPERIMENTATION<br />+ RESEARCH',
+    description: 'Rapid prototyping, paper drafting, testing ideas.',
+    width: 188,
+    lineHeight: 188,
+  },
+  {
+    number: '04',
+    title: 'PROJECT + BUILD',
+    description: 'Open source projects, system building, team collaboration.',
+    width: 175,
+    lineHeight: 116,
+  },
+  {
+    number: '05',
+    title: 'OUTPUT & IMPACT',
+    description:
+      'Output Branches: RESEARCH, PAPER, OPEN SOURCE, PRODUCT, BUSINESS',
+    width: 175,
+    lineHeight: 217,
+  },
+];
+---
+
+<section id="our-ecosystem" class="ecosystem" aria-labelledby="ecosystem-title">
+  <div class="canvas">
+    <header class="ecosystem-header">
+      <div class="eyebrow" aria-hidden="true">
+        Our Ecosystem
+      </div>
+      <h2 id="ecosystem-title" class="title">
+        From Community to Impact
+      </h2>
+      <p class="subtitle">
+        Every member is part of an interconnected ecosystem — from learning to
+        producing real work.
+      </p>
+    </header>
+
+    <div class="pipeline-container">
+      <div class="steps-row">
+        {steps.map((step) => (
+          <div
+            class="step-col"
+            style={`--col-w: ${step.width}px; --line-h: ${step.lineHeight}px;`}
+          >
+            <div class="step-card">
+              <div class="step-badge">
+                <span class="step-number" aria-hidden="true">
+                  {step.number}
+                </span>
+                <h3 class="step-title" set:html={step.title} />
+              </div>
+              <p class="step-desc">{step.description}</p>
+            </div>
+            <div class="step-line" aria-hidden="true" />
+          </div>
+        ))}
+      </div>
+      <div class="baseline" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ecosystem {
+    position: relative;
+    width: 100%;
+    background: linear-gradient(36.99deg, #050507 52.96%, #6c3bff 133.24%);
+    overflow: clip;
+  }
+
+  .canvas {
+    position: relative;
+    max-width: 1440px;
+    height: 880px;
+    margin-inline: auto;
+    padding: 80px 80px 78px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+  }
+
+  .ecosystem-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    max-width: 931px;
+    margin-inline: auto;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    border-radius: 32px;
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    font: 400 12px/18px var(--font-body, 'Manrope', sans-serif);
+    margin-bottom: 14px;
+    user-select: none;
+  }
+
+  .title {
+    margin: 0 0 24px;
+    font: 400 56px/67px var(--font-heading, 'Nasalization', sans-serif);
+    text-align: center;
+    background: linear-gradient(270deg, #ffffff 0%, #ede8ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: normal;
+  }
+
+  .subtitle {
+    margin: 0;
+    max-width: 911px;
+    font: 500 18px/27px var(--font-body, 'Manrope', sans-serif);
+    color: #ffffff;
+    text-align: center;
+  }
+
+  /* Pipeline steps */
+  .pipeline-container {
+    position: relative;
+    width: 100%;
+    max-width: 1280px;
+    margin-top: 116px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .steps-row {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 52px;
+    width: 100%;
+    max-width: 1109px;
+  }
+
+  .step-col {
+    position: relative;
+    width: var(--col-w, 175px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .step-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 175px;
+    margin-inline: auto;
+    gap: 12px;
+  }
+
+  .step-badge {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .step-number {
+    font: 700 56px/54px var(--font-body, 'Manrope', sans-serif);
+    background: linear-gradient(180deg, #6c3bff 21%, rgba(5, 5, 7, 0) 78%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .step-title {
+    margin: -18px 0 0;
+    font: 700 18px/27px var(--font-body, 'Manrope', sans-serif);
+    color: #ffffff;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    word-break: normal;
+  }
+
+  .step-desc {
+    margin: 0;
+    font: 400 14px/21px var(--font-body, 'Manrope', sans-serif);
+    color: #ffffff;
+    text-align: center;
+    width: 100%;
+  }
+
+  .step-line {
+    width: 1px;
+    height: var(--line-h, 116px);
+    background: linear-gradient(
+      180deg,
+      #6c3bff 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+
+  .baseline {
+    width: 100%;
+    max-width: 1280px;
+    height: 2px;
+    margin-top: 18px;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 1) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+
+  /* Responsive styles */
+  @media (max-width: 1100px) {
+    .canvas {
+      height: auto;
+      min-height: auto;
+      padding: 60px 24px 60px;
+    }
+
+    .title {
+      font-size: clamp(32px, 5vw, 44px);
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    .pipeline-container {
+      margin-top: 48px;
+      max-width: 600px;
+    }
+
+    .steps-row {
+      flex-direction: column;
+      align-items: center;
+      gap: 36px;
+      max-width: 100%;
+    }
+
+    .step-col {
+      width: 100%;
+      max-width: 320px;
+      margin-top: 0 !important;
+    }
+
+    .step-line {
+      height: 36px !important;
+      margin-top: 20px;
+      background: linear-gradient(
+        180deg,
+        #6c3bff 0%,
+        rgba(108, 59, 255, 0.2) 100%
+      );
+    }
+
+    .step-col:last-child .step-line {
+      display: none;
+    }
+
+    .baseline {
+      display: none;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .canvas {
+      padding: 48px 16px 48px;
+    }
+
+    .title {
+      font-size: 28px;
+      line-height: 1.25;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      line-height: 21px;
+    }
+  }
+</style>

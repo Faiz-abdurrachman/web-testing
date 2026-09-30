@@ -502,7 +502,7 @@ projects 5.104 recruitment 2.174 footer 2.666
   `c53d84d`, `06586ac` = **mentor revision 23 Sep 2026** (rail bounded, background
   HD native, Available Roles preview grid, hero viewport-aware). `51d565a` =
   balance tinggi hero mobile.
-- **Checkpoint terbaru (HEAD `4fe4c19`, 28 Sep 2026).** Setelah VT + sound:
+- **Checkpoint (HEAD `4fe4c19`, 28 Sep 2026; HEAD sekarang `52e815a`, 30 Sep 2026).** Setelah VT + sound:
   `fe71b27` VT + OG hardening (`verify-vt.mjs` uji Back/Forward + reload +
   reduce; `og:image:secure_url` + `<html prefix="og:…">`), `6aefa49` re-encode
   `sorcerer-2x`, `c3b122c` **Perf P0(a)+(d)** (`sizes` Snippets + varian 960w,

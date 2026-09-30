@@ -48,13 +48,14 @@ const probe = (page) =>
         bottom: +r.bottom.toFixed(1),
       };
     };
-    const active = nav.querySelector('.desktop-menu a.nav-link.active');
+    const active = nav.querySelector('.desktop-nav a.nav-link.active');
     const underline = active?.querySelector('.nav-underline');
     const label = active?.querySelector('.nav-label');
-    const desktop = nav.querySelector('.desktop-menu');
+    const desktopNav = nav.querySelector('.desktop-nav');
+    const desktopCta = nav.querySelector('.desktop-cta');
     const mobile = nav.querySelector('.mobile-menu');
-    const navGroup = nav.querySelector('.desktop-menu nav');
-    const button = nav.querySelector('.desktop-menu .button.white');
+    const navGroup = desktopNav;
+    const button = desktopCta?.querySelector('.button.white');
     const vis = (el) => {
       if (!el) return false;
       const st = getComputedStyle(el);
@@ -66,7 +67,7 @@ const probe = (page) =>
       beforeOpacity: getComputedStyle(nav, '::before').opacity,
       afterOpacity: getComputedStyle(nav, '::after').opacity,
       docOverflow: document.documentElement.scrollWidth - innerWidth,
-      desktopVisible: vis(desktop),
+      desktopVisible: vis(desktopNav) && vis(desktopCta),
       mobileVisible: vis(mobile),
       brand: box(nav.querySelector('.brand')),
       navGroup: navGroup ? box(navGroup) : null,
@@ -208,17 +209,28 @@ for (const route of ROUTES) {
         failures.push(
           `1440: logo ${top.brand.w}×${top.brand.h} (want 54×58.8)`,
         );
-      if (!top.button) failures.push('1440: CTA missing in the desktop menu');
+      if (!top.button) failures.push('1440: CTA missing in desktop');
       else {
         if (!close(top.button.right, 1360))
           failures.push(`1440: CTA right ${top.button.right} (want 1360)`);
-        if (!close(top.button.h, 42.1, 0.6))
-          failures.push(`1440: CTA height ${top.button.h} (want 42.1)`);
+        if (!close(top.button.w, 172, 0.6))
+          failures.push(`1440: CTA width ${top.button.w} (want 172)`);
+        if (!close(top.button.h, 43, 0.6))
+          failures.push(`1440: CTA height ${top.button.h} (want 43)`);
       }
       if (top.navGroup && top.button) {
-        const gap = top.button.x - top.navGroup.right;
-        if (!close(gap, 90))
-          failures.push(`1440: menu→CTA gap ${gap.toFixed(1)} (want 90)`);
+        if (!close(top.navGroup.w, 743, 1))
+          failures.push(`1440: menu width ${top.navGroup.w} (want 743)`);
+        const gapLogoNav = top.navGroup.x - top.brand.right;
+        if (!close(gapLogoNav, 155.5, 1))
+          failures.push(
+            `1440: logo→menu gap ${gapLogoNav.toFixed(1)} (want ~155.5)`,
+          );
+        const gapNavCta = top.button.x - top.navGroup.right;
+        if (!close(gapNavCta, 155.5, 1))
+          failures.push(
+            `1440: menu→CTA gap ${gapNavCta.toFixed(1)} (want ~155.5)`,
+          );
       }
       if (!top.underline || !top.label)
         failures.push('1440: active tab has no underline');
@@ -288,7 +300,7 @@ for (const route of ROUTES) {
   await sleep(150);
   const reduce = await page.evaluate(() => {
     const nav = document.querySelector('.navbar');
-    const navLink = document.querySelector('.desktop-menu .nav-link');
+    const navLink = document.querySelector('.desktop-nav .nav-link');
     return {
       isScrolled: nav.classList.contains('is-scrolled'),
       navTransition: getComputedStyle(nav).transitionDuration,

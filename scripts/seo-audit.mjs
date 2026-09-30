@@ -141,8 +141,8 @@ if (!sitemap0) issues.push('no sitemap-N.xml');
 else {
   const xml = await readFile(sitemap0, 'utf8');
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-  if (locs.length !== 14)
-    issues.push(`sitemap has ${locs.length} urls, expected 14`);
+  if (locs.length !== 15)
+    issues.push(`sitemap has ${locs.length} urls, expected 15`);
   for (const loc of locs) {
     if (!loc.startsWith(origin))
       issues.push(`sitemap url wrong origin: ${loc}`);

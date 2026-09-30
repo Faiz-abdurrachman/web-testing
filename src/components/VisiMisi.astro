@@ -1,0 +1,322 @@
+---
+import Starfield from './Starfield.astro';
+---
+
+<section id="visi-misi" class="visi-misi" aria-labelledby="vision-title">
+  <Starfield />
+  <div class="visi-misi-inner">
+    <!-- Vision Block (Figma 1248:14769: 1280 x 146, y=80) -->
+    <div class="vision-block">
+      <h2 id="vision-title" class="section-heading">
+        OUR VISION
+      </h2>
+      <p class="section-desc vision-desc">
+        Data Sorcerers is an AI &amp; Data Innovation Community dedicated to
+        developing people, knowledge, research, and technology through
+        collaborative learning and real-world experimentation.
+      </p>
+    </div>
+
+    <!-- Mission Block (Figma 1248:14795: 1280 x 426, y=326) -->
+    <div class="mission-block">
+      <h2 id="mission-title" class="section-heading">
+        OUR MISION
+      </h2>
+      <p class="section-desc mission-desc">
+        Data Sorcerers builds an environment where people can learn deeply,
+        experiment boldly, conduct meaningful research, and build real-world
+        solutions through collaboration
+      </p>
+
+      <ol class="mission-list" aria-label="Our mission objectives">
+        <li class="mission-item">
+          <span class="item-num" aria-hidden="true">
+            1.
+          </span>
+          <span class="item-text">
+            Develop practical AI &amp; Data capabilities.
+          </span>
+        </li>
+        <li class="mission-item">
+          <span class="item-num" aria-hidden="true">
+            2.
+          </span>
+          <span class="item-text">Encourage experimentation and research.</span>
+        </li>
+        <li class="mission-item">
+          <span class="item-num" aria-hidden="true">
+            3.
+          </span>
+          <span class="item-text">Create meaningful technology projects.</span>
+        </li>
+        <li class="mission-item">
+          <span class="item-num" aria-hidden="true">
+            4.
+          </span>
+          <span class="item-text">
+            Connect academia, industry, and community.
+          </span>
+        </li>
+        <li class="mission-item">
+          <span class="item-num" aria-hidden="true">
+            5.
+          </span>
+          <span class="item-text">Turn knowledge into tangible outputs.</span>
+        </li>
+        <li class="mission-item">
+          <span class="item-num" aria-hidden="true">
+            6.
+          </span>
+          <span class="item-text">
+            Develop talent that can contribute to real-world problems.
+          </span>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- Floating Tarot Card Illustration (Figma 1248:14798: x=1028, y=262, 356x430, no glow) -->
+  <div class="tarot-card-art" aria-hidden="true">
+    <picture>
+      <source
+        srcset="/images/about/tarot-cards.webp 1x, /images/about/tarot-cards-2x.webp 2x"
+        type="image/webp"
+      />
+      <img
+        src="/images/about/tarot-cards.webp"
+        width="356"
+        height="430"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+  </div>
+</section>
+
+<style>
+  /* Matches Figma node 1248:14797 (1440 x 832).
+     Exact geometry:
+       Section: 1440 x 832, p: 80px 80px 80px 80px.
+       Vision block: x=80, y=80, w=1280, h=146.
+       Mission block: x=80, y=326, w=1280, h=426.
+       Tarot card: x=1028, y=262, w=356, h=430 (clean, no purple glow).
+       List items: Frame 2610-2615 with #ae93ff -> #6c3bff -> transparent fade. */
+  .visi-misi {
+    position: relative;
+    isolation: isolate;
+    min-height: 832px;
+    padding: 80px var(--page-gutter);
+    overflow: clip;
+    background-color: #000;
+  }
+
+  .visi-misi-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+    max-width: 1280px;
+    margin-inline: auto;
+  }
+
+  /* Shared heading & description */
+  .section-heading {
+    margin: 0 0 24px;
+    font-family: var(--font-heading);
+    font-size: 56px;
+    font-weight: 400;
+    line-height: 68.26px;
+    letter-spacing: 0;
+    background: linear-gradient(180deg, #ffffff 0%, #ede8ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .section-desc {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+    color: #ffffff;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .vision-desc {
+    max-width: 906px;
+  }
+
+  .mission-desc {
+    max-width: 828px;
+    margin-bottom: 24px;
+  }
+
+  /* Mission block */
+  .mission-block {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 828px;
+  }
+
+  /* Mission List & Gradient Bars (Figma node 1248:14776 Frame 2610) */
+  .mission-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .mission-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 31px;
+    padding: 0 16px;
+    box-sizing: border-box;
+    background: linear-gradient(
+      90deg,
+      #ae93ff 0%,
+      #6c3bff 7%,
+      #6c3bff 58%,
+      rgba(108, 59, 255, 0) 100%
+    );
+  }
+
+  .mission-item:nth-child(1) {
+    width: 713px;
+  }
+  .mission-item:nth-child(2) {
+    width: 733px;
+  }
+  .mission-item:nth-child(3) {
+    width: 746px;
+  }
+  .mission-item:nth-child(4) {
+    width: 775px;
+  }
+  .mission-item:nth-child(5) {
+    width: 786px;
+  }
+  .mission-item:nth-child(6) {
+    width: 797px;
+  }
+
+  .item-num {
+    display: inline-block;
+    flex: none;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+    color: #ffffff;
+  }
+
+  .item-text {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+    color: #ffffff;
+    white-space: nowrap;
+  }
+
+  /* Tarot Card Art: Exact Figma node 1248:14798
+     Position: x=1028, y=262, width=356, height=430.
+     Clean crystal rendering without purple glow drop-shadow. */
+  .tarot-card-art {
+    position: absolute;
+    left: calc(50% - 720px + 1028px);
+    top: 262px;
+    z-index: 2;
+    width: 356px;
+    height: 430px;
+    pointer-events: none;
+  }
+
+  .tarot-card-art img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Responsive Breakpoints */
+  @media (max-width: 1300px) {
+    .tarot-card-art {
+      left: auto;
+      right: clamp(16px, 2.5vw, 40px);
+    }
+  }
+
+  @media (max-width: 1050px) {
+    .visi-misi {
+      padding: 64px var(--page-gutter);
+    }
+    .visi-misi-inner {
+      gap: 64px;
+    }
+    .section-heading {
+      font-size: clamp(36px, 5vw, 48px);
+      line-height: 1.2;
+      margin-bottom: 18px;
+    }
+    .mission-block {
+      max-width: 100%;
+    }
+    .tarot-card-art {
+      position: relative;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: min(300px, 80vw);
+      height: auto;
+      margin: 32px auto 0;
+    }
+    .mission-item {
+      width: 100% !important;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .visi-misi {
+      padding: 48px var(--page-gutter);
+    }
+    .visi-misi-inner {
+      gap: 48px;
+    }
+    .section-heading {
+      font-size: clamp(28px, 7vw, 38px);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .section-desc {
+      font-size: 16px;
+      line-height: 24px;
+    }
+    .mission-desc {
+      margin-bottom: 20px;
+    }
+    .mission-item {
+      height: auto;
+      min-height: 34px;
+      padding: 6px 14px;
+    }
+    .item-text {
+      white-space: normal;
+      font-size: 15px;
+      line-height: 22px;
+    }
+    .tarot-card-art {
+      width: 220px;
+      height: 265px;
+    }
+  }
+</style>

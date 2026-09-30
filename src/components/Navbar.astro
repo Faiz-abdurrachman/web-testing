@@ -15,6 +15,7 @@ const links = [
 // Only pages that exist get a real destination; the rest stay unavailable.
 const destinations: Record<string, string> = {
   Home: '/',
+  'About Us': '/about',
   Recruitment: '/recruitment',
 };
 ---
@@ -31,30 +32,30 @@ const destinations: Record<string, string> = {
     >
       <img src="/images/logo.png" width="54" height="59" alt="Data Sorcerers" />
     </a>
-    <div class="desktop-menu">
-      <nav aria-label="Main navigation">
-        {links.map((label, i) =>
-          destinations[label] ? (
-            <a
-              class:list={['nav-link', { active: label === active }]}
-              href={destinations[label]}
-              aria-current={label === active ? 'page' : undefined}
-              style={`--i:${i + 1}`}
-              data-sfx="select"
-              data-sfx-hover="hover"
-              data-astro-prefetch
-            >
-              <span class="nav-label">{label}</span>
-              <span class="nav-underline" aria-hidden="true" />
-            </a>
-          ) : (
-            <span class="nav-link" aria-disabled="true" style={`--i:${i + 1}`}>
-              <span class="nav-label">{label}</span>
-              <span class="nav-underline" aria-hidden="true" />
-            </span>
-          ),
-        )}
-      </nav>
+    <nav class="desktop-nav" aria-label="Main navigation">
+      {links.map((label, i) =>
+        destinations[label] ? (
+          <a
+            class:list={['nav-link', { active: label === active }]}
+            href={destinations[label]}
+            aria-current={label === active ? 'page' : undefined}
+            style={`--i:${i + 1}`}
+            data-sfx="select"
+            data-sfx-hover="hover"
+            data-astro-prefetch
+          >
+            <span class="nav-label">{label}</span>
+            <span class="nav-underline" aria-hidden="true" />
+          </a>
+        ) : (
+          <span class="nav-link" aria-disabled="true" style={`--i:${i + 1}`}>
+            <span class="nav-label">{label}</span>
+            <span class="nav-underline" aria-hidden="true" />
+          </span>
+        ),
+      )}
+    </nav>
+    <div class="desktop-cta">
       <Button variant="white">Join Community</Button>
     </div>
     <details class="mobile-menu">
@@ -92,21 +93,21 @@ const destinations: Record<string, string> = {
 </header>
 <style>
   /* Matches Figma node 755:15178 (component set 530:13894): 1440-wide bar,
-     padding 24px 80px, logo | menu → 90px → CTA, active tab = 1px gradient
-     underline, inactive tabs #707070. Reference: assets/Navbar.png (5×). */
+     padding 24px 80px, space-between across Logo (54px), Menu (743px), CTA (172px).
+     Active tab = 1px gradient underline, inactive tabs #707070. Reference: assets/Navbar.png. */
   .navbar {
     --nb-h: 106.8px;
     /* Lift the bar clear of the status bar / notch on installed PWAs. */
     --nb-safe: env(safe-area-inset-top, 0px);
     --nb-frame: 1440px;
     --nb-gutter: clamp(24px, 5.5556vw, 80px);
-    --nb-gap: clamp(32px, 6.25vw, 90px);
     position: fixed;
     inset: 0 0 auto;
     z-index: 50;
     background: transparent;
   }
-  /* Figma's own fill: a faint violet wash at the top fading to nothing. */
+  /* Figma's own fill + progressive background blur (node 530:13894):
+     faint violet wash with 20px blur at top tapering smoothly to 0 at bottom. */
   .navbar::before {
     content: '';
     position: absolute;
@@ -115,12 +116,26 @@ const destinations: Record<string, string> = {
     pointer-events: none;
     background: linear-gradient(
       180deg,
-      rgb(108 59 255 / 10%) 0%,
-      rgb(11 7 18 / 0%) 100%
+      rgba(108, 59, 255, 0.12) 0%,
+      rgba(11, 7, 18, 0) 100.19%
+    );
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    mask-image: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 0.55) 55%,
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 0.55) 55%,
+      transparent 100%
     );
     transition: opacity 0.3s ease;
   }
-  /* Solid backing only after scrolling so content never shines through the links. */
+  /* Translucent frosted glass on scroll: luminous, light violet-tinted glass */
   .navbar::after {
     content: '';
     position: absolute;
@@ -128,9 +143,15 @@ const destinations: Record<string, string> = {
     z-index: -1;
     opacity: 0;
     pointer-events: none;
-    background: rgb(6 5 10 / 45%);
-    backdrop-filter: blur(12px) saturate(130%);
-    -webkit-backdrop-filter: blur(12px) saturate(130%);
+    background: linear-gradient(
+      180deg,
+      rgba(108, 59, 255, 0.16) 0%,
+      rgba(18, 12, 34, 0.48) 100%
+    );
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.22);
     transition: opacity 0.3s ease;
   }
   .navbar.is-scrolled::before {
@@ -154,23 +175,27 @@ const destinations: Record<string, string> = {
   .brand {
     position: relative;
     display: block;
+    flex: none;
+    order: 0;
   }
   .brand img {
     display: block;
     width: 54px;
     height: 58.8px;
   }
-  /* Menu sits in a right-aligned group with the CTA (Figma auto-layout:
-     logo + [menu → 90px → CTA] under space-between). */
-  .desktop-menu {
+  .desktop-nav {
     display: flex;
     align-items: center;
-    gap: var(--nb-gap);
+    gap: clamp(8px, 1.11vw, 16px);
+    flex: none;
+    order: 1;
   }
-  .desktop-menu nav {
+  .desktop-cta {
     display: flex;
     align-items: center;
-    gap: clamp(6px, 1.25vw, 18px);
+    justify-content: center;
+    flex: none;
+    order: 2;
   }
   .nav-link {
     position: relative;
@@ -193,14 +218,13 @@ const destinations: Record<string, string> = {
     display: block;
     align-self: stretch;
     height: 1px;
-    background: linear-gradient(163deg, #9b7bff 0%, #ede8ff 0%, #9b7bff 100%);
+    background: linear-gradient(90deg, #9b7bff 0%, #ede8ff 50%, #9b7bff 100%);
   }
   .nav-link:not(.active) .nav-underline {
     visibility: hidden;
   }
   .nav-link[aria-disabled='true'] {
     cursor: default;
-    opacity: 0.82;
   }
   a.nav-link:hover,
   a.nav-link:focus-visible {
@@ -213,34 +237,35 @@ const destinations: Record<string, string> = {
     display: none;
   }
   /* Desktop >=1301px locks the exact Figma tab widths (component set 530:13894)
-     so the menu is 753px wide and nobody depends on font rasterisation. */
+     so the menu is 743px wide and nobody depends on font rasterisation. */
   @media (min-width: 1301px) {
-    .desktop-menu {
-      gap: 90px;
+    .desktop-nav {
+      gap: 16px;
+      width: 743px;
     }
-    .desktop-menu nav {
-      gap: 18px;
+    .desktop-cta {
+      width: 172px;
     }
     .nav-link {
       padding: 8px 14px;
       font-size: 18px;
     }
-    .desktop-menu nav > .nav-link:nth-child(1) {
+    .desktop-nav > .nav-link:nth-child(1) {
       width: 78px;
     }
-    .desktop-menu nav > .nav-link:nth-child(2) {
+    .desktop-nav > .nav-link:nth-child(2) {
       width: 106px;
     }
-    .desktop-menu nav > .nav-link:nth-child(3) {
+    .desktop-nav > .nav-link:nth-child(3) {
       width: 134px;
     }
-    .desktop-menu nav > .nav-link:nth-child(4) {
+    .desktop-nav > .nav-link:nth-child(4) {
       width: 146px;
     }
-    .desktop-menu nav > .nav-link:nth-child(5) {
+    .desktop-nav > .nav-link:nth-child(5) {
       width: 101px;
     }
-    .desktop-menu nav > .nav-link:nth-child(6) {
+    .desktop-nav > .nav-link:nth-child(6) {
       width: 98px;
     }
   }
@@ -253,7 +278,8 @@ const destinations: Record<string, string> = {
       height: var(--nb-h);
       padding: 18px var(--nb-gutter);
     }
-    .desktop-menu {
+    .desktop-nav,
+    .desktop-cta {
       display: none;
     }
     .mobile-menu {
@@ -383,12 +409,12 @@ const destinations: Record<string, string> = {
   }
   @media (prefers-reduced-motion: no-preference) {
     .navbar.is-ready .brand,
-    .navbar.is-ready .desktop-menu .nav-link,
-    .navbar.is-ready .desktop-menu .button {
+    .navbar.is-ready .desktop-nav .nav-link,
+    .navbar.is-ready .desktop-cta :global(.button) {
       animation: nav-in 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both;
       animation-delay: calc(var(--i, 0) * 55ms + 80ms);
     }
-    .navbar.is-ready .desktop-menu .button {
+    .navbar.is-ready .desktop-cta :global(.button) {
       animation-delay: 0.5s;
     }
   }

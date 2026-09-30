@@ -10,15 +10,20 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
 
-- **Navbar (PALING BARU, 28 Sep 2026):** `Navbar.astro` + `.button.white` dirombak
-  jadi **persis Figma** node `755:15178` / `assets/Navbar.png`. Ini **menggantikan**
-  desain "living HUD" — baca section "Baru saja: Navbar exact Figma redesign" di
-  bawah dulu. Ringkas: link `#707070`/aktif `#fff` + underline gradient 1px,
+- **About Us Page (PALING BARU, 30 Sep 2026):** `/about` telah diimplementasikan
+  dari Hero sampai Section 4 secara presisi ke Figma (`RntmRWAgLrh5utgzcjrUik`):
+  - Section 1: `AboutHero.astro` (`Hero Section - About Us`).
+  - Section 2: `VisiMisi.astro` (`1248:14797`, tarot card, deskripsi, checklist misi).
+  - Section 3: `Philosophy.astro` (`variant="about"`, `linear-gradient(152.43deg, #050507 63.34%, #6C3BFF 126.04%)`, full-bleed ke pinggir tanpa batas hitam, teks "We Build With It" tidak tersentuh glow).
+  - Section 4: `OurEcosystem.astro` (`1248:14877` / `1331:15784`, `linear-gradient(36.99deg, #050507 52.96%, #6C3BFF 133.24%)`, `align-items: flex-end` persis Frame 2587 sehingga ke-5 garis vertikal rata sempurna di atas garis horizontal baseline, angka 01-05 gradient vertikal + judul Bold 700).
+  - Sambungan Section 3 & 4 mengalir seamless tanpa patahan horizontal di seluruh resolusi (1366px, 1440px, 1920px).
+- **Navbar (28 Sep 2026):** `Navbar.astro` + `.button.white` dirombak
+  jadi **persis Figma** node `755:15178` / `assets/Navbar.png`. Ringkas: link `#707070`/aktif `#fff` + underline gradient 1px,
   grup kanan `menu (gap 18) → 90px → CTA` (CTA `173×42.1`), tab di-hardcode di
   ≥1301px (menu 753), scroll = backing kaca transparan `rgb(6 5 10 / 45%)` +
   `blur(12px)`. `npm run audit:navbar` assert geometri 1440.
 
-- **Situs:** static **Astro 7** — 14 rute publik (`/`, `/recruitment`,
+- **Situs:** static **Astro 7** — 15 rute publik (`/`, `/about`, `/recruitment`,
   `/recruitment/roles/{6}` 6 halaman, `/hods/{6}` 6 halaman) + `/lab/sound`
   internal (`noindex`, di luar sitemap). Target: **pixel-accurate ke PNG
   referensi**, HTML/CSS ringan (bukan flatten screenshot).
@@ -43,7 +48,7 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   baris. Geometri kartu tetap. Lihat `docs/assets.md` §Available Roles.
 - **Runtime deps sengaja cuma** `astro` + `gsap` + `three`. Jangan tambah library
   lain tanpa tanya; lazy-import yang berat.
-- **Commit terbaru (live di testing + production, HEAD `4fe4c19`):**
+- **Commit terbaru (`main` lokal = `52e815a`, 30 Sep 2026; `origin`/production = `86b49c6`):**
   - `fe71b27` **VT hardening + OG hardening** — `verify-vt.mjs` kini uji
     Back/Forward lewat client router, reload deep-link `/#domains`, dan reduce
     benar-benar inert (tanpa `hero-ready`/`.pin-spacer`); `BaseLayout` dapat
@@ -155,7 +160,7 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
 
 ## Checkpoint terakhir (28 Sep 2026) — detail
 
-- **HEAD `4fe4c19` (28 Sep 2026).** Di atas migration VT + sound: `fe71b27`
+- **HEAD saat itu `4fe4c19` (28 Sep 2026); HEAD sekarang `52e815a` (30 Sep 2026).** Di atas migration VT + sound: `fe71b27`
   (VT + OG hardening), `6aefa49` (re-encode `sorcerer-2x`), `c3b122c` (Perf P0
   a+d), `473ca00` (Perf P0 b: AVIF sorcerer + video + poster), `6c79831` (hover
   kartu + keyboard cues), `7821e87` (parity hover home + edge fade awal),
@@ -168,8 +173,8 @@ origin main` mengirim ke **testing + production**
   (`github.com/Web-Data-Sorcerers/community-web`, remote `production`).
   Jalankan `git push origin main` seperti biasa; kalau perlu cek sinkron pakai
   `git fetch production -q && git rev-parse --short main origin/main
-production/main`. HEAD terakhir `4fe4c19` (`main` = `origin/main` =
-  `production/main`).
+production/main`. **Update 30 Sep 2026:** `main` = `52e815a` sedangkan
+  `origin/main` = `production/main` = `86b49c6` (2 commit lokal belum di-push).
 - **Available Roles glow wave DIPERKECIL.** `@keyframes role-glow-wave` sekarang
   cuma `scale: 1 → 1.04` (drift `translate ±6%` dibuang) supaya ukuran glow
   balik ke frame statis. Hover kartu dapat "pointer pool" radial violet (ikut

@@ -5,6 +5,7 @@ const BASE = process.env.PREVIEW_URL || 'http://localhost:4321';
 const IDS = ['data', 'core', 'language', 'vision', 'product', 'growth'];
 const ROUTES = [
   '/',
+  '/about',
   '/recruitment',
   ...IDS.map((id) => `/hods/${id}`),
   ...IDS.map((id) => `/recruitment/roles/${id}`),

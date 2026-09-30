@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "skills": {
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "computedHash": "b146008599c31057cef1c145774cea5d5afb30e8f43fa802e47a4b461419aaaf"
+    },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "computedHash": "89496d5dd00f4810205f351759594fc2742bf8eea85a2f2b2d1de59f4bd91576"
+    },
+    "game-playtest": {
+      "source": "../../../../tmp/openai-plugins/plugins/game-studio/skills/game-playtest",
+      "sourceType": "local",
+      "computedHash": "f429505a161b6139ffb344bdf8189360a0ff38fc23a54029936acdbbcaed2f29"
+    },
+    "game-studio": {
+      "source": "../../../../tmp/openai-plugins/plugins/game-studio/skills/game-studio",
+      "sourceType": "local",
+      "computedHash": "d06549a8a9c659bc93962bf70b730a03efc4879e3cb50507308ecceb0844ab88"
+    },
+    "game-ui-frontend": {
+      "source": "../../../../tmp/openai-plugins/plugins/game-studio/skills/game-ui-frontend",
+      "sourceType": "local",
+      "computedHash": "52a249b961c61f5cf05f37794a9b162f69a9bb75aa6f59ff9c18d5cb23e20f29"
+    },
+    "gsap-core": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-core/SKILL.md",
+      "computedHash": "c4a01101d9e1aafbf4b49f75d74f9349790d8741981ba0237c990093863035a6"
+    },
+    "gsap-frameworks": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-frameworks/SKILL.md",
+      "computedHash": "4852e85a48088d9044b08ebd1db607915b628c0c3ec7e04300713f546728fbdf"
+    },
+    "gsap-performance": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-performance/SKILL.md",
+      "computedHash": "863842ac2d7aee53fd4f0025c960173d7ad3e658a5715b89b2211fa280213c1f"
+    },
+    "gsap-plugins": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-plugins/SKILL.md",
+      "computedHash": "791bda0e6e460511fe82a78e745db519b88ffaeeab4d04a74879a03ca4f41740"
+    },
+    "gsap-react": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-react/SKILL.md",
+      "computedHash": "7d3b52822681a4158e371f895c58fb7030ecaf33f585a534b7162f9e92c5d893"
+    },
+    "gsap-scrolltrigger": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-scrolltrigger/SKILL.md",
+      "computedHash": "1cdc5647693783cb7a662d84a5de434c88a051ed56b4d33597c9b5782b5973e6"
+    },
+    "gsap-timeline": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-timeline/SKILL.md",
+      "computedHash": "54981c2feec5a9c0d57988aeb32315af32bdeadd261550d5e9db7a7b1f08b487"
+    },
+    "gsap-utils": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-utils/SKILL.md",
+      "computedHash": "1ab2387f6e694718a4f1b5acf2a4ab16e1b884c3428adf5f6b26d830f00826cf"
+    },
+    "react-three-fiber-game": {
+      "source": "../../../../tmp/openai-plugins/plugins/game-studio/skills/react-three-fiber-game",
+      "sourceType": "local",
+      "computedHash": "84857ca27a48b3902f2c5b45748ba0e781abbe97ebeb470176563c0a97591ea1"
+    },
+    "three-webgl-game": {
+      "source": "../../../../tmp/openai-plugins/plugins/game-studio/skills/three-webgl-game",
+      "sourceType": "local",
+      "computedHash": "54b1b28b30e3e40ff676aec6b5276ea9749d6828518190a8e7d79cdf3c929442"
+    },
+    "vercel-react-best-practices": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/react-best-practices/SKILL.md",
+      "computedHash": "3219a1944e404ffc14d1d9d6aef6dd2e3855b81387ee0a044ccbfe14d34c2357"
+    },
+    "web-3d-asset-pipeline": {
+      "source": "../../../../tmp/openai-plugins/plugins/game-studio/skills/web-3d-asset-pipeline",
+      "sourceType": "local",
+      "computedHash": "2460872ff19b16dba3071eca7f8c7f798d4656b7d980f37d06f0f4c26674d0a1"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/web-design-guidelines/SKILL.md",
+      "computedHash": "a6a44d5498f7e8f68289902f3dedfc6f38ae0cee1e96527c80724cf27f727c2a"
+    }
+  }
+}

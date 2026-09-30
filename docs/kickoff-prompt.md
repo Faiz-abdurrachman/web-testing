@@ -5,7 +5,7 @@ Copy-paste ini ke AI baru sebelum ngasih task. Ganti bagian `TASK` di bawah.
 ---
 
 ```text
-Kamu lanjut kerja di rep^o "Data Sorcerers" — static Astro site: homepage +
+Kamu lanjut kerja di repo "Data Sorcerers" — static Astro site: homepage +
 halaman Recruitment (+ 6 halaman detail role) + 6 halaman detail HoDS.
 Target: pixel-accurate ke Figma/PNG, HTML/CSS ringan.
 

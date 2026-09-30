@@ -244,22 +244,18 @@ When adding/changing a section, update `docs/assets.md` and the relevant
 
 ## Current checkpoint
 
-- **HEAD `4fe4c19` (28 Sep 2026).** Situs pakai Astro **`<ClientRouter />`**
+- **HEAD (30 Sep 2026).** Situs pakai Astro **`<ClientRouter />`**
   (navigasi klien + `AudioContext` persist; semua komponen re-init
   `astro:page-load` + cleanup `astro:before-swap` — gotcha di atas +
-  `docs/sound-sop.md` §9). Sudah live: **VT hardening** (`fe71b27`), **OG
-  hardening**, **Perf P0(a)+(d)** (`c3b122c`), **Perf P0(b)** (`473ca00`:
-  sorcerer → AVIF, video hero di-re-encode, poster tak di-fetch di HP), **hover
-  kartu + keyboard carousel cues** (`6c79831`), **fix parity hover home +
-  rail edge fade** (`7821e87`, `4fe4c19`). **Deploy GANDA**:
-  `git push origin main` → testing + production.
-- **Next plan (prioritas).** Perf P0 inti **selesai** (Home mobile 1.33→0.98 MB).
-  Sisa: opsional AVIF hero art + ikon philosophy/glow (biar tembus ≤800 KB);
-  konten asli (`projects.ts`, tanggal recruitment); halaman About Us / Hall of
+  `docs/sound-sop.md` §9).
+  **About Us (`/about`) Section 1-4 Complete:** `AboutHero.astro`, `VisiMisi.astro`,
+  `Philosophy.astro` (`variant="about"`, full-bleed gradient), dan `OurEcosystem.astro`
+  (`From Community to Impact`, pipeline 5 langkah rata baseline horizontal).
+  **Deploy GANDA**: `git push origin main` → testing + production.
+- **Next plan (prioritas).** About Us Section 5 dan seterusnya sesuai Figma;
+  konten asli (`projects.ts`, tanggal recruitment); halaman Hall of
   Frames / Partners / Contact (nav masih `aria-disabled`, jangan bikin URL
-  palsu); webfont Nasalization (berlisensi). Detail: `docs/ai-handoff.md`
-  §"Next plan — untuk AI berikutnya". **P0(b) "splash jangan nunggu `three`" =
-  BATAL** (HP memang tidak menunggu `three`; desktop sengaja — jangan diubah).
+  palsu); webfont Nasalization (berlisensi). Detail: `docs/ai-handoff.md`.
 - **Available Roles hover (`f92b88a`).** Kartu reaktif pointer: pool radial violet
   ikut kursor (`--mx/--my`), ember lean (`--gx/--gy` ±22/16px + `scale(1.06)`),
   divider draw dari kiri, panah overshoot. Gate `(pointer: fine)` +

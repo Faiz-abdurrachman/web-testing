@@ -75,7 +75,7 @@ try {
           '.copy p',
           '.actions',
           '.brand',
-          '.desktop-menu',
+          '.desktop-nav',
         ].map((selector) => {
           const element = document.querySelector(selector);
           const { x, y, width, height } = element.getBoundingClientRect();
@@ -826,7 +826,7 @@ try {
     button: { x: 659.21875, y: 597.5, width: 121.546875, height: 51 },
   });
   assert.equal(
-    await page.locator('.desktop-menu .nav-link.active').textContent(),
+    await page.locator('.desktop-nav .nav-link.active').textContent(),
     'Recruitment',
     'Recruitment must be the active navigation link on its page',
   );
