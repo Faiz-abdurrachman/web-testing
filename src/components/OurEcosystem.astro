@@ -114,9 +114,10 @@ const steps: Step[] = [
     align-items: center;
     box-sizing: border-box;
   }
-  @media (min-width: 1456px) {
+  @media (min-width: 1441px) {
     .canvas {
-      zoom: min(2, calc(100vw / 1440px));
+      /* Uncapped so the canvas always fills the viewport and the gradient never leaves a gutter, however far the browser is zoomed out. */
+      zoom: calc(100vw / 1440px);
     }
   }
 

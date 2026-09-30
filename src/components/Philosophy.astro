@@ -133,6 +133,9 @@ const principles = [
     background: var(--color-background);
   }
   .philosophy.is-about {
+    background: var(--color-background);
+  }
+  .philosophy.is-about .canvas {
     background: linear-gradient(163deg, #050507 63%, #6c3bff 126%);
   }
   .philosophy.is-about .canvas::before {
@@ -144,9 +147,10 @@ const principles = [
     max-width: 1440px;
     margin-inline: auto;
   }
-  @media (min-width: 1456px) {
+  @media (min-width: 1441px) {
     .philosophy.is-about .canvas {
-      zoom: min(2, calc(100vw / 1440px));
+      /* Uncapped so the canvas always fills the viewport and the glow never leaves a gutter, however far the browser is zoomed out. */
+      zoom: calc(100vw / 1440px);
     }
   }
   /* The exported blur extends 350px beyond each side of the 280px ellipse. */
@@ -372,6 +376,10 @@ const principles = [
     .illustration {
       /* Anchor the artwork to the section edge outside the centered canvas. */
       left: calc((1440px - 100cqw) / 2);
+    }
+    /* When zoomed the canvas fills the viewport, so the cqw anchor would push the artwork off the left edge; keep it at the canvas origin. */
+    .philosophy.is-about .illustration {
+      left: 0;
     }
   }
   .content {
