@@ -99,6 +99,7 @@ src/data/domains.ts      6 HoDS cards (title/desc/tint/chips)
 src/data/hods.ts         6 detail categories → 22 tabs (LEARNING/…/OUTPUT)
 src/data/projects.ts     4 placeholder projects (swap for real data)
 src/pages/index.astro    homepage composition
+src/pages/about.astro    About Us composition (sections 1–4)
 src/pages/hods/[id].astro detail route (getStaticPaths over hods.ts)
 src/pages/lab/sound.astro internal sound audition page (noindex, not in sitemap)
 src/styles/global.css    @font-face, tokens, reset
@@ -232,6 +233,13 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   `verify.mjs` uses full `page.goto` so it does not exercise client nav — run
   `npm run verify:vt` (`scripts/verify-vt.mjs`) for that. Full migration notes:
   `docs/sound-sop.md` §9.
+- **Figma MCP gradient strings are lossy.** `figma_get_figma_data` returns a
+  normalised `linear-gradient(...)` string (last stop forced to 100%), which
+  renders differently from the node. The About Us Philosophy/Ecosystem fills
+  looked like `170deg`/`16deg` in the string but the exported node PNG matches
+  `163deg 63%→126%` / `24.75deg 53%→133%` (background MAE < 1 vs MCP ≈ 17). Export
+  the node (`figma_download_figma_images`) and fit the PNG pixels — never paste the
+  MCP gradient string. The old `152.43deg`/`36.99deg` values were also wrong.
 
 ## Fonts
 
@@ -251,8 +259,14 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   **About Us (`/about`) Section 1-4 Complete:** `AboutHero.astro`, `VisiMisi.astro`,
   `Philosophy.astro` (`variant="about"`, full-bleed gradient), dan `OurEcosystem.astro`
   (`From Community to Impact`, pipeline 5 langkah rata baseline horizontal).
+  **Ambient glow About = fill per-section Figma** (bukan satu radial/parent):
+  `Philosophy` `linear-gradient(163deg,#050507 63%,#6C3BFF 126%)`, `Ecosystem`
+  `linear-gradient(24.75deg,#050507 53%,#6C3BFF 133%)` — lihat gotcha MCP di atas.
+  **Status 30 Sep 2026:** koreksi glow + docs + `verify.mjs` **belum di-commit**
+  (working tree); `main` lokal `dd87041` unggul 3 commit dari
+  `origin`/production `86b49c6`.
   **Deploy GANDA**: `git push origin main` → testing + production.
-- **Next plan (prioritas).** About Us Section 5 dan seterusnya sesuai Figma;
+- **Next plan (prioritas).** Lanjutan About Us (section berikutnya sesuai Figma);
   konten asli (`projects.ts`, tanggal recruitment); halaman Hall of
   Frames / Partners / Contact (nav masih `aria-disabled`, jangan bikin URL
   palsu); webfont Nasalization (berlisensi). Detail: `docs/ai-handoff.md`.

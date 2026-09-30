@@ -26,10 +26,11 @@ production/main`. Kredensial lewat helper `store` (`~/.git-credentials`).
 
 ## 1. Ringkasan
 
-Website community "Data Sorcerers" — static site, homepage landing + 6 halaman
-detail domain (HoDS). Fokus utama: **pixel-accurate** ke desain Figma/PNG,
-dibangun dengan HTML/CSS asli (bukan tempelan screenshot), plus beberapa
-interaksi (navbar blur, carousel panah, carousel project 3D).
+Website community "Data Sorcerers" — static site **Astro 7**: homepage landing +
+halaman **About Us** + halaman **Recruitment** (+ 6 detail role) + 6 halaman
+detail domain (HoDS) + `/lab/sound` internal. Fokus utama: **pixel-accurate** ke
+desain Figma/PNG, dibangun dengan HTML/CSS asli (bukan tempelan screenshot),
+plus interaksi (navbar, carousel, motion GSAP/Three.js, sound prosedural).
 
 ---
 
@@ -79,6 +80,8 @@ src/
   components/    Shared: Navbar (prop `active`), Footer, Button
                  (primary/glass/white/secondary/apply), DomainCard, DomainRail.
                  Home: Hero, Philosophy, WhatWeDo, Domains, Projects, Recruitment.
+                 About: AboutHero, VisiMisi, OurEcosystem (+ Philosophy
+                 `variant="about"`).
                  Recruitment: RecruitmentHero, WhoShouldJoin, WhatYouWillDo,
                  AvailableRoles, SelectionTimeline, Faq, Snippets, Cta, RoleDetail.
   data/          domains.ts  (6 kartu HoDS, dipakai home + recruitment)
@@ -87,6 +90,7 @@ src/
                  projects.ts (4 project, masih placeholder)
   layouts/       BaseLayout.astro (head, font preload, slot)
   pages/         index.astro                     (homepage)
+                 about.astro                      (About Us sections 1–4)
                  hods/[id].astro                 (6 detail HoDS, getStaticPaths)
                  recruitment.astro               (halaman Recruitment lengkap)
                  recruitment/roles/[id].astro    (6 detail role, getStaticPaths)
@@ -306,6 +310,32 @@ inline-size` (semua metrik `cqw`), border emas inset (CSS `::after` +
 
 ---
 
+## 8c. Halaman About Us (`/about`) — sections 1–4 (30 Sep 2026)
+
+Route `/about`, komposisi di `src/pages/about.astro`: `AboutHero` → `VisiMisi` →
+`Philosophy variant="about"` → `OurEcosystem` (plus `Navbar active="About Us"`,
+`Footer`, `Motion`). Figma file `RntmRWAgLrh5utgzcjrUik`, halaman `1277:18477`.
+
+- **Ambient glow = fill per-section Figma** (bukan satu radial/parent bersama):
+  `.philosophy.is-about` `linear-gradient(163deg, #050507 63%, #6C3BFF 126%)`
+  (node `922:16330`); `.ecosystem` `linear-gradient(24.75deg, #050507 53%,
+#6C3BFF 133%)` (node `1248:14877`). Section bersaudara; tidak ada elemen
+  dekoratif yang menyeberang seam; seam terukur nyambung (Δ ≤ 2/255). Area ungu
+  22% (Philosophy) / 30% (Ecosystem), stabil 375–2560px.
+- **Gotcha Figma MCP (penting):** string `linear-gradient(...)` dari MCP
+  **menormalkan handle** (stop terakhir dipaksa 100%) → lossy (MCP: `170deg` /
+  `16deg`). Render node asli cocok dengan `163deg` / `24.75deg`. **Selalu export
+  node via MCP lalu fit piksel PNG** (background MAE 0.73/0.63 vs MCP ≈ 17). Nilai
+  lama `152.43deg`/`36.99deg` juga salah (MAE ≈ 4.3).
+- Section 4 pipeline: header inset 10px (pipeline mulai y=374), baseline SVG
+  `public/images/about/ecosystem-baseline.svg`, `align-items: flex-end`, grid
+  5→2→1 kolom. Detail: `docs/assets.md` §About Us; assertion `aboutEcosystem` di
+  `scripts/verify.mjs`.
+- **Status:** perubahan glow + docs + `verify.mjs` **belum di-commit** (working
+  tree, 30 Sep 2026). Rincian di `docs/ai-handoff.md`.
+
+---
+
 ## 9. Carousel project 3D (Our Project)
 
 - 3D coverflow: kartu aktif di grid Figma (`549×567` di `(445.5,270)`) tajam;
@@ -502,7 +532,7 @@ projects 5.104 recruitment 2.174 footer 2.666
   `c53d84d`, `06586ac` = **mentor revision 23 Sep 2026** (rail bounded, background
   HD native, Available Roles preview grid, hero viewport-aware). `51d565a` =
   balance tinggi hero mobile.
-- **Checkpoint (HEAD `4fe4c19`, 28 Sep 2026; HEAD sekarang `52e815a`, 30 Sep 2026).** Setelah VT + sound:
+- **Checkpoint (HEAD `4fe4c19`, 28 Sep 2026; HEAD sekarang `dd87041`, 30 Sep 2026).** Setelah VT + sound:
   `fe71b27` VT + OG hardening (`verify-vt.mjs` uji Back/Forward + reload +
   reduce; `og:image:secure_url` + `<html prefix="og:…">`), `6aefa49` re-encode
   `sorcerer-2x`, `c3b122c` **Perf P0(a)+(d)** (`sizes` Snippets + varian 960w,
@@ -512,6 +542,10 @@ projects 5.104 recruitment 2.174 footer 2.666
   cues**, `7821e87` + `4fe4c19` **fix parity hover home (GSAP `clearProps`) +
   rail edge fade**. Sisa P0 (opsional) + rencana ada di `docs/ai-handoff.md`
   §"Next plan". Gate semua hijau.
+- **Checkpoint terbaru (30 Sep 2026, HEAD `dd87041`):** halaman **About Us
+  sections 1–4** (`dd87041`) + koreksi **glow About = fill per-section Figma**
+  (working tree, **belum di-commit**; `main` unggul 3 commit dari
+  `origin`/production `86b49c6`). Detail §8c + `docs/ai-handoff.md`.
 - **Checkpoint sebelumnya (HEAD `d0fd3be`, 28 Sep 2026)**: setelah hero plate
   uncropped (`74a78e0`), redesign Available Roles (`aa3d228`) + glow wave
   (`d16542b`), datang serangkaian polish: hover pointer-reactive kartu role
@@ -548,8 +582,9 @@ projects 5.104 recruitment 2.174 footer 2.666
 - [x] ~~Halaman Recruitment~~ — **LENGKAP** (§8b).
 - [x] ~~Redesign kartu Available Roles (proporsional + border emas + sparkle)~~ dan
       ~~hero mobile fluid (home & recruitment)~~ — selesai 23 Sep 2026 (§21).
-- [ ] Halaman lain yang ada di Figma tapi belum dibuat: **About Us,
-      Hall of Frames, Partners, Contact**.
+- [x] ~~About Us (`/about`) sections 1–4~~ — **selesai 30 Sep 2026** (§8c).
+- [ ] Halaman lain yang ada di Figma tapi belum dibuat: **Hall of Frames,
+      Partners, Contact**.
 - [ ] Audit tiap halaman detail HoDS / detail role kalau ada pembaruan Figma.
 - [~] **Optimasi berat web (P0–P2)** — detail di `docs/ai-handoff.md` §"Perf
       audit & rencana". **P0(a)+(d) selesai 28 Sep 2026:** `sizes` Snippets +

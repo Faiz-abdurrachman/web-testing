@@ -1,5 +1,43 @@
 # Asset provenance
 
+## About Us — Philosophy & Our Ecosystem (30 September 2026)
+
+- Figma file `RntmRWAgLrh5utgzcjrUik`, section `1331:15784` and pipeline
+  `1331:15792`. The section is 1440 × 880. Its padded header is 931 × 178 at
+  (254.5, 80); the pipeline is 1280 × 426 at (80, 374). The five columns are
+  bottom-aligned above the baseline at y=800.
+- `OurEcosystem.astro` keeps headings, descriptions, numbers, and layout as
+  HTML/CSS. The 188/116/217px connectors use a CSS violet-to-white gradient:
+  pixel samples in the supplied PNG brighten toward the baseline, whereas the
+  Figma SVG export fades to transparent and rendered too dark. The 1280 × 2
+  baseline remains the Figma SVG in `public/images/about/ecosystem-baseline.svg`.
+- Figma uses **per-section fills**, not a shared/parent glow (`about us` page
+  `1277:18477`): Philosophy `922:16330` is `linear-gradient(163deg, #050507 63%,
+#6C3BFF 126%)`; Our Ecosystem `1248:14877` is `linear-gradient(24.75deg,
+#050507 53%, #6C3BFF 133%)`. The two are siblings (no decorative layer crosses
+  the seam) and meet continuously: both reach ~`#3C238C` at the seam's right edge
+  and `#050507` at the left. Angles/stops above were fitted from the rendered
+  node PNGs (right-edge/top-edge MAE < 1); the MCP gradient string normalises
+  handles and is lossy, and the earlier `152.43deg` / `36.99deg` values were
+  wrong (MAE ≈ 4.3 vs < 1). Implemented as each section's `background`; the
+  crystal "Mask group" (`922:16363`) belongs to Philosophy. Rejected: the
+  temporary one shared parent radial + seam bands (oversized purple).
+- The philosophy About variant had hidden the home page's `.canvas::before`
+  glow (`glow.webp`) and uses the section fill instead, matching Figma.
+- Pipeline header padding was restored to the Figma 10px inset, moving the
+  pipeline down 20px to y=374 without changing the 880px section height.
+- Wide viewport pass: the inner canvases of Philosophy and Ecosystem scale
+  continuously from a 1456px viewport, capped at 2×. Their section gradients
+  remain full viewport width; scaling the whole `body` created black gutters and
+  misaligned the section edge at browser zoom levels. The 1440px Figma geometry
+  stays unchanged.
+- At 1051–1284px the five columns shrink proportionally within the section,
+  while the pipeline keeps its 426px frame: all connector bottoms remain at
+  y=782 and the baseline at y=799. At 701–1050px the
+  pipeline uses two columns with its fifth step centred on the last row; at
+  700px and below it keeps the single-column reading order. The baseline is
+  reserved for widths where five readable columns fit.
+
 ## Splash — native ritual scene (25 September 2026, latest revision)
 
 - User rejected the raster-scene implementation and requested native web rendering

@@ -6,7 +6,8 @@ Copy-paste ini ke AI baru sebelum ngasih task. Ganti bagian `TASK` di bawah.
 
 ```text
 Kamu lanjut kerja di repo "Data Sorcerers" — static Astro site: homepage +
-halaman Recruitment (+ 6 halaman detail role) + 6 halaman detail HoDS.
+halaman About Us + halaman Recruitment (+ 6 halaman detail role) + 6 halaman
+detail HoDS.
 Target: pixel-accurate ke Figma/PNG, HTML/CSS ringan.
 
 Sebelum ngapa-ngapain, WAJIB baca dulu (urut, jangan skip):
@@ -42,7 +43,7 @@ Commands:
 - npm run build              → astro check + astro build (HARUS 0 error)
 - npm run format:check       → harus lolos sebelum commit
 - node scripts/verify.mjs               → verifikasi visual + geometri (HARUS exit 0)
-- node scripts/responsive-audit.mjs     → 14 rute × 26 lebar (320–3840; HARUS exit 0)
+- node scripts/responsive-audit.mjs     → 15 rute × 26 lebar (320–3840; HARUS exit 0)
 - npm run perf:audit         → scroll-jank + long-task per section (set PERF_MAX_TASK untuk fail)
 - npm run verify:vt          → smoke View Transitions + cue sound (navigasi klien; butuh preview)
 - npm run seo:audit          → validasi meta/OG/canonical/sitemap di dist (setelah build)
@@ -59,8 +60,17 @@ setNavbarHidden). Fitur CSS modern (mis. `backdrop-filter`): cek di `dist/`/live
 bukan cuma dev.
 
 Kondisi sekarang (detail di docs/ai-handoff.md):
-- 14 rute: `/`, `/recruitment`, `/recruitment/roles/{id}` (6), `/hods/{id}` (6)
-  (+ `/lab/sound` internal, noindex).
+- 15 rute publik: `/`, `/about`, `/recruitment`, `/recruitment/roles/{id}` (6),
+  `/hods/{id}` (6) (+ `/lab/sound` internal, noindex).
+- **About Us (`/about`) sections 1–4 SELESAI** (`AboutHero`, `VisiMisi`,
+  `Philosophy variant="about"`, `OurEcosystem`). Ambient glow = **fill
+  per-section Figma**, BUKAN satu radial/parent: `.philosophy.is-about`
+  `linear-gradient(163deg,#050507 63%,#6C3BFF 126%)`, `.ecosystem`
+  `linear-gradient(24.75deg,#050507 53%,#6C3BFF 133%)`. **Gotcha:** string
+  gradient dari **Figma MCP menormalkan handle → lossy** (MCP: 170deg/16deg;
+  render node asli: 163deg/24.75deg). Selalu export node via MCP lalu fit piksel
+  PNG; jangan paste string MCP mentah. Node: About page `1277:18477`, Philosophy
+  `922:16330`, Ecosystem `1248:14877`.
 - **View Transitions AKTIF** (`<ClientRouter />` di `BaseLayout`): navigasi
   antar-halaman klien (cross-fade) + `AudioContext` persist. Karena Astro tidak
   menjalankan ulang script bundled saat swap, **tiap komponen re-init lewat
@@ -114,6 +124,10 @@ Kalau bikin/ubah section: update `docs/assets.md` + `docs/ai-handoff.md` dan
 tambah/cek assertion di `scripts/verify.mjs`.
 
 TODO utama: **ikuti `docs/ai-handoff.md` §"Next plan — untuk AI berikutnya"**.
+**Penting sebelum mulai:** ada perubahan **belum di-commit** di working tree
+(koreksi glow About + docs + `verify.mjs` + `public/images/about/ecosystem-baseline.svg`);
+`main` lokal `dd87041` unggul **3 commit** dari `origin`/production `86b49c6`.
+Jalankan gate lalu commit/push (konfirmasi user dulu).
 **Perf P0 SELESAI (28 Sep 2026, HEAD `4fe4c19`):** Home mobile 1.33→0.98 MB —
 sorcerer → AVIF (`sorcerer-2x` 481→196 KB), video hero di-re-encode (home webm
 0.38 MB, recruitment 0.76 MB), poster tak di-fetch di HP, `sizes` Snippets +
@@ -126,7 +140,7 @@ carousel cues, dan fix parity hover home + rail edge fade (`6c79831`–`4fe4c19`
 
 Prioritas berikutnya (opsional, urut): (a) AVIF hero art + ikon philosophy/glow
 kalau mau tembus Home ≤800 KB; (b) konten asli (project/tanggal recruitment);
-(c) halaman About Us / Hall of Frames / Partners / Contact (nav `aria-disabled` —
+(c) halaman Hall of Frames / Partners / Contact — **About Us sudah selesai** (nav `aria-disabled` —
 jangan bikin URL palsu); (d) webfont Nasalization (berlisensi — jangan diakali).
 Sound selesai (`docs/sound-sop.md`).
 

@@ -14,8 +14,11 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   dari Hero sampai Section 4 secara presisi ke Figma (`RntmRWAgLrh5utgzcjrUik`):
   - Section 1: `AboutHero.astro` (`Hero Section - About Us`).
   - Section 2: `VisiMisi.astro` (`1248:14797`, tarot card, deskripsi, checklist misi).
-  - Section 3: `Philosophy.astro` (`variant="about"`, `linear-gradient(152.43deg, #050507 63.34%, #6C3BFF 126.04%)`, full-bleed ke pinggir tanpa batas hitam, teks "We Build With It" tidak tersentuh glow).
-  - Section 4: `OurEcosystem.astro` (`1248:14877` / `1331:15784`, `linear-gradient(36.99deg, #050507 52.96%, #6C3BFF 133.24%)`, `align-items: flex-end` persis Frame 2587 sehingga ke-5 garis vertikal rata sempurna di atas garis horizontal baseline, angka 01-05 gradient vertikal + judul Bold 700).
+  - Section 3: `Philosophy.astro` (`variant="about"`, node `922:16330`, `linear-gradient(163deg, #050507 63%, #6C3BFF 126%)`, full-bleed ke pinggir tanpa batas hitam, teks "We Build With It" tidak tersentuh glow).
+  - Section 4: `OurEcosystem.astro` (node `1248:14877`, `linear-gradient(24.75deg, #050507 53%, #6C3BFF 133%)`, `align-items: flex-end` persis Frame 2587 sehingga ke-5 garis vertikal rata sempurna di atas garis horizontal baseline, angka 01-05 gradient vertikal + judul Bold 700).
+  - Polish Section 4: header mendapat inset 10px sesuai Figma sehingga pipeline mulai y=374; garis vertikal CSS berubah ungu→putih sesuai sampel piksel PNG (SVG export Figma justru transparan di ujung bawah), baseline tetap SVG Figma. Ambient glow = **fill per-section** (bukan satu radial/parent bersama): Philosophy `163deg/63%/126%`, Ecosystem `24.75deg/53%/133%`, sudut+stop di-fit dari PNG node (MAE < 1); string gradient Figma MCP menormalkan handle (lossy) dan nilai lama `152.43deg`/`36.99deg` salah. Provenance: `docs/assets.md` §About Us — Our Ecosystem.
+  - Responsif wide view: hanya canvas dalam Philosophy/Ecosystem yang scale mulus mulai viewport 1456px (maksimal 2×); section gradient tetap full-bleed. Zoom pada `body` pernah membuat gutter hitam dan tepi section bergeser, jadi jangan dipasang lagi. Ukuran referensi 1440px tetap sesuai Figma.
+  - Pipeline responsif: 1051–1284px tetap 5 kolom fluid, frame 426px menjaga ujung kelima garis pada y=782 dan baseline pada y=799; 701–1050px grid 2 kolom (langkah kelima di tengah), ≤700px urutan 1 kolom. Desktop 1440px tetap sesuai Figma.
   - Sambungan Section 3 & 4 mengalir seamless tanpa patahan horizontal di seluruh resolusi (1366px, 1440px, 1920px).
 - **Navbar (28 Sep 2026):** `Navbar.astro` + `.button.white` dirombak
   jadi **persis Figma** node `755:15178` / `assets/Navbar.png`. Ringkas: link `#707070`/aktif `#fff` + underline gradient 1px,
@@ -48,7 +51,17 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   baris. Geometri kartu tetap. Lihat `docs/assets.md` §Available Roles.
 - **Runtime deps sengaja cuma** `astro` + `gsap` + `three`. Jangan tambah library
   lain tanpa tanya; lazy-import yang berat.
-- **Commit terbaru (`main` lokal = `52e815a`, 30 Sep 2026; `origin`/production = `86b49c6`):**
+- **Commit terbaru (`main` lokal = `dd87041`, 30 Sep 2026; `origin`/production = `86b49c6`, jadi `main` unggul 3 commit belum di-push):**
+  - `dd87041` **About Us page sections 1–4** — `AboutHero`, `VisiMisi`,
+    `Philosophy` (`variant="about"`), `OurEcosystem` (baseline SVG, pipeline
+    `align-items: flex-end`, inset header 10px), plus assertion geometri di
+    `verify.mjs`.
+  - **BELUM DI-COMMIT (working tree, 30 Sep 2026):** koreksi gradient ambient
+    Philosophy/Ecosystem ke **fill per-section Figma** (lihat "Baru saja" di
+    bawah) + `public/images/about/ecosystem-baseline.svg` (untracked). Jalankan
+    gate sebelum commit.
+  - `52e815a` **Navbar persis Figma** (`755:15178`) — lihat section "Navbar".
+  - `33c482a` **role card dividers** hanya saat hover/fokus.
   - `fe71b27` **VT hardening + OG hardening** — `verify-vt.mjs` kini uji
     Back/Forward lewat client router, reload deep-link `/#domains`, dan reduce
     benar-benar inert (tanpa `hero-ready`/`.pin-spacer`); `BaseLayout` dapat
@@ -110,16 +123,46 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   partikel, idle karakter, scroll reveal, tilt, magnetic. Semua **inert saat
   `prefers-reduced-motion: reduce`**.
 - **Gate sebelum commit (semua harus exit 0):** `npm run format:check`,
-  `npm run build` (0 error, 15 halaman), `PREVIEW_URL=… node scripts/verify.mjs`
-  (`browserErrors: []`), `node scripts/responsive-audit.mjs` (364 combos),
-  `npm run seo:audit`. **Penting:** `verify.mjs` pakai `page.goto` penuh, jadi
+  `npm run build` (0 error, **16 halaman**), `PREVIEW_URL=… node scripts/verify.mjs`
+  (`browserErrors: []`), `node scripts/responsive-audit.mjs` (**15 rute × 26 lebar
+  = 390 combos**), `npm run seo:audit`. **Penting:** `verify.mjs` pakai `page.goto` penuh, jadi
   **tidak menguji navigasi klien** — pakai **`npm run verify:vt`**
   (`scripts/verify-vt.mjs`): cek konteks JS persist, komponen re-init, cue
   `transition` tepat satu, modifier tidak di-intercept, dan deep-link hash.
 - **Deploy GANDA:** `git push origin main` → testing **dan** production.
-- **Next:** §"Next plan — untuk AI berikutnya" di bawah. Perf P0 **selesai**
-  (Home mobile 0.98 MB); sisa **opsional** (AVIF hero art + ikon philosophy/glow),
-  konten asli, halaman baru, webfont Nasalization. VT hardening & OG **selesai**.
+- **Next:** §"Next plan — untuk AI berikutnya" di bawah. **About Us sections 1–4
+  selesai** (`/about`, 15 rute publik); Perf P0 **selesai** (Home mobile 0.98 MB);
+  sisa **opsional** (AVIF hero art + ikon philosophy/glow), konten asli, halaman
+  **Hall of Frames / Partners / Contact** (nav masih `aria-disabled`), webfont
+  Nasalization. VT hardening & OG **selesai**.
+
+## Baru saja: About Us glow = fill per-section Figma (30 Sep 2026)
+
+- **Keluhan user:** implementasi glow sebelumnya (satu radial besar di parent
+  bersama) membuat area ungu kegedean & tidak match Figma. **Figma = sumber
+  kebenaran absolut.**
+- **Hasil audit Figma MCP** (file `RntmRWAgLrh5utgzcjrUik`): halaman
+  `About Us Page` `1277:18477` berisi section **bersaudara**; **tiap section
+  punya fill sendiri**, TIDAK ada gradient parent / elemen dekoratif yang
+  menyeberang seam.
+  - Philosophy `922:16330`: `linear-gradient(163deg, #050507 63%, #6C3BFF 126%)`.
+  - Our Ecosystem `1248:14877`: `linear-gradient(24.75deg, #050507 53%,
+#6C3BFF 133%)`.
+  - `Mask group` `922:16363` (kristal + ellipse `#6C3BFF blur(125px)`) milik
+    Philosophy (artwork), bukan ambient.
+- **Gotcha penting:** string `linear-gradient(...)` dari Figma MCP
+  **menormalkan handle** (stop terakhir dipaksa 100%) → lossy. MCP bilang
+  `170deg/59%/100%` (Philosophy) & `16deg/57%/100%` (Ecosystem), tapi render node
+  asli cocok dengan `163deg/63%/126%` & `24.75deg/53%/133%` (MAE < 1 vs MCP ≈ 17).
+  Nilai lama `152.43deg`/`36.99deg` juga salah (MAE ≈ 4.3). **Selalu export node
+  via MCP lalu fit piksel PNG**, jangan paste string gradient MCP mentah.
+- **Implementasi:** `.philosophy.is-about` & `.ecosystem` pakai `background:
+linear-gradient(...)` hasil fit. Tidak ada parent bersama, tidak ada pita seam.
+  Seam terukur nyambung (Δ ≤ 2/255). Area ungu 22% (Philosophy) / 30% (Ecosystem),
+  stabil 375–2560px (zoom proporsional karena `canvas { zoom: 100vw/1440 }`).
+  Provenance: `docs/assets.md` §About Us — Our Ecosystem.
+- **Verifikasi:** background MAE vs PNG node 0.73/0.63 per kanal; `verify.mjs`
+  EXIT 0, `responsive-audit` 390 ALL PASS, `seo:audit`, `verify:vt` PASS.
 
 ## Baru saja: Navbar exact Figma redesign (28 Sep 2026)
 
@@ -160,7 +203,7 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
 
 ## Checkpoint terakhir (28 Sep 2026) — detail
 
-- **HEAD saat itu `4fe4c19` (28 Sep 2026); HEAD sekarang `52e815a` (30 Sep 2026).** Di atas migration VT + sound: `fe71b27`
+- **HEAD saat itu `4fe4c19` (28 Sep 2026); HEAD sekarang `dd87041` (30 Sep 2026).** Di atas migration VT + sound: `fe71b27`
   (VT + OG hardening), `6aefa49` (re-encode `sorcerer-2x`), `c3b122c` (Perf P0
   a+d), `473ca00` (Perf P0 b: AVIF sorcerer + video + poster), `6c79831` (hover
   kartu + keyboard cues), `7821e87` (parity hover home + edge fade awal),
@@ -173,8 +216,9 @@ origin main` mengirim ke **testing + production**
   (`github.com/Web-Data-Sorcerers/community-web`, remote `production`).
   Jalankan `git push origin main` seperti biasa; kalau perlu cek sinkron pakai
   `git fetch production -q && git rev-parse --short main origin/main
-production/main`. **Update 30 Sep 2026:** `main` = `52e815a` sedangkan
-  `origin/main` = `production/main` = `86b49c6` (2 commit lokal belum di-push).
+production/main`. **Update 30 Sep 2026:** `main` = `dd87041` sedangkan
+  `origin/main` = `production/main` = `86b49c6` (**3 commit lokal belum di-push**;
+  plus perubahan About glow yang belum di-commit di working tree).
 - **Available Roles glow wave DIPERKECIL.** `@keyframes role-glow-wave` sekarang
   cuma `scale: 1 → 1.04` (drift `translate ±6%` dibuang) supaya ukuran glow
   balik ke frame statis. Hover kartu dapat "pointer pool" radial violet (ikut
@@ -1029,13 +1073,19 @@ Section.png` (5760×3376 → 1440×844). Patch glow terukur: center REF
   rAF-throttle + short-circuit, buang blur 30px menu HP, `inert` latar saat menu
   terbuka. Tampilan statis tidak berubah; semua gate tetap hijau.
 - TODO: webfont Nasalization, data project asli, tanggal recruitment, halaman
-  About Us / Hall of Frames / Partners / Contact, dan lanjutan animasi What We Do.
+  Hall of Frames / Partners / Contact (About Us sudah selesai), dan lanjutan
+  animasi What We Do.
 
-## Next plan — untuk AI berikutnya (28 Sep 2026)
+## Next plan — untuk AI berikutnya (update 30 Sep 2026)
 
 Urutan yang disarankan. Baca `docs/sound-sop.md` (khususnya §9) kalau menyentuh
 sound atau navigasi; detail P0–P2 ada di "Perf audit & rencana" di atas.
 
+0. **Commit/push perubahan working tree.** Ada perubahan **belum di-commit**:
+   koreksi glow About (Philosophy/Ecosystem fill per-section), `docs/*`,
+   `scripts/verify.mjs` assertion About, dan `public/images/about/ecosystem-baseline.svg`
+   (untracked). Jalankan gate dulu, lalu `git add -A && git commit` + konfirmasi
+   user sebelum `git push origin main` (deploy ganda testing+production).
 1. **Perf P0 — SELESAI (28 Sep 2026).** (a) `sizes` Snippets + 960w, (d)
    `logo.png`/hero `background`/`figure` (lihat "P0 pass"), lalu (b) **sorcerer →
    AVIF** (`sorcerer-2x` 481→196 KB), (c) **video hero di-re-encode** (home webm
@@ -1057,8 +1107,9 @@ sound atau navigasi; detail P0–P2 ada di "Perf audit & rencana" di atas.
    belum perlu. Smoke: **`npm run verify:vt`**.
 3. **Konten:** data project asli (`src/data/projects.ts` masih 4 placeholder) dan
    tanggal recruitment (`SelectionTimeline.astro` masih "Date"). Butuh material user.
-4. **Halaman baru:** About Us / Hall of Frames / Partners / Contact. Nav-nya sudah
-   ada tapi `aria-disabled` — **jangan bikin URL palsu**, konfirmasi ke user dulu.
+4. **Halaman baru:** ~~About Us~~ **DONE** (sections 1–4). Sisa: **Hall of Frames
+   / Partners / Contact**. Nav-nya sudah ada tapi `aria-disabled` — **jangan bikin
+   URL palsu**, konfirmasi ke user dulu.
 5. **Nasalization webfont:** butuh file berlisensi dari manusia — **jangan
    diakali**. Taruh `.woff2` di `public/fonts/`, update `@font-face` di
    `global.css` (pertahankan `local()`).
