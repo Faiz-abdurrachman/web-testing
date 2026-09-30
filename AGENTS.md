@@ -24,6 +24,7 @@ npm run assets:og         # regenerate og image + favicons + manifest
 npm run assets:optimize   # re-encode heavy webp (lossy q82/85/88) from assets/image-src
 npm run assets:starfield  # regenerate What We Do starfield tiles (Chromium)
 npm run assets:footer     # footer bg: sharp desktop + portrait phone variant
+npm run assets:partners   # Partners page artwork (hero/cards/icons, sharp)
 npm run seo:audit         # validate meta/OG/canonical/sitemap in dist (after build)
 npm run perf:audit        # scroll-jank report per section (set PERF_MAX_TASK to fail)
 npm run audit:navbar      # navbar states/containment/hug across widths
@@ -98,8 +99,10 @@ src/components/Sound.astro  floating mute orb + delegated data-sfx wiring
 src/data/domains.ts      6 HoDS cards (title/desc/tint/chips)
 src/data/hods.ts         6 detail categories → 22 tabs (LEARNING/…/OUTPUT)
 src/data/projects.ts     4 placeholder projects (swap for real data)
+src/data/partners.ts     Partners categories + why-cards (logos placeholder)
 src/pages/index.astro    homepage composition
 src/pages/about.astro    About Us composition (sections 1–4)
+src/pages/partners.astro Partners composition (hero + grids + why)
 src/pages/hods/[id].astro detail route (getStaticPaths over hods.ts)
 src/pages/lab/sound.astro internal sound audition page (noindex, not in sitemap)
 src/styles/global.css    @font-face, tokens, reset
@@ -112,6 +115,7 @@ scripts/starfield-patterns.mjs   gradient source for the starfield tiles
 scripts/generate-hero-video.mjs  home hero bg clip (boomerang webm/mp4 + poster)
 scripts/generate-recruitment-hero-video.mjs  recruitment hero bg (crossfade loop)
 scripts/generate-footer-background.mjs  footer bg: sharp desktop + portrait phone variant
+scripts/generate-partners-assets.mjs  Partners page artwork (hero/cards/icons)
 scripts/navbar-audit.mjs  navbar states/containment/hug across widths
 scripts/perf-audit.mjs   scroll-jank + long-task report per section
 scripts/seo-audit.mjs    validates title/meta/OG/canonical/sitemap in dist/

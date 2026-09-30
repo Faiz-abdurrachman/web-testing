@@ -7,6 +7,7 @@ const ROUTES = [
   '/',
   '/about',
   '/recruitment',
+  '/partners',
   ...IDS.map((id) => `/hods/${id}`),
   ...IDS.map((id) => `/recruitment/roles/${id}`),
 ];

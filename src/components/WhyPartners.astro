@@ -1,0 +1,208 @@
+---
+import { whyPartners } from '../data/partners';
+---
+
+<section class="why-partners" aria-labelledby="why-partners-title">
+  <div class="why-head">
+    <span class="pill">Why Data Sorcerers?</span>
+    <h2 id="why-partners-title">
+      <span>More Than a Network</span>
+      <span>A Building Partner</span>
+    </h2>
+  </div>
+  <ul class="why-grid">
+    {whyPartners.map((card) => (
+      <li class="why-card">
+        <div class="card-head">
+          <img
+            src={card.icon}
+            width="58"
+            height="63"
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+          />
+          <h3>{card.title}</h3>
+        </div>
+        <p>{card.description}</p>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  /* Matches Figma node 1331:15711 (1440 x 670): padding 80px, gap 58px,
+     #050507. Header pill + 80/102 Nasalization headline, then four 309.5px
+     cards (gap 14px) with a 1px 135deg gradient rim and a violet base glow. */
+  .why-partners {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 58px;
+    padding: 80px;
+    box-sizing: border-box;
+    background: #050507;
+  }
+  .why-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Figma top-aligns this fixed 263px frame, not centres it. */
+    justify-content: flex-start;
+    height: 263px;
+    gap: 14px;
+    text-align: center;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 12px;
+    border-radius: 32px;
+    background: rgb(255 255 255 / 15%);
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    white-space: nowrap;
+  }
+  h2 {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 80px;
+    font-weight: 400;
+    line-height: 102px;
+    color: #fff;
+    text-align: center;
+  }
+  h2 span {
+    display: block;
+  }
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .why-card {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 28px;
+    box-sizing: border-box;
+    min-height: 189px;
+    border-radius: 20px;
+    background: #262626;
+    overflow: hidden;
+  }
+  /* Violet glow bleeding in from the bottom-right (the Figma sweep). */
+  .why-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+      108% 48% at 100% 100%,
+      rgb(150 118 240 / 92%) 0%,
+      rgb(112 66 224 / 52%) 40%,
+      rgb(108 59 255 / 0%) 100%
+    );
+  }
+  /* 1px 135deg gradient rim. */
+  .why-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    background: linear-gradient(135deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%);
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+  }
+  .card-head {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .card-head img {
+    width: 58px;
+    height: 63px;
+    object-fit: contain;
+  }
+  h3 {
+    margin: 0;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 39px;
+  }
+  p {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    color: #ede8ff;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+  }
+
+  /* Four cards need ~1366px to keep the icon + title on one line; use three
+     columns below that so nothing clips. */
+  @media (min-width: 1051px) and (max-width: 1365px) {
+    .why-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 1050px) {
+    .why-partners {
+      gap: 44px;
+      padding: 64px var(--page-gutter);
+    }
+    .why-head {
+      height: auto;
+    }
+    h2 {
+      font-size: clamp(38px, 6.5vw, 56px);
+      line-height: 1.2;
+    }
+    .why-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 700px) {
+    .why-partners {
+      gap: 32px;
+      padding: 48px var(--page-gutter);
+    }
+    h2 {
+      font-size: clamp(28px, 8vw, 40px);
+    }
+    .why-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .why-card {
+      padding: 24px;
+    }
+  }
+</style>

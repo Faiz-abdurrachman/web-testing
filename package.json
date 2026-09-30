@@ -18,6 +18,7 @@
     "assets:og": "node scripts/generate-og.mjs",
     "assets:starfield": "node scripts/generate-star-tiles.mjs",
     "assets:footer": "node scripts/generate-footer-background.mjs",
+    "assets:partners": "node scripts/generate-partners-assets.mjs",
     "seo:audit": "node scripts/seo-audit.mjs",
     "perf:audit": "node scripts/perf-audit.mjs",
     "format": "prettier --write .",

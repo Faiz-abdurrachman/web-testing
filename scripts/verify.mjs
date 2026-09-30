@@ -2131,6 +2131,18 @@ try {
       lineEnds: lines.map((line) =>
         Math.round(line.getBoundingClientRect().bottom),
       ),
+      philosophyCanvasZoom: Number(
+        getComputedStyle(philosophy.querySelector('.canvas')).zoom,
+      ),
+      philosophyCanvasWidth: philosophy
+        .querySelector('.canvas')
+        .getBoundingClientRect().width,
+      philosophyIllustration: (() => {
+        const box = philosophy
+          .querySelector('.illustration')
+          .getBoundingClientRect();
+        return { left: Math.round(box.left), right: Math.round(box.right) };
+      })(),
       overflow: document.documentElement.scrollWidth - innerWidth,
     };
   });
@@ -2140,7 +2152,32 @@ try {
   assert.equal(aboutWide.philosophyWidth, aboutWide.clientWidth);
   assert.equal(aboutWide.canvasWidth, aboutWide.clientWidth);
   assert.equal(new Set(aboutWide.lineEnds).size, 1);
+  // The Philosophy background now lives on its zoomed canvas, so the artwork
+  // and glow scale together instead of the artwork drifting off the left edge.
+  assert.ok(Math.abs(aboutWide.philosophyCanvasZoom - 1920 / 1440) < 0.01);
+  assert.equal(aboutWide.philosophyCanvasWidth, aboutWide.clientWidth);
+  assert.ok(Math.abs(aboutWide.philosophyIllustration.left) < 1);
+  assert.ok(
+    aboutWide.philosophyIllustration.right <= aboutWide.clientWidth + 1,
+  );
   assert.ok(aboutWide.overflow <= 1);
+  // Past 2880px the zoom must stay uncapped, otherwise a gutter appears at the
+  // edges (the original bug: the canvas froze at 2x and showed #050507 bars).
+  await page.setViewportSize({ width: 3200, height: 900 });
+  const aboutUltraWide = await page.evaluate(() => {
+    const box = document
+      .querySelector('.philosophy.is-about .canvas')
+      .getBoundingClientRect();
+    return {
+      left: Math.round(box.left),
+      right: Math.round(box.right),
+      clientWidth: document.documentElement.clientWidth,
+      overflow: document.documentElement.scrollWidth - innerWidth,
+    };
+  });
+  assert.equal(aboutUltraWide.left, 0);
+  assert.equal(aboutUltraWide.right, aboutUltraWide.clientWidth);
+  assert.ok(aboutUltraWide.overflow <= 1);
   for (const [width, expectedDisplay] of [
     [1050, 'grid'],
     [1051, 'flex'],
@@ -2176,8 +2213,50 @@ try {
     assert.ok(pipelineFit.overflow <= 1);
   }
 
+  // Partners page — section heights and card geometry vs the reference PNGs.
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(`${baseUrl}/partners`, { waitUntil: 'networkidle' });
+  await page.evaluate(() => document.fonts.ready);
+  const partnersGeometry = await page.evaluate(() => {
+    const box = (selector) => {
+      const rect = document.querySelector(selector).getBoundingClientRect();
+      return { width: Math.round(rect.width), height: Math.round(rect.height) };
+    };
+    const card = document.querySelector('.why-card').getBoundingClientRect();
+    const partner = document
+      .querySelector('.partner-card')
+      .getBoundingClientRect();
+    return {
+      hero: box('.partners-hero'),
+      our: box('.our-partners'),
+      why: box('.why-partners'),
+      whyCard: {
+        width: Math.round(card.width * 10) / 10,
+        height: Math.round(card.height * 10) / 10,
+      },
+      partnerCard: {
+        width: Math.round(partner.width),
+        height: Math.round(partner.height),
+      },
+      groupPills: document.querySelectorAll('.group-pill').length,
+      partnerCards: document.querySelectorAll('.partner-card').length,
+      overflow: document.documentElement.scrollWidth - innerWidth,
+    };
+  });
+  assert.deepEqual(partnersGeometry, {
+    hero: { width: 1440, height: 665 },
+    our: { width: 1440, height: 1075 },
+    why: { width: 1440, height: 670 },
+    whyCard: { width: 309.5, height: 189 },
+    partnerCard: { width: 240, height: 116 },
+    groupPills: 3,
+    partnerCards: 20,
+    overflow: 0,
+  });
+
   const report = {
     aboutEcosystem: { geometry: ecosystemGeometry, wide: aboutWide },
+    partners: { geometry: partnersGeometry },
     recruitment: {
       geometry: recruitmentGeometry,
       meanAbsoluteChannelDifference:
