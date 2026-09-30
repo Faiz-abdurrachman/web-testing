@@ -26,17 +26,17 @@ function getFigmaToken() {
       return config.mcpServers.figma.env.FIGMA_API_KEY;
     }
   } catch {}
-  return 'REDACTED';
+  throw new Error(
+    'FIGMA_API_KEY not set (env var or ~/.gemini/config/mcp_config.json).',
+  );
 }
-
-const TOKEN = getFigmaToken();
 
 function figmaRequest(path) {
   return new Promise((resolve, reject) => {
     const req = https.request(
       `https://api.figma.com/v1${path}`,
       {
-        headers: { 'X-Figma-Token': TOKEN },
+        headers: { 'X-Figma-Token': getFigmaToken() },
       },
       (res) => {
         let body = '';
