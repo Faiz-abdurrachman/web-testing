@@ -2077,7 +2077,107 @@ try {
     );
   }
   assert.deepEqual(errors, []);
+  await page.goto(`${baseUrl}/about`, { waitUntil: 'networkidle' });
+  await page.evaluate(() => document.fonts.ready);
+  await setNavbarHidden(true);
+  const ecosystemGeometry = await page.evaluate(() => {
+    const section = document.querySelector('.ecosystem');
+    const sectionBox = section.getBoundingClientRect();
+    const relativeBox = (selector) => {
+      const box = document.querySelector(selector).getBoundingClientRect();
+      return {
+        x: Math.round((box.x - sectionBox.x) * 10) / 10,
+        y: Math.round((box.y - sectionBox.y) * 10) / 10,
+        width: Math.round(box.width * 10) / 10,
+        height: Math.round(box.height * 10) / 10,
+      };
+    };
+    return {
+      section: { width: sectionBox.width, height: sectionBox.height },
+      header: relativeBox('.ecosystem-header'),
+      pipeline: relativeBox('.pipeline-container'),
+      baseline: relativeBox('.baseline'),
+      lineBottoms: [...document.querySelectorAll('.ecosystem .step-line')].map(
+        (line) =>
+          Math.round(line.getBoundingClientRect().bottom - sectionBox.y),
+      ),
+    };
+  });
+  assert.deepEqual(ecosystemGeometry, {
+    section: { width: 1440, height: 880 },
+    header: { x: 254.5, y: 80, width: 931, height: 178 },
+    pipeline: { x: 80, y: 374, width: 1280, height: 426 },
+    baseline: { x: 80, y: 799, width: 1280, height: 2 },
+    lineBottoms: [782, 782, 782, 782, 782],
+  });
+  await page.locator('.ecosystem').screenshot({
+    path: 'artifacts/about-ecosystem-desktop.png',
+  });
+  await page.setViewportSize({ width: 1920, height: 900 });
+  const aboutWide = await page.evaluate(() => {
+    const ecosystem = document.querySelector('.ecosystem');
+    const philosophy = document.querySelector('.philosophy.is-about');
+    const lines = [...ecosystem.querySelectorAll('.step-line')];
+    return {
+      bodyZoom: Number(getComputedStyle(document.body).zoom),
+      canvasZoom: Number(
+        getComputedStyle(ecosystem.querySelector('.canvas')).zoom,
+      ),
+      sectionWidth: ecosystem.getBoundingClientRect().width,
+      philosophyWidth: philosophy.getBoundingClientRect().width,
+      canvasWidth: ecosystem.querySelector('.canvas').getBoundingClientRect()
+        .width,
+      clientWidth: document.documentElement.clientWidth,
+      lineEnds: lines.map((line) =>
+        Math.round(line.getBoundingClientRect().bottom),
+      ),
+      overflow: document.documentElement.scrollWidth - innerWidth,
+    };
+  });
+  assert.equal(aboutWide.bodyZoom, 1);
+  assert.ok(Math.abs(aboutWide.canvasZoom - 1920 / 1440) < 0.01);
+  assert.equal(aboutWide.sectionWidth, aboutWide.clientWidth);
+  assert.equal(aboutWide.philosophyWidth, aboutWide.clientWidth);
+  assert.equal(aboutWide.canvasWidth, aboutWide.clientWidth);
+  assert.equal(new Set(aboutWide.lineEnds).size, 1);
+  assert.ok(aboutWide.overflow <= 1);
+  for (const [width, expectedDisplay] of [
+    [1050, 'grid'],
+    [1051, 'flex'],
+    [1284, 'flex'],
+  ]) {
+    await page.setViewportSize({ width, height: 900 });
+    const pipelineFit = await page.evaluate(() => {
+      const section = document
+        .querySelector('.ecosystem')
+        .getBoundingClientRect();
+      const row = document.querySelector('.ecosystem .steps-row');
+      const box = row.getBoundingClientRect();
+      const lines = [...document.querySelectorAll('.ecosystem .step-line')];
+      const baseline = document.querySelector('.ecosystem .baseline');
+      return {
+        display: getComputedStyle(row).display,
+        contained: box.left >= section.left && box.right <= section.right,
+        lineEnds: lines.map((line) =>
+          Math.round(line.getBoundingClientRect().bottom - section.top),
+        ),
+        baselineY: Math.round(
+          baseline.getBoundingClientRect().top - section.top,
+        ),
+        overflow: document.documentElement.scrollWidth - innerWidth,
+      };
+    });
+    assert.equal(pipelineFit.display, expectedDisplay);
+    assert.equal(pipelineFit.contained, true);
+    if (expectedDisplay === 'flex') {
+      assert.deepEqual(pipelineFit.lineEnds, [782, 782, 782, 782, 782]);
+      assert.equal(pipelineFit.baselineY, 799);
+    }
+    assert.ok(pipelineFit.overflow <= 1);
+  }
+
   const report = {
+    aboutEcosystem: { geometry: ecosystemGeometry, wide: aboutWide },
     recruitment: {
       geometry: recruitmentGeometry,
       meanAbsoluteChannelDifference:

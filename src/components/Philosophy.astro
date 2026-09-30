@@ -133,7 +133,7 @@ const principles = [
     background: var(--color-background);
   }
   .philosophy.is-about {
-    background: linear-gradient(152.43deg, #050507 63.34%, #6c3bff 126.04%);
+    background: linear-gradient(163deg, #050507 63%, #6c3bff 126%);
   }
   .philosophy.is-about .canvas::before {
     display: none;
@@ -143,6 +143,11 @@ const principles = [
     min-height: 837px;
     max-width: 1440px;
     margin-inline: auto;
+  }
+  @media (min-width: 1456px) {
+    .philosophy.is-about .canvas {
+      zoom: min(2, calc(100vw / 1440px));
+    }
   }
   /* The exported blur extends 350px beyond each side of the 280px ellipse. */
   .canvas::before {
