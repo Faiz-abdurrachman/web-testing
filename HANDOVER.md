@@ -331,8 +331,9 @@ Route `/about`, komposisi di `src/pages/about.astro`: `AboutHero` → `VisiMisi`
   `public/images/about/ecosystem-baseline.svg`, `align-items: flex-end`, grid
   5→2→1 kolom. Detail: `docs/assets.md` §About Us; assertion `aboutEcosystem` di
   `scripts/verify.mjs`.
-- **Status:** perubahan glow + docs + `verify.mjs` **belum di-commit** (working
-  tree, 30 Sep 2026). Rincian di `docs/ai-handoff.md`.
+- **Status:** perubahan glow + docs + `verify.mjs` **sudah di-commit lokal**
+  (`28ce3b8`, `781278e`), **belum di-push** (30 Sep 2026). Rincian di
+  `docs/ai-handoff.md`.
 
 ---
 
@@ -542,10 +543,10 @@ projects 5.104 recruitment 2.174 footer 2.666
   cues**, `7821e87` + `4fe4c19` **fix parity hover home (GSAP `clearProps`) +
   rail edge fade**. Sisa P0 (opsional) + rencana ada di `docs/ai-handoff.md`
   §"Next plan". Gate semua hijau.
-- **Checkpoint terbaru (30 Sep 2026, HEAD `dd87041`):** halaman **About Us
+- **Checkpoint terbaru (30 Sep 2026, `main` = `781278e`):** halaman **About Us
   sections 1–4** (`dd87041`) + koreksi **glow About = fill per-section Figma**
-  (working tree, **belum di-commit**; `main` unggul 3 commit dari
-  `origin`/production `86b49c6`). Detail §8c + `docs/ai-handoff.md`.
+  (`28ce3b8`) + docs (`781278e`) — **commit lokal, belum di-push**; `main` unggul
+  5 commit dari `origin`/production `86b49c6`. Detail §8c + `docs/ai-handoff.md`.
 - **Checkpoint sebelumnya (HEAD `d0fd3be`, 28 Sep 2026)**: setelah hero plate
   uncropped (`74a78e0`), redesign Available Roles (`aa3d228`) + glow wave
   (`d16542b`), datang serangkaian polish: hover pointer-reactive kartu role

@@ -262,9 +262,9 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   **Ambient glow About = fill per-section Figma** (bukan satu radial/parent):
   `Philosophy` `linear-gradient(163deg,#050507 63%,#6C3BFF 126%)`, `Ecosystem`
   `linear-gradient(24.75deg,#050507 53%,#6C3BFF 133%)` — lihat gotcha MCP di atas.
-  **Status 30 Sep 2026:** koreksi glow + docs + `verify.mjs` **belum di-commit**
-  (working tree); `main` lokal `dd87041` unggul 3 commit dari
-  `origin`/production `86b49c6`.
+  **Status 30 Sep 2026:** koreksi glow + docs **sudah di-commit lokal** (`28ce3b8`,
+  `781278e`), **belum di-push**; `main` unggul **5 commit** dari
+  `origin`/production `86b49c6`. Working tree bersih.
   **Deploy GANDA**: `git push origin main` → testing + production.
 - **Next plan (prioritas).** Lanjutan About Us (section berikutnya sesuai Figma);
   konten asli (`projects.ts`, tanggal recruitment); halaman Hall of

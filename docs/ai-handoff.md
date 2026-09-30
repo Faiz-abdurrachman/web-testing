@@ -51,15 +51,15 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   baris. Geometri kartu tetap. Lihat `docs/assets.md` §Available Roles.
 - **Runtime deps sengaja cuma** `astro` + `gsap` + `three`. Jangan tambah library
   lain tanpa tanya; lazy-import yang berat.
-- **Commit terbaru (`main` lokal = `dd87041`, 30 Sep 2026; `origin`/production = `86b49c6`, jadi `main` unggul 3 commit belum di-push):**
-  - `dd87041` **About Us page sections 1–4** — `AboutHero`, `VisiMisi`,
-    `Philosophy` (`variant="about"`), `OurEcosystem` (baseline SVG, pipeline
-    `align-items: flex-end`, inset header 10px), plus assertion geometri di
+- **Commit terbaru (`main` lokal = `781278e`, 30 Sep 2026; `origin`/production = `86b49c6`, jadi `main` unggul 5 commit belum di-push):**
+  - `781278e` **docs** — handoff About Us + gotcha gradient Figma MCP.
+  - `28ce3b8` **glow About = fill per-section Figma** — `Philosophy`/`Ecosystem`
+    pakai `linear-gradient(...)` hasil fit PNG (lihat "Baru saja" di bawah),
+    plus `OurEcosystem` (baseline SVG) + assertion `aboutEcosystem` di
     `verify.mjs`.
-  - **BELUM DI-COMMIT (working tree, 30 Sep 2026):** koreksi gradient ambient
-    Philosophy/Ecosystem ke **fill per-section Figma** (lihat "Baru saja" di
-    bawah) + `public/images/about/ecosystem-baseline.svg` (untracked). Jalankan
-    gate sebelum commit.
+  - `dd87041` **About Us page sections 1–4** — `AboutHero`, `VisiMisi`,
+    `Philosophy` (`variant="about"`), `OurEcosystem` (pipeline
+    `align-items: flex-end`, inset header 10px).
   - `52e815a` **Navbar persis Figma** (`755:15178`) — lihat section "Navbar".
   - `33c482a` **role card dividers** hanya saat hover/fokus.
   - `fe71b27` **VT hardening + OG hardening** — `verify-vt.mjs` kini uji
@@ -216,9 +216,9 @@ origin main` mengirim ke **testing + production**
   (`github.com/Web-Data-Sorcerers/community-web`, remote `production`).
   Jalankan `git push origin main` seperti biasa; kalau perlu cek sinkron pakai
   `git fetch production -q && git rev-parse --short main origin/main
-production/main`. **Update 30 Sep 2026:** `main` = `dd87041` sedangkan
-  `origin/main` = `production/main` = `86b49c6` (**3 commit lokal belum di-push**;
-  plus perubahan About glow yang belum di-commit di working tree).
+production/main`. **Update 30 Sep 2026:** `main` = `781278e` sedangkan
+  `origin/main` = `production/main` = `86b49c6` (**5 commit lokal belum di-push**,
+  working tree bersih).
 - **Available Roles glow wave DIPERKECIL.** `@keyframes role-glow-wave` sekarang
   cuma `scale: 1 → 1.04` (drift `translate ±6%` dibuang) supaya ukuran glow
   balik ke frame statis. Hover kartu dapat "pointer pool" radial violet (ikut
@@ -1081,11 +1081,11 @@ Section.png` (5760×3376 → 1440×844). Patch glow terukur: center REF
 Urutan yang disarankan. Baca `docs/sound-sop.md` (khususnya §9) kalau menyentuh
 sound atau navigasi; detail P0–P2 ada di "Perf audit & rencana" di atas.
 
-0. **Commit/push perubahan working tree.** Ada perubahan **belum di-commit**:
-   koreksi glow About (Philosophy/Ecosystem fill per-section), `docs/*`,
-   `scripts/verify.mjs` assertion About, dan `public/images/about/ecosystem-baseline.svg`
-   (untracked). Jalankan gate dulu, lalu `git add -A && git commit` + konfirmasi
-   user sebelum `git push origin main` (deploy ganda testing+production).
+0. **Push commit lokal.** Perubahan About (glow + docs + `verify.mjs` + baseline
+   SVG) sudah **di-commit lokal** (`28ce3b8`, `781278e`), working tree bersih,
+   tapi **belum di-push** — `main` unggul 5 commit dari `origin`/production
+   `86b49c6`. Konfirmasi user dulu, lalu `git push origin main` (deploy ganda
+   testing+production). Jalankan gate sebelum push.
 1. **Perf P0 — SELESAI (28 Sep 2026).** (a) `sizes` Snippets + 960w, (d)
    `logo.png`/hero `background`/`figure` (lihat "P0 pass"), lalu (b) **sorcerer →
    AVIF** (`sorcerer-2x` 481→196 KB), (c) **video hero di-re-encode** (home webm

@@ -124,10 +124,10 @@ Kalau bikin/ubah section: update `docs/assets.md` + `docs/ai-handoff.md` dan
 tambah/cek assertion di `scripts/verify.mjs`.
 
 TODO utama: **ikuti `docs/ai-handoff.md` §"Next plan — untuk AI berikutnya"**.
-**Penting sebelum mulai:** ada perubahan **belum di-commit** di working tree
-(koreksi glow About + docs + `verify.mjs` + `public/images/about/ecosystem-baseline.svg`);
-`main` lokal `dd87041` unggul **3 commit** dari `origin`/production `86b49c6`.
-Jalankan gate lalu commit/push (konfirmasi user dulu).
+**Penting sebelum mulai:** perubahan terakhir (About glow + docs) **sudah
+di-commit lokal** (`28ce3b8`, `781278e`), working tree bersih, tapi **belum
+di-push**; `main` unggul **5 commit** dari `origin`/production `86b49c6`.
+Konfirmasi user dulu sebelum `git push origin main` (deploy ganda).
 **Perf P0 SELESAI (28 Sep 2026, HEAD `4fe4c19`):** Home mobile 1.33→0.98 MB —
 sorcerer → AVIF (`sorcerer-2x` 481→196 KB), video hero di-re-encode (home webm
 0.38 MB, recruitment 0.76 MB), poster tak di-fetch di HP, `sizes` Snippets +
