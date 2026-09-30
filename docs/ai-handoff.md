@@ -51,7 +51,7 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   baris. Geometri kartu tetap. Lihat `docs/assets.md` §Available Roles.
 - **Runtime deps sengaja cuma** `astro` + `gsap` + `three`. Jangan tambah library
   lain tanpa tanya; lazy-import yang berat.
-- **Commit terbaru (`main` lokal = `781278e`, 30 Sep 2026; `origin`/production = `86b49c6`, jadi `main` unggul 5 commit belum di-push):**
+- **Commit terbaru (30 Sep 2026; `main` lokal unggul beberapa commit dari `origin`/production `86b49c6`, belum di-push — lihat `git log`):**
   - `781278e` **docs** — handoff About Us + gotcha gradient Figma MCP.
   - `28ce3b8` **glow About = fill per-section Figma** — `Philosophy`/`Ecosystem`
     pakai `linear-gradient(...)` hasil fit PNG (lihat "Baru saja" di bawah),
@@ -217,7 +217,7 @@ origin main` mengirim ke **testing + production**
   Jalankan `git push origin main` seperti biasa; kalau perlu cek sinkron pakai
   `git fetch production -q && git rev-parse --short main origin/main
 production/main`. **Update 30 Sep 2026:** `main` = `781278e` sedangkan
-  `origin/main` = `production/main` = `86b49c6` (**5 commit lokal belum di-push**,
+  `origin/main` = `production/main` = `86b49c6` (**beberapa commit lokal belum di-push**,
   working tree bersih).
 - **Available Roles glow wave DIPERKECIL.** `@keyframes role-glow-wave` sekarang
   cuma `scale: 1 → 1.04` (drift `translate ±6%` dibuang) supaya ukuran glow
@@ -1083,7 +1083,7 @@ sound atau navigasi; detail P0–P2 ada di "Perf audit & rencana" di atas.
 
 0. **Push commit lokal.** Perubahan About (glow + docs + `verify.mjs` + baseline
    SVG) sudah **di-commit lokal** (`28ce3b8`, `781278e`), working tree bersih,
-   tapi **belum di-push** — `main` unggul 5 commit dari `origin`/production
+   tapi **belum di-push** — `main` unggul beberapa commit dari `origin`/production
    `86b49c6`. Konfirmasi user dulu, lalu `git push origin main` (deploy ganda
    testing+production). Jalankan gate sebelum push.
 1. **Perf P0 — SELESAI (28 Sep 2026).** (a) `sizes` Snippets + 960w, (d)

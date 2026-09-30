@@ -126,7 +126,7 @@ tambah/cek assertion di `scripts/verify.mjs`.
 TODO utama: **ikuti `docs/ai-handoff.md` §"Next plan — untuk AI berikutnya"**.
 **Penting sebelum mulai:** perubahan terakhir (About glow + docs) **sudah
 di-commit lokal** (`28ce3b8`, `781278e`), working tree bersih, tapi **belum
-di-push**; `main` unggul **5 commit** dari `origin`/production `86b49c6`.
+di-push**; `main` unggul **beberapa commit** dari `origin`/production `86b49c6`.
 Konfirmasi user dulu sebelum `git push origin main` (deploy ganda).
 **Perf P0 SELESAI (28 Sep 2026, HEAD `4fe4c19`):** Home mobile 1.33→0.98 MB —
 sorcerer → AVIF (`sorcerer-2x` 481→196 KB), video hero di-re-encode (home webm
