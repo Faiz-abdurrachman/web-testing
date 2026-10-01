@@ -1,0 +1,330 @@
+---
+const projects = [
+  {
+    name: 'Arutala Aksara',
+    desc: 'Lorem ipsum Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum',
+  },
+];
+---
+
+<section class="hof-projects" aria-labelledby="hof-projects-title">
+  <div class="projects-inner">
+    <div class="projects-header">
+      <div class="projects-head-top">
+        <span class="projects-pill">Project Highlight</span>
+        <h2 id="hof-projects-title">See What Our Sorcerers Create</h2>
+      </div>
+      <p>
+        Discover ideas brought to life through curiosity, collaboration, and
+        experimentation, from meaningful research to impactful digital products.
+      </p>
+    </div>
+    <div class="projects-stage">
+      <img
+        class="projects-glow"
+        src="/images/hof/projects/glow.webp"
+        width="1200"
+        height="487"
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
+      />
+      {['is-side is-left', 'is-side is-right', 'is-center'].map((cls) => (
+        <article class:list={['hof-project-card', ...cls.split(' ')]}>
+          <img
+            class="project-shot"
+            src="/images/hof/projects/shot.webp"
+            srcset="/images/hof/projects/shot.webp 1x, /images/hof/projects/shot-2x.webp 2x"
+            width="933"
+            height="573"
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
+          <span class="project-tint" aria-hidden="true" />
+          <span class="project-bar" aria-hidden="true" />
+          <div class="project-pills">
+            <span>HoDS Apa</span>
+            <span>Lomba/research</span>
+          </div>
+          <h3>{projects[0].name}</h3>
+          <p>{projects[0].desc}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+  <div class="projects-dots" aria-hidden="true">
+    <span />
+    <span class="is-active" />
+    <span />
+  </div>
+</section>
+
+<style>
+  /* Matches Figma node 1439:4655 (1440 × 1181): padding 80, header (803 wide,
+     gap 24) + gap 80, stage 1280 × 730 (three overlapping browser-window cards:
+     centre 933 × 730 on top, sides 800 × 625.94), then the dots (gap 19).
+     The stage is a `inline-size` container so the whole composition scales
+     proportionally (1cqw = 12.8px at the 1280 reference). */
+  .hof-projects {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 19px;
+    padding: 80px;
+    background: #050507;
+    overflow: clip;
+  }
+
+  .projects-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 80px;
+    width: 100%;
+  }
+
+  .projects-header {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 803px;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .projects-head-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .projects-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 32px;
+    background: rgb(255 255 255 / 15%);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+  }
+
+  .projects-header h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 67px;
+    background: linear-gradient(181deg, #fff 15%, #999 42%, #fff 79%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .projects-header p {
+    margin: 0;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+  }
+
+  .projects-stage {
+    position: relative;
+    container-type: inline-size;
+    width: 100%;
+    max-width: 1280px;
+    aspect-ratio: 1280 / 730;
+  }
+
+  .projects-glow {
+    position: absolute;
+    left: -18.63cqw;
+    top: 1.016cqw;
+    width: 137.27cqw;
+    height: 55.74cqw;
+    pointer-events: none;
+  }
+
+  .hof-project-card {
+    position: absolute;
+    container-type: inline-size;
+    aspect-ratio: 933 / 730;
+    border-radius: 1.929cqw;
+    overflow: hidden;
+    background: #0e0626;
+    box-shadow:
+      0.201cqw 0.134cqw 0.536cqw rgb(0 0 0 / 10%),
+      0.871cqw 0.469cqw 1.005cqw rgb(0 0 0 / 9%),
+      1.875cqw 1.139cqw 1.34cqw rgb(0 0 0 / 5%),
+      3.35cqw 1.943cqw 1.541cqw rgb(0 0 0 / 1%);
+  }
+  /* Gradient rim as an overlay so the shot fills the full 933px card (a real
+     border would shrink the content box and shift the browser mockup). */
+  .hof-project-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    border-radius: inherit;
+    padding: 0.214cqw;
+    background: linear-gradient(
+      136deg,
+      #fff 0%,
+      #707070 33%,
+      #6c3bff 49%,
+      #707070 66%,
+      #fff 91%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .hof-project-card.is-left {
+    left: 0;
+    top: 4.6875cqw;
+    width: 62.5cqw;
+    z-index: 1;
+  }
+  .hof-project-card.is-right {
+    left: 37.5cqw;
+    top: 5.234cqw;
+    width: 62.5cqw;
+    z-index: 1;
+  }
+  .hof-project-card.is-center {
+    left: 13.594cqw;
+    top: 0;
+    width: 72.891cqw;
+    z-index: 2;
+  }
+
+  .project-shot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 61.41cqw;
+    object-fit: cover;
+    object-position: top center;
+  }
+
+  /* Figma's image fill stacks a 20% black over the screenshot
+     (`[rgba(0,0,0,0.2), IMAGE]`), so the mockup reads greyer than the raw. */
+  .project-tint {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 61.41cqw;
+    background: rgb(0 0 0 / 20%);
+    pointer-events: none;
+  }
+
+  .project-bar {
+    position: absolute;
+    inset: 59.16cqw 0 auto;
+    height: 19.94cqw;
+    background: #0e0626;
+  }
+
+  .project-pills {
+    position: absolute;
+    top: 54.88cqw;
+    left: 3.537cqw;
+    display: flex;
+    gap: 1.5cqw;
+  }
+  .project-pills span {
+    padding: 0.429cqw 1.286cqw;
+    border-radius: 3.43cqw;
+    background: #6c3bff;
+    color: #fff;
+    font-size: 1.286cqw;
+    font-weight: 400;
+    line-height: 1.929cqw;
+    white-space: nowrap;
+  }
+
+  .hof-project-card h3 {
+    position: absolute;
+    top: 61.41cqw;
+    left: 3.537cqw;
+    margin: 0;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 2.787cqw;
+    font-weight: 700;
+    line-height: 4.18cqw;
+  }
+
+  .hof-project-card p {
+    position: absolute;
+    top: 67.09cqw;
+    left: 3.537cqw;
+    width: 84.46cqw;
+    margin: 0;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 1.715cqw;
+    font-weight: 400;
+    line-height: 2.572cqw;
+  }
+
+  .projects-dots {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .projects-dots span {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #707070;
+  }
+  .projects-dots span.is-active {
+    background: linear-gradient(153deg, #6c3bff 0%, #9483c6 100%);
+  }
+
+  @media (max-width: 900px) {
+    .projects-header h2 {
+      font-size: clamp(34px, 7vw, 56px);
+      line-height: 1.2;
+    }
+    .hof-project-card.is-side {
+      display: none;
+    }
+    .projects-stage {
+      aspect-ratio: auto;
+    }
+    .hof-project-card.is-center {
+      position: relative;
+      left: auto;
+      top: auto;
+      width: 100%;
+      margin-inline: auto;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .hof-projects {
+      padding: 56px var(--page-gutter);
+    }
+    .projects-header p {
+      font-size: 16px;
+      line-height: 24px;
+    }
+  }
+</style>

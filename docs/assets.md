@@ -1,5 +1,39 @@
 # Asset provenance
 
+## Hall of Frames — Project highlights (1 October 2026)
+
+- Section node **`1439:4655`** ("Project highlights"), 1440 × 1181, `padding 80`,
+  `gap 19`, `#050507`. Header `1439:4661` (803 wide, `gap 24`): a "Project
+  Highlight" pill (`rgba(255,255,255,.15)`, radius 32, `4px 12px`, Manrope 400
+  12/18), title **Bluu Next Bold 56 / 67** gradient ("See What Our Sorcerers
+  Create") and a Manrope Medium 18/27 subtitle. A decorative **bow-tie glow**
+  (`1439:4656`, an IMAGE-SVG with `blur(43px)`) sits behind the stage.
+- Stage `1439:4667` is **1280 × 730**, an `inline-size` container so it scales
+  proportionally (`1cqw = 12.8px`). Three browser-window cards: centre
+  `1439:4686` **933 × 730** at `174/0` (on top), sides `1439:4677`/`1439:4668`
+  **800 × 625.94** at `0/60` and `480/67`. The card is itself a container
+  (base 933), so the side cards are just the centre scaled (0.8575). Class is
+  `hof-project-card` (renamed — `verify.mjs`'s `setNavbarHidden` hides
+  `.project-card:not(.is-active)` from the homepage carousel and was hiding
+  these).
+- Card layers: the **raw browser-mockup screenshot** (imageRef `44090885…`,
+  `HoF-Project-Shot-raw.png`) under a **20% black tint** — Figma's fill is
+  `[rgba(0,0,0,0.2), IMAGE]`; without the tint the mockup read far too white
+  (stage MAE 28 → 3). Then the `#0E0626` bar, title, lorem description and two
+  `#6C3BFF` pills. The **136deg gradient rim is an `::after` + mask overlay**,
+  not a border: a real 2px border shrank the content box (929 vs 933) and shifted
+  the mockup. The Figma drop shadow is reproduced with `box-shadow` in stage-cqw.
+- `1439:4695` dots: three 13px circles (`#707070`), the middle active with a
+  `153deg #6C3BFF → #9483C6` gradient. All text is **placeholder**
+  ("Arutala Aksara", lorem).
+- `npm run assets:hof` bakes `public/images/hof/projects/{shot,glow}.webp`
+  (the blur-baked glow ships as a single 1200w asset — the 3514px export was
+  visually identical and much heavier). `verify.mjs` asserts the `hofProjects`
+  geometry (section 1440 × 1181, header 318.5/80/803, stage 80/339/1280 × 730,
+  centre 933 × 730 at 254/339, sides 800 × 625.9, dots 49 × 13, overflow 0) and
+  diffs vs `HoF-Projects-1x.png` (MAE **2.96**). Responsive: the stage scales
+  proportionally down to 900px, then only the centre card shows.
+
 ## Hall of Frames — Featured Sorcerers (1 October 2026)
 
 - Section node **`1439:4512`** ("SORCERERS SPOTLIGHT & MEMBERS GALLERY"),

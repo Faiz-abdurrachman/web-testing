@@ -2395,6 +2395,79 @@ try {
       hofFeaturedActual[i] - hofFeaturedReference[i],
     );
   }
+
+  // Hall of Frames — Project highlights (node 1439:4655) geometry + diff.
+  await page.goto(`${baseUrl}/hall-of-frames`, { waitUntil: 'networkidle' });
+  await page.evaluate(() => document.fonts.ready);
+  await page.evaluate(() => document.fonts.load('700 56px "Bluu Next"'));
+  await setNavbarHidden(true);
+  await page.locator('.hof-projects').scrollIntoViewIfNeeded();
+  // Images are lazy/decoded late; wait so the screenshot is not mid-load.
+  await page.waitForFunction(() =>
+    [...document.querySelectorAll('.hof-projects img')].every(
+      (img) => img.complete && img.naturalWidth > 0,
+    ),
+  );
+  await page.evaluate(() =>
+    Promise.all(
+      [...document.querySelectorAll('.hof-projects img')].map((img) =>
+        img.decode().catch(() => {}),
+      ),
+    ),
+  );
+  const hofProjectsGeometry = await page.evaluate(() => {
+    const section = document.querySelector('.hof-projects');
+    const sb = section.getBoundingClientRect();
+    const rel = (selector) => {
+      const box = document.querySelector(selector).getBoundingClientRect();
+      return {
+        x: Math.round((box.x - sb.x) * 10) / 10,
+        y: Math.round((box.y - sb.y) * 10) / 10,
+        width: Math.round(box.width * 10) / 10,
+        height: Math.round(box.height * 10) / 10,
+      };
+    };
+    return {
+      section: { width: Math.round(sb.width), height: Math.round(sb.height) },
+      header: rel('.projects-header'),
+      stage: rel('.projects-stage'),
+      center: rel('.hof-project-card.is-center'),
+      left: rel('.hof-project-card.is-left'),
+      right: rel('.hof-project-card.is-right'),
+      dots: rel('.projects-dots'),
+      overflow: document.documentElement.scrollWidth - innerWidth,
+    };
+  });
+  assert.deepEqual(hofProjectsGeometry, {
+    section: { width: 1440, height: 1181 },
+    header: { x: 318.5, y: 80, width: 803, height: 179 },
+    stage: { x: 80, y: 339, width: 1280, height: 730 },
+    center: { x: 254, y: 339, width: 933, height: 730 },
+    left: { x: 80, y: 399, width: 800, height: 625.9 },
+    right: { x: 560, y: 406, width: 800, height: 625.9 },
+    dots: { x: 695.5, y: 1088, width: 49, height: 13 },
+    overflow: 0,
+  });
+  await page
+    .locator('.hof-projects')
+    .screenshot({ path: 'artifacts/hof-projects-desktop.png' });
+  const hofProjectsReference = await sharp(
+    'assets/hall of frames/projects/HoF-Projects-1x.png',
+  )
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const hofProjectsActual = await sharp('artifacts/hof-projects-desktop.png')
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(hofProjectsReference.length, hofProjectsActual.length);
+  let hofProjectsTotal = 0;
+  for (let i = 0; i < hofProjectsActual.length; i++) {
+    hofProjectsTotal += Math.abs(
+      hofProjectsActual[i] - hofProjectsReference[i],
+    );
+  }
   assert.deepEqual(errors, []);
 
   const report = {
@@ -2408,6 +2481,11 @@ try {
       geometry: hofFeaturedGeometry,
       meanAbsoluteChannelDifference:
         hofFeaturedTotal / hofFeaturedActual.length,
+    },
+    hofProjects: {
+      geometry: hofProjectsGeometry,
+      meanAbsoluteChannelDifference:
+        hofProjectsTotal / hofProjectsActual.length,
     },
     recruitment: {
       geometry: recruitmentGeometry,

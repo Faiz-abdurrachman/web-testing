@@ -10,17 +10,27 @@ import sharp from 'sharp';
 
 const src = 'assets/hall of frames/hero';
 const featuredSrc = 'assets/hall of frames/featured';
+const projectsSrc = 'assets/hall of frames/projects';
 const out = 'public/images/hof';
 const featuredOut = path.join(out, 'featured');
+const projectsOut = path.join(out, 'projects');
 const bg = path.join(src, 'HoF-Hero-Bg-raw.png');
 
 await mkdir(featuredOut, { recursive: true });
+await mkdir(projectsOut, { recursive: true });
 
 const webp = (input, output, width, quality) =>
   sharp(input)
     .resize({ width })
     .webp({ quality, effort: 5 })
     .toFile(path.join(featuredOut, output));
+
+const webpIn = (dir) => (input, output, width, quality) =>
+  sharp(input)
+    .resize({ width })
+    .webp({ quality, effort: 5 })
+    .toFile(path.join(dir, output));
+const projectWebp = webpIn(projectsOut);
 
 await Promise.all([
   // 1440×903 hero frame; the source is 3344×1882 so the 2x (cover to 2880×1806)
@@ -60,6 +70,28 @@ await Promise.all([
   // reference is markedly bluer), so the node's own render is used as overlay.
   webp(path.join(featuredSrc, 'HoF-Card-Fade-2x.png'), 'fade.webp', 302, 90),
   webp(path.join(featuredSrc, 'HoF-Card-Fade-2x.png'), 'fade-2x.webp', 604, 88),
+  // Project highlights: the browser-mockup screenshot is the raw image fill;
+  // the bow-tie glow is the exported (blur-baked) IMAGE-SVG node 1439:4656.
+  projectWebp(
+    path.join(projectsSrc, 'HoF-Project-Shot-raw.png'),
+    'shot.webp',
+    933,
+    88,
+  ),
+  projectWebp(
+    path.join(projectsSrc, 'HoF-Project-Shot-raw.png'),
+    'shot-2x.webp',
+    1799,
+    86,
+  ),
+  // Blur-baked glow: very soft/low-frequency, so a single downscaled asset is
+  // visually identical and far lighter than the 3514px export.
+  projectWebp(
+    path.join(projectsSrc, 'HoF-Projects-Glow-2x.png'),
+    'glow.webp',
+    1200,
+    70,
+  ),
 ]);
 
 console.log(`Hall of Frames artwork written to ${out}/`);
