@@ -17,8 +17,10 @@ const large = ['product', 'growth'].includes(domain.id);
   data-sfx-hover="hover"
 >
   <div class="domain-card-inner">
-    <h3 id={`domain-${domain.id}`}>{domain.title}</h3>
-    <p>{domain.description}</p>
+    <div class="card-copy">
+      <h3 id={`domain-${domain.id}`}>{domain.title}</h3>
+      <p>{domain.description}</p>
+    </div>
     <img
       class="glow"
       src={`/images/domains/${domain.id}.svg`}
@@ -65,7 +67,8 @@ const large = ['product', 'growth'].includes(domain.id);
     position: relative;
     display: block;
     isolation: isolate;
-    flex: 0 0 394px;
+    flex: 0 0 405px;
+    width: 405px;
     height: 436px;
     border-radius: 20px 0;
     background: rgb(var(--tint) / 10%);
@@ -84,32 +87,42 @@ const large = ['product', 'growth'].includes(domain.id);
     inset: 0;
     padding: 1px;
     border-radius: inherit;
-    background: linear-gradient(
-      135deg,
-      #fff,
-      rgb(var(--tint)) 52%,
-      rgb(var(--tint)) 75%,
-      #fff
-    );
+    background: linear-gradient(135deg, #fff, rgb(var(--tint)) 50%, #fff);
     mask:
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0);
     mask-composite: exclude;
     pointer-events: none;
   }
+  .card-copy {
+    position: absolute;
+    left: 42px;
+    top: 27px;
+    width: 322px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 2;
+  }
+  .growth .card-copy {
+    left: 32px;
+  }
   h3 {
     position: relative;
-    margin: 16px 14px 0;
+    margin: 0;
+    font-family: var(--font-body);
     font-size: 22px;
     line-height: 33px;
     font-weight: 700;
+    color: #fff;
   }
   p {
     position: relative;
-    margin: 11px 14px 0;
+    margin: 0;
+    font-family: var(--font-body);
     font-size: 16px;
     line-height: 24px;
-    color: #d8d1d1;
+    color: #fff;
   }
   .glow {
     position: absolute;
@@ -185,13 +198,6 @@ const large = ['product', 'growth'].includes(domain.id);
   .vision .cloud {
     height: 208.523px;
   }
-  .large h3 {
-    margin-left: 21px;
-  }
-  .large p {
-    margin-left: 21px;
-    margin-right: 18px;
-  }
   .large .cloud-frame {
     left: -180.63px;
     top: 167.91px;
@@ -219,12 +225,6 @@ const large = ['product', 'growth'].includes(domain.id);
     left: -374.58px;
     width: 1279.97px;
     height: 453.37px;
-  }
-  .growth h3 {
-    margin-top: 14px;
-  }
-  .growth p {
-    margin: 8px 16px 0 25px;
   }
   .growth .cloud-frame {
     top: 168.16px;
@@ -293,8 +293,16 @@ const large = ['product', 'growth'].includes(domain.id);
   }
   @media (max-width: 600px) {
     .domain-card {
-      flex-basis: calc(100vw - 48px);
-      max-width: 394px;
+      flex: 0 0 calc(100vw - 48px);
+      width: calc(100vw - 48px);
+      max-width: 405px;
+    }
+    .card-copy {
+      left: 24px;
+      width: calc(100% - 48px);
+    }
+    .growth .card-copy {
+      left: 24px;
     }
     .large .cloud-frame {
       transform-origin: 180.63px 268.09px;
@@ -304,7 +312,7 @@ const large = ['product', 'growth'].includes(domain.id);
     }
     .cloud-frame {
       top: 150px;
-      transform: scale(min(1, calc((100vw - 48px) / 394px)));
+      transform: scale(min(1, calc((100vw - 48px) / 405px)));
       transform-origin: 169px 286px;
     }
   }

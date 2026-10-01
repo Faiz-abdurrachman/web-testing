@@ -10,7 +10,19 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
 
-- **Homepage What We Do — revisi font, cards & spacing (PALING BARU, 2 Oct 2026).**
+- **Homepage Choose Your Domain (HoDS) — revisi font, cards & spacing (PALING BARU, 2 Oct 2026).**
+  `Domains.astro`, `DomainCard.astro`, dan `DomainRail.astro` (`1430:2138`, frame `1430:2040`) direvisi presisi:
+  judul **Bluu Next Bold 700 56/67.2** (`--font-display`), gradient per baris `linear-gradient(211.54deg, #FFFFFF 32.8%, #999999 49.8%, #FFFFFF 73.04%)`,
+  eyebrow pill `House of Data Sorcerers` (Figma `GLASS` effect, 159×26, gap ke heading `8px`),
+  subtitle Manrope 16/24 white (gap dari heading `24px`),
+  header `Frame 2284` (1280×149), gap header ke rail kartu **`74px`**,
+  gap antar card diperkecil ke **`32px`** (turun dari 40px) dan ukuran kartu diperlebar ke **`405px × 436px`** (dari 394px) sesuai catatan Gembala "spacing antar card dan ukuran card berubah",
+  text box kartu (`top: 27px, left: 42px`, Card 5 `left: 32px`, `width: 322px`, gap title-ke-desc `8px`),
+  judul kartu Manrope Bold 700 22/33 white, deskripsi Manrope 400 16/24 white,
+  keyboard navigation (step 437px) & attract-mode step scroll utuh.
+  MAE section **2.4051**. Geometri bboxes diff **0.0px**.
+  Detail: `docs/assets.md` §Homepage House of Data Sorcerers (HoDS).
+- **Homepage What We Do — revisi font, cards & spacing (2 Oct 2026).**
   `WhatWeDo.astro` (`1430:2089`, frame `1430:2040`) direvisi presisi:
   judul **Bluu Next Bold 700 56/67.2** (`--font-display`), 2 baris `gap: 4px`,
   gradient per baris `linear-gradient(211.54deg, #FFFFFF 32.8%, #999999 49.8%, #FFFFFF 73.04%)`,

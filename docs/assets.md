@@ -1,5 +1,48 @@
 # Asset provenance
 
+## Homepage — House of Data Sorcerers (HoDS) / Choose Your Domain (2 October 2026)
+
+- Section node **`1430:2138`** ("House of Data Sorcerers Section", frame `1430:2040`, file `JYUzJK1hFqaEwL6DpdDvjp`),
+  1440 × 819, `padding: 80px`. Reference: `assets/assets home page/hods/Home-HoDS-Revisi-1x.png`
+  (1440 × 819) & `Home-HoDS-Revisi-2x.png` (2880 × 1638). Sub-nodes: `Home-HoDS-Header-2x.png` (`1430:2139`),
+  `Home-HoDS-Eyebrow-2x.png` (`1430:2141`), `Home-HoDS-Title-2x.png` (`1430:2143`).
+- Typography & Header Group:
+  - Header Frame 2284 (`1430:2139`), 1280 × 149 at `x: 80, y: 80`.
+  - Frame 2283 (`1430:2140`), 1280 × 101, gap: 8px:
+    - Eyebrow CTA `1430:2141`: "House of Data Sorcerers" (Manrope Regular 12/18, padding `4px 12px`, border-radius 32px,
+      `rgba(255,255,255,0.15)` with Figma `GLASS` effect `box-shadow: inset 0 1px 1px rgb(255 255 255 / 40%)`). Sits at `x: 640.5, y: 80, w: 159, h: 26`.
+    - Eyebrow to title gap: **`8px`** (was 14px in old layout).
+    - Heading `1430:2143`: "Choose Your Domain", **Bluu Next Bold 700**, size **56px**, line-height **67.2px**,
+      letter-spacing `0`, gradient `linear-gradient(211.54deg, #FFFFFF 32.8%, #999999 49.8%, #FFFFFF 73.04%)` (`background-clip: text`). Sits at `x: 451, y: 114, w: 538, h: 67`.
+  - Heading to subtitle gap: **`24px`**.
+  - Subtitle `1430:2144`: "Every Sorcerer specializes. Find your domain and go deep with a community of experts.", Manrope Regular 16/24, letter-spacing -0.176px, white, sits at `x: 80, y: 205, w: 1280, h: 24`.
+- Card Rail & Domain Cards:
+  - Header to rail gap: **`74px`** (y = 80 + 149 + 74 = 303).
+  - Rail Frame 2509 (`1430:2145`): 1280 × 436 at `x: 80, y: 303`. Gap between cards: **`32px`** (reduced from 40px per Gembala note "spacing antar card dan ukuran card berubah").
+  - 6 Domain Cards resized to **405px × 436px** (previously 394px / 399.98px):
+    - Card 0 (Data Intelligence): `x: 80, y: 303, width: 405, height: 436`
+    - Card 1 (Core AI & Engineering): `x: 517, y: 303, width: 405, height: 436`
+    - Card 2 (Language & Reasoning): `x: 954, y: 303, width: 405, height: 436`
+    - Card 3 (Vision & Multimodal): `x: 1391, y: 303, width: 405, height: 436`
+    - Card 4 (Product & Software): `x: 1828, y: 303, width: 405, height: 436`
+    - Card 5 (Growth & Community): `x: 2265, y: 303, width: 405, height: 436`
+  - Card text box (`Frame 2726`–`2731`): `top: 27px, left: 42px` (Card 5 `left: 32px`), `width: 322px`, gap between title & desc: **`8px`**.
+    - Title: Manrope Bold 700 22/33 white.
+    - Description: Manrope Regular 400 16/24 white.
+  - Card border & rim: `border-radius: 20px 0;`, 1px gradient rim `linear-gradient(135deg, #fff, rgb(var(--tint)) 50%, #fff)`.
+  - Attract-mode step scroll and keyboard navigation (ArrowLeft/ArrowRight with step=437px, Home, End) preserved.
+- Measurements & Precision:
+  - `verify.mjs` assertions:
+    - section: `{ width: 1440, height: 819, top: 2580 }`
+    - header: `{ x: 80, y: 80, width: 1280, height: 149 }`
+    - eyebrow: `{ x: 640.5, y: 80, width: 159, height: 26 }`
+    - heading: `{ x: 451, y: 114, width: 538, height: 67 }`
+    - cards: 6 cards at exact coordinates `[ 80, 517, 954, 1391, 1828, 2265 ]`, `y: 303, width: 405, height: 436`.
+  - Geometry diff: **0.0px** across all elements.
+  - Section MAE: **`2.4051`** (evaluated against `Home-HoDS-Revisi-1x.png`).
+  - Responsive audit: 18 routes × 26 widths (468/468) **ALL PASS**.
+  - ClientRouter (VT): **ALL PASS**, pageerrors: none.
+
 ## Homepage — What We Do (2 October 2026)
 
 - Section node **`1430:2089`** ("What We Do Section", frame `1430:2040`, file `JYUzJK1hFqaEwL6DpdDvjp`),

@@ -282,10 +282,33 @@ try {
     .screenshot({ path: 'artifacts/domains-desktop.png' });
   const domainGeometry = await page.locator('.domains').evaluate((section) => {
     const box = section.getBoundingClientRect();
+    const header = section
+      .querySelector('.header-inner')
+      .getBoundingClientRect();
+    const eyebrow = section.querySelector('.eyebrow').getBoundingClientRect();
+    const heading = section.querySelector('h2').getBoundingClientRect();
     return {
       width: box.width,
       height: box.height,
       top: box.top + scrollY,
+      header: {
+        x: header.x - box.x,
+        y: header.y - box.y,
+        width: header.width,
+        height: header.height,
+      },
+      eyebrow: {
+        x: eyebrow.x - box.x,
+        y: eyebrow.y - box.y,
+        width: eyebrow.width,
+        height: eyebrow.height,
+      },
+      heading: {
+        x: heading.x - box.x,
+        y: heading.y - box.y,
+        width: heading.width,
+        height: heading.height,
+      },
       cards: [...section.querySelectorAll('.domain-card')].map((card) => {
         const rect = card.getBoundingClientRect();
         return {
@@ -299,19 +322,37 @@ try {
   });
   assert.deepEqual(domainGeometry, {
     width: 1440,
-    height: 826,
+    height: 819,
     top: 2580,
+    header: {
+      x: 80,
+      y: 80,
+      width: 1280,
+      height: 149,
+    },
+    eyebrow: {
+      x: 640.5,
+      y: 80,
+      width: 159,
+      height: 26,
+    },
+    heading: {
+      x: 451,
+      y: 114,
+      width: 538,
+      height: 67,
+    },
     cards: Array.from({ length: 6 }, (_, i) => ({
-      x: 80 + i * 439.984375,
-      y: 310,
-      width: 399.984375,
+      x: 80 + i * 437,
+      y: 303,
+      width: 405,
       height: 436,
     })),
   });
   const domainReference = await sharp(
-    'assets/assets home page/hods/House of Data Sorcerers Section.png',
+    'assets/assets home page/hods/Home-HoDS-Revisi-1x.png',
   )
-    .resize(1440, 826)
+    .resize(1440, 819)
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -329,7 +370,7 @@ try {
     domainDiff[i] = Math.min(255, delta * 4);
     domainOverlay[i] = Math.round((domainActual[i] + domainReference[i]) / 2);
   }
-  const domainRaw = { width: 1440, height: 826, channels: 3 };
+  const domainRaw = { width: 1440, height: 819, channels: 3 };
   await sharp(domainDiff, { raw: domainRaw })
     .png()
     .toFile('artifacts/domains-diff.png');
@@ -354,7 +395,7 @@ try {
   await page.keyboard.press('Home');
   assert.equal(await rail.evaluate((element) => element.scrollLeft), 0);
   await page.keyboard.press('ArrowRight');
-  assert.equal(await rail.evaluate((element) => element.scrollLeft), 440);
+  assert.equal(await rail.evaluate((element) => element.scrollLeft), 437);
   await page.keyboard.press('Home');
   await rail.evaluate((element) => element.blur());
   await page.evaluate(() => scrollTo(0, 0));
@@ -394,7 +435,7 @@ try {
   assert.deepEqual(projectsGeometry, {
     width: 1440,
     height: 917,
-    top: 3406,
+    top: 3399,
     elements: {
       h2: { x: 80, y: 120, width: 751.296875, height: 68 },
       '.project-card.is-active': {
@@ -476,7 +517,7 @@ try {
   assert.deepEqual(recruitmentGeometry, {
     width: 1440,
     height: 577,
-    top: 4323,
+    top: 4316,
     elements: {
       '.recruitment-panel': { x: 80, y: 80, width: 1280, height: 417 },
       h2: { x: 81, y: 193, width: 1278, height: 68 },
@@ -957,10 +998,10 @@ try {
     top: 866,
     heading: { x: 80, y: 80, width: 1280, height: 68 },
     copy: { x: 80, y: 172, width: 1280, height: 27 },
-    cards: [80, 519.984375, 959.96875, 1399.953125].map((x) => ({
+    cards: [80, 517, 954, 1391].map((x) => ({
       x,
       y: 273,
-      width: 399.984375,
+      width: 405,
       height: 436,
     })),
   });

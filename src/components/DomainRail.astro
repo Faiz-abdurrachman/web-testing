@@ -69,7 +69,7 @@ const { base = '/hods', suffix = '' } = Astro.props;
         : [];
       const step = () =>
         (rail.querySelector('.domain-card')?.getBoundingClientRect().width ??
-          394) + (parseFloat(getComputedStyle(rail).columnGap) || 0);
+          405) + (parseFloat(getComputedStyle(rail).columnGap) || 0);
 
       arrows.forEach((arrow) =>
         arrow.addEventListener('click', () => {
@@ -89,7 +89,7 @@ const { base = '/hods', suffix = '' } = Astro.props;
       const measure = () => {
         cardWidth =
           rail.querySelector('.domain-card')?.getBoundingClientRect().width ??
-          394;
+          405;
         cardStride =
           cardWidth + (parseFloat(getComputedStyle(rail).columnGap) || 0);
       };
@@ -256,7 +256,7 @@ const { base = '/hods', suffix = '' } = Astro.props;
           }
           const card = rail.querySelector('.domain-card');
           const s =
-            (card?.getBoundingClientRect().width ?? 394) +
+            (card?.getBoundingClientRect().width ?? 405) +
             (parseFloat(getComputedStyle(rail).columnGap) || 0);
           const maxIndex = Math.max(
             0,
@@ -343,7 +343,7 @@ const { base = '/hods', suffix = '' } = Astro.props;
   }
   .domain-rail {
     display: flex;
-    gap: 40px;
+    gap: 32px;
     overflow-x: auto;
     overscroll-behavior-x: contain;
     /* Scroll containers clip on both axes; padding gives the hover lift vertical room and the equal negative margin keeps section geometry identical. */
@@ -355,7 +355,8 @@ const { base = '/hods', suffix = '' } = Astro.props;
     cursor: grab;
   }
   .domain-rail :global(.domain-card) {
-    flex-basis: calc((100% - 80px) / 3);
+    flex: 0 0 405px;
+    width: 405px;
     scroll-snap-align: start;
   }
   .domain-rail.is-dragging {
@@ -460,7 +461,8 @@ const { base = '/hods', suffix = '' } = Astro.props;
       margin-bottom: 66px;
     }
     .domain-rail :global(.domain-card) {
-      flex-basis: calc((100% - 40px) / 2);
+      flex: 0 0 calc((100% - 32px) / 2);
+      width: calc((100% - 32px) / 2);
     }
     .rail-arrow {
       top: auto;

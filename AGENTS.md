@@ -338,6 +338,16 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   Situs pakai Astro **`<ClientRouter />`** (navigasi klien + `AudioContext`
   persist; semua komponen re-init `astro:page-load` + cleanup
   `astro:before-swap` — `docs/sound-sop.md` §9).
+- **Homepage Choose Your Domain (HoDS) — revisi font, cards & spacing (2 Oct 2026).** Frame Figma
+  `1430:2040`, section `1430:2138`. Judul **Bluu Next Bold 700 56/67.2** (token
+  `--font-display`), gradient per baris, Eyebrow `House of Data Sorcerers`
+  (Figma `GLASS` effect, 159×26, gap ke heading 8px). Subtitle Manrope 16/24 white
+  (gap ke heading 24px). Gap header ke rail kartu 74px. Rail Frame 2509 (1280×436),
+  gap antar card diperkecil ke 32px dan ukuran kartu diperlebar ke 405×436px di koordinat
+  `x: [80, 517, 954, 1391, 1828, 2265], y: 303`. Judul kartu Manrope Bold 700 22/33,
+  deskripsi Manrope 400 16/24 white, gap teks 8px. Keyboard navigation (step 437px) &
+  attract-mode step scroll utuh. Section MAE **2.4051**. Geometri diff 0.0px.
+  Detail: `docs/assets.md` §Homepage House of Data Sorcerers (HoDS).
 - **Homepage What We Do — revisi font, cards & spacing (2 Oct 2026).** Frame Figma
   `1430:2040`, section `1430:2089`. Judul **Bluu Next Bold 700 56/67.2** (token
   `--font-display`), gradient per baris, 2 baris `gap: 4px`. Eyebrow `What We Do`
