@@ -64,7 +64,7 @@ LANGKAH 4 — Verifikasi (LOOP sampai presisi, jangan berhenti sebelum pas):
   ada overlay baru, tambahkan ke list).
 - Target: ink ±1px, MAE rendah (referensi existing ~1.6–5), `npm run build` 0 error,
   `node scripts/verify.mjs` exit 0 (`browserErrors: []`), `node scripts/responsive-audit.mjs`
-  16 rute × 26 lebar PASS, `npm run audit:navbar` PASS, `npm run seo:audit` PASS,
+  17 rute × 26 lebar PASS, `npm run audit:navbar` PASS, `npm run seo:audit` PASS,
   `npm run verify:vt` PASS. Kalau belum pas: UKUR, perbaiki, ulangi.
 
 LANGKAH 5 — Dokumentasi + commit:

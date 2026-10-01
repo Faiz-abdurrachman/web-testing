@@ -56,9 +56,10 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   ≥1301px (menu 753), scroll = backing kaca transparan `rgb(6 5 10 / 45%)` +
   `blur(12px)`. `npm run audit:navbar` assert geometri 1440.
 
-- **Situs:** static **Astro 7** — 16 rute publik (`/`, `/about`, `/recruitment`,
-  `/partners`, `/recruitment/roles/{6}` 6 halaman, `/hods/{6}` 6 halaman) +
-  `/lab/sound` internal (`noindex`, di luar sitemap). Target: **pixel-accurate ke
+- **Situs:** static **Astro 7** — 17 rute publik (`/`, `/about`, `/recruitment`,
+  `/partners`, `/hall-of-frames`, `/recruitment/roles/{6}` 6 halaman,
+  `/hods/{6}` 6 halaman) + `/lab/sound` internal (`noindex`, di luar sitemap).
+  `/contact` belum dibuat. Target: **pixel-accurate ke
   PNG referensi**, HTML/CSS ringan (bukan flatten screenshot).
 - **Perbaikan lokal 29 Sep 2026:** sudut glow kartu HoDS yang menjadi kotak
   saat hover diperbaiki dengan `.domain-card-inner` sebagai clip wrapper tanpa
@@ -172,15 +173,15 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   partikel, idle karakter, scroll reveal, tilt, magnetic. Semua **inert saat
   `prefers-reduced-motion: reduce`**.
 - **Gate sebelum commit (semua harus exit 0):** `npm run format:check`,
-  `npm run build` (0 error, **16 halaman**), `PREVIEW_URL=… node scripts/verify.mjs`
-  (`browserErrors: []`), `node scripts/responsive-audit.mjs` (**16 rute × 26 lebar
-  = 416 combos**), `npm run seo:audit` (17 halaman, sitemap 16). **Penting:** `verify.mjs` pakai `page.goto` penuh, jadi
+  `npm run build` (0 error, **17 halaman**), `PREVIEW_URL=… node scripts/verify.mjs`
+  (`browserErrors: []`), `node scripts/responsive-audit.mjs` (**17 rute × 26 lebar
+  = 442 combos**), `npm run seo:audit` (18 halaman, sitemap 17). **Penting:** `verify.mjs` pakai `page.goto` penuh, jadi
   **tidak menguji navigasi klien** — pakai **`npm run verify:vt`**
   (`scripts/verify-vt.mjs`): cek konteks JS persist, komponen re-init, cue
   `transition` tepat satu, modifier tidak di-intercept, dan deep-link hash.
 - **Deploy GANDA:** `git push origin main` → testing **dan** production.
 - **Next:** §"Next plan — untuk AI berikutnya" di bawah. **About Us sections 1–4
-  selesai**; **Partners page selesai** (`/partners`, 16 rute publik); Perf P0
+  selesai**; **Partners page selesai** (`/partners`, 17 rute publik); Perf P0
   **selesai** (Home mobile 0.98 MB); sisa **opsional** (AVIF hero art + ikon
   philosophy/glow), konten asli, halaman **Hall of Frames / Contact** (nav masih
   `aria-disabled`), webfont Nasalization. VT hardening & OG **selesai**.

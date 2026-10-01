@@ -60,7 +60,7 @@ COMMANDS:
 - npm run build              → astro check + build (HARUS 0 error, 17 halaman)
 - npm run format:check       → harus lolos sebelum commit
 - node scripts/verify.mjs               → verifikasi visual + geometri (HARUS exit 0)
-- node scripts/responsive-audit.mjs     → 16 rute × 26 lebar 320–3840 (HARUS exit 0)
+- node scripts/responsive-audit.mjs     → 17 rute × 26 lebar 320–3840 (HARUS exit 0)
 - npm run audit:navbar       → geometri navbar exact 1440 (HARUS ALL PASS)
 - npm run verify:vt          → smoke View Transitions + cue sound (butuh preview)
 - npm run seo:audit          → validasi meta/OG/canonical/sitemap di dist (setelah build)
@@ -75,7 +75,7 @@ workflow" di AGENTS.md (reducedMotion + setNavbarHidden). CSS modern
 (mis. backdrop-filter): cek di `dist/`/live, bukan cuma dev.
 
 KONDISI SEKARANG (detail: docs/ai-handoff.md):
-- **16 rute publik**: `/`, `/about`, `/partners`, `/recruitment`,
+- **17 rute publik**: `/`, `/about`, `/partners`, `/recruitment`,
   `/recruitment/roles/{6}`, `/hods/{6}` (+ `/lab/sound` internal, noindex).
 - **Homepage hero — revisi font & spacing (terbaru, 1 Oct 2026).** Frame Figma
   `1430:2040`/hero `1430:2041`. Judul **Bluu Next Bold 72/86** (SIL OFL di-bundle,
