@@ -68,6 +68,11 @@ LANGKAH 4 — Verifikasi (LOOP sampai presisi, jangan berhenti sebelum pas):
   SEBELUM screenshot, kalau tidak kartu terlihat kosong.
 - Cek lapis fill Figma: image fill bisa ditumpuk warna (mis. `[rgba(0,0,0,.2), IMAGE]`)
   dan artwork full-bleed butuh ring overlay, bukan `border` (border mengecilkan content).
+- Cek `effects`/`strokes` asli via **REST API** (`GET /v1/files/<key>/nodes?ids=…`,
+  header `X-Figma-Token: $FIGMA_API_KEY`) — MCP menyembunyikan `GLASS`. Surface
+  GLASS = rim 1px + blur → emulasi ring `::after` + `mask-composite` (bukan
+  `border`), alpha di-fit dari PNG (top > bottom > sisi). Elemen non-glass
+  (input/ikon) jangan diberi rim.
 - Target: ink ±1px, MAE rendah (referensi existing ~1.6–5), `npm run build` 0 error,
   `node scripts/verify.mjs` exit 0 (`browserErrors: []`), `node scripts/responsive-audit.mjs`
   18 rute × 26 lebar PASS, `npm run audit:navbar` PASS, `npm run seo:audit` PASS,

@@ -23,11 +23,21 @@
 - Purple swirl: the node `1445:5067` render placed absolutely at `-131/−92`
   (801 × 600) → `public/images/contact/hero-art.webp`; `npm run
 assets:contact` regenerates it and the icons.
+- **Figma GLASS effect (precision pass 1 Oct 2026).** The pill `1445:5072`, info
+  cards `1445:5077` and form panel `1445:5098` use Figma's **GLASS** effect
+  (`GET /v1/files/<key>/nodes` → `effects:[{type:"GLASS"}]`; `figma_get_figma_data`
+  hides it). It renders a 1px specular rim + backdrop blur, NOT a stroke. Emulated
+  with an `::after` ring + `mask-composite: exclude` (a real `border` would shrink
+  the content box) and alpha calibrated from pixels (`37% → 11% @52% → 28%` over
+  the fill). The input fields `1445:5102` and arrow discs `1445:5082` are **not**
+  glass (plain `.20`/`.15` fill) — do not add a rim to them.
 - `verify.mjs` asserts the `contactHero` geometry (section 1440 × 954, row
   80/240/1280 × 594, left 587, form 661, art −131/−92/801 × 600, cards
-  564/662/760 × 74, overflow 0) and diffs vs `Contact-Hero-1x.png` (MAE
-  **3.00**; the form panel alone is 0.57). `responsive-audit` now covers
-  `/contact` (18 routes × 26 widths = 468) and the sitemap has 18 URLs.
+  564/662/760 × 74, overflow 0) and diffs vs `Contact-Hero-1x.png`. MAE after the
+  glass pass **3.00 → 2.76** (cards ~5.1 → ~3.4, form 1.35 → 1.11); the _navbar
+  excluded_ content MAE is **~1.28** (the reference PNG includes the navbar, which
+  `verify.mjs` hides). `responsive-audit` covers `/contact` (18 routes × 26 widths
+  = 468) and the sitemap has 18 URLs.
 
 ## Hall of Frames — Community Milestone (1 October 2026)
 

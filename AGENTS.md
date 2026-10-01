@@ -293,6 +293,24 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   In `verify.mjs` / diff scripts, `scrollIntoView` then `waitForFunction` every
   `<img>` in the section is `complete && naturalWidth>0` + `img.decode()` before
   the screenshot, or the section renders empty.
+- **Figma `GLASS` effects are invisible to `figma_get_figma_data`.** A glass frame
+  renders a 1px specular rim + backdrop blur but MCP reports no stroke/effect.
+  Fetch the real payload via REST (`GET /v1/files/<key>/nodes?ids=…`, header
+  `X-Figma-Token: $FIGMA_API_KEY`) — Contact pill/cards/form are
+  `effects:[{type:"GLASS"}]`. Emulate the rim with an `::after` ring + `mask`/
+  `mask-composite: exclude` (**never a real `border`** — it shrinks the content
+  box) and fit the alpha per edge from the PNG (glass rim is brighter on top:
+  top ≈116, bottom ≈96, sides ≈60 at 1×). `backdrop-filter: blur(8px)` is closest
+  but only helps where artwork sits behind the panel.
+- **Cross-renderer font rasterisation is irreducible residual MAE.** Small text
+  (e.g. the 12px pill) differs ~1px/glyph edge between Figma and Chromium even when
+  the ink bbox matches; do **not** "fix" it by shifting position or changing the
+  gradient. `text-rendering: geometricPrecision` helps some regions but wrecks
+  others — never set it globally.
+- **A reference hero PNG may include the navbar.** `Contact-Hero-1x.png` (node
+  `1445:5066`) contains the navbar; since `verify.mjs` hides `.navbar`, the
+  whole-section MAE reads high. Judge precision **excluding the navbar band**
+  (Contact: full 2.76 → ~1.28 below the navbar).
 
 ## Fonts
 
@@ -305,10 +323,16 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
 
 ## Current checkpoint
 
-- **HEAD (1 Oct 2026, `e515b26`; `main = origin/main = production/main`).**
+- **HEAD (1 Oct 2026, `c55c5e5` + docs; `main` lokal belum di-push).**
   Situs pakai Astro **`<ClientRouter />`** (navigasi klien + `AudioContext`
   persist; semua komponen re-init `astro:page-load` + cleanup
   `astro:before-swap` — `docs/sound-sop.md` §9).
+- **Contact precision pass — Figma GLASS rim (1 Oct 2026, `c55c5e5`).** Pill
+  `1445:5072`, kartu info `1445:5077`, panel form `1445:5098` pakai effect
+  **`GLASS`** (cek via REST API — MCP `figma_get_figma_data` menyembunyikannya).
+  Diemulasi ring `::after` + `mask-composite: exclude` (bukan `border`) + alpha
+  di-fit dari PNG → rim persis (top 116/115, bottom 96/95, sisi 60/60). MAE hero
+  3.00 → 2.76 (konten tanpa navbar ~1.28), kartu ~5.1 → ~3.4, form 1.35 → 1.11.
 - **Homepage hero — revisi font & spacing (1 Oct 2026, `e515b26`).** Frame Figma
   `1430:2040`, hero `1430:2041`. Judul **Bluu Next Bold 72/86** (OFL di-bundle,
   token `--font-display`; Nasalization tetap untuk halaman lain), gradient per

@@ -59,6 +59,25 @@ Aturan: kalau (1) berbeda dengan (4)/(5), **ikut (1)**.
   screenshot.** Di `verify.mjs`/skrip diff, `scrollIntoView` dulu lalu
   `waitForFunction` semua `<img>` di section `complete && naturalWidth>0` +
   `img.decode()` sebelum screenshot, jika tidak section terlihat kosong.
+- **Figma `GLASS` effect TIDAK muncul di `figma_get_figma_data` (MCP).** Frame
+  glass (pill/kartu/panel) merender **rim 1px bergradasi + backdrop blur**, tapi
+  MCP melaporkan fills/effects seolah kosong. Ambil `effects`/`strokes` asli via
+  **REST API**: `GET https://api.figma.com/v1/files/<key>/nodes?ids=<id>` dengan
+  header `X-Figma-Token: $FIGMA_API_KEY` — contoh Contact: `effects:[{type:"GLASS"}]`.
+  Emulasi rim dengan **ring `::after` + `mask`/`mask-composite: exclude`** (JANGAN
+  `border` — border mengecilkan content box), lalu **kalibrasi alpha per sisi dari
+  piksel PNG** (glass rim lebih terang di atas: contoh terukur top ≈116, bottom
+  ≈96, sisi ≈60 di 1×). Blur opsional (`backdrop-filter: blur(8px)` paling dekat;
+  hanya berdampak bila ada artwork di belakang panel).
+- **Rasterisasi font lintas-renderer = sisa MAE yang sulit hilang.** Pada teks
+  kecil (mis. pill Manrope 12px) Figma vs Chromium bisa beda ~1px/tepi glyph walau
+  bbox tinta identik; **jangan** kejar dengan menggeser posisi/mengganti gradient.
+  `text-rendering: geometricPrecision` membantu sebagian region tapi merusak region
+  lain — jangan dipasang global.
+- **Referensi PNG hero bisa IKUT memuat navbar.** `Contact-Hero-1x.png` (node
+  `1445:5066`) menyertakan navbar; karena `verify.mjs` menyembunyikan `.navbar`,
+  MAE "seluruh section" jadi menggelembung. Hitung MAE presisi **tanpa region
+  navbar** (Contact: full 2.76 → **~1.28** di bawah navbar).
 
 ## 3. Alur kerja presisi (per section)
 
@@ -178,6 +197,15 @@ Semua di file Figma `JYUzJK1hFqaEwL6DpdDvjp`. Hasil akhir (reduced motion, 1440)
   = render node `1439:4709`. MAE 1.33.
 - **Contact** `1445:5066`: hero 1440×954; artwork swirl = render node `1445:5067`
   di `−131/−92`; form/field = HTML asli. MAE 3.00 (panel form 0.57).
+  - **Precision pass (1 Oct 2026, lanjutan).** Pill `1445:5072`, kartu info
+    `1445:5077`, panel `1445:5098` memakai **GLASS** (REST `effects:[GLASS]`; MCP
+    tidak menampilkan). Diemulasi ring `::after` + mask, alpha dikalibrasi
+    (`37% → 11% @52% → 28%` di atas fill) → rim kartu/panel **persis** (top
+    116/115, bottom 96/95, sisi 60/60). MAE: hero 3.00 → **2.76** (konten tanpa
+    navbar ~**1.28**), kartu ~5.1 → **~3.4**, form 1.35 → **1.11**. Input field &
+    arrow disc **bukan** glass (fill solid) — jangan beri rim. Sisa: pill ~18
+    (rasterisasi 12px + blur), title 6.6 (gradient sudah optimal), submit 4.17,
+    footer 5.91, artwork 3.9.
 - Pelajaran berulang: **kalau satu region diff tinggi, isolasi dulu** — di proyek
   ini penyebab tersering bukan font, tapi (a) gradient MCP lossy, (b) tint/lapis
   fill kelewat, (c) artwork/scale, (d) class bentrok hide-list, (e) gambar lazy
@@ -188,6 +216,7 @@ Semua di file Figma `JYUzJK1hFqaEwL6DpdDvjp`. Hasil akhir (reduced motion, 1440)
 - [ ] Referensi = PNG node terbaru yang diexport (bukan CSS).
 - [ ] Font persis Figma ter-bundle (weight benar, tanpa faux bold).
 - [ ] Image fill dipakai apa adanya (tidak direkonstruksi).
+- [ ] `effects`/`strokes` asli dicek via REST API (MCP menyembunyikan `GLASS`).
 - [ ] Gradient/efek di-fit dari piksel PNG, bukan string MCP.
 - [ ] Posisi tinta ±1px; MAE per region diukur & dilaporkan.
 - [ ] Geometri di-assert di `verify.mjs`; navbar-audit diupdate bila perlu.

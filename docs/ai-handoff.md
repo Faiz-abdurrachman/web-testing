@@ -10,7 +10,17 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
 
-- **Homepage hero — revisi font & spacing (PALING BARU, 1 Oct 2026):** Figma
+- **Contact precision pass — Figma GLASS effect (PALING BARU, 1 Oct 2026).**
+  `ContactHero.astro`: pill `1445:5072`, kartu info `1445:5077`, panel form
+  `1445:5098` pakai Figma **GLASS** (`effects:[{type:"GLASS"}]` via REST API — MCP
+  `figma_get_figma_data` **menyembunyikannya**). Diemulasi **ring `::after` +
+  `mask-composite: exclude`** (bukan `border`) + alpha dikalibrasi dari piksel.
+  Terukur (reduce, 1440): hero **3.00 → 2.76** (konten **tanpa navbar ~1.28**),
+  kartu ~5.1 → ~3.4, form 1.35 → 1.11; rim kartu/panel **persis** (top 116/115,
+  bottom 96/95, sisi 60/60). Input & arrow disc **bukan** glass. Sisa: pill ~18
+  (rasterisasi 12px), title 6.6, submit 4.17, footer 5.91, artwork 3.9. Detail:
+  `docs/pixel-precision-sop.md` §2 + §7, `docs/assets.md` §Contact.
+- **Homepage hero — revisi font & spacing (1 Oct 2026):** Figma
   frame `1430:2040`; hero `1430:2041`. Judul pindah ke **Bluu Next Bold 72/86**
   (OFL, **di-bundle** `public/fonts/bluu-next-700.woff2`, token `--font-display`;
   Nasalization tetap untuk halaman lain), 2 baris `gap 4`, gradient per baris;
@@ -193,6 +203,28 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   **opsional** (AVIF hero art + ikon philosophy/glow), konten asli (project,
   tanggal, partner/logo, member HoF), webfont Nasalization. VT hardening & OG
   **selesai**.
+
+## Baru saja: Contact precision pass — Figma GLASS effect (1 Oct 2026)
+
+- **Root cause baru:** surface glass (pill/kartu/panel) punya **effect `GLASS`**
+  di Figma. `figma_get_figma_data` (MCP) **tidak** mengekspos effects; ambil via
+  REST `GET /v1/files/<key>/nodes?ids=…` header `X-Figma-Token` (`effects:[GLASS]`).
+  Glass = rim 1px bergradasi + backdrop blur, bukan stroke.
+- **Fix:** ring `::after` + `mask`/`mask-composite: exclude` (pola `Button.astro`),
+  alpha di-fit dari piksel (top 37% → mid 11% @52% → bottom 28% di atas fill). Jangan
+  pakai `border` (mengecilkan content box → content geser 1px). Input `1445:5102` &
+  arrow `1445:5082` **bukan** glass.
+- **Hasil (reduce, 1440):** hero 3.00 → **2.76**; konten tanpa region navbar
+  (referensi PNG ikut memuat navbar) **~1.28**; kartu 5.46/5.12/4.96 →
+  **3.67/3.33/3.17**; form 1.35 → **1.11**; rim kartu/panel persis (top 116/115,
+  bottom 96/95, sisi 60/60).
+- **Sisa terukur:** pill ~18 (rasterisasi font 12px; `blur(8px)` hanya −2), title
+  6.6 (gradient sudah optimal saat di-sweep), submit 4.17, footer 5.91, artwork 3.9.
+- **Commit:** `c55c5e5` `fix(contact): emulate Figma GLASS rim on pill, cards,
+form panel` (+ commit docs). File berubah: `src/components/ContactHero.astro`
+  saja. `format:check` + `build` (19 halaman) + `verify.mjs` (EXIT 0, contactHero
+  MAE 2.757, `browserErrors: []`) PASS. **Catatan verifikasi:** `Contact-Hero-1x.png`
+  menyertakan navbar; nilai presisi sebenarnya = MAE tanpa area navbar (~1.28).
 
 ## Baru saja: Homepage hero — font & spacing revision (1 Oct 2026)
 
@@ -1224,6 +1256,11 @@ sound atau navigasi; detail P0–P2 ada di "Perf audit & rencana" di atas.
    Philosophy → What We Do → HoDS → Our Project → CTA; lalu halaman lain saat
    frame revisinya tersedia. Halaman yang belum direvisi tetap `--font-heading`
    (Nasalization) supaya diff & geometri tidak berubah.
+   - **Side task (Contact precision pass, 1 Oct 2026):** glass rim pill/kartu/panel
+     **selesai** (lihat "Baru saja"). Sisa opsional: `backdrop-filter: blur(8px)`
+     di pill (win kecil ~2 MAE), submit inset shadow, footer 5.91, artwork 3.9.
+     **Cek juga** surface glass di halaman lain (About/Partners/HoF) via REST —
+     `glow`/`card` Figma sering GLASS dan MCP tidak menampilkannya.
 1. **Perf P0 — SELESAI (28 Sep 2026).** (a) `sizes` Snippets + 960w, (d)
    `logo.png`/hero `background`/`figure` (lihat "P0 pass"), lalu (b) **sorcerer →
    AVIF** (`sorcerer-2x` 481→196 KB), (c) **video hero di-re-encode** (home webm

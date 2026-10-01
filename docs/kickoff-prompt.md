@@ -26,6 +26,12 @@ ATURAN INTI (hukum, jangan dilanggar):
 - SELALU mulai dari export node: `figma_get_figma_data` (struktur) +
   `figma_download_figma_images` (PNG 1x/2x + node teks/komponen terpisah) → UKUR
   dengan sharp. Jangan paste string MCP/CSS mentah.
+- **Effect Figma (GLASS/shadow) TIDAK selalu muncul di MCP.** `figma_get_figma_data`
+  bisa melaporkan fills/effects kosong padahal node memakai effect `GLASS`
+  (rim 1px + backdrop blur). Cek `effects`/`strokes` asli via **REST API**
+  (`GET /v1/files/<key>/nodes?ids=…`, header `X-Figma-Token: $FIGMA_API_KEY`).
+  Emulasi rim dengan ring `::after` + `mask-composite: exclude` (JANGAN `border` —
+  menggeser content box), alpha di-fit dari PNG (rim glass lebih terang di atas).
 - **Bundle font persis Figma** (cek lisensi; OFL → vendor woff2 ke public/fonts/ +
   @font-face; deklarasikan weight asli biar tidak faux-bold). Jangan ganti font
   global mid-migrasi — halaman yang belum direvisi tetap token lamanya.
