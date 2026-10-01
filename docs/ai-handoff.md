@@ -1303,26 +1303,28 @@ Section.png` (5760×3376 → 1440×844). Patch glow terukur: center REF
   Hall of Frames / Partners / Contact (About Us sudah selesai), dan lanjutan
   animasi What We Do.
 
-## Next plan — untuk AI berikutnya (update 1 Oct 2026)
+## Next plan — untuk AI berikutnya (update 2 Oct 2026)
 
 Urutan yang disarankan. Baca `docs/sound-sop.md` (khususnya §9) kalau menyentuh
 sound atau navigasi; detail P0–P2 ada di "Perf audit & rencana" di atas.
 
-1. **Homepage — revisi font & spacing (SEDANG JALAN).** Hero + navbar **selesai**
-   (1 Oct 2026, lihat "Baru saja" di atas). Lanjut per section pakai
-   **`--font-display` (Bluu Next)** + grid 8px sesuai frame `1430:2040`:
-   Philosophy → What We Do → HoDS → Our Project → CTA; lalu halaman lain saat
-   frame revisinya tersedia. Halaman yang belum direvisi tetap `--font-heading`
-   (Nasalization) supaya diff & geometri tidak berubah.
-   - **Side task (Contact precision pass, 1 Oct 2026):** glass rim pill/kartu/panel
-     **selesai** (lihat "Baru saja"). Sisa opsional: `backdrop-filter: blur(8px)`
-     di pill (win kecil ~2 MAE), submit inset shadow, footer 5.91, artwork 3.9.
-     **Cek juga** surface glass di halaman lain (About/Partners/HoF) via REST —
-     `glow`/`card` Figma sering GLASS dan MCP tidak menampilkannya.
-   - **Side task (HoF Project highlights 3D carousel, 1 Oct 2026):** **selesai**
-     (lihat "Baru saja"). Sisa opsional: project/shot asli (sekarang pakai shot
-     yang sama untuk 3 slide), clone/lebih banyak slide biar wrap mulus, dan
-     samakan perilaku di homepage `Our Project` (`1430:2146`) kalau mau konsisten.
+1. **Homepage — revisi font & spacing (SEDANG JALAN, frame `1430:2040`).**
+   - **Hero (`1430:2041`) SELESAI** (Bluu Next Bold 72/86, plate background webp, MAE 3.18).
+   - **Our Philosophy (`1430:2052`) SELESAI** (Bluu Next Bold 56/67, 591px col, 8pt spacing, MAE 2.568).
+   - **What We Do (`1430:2089`) SELESAI** (Bluu Next Bold 56/67.2, 4 kartu 391×254 di `(80,80)`, `(969,80)`, `(80,506)`, `(969,506)`, Manrope Bold 26/39 titles, MAE 2.5790).
+   - **TUGAS BERIKUTNYA: House of Data Sorcerers (HoDS) / "Choose Your Domain" (`1430:2138`)**:
+     - Frame Figma: `1430:2138` (1440 × 819, `padding: 80px`).
+     - Header group `1430:2139` (`Frame 2284`, 1280 × 149):
+       - `Frame 2283` (`1280 × 101`, `VERTICAL gap: 8px`):
+         - Eyebrow CTA `1430:2141` (`159 × 26px`, padding `4px 12px`, border-radius 32px, `rgba(255,255,255,0.15)` with Figma `GLASS` effect, text: "House of Data Sorcerers").
+         - Heading `1430:2143` ("Choose Your Domain", `538 × 67px`, **Bluu Next Bold 700 56px / 67.2px**, per-line clipped `linear-gradient(211.54deg, #FFFFFF 32.8%, #999999 49.8%, #FFFFFF 73.04%)`, gap ke eyebrow: **8px**).
+       - Subtitle `1430:2144` (Manrope Regular 16/24 white, `1280 × 24px`, gap ke heading: **24px**).
+     - Gap header group ke rail kartu: **74px** (`Frame 2284` ke `HoDS Card`).
+     - Rail kartu `HoDS Card` (`1430:2145` / `DomainRail.astro`): `1280 × 436px` (`Frame 2509`, `gap: 32px`, 6 kartu domain `405 × 436px`).
+     - Export referensi 1x & 2x: `assets/assets home page/hods/Home-HoDS-Revisi-{1x,2x}.png` via `node scripts/figma.mjs export 1430:2138 1 png ...`.
+     - Update assertion geometri di `verify.mjs` & cek `responsive-audit.mjs`.
+   - **Section sesudahnya:** Our Project (`1430:2146`) → CTA Recruitment (`1430:2162`).
+   - Sisa opsional surface glass di halaman lain via REST, dan konten asli saat material tersedia.
 1. **Perf P0 — SELESAI (28 Sep 2026).** (a) `sizes` Snippets + 960w, (d)
    `logo.png`/hero `background`/`figure` (lihat "P0 pass"), lalu (b) **sorcerer →
    AVIF** (`sorcerer-2x` 481→196 KB), (c) **video hero di-re-encode** (home webm

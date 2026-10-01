@@ -93,13 +93,23 @@ KONDISI SEKARANG (detail: docs/ai-handoff.md):
   (hero `1445:5066`, MAE 3.00; form panel 0.57) — hero kiri + form asli +
   artwork swirl. Aset: `npm run assets:contact`. Kartu info sengaja **non-link**
   (destinasi belum diberikan — jangan bikin URL karangan).
-- **Homepage hero — revisi font & spacing (terbaru, 1 Oct 2026).** Frame Figma
+- **Homepage hero — revisi font & spacing (1 Oct 2026).** Frame Figma
   `1430:2040`/hero `1430:2041`. Judul **Bluu Next Bold 72/86** (SIL OFL di-bundle,
   token `--font-display`; Nasalization tetap untuk halaman lain), 2 baris gap 4,
   gradient per baris; paragraf Manrope 18/25 lebar 655; spacing 80/64/16/24; tombol
   `community` (hover #2F196F) & `explore` (hover #4C3B7E); navbar CTA **"Join Us"
   93×43** (shared). **Art hero = image fill Figma persis** → hero MAE 27.96 → 3.18.
-  Referensi: `Home-Hero-Revisi.png`. Node teks `1430:2044/2045/2046`.
+- **Homepage Our Philosophy — revisi font & spacing (2 Oct 2026).** Frame Figma
+  `1430:2040`, section `1430:2052`. Judul **Bluu Next Bold 700 56/67** (token
+  `--font-display`), 2 baris `gap: 4px`, `&nbsp;` menjaga double-space Figma (587px width exact).
+  Kolom desktop 591px di `x: 766, y: 205`. Strict 8pt spacing: eyebrow gap 8px, title-to-grid 48px,
+  icon-to-font 24px (sesuai desainer Gembala), title-to-subtitle 8px, grid 30px×92px. Section MAE **2.568**.
+- **Homepage What We Do — revisi font, cards & spacing (2 Oct 2026).** Frame Figma
+  `1430:2040`, section `1430:2089`. Judul **Bluu Next Bold 700 56/67.2** (token `--font-display`),
+  2 baris `gap: 4px`. Eyebrow `What We Do` (Figma `GLASS` effect, gap ke heading 8px).
+  4 kartu pillar diperlebar ke **391px × 254px** di `(80,80)`, `(969,80)`, `(80,506)`, `(969,506)`.
+  Judul kartu **Manrope Bold 700 26/39**, gap nomor-ke-judul 0px, gap judul-ke-desc 16px, gradient rim 1px `135deg`.
+  Section MAE **2.5790**. Geometri diff 0.0px.
 - **About Us §1–4 SELESAI** (`/about`, dibangun dari file Figma LAMA
   `RntmRWAgLrh5utgzcjrUik`): ambient glow = **fill per-section Figma**
   (`Philosophy` 163deg 63%/126%; `Ecosystem` 24.75deg 53%/133%) — MCP menormalkan
@@ -123,10 +133,16 @@ KONDISI SEKARANG (detail: docs/ai-handoff.md):
   fixed-px yang bisa overflow (tes 320–3840).
 
 PRIORITAS BERIKUTNYA (lihat docs/ai-handoff.md §"Next plan"):
-1. **Lanjutkan revisi font & spacing homepage** ke section berikutnya, urut:
-   **Philosophy → What We Do → HoDS → Our Project → CTA**, pakai `--font-display`
-   (Bluu Next) + grid 8px sesuai frame `1430:2040`. Perlakukan tiap section seperti
-   hero: export node → ukur → implement → diff ±1px → update verify.
+1. **Lanjutkan revisi font & spacing homepage: House of Data Sorcerers (HoDS) / "Choose Your Domain" (`1430:2138`)**:
+   - Frame Figma: `1430:2138` (1440 × 819, `padding: 80px`).
+   - Header group `1430:2139` (`Frame 2284`, 1280 × 149):
+     - `Frame 2283` (`1280 × 101`, `VERTICAL gap: 8px`):
+       - Eyebrow CTA `1430:2141` (`159 × 26px`, padding `4px 12px`, border-radius 32px, `rgba(255,255,255,0.15)` with Figma `GLASS` effect, text: "House of Data Sorcerers").
+       - Heading `1430:2143` ("Choose Your Domain", `538 × 67px`, **Bluu Next Bold 700 56px / 67.2px**, per-line clipped `linear-gradient(211.54deg, #FFFFFF 32.8%, #999999 49.8%, #FFFFFF 73.04%)`, gap ke eyebrow: **8px**).
+     - Subtitle `1430:2144` (Manrope Regular 16/24 white, `1280 × 24px`, gap ke heading: **24px**).
+   - Gap header group ke rail kartu: **74px** (`Frame 2284` ke `HoDS Card`).
+   - Rail kartu `HoDS Card` (`1430:2145` / `DomainRail.astro`): `1280 × 436px` (`Frame 2509`, `gap: 32px`, 6 kartu domain `405 × 436px`).
+   - Lanjut per section: **Our Project (`1430:2146`) → CTA Recruitment (`1430:2162`)**.
 2. **About Us revisi ke file baru** (`1439:4184`, hero + Our Team) — **tunggu
    izin user** (sekarang masih versi lama).
 3. Konten asli (`projects.ts`, tanggal recruitment, logo partner 20 slot, member/
@@ -139,5 +155,15 @@ tambah/cek assertion + path referensi di `scripts/verify.mjs`.
 Sebelum mulai task di bawah: ringkas dulu pemahamanmu + rencana singkat, lalu kerjakan.
 
 TASK:
-<TULIS TASK DI SINI>
+Revisi section House of Data Sorcerers (HoDS) / "Choose Your Domain" pada homepage
+berdasarkan Figma node 1430:2138 (frame 1430:2040, file JYUzJK1hFqaEwL6DpdDvjp).
+Ikuti SOP presisi piksel (docs/pixel-precision-sop.md):
+1. Export referensi 1x & 2x: node 1430:2138 ke assets/assets home page/hods/Home-HoDS-Revisi-{1x,2x}.png
+   lewat node scripts/figma.mjs export 1430:2138 1 png ...
+2. Export cutouts header Frame 2284 dan Eyebrow 1430:2141.
+3. Update Heading font ke Bluu Next Bold 700 56px / 67.2px, gradient per baris, gap eyebrow 8px.
+4. Update Subtitle Manrope 16/24, gap 24px.
+5. Pertahankan attract-mode rail dan interaksi keyboard pada DomainRail.astro.
+6. Ukur dengan sharp, sesuaikan geometri di scripts/verify.mjs, jalankan responsive audit,
+   pastikan MAE seminimal mungkin (<3.0) dan semua tes exit 0.
 ```
