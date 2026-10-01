@@ -139,11 +139,11 @@ assets:contact` regenerates it and the icons.
   2880 × 1806). Not reconstructed.
 - Navbar is the shared component; the active "Hall of Frames" underline is
   `118px` (= the 146px tab minus 2 × 14 padding), matching Figma. "Hall of
-  Frames" is now a real link (`/hall-of-frames`) in `Navbar.astro`
-  `destinations`; "Contact" stays `aria-disabled` until its page exists. A page
-  whose tab is not linked yet renders its active entry as an `aria-disabled`
-  `<span>`, so the `active` class is applied to the disabled branch too —
-  otherwise the current tab stayed `#707070` with no underline.
+  Frames" is a real link (`/hall-of-frames`) in `Navbar.astro` `destinations`
+  ("Contact" too, at `/contact`; all navbar links are now live). A tab that is
+  somehow not linked yet renders its active entry as an `aria-disabled` `<span>`,
+  so the `active` class is applied to the disabled branch too — otherwise the
+  current tab stayed `#707070` with no underline.
 - Verification: `scripts/verify.mjs` asserts the hero/content/title/subtitle
   geometry (1440 × 903, 800 × 282, 80/102, 758 × 54), `overflow 0`, and diffs
   against `HoF-Hero-1x.png` (MAE 4.34). Build 18 pages, `verify.mjs` exit 0
