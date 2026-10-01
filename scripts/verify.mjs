@@ -203,36 +203,50 @@ try {
     .locator('.what-we-do')
     .evaluate((section) => {
       const rect = section.getBoundingClientRect();
+      const rel = (sel) => {
+        const el = section.querySelector(sel);
+        if (!el) return null;
+        const b = el.getBoundingClientRect();
+        return {
+          x: Math.round((b.x - rect.x) * 10) / 10,
+          y: Math.round((b.y - rect.y) * 10) / 10,
+          width: Math.round(b.width * 10) / 10,
+          height: Math.round(b.height * 10) / 10,
+        };
+      };
       return {
-        width: rect.width,
-        height: rect.height,
-        top: rect.top + scrollY,
+        width: Math.round(rect.width),
+        height: Math.round(rect.height),
+        top: Math.round(rect.top + scrollY),
+        eyebrow: rel('.eyebrow'),
+        heading: rel('h2'),
         cards: [...section.querySelectorAll('.pillar')].map((card) => {
           const box = card.getBoundingClientRect();
           return {
-            x: box.x - rect.x,
-            y: box.y - rect.y,
-            width: box.width,
-            height: box.height,
+            x: Math.round(box.x - rect.x),
+            y: Math.round(box.y - rect.y),
+            width: Math.round(box.width),
+            height: Math.round(box.height),
           };
         }),
       };
     });
   assert.deepEqual(pillarsGeometry, {
     width: 1440,
-    height: 844,
+    height: 840,
     top: 1740,
+    eyebrow: { x: 678, y: 334, width: 84, height: 26 },
+    heading: { x: 80, y: 369, width: 1280, height: 138 },
     cards: [
-      { x: 160, y: 80, width: 311, height: 254 },
-      { x: 971, y: 80, width: 309, height: 254 },
-      { x: 160, y: 510, width: 309, height: 254 },
-      { x: 970, y: 510, width: 310, height: 254 },
+      { x: 80, y: 80, width: 391, height: 254 },
+      { x: 969, y: 80, width: 391, height: 254 },
+      { x: 80, y: 506, width: 391, height: 254 },
+      { x: 969, y: 506, width: 391, height: 254 },
     ],
   });
   const pillarsReference = await sharp(
-    'assets/assets home page/what we do/What We Do Section.png',
+    'assets/assets home page/what we do/Home-WhatWeDo-Revisi-1x.png',
   )
-    .resize(1440, 844)
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -252,7 +266,7 @@ try {
       (pillarsActual[i] + pillarsReference[i]) / 2,
     );
   }
-  const pillarsRaw = { width: 1440, height: 844, channels: 3 };
+  const pillarsRaw = { width: 1440, height: 840, channels: 3 };
   await sharp(pillarsDiff, { raw: pillarsRaw })
     .png()
     .toFile('artifacts/what-we-do-diff.png');
@@ -286,7 +300,7 @@ try {
   assert.deepEqual(domainGeometry, {
     width: 1440,
     height: 826,
-    top: 2584,
+    top: 2580,
     cards: Array.from({ length: 6 }, (_, i) => ({
       x: 80 + i * 439.984375,
       y: 310,
@@ -380,7 +394,7 @@ try {
   assert.deepEqual(projectsGeometry, {
     width: 1440,
     height: 917,
-    top: 3410,
+    top: 3406,
     elements: {
       h2: { x: 80, y: 120, width: 751.296875, height: 68 },
       '.project-card.is-active': {
@@ -462,7 +476,7 @@ try {
   assert.deepEqual(recruitmentGeometry, {
     width: 1440,
     height: 577,
-    top: 4327,
+    top: 4323,
     elements: {
       '.recruitment-panel': { x: 80, y: 80, width: 1280, height: 417 },
       h2: { x: 81, y: 193, width: 1278, height: 68 },

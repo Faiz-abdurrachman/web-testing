@@ -1,5 +1,50 @@
 # Asset provenance
 
+## Homepage — What We Do (2 October 2026)
+
+- Section node **`1430:2089`** ("What We Do Section", frame `1430:2040`, file `JYUzJK1hFqaEwL6DpdDvjp`),
+  1440 × 840, `padding: 80px`. Reference: `assets/assets home page/what we do/Home-WhatWeDo-Revisi-1x.png`
+  (1440 × 840) & `Home-WhatWeDo-Revisi-2x.png` (2880 × 1680).
+- Typography & Heading:
+  - Central heading group `1430:2419` (`Frame 2724`), 1280 × 172 at `x: 80, y: 334`.
+  - Eyebrow pill `1430:2113`: `What We Do` (Manrope Regular 12/18, padding `4px 8px`, border-radius 32px,
+    `rgba(255,255,255,0.15)` with Figma `GLASS` effect). Sits at `x: 678, y: 334, w: 84, h: 26`.
+  - Eyebrow to title gap: **`8px`** (was 14px in old layout).
+  - Title `1430:2420` (`Frame 2725`): **Bluu Next Bold 700**, size **56px**, line-height **67.2px**,
+    letter-spacing `0`. Two lines: "Four Pillars" (`1430:2115`) and "of Innovation" (`1430:2418`), `gap: 4px`.
+  - Gradient per line: `linear-gradient(211.54deg, #FFFFFF 32.8%, #999999 49.8%, #FFFFFF 73.04%)` (`background-clip: text`).
+- Four Pillars Cards:
+  - All four cards resized to **391px × 254px** (previously 311px / 309px):
+    - Pillar 01 (LEARNING): `x: 80, y: 80, width: 391, height: 254`
+    - Pillar 02 (EXPERIMENTATION): `x: 969, y: 80, width: 391, height: 254`
+    - Pillar 03 (RESEARCH): `x: 80, y: 506, width: 391, height: 254`
+    - Pillar 04 (BUILD): `x: 969, y: 506, width: 391, height: 254`
+  - Strict 8pt grid & vertical layout:
+    - Top row (cards 1 & 2): `y = 80 to 334` (height 254px).
+    - Center row (heading group): `y = 334 to 506` (height 172px).
+    - Bottom row (cards 3 & 4): `y = 506 to 760` (height 254px).
+    - Section height: `80 + 254 + 172 + 254 + 80 = 840px`.
+  - Card typography:
+    - Number (01..04): Manrope Regular 16/24, letter-spacing -0.176px, `#EDE8FF`.
+    - Title: **Manrope Bold 700 26px / 39px** (was Nasalization 24/36), letter-spacing 0, white.
+    - Description: Manrope Regular 16/24, letter-spacing -0.176px, white.
+    - Number to title gap: `0px` (Frame 2272). Title to description gap: `16px`.
+    - Internal text box `Frame 2273`: 325 × 151px, centered horizontally (`left: 33px`) and vertically (`top: 51.5px`).
+  - Card decoration & rim:
+    - `border-radius: 20px 0;`
+    - Card background: `rgba(255, 255, 255, 0.15)`.
+    - Card 1px rim: `linear-gradient(135deg, #E0DCFF 0%, #2E276C 50%, #CBC5FF 100%)`.
+    - Card glow: `card-glow.svg` at `left: -237.4px, top: 101.6px, width: 1230.8px, height: 357px`.
+- Measurements & Precision:
+  - `verify.mjs` assertions:
+    - section: `{ width: 1440, height: 840, top: 1740 }`
+    - eyebrow: `{ x: 678, y: 334, width: 84, height: 26 }`
+    - heading: `{ x: 80, y: 369, width: 1280, height: 138 }`
+    - cards: 4 cards at exact coordinates `[ {80, 80}, {969, 80}, {80, 506}, {969, 506} ]`
+  - Geometry diff: **0.0px** across all elements.
+  - Section MAE: **`2.5790`** (evaluated against `Home-WhatWeDo-Revisi-1x.png`).
+  - Responsive audit: 18 routes × 26 widths (468/468) **ALL PASS**.
+
 ## Homepage — Our Philosophy (1–2 October 2026)
 
 - Section node **`1430:2052`** ("Philosophy Section", frame `1430:2040`, file `JYUzJK1hFqaEwL6DpdDvjp`),

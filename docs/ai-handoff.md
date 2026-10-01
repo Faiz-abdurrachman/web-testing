@@ -10,7 +10,17 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
 
-- **Homepage Our Philosophy — revisi font & spacing (PALING BARU, 2 Oct 2026).**
+- **Homepage What We Do — revisi font, cards & spacing (PALING BARU, 2 Oct 2026).**
+  `WhatWeDo.astro` (`1430:2089`, frame `1430:2040`) direvisi presisi:
+  judul **Bluu Next Bold 700 56/67.2** (`--font-display`), 2 baris `gap: 4px`,
+  gradient per baris `linear-gradient(211.54deg, #FFFFFF 32.8%, #999999 49.8%, #FFFFFF 73.04%)`,
+  eyebrow pill `What We Do` (Figma `GLASS` effect, gap ke heading `8px`),
+  4 kartu pillar diperlebar ke **391px × 254px** di koordinat exact `[ (80, 80), (969, 80), (80, 506), (969, 506) ]`,
+  judul kartu pindah dari Nasalization ke **Manrope Bold 700 26px / 39px**, gap nomor-ke-judul `0px`, gap judul-ke-desc `16px`,
+  stroke kartu 1px gradient `#E0DCFF`→`#2E276C`→`#CBC5FF` di `135deg`.
+  MAE section **2.5790**. Geometri bboxes diff **0.0px**.
+  Detail: `docs/assets.md` §Homepage What We Do.
+- **Homepage Our Philosophy — revisi font & spacing (2 Oct 2026).**
   `Philosophy.astro` (`1430:2052`, frame `1430:2040`) direvisi presisi:
   judul **Bluu Next Bold 700 56/67** (`--font-display`), 2 baris `gap: 4px`,
   gradient per baris `linear-gradient(211.54deg, #FFFFFF 32.8%, #999999 49.8%, #FFFFFF 73.04%)`,

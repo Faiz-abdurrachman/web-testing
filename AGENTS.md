@@ -338,6 +338,13 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   Situs pakai Astro **`<ClientRouter />`** (navigasi klien + `AudioContext`
   persist; semua komponen re-init `astro:page-load` + cleanup
   `astro:before-swap` — `docs/sound-sop.md` §9).
+- **Homepage What We Do — revisi font, cards & spacing (2 Oct 2026).** Frame Figma
+  `1430:2040`, section `1430:2089`. Judul **Bluu Next Bold 700 56/67.2** (token
+  `--font-display`), gradient per baris, 2 baris `gap: 4px`. Eyebrow `What We Do`
+  (Figma `GLASS` effect, gap ke heading 8px). 4 kartu pillar 391×254 di `(80,80)`,
+  `(969,80)`, `(80,506)`, `(969,506)`. Judul kartu **Manrope Bold 700 26/39**,
+  gap nomor-ke-judul 0px, gap judul-ke-desc 16px, gradient rim 1px `135deg`.
+  Section MAE **2.5790**. Geometri diff 0.0px. Detail: `docs/assets.md` §Homepage What We Do.
 - **Homepage Our Philosophy — revisi font & spacing (2 Oct 2026).** Frame Figma
   `1430:2040`, section `1430:2052`. Judul **Bluu Next Bold 700 56/67** (token
   `--font-display`), gradient per baris, 2 baris `gap: 4px`, `&nbsp;` menjaga
