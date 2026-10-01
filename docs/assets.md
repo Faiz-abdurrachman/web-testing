@@ -1,5 +1,34 @@
 # Asset provenance
 
+## Contact page (1 October 2026)
+
+- Route `/contact` (Figma page `1445:5065`, file `JYUzJK1hFqaEwL6DpdDvjp`);
+  hero node **`1445:5066`** (1440 × 954, `padding 240px 80px 120px`, `gap 160`,
+  `#050507`). A centered row (`gap 32`) holds a **587px left column**
+  (`space-between`) and a **661px form panel**.
+- Left column: "Contact Us" pill (`rgba(255,255,255,.15)`, radius 32, `4/12`,
+  Manrope 400 12/18), **Bluu Next Bold 56 / 67** gradient title "Get in touch",
+  Manrope Medium 18/27 copy, then three **info cards** (587 × 74, `padding 12px
+20px`, radius 20, `rgba(255,255,255,.12)`, `gap 18`): 61 × 45 icon (each icon
+  rect exported as a render — `icon-{email,whatsapp,office}.webp`), title
+  Manrope Bold 16/24 white, value Manrope 400 16/24 `#ADADAD`, and a 37px
+  `rgba(255,255,255,.15)` arrow disc (inline 10px SVG, `stroke #fff`). The cards
+  are **not links** (no destinations were supplied — do not invent URLs).
+- Form panel (661 × 594, `padding 20px 32px`, radius 20, `rgba(255,255,255,.12)`,
+  `gap 32`): four fields (`gap 16`) — label Manrope Bold 16/24 white, input
+  `padding 16px 14px`, radius 20, `rgba(255,255,255,.20)`, placeholder
+  `#A3A3A3`; the Message control is a 135px textarea. Submit = full-width
+  200px pill using the Join-Us radial gradient + inset shadows, Manrope Medium
+  18/27. It is a real `<form>`/`<input>`/`<textarea>` (no endpoint wired yet).
+- Purple swirl: the node `1445:5067` render placed absolutely at `-131/−92`
+  (801 × 600) → `public/images/contact/hero-art.webp`; `npm run
+assets:contact` regenerates it and the icons.
+- `verify.mjs` asserts the `contactHero` geometry (section 1440 × 954, row
+  80/240/1280 × 594, left 587, form 661, art −131/−92/801 × 600, cards
+  564/662/760 × 74, overflow 0) and diffs vs `Contact-Hero-1x.png` (MAE
+  **3.00**; the form panel alone is 0.57). `responsive-audit` now covers
+  `/contact` (18 routes × 26 widths = 468) and the sitemap has 18 URLs.
+
 ## Hall of Frames — Community Milestone (1 October 2026)
 
 - Section node **`1439:4699`** ("Milestone DS Section"), 1440 × 987,

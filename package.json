@@ -20,6 +20,7 @@
     "assets:footer": "node scripts/generate-footer-background.mjs",
     "assets:partners": "node scripts/generate-partners-assets.mjs",
     "assets:hof": "node scripts/generate-hof-assets.mjs",
+    "assets:contact": "node scripts/generate-contact-assets.mjs",
     "seo:audit": "node scripts/seo-audit.mjs",
     "perf:audit": "node scripts/perf-audit.mjs",
     "format": "prettier --write .",

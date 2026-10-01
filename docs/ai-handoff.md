@@ -28,12 +28,18 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   node `1439:4709`). Assertion `hofHero` + `hofFeatured` + `hofProjects` +
   `hofMilestone` di `verify.mjs`, exit 0, `browserErrors: []`. **Semua section
   Hall of Frames selesai** (Hero/Featured/Projects/Milestone + Footer). Sisa 2E:
-  tambah rute ke `responsive-audit.mjs` + `seo-audit` (17 rute), update docs,
+  tambah rute ke `responsive-audit.mjs` + `seo-audit` (18 rute), update docs,
   commit. Nav "Hall of Frames" sudah aktif (`/hall-of-frames`). **Gotcha:** class
   `hof-project-card` sengaja tidak dinamai `.project-card` — `setNavbarHidden`
   di `verify.mjs` menyembunyikan `.project-card:not(.is-active)` (homepage
   carousel).
-- **Contact (belum dimulai):** route `/contact` (Figma `1445:5065`).
+- **Contact page selesai (1 Oct 2026):** `/contact` (Figma page `1445:5065`)
+  → `ContactHero.astro` (hero `1445:5066`, 1440×954): kolom kiri 587 (pill +
+  Bluu Next 56/67 + 3 kartu info) + panel form 661 (input asli + submit
+  gradient) + artwork swirl node `1445:5067` di `-131/−92`. Assertion
+  `contactHero` (MAE 3.00; form 0.57). `npm run assets:contact`. Kartu info
+  **bukan link** (destinasi tidak diberikan). Nav "Contact" aktif. **Semua 18
+  rute publik + semua link navbar selesai.**
 - **Partners Page (30 Sep 2026):** `/partners` (`PartnersHero` +
   `OurPartners` + `WhyPartners`, komponen & `data/partners.ts` baru). Nav
   "Partners" kini link asli. Geometri persis referensi (halaman 1440×2966: hero
@@ -56,10 +62,11 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   ≥1301px (menu 753), scroll = backing kaca transparan `rgb(6 5 10 / 45%)` +
   `blur(12px)`. `npm run audit:navbar` assert geometri 1440.
 
-- **Situs:** static **Astro 7** — 17 rute publik (`/`, `/about`, `/recruitment`,
-  `/partners`, `/hall-of-frames`, `/recruitment/roles/{6}` 6 halaman,
+- **Situs:** static **Astro 7** — 18 rute publik (`/`, `/about`, `/recruitment`,
+  `/partners`, `/hall-of-frames`, `/contact`, `/recruitment/roles/{6}` 6 halaman,
   `/hods/{6}` 6 halaman) + `/lab/sound` internal (`noindex`, di luar sitemap).
-  `/contact` belum dibuat. Target: **pixel-accurate ke
+  Semua rute navbar (Home/About/Recruitment/Hall of Frames/Partners/Contact)
+  sudah aktif. Target: **pixel-accurate ke
   PNG referensi**, HTML/CSS ringan (bukan flatten screenshot).
 - **Perbaikan lokal 29 Sep 2026:** sudut glow kartu HoDS yang menjadi kotak
   saat hover diperbaiki dengan `.domain-card-inner` sebagai clip wrapper tanpa
@@ -173,18 +180,19 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   partikel, idle karakter, scroll reveal, tilt, magnetic. Semua **inert saat
   `prefers-reduced-motion: reduce`**.
 - **Gate sebelum commit (semua harus exit 0):** `npm run format:check`,
-  `npm run build` (0 error, **17 halaman**), `PREVIEW_URL=… node scripts/verify.mjs`
-  (`browserErrors: []`), `node scripts/responsive-audit.mjs` (**17 rute × 26 lebar
-  = 442 combos**), `npm run seo:audit` (18 halaman, sitemap 17). **Penting:** `verify.mjs` pakai `page.goto` penuh, jadi
+  `npm run build` (0 error, **18 halaman**), `PREVIEW_URL=… node scripts/verify.mjs`
+  (`browserErrors: []`), `node scripts/responsive-audit.mjs` (**18 rute × 26 lebar
+  = 468 combos**), `npm run seo:audit` (19 halaman, sitemap 18). **Penting:** `verify.mjs` pakai `page.goto` penuh, jadi
   **tidak menguji navigasi klien** — pakai **`npm run verify:vt`**
   (`scripts/verify-vt.mjs`): cek konteks JS persist, komponen re-init, cue
   `transition` tepat satu, modifier tidak di-intercept, dan deep-link hash.
 - **Deploy GANDA:** `git push origin main` → testing **dan** production.
-- **Next:** §"Next plan — untuk AI berikutnya" di bawah. **About Us sections 1–4
-  selesai**; **Partners page selesai** (`/partners`, 17 rute publik); Perf P0
-  **selesai** (Home mobile 0.98 MB); sisa **opsional** (AVIF hero art + ikon
-  philosophy/glow), konten asli, halaman **Hall of Frames / Contact** (nav masih
-  `aria-disabled`), webfont Nasalization. VT hardening & OG **selesai**.
+- **Next:** §"Next plan — untuk AI berikutnya" di bawah. **Semua halaman rute
+  navbar selesai** (About/Partners/Recruitment/Hall of Frames/Contact — 18 rute
+  publik, semua link aktif); Perf P0 **selesai** (Home mobile 0.98 MB); sisa
+  **opsional** (AVIF hero art + ikon philosophy/glow), konten asli (project,
+  tanggal, partner/logo, member HoF), webfont Nasalization. VT hardening & OG
+  **selesai**.
 
 ## Baru saja: Homepage hero — font & spacing revision (1 Oct 2026)
 
@@ -210,7 +218,7 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   82 KB) via `generate-hero-layers.mjs`; `figure.webp` dihapus. Idle karakter
   terpisah → idle halus seluruh plate (`motion.ts` `animatePlate`, overscan 1.05).
   Hero MAE (reduce, 1440) **27.96 → 3.18**.
-- **Gate:** build 17 halaman, `verify.mjs` EXIT 0 (`browserErrors: []`),
+- **Gate:** build 18 halaman, `verify.mjs` EXIT 0 (`browserErrors: []`),
   `responsive-audit` 416 ALL PASS, `navbar-audit` ALL PASS, `seo:audit` PASS,
   `verify:vt` PASS, `format:check` OK.
 - **Berikutnya:** lanjutkan revisi font/spacing ke section homepage lain
@@ -1237,10 +1245,11 @@ sound atau navigasi; detail P0–P2 ada di "Perf audit & rencana" di atas.
    belum perlu. Smoke: **`npm run verify:vt`**.
 1. **Konten:** data project asli (`src/data/projects.ts` masih 4 placeholder) dan
    tanggal recruitment (`SelectionTimeline.astro` masih "Date"). Butuh material user.
-1. **Halaman baru:** ~~About Us~~ **DONE**, ~~Partners~~ **DONE** (`/partners`).
-   Sisa: **Hall of Frames / Contact**. Nav-nya sudah ada tapi `aria-disabled` —
-   **jangan bikin URL palsu**, konfirmasi ke user dulu. Logo partner asli (20
-   slot) juga masih ditunggu (sekarang placeholder DS).
+1. **Halaman baru:** ~~About Us~~ ~~Partners~~ ~~Hall of Frames~~ ~~Contact~~
+   **ALL DONE** (18 rute publik, semua link navbar aktif). Sisa konten asli:
+   logo partner (20 slot, sekarang placeholder DS), member HoF, project HoF,
+   milestone. **Jangan bikin URL palsu** untuk kartu info Contact (sengaja
+   non-link sampai destinasi diberikan).
 1. **Nasalization webfont:** butuh file berlisensi dari manusia — **jangan
    diakali**. Taruh `.woff2` di `public/fonts/`, update `@font-face` di
    `global.css` (pertahankan `local()`).

@@ -38,7 +38,7 @@ npm run verify:vt         # View Transitions + sound-cue smoke (client-side nav)
 non-zero on any failed assertion.
 
 `scripts/responsive-audit.mjs` is a lightweight, per-route Playwright pass over
-all 17 routes × 26 widths (320 → 3840). It checks horizontal overflow, clipped
+all 18 routes × 26 widths (320 → 3840). It checks horizontal overflow, clipped
 text, carousel-arrow/card overlap and the navbar breakpoint, and writes
 `artifacts/responsive-audit.json`. Use it when the full `verify.mjs` is too slow
 or the dev server makes `waitUntil: networkidle` hang (see Verification workflow).
@@ -296,7 +296,7 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   `docs/pixel-precision-sop.md` §6.
 - **Sudah live:** About Us §1–4, Partners page (`/partners`), Recruitment
   lengkap, 6 detail role, 6 detail HoDS, Navbar exact Figma, motion, sound,
-  SEO/OG, View Transitions. **17 rute publik** (+ `/lab/sound` internal).
+  SEO/OG, View Transitions. **18 rute publik** (+ `/lab/sound` internal).
 - **Next plan (prioritas).** Lanjutkan revisi font & spacing ke section homepage
   lain — **Philosophy → What We Do → HoDS → Our Project → CTA** (pakai
   `--font-display` + grid 8px sesuai frame `1430:2040`); lalu konten asli
@@ -338,7 +338,7 @@ role-glow-wave` = `scale: 1 → 1.04` saja (drift `translate ±6%` dibuang) →
 - Polish terakhir (setelah checkpoint recruitment): menu hamburger **full-screen**
   dengan animasi buka/tutup JS (fallback instant saat `prefers-reduced-motion`)
   plus hover pill membulat; panah carousel **kiri-kanan di desktop, bawah di
-  mobile**; skrip `scripts/responsive-audit.mjs` (17 halaman × 26 lebar) ALL PASS.
+  mobile**; skrip `scripts/responsive-audit.mjs` (18 halaman × 26 lebar) ALL PASS.
   Lihat `git log`.
 - **Available Roles cards (redesign 26 Sep 2026)**: proporsional penuh —
   `aspect-ratio: 1652 / 956` + `container-type: inline-size`, semua ukuran `cqw`;

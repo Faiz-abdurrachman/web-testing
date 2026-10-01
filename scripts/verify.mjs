@@ -2546,6 +2546,86 @@ try {
       hofMilestoneActual[i] - hofMilestoneReference[i],
     );
   }
+
+  // Contact hero (node 1445:5066) geometry + diff.
+  await page.goto(`${baseUrl}/contact`, { waitUntil: 'networkidle' });
+  await page.evaluate(() => document.fonts.ready);
+  await page.evaluate(() => document.fonts.load('700 56px "Bluu Next"'));
+  await setNavbarHidden(true);
+  await page.locator('.contact-hero').scrollIntoViewIfNeeded();
+  await page.waitForFunction(() =>
+    [...document.querySelectorAll('.contact-hero img')].every(
+      (img) => img.complete && img.naturalWidth > 0,
+    ),
+  );
+  await page.evaluate(() =>
+    Promise.all(
+      [...document.querySelectorAll('.contact-hero img')].map((img) =>
+        img.decode().catch(() => {}),
+      ),
+    ),
+  );
+  const contactHeroGeometry = await page.evaluate(() => {
+    const section = document.querySelector('.contact-hero');
+    const sb = section.getBoundingClientRect();
+    const rel = (selector) => {
+      const box = document.querySelector(selector).getBoundingClientRect();
+      return {
+        x: Math.round((box.x - sb.x) * 10) / 10,
+        y: Math.round((box.y - sb.y) * 10) / 10,
+        width: Math.round(box.width * 10) / 10,
+        height: Math.round(box.height * 10) / 10,
+      };
+    };
+    return {
+      section: { width: Math.round(sb.width), height: Math.round(sb.height) },
+      art: rel('.hero-art'),
+      row: rel('.hero-row'),
+      left: rel('.hero-left'),
+      form: rel('.contact-form'),
+      cards: [...document.querySelectorAll('.info-card')].map((card) => {
+        const box = card.getBoundingClientRect();
+        return {
+          y: Math.round((box.y - sb.y) * 10) / 10,
+          height: Math.round(box.height * 10) / 10,
+        };
+      }),
+      overflow: document.documentElement.scrollWidth - innerWidth,
+    };
+  });
+  assert.deepEqual(contactHeroGeometry, {
+    section: { width: 1440, height: 954 },
+    art: { x: -131, y: -92, width: 801, height: 600 },
+    row: { x: 80, y: 240, width: 1280, height: 594 },
+    left: { x: 80, y: 240, width: 587, height: 594 },
+    form: { x: 699, y: 240, width: 661, height: 594 },
+    cards: [
+      { y: 564, height: 74 },
+      { y: 662, height: 74 },
+      { y: 760, height: 74 },
+    ],
+    overflow: 0,
+  });
+  await page
+    .locator('.contact-hero')
+    .screenshot({ path: 'artifacts/contact-hero-desktop.png' });
+  const contactHeroReference = await sharp(
+    'assets/contact/hero/Contact-Hero-1x.png',
+  )
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const contactHeroActual = await sharp('artifacts/contact-hero-desktop.png')
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(contactHeroReference.length, contactHeroActual.length);
+  let contactHeroTotal = 0;
+  for (let i = 0; i < contactHeroActual.length; i++) {
+    contactHeroTotal += Math.abs(
+      contactHeroActual[i] - contactHeroReference[i],
+    );
+  }
   assert.deepEqual(errors, []);
 
   const report = {
@@ -2569,6 +2649,11 @@ try {
       geometry: hofMilestoneGeometry,
       meanAbsoluteChannelDifference:
         hofMilestoneTotal / hofMilestoneActual.length,
+    },
+    contactHero: {
+      geometry: contactHeroGeometry,
+      meanAbsoluteChannelDifference:
+        contactHeroTotal / contactHeroActual.length,
     },
     recruitment: {
       geometry: recruitmentGeometry,

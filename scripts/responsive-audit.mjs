@@ -9,6 +9,7 @@ const ROUTES = [
   '/recruitment',
   '/partners',
   '/hall-of-frames',
+  '/contact',
   ...IDS.map((id) => `/hods/${id}`),
   ...IDS.map((id) => `/recruitment/roles/${id}`),
 ];

@@ -1,0 +1,350 @@
+---
+const info = [
+  {
+    title: 'Email Us',
+    value: 'datasorcerers.id@gmail.com',
+    icon: 'email',
+  },
+  {
+    title: 'WhatsApp',
+    value: '09876543215637',
+    icon: 'whatsapp',
+  },
+  {
+    title: 'Our Office',
+    value: 'Sleman, DI Yogyakarta',
+    icon: 'office',
+  },
+];
+---
+
+<section class="contact-hero" aria-labelledby="contact-hero-title">
+  <img
+    class="hero-art"
+    src="/images/contact/hero-art.webp"
+    srcset="/images/contact/hero-art.webp 1x, /images/contact/hero-art-2x.webp 2x"
+    width="801"
+    height="600"
+    alt=""
+    aria-hidden="true"
+    fetchpriority="high"
+    decoding="async"
+  />
+  <div class="hero-row">
+    <div class="hero-left">
+      <div class="hero-intro">
+        <div class="hero-head">
+          <span class="hero-pill">Contact Us</span>
+          <h1 id="contact-hero-title">Get in touch</h1>
+        </div>
+        <p>
+          Share your idea, challenge, or collaboration opportunity. We would
+          love to explore what we can build together.
+        </p>
+      </div>
+      <div class="hero-cards">
+        {info.map((item) => (
+          <article class="info-card">
+            <img
+              class="info-icon"
+              src={`/images/contact/icon-${item.icon}.webp`}
+              srcset={`/images/contact/icon-${item.icon}.webp 1x, /images/contact/icon-${item.icon}-2x.webp 2x`}
+              width="61"
+              height="45"
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="info-text">
+              <span class="info-title">{item.title}</span>
+              <span class="info-value">{item.value}</span>
+            </span>
+            <span class="info-arrow" aria-hidden="true">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path
+                  d="M9.21053 0.789474L0.789474 9.21053M9.21053 7.80702V0.789474H2.19298"
+                  stroke="white"
+                  stroke-width="1.57895"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+          </article>
+        ))}
+      </div>
+    </div>
+    <form class="contact-form">
+      <div class="form-fields">
+        <label class="field">
+          <span>Name</span>
+          <input type="text" name="name" placeholder="Your Name..." />
+        </label>
+        <label class="field">
+          <span>Email</span>
+          <input type="email" name="email" placeholder="example123@gmail.com" />
+        </label>
+        <label class="field">
+          <span>Subject</span>
+          <input type="text" name="subject" placeholder="Title..." />
+        </label>
+        <label class="field">
+          <span>Message</span>
+          <textarea name="message" placeholder="Type here..."></textarea>
+        </label>
+      </div>
+      <button type="submit" class="form-submit">
+        Submit
+      </button>
+    </form>
+  </div>
+</section>
+
+<style>
+  /* Matches Figma node 1445:5066 (1440 × 954): padding 240px 80px 120px, a
+     centered row (gap 32) of a 587px left column (pill/title/copy + three info
+     cards, `space-between`) and a 661px form panel. The purple swirl is the
+     node 1445:5067 render at −131/−92 (801 × 600). Info cards are non-links
+     (no destinations were supplied). */
+  .contact-hero {
+    position: relative;
+    min-height: 954px;
+    padding: 240px 80px 120px;
+    background: #050507;
+    overflow: clip;
+  }
+
+  .hero-art {
+    position: absolute;
+    left: -131px;
+    top: -92px;
+    width: 801px;
+    height: 600px;
+    pointer-events: none;
+  }
+
+  .hero-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    justify-content: space-between;
+    gap: 40px;
+    width: 587px;
+  }
+
+  .hero-intro {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .hero-head {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .hero-pill {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 32px;
+    background: rgb(255 255 255 / 15%);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+  }
+
+  .hero-intro h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 67px;
+    letter-spacing: -0.011em;
+    background: linear-gradient(181deg, #fff 15%, #999 42%, #fff 79%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .hero-intro p {
+    margin: 0;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+  }
+
+  .hero-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .info-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 12px 20px;
+    border-radius: 20px;
+    background: rgb(255 255 255 / 12%);
+  }
+
+  .info-icon {
+    display: block;
+    flex: none;
+    width: 61px;
+    height: 45px;
+    object-fit: contain;
+  }
+
+  .info-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+  }
+
+  .info-title {
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+  }
+
+  .info-value {
+    color: #adadad;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+  }
+
+  .info-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 37px;
+    height: 37px;
+    border-radius: 20px;
+    background: rgb(255 255 255 / 15%);
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    width: 661px;
+    padding: 20px 32px;
+    border-radius: 20px;
+    background: rgb(255 255 255 / 12%);
+  }
+
+  .form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .field > span {
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+  }
+
+  .field input,
+  .field textarea {
+    width: 100%;
+    padding: 16px 14px;
+    border: 0;
+    border-radius: 20px;
+    background: rgb(255 255 255 / 20%);
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+  }
+
+  .field textarea {
+    height: 135px;
+    resize: none;
+  }
+
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: #a3a3a3;
+  }
+
+  .form-submit {
+    width: 100%;
+    padding: 8px 16px;
+    border: 0;
+    border-radius: 200px;
+    background: radial-gradient(
+      circle at 26% 0%,
+      #6c3bff 0%,
+      #9b7bff 50%,
+      #6c3bff 100%
+    );
+    box-shadow:
+      inset -2px -2px 4px 0 rgb(188 166 255 / 90%),
+      inset -2px -2px 1.4px 0 rgb(188 166 255 / 100%),
+      inset 0 2px 1.2px 0 rgb(255 255 255 / 50%);
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 1100px) {
+    .contact-hero {
+      min-height: 0;
+      padding: 160px var(--page-gutter) 80px;
+    }
+    .hero-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .hero-left,
+    .contact-form {
+      width: 100%;
+    }
+    .hero-left {
+      align-self: auto;
+      gap: 40px;
+    }
+    .hero-intro h1 {
+      font-size: clamp(36px, 7vw, 56px);
+      line-height: 1.2;
+    }
+    .hero-art {
+      width: 600px;
+      height: 450px;
+    }
+  }
+</style>
