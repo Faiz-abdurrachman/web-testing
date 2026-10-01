@@ -23,14 +23,16 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
 - **Hall of Frames (WIP, 1 Oct 2026):** route `/hall-of-frames` (Figma page
   `1439:4506`, file `JYUzJK1hFqaEwL6DpdDvjp`). **Hero selesai** (`1439:4507`,
   MAE 4.34). **Featured Sorcerers selesai** (`1439:4512`, MAE 2.01). **Project
-  highlights selesai** (`1439:4655`, `HallOfFramesProjects.astro`, MAE 2.96 —
-  kartu `hof-project-card` 933×730 + sisi 800×626 via container queries,
-  screenshot fill + tint 20%, glow node `1439:4656`). Assertion `hofHero` +
-  `hofFeatured` + `hofProjects` di `verify.mjs`, exit 0, `browserErrors: []`.
-  Berikutnya: **Community Milestone** (`1439:4699`). Nav "Hall of Frames" sudah
-  aktif (`/hall-of-frames`). **Gotcha:** class `hof-project-card` sengaja tidak
-  dinamai `.project-card` — `setNavbarHidden` di `verify.mjs` menyembunyikan
-  `.project-card:not(.is-active)` (homepage carousel).
+  highlights selesai** (`1439:4655`, MAE 2.96). **Community Milestone selesai**
+  (`1439:4699`, `HallOfFramesMilestone.astro`, MAE 1.33 — timeline 3 baris + rail
+  node `1439:4709`). Assertion `hofHero` + `hofFeatured` + `hofProjects` +
+  `hofMilestone` di `verify.mjs`, exit 0, `browserErrors: []`. **Semua section
+  Hall of Frames selesai** (Hero/Featured/Projects/Milestone + Footer). Sisa 2E:
+  tambah rute ke `responsive-audit.mjs` + `seo-audit` (17 rute), update docs,
+  commit. Nav "Hall of Frames" sudah aktif (`/hall-of-frames`). **Gotcha:** class
+  `hof-project-card` sengaja tidak dinamai `.project-card` — `setNavbarHidden`
+  di `verify.mjs` menyembunyikan `.project-card:not(.is-active)` (homepage
+  carousel).
 - **Contact (belum dimulai):** route `/contact` (Figma `1445:5065`).
 - **Partners Page (30 Sep 2026):** `/partners` (`PartnersHero` +
   `OurPartners` + `WhyPartners`, komponen & `data/partners.ts` baru). Nav

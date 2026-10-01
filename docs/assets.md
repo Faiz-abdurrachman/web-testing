@@ -1,5 +1,25 @@
 # Asset provenance
 
+## Hall of Frames — Community Milestone (1 October 2026)
+
+- Section node **`1439:4699`** ("Milestone DS Section"), 1440 × 987,
+  `padding 100px 80px`, `gap 80`, `#050507`. Header `1439:4700` (1108 wide,
+  `gap 24`): title **Bluu Next Bold 56 / 84** (`-0.011em`, gradient heading) +
+  Manrope Medium 18/27 subtitle.
+- Timeline `1439:4703` (`gap 58`): three rows `1439:4704/4714/4719` (row
+  `year (64) → gap 146 → content (944)`, height 143). Year = Manrope SemiBold
+  **26 / 42** and item title = Manrope SemiBold **36 / 48**, both filled with the
+  `180deg #6C3BFF → #fff` gradient (per text node); description = Manrope Medium
+  18/27 white. The **gradient rail with three diamonds** is the exported
+  IMAGE-SVG node `1439:4709` (14 × 414 at `130/21`, absolute), shipped as
+  `public/images/hof/milestone/rail.webp` — not rebuilt. Content is placeholder
+  lorem (2024/2025/2026, "Our First Focused").
+- `npm run assets:hof` writes the rail. `verify.mjs` asserts the `hofMilestone`
+  geometry (section 1440 × 987, header 80/100/1108 × 162, list 80/342/1280 × 545,
+  rail 210/363/14 × 414, rows 342/543/744 × 143, overflow 0) and diffs vs
+  `HoF-Milestone-1x.png` (MAE **1.33**). Responsive: ≤900px the rail hides and
+  the year stacks above the copy.
+
 ## Hall of Frames — Project highlights (1 October 2026)
 
 - Section node **`1439:4655`** ("Project highlights"), 1440 × 1181, `padding 80`,

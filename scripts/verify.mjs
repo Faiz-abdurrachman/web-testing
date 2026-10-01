@@ -2468,6 +2468,84 @@ try {
       hofProjectsActual[i] - hofProjectsReference[i],
     );
   }
+
+  // Hall of Frames — Community Milestone (node 1439:4699) geometry + diff.
+  await page.goto(`${baseUrl}/hall-of-frames`, { waitUntil: 'networkidle' });
+  await page.evaluate(() => document.fonts.ready);
+  await page.evaluate(() => document.fonts.load('700 56px "Bluu Next"'));
+  await setNavbarHidden(true);
+  await page.locator('.hof-milestone').scrollIntoViewIfNeeded();
+  await page.waitForFunction(() =>
+    [...document.querySelectorAll('.hof-milestone img')].every(
+      (img) => img.complete && img.naturalWidth > 0,
+    ),
+  );
+  await page.evaluate(() =>
+    Promise.all(
+      [...document.querySelectorAll('.hof-milestone img')].map((img) =>
+        img.decode().catch(() => {}),
+      ),
+    ),
+  );
+  const hofMilestoneGeometry = await page.evaluate(() => {
+    const section = document.querySelector('.hof-milestone');
+    const sb = section.getBoundingClientRect();
+    const rel = (selector) => {
+      const box = document.querySelector(selector).getBoundingClientRect();
+      return {
+        x: Math.round((box.x - sb.x) * 10) / 10,
+        y: Math.round((box.y - sb.y) * 10) / 10,
+        width: Math.round(box.width * 10) / 10,
+        height: Math.round(box.height * 10) / 10,
+      };
+    };
+    return {
+      section: { width: Math.round(sb.width), height: Math.round(sb.height) },
+      header: rel('.milestone-header'),
+      list: rel('.milestone-list'),
+      rail: rel('.milestone-rail'),
+      rows: [...document.querySelectorAll('.milestone-row')].map((row) => {
+        const box = row.getBoundingClientRect();
+        return {
+          y: Math.round((box.y - sb.y) * 10) / 10,
+          height: Math.round(box.height * 10) / 10,
+        };
+      }),
+      overflow: document.documentElement.scrollWidth - innerWidth,
+    };
+  });
+  assert.deepEqual(hofMilestoneGeometry, {
+    section: { width: 1440, height: 987 },
+    header: { x: 80, y: 100, width: 1108, height: 162 },
+    list: { x: 80, y: 342, width: 1280, height: 545 },
+    rail: { x: 210, y: 363, width: 14, height: 414 },
+    rows: [
+      { y: 342, height: 143 },
+      { y: 543, height: 143 },
+      { y: 744, height: 143 },
+    ],
+    overflow: 0,
+  });
+  await page
+    .locator('.hof-milestone')
+    .screenshot({ path: 'artifacts/hof-milestone-desktop.png' });
+  const hofMilestoneReference = await sharp(
+    'assets/hall of frames/milestone/HoF-Milestone-1x.png',
+  )
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const hofMilestoneActual = await sharp('artifacts/hof-milestone-desktop.png')
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(hofMilestoneReference.length, hofMilestoneActual.length);
+  let hofMilestoneTotal = 0;
+  for (let i = 0; i < hofMilestoneActual.length; i++) {
+    hofMilestoneTotal += Math.abs(
+      hofMilestoneActual[i] - hofMilestoneReference[i],
+    );
+  }
   assert.deepEqual(errors, []);
 
   const report = {
@@ -2486,6 +2564,11 @@ try {
       geometry: hofProjectsGeometry,
       meanAbsoluteChannelDifference:
         hofProjectsTotal / hofProjectsActual.length,
+    },
+    hofMilestone: {
+      geometry: hofMilestoneGeometry,
+      meanAbsoluteChannelDifference:
+        hofMilestoneTotal / hofMilestoneActual.length,
     },
     recruitment: {
       geometry: recruitmentGeometry,

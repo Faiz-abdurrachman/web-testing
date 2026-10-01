@@ -11,13 +11,16 @@ import sharp from 'sharp';
 const src = 'assets/hall of frames/hero';
 const featuredSrc = 'assets/hall of frames/featured';
 const projectsSrc = 'assets/hall of frames/projects';
+const milestoneSrc = 'assets/hall of frames/milestone';
 const out = 'public/images/hof';
 const featuredOut = path.join(out, 'featured');
 const projectsOut = path.join(out, 'projects');
+const milestoneOut = path.join(out, 'milestone');
 const bg = path.join(src, 'HoF-Hero-Bg-raw.png');
 
 await mkdir(featuredOut, { recursive: true });
 await mkdir(projectsOut, { recursive: true });
+await mkdir(milestoneOut, { recursive: true });
 
 const webp = (input, output, width, quality) =>
   sharp(input)
@@ -31,6 +34,7 @@ const webpIn = (dir) => (input, output, width, quality) =>
     .webp({ quality, effort: 5 })
     .toFile(path.join(dir, output));
 const projectWebp = webpIn(projectsOut);
+const milestoneWebp = webpIn(milestoneOut);
 
 await Promise.all([
   // 1440×903 hero frame; the source is 3344×1882 so the 2x (cover to 2880×1806)
@@ -91,6 +95,19 @@ await Promise.all([
     'glow.webp',
     1200,
     70,
+  ),
+  // Community Milestone rail: gradient line + three diamonds (node 1439:4709).
+  milestoneWebp(
+    path.join(milestoneSrc, 'HoF-Milestone-Line-2x.png'),
+    'rail.webp',
+    14,
+    90,
+  ),
+  milestoneWebp(
+    path.join(milestoneSrc, 'HoF-Milestone-Line-2x.png'),
+    'rail-2x.webp',
+    28,
+    88,
   ),
 ]);
 
