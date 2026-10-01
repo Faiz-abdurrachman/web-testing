@@ -294,15 +294,21 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   (`Home-Hero-Plate.png` → `background.webp`, `figure.webp` dihapus) → hero MAE
   **27.96 → 3.18**. Detail: `docs/assets.md` §Homepage hero +
   `docs/pixel-precision-sop.md` §6.
+- **Hall of Frames + Contact selesai (1 Oct 2026, file Figma
+  `JYUzJK1hFqaEwL6DpdDvjp`).** `/hall-of-frames` (Hero `1439:4507` MAE 4.34,
+  Featured `1439:4512` 2.01, Projects `1439:4655` 2.96, Milestone `1439:4699`
+  1.33) dan `/contact` (`ContactHero.astro`, hero `1445:5066` MAE 3.00). Semua
+  link navbar aktif. Generator: `npm run assets:hof` + `npm run assets:contact`.
+  Detail: `docs/assets.md` §Hall of Frames / §Contact.
 - **Sudah live:** About Us §1–4, Partners page (`/partners`), Recruitment
-  lengkap, 6 detail role, 6 detail HoDS, Navbar exact Figma, motion, sound,
-  SEO/OG, View Transitions. **18 rute publik** (+ `/lab/sound` internal).
-- **Next plan (prioritas).** Lanjutkan revisi font & spacing ke section homepage
-  lain — **Philosophy → What We Do → HoDS → Our Project → CTA** (pakai
-  `--font-display` + grid 8px sesuai frame `1430:2040`); lalu konten asli
-  (`projects.ts`, tanggal recruitment); halaman **Hall of Frames / Contact**
-  (nav masih `aria-disabled`, jangan bikin URL palsu); webfont Nasalization.
-  Detail: `docs/ai-handoff.md` §"Next plan".
+  lengkap, Hall of Frames, Contact, 6 detail role, 6 detail HoDS, Navbar exact
+  Figma, motion, sound, SEO/OG, View Transitions. **18 rute publik** (+
+  `/lab/sound` internal) — semua link navbar aktif.
+- **Next plan (prioritas).** Konten asli (`projects.ts`, tanggal recruitment,
+  logo partner, member/project/milestone HoF); revisi font & spacing homepage
+  ke section lain (Philosophy → What We Do → HoDS → Our Project → CTA, pakai
+  `--font-display` + grid 8px); webfont Nasalization. Detail:
+  `docs/ai-handoff.md` §"Next plan".
 - **Deploy GANDA**: `git push origin main` → testing + production.
 - **Available Roles hover (`f92b88a`).** Kartu reaktif pointer: pool radial violet
   ikut kursor (`--mx/--my`), ember lean (`--gx/--gy` ±22/16px + `scale(1.06)`),
