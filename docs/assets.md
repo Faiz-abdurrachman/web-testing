@@ -1,5 +1,39 @@
 # Asset provenance
 
+## Detail HoDS Pages (/hods/[id]) — Frame Height 1280px & Spacing (2 October 2026)
+
+- Frame nodes Figma (file `JYUzJK1hFqaEwL6DpdDvjp`, page `Design`):
+  - Data Intelligence: node `864:18857` (1440 × 1280, padding 80px)
+  - Core AI & Engineering: node `864:18904` (1440 × 1280, padding 80px)
+  - Language & Reasoning: node `864:18959` (1440 × 1280, padding 80px). Reference: `assets/assets home page/hods/detail/HoDS-Detail-Language-1x.png` (1440 × 1280) & `HoDS-Detail-Language-2x.png` (2880 × 2560).
+  - Vision & Multimodal: node `864:19013` (1440 × 1280, padding 80px)
+  - Product & Software: node `864:19024` (1440 × 1280, padding 80px)
+  - Growth & Community: node `864:19035` (1440 × 1280, padding 80px)
+- Perintah / Callout Gembala (Sat Sep 26 2026):
+  - "Penyesuaian Height (tinggi card) menjadi 1280px untuk ALL Detile HoDS"
+  - Seluruh frame halaman di Figma diseragamkan ke **1440 × 1280px**.
+- Layout & Spacing:
+  - Container `.hods-detail-inner`: `width: 100%; max-width: 1440px; min-height: 1280px; padding: 80px; gap: 56px;`
+  - Back Link (`Frame 2391`): `151 × 27px` at `x: 80, y: 80`. Gap ke hero card: `56px`.
+  - Hero Card (`card detile role (HoDS)`): `1280 × 279px` at `x: 80, y: 163` (`80 + 27 + 56 = 163`). Gap ke role-body (tabs): `56px`.
+  - Content Tabs (`Frame 2491`): at `x: 80, y: 498` (`163 + 279 + 56 = 498`). Height `32px`, `gap: 8px` antar button.
+  - Role Body gap: `32px` antara tabs dan panels.
+  - Block gap: `16px` antara title H2 (`Manrope Bold 700 26/39`) dan description/bullets (`Manrope Medium 500 18/27`).
+  - Panel gap: `42px` antar block.
+  - Mobile (`@media (max-width: 900px)`): `.hods-detail-inner` `min-height: 0; gap: 40px; padding: calc(40px + env(safe-area-inset-top, 0px)) 24px 40px;` dan `.hods-detail` `min-height: 100vh / 100lvh;`.
+- Measurements & Precision:
+  - `verify.mjs` assertions (diuji pada seluruh 6 rute `/hods/{data,core,language,vision,product,growth}`):
+    - Container: `1440 × 1280` exact.
+    - Back link: `{ x: 80, y: 80 }` exact.
+    - Hero Card: `{ x: 80, y: 163, width: 1280, height: 279 }` exact.
+    - Tabs: `{ x: 80, y: 498, width: 1280, height: 32 }` exact.
+  - Regional MAE on `/hods/language`:
+    - Top (y 0–163): **0.5816**
+    - Content (y 442–800): **1.3456**
+    - Bottom space (y 800–1280): **2.3912**
+  - Responsive audit: 18 routes × 26 widths (468/468) **ALL PASS**.
+  - ClientRouter (VT): **ALL PASS**, pageerrors: none.
+
 ## Homepage — House of Data Sorcerers (HoDS) / Choose Your Domain (2 October 2026)
 
 - Section node **`1430:2138`** ("House of Data Sorcerers Section", frame `1430:2040`, file `JYUzJK1hFqaEwL6DpdDvjp`),

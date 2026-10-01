@@ -10,7 +10,20 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
 
-- **Homepage Choose Your Domain (HoDS) — revisi font, cards & spacing (PALING BARU, 2 Oct 2026).**
+- **Detail HoDS Pages (/hods/[id]) — penyesuaian height 1280px & spacing (PALING BARU, 2 Oct 2026).**
+  `HoDSDetail.astro` direvisi presisi sesuai Frame Figma `864:18857`, `864:18904`, `864:18959`, `864:19013`, `864:19024`, `864:19035` dan callout resmi Gembala ("Penyesuaian Height (tinggi card) menjadi 1280px untuk ALL Detile HoDS"):
+  - Container `.hods-detail-inner`: `width: 100%; max-width: 1440px; min-height: 1280px; padding: 80px; gap: 56px;` (desktop 1440 × 1280 exact).
+  - Back Link (`Frame 2391`): `151 × 27px` di `x: 80, y: 80`. Gap ke hero card `56px`.
+  - Hero Card (`card detile role (HoDS)`): `1280 × 279px` di `x: 80, y: 163`. Gap ke tabs `56px`.
+  - Tabs (`Frame 2491`): di `x: 80, y: 498`, height `32px`, `gap: 8px`.
+  - Role Body gap `32px` (antara tabs dan panels).
+  - Block gap `16px` (antara title H2 26/39 dan description 18/27).
+  - Mobile (`≤900px`): `.hods-detail-inner` `min-height: 0; gap: 40px; padding: calc(40px + env(safe-area-inset-top, 0px)) 24px 40px;` dan `.hods-detail` `min-height: 100vh / 100lvh;`.
+  - Geometri di-assert pada seluruh 6 rute (`/hods/{data,core,language,vision,product,growth}`) di `scripts/verify.mjs`: `width: 1440, height: 1280, back: (80,80), card: (80,163,1280,279), tabs: (80,498,1280,32)`.
+  - Regional MAE pada `/hods/language`: Top (0–163) **0.5816**, Content (442–800) **1.3456**, Bottom space (800–1280) **2.3912**.
+  - Audit responsif 18 rute × 26 widths (468/468) & verify:vt **ALL PASS**.
+  - Detail: `docs/assets.md` §Detail HoDS Pages (/hods/[id]).
+- **Homepage Choose Your Domain (HoDS) — revisi font, cards & spacing (2 Oct 2026).**
   `Domains.astro`, `DomainCard.astro`, dan `DomainRail.astro` (`1430:2138`, frame `1430:2040`) direvisi presisi:
   judul **Bluu Next Bold 700 56/67.2** (`--font-display`), gradient per baris `linear-gradient(211.54deg, #FFFFFF 32.8%, #999999 49.8%, #FFFFFF 73.04%)`,
   eyebrow pill `House of Data Sorcerers` (Figma `GLASS` effect, 159×26, gap ke heading `8px`),

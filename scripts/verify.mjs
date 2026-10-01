@@ -1165,6 +1165,63 @@ try {
     { href: '/#domains', label: 'Back to HoDS' },
     'HoDS back link defaults to the homepage',
   );
+  for (const domain of rolePages) {
+    await page.setViewportSize({ width: 1440, height: 1400 });
+    await page.goto(`${baseUrl}/hods/${domain.id}`, {
+      waitUntil: 'networkidle',
+    });
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+      await Promise.all(
+        [...document.images].map(async (image) => {
+          image.loading = 'eager';
+          await image.decode().catch(() => {});
+        }),
+      );
+    });
+    const hodsGeometry = await page
+      .locator('.hods-detail')
+      .evaluate((section) => {
+        const rect = section.getBoundingClientRect();
+        const relative = (selector) => {
+          const box = section.querySelector(selector)?.getBoundingClientRect();
+          return box
+            ? {
+                x: box.x - rect.x,
+                y: box.y - rect.y,
+                width: box.width,
+                height: box.height,
+              }
+            : null;
+        };
+        return {
+          width: rect.width,
+          height: rect.height,
+          back: relative('.back'),
+          card: relative('.role-card'),
+          tabs: relative('.tabs'),
+        };
+      });
+    assert.equal(hodsGeometry.width, 1440, `HoDS ${domain.id} width`);
+    assert.equal(hodsGeometry.height, 1280, `HoDS ${domain.id} height`);
+    assert.deepEqual(
+      {
+        x: hodsGeometry.card.x,
+        y: hodsGeometry.card.y,
+        width: hodsGeometry.card.width,
+        height: hodsGeometry.card.height,
+      },
+      { x: 80, y: 163, width: 1280, height: 279 },
+      `HoDS ${domain.id} card box`,
+    );
+    assert.equal(hodsGeometry.back.x, 80, `HoDS ${domain.id} back link x`);
+    assert.equal(hodsGeometry.back.y, 80, `HoDS ${domain.id} back link y`);
+    assert.equal(hodsGeometry.tabs.x, 80, `HoDS ${domain.id} tabs x`);
+    assert.equal(hodsGeometry.tabs.y, 498, `HoDS ${domain.id} tabs y`);
+    await page
+      .locator('.hods-detail')
+      .screenshot({ path: `artifacts/hods-detail-${domain.id}.png` });
+  }
   const roleReport = {};
   const roleSizes = [320, 390, 768, 1024, 1440, 1680, 1920];
   for (const role of rolePages) {

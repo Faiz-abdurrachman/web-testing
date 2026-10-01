@@ -183,9 +183,10 @@ const { hod } = Astro.props;
     z-index: 1;
     display: flex;
     flex-direction: column;
-    gap: 58px;
+    gap: 56px;
     width: 100%;
     max-width: 1440px;
+    min-height: 1280px;
     margin-inline: auto;
     padding: 80px;
   }
@@ -262,13 +263,13 @@ const { hod } = Astro.props;
   .role-body {
     display: flex;
     flex-direction: column;
-    gap: 36px;
+    gap: 32px;
   }
   .tabs {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 11px;
+    gap: 8px;
   }
   .tab {
     display: inline-flex;
@@ -306,7 +307,7 @@ const { hod } = Astro.props;
   .block {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
   }
   .block h2 {
     margin: 0;
@@ -351,12 +352,13 @@ const { hod } = Astro.props;
     background: linear-gradient(135deg, #6c3bff 17%, #ede8ff 50%, #6c3bff 83%);
   }
   @media (max-width: 900px) {
-    /* Fill the viewport so the gradient never leaves a body-coloured gap below it when the content is shorter than the screen (phones with the browser chrome hidden). Desktop is unchanged. */
+    /* Fill the viewport so the gradient never leaves a body-coloured gap below it when the content is shorter than the screen (phones with the browser chrome hidden). Desktop keeps the exact 1280px reference frame. */
     .hods-detail {
       min-height: 100vh;
       min-height: 100lvh;
     }
     .hods-detail-inner {
+      min-height: 0;
       gap: 40px;
       padding: calc(40px + env(safe-area-inset-top, 0px)) 24px 40px;
     }

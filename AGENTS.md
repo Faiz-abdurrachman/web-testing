@@ -338,6 +338,15 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   Situs pakai Astro **`<ClientRouter />`** (navigasi klien + `AudioContext`
   persist; semua komponen re-init `astro:page-load` + cleanup
   `astro:before-swap` — `docs/sound-sop.md` §9).
+- **Detail HoDS Pages (/hods/[id]) — penyesuaian height 1280px & spacing (2 Oct 2026).**
+  Frame Figma `864:18857`, `864:18904`, `864:18959`, `864:19013`, `864:19024`, `864:19035`
+  dan callout Gembala: "Penyesuaian Height (tinggi card) menjadi 1280px untuk ALL Detile HoDS".
+  Container `.hods-detail-inner` `min-height: 1280px`, gap `56px`, padding `80px`.
+  Back link di `(80, 80)`, hero card di `(80, 163)` (1280×279), tabs di `(80, 498)` (gap 8px),
+  role body gap `32px`, block gap `16px`. Geometri di-assert pada seluruh 6 rute (`/hods/{data,core,language,vision,product,growth}`).
+  Regional MAE `/hods/language`: Top **0.5816**, Content **1.3456**, Bottom **2.3912**.
+  Audit responsif 18 rute × 26 widths (468/468) & verify.mjs exit 0.
+  Detail: `docs/assets.md` §Detail HoDS Pages (/hods/[id]).
 - **Homepage Choose Your Domain (HoDS) — revisi font, cards & spacing (2 Oct 2026).** Frame Figma
   `1430:2040`, section `1430:2138`. Judul **Bluu Next Bold 700 56/67.2** (token
   `--font-display`), gradient per baris, Eyebrow `House of Data Sorcerers`
