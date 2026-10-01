@@ -22,12 +22,13 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   §Homepage hero — font & spacing revision.
 - **Hall of Frames (WIP, 1 Oct 2026):** route `/hall-of-frames` (Figma page
   `1439:4506`, file `JYUzJK1hFqaEwL6DpdDvjp`). **Hero selesai** (`1439:4507`)
-  → `HallOfFramesHero.astro`: Bluu Next 80/102 gradient `181deg` (satu gradient
-  untuk blok 2 baris), subjudul Manrope 500 18/27 `#EDE8FF`, art = raw image fill
-  (`npm run assets:hof` → `public/images/hof/hero-bg*.webp`). `verify.mjs`
-  assertion `hofHero` + MAE 4.34, exit 0, `browserErrors: []`. Section berikutnya
-  **belum** dibuat (Featured Sorcerers → Project highlights → Community
-  Milestone). Nav "Hall of Frames" masih `aria-disabled` sampai halaman selesai.
+  → `HallOfFramesHero.astro` (MAE 4.34). **Featured Sorcerers selesai**
+  (`1439:4512`) → `HallOfFramesFeatured.astro` (header Bluu Next 56; 8 kartu
+  302×400, potret bleed di atas frame seperti Figma, overlay frame + fade dari
+  render node karena string gradient MCP lossy → MAE **2.01**). Assertion
+  `hofHero` + `hofFeatured` di `verify.mjs`, exit 0, `browserErrors: []`.
+  Berikutnya: **Project highlights** (`1439:4655`) → Community Milestone
+  (`1439:4699`). Nav "Hall of Frames" sudah aktif (`/hall-of-frames`).
 - **Contact (belum dimulai):** route `/contact` (Figma `1445:5065`).
 - **Partners Page (30 Sep 2026):** `/partners` (`PartnersHero` +
   `OurPartners` + `WhyPartners`, komponen & `data/partners.ts` baru). Nav

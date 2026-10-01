@@ -1,0 +1,287 @@
+---
+interface Member {
+  name: string;
+  role: string;
+  photo: 1 | 2;
+  muted: boolean;
+  lead?: boolean;
+}
+
+// Figma node 1439:4512: two rows of four cards. Row 1/2 repeat the same four
+// members (placeholder content). Card 1 uses the "lead" portrait (302×532 box
+// at y −132); the rest use the uniform portrait (302×442 at y −42).
+const row: Member[] = [
+  {
+    name: 'Marchel Shevchenko',
+    role: 'Founder',
+    photo: 1,
+    muted: false,
+    lead: true,
+  },
+  { name: 'Zidan Amikul', role: 'Community Lead', photo: 2, muted: true },
+  { name: 'Rose', role: 'UI/UX Designer', photo: 2, muted: true },
+  { name: 'Rose', role: 'UI/UX Designer', photo: 2, muted: true },
+];
+const members: Member[] = [...row, ...row];
+---
+
+<section class="hof-featured" aria-labelledby="hof-featured-title">
+  <div class="featured-header">
+    <h2 id="hof-featured-title">Featured Sorcerers</h2>
+    <p>Celebrating the individuals driving innovation and contribution.</p>
+  </div>
+  <div class="featured-grid">
+    {members.map((member) => (
+      <article
+        class:list={['featured-card', { 'is-lead': member.lead }]}
+        aria-label={`${member.name}, ${member.role}`}
+      >
+        <img
+          class="card-photo"
+          src={`/images/hof/featured/photo-${member.photo}.webp`}
+          srcset={`/images/hof/featured/photo-${member.photo}.webp 1x, /images/hof/featured/photo-${member.photo}-2x.webp 2x`}
+          width="302"
+          height={member.lead ? '532' : '442'}
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
+        <img
+          class="card-frame"
+          src="/images/hof/featured/frame.webp"
+          width="295"
+          height="277"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+        />
+        <img
+          class="card-fade"
+          src="/images/hof/featured/fade.webp"
+          srcset="/images/hof/featured/fade.webp 1x, /images/hof/featured/fade-2x.webp 2x"
+          width="302"
+          height="153"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="card-meta">
+          <span class="card-name">{member.name}</span>
+          <span class="card-divider" aria-hidden="true" />
+          <span class:list={['card-role', { 'is-muted': member.muted }]}>
+            {member.role}
+          </span>
+          <span class="card-socials" aria-hidden="true">
+            <svg viewBox="0 0 16 16" width="16" height="16" fill="none">
+              <path
+                d="M8 1.44062C10.1375 1.44062 10.3906 1.45 11.2313 1.4875C12.0125 1.52187 12.4344 1.65313 12.7156 1.7625C13.0875 1.90625 13.3563 2.08125 13.6344 2.35938C13.9156 2.64062 14.0875 2.90625 14.2313 3.27813C14.3406 3.55938 14.4719 3.98438 14.5063 4.7625C14.5438 5.60625 14.5531 5.85938 14.5531 7.99375C14.5531 10.1313 14.5438 10.3844 14.5063 11.225C14.4719 12.0063 14.3406 12.4281 14.2313 12.7094C14.0875 13.0813 13.9125 13.35 13.6344 13.6281C13.3531 13.9094 13.0875 14.0813 12.7156 14.225C12.4344 14.3344 12.0094 14.4656 11.2313 14.5C10.3875 14.5375 10.1344 14.5469 8 14.5469C5.8625 14.5469 5.60938 14.5375 4.76875 14.5C3.9875 14.4656 3.56563 14.3344 3.28438 14.225C2.9125 14.0813 2.64375 13.9063 2.36563 13.6281C2.08438 13.3469 1.9125 13.0813 1.76875 12.7094C1.65938 12.4281 1.52813 12.0031 1.49375 11.225C1.45625 10.3813 1.44688 10.1281 1.44688 7.99375C1.44688 5.85625 1.45625 5.60313 1.49375 4.7625C1.52813 3.98125 1.65938 3.55938 1.76875 3.27813C1.9125 2.90625 2.0875 2.6375 2.36563 2.35938C2.64688 2.07812 2.9125 1.90625 3.28438 1.7625C3.56563 1.65313 3.99063 1.52187 4.76875 1.4875C5.60938 1.45 5.8625 1.44062 8 1.44062ZM8 0C5.82813 0 5.55625 0.009375 4.70313 0.046875C3.85313 0.084375 3.26875 0.221875 2.7625 0.41875C2.23438 0.625 1.7875 0.896875 1.34375 1.34375C0.896875 1.7875 0.625 2.23438 0.41875 2.75938C0.221875 3.26875 0.084375 3.85 0.046875 4.7C0.009375 5.55625 0 5.82812 0 8C0 10.1719 0.009375 10.4438 0.046875 11.2969C0.084375 12.1469 0.221875 12.7313 0.41875 13.2375C0.625 13.7656 0.896875 14.2125 1.34375 14.6562C1.7875 15.1 2.23438 15.375 2.75938 15.5781C3.26875 15.775 3.85 15.9125 4.7 15.95C5.55313 15.9875 5.825 15.9969 7.99688 15.9969C10.1688 15.9969 10.4406 15.9875 11.2938 15.95C12.1438 15.9125 12.7281 15.775 13.2344 15.5781C13.7594 15.375 14.2063 15.1 14.65 14.6562C15.0938 14.2125 15.3688 13.7656 15.5719 13.2406C15.7688 12.7313 15.9063 12.15 15.9438 11.3C15.9813 10.4469 15.9906 10.175 15.9906 8.00313C15.9906 5.83125 15.9813 5.55938 15.9438 4.70625C15.9063 3.85625 15.7688 3.27188 15.5719 2.76562C15.375 2.23438 15.1031 1.7875 14.6563 1.34375C14.2125 0.9 13.7656 0.625 13.2406 0.421875C12.7313 0.225 12.15 0.0875 11.3 0.05C10.4438 0.009375 10.1719 0 8 0Z"
+                fill="white"
+                fill-opacity="0.53"
+              />
+              <path
+                d="M8 3.89062C5.73125 3.89062 3.89062 5.73125 3.89062 8C3.89062 10.2688 5.73125 12.1094 8 12.1094C10.2688 12.1094 12.1094 10.2688 12.1094 8C12.1094 5.73125 10.2688 3.89062 8 3.89062ZM8 10.6656C6.52813 10.6656 5.33437 9.47188 5.33437 8C5.33437 6.52813 6.52813 5.33437 8 5.33437C9.47188 5.33437 10.6656 6.52813 10.6656 8C10.6656 9.47188 9.47188 10.6656 8 10.6656Z"
+                fill="white"
+                fill-opacity="0.53"
+              />
+              <path
+                d="M13.2312 3.725C13.2312 4.25625 12.8 4.68438 12.2719 4.68438C11.7406 4.68438 11.3125 4.25313 11.3125 3.725C11.3125 3.19375 11.7438 2.76562 12.2719 2.76562C12.8 2.76562 13.2312 3.19688 13.2312 3.725Z"
+                fill="white"
+                fill-opacity="0.53"
+              />
+            </svg>
+            <svg viewBox="0 0 16 16" width="16" height="16" fill="none">
+              <path
+                d="M14.8156 0H1.18125C0.528125 0 0 0.515625 0 1.15313V14.8438C0 15.4813 0.528125 16 1.18125 16H14.8156C15.4688 16 16 15.4813 16 14.8469V1.15313C16 0.515625 15.4688 0 14.8156 0ZM4.74687 13.6344H2.37188V5.99687H4.74687V13.6344ZM3.55938 4.95625C2.79688 4.95625 2.18125 4.34062 2.18125 3.58125C2.18125 2.82188 2.79688 2.20625 3.55938 2.20625C4.31875 2.20625 4.93437 2.82188 4.93437 3.58125C4.93437 4.3375 4.31875 4.95625 3.55938 4.95625ZM13.6344 13.6344H11.2625V9.92188C11.2625 9.0375 11.2469 7.89687 10.0281 7.89687C8.79375 7.89687 8.60625 8.8625 8.60625 9.85938V13.6344H6.2375V5.99687H8.5125V7.04063H8.54375C8.85938 6.44063 9.63438 5.80625 10.7875 5.80625C13.1906 5.80625 13.6344 7.3875 13.6344 9.44375V13.6344Z"
+                fill="white"
+                fill-opacity="0.53"
+              />
+            </svg>
+          </span>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  /* Matches Figma node 1439:4512 (1440 × 1241): padding 80, header (768 wide,
+     gap 24) then a gap 80 to the gallery (two rows of four 302×400 cards,
+     column gap 24 / row gap 66). The card is proportional via container queries
+     (1cqw = 3.02px at the 302px reference card) like `AvailableRoles`. */
+  .hof-featured {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 80px;
+    padding: 80px;
+    background: #050507;
+  }
+
+  .featured-header {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 768px;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .featured-header h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.5;
+    letter-spacing: -0.011em;
+    background: linear-gradient(181deg, #fff 15%, #999 42%, #fff 79%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .featured-header p {
+    margin: 0;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+  }
+
+  .featured-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: 24px;
+    row-gap: 66px;
+    width: 100%;
+    max-width: 1280px;
+  }
+
+  /* Figma does not clip the card: the portrait bleeds above the 302×400 frame
+     (the exported photo rects keep their own bottom radius). */
+  .featured-card {
+    position: relative;
+    container-type: inline-size;
+    aspect-ratio: 302 / 400;
+    border-radius: 10px;
+    background: rgb(255 255 255 / 10%);
+  }
+
+  .card-photo {
+    position: absolute;
+    top: -13.91cqw;
+    left: 0;
+    display: block;
+    width: 100cqw;
+    height: 146.36cqw;
+    object-fit: fill;
+  }
+  .featured-card.is-lead .card-photo {
+    top: -43.71cqw;
+    height: 176.16cqw;
+  }
+
+  .card-frame {
+    position: absolute;
+    top: 4.3cqw;
+    left: 0.99cqw;
+    width: 97.68cqw;
+    height: 91.72cqw;
+    pointer-events: none;
+  }
+
+  .card-fade {
+    position: absolute;
+    inset: auto 0 0;
+    display: block;
+    width: 100%;
+    height: 50.66cqw;
+    border-radius: 0 0 10px 10px;
+    pointer-events: none;
+  }
+
+  .card-meta {
+    position: absolute;
+    top: 94.04cqw;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.32cqw;
+    width: 71.85cqw;
+    text-align: center;
+  }
+  .featured-card.is-lead .card-meta {
+    width: max-content;
+  }
+
+  .card-name {
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 7.28cqw;
+    font-weight: 700;
+    line-height: 10.93cqw;
+    white-space: nowrap;
+  }
+
+  .card-divider {
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: rgb(255 255 255 / 30%);
+  }
+
+  .card-role {
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 5.3cqw;
+    font-weight: 400;
+    line-height: 7.95cqw;
+  }
+  .card-role.is-muted {
+    color: #d8d1d1;
+  }
+
+  .card-socials {
+    display: flex;
+    align-items: center;
+    gap: 3.31cqw;
+    height: 5.3cqw;
+  }
+  .card-socials svg {
+    display: block;
+    width: 5.3cqw;
+    height: 5.3cqw;
+  }
+
+  @media (max-width: 1100px) {
+    .hof-featured {
+      padding: 64px var(--page-gutter);
+      gap: 56px;
+    }
+    .featured-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .hof-featured {
+      padding: 56px var(--page-gutter);
+      gap: 44px;
+    }
+    .featured-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .featured-header h2 {
+      font-size: clamp(34px, 9vw, 56px);
+      line-height: 1.3;
+    }
+    .featured-header p {
+      font-size: 16px;
+      line-height: 24px;
+    }
+  }
+</style>

@@ -9,10 +9,18 @@ import path from 'node:path';
 import sharp from 'sharp';
 
 const src = 'assets/hall of frames/hero';
+const featuredSrc = 'assets/hall of frames/featured';
 const out = 'public/images/hof';
+const featuredOut = path.join(out, 'featured');
 const bg = path.join(src, 'HoF-Hero-Bg-raw.png');
 
-await mkdir(out, { recursive: true });
+await mkdir(featuredOut, { recursive: true });
+
+const webp = (input, output, width, quality) =>
+  sharp(input)
+    .resize({ width })
+    .webp({ quality, effort: 5 })
+    .toFile(path.join(featuredOut, output));
 
 await Promise.all([
   // 1440×903 hero frame; the source is 3344×1882 so the 2x (cover to 2880×1806)
@@ -25,6 +33,33 @@ await Promise.all([
     .resize({ width: 3210 })
     .webp({ quality: 84, effort: 5 })
     .toFile(path.join(out, 'hero-bg-2x.webp')),
+  // Featured Sorcerers cards: portraits are the Figma-rendered rects (already
+  // cropped as displayed), the frame is the exported "Mask group" overlay.
+  webp(path.join(featuredSrc, 'HoF-Photo-1-2x.png'), 'photo-1.webp', 302, 86),
+  webp(
+    path.join(featuredSrc, 'HoF-Photo-1-2x.png'),
+    'photo-1-2x.webp',
+    604,
+    84,
+  ),
+  webp(path.join(featuredSrc, 'HoF-Photo-2-2x.png'), 'photo-2.webp', 302, 86),
+  webp(
+    path.join(featuredSrc, 'HoF-Photo-2-2x.png'),
+    'photo-2-2x.webp',
+    604,
+    84,
+  ),
+  webp(path.join(featuredSrc, 'HoF-Card-Frame-2x.png'), 'frame.webp', 295, 90),
+  webp(
+    path.join(featuredSrc, 'HoF-Card-Frame-2x.png'),
+    'frame-2x.webp',
+    590,
+    88,
+  ),
+  // Bottom violet fade. The MCP `linear-gradient` string is lossy (the rendered
+  // reference is markedly bluer), so the node's own render is used as overlay.
+  webp(path.join(featuredSrc, 'HoF-Card-Fade-2x.png'), 'fade.webp', 302, 90),
+  webp(path.join(featuredSrc, 'HoF-Card-Fade-2x.png'), 'fade-2x.webp', 604, 88),
 ]);
 
 console.log(`Hall of Frames artwork written to ${out}/`);

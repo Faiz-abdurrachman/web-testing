@@ -2336,6 +2336,65 @@ try {
   for (let i = 0; i < hofHeroActual.length; i++) {
     hofHeroTotal += Math.abs(hofHeroActual[i] - hofHeroReference[i]);
   }
+
+  // Hall of Frames — Featured Sorcerers (node 1439:4512) geometry + diff.
+  await page.goto(`${baseUrl}/hall-of-frames`, { waitUntil: 'networkidle' });
+  await page.evaluate(() => document.fonts.ready);
+  await page.evaluate(() => document.fonts.load('700 56px "Bluu Next"'));
+  await setNavbarHidden(true);
+  const hofFeaturedGeometry = await page.evaluate(() => {
+    const section = document.querySelector('.hof-featured');
+    const sb = section.getBoundingClientRect();
+    const rel = (selector) => {
+      const box = document.querySelector(selector).getBoundingClientRect();
+      return {
+        x: Math.round((box.x - sb.x) * 10) / 10,
+        y: Math.round((box.y - sb.y) * 10) / 10,
+        width: Math.round(box.width * 10) / 10,
+        height: Math.round(box.height * 10) / 10,
+      };
+    };
+    return {
+      section: { width: Math.round(sb.width), height: Math.round(sb.height) },
+      header: rel('.featured-header'),
+      grid: rel('.featured-grid'),
+      card1: rel('.featured-card'),
+      card2: rel('.featured-card:nth-child(2)'),
+      frame: rel('.featured-card .card-frame'),
+      cards: document.querySelectorAll('.featured-card').length,
+      overflow: document.documentElement.scrollWidth - innerWidth,
+    };
+  });
+  assert.deepEqual(hofFeaturedGeometry, {
+    section: { width: 1440, height: 1241 },
+    header: { x: 336, y: 80, width: 768, height: 135 },
+    grid: { x: 80, y: 295, width: 1280, height: 866 },
+    card1: { x: 80, y: 295, width: 302, height: 400 },
+    card2: { x: 406, y: 295, width: 302, height: 400 },
+    frame: { x: 83, y: 308, width: 295, height: 277 },
+    cards: 8,
+    overflow: 0,
+  });
+  await page
+    .locator('.hof-featured')
+    .screenshot({ path: 'artifacts/hof-featured-desktop.png' });
+  const hofFeaturedReference = await sharp(
+    'assets/hall of frames/featured/HoF-Featured-1x.png',
+  )
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const hofFeaturedActual = await sharp('artifacts/hof-featured-desktop.png')
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(hofFeaturedReference.length, hofFeaturedActual.length);
+  let hofFeaturedTotal = 0;
+  for (let i = 0; i < hofFeaturedActual.length; i++) {
+    hofFeaturedTotal += Math.abs(
+      hofFeaturedActual[i] - hofFeaturedReference[i],
+    );
+  }
   assert.deepEqual(errors, []);
 
   const report = {
@@ -2344,6 +2403,11 @@ try {
     hofHero: {
       geometry: hofHeroGeometry,
       meanAbsoluteChannelDifference: hofHeroTotal / hofHeroActual.length,
+    },
+    hofFeatured: {
+      geometry: hofFeaturedGeometry,
+      meanAbsoluteChannelDifference:
+        hofFeaturedTotal / hofFeaturedActual.length,
     },
     recruitment: {
       geometry: recruitmentGeometry,

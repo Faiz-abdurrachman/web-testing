@@ -1,5 +1,36 @@
 # Asset provenance
 
+## Hall of Frames — Featured Sorcerers (1 October 2026)
+
+- Section node **`1439:4512`** ("SORCERERS SPOTLIGHT & MEMBERS GALLERY"),
+  1440 × 1241, `padding 80`, `gap 80`, `#050507`. Header `1439:4513` is 768 wide
+  (`gap 24`): title **Bluu Next Bold 56 / 84** (`letter-spacing -0.011em`,
+  gradient heading) + subtitle Manrope Medium 500 18/27 white. Gallery
+  `1439:4516` = two rows of four cards, `column-gap 24` / `row-gap 66`.
+- Cards (`featured-card`) are **302 × 400**, radius 10, fill
+  `rgba(255,255,255,0.1)`, drawn with container queries (`1cqw = 3.02px`) so the
+  whole card scales, like `AvailableRoles`. **Figma does not clip the card**: the
+  portrait bleeds above the frame — card 1 uses a 302 × 532 rect at `y −132`
+  (node `1439:4522`), the others a 302 × 442 rect at `y −42` (node `1439:4539`).
+  The portraits are the **Figma-rendered rects** (already cropped as displayed),
+  baked to `public/images/hof/featured/photo-{1,2}{,-2x}.webp`.
+- Decorative inner frame = the exported **"Mask group"** node `1439:4519`
+  (295 × 277 at `3/13`), used as a transparent overlay (`frame.webp`), not
+  rebuilt. Bottom violet fade = the exported node **`1439:4523`** overlay
+  (`fade.webp`): the MCP `linear-gradient(180deg, rgba(108,59,255,0) → #0E0626)`
+  string is **lossy** (the rendered reference is markedly bluer — fitting a CSS
+  gradient left card MAE ≈ 6.8; the node overlay drops it to ≈ 2.0).
+- Meta block at `y 284` (`gap 7`): name Manrope Bold 22/33 white; 1px
+  `rgba(255,255,255,.3)` divider (width = block; card 1 is `max-content`,
+  others 217); role Manrope 16/24 white (lead) or `#D8D1D1`; two 16px social
+  icons (nodes `1439:4529`/`1439:4533`, white `fill-opacity .53` as **inline
+  SVG**). Content is placeholder (Marchel / Zidan / Rose, rows repeated).
+- `npm run assets:hof` (`scripts/generate-hof-assets.mjs`) writes the served art.
+  `verify.mjs` asserts the `hofFeatured` geometry (section 1440 × 1241, header
+  336/80/768, grid 80/295/1280, card 302 × 400 at 80/406, frame 295 × 277 at
+  83/308, 8 cards, overflow 0) and diffs vs `HoF-Featured-1x.png`
+  (MAE **2.01**). Responsive: 4 columns > 1100px, 2 at 561–1100, 1 ≤ 560px.
+
 ## Hall of Frames — Hero (1 October 2026)
 
 - New route `/hall-of-frames` (Figma page `1439:4506`, file
