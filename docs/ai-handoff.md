@@ -6,11 +6,21 @@ harus menebak dari git log. Ini dokumen hidup — update kalau ada perubahan bes
 Baca dulu, urut: `AGENTS.md` (aturan operasional) → `HANDOVER.md` (konteks
 panjang) → `docs/assets.md` (provenance per section) → file ini.
 
-## Ringkasan cepat (untuk AI baru) — 30 Sep 2026
+## Ringkasan cepat (untuk AI baru) — 1 Oct 2026
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
 
-- **Partners Page (PALING BARU, 30 Sep 2026):** `/partners` (`PartnersHero` +
+- **Homepage hero — revisi font & spacing (PALING BARU, 1 Oct 2026):** Figma
+  frame `1430:2040`; hero `1430:2041`. Judul pindah ke **Bluu Next Bold 72/86**
+  (OFL, **di-bundle** `public/fonts/bluu-next-700.woff2`, token `--font-display`;
+  Nasalization tetap untuk halaman lain), 2 baris `gap 4`, gradient per baris;
+  paragraf Manrope 18/25 lebar 655; spacing 80/64/16/24. Tombol baru `community`
+  (violet, hover `#2F196F`) + `explore` (glass, hover `#4C3B7E`); navbar CTA
+  **"Join Us" 93 × 43** (global). **Art hero diganti plate Figma persis**
+  (`Home-Hero-Plate.png` → `background.webp`, `generate-hero-layers.mjs`;
+  `figure.webp` dihapus) → hero MAE **27.96 → 3.18**. Detail: `docs/assets.md`
+  §Homepage hero — font & spacing revision.
+- **Partners Page (30 Sep 2026):** `/partners` (`PartnersHero` +
   `OurPartners` + `WhyPartners`, komponen & `data/partners.ts` baru). Nav
   "Partners" kini link asli. Geometri persis referensi (halaman 1440×2966: hero
   665 / Our Partners 1075 / Why 670 / footer 556), kartu partner 240×116 (grid 5) & kartu Why 309.5×189 (baris 4). **Logo partner masih placeholder DS**
@@ -154,6 +164,37 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   **selesai** (Home mobile 0.98 MB); sisa **opsional** (AVIF hero art + ikon
   philosophy/glow), konten asli, halaman **Hall of Frames / Contact** (nav masih
   `aria-disabled`), webfont Nasalization. VT hardening & OG **selesai**.
+
+## Baru saja: Homepage hero — font & spacing revision (1 Oct 2026)
+
+- **Sumber:** Figma file `JYUzJK1hFqaEwL6DpdDvjp`, frame `1430:2040` "Home Page
+  Revisi Font & Spacing"; hero `1430:2041` (1440 × 903, padding 80, content
+  centred), navbar `1430:2051`, buttons `1430:2048`. Referensi baru diexport via
+  `figma_download_figma_images` (`Home-Hero-Revisi.png` + varian 2× & node teks).
+- **Font:** desain pindah dari Nasalization ke **Bluu Next Bold**, dan Bluu Next
+  **SIL OFL** → sekarang di-bundle (`public/fonts/bluu-next-700.woff2` +
+  `BluuNext-OFL.txt`, `@font-face` weight 700, token `--font-display`). Halaman
+  lain tetap Nasalization (belum direvisi) supaya diff/ geometri halaman itu tidak
+  berubah.
+- **Hero:** judul 72/86 dua baris `gap 4` + gradient per baris
+  (`211.54deg #fff 32.8% / #999 49.8% / #fff 73.04%`); paragraf Manrope 18/25
+  lebar 655; padding 80, gap 64/16/24. Posisi tinta cocok referensi ±1px.
+- **Tombol** (`Button.astro`): varian baru `community` (primary violet hug 43px,
+  hover `#2F196F`) & `explore` (glass, hover `#4C3B7E`; rim di-fit dari export
+  karena inset shadow Figma jauh lebih terang dari node). Varian lama tidak
+  diubah. Navbar CTA → **"Join Us"** `community` 93 × 43 (global; semua halaman),
+  menu 743 / gap 195; `navbar-audit.mjs` diupdate.
+- **Art:** `background.webp` + `figure.webp` (rekonstruksi, ~24 MAE) **diganti**
+  image fill Figma `Home-Hero-Plate.png` → `background.webp` (1583 × 993, q85,
+  82 KB) via `generate-hero-layers.mjs`; `figure.webp` dihapus. Idle karakter
+  terpisah → idle halus seluruh plate (`motion.ts` `animatePlate`, overscan 1.05).
+  Hero MAE (reduce, 1440) **27.96 → 3.18**.
+- **Gate:** build 17 halaman, `verify.mjs` EXIT 0 (`browserErrors: []`),
+  `responsive-audit` 416 ALL PASS, `navbar-audit` ALL PASS, `seo:audit` PASS,
+  `verify:vt` PASS, `format:check` OK.
+- **Berikutnya:** lanjutkan revisi font/spacing ke section homepage lain
+  (Philosophy, WhatWeDo, HoDS, Projects, CTA) memakai `--font-display` + grid 8px;
+  lalu halaman lain saat frame revisinya ada.
 
 ## Baru saja: Partners page (30 Sep 2026)
 
@@ -1143,16 +1184,17 @@ Section.png` (5760×3376 → 1440×844). Patch glow terukur: center REF
   Hall of Frames / Partners / Contact (About Us sudah selesai), dan lanjutan
   animasi What We Do.
 
-## Next plan — untuk AI berikutnya (update 30 Sep 2026)
+## Next plan — untuk AI berikutnya (update 1 Oct 2026)
 
 Urutan yang disarankan. Baca `docs/sound-sop.md` (khususnya §9) kalau menyentuh
 sound atau navigasi; detail P0–P2 ada di "Perf audit & rencana" di atas.
 
-0. **Push commit lokal.** Perubahan About (glow + docs + `verify.mjs` + baseline
-   SVG) sudah **di-commit lokal** (`28ce3b8`, `781278e`), working tree bersih,
-   tapi **belum di-push** — `main` unggul beberapa commit dari `origin`/production
-   `86b49c6`. Konfirmasi user dulu, lalu `git push origin main` (deploy ganda
-   testing+production). Jalankan gate sebelum push.
+1. **Homepage — revisi font & spacing (SEDANG JALAN).** Hero + navbar **selesai**
+   (1 Oct 2026, lihat "Baru saja" di atas). Lanjut per section pakai
+   **`--font-display` (Bluu Next)** + grid 8px sesuai frame `1430:2040`:
+   Philosophy → What We Do → HoDS → Our Project → CTA; lalu halaman lain saat
+   frame revisinya tersedia. Halaman yang belum direvisi tetap `--font-heading`
+   (Nasalization) supaya diff & geometri tidak berubah.
 1. **Perf P0 — SELESAI (28 Sep 2026).** (a) `sizes` Snippets + 960w, (d)
    `logo.png`/hero `background`/`figure` (lihat "P0 pass"), lalu (b) **sorcerer →
    AVIF** (`sorcerer-2x` 481→196 KB), (c) **video hero di-re-encode** (home webm
@@ -1168,21 +1210,21 @@ sound atau navigasi; detail P0–P2 ada di "Perf audit & rencana" di atas.
      teknik yang sama (AVIF + webp fallback), ukur MAE dulu. **Catatan:** P0(b)
      "splash jangan nunggu `three`" tetap **dibatalkan** — HP memang tidak
      menunggu `three`; desktop sengaja menunggu (jangan diubah).
-2. **View Transitions (DONE; sisa device nyata).** `verify-vt.mjs` sudah menguji
+1. **View Transitions (DONE; sisa device nyata).** `verify-vt.mjs` sudah menguji
    Back/Forward, reload deep-link, dan inert saat reduce. Sisa: uji Safari/Firefox
    & perangkat asli (Playwright firefox belum terpasang). `transition:persist`
    belum perlu. Smoke: **`npm run verify:vt`**.
-3. **Konten:** data project asli (`src/data/projects.ts` masih 4 placeholder) dan
+1. **Konten:** data project asli (`src/data/projects.ts` masih 4 placeholder) dan
    tanggal recruitment (`SelectionTimeline.astro` masih "Date"). Butuh material user.
-4. **Halaman baru:** ~~About Us~~ **DONE**, ~~Partners~~ **DONE** (`/partners`).
+1. **Halaman baru:** ~~About Us~~ **DONE**, ~~Partners~~ **DONE** (`/partners`).
    Sisa: **Hall of Frames / Contact**. Nav-nya sudah ada tapi `aria-disabled` —
    **jangan bikin URL palsu**, konfirmasi ke user dulu. Logo partner asli (20
    slot) juga masih ditunggu (sekarang placeholder DS).
-5. **Nasalization webfont:** butuh file berlisensi dari manusia — **jangan
+1. **Nasalization webfont:** butuh file berlisensi dari manusia — **jangan
    diakali**. Taruh `.woff2` di `public/fonts/`, update `@font-face` di
    `global.css` (pertahankan `local()`).
-6. **Sound (opsional):** tuning level cue/ambient (Bagian B, ditunda), pisah
+1. **Sound (opsional):** tuning level cue/ambient (Bagian B, ditunda), pisah
    kontrol SFX vs ambient, atau ganti ke sample AI lewat MCP ElevenLabs kalau mau
    non-prosedural.
-7. ~~**OG hardening**~~ — **DONE:** `<html prefix="og: https://ogp.me/ns#">` +
+1. ~~**OG hardening**~~ — **DONE:** `<html prefix="og: https://ogp.me/ns#">` +
    `og:image:secure_url` di `BaseLayout.astro`, `seo:audit` PASS.

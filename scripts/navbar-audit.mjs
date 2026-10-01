@@ -6,7 +6,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 // drives the bar up and down at every breakpoint (including the 1050/1051 edge)
 // and asserts:
 //   - the Figma resting state: no backing at the top, exact 1440 geometry
-//     (logo 80/24, nav group right edge 1360, 90px menu→CTA gap, 42.1px CTA,
+//     (logo 80/24, space-between gaps of 195px, menu 743, "Join Us" CTA 93×43,
 //     active tab underlined by a 1px line matching the label width);
 //   - the scrolled state only adds a solid backing (no capsule, no morph);
 //   - the right menu shows for the breakpoint and nothing overflows;
@@ -55,7 +55,7 @@ const probe = (page) =>
     const desktopCta = nav.querySelector('.desktop-cta');
     const mobile = nav.querySelector('.mobile-menu');
     const navGroup = desktopNav;
-    const button = desktopCta?.querySelector('.button.white');
+    const button = desktopCta?.querySelector('.button');
     const vis = (el) => {
       if (!el) return false;
       const st = getComputedStyle(el);
@@ -213,8 +213,8 @@ for (const route of ROUTES) {
       else {
         if (!close(top.button.right, 1360))
           failures.push(`1440: CTA right ${top.button.right} (want 1360)`);
-        if (!close(top.button.w, 172, 0.6))
-          failures.push(`1440: CTA width ${top.button.w} (want 172)`);
+        if (!close(top.button.w, 93, 0.6))
+          failures.push(`1440: CTA width ${top.button.w} (want 93)`);
         if (!close(top.button.h, 43, 0.6))
           failures.push(`1440: CTA height ${top.button.h} (want 43)`);
       }
@@ -222,14 +222,14 @@ for (const route of ROUTES) {
         if (!close(top.navGroup.w, 743, 1))
           failures.push(`1440: menu width ${top.navGroup.w} (want 743)`);
         const gapLogoNav = top.navGroup.x - top.brand.right;
-        if (!close(gapLogoNav, 155.5, 1))
+        if (!close(gapLogoNav, 195, 1))
           failures.push(
-            `1440: logo→menu gap ${gapLogoNav.toFixed(1)} (want ~155.5)`,
+            `1440: logo→menu gap ${gapLogoNav.toFixed(1)} (want ~195)`,
           );
         const gapNavCta = top.button.x - top.navGroup.right;
-        if (!close(gapNavCta, 155.5, 1))
+        if (!close(gapNavCta, 195, 1))
           failures.push(
-            `1440: menu→CTA gap ${gapNavCta.toFixed(1)} (want ~155.5)`,
+            `1440: menu→CTA gap ${gapNavCta.toFixed(1)} (want ~195)`,
           );
       }
       if (!top.underline || !top.label)

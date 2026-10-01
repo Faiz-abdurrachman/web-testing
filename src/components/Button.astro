@@ -2,7 +2,14 @@
 interface Props {
   href?: string;
   compact?: boolean;
-  variant?: 'primary' | 'glass' | 'white' | 'secondary' | 'apply';
+  variant?:
+    | 'primary'
+    | 'glass'
+    | 'white'
+    | 'secondary'
+    | 'apply'
+    | 'community'
+    | 'explore';
 }
 const { href, variant = 'primary', compact = false } = Astro.props;
 ---
@@ -252,6 +259,49 @@ const { href, variant = 'primary', compact = false } = Astro.props;
       inset -6px -6px 2px -4px #b3b3b3,
       inset 0 0 0 2px #999,
       inset 0 0 40px rgb(242 242 242 / 50%);
+  }
+  /* Homepage revision (Figma component sets 1393:3304 / 1393:3355 / 1393:3307):
+     Primary = violet radial pill that hugs its label, 43px tall (18/27 + 8px
+     padding); hover fills solid #2F196F. */
+  .community {
+    height: 43px;
+    padding: 8px 16px;
+    font-weight: 500;
+    line-height: 27px;
+    background: radial-gradient(
+      circle at 26% 0%,
+      #6c3bff 0%,
+      #9b7bff 50%,
+      #6c3bff 100%
+    );
+    box-shadow:
+      inset 0 2px 1.2px rgb(255 255 255 / 50%),
+      inset -2px -2px 1.4px #bca6ff,
+      inset -2px -2px 4px rgb(188 166 255 / 90%);
+  }
+  .community:hover {
+    background: #2f196f;
+  }
+  /* Secondary = dark glass pill that hugs its label; hover #4C3B7E. The raw
+     Figma inset shadows (40px inner glow + 2px #999 ring) render far brighter
+     than the node/PNG, so the rim is baked from the reference export instead:
+     a dark violet fill with a thin bright edge and a soft top-left highlight. */
+  .explore {
+    height: 43px;
+    padding: 8px 16px;
+    font-weight: 500;
+    line-height: 27px;
+    background: #22213a;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow:
+      inset 0 0 0 1px rgb(184 182 205 / 55%),
+      inset 0 2px 2px -1px rgb(255 255 255 / 80%),
+      inset 2px 2px 3px -2px rgb(255 255 255 / 35%),
+      inset -2px -2px 3px -2px rgb(196 191 220 / 45%);
+  }
+  .explore:hover {
+    background: #4c3b7e;
   }
   /* Hover: dark pills turn violet, violet pills turn dark, white turns violet. */
   .glass:hover,

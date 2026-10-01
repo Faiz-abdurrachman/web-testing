@@ -44,6 +44,16 @@
   font-weight: 400;
   font-display: swap;
 }
+/* Bluu Next — SIL OFL 1.1 (bundled, public/fonts/BluuNext-OFL.txt). Display
+   face for the homepage revision. It ships a single Bold cut, so it is declared
+   as weight 700 (matching Figma) to avoid the browser synthesising faux bold. */
+@font-face {
+  font-family: 'Bluu Next';
+  src: url('/fonts/bluu-next-700.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
 :root {
   color-scheme: dark;
   --color-background: #050507;
@@ -51,6 +61,9 @@
   --color-accent: #9b7bff;
   --font-body: 'Manrope', sans-serif;
   --font-heading: 'Nasalization', sans-serif;
+  /* Homepage revision display face (Figma "Bluu Next"); other pages keep
+     --font-heading until their own revision lands. */
+  --font-display: 'Bluu Next', var(--font-heading), sans-serif;
   --page-gutter: clamp(24px, 5.555556vw, 112px);
 }
 * {

@@ -15,14 +15,6 @@ import Button from './Button.astro';
           fetchpriority="high"
           decoding="async"
         />
-        <img
-          class="art-figure"
-          src="/images/hero/figure.webp"
-          width="1583"
-          height="993"
-          alt=""
-          decoding="async"
-        />
         <video class="art-video" muted loop playsinline preload="none">
           <source src="/images/hero/hero-bg.webm" type="video/webm" />
           <source src="/images/hero/hero-bg.mp4" type="video/mp4" />
@@ -37,8 +29,8 @@ import Button from './Button.astro';
     <div class="copy">
       <div class="title-wrap">
         <h1 id="hero-title">
-          <span>SORCERY IN DATA</span>
-          <span>MAGIC IN AI</span>
+          <span>Sorcery In Data</span>
+          <span>Magic In AI</span>
         </h1>
       </div>
       <p>
@@ -47,8 +39,8 @@ import Button from './Button.astro';
       </p>
     </div>
     <div class="actions" aria-label="Community actions">
-      <Button>Join the Community</Button>
-      <Button variant="glass">Explore Our Project</Button>
+      <Button variant="community">Join the Community</Button>
+      <Button variant="explore">Explore Our Project</Button>
     </div>
   </div>
 </section>
@@ -104,7 +96,7 @@ import Button from './Button.astro';
     const load = () => {
       // Attach the poster only when the clip is actually about to load, so
       // phones and reduced-motion never fetch the extra frame. The static
-      // background.webp + figure.webp already cover the fallback.
+      // background.webp plate already covers the fallback.
       if (!video.poster) video.poster = '/images/hero/hero-poster.webp';
       video.preload = 'auto';
       video.load();
@@ -177,7 +169,8 @@ import Button from './Button.astro';
     display: flex;
     align-items: center;
     min-height: min(903px, 100svh);
-    padding: 140px var(--page-gutter) 64px;
+    /* Figma node 1430:2041: 1440x903, padding 80, content centred. */
+    padding: 80px var(--page-gutter);
     overflow: clip;
   }
   .artwork {
@@ -209,21 +202,18 @@ import Button from './Button.astro';
   /* At ≥601px with motion allowed the plate owns the hero from the first paint:
      its poster (the clip's own frame 0) stands in until playback starts, so the
      static art never swaps to a different composition mid-view. Under reduced
-     motion, or ≤600px, the video stays hidden and `background.webp` +
-     `figure.webp` remain the reference render. */
+     motion, or ≤600px, the video stays hidden and the `background.webp` plate
+     remains the reference render. */
   @media (prefers-reduced-motion: no-preference) and (min-width: 601px) {
     .art-video {
       opacity: 1;
     }
   }
-  /* Once the clip is live, drop the static cutout underneath it. */
-  .artwork-stack.is-video .art-figure {
-    opacity: 0;
-  }
+
   .hero-content {
     display: flex;
     flex-direction: column;
-    gap: clamp(40px, 7svh, 96px);
+    gap: 64px;
     max-width: 1280px;
     margin-inline: auto;
     width: 100%;
@@ -231,26 +221,25 @@ import Button from './Button.astro';
   .copy {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 16px;
   }
   h1 {
     margin: 0;
-    font-family: var(--font-heading);
-    font-size: 80px;
-    font-weight: 400;
-    line-height: 98px;
-    background: linear-gradient(
-      267.1deg,
-      #fff 5.29%,
-      #dfdfdf 46.05%,
-      #dfdfdf 99.19%
-    );
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-family: var(--font-display);
+    font-size: 72px;
+    font-weight: 700;
+    line-height: 86px;
+  }
+  /* Figma paints the gradient per text node, so each line gets its own box. */
+  h1 span {
+    display: block;
+    background: linear-gradient(211.54deg, #fff 32.8%, #999 49.8%, #fff 73.04%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-  }
-  h1 span {
-    display: block;
   }
   .title-wrap {
     position: relative;
@@ -262,11 +251,10 @@ import Button from './Button.astro';
   }
   p {
     margin: 0;
-    max-width: 619px;
-    font-size: 16px;
+    max-width: 655px;
+    font-size: 18px;
     font-weight: 400;
-    line-height: 24px;
-    letter-spacing: -0.176px;
+    line-height: 25px;
   }
   .actions {
     display: flex;
@@ -487,13 +475,6 @@ import Button from './Button.astro';
     .hero {
       min-height: 100svh;
       min-height: 100lvh;
-    }
-    /* One rule for every phone: the old per-width buckets were non-monotonic and their object-position pushed the sorcerer right on narrow screens, so 360/375px read as "too small". 72% keeps the character the same share of the screen everywhere; 59% centres it (art centre is ~60.5%). */
-    .artwork .art-figure {
-      top: auto;
-      bottom: 0;
-      height: 72%;
-      object-position: 59% bottom;
     }
   }
   @media (max-width: 480px) {

@@ -62,9 +62,9 @@ try {
     return document.fonts.ready;
   });
   const desktop = await page.evaluate(async () => {
-    const headingFonts = await document.fonts.load('80px Nasalization');
+    const headingFonts = await document.fonts.load('700 72px "Bluu Next"');
     return {
-      nasalizationLoaded:
+      headingFontLoaded:
         headingFonts.length > 0 &&
         headingFonts.every((font) => font.status === 'loaded'),
       elements: Object.fromEntries(
@@ -88,16 +88,16 @@ try {
     };
   });
   assert.equal(
-    desktop.nasalizationLoaded,
+    desktop.headingFontLoaded,
     true,
-    'Install the local Nasalization font or provide its licensed webfont before visual validation.',
+    'The bundled Bluu Next display font must load before visual validation.',
   );
   await page
     .locator('.hero')
     .screenshot({ path: 'artifacts/hero-desktop.png' });
   await setNavbarHidden(true);
   const reference = await sharp(
-    'assets/assets home page/hero section/Hero Section.png',
+    'assets/assets home page/hero section/Home-Hero-Revisi.png',
   )
     .resize(1440, 903)
     .removeAlpha()

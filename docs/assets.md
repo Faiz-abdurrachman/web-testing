@@ -1,5 +1,50 @@
 # Asset provenance
 
+## Homepage hero — font & spacing revision (1 October 2026)
+
+- **Figma frame `1430:2040` "Home Page Revisi Font & Spacing"**, hero section
+  `1430:2041` (1440 × 903, `padding 80`, content vertically centred). Navbar
+  instance `1430:2051`, hero buttons `1430:2048`. Reference renders exported with
+  `figma_download_figma_images` to
+  `assets/assets home page/hero section/Home-Hero-Revisi.png` (1×) and
+  `*-2x.png`, plus the isolated text/button/navbar nodes used for measurement.
+- **Headline**: Figma switched the display face from Nasalization to **Bluu Next
+  Bold 700**, **72 / 86**, two lines `gap 4`, gradient painted per line
+  (`linear-gradient(211.54deg, #fff 32.8%, #999 49.8%, #fff 73.04%)`). Bluu Next
+  is **SIL OFL 1.1**, so it is now bundled: `public/fonts/bluu-next-700.woff2`
+  (20 KB) + `BluuNext-OFL.txt`, declared at weight 700 (single cut, avoids faux
+  bold) and exposed as the `--font-display` token. `--font-heading` (Nasalization)
+  is untouched so other pages keep their current look until their own revision.
+- **Paragraph**: Manrope Regular **18 / 25**, width **655** (was 16/24, 619).
+- **Spacing** (design uses an 8px grid): hero `padding 80`, content `gap 64`,
+  copy `gap 16`, actions `gap 24`; measured text ink rows match the reference to
+  ±1px (295/383/475/500). Buttons 201 × 43 + 195 × 43 at gap 24.
+- **Buttons** (`Button.astro`): new `community` (Primary — violet radial pill that
+  hugs its label, 43px, hover fills `#2F196F`) and `explore` (Secondary dark glass
+  pill, hover `#4C3B7E`). The raw Figma inset shadows render far brighter than the
+  node, so `explore`'s rim is baked from the reference export (dark violet fill
+  `#22213a`, thin bright edge + soft top-left highlight). Existing variants
+  (`primary`/`glass`/`white`/`secondary`/`apply`) are unchanged.
+- **Navbar CTA**: now **"Join Us"** — the same `community` pill, **93 × 43** with
+  hover `#2F196F` (node `1393:3355`), replacing the old white `Join Community`
+  172 × 43. Shared component, so this applies to every page; the revision frame
+  also uses `menu gap 16` (menu 743) and a space-between layout (195px gaps).
+  `scripts/navbar-audit.mjs` asserts the new geometry.
+- **Hero art**: replaced the two reconstructed layers
+  (`background.webp` + `figure.webp`, ~24 MAE vs the reference background) with
+  the **exact Figma image fill** of `1430:2041`
+  (`assets/assets home page/hero section/Home-Hero-Plate.png`, 1437 × 894),
+  baked to `public/images/hero/background.webp` (1583 × 993, q85, 82 KB) by
+  `scripts/generate-hero-layers.mjs`. `fit: cover` mirrors the Figma FILL crop;
+  the plate reproduces the reference background at **~2.7 MAE**. The separate
+  character idle became a subtle whole-plate idle in `motion.ts`
+  (`animatePlate`, 5% overscan) — reduced-motion is inert and still pixel-exact.
+  Hero MAE (reduced motion, 1440) dropped **27.96 → 3.18**.
+- **Verification**: `scripts/verify.mjs` now asserts the bundled "Bluu Next"
+  loads and diffs against `Home-Hero-Revisi.png`; `navbar-audit` asserts CTA
+  93 × 43 / gaps 195. Gates: build 17 pages, verify EXIT 0 (`browserErrors: []`),
+  responsive 416 ALL PASS, navbar ALL PASS, seo PASS, verify:vt PASS.
+
 ## Partners page (30 September 2026)
 
 - Route `/partners`, composed of `PartnersHero`, `OurPartners`, `WhyPartners`

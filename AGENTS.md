@@ -330,14 +330,19 @@ role-glow-wave` = `scale: 1 → 1.04` saja (drift `translate ±6%` dibuang) →
   `min-height: 100svh` dengan konten dipusatkan vertikal;
   judul konsisten 2 baris sampai 320px; tombol home stack ≤480px. **≥601px tidak
   diubah** — tablet/desktop dan diff PNG hero 1440 tetap (jaga ini saat mengedit).
-- **Hero layered scene (Option B)**: art hero sekarang dua layer full-frame
-  1583 × 993 (`public/images/hero/background.webp` + `figure.webp`) dari
-  `assets/background/hero/data-sorcerers-hero-production-pack/`, digenerate
-  `scripts/generate-hero-layers.mjs` (placeholder terukur: karakter tinggi 355,
-  kaki 86%, tengah 60.5%). Keduanya `object-fit: cover` dalam `.artwork-stack`
-  jadi selalu sejajar; parallax `.art-bg` +46 / `.art-figure` +28. Catatan:
-  `sorcerer_primary.png` = rekonstruksi (RMSE ≈ 104 vs master), bukan ekstraksi
-  pixel-match. `public/images/backgrounds/hero.webp` sudah dihapus.
+- **Hero = plate Figma persis + revisi font & spacing (1 Oct 2026)**: `Hero.astro`
+  memakai satu plate full-frame 1583 × 993 (`public/images/hero/background.webp`)
+  = **image fill Figma** node `1430:2041` (`assets/assets home page/hero
+section/Home-Hero-Plate.png`), digenerate `scripts/generate-hero-layers.mjs`.
+  Cocok referensi ~2.7 MAE — menggantikan layered `background.webp`+`figure.webp`
+  rekonstruksi (yang ~24 MAE; `figure.webp` dihapus). Judul **Bluu Next Bold
+  72/86** (`--font-display`, woff2 OFL di-bundle; Nasalization tetap untuk halaman
+  lain), 2 baris `gap 4`, gradient per baris; paragraf Manrope 18/25 lebar 655;
+  padding 80, gap 64/16/24. Tombol `community` (primary violet, hover `#2F196F`)
+  & `explore` (glass, hover `#4C3B7E`). Navbar CTA "Join Us" 93 × 43 (shared,
+  semua halaman; `navbar-audit` assert 743 menu / gap 195 / CTA 93). Idle karakter
+  terpisah → idle halus seluruh plate (`.art-bg`, overscan 1.05, `motion.ts
+animatePlate`). Referensi hero: `Home-Hero-Revisi.png` (node `1430:2041`).
 - SEO/OG selesai: canonical + Open Graph/Twitter + JSON-LD + `robots.txt` +
   sitemap (`@astrojs/sitemap`) + share card `public/og/og-default.jpg`. Origin
   dari `SITE_URL` (default `https://data-sorcerers-community-sigma.vercel.app`) — **ganti begitu

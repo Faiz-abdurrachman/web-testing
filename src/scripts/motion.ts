@@ -50,20 +50,21 @@ function reveal(
   });
 }
 
-function animateFigure(
-  figure: HTMLElement,
+function animatePlate(
+  plate: HTMLElement,
   hero: HTMLElement,
   cleanups: Cleanup[],
-  fine: boolean,
   richIdle: boolean,
   settled: boolean,
 ) {
-  // Rotation pivots at the feet so the sway reads as weight shift.
-  gsap.set(figure, { transformOrigin: '60% 88%', transformPerspective: 800 });
+  // The hero art is one flat Figma plate now, so the idle must never expose an
+  // edge: keep a 5% overscan and stay inside it when breathing/translating. This
+  // is only ever set with motion enabled — under reduced motion the function is
+  // not called, so the hero keeps matching the reference frame exactly.
+  const OVERSCAN = 1.05;
+  gsap.set(plate, { transformOrigin: '50% 55%', scale: OVERSCAN });
 
-  // The idle loop keeps the cutout alive, but three infinite transforms per
-  // frame are wasteful on phones. Mobile gets a single subtle bob; desktop gets
-  // the full bob + sway + breathing. Either way it is paused while the hero is
+  // The idle loop keeps the scene alive; it is paused while the hero is
   // off-screen so the compositor has nothing to animate further down the page.
   const idles: gsap.core.Tween[] = [];
   let heroVisible = true;
@@ -76,50 +77,36 @@ function animateFigure(
   io.observe(hero);
   cleanups.push(() => io.disconnect());
 
-  // Idle loop: slow bob + breathing + weight-shift sway, so the cutout is never
-  // a still image. `y` (px, scroll) and `yPercent` compose in GSAP, and the sway
-  // uses `rotation` while the pointer uses `rotationX/Y`.
   const startIdle = () => {
     idles.push(
-      gsap.to(figure, {
-        yPercent: 1.3,
-        duration: 2.6,
+      gsap.to(plate, {
+        scale: richIdle ? 1.085 : 1.07,
+        duration: richIdle ? 4.2 : 5.5,
+        ease: 'sine.inOut',
+        yoyo: true,
+        repeat: -1,
+      }),
+      gsap.to(plate, {
+        yPercent: 0.8,
+        duration: richIdle ? 3.1 : 4.4,
         ease: 'sine.inOut',
         yoyo: true,
         repeat: -1,
       }),
     );
-    if (richIdle) {
-      idles.push(
-        gsap.to(figure, {
-          rotation: 0.9,
-          duration: 3.4,
-          ease: 'sine.inOut',
-          yoyo: true,
-          repeat: -1,
-        }),
-        gsap.to(figure, {
-          scale: 1.015,
-          duration: 1.9,
-          ease: 'sine.inOut',
-          yoyo: true,
-          repeat: -1,
-        }),
-      );
-    }
     resume();
   };
 
   if (settled) {
-    // Warm, in-session navigation: skip the rise-in and just keep the idle, so
-    // the character does not replay its entrance on every tab switch.
-    gsap.set(figure, { yPercent: 0, autoAlpha: 1 });
+    // Warm, in-session navigation: skip the entrance so it does not replay on
+    // every tab switch.
+    gsap.set(plate, { yPercent: 0, autoAlpha: 1 });
     startIdle();
   } else {
-    // Entrance: the sorcerer rises into place just after the plate.
+    // Entrance: the scene settles out of the plate just after the CSS reveal.
     gsap.fromTo(
-      figure,
-      { yPercent: 7, autoAlpha: 0 },
+      plate,
+      { yPercent: 2.4, autoAlpha: 0, scale: OVERSCAN },
       {
         yPercent: 0,
         autoAlpha: 1,
@@ -132,34 +119,7 @@ function animateFigure(
   }
   cleanups.push(() => {
     idles.forEach((tween) => tween.kill());
-    gsap.killTweensOf(figure);
-  });
-
-  if (!fine) return;
-  const rx = gsap.quickTo(figure, 'rotationX', {
-    duration: 0.7,
-    ease: 'power3',
-  });
-  const ry = gsap.quickTo(figure, 'rotationY', {
-    duration: 0.7,
-    ease: 'power3',
-  });
-  const onMove = (event: MouseEvent) => {
-    const rect = hero.getBoundingClientRect();
-    const px = (event.clientX - rect.left) / rect.width - 0.5;
-    const py = (event.clientY - rect.top) / rect.height - 0.5;
-    ry(px * 5);
-    rx(-py * 4);
-  };
-  const onLeave = () => {
-    rx(0);
-    ry(0);
-  };
-  hero.addEventListener('mousemove', onMove);
-  hero.addEventListener('mouseleave', onLeave);
-  cleanups.push(() => {
-    hero.removeEventListener('mousemove', onMove);
-    hero.removeEventListener('mouseleave', onLeave);
+    gsap.killTweensOf(plate);
   });
 }
 
@@ -336,7 +296,7 @@ export function initMotion() {
       const hero = document.querySelector<HTMLElement>('.hero');
       if (hero) {
         const stack = hero.querySelector<HTMLElement>('.artwork-stack');
-        const figure = hero.querySelector<HTMLElement>('.art-figure');
+        const scene = hero.querySelector<HTMLElement>('.art-bg');
         const content = hero.querySelector<HTMLElement>('.hero-content');
 
         // The pointer parallax below slides this full-bleed layer, so give it a
@@ -349,14 +309,13 @@ export function initMotion() {
         if (stack && finePointer()) gsap.set(stack, { scale: 1.04 });
 
         // At ≥601px the animated `.art-video` layer fades in over the static
-        // stack, so the cutout's own idle/pointer work would only ever animate a
-        // hidden layer. Skip it there; ≤600px (and the no-video fallback) keeps
-        // the figure alive.
+        // plate, so the plate idle would only ever animate a hidden layer. Skip
+        // it there; ≤600px (and the no-video fallback) keeps the scene alive.
         const coveredByVideo =
           Boolean(hero.querySelector('.art-video')) &&
           window.matchMedia('(min-width: 601px)').matches;
-        if (figure && !coveredByVideo)
-          animateFigure(figure, hero, cleanups, finePointer(), desktop, warm);
+        if (scene && !coveredByVideo)
+          animatePlate(scene, hero, cleanups, desktop, warm);
 
         if (desktop && stack && content) {
           // Pinned scroll sequence: the plate zooms in, the sorcerer rises, the
@@ -379,7 +338,6 @@ export function initMotion() {
           // finished the zoom halfway through and the still-pinned hero read as
           // "stuck" while the remaining scroll did nothing.
           tl.to(stack, { scale: 1.35, y: -110, ease: 'none', duration: 1 }, 0);
-          if (figure) tl.to(figure, { y: 90, ease: 'none', duration: 1 }, 0);
           tl.to(
             content,
             { y: -200, autoAlpha: 0, scale: 0.94, ease: 'none', duration: 1 },
@@ -414,7 +372,7 @@ export function initMotion() {
         // art as the hero left read as a grow/shrink glitch — the hero is
         // 100dvh, so the collapsing address bar kept re-measuring the trigger —
         // and it cost a transform on the largest layer every frame. Phones now
-        // scroll the hero away untouched; the figure keeps only its idle bob.
+        // scroll the hero away untouched; the plate keeps only its gentle idle.
 
         if (stack && finePointer()) {
           const xTo = gsap.quickTo(stack, 'xPercent', {
