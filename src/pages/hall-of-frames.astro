@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import HallOfFramesHero from '../components/HallOfFramesHero.astro';
+import Footer from '../components/Footer.astro';
+import Motion from '../components/Motion.astro';
+---
+
+<BaseLayout
+  title="Hall of Frames — Data Sorcerers"
+  description="Where knowledge turns into legacy. A curated gallery of people, achievements, research, projects, and milestones created within the Data Sorcerers ecosystem."
+>
+  <Navbar active="Hall of Frames" />
+  <main id="main">
+    <HallOfFramesHero />
+  </main>
+  <Footer />
+  <Motion />
+</BaseLayout>

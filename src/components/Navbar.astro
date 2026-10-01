@@ -17,6 +17,7 @@ const destinations: Record<string, string> = {
   Home: '/',
   'About Us': '/about',
   Recruitment: '/recruitment',
+  'Hall of Frames': '/hall-of-frames',
   Partners: '/partners',
 };
 ---
@@ -49,7 +50,11 @@ const destinations: Record<string, string> = {
             <span class="nav-underline" aria-hidden="true" />
           </a>
         ) : (
-          <span class="nav-link" aria-disabled="true" style={`--i:${i + 1}`}>
+          <span
+            class:list={['nav-link', { active: label === active }]}
+            aria-disabled="true"
+            style={`--i:${i + 1}`}
+          >
             <span class="nav-label">{label}</span>
             <span class="nav-underline" aria-hidden="true" />
           </span>
@@ -81,7 +86,11 @@ const destinations: Record<string, string> = {
               <span class="nav-underline" aria-hidden="true" />
             </a>
           ) : (
-            <span class="nav-link" aria-disabled="true" style={`--i:${i + 1}`}>
+            <span
+              class:list={['nav-link', { active: label === active }]}
+              aria-disabled="true"
+              style={`--i:${i + 1}`}
+            >
               <span class="nav-label">{label}</span>
               <span class="nav-underline" aria-hidden="true" />
             </span>
@@ -231,7 +240,7 @@ const destinations: Record<string, string> = {
   a.nav-link:focus-visible {
     color: #fff;
   }
-  a.nav-link.active {
+  .nav-link.active {
     color: #fff;
   }
   .mobile-menu {

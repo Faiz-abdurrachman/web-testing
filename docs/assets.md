@@ -1,5 +1,41 @@
 # Asset provenance
 
+## Hall of Frames — Hero (1 October 2026)
+
+- New route `/hall-of-frames` (Figma page `1439:4506`, file
+  `JYUzJK1hFqaEwL6DpdDvjp`). Hero node **`1439:4507`** (1440 × 903, column,
+  centred, `gap 10`), fills = one **raw image fill** `6b05af5d…`. Reference
+  exports live in `assets/hall of frames/hero/`:
+  `HoF-Hero-1x.png` (1440 × 903), `HoF-Hero-2x.png` (2880 × 1806),
+  `HoF-Hero-Title.png`, `HoF-Hero-Subtitle.png`, and the raw fill
+  `HoF-Hero-Bg-raw.png` (3344 × 1882).
+- Title `1439:4509`: **Bluu Next Bold 700, 80 / 102**, two lines
+  ("Where Knowledge" / "Turns Into Legacy"), fill = the shared **"Gradient
+  Heading"** `linear-gradient(181deg, #fff 15%, #999 42%, #fff 79%)`. It is a
+  single text node, so the gradient spans the whole two-line block (not per
+  line) — implemented as one `h1` with two `display:block` spans under a single
+  `background-clip:text`.
+- Subtitle `1439:4510`: Manrope Medium 500 **18 / 27** `#EDE8FF`, width **758**,
+  two lines. Content frame `1439:4508` is 800 wide, `gap 24`; measured
+  `content 320 / 310.5 / 800 × 282` (h1 800 × 204; p 341 / 538.5 / 758 × 54).
+  Text block aligned at vertical shift 0 vs the reference; title MAE ≈ 3.9.
+- Art: the raw image fill is baked as-is (`FILL` = `object-fit: cover`) by
+  `scripts/generate-hof-assets.mjs` (`npm run assets:hof`) →
+  `public/images/hof/hero-bg.webp` (1440w) + `hero-bg-2x.webp` (3210w, covers
+  2880 × 1806). Not reconstructed.
+- Navbar is the shared component; the active "Hall of Frames" underline is
+  `118px` (= the 146px tab minus 2 × 14 padding), matching Figma. "Hall of
+  Frames" is now a real link (`/hall-of-frames`) in `Navbar.astro`
+  `destinations`; "Contact" stays `aria-disabled` until its page exists. A page
+  whose tab is not linked yet renders its active entry as an `aria-disabled`
+  `<span>`, so the `active` class is applied to the disabled branch too —
+  otherwise the current tab stayed `#707070` with no underline.
+- Verification: `scripts/verify.mjs` asserts the hero/content/title/subtitle
+  geometry (1440 × 903, 800 × 282, 80/102, 758 × 54), `overflow 0`, and diffs
+  against `HoF-Hero-1x.png` (MAE 4.34). Build 18 pages, `verify.mjs` exit 0
+  (`browserErrors: []`), responsive 320–3840 all clean (hero heroH
+  903/760/100svh by breakpoint).
+
 ## Homepage hero — font & spacing revision (1 October 2026)
 
 - **Figma frame `1430:2040` "Home Page Revisi Font & Spacing"**, hero section

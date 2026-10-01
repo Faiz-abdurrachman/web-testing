@@ -20,6 +20,15 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   (`Home-Hero-Plate.png` → `background.webp`, `generate-hero-layers.mjs`;
   `figure.webp` dihapus) → hero MAE **27.96 → 3.18**. Detail: `docs/assets.md`
   §Homepage hero — font & spacing revision.
+- **Hall of Frames (WIP, 1 Oct 2026):** route `/hall-of-frames` (Figma page
+  `1439:4506`, file `JYUzJK1hFqaEwL6DpdDvjp`). **Hero selesai** (`1439:4507`)
+  → `HallOfFramesHero.astro`: Bluu Next 80/102 gradient `181deg` (satu gradient
+  untuk blok 2 baris), subjudul Manrope 500 18/27 `#EDE8FF`, art = raw image fill
+  (`npm run assets:hof` → `public/images/hof/hero-bg*.webp`). `verify.mjs`
+  assertion `hofHero` + MAE 4.34, exit 0, `browserErrors: []`. Section berikutnya
+  **belum** dibuat (Featured Sorcerers → Project highlights → Community
+  Milestone). Nav "Hall of Frames" masih `aria-disabled` sampai halaman selesai.
+- **Contact (belum dimulai):** route `/contact` (Figma `1445:5065`).
 - **Partners Page (30 Sep 2026):** `/partners` (`PartnersHero` +
   `OurPartners` + `WhyPartners`, komponen & `data/partners.ts` baru). Nav
   "Partners" kini link asli. Geometri persis referensi (halaman 1440×2966: hero

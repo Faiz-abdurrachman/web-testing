@@ -2254,9 +2254,97 @@ try {
     overflow: 0,
   });
 
+  // Hall of Frames hero — geometry + diff vs the Figma node 1439:4507 export.
+  await page.setViewportSize({ width: 1440, height: 1400 });
+  await page.goto(`${baseUrl}/hall-of-frames`, { waitUntil: 'networkidle' });
+  await page.evaluate(() => document.fonts.ready);
+  await page.evaluate(() => document.fonts.load('700 80px "Bluu Next"'));
+  await setNavbarHidden(true);
+  const hofHeroGeometry = await page.evaluate(() => {
+    const box = (selector) => {
+      const el = document.querySelector(selector);
+      const rect = el.getBoundingClientRect();
+      const style = getComputedStyle(el);
+      return {
+        x: rect.x,
+        y: rect.y,
+        width: rect.width,
+        height: rect.height,
+        fontSize: style.fontSize,
+        lineHeight: style.lineHeight,
+      };
+    };
+    return {
+      hero: box('.hof-hero'),
+      content: box('.hero-content'),
+      title: box('#hof-hero-title'),
+      subtitle: box('.hof-hero p'),
+      overflow: document.documentElement.scrollWidth - innerWidth,
+    };
+  });
+  assert.deepEqual(hofHeroGeometry, {
+    hero: {
+      x: 0,
+      y: 0,
+      width: 1440,
+      height: 903,
+      fontSize: '16px',
+      lineHeight: 'normal',
+    },
+    content: {
+      x: 320,
+      y: 310.5,
+      width: 800,
+      height: 282,
+      fontSize: '16px',
+      lineHeight: 'normal',
+    },
+    title: {
+      x: 320,
+      y: 310.5,
+      width: 800,
+      height: 204,
+      fontSize: '80px',
+      lineHeight: '102px',
+    },
+    subtitle: {
+      x: 341,
+      y: 538.5,
+      width: 758,
+      height: 54,
+      fontSize: '18px',
+      lineHeight: '27px',
+    },
+    overflow: 0,
+  });
+  await page
+    .locator('.hof-hero')
+    .screenshot({ path: 'artifacts/hof-hero-desktop.png' });
+  const hofHeroReference = await sharp(
+    'assets/hall of frames/hero/HoF-Hero-1x.png',
+  )
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const hofHeroActual = await sharp('artifacts/hof-hero-desktop.png')
+    .extract({ left: 0, top: 0, width: 1440, height: 903 })
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(hofHeroReference.length, hofHeroActual.length);
+  let hofHeroTotal = 0;
+  for (let i = 0; i < hofHeroActual.length; i++) {
+    hofHeroTotal += Math.abs(hofHeroActual[i] - hofHeroReference[i]);
+  }
+  assert.deepEqual(errors, []);
+
   const report = {
     aboutEcosystem: { geometry: ecosystemGeometry, wide: aboutWide },
     partners: { geometry: partnersGeometry },
+    hofHero: {
+      geometry: hofHeroGeometry,
+      meanAbsoluteChannelDifference: hofHeroTotal / hofHeroActual.length,
+    },
     recruitment: {
       geometry: recruitmentGeometry,
       meanAbsoluteChannelDifference:
