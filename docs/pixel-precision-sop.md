@@ -39,6 +39,26 @@ Aturan: kalau (1) berbeda dengan (4)/(5), **ikut (1)**.
   memakai image fill mentah langsung turun ke ~2.7 MAE. Lihat §6.
 - **Minifier build bisa membuang properti CSS** (mis. `backdrop-filter`
   unprefixed). Cek hasil di `dist/`/live, bukan cuma `dev`.
+- **Satu fill bisa menumpuk gambar + warna.** Figma kadang punya
+  `fills: [rgba(0,0,0,0.2), {type:IMAGE, imageRef}]` — bukan cuma gambar. Kalau
+  tint itu tidak dipasang, render jadi jauh lebih terang (studi kasus card HoF
+  Project: stage MAE 28 → 3 setelah tint 20% ditambah).
+- **`border` nyata mengecilkan content box.** Kalau artwork/screenshot harus
+  mengisi penuh frame, jangan pakai `border` — pakai **ring overlay** (pseudo
+  `::after` + `mask`/`mask-composite: exclude`) supaya isi tetap selebar frame
+  (studi kasus: shot 929 vs 933 → ghost).
+- **Figma TIDAK selalu meng-clip frame.** Sebelum pasang `overflow:hidden`,
+  cek render: kalau node anak sengaja overflow (mis. potret bleed ke atas frame),
+  jangan clip.
+- **Jangan pakai nama class yang bentrok dengan hide-list `verify.mjs`.**
+  `setNavbarHidden` menyembunyikan `.navbar`, `.rail-arrow`, `.project-arrow`,
+  `.project-dots`, `.project-card:not(.is-active)` — komponen baru yang memakai
+  `.project-card` akan ikut hilang saat verifikasi (studi kasus: rename ke
+  `.hof-project-card`).
+- **Gambar `loading="lazy"` di depth bawah halaman belum ter-decode saat
+  screenshot.** Di `verify.mjs`/skrip diff, `scrollIntoView` dulu lalu
+  `waitForFunction` semua `<img>` di section `complete && naturalWidth>0` +
+  `img.decode()` sebelum screenshot, jika tidak section terlihat kosong.
 
 ## 3. Alur kerja presisi (per section)
 
@@ -137,7 +157,33 @@ text; background-clip: text; color: transparent;` **per baris**.
 - Pelajaran: **diff tinggi bisa jadi karena artwork, bukan teks** — cek region
   dulu (background vs teks) sebelum menyalahkan font.
 
-## 7. Checklist presisi (patokan "beres")
+## 7. Studi kasus — Hall of Frames + Contact (1 Oct 2026)
+
+Semua di file Figma `JYUzJK1hFqaEwL6DpdDvjp`. Hasil akhir (reduced motion, 1440):
+
+- **HoF Hero** `1439:4507`: art = raw image fill (`fit:cover`), judul Bluu Next
+  80/102 (satu gradient menyeberang blok 2 baris). MAE 4.34 (bg 1.45).
+- **Featured Sorcerers** `1439:4512`: 8 kartu 302×400 via **container queries**
+  (`1cqw = 3.02px`). **Figma tidak clip** → potret bleed ke atas (302×532 @ y−132
+  untuk kartu lead, 302×442 @ −42 lainnya). Frame dekoratif + **fade bawah**
+  memakai **render node** (bukan string `linear-gradient` MCP yang lossy: fade
+  MCP merender jauh lebih gelap; overlay node memangkas kartu MAE 6.8 → 2.0).
+  MAE section 2.01.
+- **Project highlights** `1439:4655`: stage 1280×730 dengan 3 kartu browser-mockup
+  (tengah 933×730 + sisi 800×626). Screenshot = raw `imageRef` + **tint 20%**
+  (lihat §2); rim = ring overlay (bukan border); glow = render node
+  IMAGE-SVG `1439:4656` (blur ter-bake; cukup 1 file 1200w, downscale aman karena
+  low-frequency). MAE 2.96.
+- **Community Milestone** `1439:4699`: timeline 3 baris; rail gradient + 3 diamond
+  = render node `1439:4709`. MAE 1.33.
+- **Contact** `1445:5066`: hero 1440×954; artwork swirl = render node `1445:5067`
+  di `−131/−92`; form/field = HTML asli. MAE 3.00 (panel form 0.57).
+- Pelajaran berulang: **kalau satu region diff tinggi, isolasi dulu** — di proyek
+  ini penyebab tersering bukan font, tapi (a) gradient MCP lossy, (b) tint/lapis
+  fill kelewat, (c) artwork/scale, (d) class bentrok hide-list, (e) gambar lazy
+  belum decode.
+
+## 8. Checklist presisi (patokan "beres")
 
 - [ ] Referensi = PNG node terbaru yang diexport (bukan CSS).
 - [ ] Font persis Figma ter-bundle (weight benar, tanpa faux bold).

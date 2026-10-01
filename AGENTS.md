@@ -27,6 +27,8 @@ npm run assets:optimize   # re-encode heavy webp (lossy q82/85/88) from assets/i
 npm run assets:starfield  # regenerate What We Do starfield tiles (Chromium)
 npm run assets:footer     # footer bg: sharp desktop + portrait phone variant
 npm run assets:partners   # Partners page artwork (hero/cards/icons, sharp)
+npm run assets:hof        # Hall of Frames artwork (hero/cards/projects/rail, sharp)
+npm run assets:contact    # Contact page artwork (swirl + info-card icons, sharp)
 npm run seo:audit         # validate meta/OG/canonical/sitemap in dist (after build)
 npm run perf:audit        # scroll-jank report per section (set PERF_MAX_TASK to fail)
 npm run audit:navbar      # navbar states/containment/hug across widths
@@ -125,8 +127,10 @@ src/data/hods.ts         6 detail categories → 22 tabs (LEARNING/…/OUTPUT)
 src/data/projects.ts     4 placeholder projects (swap for real data)
 src/data/partners.ts     Partners categories + why-cards (logos placeholder)
 src/pages/index.astro    homepage composition
-src/pages/about.astro    About Us composition (sections 1–4)
+src/pages/about.astro    About Us composition (sections 1–4, OLD Figma file)
 src/pages/partners.astro Partners composition (hero + grids + why)
+src/pages/hall-of-frames.astro  HoF composition (hero/featured/projects/milestone)
+src/pages/contact.astro  Contact composition (hero + form + info cards)
 src/pages/hods/[id].astro detail route (getStaticPaths over hods.ts)
 src/pages/lab/sound.astro internal sound audition page (noindex, not in sitemap)
 src/styles/global.css    @font-face, tokens, reset
@@ -140,6 +144,8 @@ scripts/generate-hero-video.mjs  home hero bg clip (boomerang webm/mp4 + poster)
 scripts/generate-recruitment-hero-video.mjs  recruitment hero bg (crossfade loop)
 scripts/generate-footer-background.mjs  footer bg: sharp desktop + portrait phone variant
 scripts/generate-partners-assets.mjs  Partners page artwork (hero/cards/icons)
+scripts/generate-hof-assets.mjs  Hall of Frames artwork (hero/featured/projects/rail)
+scripts/generate-contact-assets.mjs  Contact artwork (swirl + info-card icons)
 scripts/navbar-audit.mjs  navbar states/containment/hug across widths
 scripts/perf-audit.mjs   scroll-jank + long-task report per section
 scripts/seo-audit.mjs    validates title/meta/OG/canonical/sitemap in dist/
@@ -269,6 +275,24 @@ When adding/changing a section, update `docs/assets.md` and the relevant
   `163deg 63%→126%` / `24.75deg 53%→133%` (background MAE < 1 vs MCP ≈ 17). Export
   the node (`figma_download_figma_images`) and fit the PNG pixels — never paste the
   MCP gradient string. The old `152.43deg`/`36.99deg` values were also wrong.
+  Same for the HoF Featured card fade: the MCP string rendered far too dark/less
+  blue, so the **node render** is used as an overlay (card MAE 6.8 → 2.0).
+- **A Figma fill can stack an image + a colour.** E.g. the HoF Project cards have
+  `fills: [rgba(0,0,0,0.2), IMAGE]`; without the 20% tint the screenshot reads
+  far too bright (stage MAE 28 → 3).
+- **A real `border` shrinks the content box.** When an artwork/screenshot must fill
+  the whole frame, use a **ring overlay** (`::after` + `mask` / `mask-composite:
+exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
+  ghosted).
+- **Figma does not always clip a frame.** Check the render before adding
+  `overflow:hidden` — the HoF Featured portraits intentionally bleed above the card.
+- **Do not reuse class names from `verify.mjs`'s hide-list.** `setNavbarHidden`
+  hides `.project-card:not(.is-active)`; a new component using `.project-card`
+  disappears during verification (renamed to `.hof-project-card`).
+- **`loading="lazy"` images deep in the page are not decoded at screenshot time.**
+  In `verify.mjs` / diff scripts, `scrollIntoView` then `waitForFunction` every
+  `<img>` in the section is `complete && naturalWidth>0` + `img.decode()` before
+  the screenshot, or the section renders empty.
 
 ## Fonts
 

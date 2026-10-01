@@ -61,7 +61,13 @@ LANGKAH 4 — Verifikasi (LOOP sampai presisi, jangan berhenti sebelum pas):
   screenshot + diff (tulis artifacts/), containment + overflow 320–3840, 0 browser error.
 - Kalau geometri navbar berubah: update scripts/navbar-audit.mjs.
 - Sembunyikan overlay yang TIDAK ada di PNG referensi (lihat setNavbarHidden; kalau
-  ada overlay baru, tambahkan ke list).
+  ada overlay baru, tambahkan ke list). JANGAN pakai nama class yang sudah ada di
+  list itu (mis. `.project-card`) — komponen baru akan ikut ter-hide.
+- Kalau section ada di bawah fold / punya `loading="lazy"`: `scrollIntoView` lalu
+  `waitForFunction` semua `<img>` section `complete && naturalWidth>0` + `img.decode()`
+  SEBELUM screenshot, kalau tidak kartu terlihat kosong.
+- Cek lapis fill Figma: image fill bisa ditumpuk warna (mis. `[rgba(0,0,0,.2), IMAGE]`)
+  dan artwork full-bleed butuh ring overlay, bukan `border` (border mengecilkan content).
 - Target: ink ±1px, MAE rendah (referensi existing ~1.6–5), `npm run build` 0 error,
   `node scripts/verify.mjs` exit 0 (`browserErrors: []`), `node scripts/responsive-audit.mjs`
   18 rute × 26 lebar PASS, `npm run audit:navbar` PASS, `npm run seo:audit` PASS,

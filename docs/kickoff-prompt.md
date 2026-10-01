@@ -65,7 +65,8 @@ COMMANDS:
 - npm run verify:vt          → smoke View Transitions + cue sound (butuh preview)
 - npm run seo:audit          → validasi meta/OG/canonical/sitemap di dist (setelah build)
 - npm run perf:audit         → scroll-jank + long-task per section
-- npm run assets:og / :starfield / :footer / :partners / :optimize → regen aset
+- npm run assets:og / :starfield / :footer / :partners / :hof / :contact /
+  :optimize → regen aset
 
 CATATAN VERIFIKASI: pakai Chromium `/usr/bin/chromium` (override CHROMIUM_PATH) dan
 `PREVIEW_URL` (default http://localhost:4321). `verify.mjs` nunggu `networkidle`;
@@ -76,7 +77,16 @@ workflow" di AGENTS.md (reducedMotion + setNavbarHidden). CSS modern
 
 KONDISI SEKARANG (detail: docs/ai-handoff.md):
 - **18 rute publik**: `/`, `/about`, `/partners`, `/recruitment`,
-  `/recruitment/roles/{6}`, `/hods/{6}` (+ `/lab/sound` internal, noindex).
+  `/hall-of-frames`, `/contact`, `/recruitment/roles/{6}`, `/hods/{6}`
+  (+ `/lab/sound` internal, noindex). **Semua link navbar aktif.**
+- **Hall of Frames SELESAI** (`/hall-of-frames`, file Figma
+  `JYUzJK1hFqaEwL6DpdDvjp`): Hero `1439:4507` (MAE 4.34), Featured Sorcerers
+  `1439:4512` (2.01), Project highlights `1439:4655` (2.96), Community
+  Milestone `1439:4699` (1.33). Aset: `npm run assets:hof`.
+- **Contact SELESAI** (`/contact`, page `1445:5065`): `ContactHero.astro`
+  (hero `1445:5066`, MAE 3.00; form panel 0.57) — hero kiri + form asli +
+  artwork swirl. Aset: `npm run assets:contact`. Kartu info sengaja **non-link**
+  (destinasi belum diberikan — jangan bikin URL karangan).
 - **Homepage hero — revisi font & spacing (terbaru, 1 Oct 2026).** Frame Figma
   `1430:2040`/hero `1430:2041`. Judul **Bluu Next Bold 72/86** (SIL OFL di-bundle,
   token `--font-display`; Nasalization tetap untuk halaman lain), 2 baris gap 4,
@@ -84,9 +94,12 @@ KONDISI SEKARANG (detail: docs/ai-handoff.md):
   `community` (hover #2F196F) & `explore` (hover #4C3B7E); navbar CTA **"Join Us"
   93×43** (shared). **Art hero = image fill Figma persis** → hero MAE 27.96 → 3.18.
   Referensi: `Home-Hero-Revisi.png`. Node teks `1430:2044/2045/2046`.
-- **About Us §1–4 SELESAI** (`/about`): ambient glow = **fill per-section Figma**
+- **About Us §1–4 SELESAI** (`/about`, dibangun dari file Figma LAMA
+  `RntmRWAgLrh5utgzcjrUik`): ambient glow = **fill per-section Figma**
   (`Philosophy` 163deg 63%/126%; `Ecosystem` 24.75deg 53%/133%) — MCP menormalkan
-  handle (lossy), fit dari PNG.
+  handle (lossy), fit dari PNG. **CATATAN:** ada desain About Us BARU di file
+  `JYUzJK1hFqaEwL6DpdDvjp` node `1439:4184` (hero Bluu Next 80 + section Our
+  Team) — user minta **JANGAN disentuh dulu**; `/about` masih versi lama.
 - **Partners page SELESAI** (`/partners`): hero/OurPartners/WhyPartners, geometri
   di-assert; logo partner masih placeholder DS.
 - **Recruitment LENGKAP** + 6 detail role + 6 detail HoDS.
@@ -108,9 +121,10 @@ PRIORITAS BERIKUTNYA (lihat docs/ai-handoff.md §"Next plan"):
    **Philosophy → What We Do → HoDS → Our Project → CTA**, pakai `--font-display`
    (Bluu Next) + grid 8px sesuai frame `1430:2040`. Perlakukan tiap section seperti
    hero: export node → ukur → implement → diff ±1px → update verify.
-2. Konten asli (`projects.ts`, tanggal recruitment) — butuh material user.
-3. Halaman **Hall of Frames / Contact** (nav masih `aria-disabled` — jangan bikin
-   URL palsu).
+2. **About Us revisi ke file baru** (`1439:4184`, hero + Our Team) — **tunggu
+   izin user** (sekarang masih versi lama).
+3. Konten asli (`projects.ts`, tanggal recruitment, logo partner 20 slot, member/
+   project/milestone HoF) — butuh material user.
 4. Webfont Nasalization (berlisensi — jangan diakali).
 
 Kalau bikin/ubah section: WAJIB update `docs/assets.md` + `docs/ai-handoff.md` dan
