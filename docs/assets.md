@@ -1,5 +1,35 @@
 # Asset provenance
 
+## Homepage — Our Philosophy (1–2 October 2026)
+
+- Section node **`1430:2052`** ("Philosophy Section", frame `1430:2040`, file `JYUzJK1hFqaEwL6DpdDvjp`),
+  1440 × 837, `padding 80px`, `#050507`. Reference: `assets/assets home page/ourphilosophy/Home-Philosophy-Revisi-1x.png`
+  (1440 × 837) & `Home-Philosophy-Revisi-2x.png` (2880 × 1674).
+- Heading & Typography:
+  - Font moved to **Bluu Next Bold 700**, size **56px**, line-height **67px**, letter-spacing: `0%` (`0em`),
+    2 lines (`We Don't  Just Learn AI` & `We Build With It`), `gap: 4px`.
+  - Gradient per line: `linear-gradient(211.54deg, #FFFFFF 32.8%, #999999 49.8%, #FFFFFF 73.04%)` (`background-clip: text`).
+  - Eyebrow pill `1430:2056`: `Our Philosphy` (Manrope Regular 12/18, padding `4px 8px`, border-radius 32px, bg `rgba(255,255,255,0.15)`).
+- Spacing 8-point grid strictly implemented:
+  - Content column (`1430:2054`): `591px` wide at `x: 766px, y: 205px` (`@media (min-width: 1400px)`).
+  - Eyebrow to heading gap: **`8px`** (was 14px).
+  - Heading to principles grid gap: **`48px`** (was 74px).
+  - Principles item icon-to-font gap: **`24px`** (was 20px, strictly obeying Gembala's note).
+  - Principle title to description gap: **`8px`**.
+  - Principles grid: 2 columns × 3 rows, `column-gap: 92px`, `row-gap: 30px`, width `591px`, height `248px`.
+  - Principles items: LEARN (63×64), SHIP (59×60), EXPERIMENT (63×64), IMPACT (63×64), RESEARCH / BUILD (59×60). Titles Manrope Bold 18/27 & descriptions Manrope Regular 14/21 white.
+- Artwork & Glow:
+  - Retains composite sorcerer illustration (`public/images/philosophy/sorcerer-{1x,2x}.{avif,webp}`) and reduced-motion static fallback.
+  - Background glow: ellipse `1430:2053` at `x: 1195, y: 648`, 280 × 280, `#6C3BFF blur(175px)`.
+- Isolation & Parity:
+  - About Us variant (`variant="about"`) strictly isolated so it retains its full-bleed gradient and layout without regression.
+  - Intermediate & mobile viewports use fluid clamp font-size with wrapping to eliminate any clipping at 320–1399px.
+- Measurements & Precision:
+  - `verify.mjs` geometry assertion: `heading: { x: 766, y: 239, width: 591, height: 138 }`, `principles: { x: 766, y: 425, width: 591, height: 248 }`.
+  - Ink bounding boxes match Figma reference: Line 1 `w=587` (exact ±0.0px), Line 2 `w=425` (exact ±0.0px), Grid ink `x=[770, 1379] y=[429, 694]` (exact ±0.0px).
+  - Mean Absolute Error (MAE): Full section **2.568**, Principles Grid **2.72**, Illustration **1.99**.
+  - Responsive audit: 18 routes × 26 widths (468/468) **ALL PASS**.
+
 ## Contact page (1 October 2026)
 
 - Route `/contact` (Figma page `1445:5065`, file `JYUzJK1hFqaEwL6DpdDvjp`);

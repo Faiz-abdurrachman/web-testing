@@ -334,10 +334,18 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
 
 ## Current checkpoint
 
-- **HEAD (1 Oct 2026, `c55c5e5` + docs; `main` lokal belum di-push).**
+- **HEAD (2 Oct 2026; `main` lokal).**
   Situs pakai Astro **`<ClientRouter />`** (navigasi klien + `AudioContext`
   persist; semua komponen re-init `astro:page-load` + cleanup
   `astro:before-swap` — `docs/sound-sop.md` §9).
+- **Homepage Our Philosophy — revisi font & spacing (2 Oct 2026).** Frame Figma
+  `1430:2040`, section `1430:2052`. Judul **Bluu Next Bold 700 56/67** (token
+  `--font-display`), gradient per baris, 2 baris `gap: 4px`, `&nbsp;` menjaga
+  double-space Figma (587px width exact). Kolom desktop 591px di `x: 766, y: 205`.
+  Strict 8pt spacing: eyebrow gap 8px, title-to-grid 48px, icon-to-font 24px,
+  title-to-subtitle 8px, grid 30px×92px. Section MAE **2.568** (turun dari 27+;
+  Grid MAE 2.72, Ilus 1.99). Geometri diff 0.0px. About Us (`variant="about"`)
+  100% utuh. Detail: `docs/assets.md` §Homepage Our Philosophy.
 - **Contact precision pass — Figma GLASS rim (1 Oct 2026, `c55c5e5`).** Pill
   `1445:5072`, kartu info `1445:5077`, panel form `1445:5098` pakai effect
   **`GLASS`** (cek via REST API — MCP `figma_get_figma_data` menyembunyikannya).

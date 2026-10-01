@@ -6,11 +6,22 @@ harus menebak dari git log. Ini dokumen hidup — update kalau ada perubahan bes
 Baca dulu, urut: `AGENTS.md` (aturan operasional) → `HANDOVER.md` (konteks
 panjang) → `docs/assets.md` (provenance per section) → file ini.
 
-## Ringkasan cepat (untuk AI baru) — 1 Oct 2026
+## Ringkasan cepat (untuk AI baru) — 2 Oct 2026
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
 
-- **HoF Project highlights — 3D carousel (PALING BARU, 1 Oct 2026).**
+- **Homepage Our Philosophy — revisi font & spacing (PALING BARU, 2 Oct 2026).**
+  `Philosophy.astro` (`1430:2052`, frame `1430:2040`) direvisi presisi:
+  judul **Bluu Next Bold 700 56/67** (`--font-display`), 2 baris `gap: 4px`,
+  gradient per baris `linear-gradient(211.54deg, #FFFFFF 32.8%, #999999 49.8%, #FFFFFF 73.04%)`,
+  `We Don't&nbsp; Just Learn AI` (double-space Figma dijaga via `&nbsp;` agar ink width persis 587px),
+  kolom konten `591px` di `x: 766, y: 205` (`left: 766px, top: 205px` di desktop ≥1400px),
+  spacing grid 8px: eyebrow→title `8px`, title→grid `48px`, icon→font `24px` (naik dari 20px), title→subtitle `8px`,
+  grid principles `30px 92px`.
+  MAE section **2.568** (turun dari 27+; Grid MAE 2.72, Ilus 1.99). Geometri bboxes diff 0.0px.
+  Varian About Us (`variant="about"`) tetap 100% utuh tanpa regresi.
+  Detail: `docs/assets.md` §Homepage Our Philosophy — revisi font & 8pt spacing.
+- **HoF Project highlights — 3D carousel (1 Oct 2026).**
   `HallOfFramesProjects.astro` (`1439:4655`) dari statis → **coverflow 3D**:
   slot = class + transform (`is-left`/`is-center`/`is-right`), transisi mulus,
   side card `blur(6px)` + `rotateY(±10deg)` + `translateZ(-40px)`, glow animasi

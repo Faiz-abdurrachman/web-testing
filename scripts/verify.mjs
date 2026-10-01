@@ -123,13 +123,14 @@ try {
   await page.locator('.philosophy').scrollIntoViewIfNeeded();
   await page.evaluate(async () => {
     await document.fonts.ready;
+    await document.fonts.load('700 56px "Bluu Next"');
     await Promise.all([...document.images].map((image) => image.decode()));
   });
   await page
     .locator('.philosophy')
     .screenshot({ path: 'artifacts/philosophy-desktop.png' });
   const philosophyReference = await sharp(
-    'assets/assets home page/ourphilosophy/Philosophy Section(1).png',
+    'assets/assets home page/ourphilosophy/Home-Philosophy-Revisi-1x.png',
   )
     .resize(1440, 837)
     .removeAlpha()
@@ -183,8 +184,8 @@ try {
     width: 1440,
     height: 837,
     top: 903,
-    heading: { x: 855, y: 190, width: 471, height: 204 },
-    principles: { x: 855, y: 468, width: 471, height: 248 },
+    heading: { x: 766, y: 239, width: 591, height: 138 },
+    principles: { x: 766, y: 425, width: 591, height: 248 },
   });
   await page.screenshot({
     path: 'artifacts/homepage-desktop.png',

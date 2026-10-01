@@ -97,9 +97,18 @@ const principles = [
       <div class="heading">
         <span class="eyebrow">Our Philosphy</span>
         <h2 id="philosophy-title">
-          <span>We Don't</span>
-          <span>Just Learn AI</span>
-          <span>We Build With It</span>
+          {variant === 'about' ? (
+            <>
+              <span>We Don't</span>
+              <span>Just Learn AI</span>
+              <span>We Build With It</span>
+            </>
+          ) : (
+            <>
+              <span>We Don't&nbsp; Just Learn AI</span>
+              <span>We Build With It</span>
+            </>
+          )}
         </h2>
       </div>
       <ul class="principles" aria-label="Our principles">
@@ -396,16 +405,18 @@ const principles = [
     flex-direction: column;
     align-items: flex-start;
     gap: 14px;
+    width: 471px;
   }
   .eyebrow {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 93px;
+    width: fit-content;
     height: 26px;
     padding: 4px 8px;
     border-radius: 32px;
     background: rgb(255 255 255 / 15%);
+    font-family: var(--font-body);
     font-size: 12px;
     font-weight: 400;
     line-height: 18px;
@@ -424,9 +435,28 @@ const principles = [
     background-clip: text;
     color: transparent;
   }
+  .philosophy:not(.is-about) h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
   h2 span {
     display: block;
     white-space: nowrap;
+  }
+  .philosophy:not(.is-about) h2 span {
+    background: linear-gradient(
+      211.54deg,
+      #ffffff 32.8%,
+      #999999 49.8%,
+      #ffffff 73.04%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
   }
   .principles {
     margin: 0;
@@ -441,6 +471,37 @@ const principles = [
     align-items: center;
     gap: 20px;
     min-width: 0;
+  }
+  .philosophy:not(.is-about) li {
+    gap: 24px;
+  }
+  @media (min-width: 1400px) {
+    .philosophy:not(.is-about) .content {
+      position: absolute;
+      left: 766px;
+      top: 205px;
+      margin-left: 0;
+      padding-top: 0;
+      width: 591px;
+      gap: 48px;
+    }
+    .philosophy:not(.is-about) .heading {
+      gap: 8px;
+      width: 591px;
+    }
+    .philosophy:not(.is-about) h2 {
+      width: 591px;
+      font-size: 56px;
+      line-height: 67px;
+      letter-spacing: 0;
+    }
+    .philosophy:not(.is-about) h2 span {
+      white-space: nowrap;
+    }
+    .philosophy:not(.is-about) .principles {
+      width: 591px;
+      height: 248px;
+    }
   }
   li img {
     display: block;
@@ -457,16 +518,19 @@ const principles = [
   p {
     margin: 0;
     white-space: nowrap;
+    font-family: var(--font-body);
   }
   h3 {
     font-size: 18px;
     font-weight: 700;
     line-height: 27px;
+    color: #fff;
   }
   p {
     font-size: 14px;
     font-weight: 400;
     line-height: 21px;
+    color: #fff;
   }
   .principles li h3 {
     transition: color 0.35s ease;
@@ -608,21 +672,32 @@ const principles = [
       top: 100px;
     }
     .content {
-      margin-left: 57%;
+      position: relative;
+      left: auto;
+      top: auto;
+      margin-left: 54%;
       padding-top: 120px;
-      width: calc(43% - var(--page-gutter));
+      width: calc(46% - var(--page-gutter));
       gap: 56px;
     }
-    h2 {
+    .heading,
+    h2,
+    .principles {
       width: 100%;
-      font-size: clamp(28px, 3.89vw, 54px);
+    }
+    h2 {
+      font-size: clamp(24px, 3.5vw, 54px);
       line-height: 1.214286;
     }
+    h2 span {
+      white-space: normal;
+    }
     .principles {
+      height: auto;
       column-gap: 24px;
     }
     li {
-      gap: 10px;
+      gap: 16px;
     }
     li img {
       width: 42px;
@@ -651,22 +726,33 @@ const principles = [
       padding: 64px var(--page-gutter) 0;
     }
     .content {
+      position: relative;
+      left: auto;
+      top: auto;
       margin-left: 0;
       padding-top: 0;
       width: 100%;
       gap: 40px;
     }
-    h2 {
+    .heading,
+    h2,
+    .principles {
       width: 100%;
-      font-size: clamp(30px, 7.2vw, 50px);
-      line-height: 1.214286;
+    }
+    h2 {
+      font-size: clamp(22px, 6.5vw, 42px);
+      line-height: 1.2;
+    }
+    h2 span {
+      white-space: normal;
     }
     .principles {
+      height: auto;
       column-gap: 20px;
       row-gap: 26px;
     }
     li {
-      gap: 10px;
+      gap: 16px;
     }
     li img {
       width: 42px;
