@@ -1,0 +1,154 @@
+# SOP — Presisi piksel (WAJIB untuk semua section/halaman)
+
+Tujuan proyek ini: **pixel-accurate ke Figma/PNG**. Dokumen ini adalah protokol
+keras yang harus diikuti tiap mengubah/membuat UI. Ringkasnya: **export node PNG
+dari Figma → bundle font yang sama → pakai image-fill apa adanya → ukur dengan
+`sharp` → diff → iterasi**. Jangan pernah "kira-kira".
+
+Baca bersama `AGENTS.md` (aturan operasional), `docs/assets.md` (provenance),
+dan `docs/ai-handoff.md` (state terkini).
+
+## 1. Hierarki sumber kebenaran (dari paling tinggi)
+
+1. **Render node PNG dari Figma** (`figma_download_figma_images`, 1× di lebar
+   frame + 2× untuk ukur). Ini otoritas akhir.
+2. **File font yang sama persis** dengan yang dipakai Figma (tanpa ini mustahil
+   presisi — lihat §5).
+3. **Image fill mentah Figma** (kalau node punya `imageRef`) — dipakai apa adanya
+   untuk artwork, bukan direkonstruksi.
+4. **Angka Figma API/MCP** (fontSize/lineHeight/gap/padding/posisi) = titik awal.
+5. **CSS "Copy as code" Figma / string MCP** = **hint saja, sering lossy**.
+
+Aturan: kalau (1) berbeda dengan (4)/(5), **ikut (1)**.
+
+## 2. Gotcha yang sudah terbukti (jangan diulang)
+
+- **String `linear-gradient(...)` dari Figma MCP menormalkan handle → lossy**
+  (stop terakhir dipaksa 100%, sudut bergeser). Contoh About: MCP `170deg` /
+  `16deg`, render asli `163deg` / `24.75deg` (MAE MCP ≈ 17 vs fit ≈ 0.7).
+  **Selalu fit dari piksel PNG node**, jangan paste string MCP mentah.
+- **"Copy as code" Figma tidak memuat `effects`** (shadow/glow) pada teks dan
+  memakai angka desimal aneh. Cek `effects` lewat data node; kalau tidak ada di
+  data node, artinya **tidak ada shadow** (verifikasi dengan export node teks ke
+  atas putih: shadow/glow akan tampak sebagai halo; teks bersih = tidak ada).
+- **Gradient teks diterapkan per text-node** (per baris kalau tiap baris node
+  terpisah), jadi tiap baris punya salinan gradient sendiri — bukan satu gradient
+  membentang di dua baris. Implementasikan per `<span>` baris.
+- **Jangan rekonstruksi art yang sudah ada image fill-nya.** Rekonstruksi
+  (layering/cutout) pernah dipakai untuk hero dan hasilnya ~24 MAE vs render;
+  memakai image fill mentah langsung turun ke ~2.7 MAE. Lihat §6.
+- **Minifier build bisa membuang properti CSS** (mis. `backdrop-filter`
+  unprefixed). Cek hasil di `dist/`/live, bukan cuma `dev`.
+
+## 3. Alur kerja presisi (per section)
+
+### Langkah A — Ambil struktur Figma
+
+- `figma_get_figma_data` pada node section (dan node anak yang perlu).
+- Catat: mode layout, padding, gap, align, ukuran, posisi, teks persis,
+  `textStyle` (family/weight/size/lineHeight/letterSpacing), fills, effects,
+  radius, stroke.
+
+### Langkah B — Export referensi
+
+- `figma_download_figma_images`:
+  - node section → `…-Revisi.png` (1×, lebar frame) + `…-2x.png`.
+  - node **teks** terpisah (transparan) untuk mengukur bbox glyph.
+  - node **komponen** terpisah (tombol/tab) untuk mengukur lebar/tinggi & warna.
+  - kalau node punya `imageRef`, unduh **image mentahnya** (isi `imageRef`) —
+    ini art persisnya.
+- Simpan di `assets/<page>/<section>/` (bukan di `public/`).
+
+### Langkah C — Ukur dengan `sharp`
+
+Ukur dari PNG 2× (bagi 2 untuk CSS px): bbox tinta tiap teks, lebar/tinggi
+tombol, posisi (x/y), dan **profil warna** (dropdown gradient/fill) via sampling
+piksel. `sharp.resize(lebar, tinggi, {fit:'cover'})` untuk menyamakan skala.
+Tulis skrip sekali pakai di `/tmp/opencode/` (jangan commit), pakai
+`createRequire('<repo>/package.json')` supaya `sharp`/`@playwright/test` resolve.
+
+### Langkah D — Bangun HTML/CSS
+
+- Hardcode angka hasil ukur (jangan pakai fixed-px yang bisa overflow; uji
+  320–3840px).
+- Semua teks/tombol/border/kartu/gradient-text = HTML/CSS asli.
+- Gradient teks: `background: linear-gradient(...)`, `-webkit-background-clip:
+text; background-clip: text; color: transparent;` **per baris**.
+- Kalau ada animasi: sediakan `prefers-reduced-motion` (statis = persis referensi).
+
+### Langkah E — Loop diff (jangan berhenti sebelum pas)
+
+- Screenshot elemen via Playwright (`reducedMotion: 'reduce'`, viewport = frame),
+  bandingkan dengan PNG referensi pakai `sharp`: **MAE per region** (judul,
+  paragraf, tombol, navbar, background) + visual crop berdampingan.
+- Target: **posisi tinta ±1px**, MAE tiap region serendah mungkin (referensi
+  existing ~1.6–5; hero revision final **3.18**). Kalau satu region tinggi,
+  cari penyebabnya (font? gradient? artwork?) sebelum lanjut.
+- Sembunyikan overlay yang tidak ada di PNG (lihat `setNavbarHidden` di
+  `verify.mjs`).
+
+### Langkah F — Kunci di verifikasi
+
+- Update `scripts/verify.mjs`: assertion geometri (`assert.deepEqual`), path PNG
+  referensi, dan cek font yang dipakai (`document.fonts.load(...)`).
+- Update `scripts/navbar-audit.mjs` kalau geometri navbar berubah.
+- Update `docs/assets.md` (provenance) + `docs/ai-handoff.md` (state).
+
+## 4. Aturan font (paling sering bikin gagal presisi)
+
+- **Bundle font persis yang dipakai Figma.** Family baru → unduh woff2 dari
+  sumber resmi, simpan di `public/fonts/`, tambah `@font-face` + license kalau
+  OFL. Contoh: **Bluu Next** (SIL OFL) di `public/fonts/bluu-next-700.woff2`,
+  token `--font-display`.
+- **Hati-hati faux bold:** kalau font hanya punya satu cut (mis. Bluu Next
+  Bold), deklarasikan `@font-face { font-weight: 700 }` dan pakai `font-weight:
+700` (jangan deklarasikan 400 lalu minta 700 → browser menebalkan sintetis).
+- **Jangan ganti font global selama migrasi.** Halaman yang belum direvisi tetap
+  pakai font lamanya (`--font-heading`); section yang sudah direvisi pakai token
+  baru (`--font-display`). Ini menjaga diff & geometri halaman lain.
+- **Lisensi:** cek dulu. Nasalization **tidak boleh** di-bundle (lisensi desktop);
+  jangan akali. Kalau file asli dari desainer tersedia, minta untuk kecocokan
+  versi glyph.
+
+## 5. Aturan artwork (image fill vs rekonstruksi)
+
+- Kalau node punya `imageRef`: **unduh image mentah & pakai apa adanya** (bake ke
+  webp dengan `fit:'cover'` mengikuti crop FILL Figma). Jangan pecah jadi layer
+  rekonstruksi kecuali motion memang butuh cutout terpisah.
+- Kalau motion butuh elemen bergerak terpisah (mis. karakter idle) dan art-nya
+  satu plate datar: gerakkan **seluruh plate** dengan **overscan** (mis. 1.05)
+  supaya tepi tidak bocor — jangan bergerak melebihi overscan.
+- Generator aset harus reproducible lewat script di `scripts/generate-*.mjs`
+  (baca dari `assets/`, tulis ke `public/images/...`).
+
+## 6. Studi kasus — Homepage hero (1 Oct 2026)
+
+- Frame `1430:2040`, hero `1430:2041`. Judul pindah **Nasalization → Bluu Next
+  Bold 72/86** (gradient per baris `211.54deg #fff 32.8% / #999 49.8% / #fff
+73.04%`), paragraf Manrope **18/25** lebar 655, spacing **80/64/16/24**,
+  tombol Primary/Sec baru (hover `#2F196F` / `#4C3B7E`), navbar CTA **"Join Us"
+  93×43** (shared).
+- **Art**: node hero punya image fill → diunduh (`Home-Hero-Plate.png`) dan
+  dipakai langsung → background MAE **~24 → ~2.7**; hero MAE keseluruhan
+  **27.96 → 3.18** (reduced motion, 1440). `figure.webp` (rekonstruksi) dihapus.
+- Angka ukur kunci (1440): content `x80 y277 w1280 h349`; tinta judul baris 1/2 di
+  y `295/383`; paragraf y `475/500`; tombol y `583`, lebar `201` + `195`; CTA
+  navbar `x1267 w93`; menu `x329 w743`.
+- Pelajaran: **diff tinggi bisa jadi karena artwork, bukan teks** — cek region
+  dulu (background vs teks) sebelum menyalahkan font.
+
+## 7. Checklist presisi (patokan "beres")
+
+- [ ] Referensi = PNG node terbaru yang diexport (bukan CSS).
+- [ ] Font persis Figma ter-bundle (weight benar, tanpa faux bold).
+- [ ] Image fill dipakai apa adanya (tidak direkonstruksi).
+- [ ] Gradient/efek di-fit dari piksel PNG, bukan string MCP.
+- [ ] Posisi tinta ±1px; MAE per region diukur & dilaporkan.
+- [ ] Geometri di-assert di `verify.mjs`; navbar-audit diupdate bila perlu.
+- [ ] `prefers-reduced-motion` inert & tetap pixel-exact.
+- [ ] `format:check`, `build` 0 error, `verify.mjs` exit 0 (`browserErrors: []`),
+      `responsive-audit` 416 PASS, `navbar-audit` PASS, `seo:audit` PASS,
+      `verify:vt` PASS.
+- [ ] `docs/assets.md` + `docs/ai-handoff.md` + `AGENTS.md` diupdate.
+- [ ] Commit per fitur; konfirmasi user sebelum `git push origin main`
+      (deploy ganda).

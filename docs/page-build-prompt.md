@@ -2,83 +2,90 @@
 
 Copy-paste template di bawah ke AI, ganti bagian `<...>`. Tujuannya: hasil
 **konsisten** dengan halaman yang sudah ada dan **presisi** ke Figma/PNG.
+Metode lengkap ada di **`docs/pixel-precision-sop.md`** (wajib dibaca).
 
 Contoh terisi pakai halaman Recruitment (`assets/assets recruitment page/`).
 
 ---
 
 ```text
-Kamu kerja di repo "Data Sorcerers" (Astro static). Task: bikin halaman baru
-"<NAMA HALAMAN / SECTION>".
+Kamu kerja di repo "Data Sorcerers" (Astro static). Task: bikin halaman/section
+baru "<NAMA HALAMAN / SECTION>".
 
 LANGKAH 0 — WAJIB baca dulu (jangan skip):
-- AGENTS.md      → aturan operasional, commands, konvensi verifikasi, gotchas
-- HANDOVER.md    → konteks, stack, section yang sudah ada, checkpoint
-- docs/assets.md → provenance + node Figma tiap section
+- AGENTS.md                    → aturan operasional, commands, konvensi, gotchas
+- docs/pixel-precision-sop.md  → **SOP PRESISI PIKsel** (export node, font, image
+                                 fill, ukur sharp, diff, iterasi). Patuhi ini.
+- docs/ai-handoff.md           → state terkini
+- HANDOVER.md                  → konteks, stack, section yang sudah ada
+- docs/assets.md               → provenance + node Figma tiap section
 
 ASET REFERENSI (dikelompokkan per halaman):
-- Folder halaman: assets/assets recruitment page/
-- Sub-section:   assets/assets recruitment page/hero section/
-- Link Figma (dari hero.txt): node 770:15523
-- Full-page ref: assets/assets recruitment page/RECRUITMENT PAGE.png
-                 (2880x14524 → 1440x7262 @1x)
+- Folder halaman: assets/<page>/
+- Sub-section:    assets/<page>/<section>/
+- Link Figma + node id dari file .txt di folder aset.
+- Full-page ref:  assets/<page>/...PNG (kalau ada).
 - File .css di folder aset = HINT saja, bukan otoritas.
 
-LANGKAH 1 — Deep dive (satu section per iterasi):
-- Baca SEMUA .txt (link Figma) + .css referensi.
-- Ambil data Figma node terkait (figma MCP): layout (mode/padding/gap/align),
-  ukuran & posisi tiap elemen, teks persis, font (family/weight/size/line-height/
-  letter-spacing), warna, gradient, radius, stroke, shadow.
-- Kalau halaman punya banyak section, kerjakan urut, commit per section.
+LANGKAH 1 — Ambil data Figma + export:
+- `figma_get_figma_data` (node section + anak): layout (mode/padding/gap/align),
+  ukuran/posisi, teks persis, textStyle (family/weight/size/lineHeight/
+  letterSpacing), fills, effects, radius, stroke.
+- `figma_download_figma_images`: node section PNG 1x + 2x, plus node TEKS dan
+  KOMPONEN (tombol/tab) terpisah untuk mengukur bbox/warna. Simpan di assets/.
 
-LANGKAH 2 — Otoritas desain:
-- PNG referensi = SUMBER KEBENARAN. CSS export Figma cuma hint. Kalau beda → PNG.
-- Ukur dari PNG pakai sharp (bounding box, posisi, warna, pixel diff).
-- JANGAN nebak/eyeball. Kalau ragu, ukur.
+LANGKAH 2 — Otoritas desain (hukum):
+- **PNG node hasil export = SUMBER KEBENARAN.** CSS export Figma / string gradient
+  MCP = hint & sering LOSSY (MCP menormalkan handle gradient; Copy-as-code tidak
+  memuat effects). Kalau beda → PNG. Jangan paste string MCP/CSS mentah.
+- Ukur dari PNG 2x pakai sharp (bbox tinta, posisi x/y, lebar/tinggi, profil warna).
+  "Ink" harus cocok ±1px. JANGAN nebak/eyeball.
 
 LANGKAH 3 — Bangun:
-- Buat Astro component + scoped CSS. Semua UI = HTML/CSS asli (teks, tombol,
-  border, kartu, gradient text). Gambar HANYA untuk artwork/foto. Jangan flatten
-  screenshot jadi UI.
-- Route: src/pages/<slug>.astro (static). Kalau perlu, wire dari Navbar — tapi
-  link yang belum punya tujuan tetap aria-disabled (jangan bikin URL karangan).
-- Aset tampil: convert ke WebP (sharp), simpan di public/images/<page>/.
-  Untuk artwork/foto pakai kualitas tinggi/lossless.
-- Kalau ada animasi: WAJIB sediakan fallback prefers-reduced-motion.
-- Jangan tambah dependency/library tanpa tanya. Runtime deps harus tetap ringan.
+- Astro component + scoped CSS. Route: src/pages/<slug>.astro (static).
+- **Semua UI = HTML/CSS asli** (teks, tombol, border, kartu, gradient text).
+  Gambar HANYA untuk artwork/foto. Gradient teks per baris (`background-clip:text`).
+  Jangan flatten screenshot jadi UI.
+- **Font**: bundle font persis Figma (cek lisensi; OFL → public/fonts/*.woff2 +
+  @font-face, weight asli biar tidak faux-bold). Selama migrasi, jangan ganti font
+  global — pakai token baru (mis. `--font-display`) untuk section yang direvisi.
+- **Artwork dengan `imageRef`**: download raw & pakai apa adanya (`fit:cover` sesuai
+  crop FILL Figma). JANGAN rekonstruksi dari layer.
+- Aset tampil: WebP (sharp) di public/images/<page>/; artwork kualitas tinggi.
+- Animasi: WAJIB fallback prefers-reduced-motion (render reduce pixel-exact).
+- Link yang belum punya tujuan tetap `aria-disabled` (jangan bikin URL karangan).
+- Jangan tambah dependency/library tanpa tanya.
 
 LANGKAH 4 — Verifikasi (LOOP sampai presisi, jangan berhenti sebelum pas):
-- Tambah pengecekan di scripts/verify.mjs:
-  * geometri desktop EXACT (assert.deepEqual: x/y/width/height section + elemen kunci),
-  * screenshot section + diff vs PNG referensi (tulis ke artifacts/),
-  * containment teks + overflow horizontal 320–3840px,
-  * 0 browser error.
-- Saat screenshot, elemen yang TIDAK ada di PNG referensi harus disembunyikan
-  (lihat setNavbarHidden di verify.mjs; kalau ada overlay UI baru, tambahkan ke list).
-- Target: `npm run build` 0 error; `node scripts/verify.mjs` exit 0; 0 browser
-  error; skor diff ~< 2.5/255 (sisa wajar dari rasterisasi font + resampling gambar).
-- Jalankan juga `node scripts/responsive-audit.mjs` (14 halaman × 26 lebar) dan
-  `npm run seo:audit` (setelah build) — dua-duanya harus PASS. Kalau ada section
-  ber-carousel, panah: kiri-kanan di desktop, bawah di mobile (lihat AGENTS gotchas).
-- Kalau geometri/diff belum pas: UKUR, perbaiki, ulangi. Jangan klaim selesai
-  sebelum benar-benar sesuai.
+- Update scripts/verify.mjs: geometri EXACT (assert.deepEqual), path PNG referensi,
+  screenshot + diff (tulis artifacts/), containment + overflow 320–3840, 0 browser error.
+- Kalau geometri navbar berubah: update scripts/navbar-audit.mjs.
+- Sembunyikan overlay yang TIDAK ada di PNG referensi (lihat setNavbarHidden; kalau
+  ada overlay baru, tambahkan ke list).
+- Target: ink ±1px, MAE rendah (referensi existing ~1.6–5), `npm run build` 0 error,
+  `node scripts/verify.mjs` exit 0 (`browserErrors: []`), `node scripts/responsive-audit.mjs`
+  16 rute × 26 lebar PASS, `npm run audit:navbar` PASS, `npm run seo:audit` PASS,
+  `npm run verify:vt` PASS. Kalau belum pas: UKUR, perbaiki, ulangi.
 
 LANGKAH 5 — Dokumentasi + commit:
-- Update docs/assets.md: provenance section baru (node Figma, ukuran frame,
-  catatan penting, sumber gambar).
-- Update README + HANDOVER: daftar halaman/section.
-- Commit per fitur (gaya `feat:` / `fix:` / `docs:`), push ke `main`.
+- Update docs/assets.md (provenance: node Figma, ukuran frame, sumber aset) +
+  docs/ai-handoff.md + AGENTS.md bila aturan/section berubah.
+- Commit per fitur (`feat:`/`fix:`/`docs:`). **Konfirmasi user dulu sebelum
+  `git push origin main`** (deploy ganda testing + production).
 
 CHECKLIST PRESISI (patokan "beres"):
-- [ ] Semua ukuran/posisi/font/warna diambil dari Figma + diverifikasi ke PNG.
-- [ ] PNG = otoritas saat CSS Figma beda.
+- [ ] Referensi = PNG node terbaru (bukan CSS/MCP).
+- [ ] Font persis Figma ter-bundle (weight benar, bukan faux-bold).
+- [ ] Image fill dipakai apa adanya (tidak direkonstruksi).
+- [ ] Gradient/efek di-fit dari piksel PNG, bukan string MCP.
 - [ ] Semua teks/tombol/border = HTML/CSS asli.
-- [ ] Geometri element kunci PASS (deepEqual) di verify.
+- [ ] Posisi tinta ±1px; MAE per region diukur & dilaporkan.
+- [ ] Geometri kunci PASS (deepEqual) di verify; navbar-audit diupdate bila perlu.
 - [ ] Overflow 320–3840px aman, teks tidak terpotong.
-- [ ] prefers-reduced-motion ada kalau ada animasi.
-- [ ] build 0 error, verify exit 0, 0 browser error.
-- [ ] docs/assets.md + README + HANDOVER diupdate.
-- [ ] commit + push.
+- [ ] prefers-reduced-motion ada & pixel-exact.
+- [ ] build 0 error, verify exit 0, 0 browser error, responsive/audit/seo/vt PASS.
+- [ ] docs/assets.md + docs/ai-handoff.md + AGENTS.md diupdate.
+- [ ] commit (per fitur); konfirmasi user sebelum push.
 
 Sebelum mulai: ringkas pemahamanmu + rencana urutan section, lalu kerjakan.
 ```

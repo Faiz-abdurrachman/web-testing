@@ -6,146 +6,118 @@ Copy-paste ini ke AI baru sebelum ngasih task. Ganti bagian `TASK` di bawah.
 
 ```text
 Kamu lanjut kerja di repo "Data Sorcerers" — static Astro site: homepage +
-halaman About Us + halaman Recruitment (+ 6 halaman detail role) + 6 halaman
-detail HoDS.
-Target: pixel-accurate ke Figma/PNG, HTML/CSS ringan.
+About Us + Partners + Recruitment (+ 6 detail role) + 6 detail HoDS.
+Target: **pixel-accurate ke Figma/PNG**, HTML/CSS ringan (bukan flatten screenshot).
 
 Sebelum ngapa-ngapain, WAJIB baca dulu (urut, jangan skip):
-1. AGENTS.md           → aturan operasional, commands, konvensi verifikasi, gotchas
-2. docs/ai-handoff.md  → STATE PALING TERKINI ("dimana kita sekarang"); baca ini
-                         sebelum nebak dari git log
-3. HANDOVER.md         → konteks panjang: stack, struktur, status, TODO
-4. docs/assets.md      → provenance tiap section + node Figma
-5. docs/sound-sop.md   → SOP sound system (Web Audio prosedural) + tuning + gotcha
-                         (skill `.agents/skills/data-sorcerers-sound/SKILL.md`)
+1. AGENTS.md                    → aturan operasional, commands, konvensi verifikasi, gotchas
+2. docs/pixel-precision-sop.md  → **SOP PRESISI PIKsel (paling penting)** — cara
+                                  export node Figma, bundle font, pakai image fill,
+                                  ukur sharp, diff, iterasi. Baca sebelum sentuh UI apa pun.
+3. docs/ai-handoff.md           → STATE PALING TERKINI ("dimana kita sekarang")
+4. HANDOVER.md                  → konteks panjang: stack, struktur, status, TODO
+5. docs/assets.md               → provenance tiap section + node Figma
+6. docs/sound-sop.md            → SOP sound (Web Audio prosedural) + porting
+                                  (skill `.agents/skills/data-sorcerers-sound/SKILL.md`)
 
-Aturan inti (patuhi):
-- PNG referensi = sumber kebenaran; CSS export Figma cuma hint. Kalau beda → ikut PNG.
-- Semua UI = HTML/CSS asli. Jangan flatten screenshot jadi gambar (teks, tombol,
-  border, kartu, gradient text).
-- Ukur dari PNG pakai sharp (bbox/pixel diff). Jangan nebak/eyeball.
-- Geometri di-assert di scripts/verify.mjs (assert.deepEqual). Kalau desain sengaja
-  diubah, update assertion-nya juga.
-- Wajib fallback prefers-reduced-motion untuk tiap animasi (verify/audit jalan di
-  `reducedMotion: reduce`).
-- Runtime deps sengaja cuma `astro` + `gsap` + `three`. Jangan tambah library lain
+ATURAN INTI (hukum, jangan dilanggar):
+- **PNG node hasil export dari Figma = sumber kebenaran.** CSS export Figma, string
+  gradient MCP, dan `effects` payload = hint & sering LOSSY. Kalau beda → ikut PNG.
+- SELALU mulai dari export node: `figma_get_figma_data` (struktur) +
+  `figma_download_figma_images` (PNG 1x/2x + node teks/komponen terpisah) → UKUR
+  dengan sharp. Jangan paste string MCP/CSS mentah.
+- **Bundle font persis Figma** (cek lisensi; OFL → vendor woff2 ke public/fonts/ +
+  @font-face; deklarasikan weight asli biar tidak faux-bold). Jangan ganti font
+  global mid-migrasi — halaman yang belum direvisi tetap token lamanya.
+  Nasalization TIDAK boleh di-bundle (lisensi desktop) — jangan diakali.
+- **Image fill dipakai APA ADANYA** (`imageRef` → download raw → `fit:cover` sesuai
+  crop FILL Figma). Jangan rekonstruksi dari layer (hero rekonstruksi ~24 MAE vs
+  raw fill ~2.7 MAE).
+- **Semua UI = HTML/CSS asli.** Teks/tombol/border/kartu/gradient-text dibangun di
+  CSS. Gradient teks per baris (`background-clip:text`).
+- **Ukur, jangan nebak.** Posisi tinta harus cocok referensi **±1px**. Kalau diff
+  satu region tinggi, cek dulu: font? gradient? artwork? — jangan langsung "fix CSS".
+- **Geometri di-assert** di scripts/verify.mjs (`assert.deepEqual`). Kalau desain
+  sengaja diubah → update assertion + path PNG referensi di commit yang sama.
+- Wajib fallback `prefers-reduced-motion`; render reduce harus tetap pixel-exact
+  (semua audit jalan di reducedMotion: reduce).
+- Runtime deps SENGAJA cuma `astro` + `gsap` + `three`. Jangan tambah library lain
   tanpa tanya; lazy-import yang berat.
-- Commit per fitur, gaya `feat:`/`fix:`/`docs:`/`chore:`. Konfirmasi dulu ke user
-  sebelum push (Vercel auto-deploy dari `main`).
-- **Push GANDA**: remote `origin` (= testing) punya **dua push URL** (testing +
-  production `Web-Data-Sorcerers/community-web`). `git push origin main` mengirim
-  ke dua-duanya — jangan tambah remote lain. Cek sinkron: `git fetch production
-  -q && git rev-parse --short main origin/main production/main`.
+- View Transitions (ClientRouter) AKTIF: tiap komponen yang sentuh DOM WAJIB
+  re-init di `astro:page-load` + cleanup di `astro:before-swap` (docs/sound-sop.md §9).
+- Update docs tiap ubah section: docs/assets.md + docs/ai-handoff.md + AGENTS.md.
+- Commit per fitur (`feat:`/`fix:`/`docs:`/`chore:`). **Konfirmasi user dulu sebelum
+  push** (Vercel auto-deploy dari `main`).
 
-Commands:
+PUSH GANDA (penting): remote `origin` (= testing) punya DUA push URL (testing +
+production `Web-Data-Sorcerers/community-web`). `git push origin main` mengirim ke
+dua-duanya — jangan tambah remote/push URL lain. Cek sinkron:
+`git fetch production -q && git rev-parse --short main origin/main production/main`.
+
+COMMANDS:
 - npm ci                     → install (Node 22.x)
 - npm run dev                → dev server http://localhost:4321
-- npm run build              → astro check + astro build (HARUS 0 error)
+- npm run build              → astro check + build (HARUS 0 error, 17 halaman)
 - npm run format:check       → harus lolos sebelum commit
 - node scripts/verify.mjs               → verifikasi visual + geometri (HARUS exit 0)
-- node scripts/responsive-audit.mjs     → 15 rute × 26 lebar (320–3840; HARUS exit 0)
-- npm run perf:audit         → scroll-jank + long-task per section (set PERF_MAX_TASK untuk fail)
-- npm run verify:vt          → smoke View Transitions + cue sound (navigasi klien; butuh preview)
+- node scripts/responsive-audit.mjs     → 16 rute × 26 lebar 320–3840 (HARUS exit 0)
+- npm run audit:navbar       → geometri navbar exact 1440 (HARUS ALL PASS)
+- npm run verify:vt          → smoke View Transitions + cue sound (butuh preview)
 - npm run seo:audit          → validasi meta/OG/canonical/sitemap di dist (setelah build)
-- npm run assets:og          → regen og image + favicon + manifest
-- npm run assets:starfield   → regen tile bintang What We Do (Chromium)
-- npm run assets:optimize    → re-encode webp berat
+- npm run perf:audit         → scroll-jank + long-task per section
+- npm run assets:og / :starfield / :footer / :partners / :optimize → regen aset
 
-Catatan verifikasi: `verify.mjs`/`responsive-audit.mjs` pakai Chromium di
-`/usr/bin/chromium` (override `CHROMIUM_PATH`) dan `PREVIEW_URL` (default
-http://localhost:4321). Kalau verify hang di `networkidle`/OOM: `npm run build &&
-npx astro preview --port 4331` lalu `PREVIEW_URL=http://localhost:4331 node
-scripts/verify.mjs`. Baca "Verification workflow" di AGENTS.md (reducedMotion +
-setNavbarHidden). Fitur CSS modern (mis. `backdrop-filter`): cek di `dist/`/live,
-bukan cuma dev.
+CATATAN VERIFIKASI: pakai Chromium `/usr/bin/chromium` (override CHROMIUM_PATH) dan
+`PREVIEW_URL` (default http://localhost:4321). `verify.mjs` nunggu `networkidle`;
+kalau hang di dev/OOM: `npm run build && npx astro preview --port 4331` lalu
+`PREVIEW_URL=http://localhost:4331 node scripts/verify.mjs`. Baca "Verification
+workflow" di AGENTS.md (reducedMotion + setNavbarHidden). CSS modern
+(mis. backdrop-filter): cek di `dist/`/live, bukan cuma dev.
 
-Kondisi sekarang (detail di docs/ai-handoff.md):
-- 15 rute publik: `/`, `/about`, `/recruitment`, `/recruitment/roles/{id}` (6),
-  `/hods/{id}` (6) (+ `/lab/sound` internal, noindex).
-- **About Us (`/about`) sections 1–4 SELESAI** (`AboutHero`, `VisiMisi`,
-  `Philosophy variant="about"`, `OurEcosystem`). Ambient glow = **fill
-  per-section Figma**, BUKAN satu radial/parent: `.philosophy.is-about`
-  `linear-gradient(163deg,#050507 63%,#6C3BFF 126%)`, `.ecosystem`
-  `linear-gradient(24.75deg,#050507 53%,#6C3BFF 133%)`. **Gotcha:** string
-  gradient dari **Figma MCP menormalkan handle → lossy** (MCP: 170deg/16deg;
-  render node asli: 163deg/24.75deg). Selalu export node via MCP lalu fit piksel
-  PNG; jangan paste string MCP mentah. Node: About page `1277:18477`, Philosophy
-  `922:16330`, Ecosystem `1248:14877`.
-- **View Transitions AKTIF** (`<ClientRouter />` di `BaseLayout`): navigasi
-  antar-halaman klien (cross-fade) + `AudioContext` persist. Karena Astro tidak
-  menjalankan ulang script bundled saat swap, **tiap komponen re-init lewat
-  `astro:page-load`** dan cleanup di `astro:before-swap` (AbortController/
-  observer/GSAP). Aturan lengkap: `docs/sound-sop.md` §9. Kalau bikin komponen
-  baru yang menyentuh DOM, WAJIB ikut pola ini.
-- Motion GSAP + Three.js AKTIF (`src/components/Motion.astro` +
-  `src/scripts/motion.ts`): hero pinned scroll + partikel Three.js (lazy), idle
-  karakter, scroll reveal, 3D tilt, magnetic button, cursor glow. Semua inert saat
-  reduced motion.
-- Navbar = **persis Figma** (`Navbar.astro`, node `755:15178` / `assets/Navbar.png`
-  = 5× frame 1440×106.8): `padding 24px 80px`, logo 54×58.8 di 80/24, grup kanan
-  `menu (gap 18) → 90px → CTA`, link non-aktif `#707070`, aktif `#fff` + underline
-  gradient 1px selebar label (Home 49px), CTA putih `173 × 42.1` rim `148deg` 2px.
-  ≥1301px lebar tab di-hardcode ke Figma (menu **753**) biar persis; saat scroll
-  cuma cross-fade ke backing kaca transparan (`rgb(6 5 10 / 45%)` + `blur(12px)`),
-  **tanpa** kapsul/indikator/flash/morph. Mobile ≤1050 = hamburger full-screen,
-  warna link diselaraskan. Audit: `npm run audit:navbar` (assert geometri 1440).
-- What We Do: starfield di-raster jadi tile PNG periodik
-  (`public/images/starfield/starfield-*.png`, regen `npm run assets:starfield`)
-  supaya scroll tidak berat; `will-change` hanya saat section dekat viewport.
-- Deep link / Back: `BaseLayout.astro` re-apply target hash setelah splash selesai
-  (`section[id]`/`main[id]` punya `scroll-margin-top: 110px`). Jangan diubah tanpa
-  alasan — pernah bug Back mendarat di section salah.
-- Available Roles card: `aspect-ratio: 1652/956` + `container-type: inline-size`,
-  semua metrik `cqw`, base `#2a2a2c`, glow violet kanan-bawah (`role-glow.webp`) +
-  ring gradient `150deg` via `mask-composite`. Judul Title Case dari `domains.ts`,
-  tagline dari `roles.ts`. Glow wave halus `scale 1→1.04` (di-pause off-screen).
-  Hover pointer-reactive: pool radial ikut kursor + ember lean + divider draw +
-  panah overshoot (gate `(pointer: fine)` + `no-preference`). Geometri di-assert
-  di `verify.mjs` (section `851.375`, list `518.375`, kartu `413.33 × 239.19`).
-- Detail role/HoDS: `main` `min-height: 100vh/100lvh` **hanya ≤900px** biar
-  gradient mentok bawah (desktop tetap frame 1280 — `verify.mjs` assert di
-  1440×1400); jangan naikkan ke base.
-- Hero mobile fluid (≤600px) pakai `clamp()` + `min-height: 100svh`; ≥601px jangan
-  diubah (tablet/desktop + diff PNG 1440 tetap).
-- SEO/OG: origin dari `SITE_URL` (default
-  `https://data-sorcerers-community-sigma.vercel.app`) → canonical/OG/Twitter/
-  JSON-LD, robots, sitemap, share card. Ganti origin kalau domain final beda.
-- Sound: SFX prosedural + ambient (Web Audio, 0 aset/0 dependency), orb mute
-  melayang (`src/components/Sound.astro` di `BaseLayout`), cue per-komponen via
-  `data-sfx` / `data-sfx-hover` / event `ds:sfx`, cue `transition` pada link
-  internal, halaman audisi `/lab/sound`. **SOP portable (disukai user, bakal
-  dipakai ulang): `docs/sound-sop.md`** (§10 cara porting ke project lain).
-  Jangan tambah dependency/file audio tanpa izin.
-- Konvensi: carousel/rail pakai ←/→ saat section-nya di tengah viewport (Projects &
-  DomainRail ganti di 1050px, Snippets di 760px); button hover = swap warna; jangan
-  pakai lebar fixed-px yang bisa overflow (tes 320–3840px).
+KONDISI SEKARANG (detail: docs/ai-handoff.md):
+- **16 rute publik**: `/`, `/about`, `/partners`, `/recruitment`,
+  `/recruitment/roles/{6}`, `/hods/{6}` (+ `/lab/sound` internal, noindex).
+- **Homepage hero — revisi font & spacing (terbaru, 1 Oct 2026).** Frame Figma
+  `1430:2040`/hero `1430:2041`. Judul **Bluu Next Bold 72/86** (SIL OFL di-bundle,
+  token `--font-display`; Nasalization tetap untuk halaman lain), 2 baris gap 4,
+  gradient per baris; paragraf Manrope 18/25 lebar 655; spacing 80/64/16/24; tombol
+  `community` (hover #2F196F) & `explore` (hover #4C3B7E); navbar CTA **"Join Us"
+  93×43** (shared). **Art hero = image fill Figma persis** → hero MAE 27.96 → 3.18.
+  Referensi: `Home-Hero-Revisi.png`. Node teks `1430:2044/2045/2046`.
+- **About Us §1–4 SELESAI** (`/about`): ambient glow = **fill per-section Figma**
+  (`Philosophy` 163deg 63%/126%; `Ecosystem` 24.75deg 53%/133%) — MCP menormalkan
+  handle (lossy), fit dari PNG.
+- **Partners page SELESAI** (`/partners`): hero/OurPartners/WhyPartners, geometri
+  di-assert; logo partner masih placeholder DS.
+- **Recruitment LENGKAP** + 6 detail role + 6 detail HoDS.
+- **Navbar = persis Figma** (`Navbar.astro`): padding 24/80, logo 54×58.8 di 80/24,
+  link #707070/aktif #fff + underline gradient, menu 743 / gap 16 / space-between
+  (gap 195), CTA "Join Us" 93×43; scroll = backing kaca transparan, tanpa morph.
+  Mobile ≤1050 = hamburger full-screen.
+- **Motion GSAP + Three.js AKTIF** (Motion.astro/motion.ts): hero pinned + partikel
+  (lazy), scroll reveal, tilt, magnetic. Semua inert saat reduce. Idle hero = idle
+  halus seluruh plate (`animatePlate`, overscan 1.05).
+- **Sound prosedural SELESAI** (`docs/sound-sop.md`), 0 dependency/0 file audio.
+- **View Transitions AKTIF**; **SEO/OG/sitemap** selesai (origin dari `SITE_URL`).
+- Konvensi: carousel/rail pakai ←/→ saat section di tengah viewport (Projects &
+  DomainRail 1050px, Snippets 760px); button hover = swap warna; jangan pakai lebar
+  fixed-px yang bisa overflow (tes 320–3840).
 
-Kalau bikin/ubah section: update `docs/assets.md` + `docs/ai-handoff.md` dan
-tambah/cek assertion di `scripts/verify.mjs`.
+PRIORITAS BERIKUTNYA (lihat docs/ai-handoff.md §"Next plan"):
+1. **Lanjutkan revisi font & spacing homepage** ke section berikutnya, urut:
+   **Philosophy → What We Do → HoDS → Our Project → CTA**, pakai `--font-display`
+   (Bluu Next) + grid 8px sesuai frame `1430:2040`. Perlakukan tiap section seperti
+   hero: export node → ukur → implement → diff ±1px → update verify.
+2. Konten asli (`projects.ts`, tanggal recruitment) — butuh material user.
+3. Halaman **Hall of Frames / Contact** (nav masih `aria-disabled` — jangan bikin
+   URL palsu).
+4. Webfont Nasalization (berlisensi — jangan diakali).
 
-TODO utama: **ikuti `docs/ai-handoff.md` §"Next plan — untuk AI berikutnya"**.
-**Penting sebelum mulai:** perubahan terakhir (About glow + docs) **sudah
-di-commit lokal** (`28ce3b8`, `781278e`), working tree bersih, tapi **belum
-di-push**; `main` unggul **beberapa commit** dari `origin`/production `86b49c6`.
-Konfirmasi user dulu sebelum `git push origin main` (deploy ganda).
-**Perf P0 SELESAI (28 Sep 2026, HEAD `4fe4c19`):** Home mobile 1.33→0.98 MB —
-sorcerer → AVIF (`sorcerer-2x` 481→196 KB), video hero di-re-encode (home webm
-0.38 MB, recruitment 0.76 MB), poster tak di-fetch di HP, `sizes` Snippets +
-960w, `logo.png` 14 KB, hero bg/fig 180/86 KB. Sudah live juga: VT hardening
-(`verify-vt.mjs` uji Back/Forward + reload + reduce; sisa device nyata), OG
-hardening, hover kartu (domain/project/snippet) + hover cue project, keyboard
-carousel cues, dan fix parity hover home + rail edge fade (`6c79831`–`4fe4c19`).
-**P0(b) "splash jangan nunggu `three`" = BATAL** (HP memang tidak menunggu
-`three`; desktop sengaja).
-
-Prioritas berikutnya (opsional, urut): (a) AVIF hero art + ikon philosophy/glow
-kalau mau tembus Home ≤800 KB; (b) konten asli (project/tanggal recruitment);
-(c) halaman Hall of Frames / Partners / Contact — **About Us sudah selesai** (nav `aria-disabled` —
-jangan bikin URL palsu); (d) webfont Nasalization (berlisensi — jangan diakali).
-Sound selesai (`docs/sound-sop.md`).
+Kalau bikin/ubah section: WAJIB update `docs/assets.md` + `docs/ai-handoff.md` dan
+tambah/cek assertion + path referensi di `scripts/verify.mjs`.
 
 Sebelum mulai task di bawah: ringkas dulu pemahamanmu + rencana singkat, lalu kerjakan.
 
 TASK:
-<pahami semuanya dulu>
+<TULIS TASK DI SINI>
 ```

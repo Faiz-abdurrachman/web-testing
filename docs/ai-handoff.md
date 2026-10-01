@@ -67,8 +67,14 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   baris. Geometri kartu tetap. Lihat `docs/assets.md` §Available Roles.
 - **Runtime deps sengaja cuma** `astro` + `gsap` + `three`. Jangan tambah library
   lain tanpa tanya; lazy-import yang berat.
-- **Commit terbaru (30 Sep 2026; `main` = `origin/main` = `production/main` =
-  `5329a4a`, sudah sinkron):**
+- **Commit terbaru (1 Oct 2026; `main` = `origin/main` = `production/main` =
+  `e515b26`, sudah sinkron):**
+  - `e515b26` **Homepage hero — revisi font & spacing** — Bluu Next Bold
+    (OFL di-bundle) 72/86 gradient per baris, paragraf 18/25 lebar 655, spacing
+    80/64/16/24; tombol `community`/`explore`; navbar CTA "Join Us" 93×43;
+    **art hero = image fill Figma persis** (`Home-Hero-Plate.png` →
+    `background.webp`, `figure.webp` dihapus) → hero MAE 27.96 → 3.18. Detail di
+    §"Baru saja: Homepage hero".
   - `5329a4a` **hapus token Figma hardcoded** — `scripts/figma.mjs` dulu punya
     PAT di fallback; push ke production ditolak GitHub Push Protection. Fix:
     token dibuang (pakai env `FIGMA_API_KEY` / config MCP) + history

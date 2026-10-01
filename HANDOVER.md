@@ -18,6 +18,7 @@ production/main`. Kredensial lewat helper `store` (`~/.git-credentials`).
 - **STATE PALING TERKINI**: `docs/ai-handoff.md` — **baca ini lebih dulu** sebelum
   dokumen ini. Di situ ada checkpoint terbaru (View Transitions + sound system),
   gotcha, dan next plan.
+- **SOP presisi piksel (WAJIB sebelum sentuh UI)**: `docs/pixel-precision-sop.md`.
 - **SOP sound (portable, bisa dipakai ulang)**: `docs/sound-sop.md`.
 - **Prompt buat AI baru**: `docs/kickoff-prompt.md` (copy-paste starter).
 - **Prompt bikin halaman baru presisi**: `docs/page-build-prompt.md`.

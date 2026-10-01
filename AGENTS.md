@@ -6,9 +6,11 @@ Figma/PNG** with lightweight HTML/CSS.
 
 Human-facing docs: `HANDOVER.md` (full context) and `docs/assets.md`
 (per-section provenance + Figma nodes). For the current live state read
-`docs/ai-handoff.md` first. Read those for "why"; this file is the operating
-manual. A copy-paste starter for new agents lives in `docs/kickoff-prompt.md`;
-for building a new page/section use `docs/page-build-prompt.md`.
+`docs/ai-handoff.md` first. **Before touching any UI, read
+`docs/pixel-precision-sop.md` — the strict "how to hit pixel accuracy" protocol.**
+Read those for "why"; this file is the operating manual. A copy-paste starter for
+new agents lives in `docs/kickoff-prompt.md`; for building a new page/section use
+`docs/page-build-prompt.md`.
 
 ## Commands
 
@@ -36,7 +38,7 @@ npm run verify:vt         # View Transitions + sound-cue smoke (client-side nav)
 non-zero on any failed assertion.
 
 `scripts/responsive-audit.mjs` is a lightweight, per-route Playwright pass over
-all 14 routes × 26 widths (320 → 3840). It checks horizontal overflow, clipped
+all 16 routes × 26 widths (320 → 3840). It checks horizontal overflow, clipped
 text, carousel-arrow/card overlap and the navbar breakpoint, and writes
 `artifacts/responsive-audit.json`. Use it when the full `verify.mjs` is too slow
 or the dev server makes `waitUntil: networkidle` hang (see Verification workflow).
@@ -57,21 +59,43 @@ origin/main production/main` (all three should match).
 
 ## Non-negotiable rules
 
-1. **The reference PNG is the source of truth.** Figma CSS exports are only
-   hints. When they disagree, match the PNG.
-2. **All UI is real HTML/CSS.** Images are only artwork/photos. Never flatten a
+Full protocol: **`docs/pixel-precision-sop.md`**. The rules below are the law.
+
+1. **The reference PNG node (exported from Figma) is the source of truth.**
+   Figma CSS exports, MCP gradient strings and `effects` payloads are only hints
+   and are frequently lossy. When they disagree, match the exported PNG.
+2. **Start from the exported node, not the CSS.** For every section: get the
+   Figma node (MCP) → export the node PNG (1× + 2×) and the individual text /
+   component nodes via `figma_download_figma_images` → measure with `sharp`.
+3. **Bundle the exact font Figma uses** (check licence; OFL → vendor the woff2
+   into `public/fonts/` + `@font-face`). Declare the real weight to avoid faux
+   bold. Never swap a page's font globally mid-migration — unrevised pages keep
+   the old token. Nasalization is **not** bundleable (desktop licence).
+4. **Use image-fill artwork verbatim.** If a node has an `imageRef`, download the
+   raw image and bake it as-is (`fit: cover` mirroring the Figma FILL crop) — do
+   not reconstruct it from layers. Reconstruction was ~24 MAE vs the hero node;
+   the raw fill is ~2.7.
+5. **All UI is real HTML/CSS.** Images are only artwork/photos. Never flatten a
    screenshot (text, buttons, borders, cards, gradient text) into the UI.
-3. **Measure, don't guess.** Extract values from the reference PNG with `sharp`
-   (bbox, pixel diffs) and hardcode the measured numbers. Do not eyeball.
-4. **Keep geometry exact.** Existing values are asserted in `verify.mjs`
-   (`assert.deepEqual`). If a design change is intentional, update the assertion.
-5. **Always provide a `prefers-reduced-motion` fallback** for any animation.
-6. **Never break the bundle budget.** Runtime deps are `astro` + `gsap` (approved)
+   Text gradients are applied **per line** (`background-clip: text`).
+6. **Measure, don't guess.** Extract values from the reference PNG with `sharp`
+   (bbox, per-region MAE) and hardcode the measured numbers. "Ink" positions must
+   match the reference to **±1px**. Do not eyeball. If a region's diff is high,
+   isolate whether it is font, gradient or artwork before "fixing" the CSS.
+7. **Keep geometry exact.** Existing values are asserted in `verify.mjs`
+   (`assert.deepEqual`). If a design change is intentional, update the assertion
+   and the reference PNG path in the same commit.
+8. **Always provide a `prefers-reduced-motion` fallback** for any animation; the
+   reduced-motion render must remain pixel-exact (all audits run in `reduce`).
+9. **Never break the bundle budget.** Runtime deps are `astro` + `gsap` (approved)
    and `three`. Do not add other UI libraries without asking; lazy-import heavy
    code (the hero Three.js layer is a dynamic `import()`).
-7. **Commit per feature**, push to `main`. `origin` has **two push URLs**
-   (testing + production) — see "Git & deploy". Follow existing message style
-   (`feat:`, `fix:`, `docs:`, `chore:`).
+10. **Commit per feature**, push to `main`. `origin` has **two push URLs**
+    (testing + production) — see "Git & deploy". Follow existing message style
+    (`feat:`, `fix:`, `docs:`, `chore:`). Confirm with the user before pushing.
+11. **Update the docs with the code**: `docs/assets.md` (provenance + node ids),
+    `docs/ai-handoff.md` (state) and `AGENTS.md` (this file) whenever a section
+    or rule changes.
 
 ## SEO & sharing
 
@@ -124,6 +148,7 @@ public/og/og-default.jpg share card (served)
 public/                  served assets (fonts, images)
 assets/<page>/           raw PNGs read by verify/generate scripts (NOT served; unused ones archived outside repo)
 docs/assets.md           provenance per section (keep updated)
+docs/pixel-precision-sop.md  strict pixel-accuracy protocol (read before any UI)
 docs/sound-sop.md        sound system SOP (procedural Web Audio SFX + ambient)
 docs/ai-handoff.md       live "where we are now" handoff for the next AI agent
 artifacts/               verify output (git-ignored)
@@ -256,24 +281,29 @@ When adding/changing a section, update `docs/assets.md` and the relevant
 
 ## Current checkpoint
 
-- **HEAD (30 Sep 2026).** Situs pakai Astro **`<ClientRouter />`**
-  (navigasi klien + `AudioContext` persist; semua komponen re-init
-  `astro:page-load` + cleanup `astro:before-swap` — gotcha di atas +
-  `docs/sound-sop.md` §9).
-  **About Us (`/about`) Section 1-4 Complete:** `AboutHero.astro`, `VisiMisi.astro`,
-  `Philosophy.astro` (`variant="about"`, full-bleed gradient), dan `OurEcosystem.astro`
-  (`From Community to Impact`, pipeline 5 langkah rata baseline horizontal).
-  **Ambient glow About = fill per-section Figma** (bukan satu radial/parent):
-  `Philosophy` `linear-gradient(163deg,#050507 63%,#6C3BFF 126%)`, `Ecosystem`
-  `linear-gradient(24.75deg,#050507 53%,#6C3BFF 133%)` — lihat gotcha MCP di atas.
-  **Status 30 Sep 2026:** koreksi glow + docs **sudah di-commit lokal** (`28ce3b8`,
-  `781278e`), **belum di-push**; `main` unggul **beberapa commit** dari
-  `origin`/production `86b49c6`. Working tree bersih.
-  **Deploy GANDA**: `git push origin main` → testing + production.
-- **Next plan (prioritas).** Lanjutan About Us (section berikutnya sesuai Figma);
-  konten asli (`projects.ts`, tanggal recruitment); halaman Hall of
-  Frames / Partners / Contact (nav masih `aria-disabled`, jangan bikin URL
-  palsu); webfont Nasalization (berlisensi). Detail: `docs/ai-handoff.md`.
+- **HEAD (1 Oct 2026, `e515b26`; `main = origin/main = production/main`).**
+  Situs pakai Astro **`<ClientRouter />`** (navigasi klien + `AudioContext`
+  persist; semua komponen re-init `astro:page-load` + cleanup
+  `astro:before-swap` — `docs/sound-sop.md` §9).
+- **Homepage hero — revisi font & spacing (1 Oct 2026, `e515b26`).** Frame Figma
+  `1430:2040`, hero `1430:2041`. Judul **Bluu Next Bold 72/86** (OFL di-bundle,
+  token `--font-display`; Nasalization tetap untuk halaman lain), gradient per
+  baris, paragraf Manrope 18/25 lebar 655, spacing 80/64/16/24; tombol
+  `community`/`explore` (hover `#2F196F`/`#4C3B7E`); navbar CTA **"Join Us"
+  93×43** (shared, semua halaman). **Art hero = plate Figma persis**
+  (`Home-Hero-Plate.png` → `background.webp`, `figure.webp` dihapus) → hero MAE
+  **27.96 → 3.18**. Detail: `docs/assets.md` §Homepage hero +
+  `docs/pixel-precision-sop.md` §6.
+- **Sudah live:** About Us §1–4, Partners page (`/partners`), Recruitment
+  lengkap, 6 detail role, 6 detail HoDS, Navbar exact Figma, motion, sound,
+  SEO/OG, View Transitions. **16 rute publik** (+ `/lab/sound` internal).
+- **Next plan (prioritas).** Lanjutkan revisi font & spacing ke section homepage
+  lain — **Philosophy → What We Do → HoDS → Our Project → CTA** (pakai
+  `--font-display` + grid 8px sesuai frame `1430:2040`); lalu konten asli
+  (`projects.ts`, tanggal recruitment); halaman **Hall of Frames / Contact**
+  (nav masih `aria-disabled`, jangan bikin URL palsu); webfont Nasalization.
+  Detail: `docs/ai-handoff.md` §"Next plan".
+- **Deploy GANDA**: `git push origin main` → testing + production.
 - **Available Roles hover (`f92b88a`).** Kartu reaktif pointer: pool radial violet
   ikut kursor (`--mx/--my`), ember lean (`--gx/--gy` ±22/16px + `scale(1.06)`),
   divider draw dari kiri, panah overshoot. Gate `(pointer: fine)` +
@@ -308,7 +338,7 @@ role-glow-wave` = `scale: 1 → 1.04` saja (drift `translate ±6%` dibuang) →
 - Polish terakhir (setelah checkpoint recruitment): menu hamburger **full-screen**
   dengan animasi buka/tutup JS (fallback instant saat `prefers-reduced-motion`)
   plus hover pill membulat; panah carousel **kiri-kanan di desktop, bawah di
-  mobile**; skrip `scripts/responsive-audit.mjs` (14 halaman × 26 lebar) ALL PASS.
+  mobile**; skrip `scripts/responsive-audit.mjs` (16 halaman × 26 lebar) ALL PASS.
   Lihat `git log`.
 - **Available Roles cards (redesign 26 Sep 2026)**: proporsional penuh —
   `aspect-ratio: 1652 / 956` + `container-type: inline-size`, semua ukuran `cqw`;
