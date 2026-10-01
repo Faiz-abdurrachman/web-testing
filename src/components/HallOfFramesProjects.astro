@@ -1,10 +1,28 @@
 ---
-const projects = [
-  {
-    name: 'Arutala Aksara',
-    desc: 'Lorem ipsum Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum',
-  },
-];
+import { projects } from '../data/projects';
+
+const slides = projects.slice(0, 3);
+// Render two copies of the ring so the wrap always happens between off-window
+// slots. With a single copy (3 cards) the wrapping card slides visibly across
+// the centre; with six, every visible card moves exactly one slot per step.
+const deck = [...slides, ...slides];
+const DECK = deck.length;
+const slotOf = (index: number, active = 0) => {
+  let slot = index - active;
+  if (slot > DECK / 2) slot -= DECK;
+  else if (slot < -DECK / 2) slot += DECK;
+  return slot;
+};
+const slotClass = (slot: number) =>
+  slot === 0
+    ? 'is-center'
+    : slot === -1
+      ? 'is-left'
+      : slot === 1
+        ? 'is-right'
+        : slot < 0
+          ? 'is-far-left'
+          : 'is-far-right';
 ---
 
 <section class="hof-projects" aria-labelledby="hof-projects-title">
@@ -19,7 +37,13 @@ const projects = [
         experimentation, from meaningful research to impactful digital products.
       </p>
     </div>
-    <div class="projects-stage">
+    <div
+      class="projects-stage"
+      tabindex="0"
+      role="group"
+      aria-roledescription="carousel"
+      aria-label="Projects — use the arrow keys to browse"
+    >
       <img
         class="projects-glow"
         src="/images/hof/projects/glow.webp"
@@ -30,43 +54,258 @@ const projects = [
         loading="lazy"
         decoding="async"
       />
-      {['is-side is-left', 'is-side is-right', 'is-center'].map((cls) => (
-        <article class:list={['hof-project-card', ...cls.split(' ')]}>
-          <img
-            class="project-shot"
-            src="/images/hof/projects/shot.webp"
-            srcset="/images/hof/projects/shot.webp 1x, /images/hof/projects/shot-2x.webp 2x"
-            width="933"
-            height="573"
-            alt=""
-            loading="lazy"
-            decoding="async"
-          />
-          <span class="project-tint" aria-hidden="true" />
-          <span class="project-bar" aria-hidden="true" />
-          <div class="project-pills">
-            <span>HoDS Apa</span>
-            <span>Lomba/research</span>
-          </div>
-          <h3>{projects[0].name}</h3>
-          <p>{projects[0].desc}</p>
-        </article>
-      ))}
+      {deck.map((project, index) => {
+        const slot = slotOf(index);
+        return (
+          <article
+            class:list={[
+              'hof-project-card',
+              slotClass(slot),
+              { 'is-active': slot === 0 },
+            ]}
+            data-index={index}
+            aria-hidden={slot === 0 ? undefined : 'true'}
+            aria-labelledby={`hof-project-${index}`}
+          >
+            <div class="hof-project-inner">
+              <img
+                class="project-shot"
+                src="/images/hof/projects/shot.webp"
+                srcset="/images/hof/projects/shot.webp 1x, /images/hof/projects/shot-2x.webp 2x"
+                width="933"
+                height="573"
+                alt=""
+                loading={index === 0 ? 'eager' : 'lazy'}
+                decoding="async"
+              />
+              <span class="project-tint" aria-hidden="true" />
+              <span class="project-bar" aria-hidden="true" />
+              <div class="project-pills">
+                {project.tags.map((tag) => (
+                  <span>{tag}</span>
+                ))}
+              </div>
+              <h3 id={`hof-project-${index}`}>{project.title}</h3>
+              <p>{project.description}</p>
+            </div>
+          </article>
+        );
+      })}
+      <button
+        class="project-arrow prev"
+        type="button"
+        aria-label="Previous project"
+        data-dir="-1"
+        data-sfx="select"
+        data-sfx-hover="hover"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M15 5l-7 7 7 7"></path>
+        </svg>
+      </button>
+      <button
+        class="project-arrow next"
+        type="button"
+        aria-label="Next project"
+        data-dir="1"
+        data-sfx="select"
+        data-sfx-hover="hover"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 5l7 7-7 7"></path>
+        </svg>
+      </button>
     </div>
   </div>
-  <div class="projects-dots" aria-hidden="true">
-    <span />
-    <span class="is-active" />
-    <span />
+  <div class="projects-dots" role="tablist" aria-label="Select project">
+    {slides.map((project, index) => (
+      <button
+        class="dot"
+        type="button"
+        role="tab"
+        aria-label={project.title}
+        aria-selected={index === 0}
+        data-index={index}
+        data-sfx="click"
+        data-sfx-hover="hover"
+      />
+    ))}
   </div>
 </section>
 
+<script>
+  let projectsController: AbortController | undefined;
+  const keyCue = () =>
+    window.dispatchEvent(
+      new CustomEvent('ds:sfx', { detail: { cue: 'select' } }),
+    );
+
+  const initHofProjects = () => {
+    projectsController?.abort();
+    const ac = new AbortController();
+    projectsController = ac;
+    const { signal } = ac;
+
+    document
+      .querySelectorAll<HTMLElement>('.hof-projects')
+      .forEach((section) => {
+        const stage = section.querySelector<HTMLElement>('.projects-stage');
+        if (!stage) return;
+        const cards = [
+          ...stage.querySelectorAll<HTMLElement>('.hof-project-card'),
+        ];
+        const arrows = [
+          ...stage.querySelectorAll<HTMLButtonElement>('.project-arrow'),
+        ];
+        const dots = [
+          ...section.querySelectorAll<HTMLButtonElement>('.projects-dots .dot'),
+        ];
+        if (!cards.length) return;
+        const count = cards.length;
+        let active = 0;
+
+        const slotOf = (index: number) => {
+          let slot = index - active;
+          if (slot > count / 2) slot -= count;
+          else if (slot < -count / 2) slot += count;
+          return slot;
+        };
+
+        const slotClass = (slot: number) =>
+          slot === 0
+            ? 'is-center'
+            : slot === -1
+              ? 'is-left'
+              : slot === 1
+                ? 'is-right'
+                : slot < 0
+                  ? 'is-far-left'
+                  : 'is-far-right';
+        const slots = [
+          'is-center',
+          'is-left',
+          'is-right',
+          'is-far-left',
+          'is-far-right',
+        ];
+        const slideCount = dots.length || 1;
+        const render = () => {
+          cards.forEach((card, index) => {
+            const slot = slotOf(index);
+            card.classList.remove(...slots);
+            card.classList.add(slotClass(slot));
+            card.classList.toggle('is-active', slot === 0);
+            card.setAttribute('aria-hidden', slot === 0 ? 'false' : 'true');
+          });
+          dots.forEach((dot, index) =>
+            dot.setAttribute(
+              'aria-selected',
+              String(index === active % slideCount),
+            ),
+          );
+        };
+
+        const go = (delta: number) => {
+          active = (active + delta + count) % count;
+          render();
+        };
+
+        arrows.forEach((arrow) =>
+          arrow.addEventListener(
+            'click',
+            () => {
+              keyCue();
+              go(Number(arrow.dataset.dir));
+            },
+            { signal },
+          ),
+        );
+        dots.forEach((dot, index) =>
+          dot.addEventListener(
+            'click',
+            () => {
+              active = index;
+              render();
+            },
+            { signal },
+          ),
+        );
+        stage.addEventListener(
+          'keydown',
+          (event) => {
+            if (event.key === 'ArrowLeft') {
+              event.preventDefault();
+              keyCue();
+              go(-1);
+            } else if (event.key === 'ArrowRight') {
+              event.preventDefault();
+              keyCue();
+              go(1);
+            }
+          },
+          { signal },
+        );
+        addEventListener(
+          'keydown',
+          (event) => {
+            if (event.defaultPrevented) return;
+            const target = event.target as HTMLElement | null;
+            if (
+              target?.closest(
+                'input, textarea, select, [contenteditable="true"]',
+              )
+            )
+              return;
+            const rect = section.getBoundingClientRect();
+            const center = innerHeight / 2;
+            if (rect.top > center || rect.bottom < center) return;
+            if (event.key === 'ArrowLeft') {
+              event.preventDefault();
+              keyCue();
+              go(-1);
+            } else if (event.key === 'ArrowRight') {
+              event.preventDefault();
+              keyCue();
+              go(1);
+            }
+          },
+          { signal },
+        );
+        let startX: number | null = null;
+        stage.addEventListener('pointerdown', (event) => {
+          startX = event.clientX;
+        });
+        stage.addEventListener('pointerup', (event) => {
+          if (startX === null) return;
+          const delta = event.clientX - startX;
+          startX = null;
+          if (Math.abs(delta) > 40) go(delta < 0 ? 1 : -1);
+        });
+        stage.addEventListener('pointercancel', () => {
+          startX = null;
+        });
+        const io = new IntersectionObserver(
+          ([entry]) =>
+            section.classList.toggle('is-idle', !entry.isIntersecting),
+          { rootMargin: '120px' },
+        );
+        io.observe(section);
+        signal.addEventListener('abort', () => io.disconnect());
+        render();
+      });
+  };
+
+  document.addEventListener('astro:page-load', initHofProjects);
+</script>
+
 <style>
   /* Matches Figma node 1439:4655 (1440 × 1181): padding 80, header (803 wide,
-     gap 24) + gap 80, stage 1280 × 730 (three overlapping browser-window cards:
-     centre 933 × 730 on top, sides 800 × 625.94), then the dots (gap 19).
+     gap 24) + gap 80, stage 1280 × 730 (three browser-window cards: centre
+     933 × 730 on top, sides 800 × 625.94), then the dots (gap 19).
      The stage is a `inline-size` container so the whole composition scales
-     proportionally (1cqw = 12.8px at the 1280 reference). */
+     proportionally (1cqw = 12.8px at the 1280 reference). The stage also
+     doubles as a 3D coverflow: each card's slot is a class + transform, so
+     navigation animates smoothly (blur/rotation only under no-preference). */
   .hof-projects {
     position: relative;
     display: flex;
@@ -154,20 +393,56 @@ const projects = [
 
   .hof-project-card {
     position: absolute;
-    container-type: inline-size;
+    top: 50%;
+    left: 50%;
+    width: 72.891cqw;
     aspect-ratio: 933 / 730;
-    border-radius: 1.929cqw;
-    overflow: hidden;
-    background: #0e0626;
+    container-type: inline-size;
+    transform: translate(-50%, -50%) translate3d(0, 0, 0) rotateY(0deg) scale(1);
+    transform-origin: center;
+    backface-visibility: hidden;
     box-shadow:
       0.201cqw 0.134cqw 0.536cqw rgb(0 0 0 / 10%),
       0.871cqw 0.469cqw 1.005cqw rgb(0 0 0 / 9%),
       1.875cqw 1.139cqw 1.34cqw rgb(0 0 0 / 5%),
       3.35cqw 1.943cqw 1.541cqw rgb(0 0 0 / 1%);
   }
+  .hof-project-card.is-left {
+    transform: translate(-50%, -50%) translate3d(-18.75cqw, 0.625cqw, 0)
+      rotateY(0deg) scale(0.85746);
+    z-index: 1;
+  }
+  .hof-project-card.is-right {
+    transform: translate(-50%, -50%) translate3d(18.75cqw, 1.17cqw, 0)
+      rotateY(0deg) scale(0.85746);
+    z-index: 1;
+  }
+  /* Cards parked outside the visible window (slot |n| ≥ 2). They stay in the
+     DOM so stepping one slot animates (fade + slide) instead of popping. */
+  .hof-project-card.is-far-left,
+  .hof-project-card.is-far-right {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .hof-project-card.is-center {
+    /* Figma's centre card sits 0.5px right of the geometric centre (x174 at 1280). */
+    transform: translate(-50%, -50%) translate3d(0.039cqw, 0, 0) rotateY(0deg)
+      scale(1);
+    z-index: 2;
+  }
+  /* Clip on an untransformed inner wrapper so the rounded corners stay round
+     while the card itself is 3D-transformed (see pixel-precision SOP gotcha). */
+  .hof-project-inner {
+    position: absolute;
+    inset: 0;
+    border-radius: 1.929cqw;
+    overflow: hidden;
+    clip-path: inset(0 round 1.929cqw);
+    background: #0e0626;
+  }
   /* Gradient rim as an overlay so the shot fills the full 933px card (a real
      border would shrink the content box and shift the browser mockup). */
-  .hof-project-card::after {
+  .hof-project-inner::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -191,25 +466,6 @@ const projects = [
       linear-gradient(#000 0 0);
     mask-composite: exclude;
     pointer-events: none;
-  }
-
-  .hof-project-card.is-left {
-    left: 0;
-    top: 4.6875cqw;
-    width: 62.5cqw;
-    z-index: 1;
-  }
-  .hof-project-card.is-right {
-    left: 37.5cqw;
-    top: 5.234cqw;
-    width: 62.5cqw;
-    z-index: 1;
-  }
-  .hof-project-card.is-center {
-    left: 13.594cqw;
-    top: 0;
-    width: 72.891cqw;
-    z-index: 2;
   }
 
   .project-shot {
@@ -283,38 +539,131 @@ const projects = [
     line-height: 2.572cqw;
   }
 
+  .project-arrow {
+    position: absolute;
+    top: 50%;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    transform: translateY(-50%);
+    border: 1px solid rgb(203 197 255 / 60%);
+    border-radius: 50%;
+    background: rgb(16 9 35 / 85%);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+  }
+  .project-arrow svg {
+    width: 26px;
+    height: 26px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .project-arrow.prev {
+    left: 0;
+  }
+  .project-arrow.next {
+    right: 0;
+  }
+
   .projects-dots {
     display: flex;
     align-items: center;
     gap: 5px;
   }
-  .projects-dots span {
+  .projects-dots .dot {
     width: 13px;
     height: 13px;
+    padding: 0;
+    border: 0;
     border-radius: 50%;
     background: #707070;
+    cursor: pointer;
   }
-  .projects-dots span.is-active {
+  .projects-dots .dot[aria-selected='true'] {
     background: linear-gradient(153deg, #6c3bff 0%, #9483c6 100%);
   }
 
-  @media (max-width: 900px) {
-    .projects-header h2 {
-      font-size: clamp(34px, 7vw, 56px);
-      line-height: 1.2;
+  @media (prefers-reduced-motion: no-preference) {
+    .projects-stage {
+      perspective: 1600px;
     }
-    .hof-project-card.is-side {
+    .hof-project-card {
+      transition:
+        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 0.45s ease,
+        opacity 0.45s ease;
+      will-change: transform, filter;
+    }
+    .hof-project-card.is-left {
+      transform: translate(-50%, -50%) translate3d(-18.75cqw, 0.625cqw, -40px)
+        rotateY(10deg) scale(0.85746);
+      filter: blur(6px) brightness(0.72);
+    }
+    .hof-project-card.is-right {
+      transform: translate(-50%, -50%) translate3d(18.75cqw, 1.17cqw, -40px)
+        rotateY(-10deg) scale(0.85746);
+      filter: blur(6px) brightness(0.72);
+    }
+    .hof-project-card.is-far-left {
+      transform: translate(-50%, -50%) translate3d(-18.75cqw, 0.625cqw, -80px)
+        rotateY(16deg) scale(0.72);
+      filter: blur(8px) brightness(0.6);
+    }
+    .hof-project-card.is-far-right {
+      transform: translate(-50%, -50%) translate3d(18.75cqw, 1.17cqw, -80px)
+        rotateY(-16deg) scale(0.72);
+      filter: blur(8px) brightness(0.6);
+    }
+    .projects-glow {
+      animation: hof-glow 7s ease-in-out infinite alternate;
+    }
+    .hof-projects.is-idle .projects-glow {
+      animation-play-state: paused;
+    }
+  }
+
+  @keyframes hof-glow {
+    from {
+      opacity: 0.7;
+      transform: scale(1) translateX(0);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1.04) translateX(0.5%);
+    }
+  }
+
+  @media (max-width: 1050px) {
+    .project-arrow {
+      top: auto;
+      bottom: -66px;
+      transform: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .hof-project-card,
+    .hof-project-card.is-center,
+    .hof-project-card.is-left,
+    .hof-project-card.is-right {
+      position: relative;
+      top: auto;
+      left: auto;
+      width: min(100%, 560px);
+      transform: none;
+      margin-inline: auto;
+    }
+    .hof-project-card:not(.is-center) {
       display: none;
     }
     .projects-stage {
       aspect-ratio: auto;
-    }
-    .hof-project-card.is-center {
-      position: relative;
-      left: auto;
-      top: auto;
-      width: 100%;
-      margin-inline: auto;
     }
   }
 
@@ -325,6 +674,15 @@ const projects = [
     .projects-header p {
       font-size: 16px;
       line-height: 24px;
+    }
+    .project-arrow {
+      width: 40px;
+      height: 40px;
+      bottom: -56px;
+    }
+    .project-arrow svg {
+      width: 20px;
+      height: 20px;
     }
   }
 </style>

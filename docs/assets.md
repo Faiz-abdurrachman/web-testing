@@ -82,16 +82,45 @@ assets:contact` regenerates it and the icons.
   `#6C3BFF` pills. The **136deg gradient rim is an `::after` + mask overlay**,
   not a border: a real 2px border shrank the content box (929 vs 933) and shifted
   the mockup. The Figma drop shadow is reproduced with `box-shadow` in stage-cqw.
-- `1439:4695` dots: three 13px circles (`#707070`), the middle active with a
+- `1439:4695` dots: three 13px circles (`#707070`), the active one a
   `153deg #6C3BFF → #9483C6` gradient. All text is **placeholder**
   ("Arutala Aksara", lorem).
+- **3D carousel (1 Oct 2026).** The static stage became an interactive coverflow.
+  Each slot is a **class + transform** (`is-left` / `is-center` / `is-right`) on
+  the same `.hof-project-card`, so CSS `transition` (transform/filter/opacity
+  `0.62s cubic-bezier(0.22,0.61,0.36,1)`) animates the movement smoothly — no JS
+  transform maths, which keeps the reduced-motion geometry exact. Slot transforms
+  reproduce the Figma boxes: centre `translate(-50%,-50%) translateX(0.039cqw)`
+  (Figma centre is at x174 = 0.5px right of the stage centre), sides
+  `translate(±18.75cqw, +0.625/+1.17cqw) scale(0.85746)`.
+  - **Only under `prefers-reduced-motion: no-preference`:** side cards get
+    `rotateY(±10deg) translateZ(-40px)` + `blur(6px) brightness(.72)`, and the
+    glow animates (`hof-glow`, `7s alternate`, paused off-screen via
+    `is-idle`/IntersectionObserver). Under `reduce` / no-JS the render is the
+    static Figma composition (sharp, no rotation).
+  - **Arrows** `.project-arrow prev/next` (`.project-arrow` is in `verify.mjs`'s
+    hide-list, so it never affects the reference diff): 52px discs at the stage
+    sides `80/678` and `1308/678` on desktop; ≤1050px they move below the stage.
+    Dots are real `<button>`s driving the carousel; keyboard ←/→ (when the section
+    is centred) and drag/swipe work. Slides come from `src/data/projects.ts`
+    (first 3; placeholder), each card reusing the HoF browser-mockup shot. The
+    deck is **rendered twice (6 DOM cards)** so the ring wrap always happens
+    between off-window slots (`is-far-left`/`is-far-right`, `opacity: 0`) — with
+    a single copy the wrapping card visibly slid across the centre. Every visible
+    card therefore moves exactly one slot per step, and all slots share the same
+    `translate → translate3d → rotateY → scale` transform list so the browser
+    interpolates per-function (no matrix fallback).
+  - **View Transitions:** the controller re-inits on `astro:page-load` and tears
+    down on `astro:before-swap` via `AbortController`.
 - `npm run assets:hof` bakes `public/images/hof/projects/{shot,glow}.webp`
   (the blur-baked glow ships as a single 1200w asset — the 3514px export was
   visually identical and much heavier). `verify.mjs` asserts the `hofProjects`
   geometry (section 1440 × 1181, header 318.5/80/803, stage 80/339/1280 × 730,
-  centre 933 × 730 at 254/339, sides 800 × 625.9, dots 49 × 13, overflow 0) and
-  diffs vs `HoF-Projects-1x.png` (MAE **2.96**). Responsive: the stage scales
-  proportionally down to 900px, then only the centre card shows.
+  centre 933 × 730 at 254/339, sides 800 × 625.9, dots 49 × 13, arrows 52 × 52 at
+  80/678 & 1308/678, overflow 0) and diffs vs `HoF-Projects-1x.png` (MAE **3.05**
+  — the side cards now show the neighbouring project, up from 2.96 when all three
+  repeated "Arutala"). Responsive: the coverflow runs down to 900px, below which
+  only the centre card shows and the arrows sit under the dots row.
 
 ## Hall of Frames — Featured Sorcerers (1 October 2026)
 

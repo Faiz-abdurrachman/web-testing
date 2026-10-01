@@ -2435,6 +2435,8 @@ try {
       left: rel('.hof-project-card.is-left'),
       right: rel('.hof-project-card.is-right'),
       dots: rel('.projects-dots'),
+      arrowPrev: rel('.project-arrow.prev'),
+      arrowNext: rel('.project-arrow.next'),
       overflow: document.documentElement.scrollWidth - innerWidth,
     };
   });
@@ -2446,6 +2448,8 @@ try {
     left: { x: 80, y: 399, width: 800, height: 625.9 },
     right: { x: 560, y: 406, width: 800, height: 625.9 },
     dots: { x: 695.5, y: 1088, width: 49, height: 13 },
+    arrowPrev: { x: 80, y: 678, width: 52, height: 52 },
+    arrowNext: { x: 1308, y: 678, width: 52, height: 52 },
     overflow: 0,
   });
   await page

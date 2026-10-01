@@ -311,6 +311,17 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   `1445:5066`) contains the navbar; since `verify.mjs` hides `.navbar`, the
   whole-section MAE reads high. Judge precision **excluding the navbar band**
   (Contact: full 2.76 → ~1.28 below the navbar).
+- **`container-type: inline-size` decides what a card's inner `cqw` means.**
+  `.hof-project-card` is itself a container (base 933), so its inner `cqw` values
+  resolve against the card, not the 1280 stage. Dropping it while refactoring the
+  HoF carousel made every inner size blow up (stage MAE 34.8). Keep it when
+  moving a card to transform-based positioning.
+- **The HoF Project highlights is a 3D coverflow (`HallOfFramesProjects.astro`,
+  node `1439:4655`).** Slots are classes + transforms (`is-left`/`is-center`/
+  `is-right`) so a CSS `transition` animates them; side cards blur/rotate only
+  under `prefers-reduced-motion: no-preference`, so the `reduce` render stays the
+  static Figma composition (verified). Arrows are `.project-arrow` (in
+  `setNavbarHidden`'s hide-list — they never affect the reference diff).
 
 ## Fonts
 

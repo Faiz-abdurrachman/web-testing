@@ -10,7 +10,15 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
 
-- **Contact precision pass — Figma GLASS effect (PALING BARU, 1 Oct 2026).**
+- **HoF Project highlights — 3D carousel (PALING BARU, 1 Oct 2026).**
+  `HallOfFramesProjects.astro` (`1439:4655`) dari statis → **coverflow 3D**:
+  slot = class + transform (`is-left`/`is-center`/`is-right`), transisi mulus,
+  side card `blur(6px)` + `rotateY(±10deg)` + `translateZ(-40px)`, glow animasi
+  (pause off-screen), panah sisi (bawah ≤1050px), dots/keyboard/drag. Reduce =
+  statis Figma (geometri persis, MAE 3.05). Slides = `projects.ts` slice(0,3).
+  Gotcha: `container-type: inline-size` wajib di `.hof-project-card`.
+  Detail: `docs/assets.md` §Hall of Frames — Project highlights.
+- **Contact precision pass — Figma GLASS effect (1 Oct 2026).**
   `ContactHero.astro`: pill `1445:5072`, kartu info `1445:5077`, panel form
   `1445:5098` pakai Figma **GLASS** (`effects:[{type:"GLASS"}]` via REST API — MCP
   `figma_get_figma_data` **menyembunyikannya**). Diemulasi **ring `::after` +
@@ -203,6 +211,35 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   **opsional** (AVIF hero art + ikon philosophy/glow), konten asli (project,
   tanggal, partner/logo, member HoF), webfont Nasalization. VT hardening & OG
   **selesai**.
+
+## Baru saja: HoF Project highlights — 3D carousel (1 Oct 2026)
+
+- **Section `1439:4655`** (`HallOfFramesProjects.astro`, `/hall-of-frames`) naik
+  dari statis jadi **3D coverflow** seperti `Our Project` homepage, plus yang
+  diminta user: transisi mulus, side card agak blur, glow sisi hidup, panah.
+- **Cara:** tiap slot = **class + transform** (`is-center`/`is-left`/`is-right`,
+  plus `is-far-left`/`is-far-right` = kartu di luar window, `opacity:0`) pada
+  `.hof-project-card` yang sama → `transition` CSS yang menganimasikan (tanpa JS
+  transform maths), jadi **reduce tetap statis & pixel-exact**. **Deck dirender 2×
+  (6 kartu)** supaya wrap selalu antar-slot tak terlihat → tiap kartu terlihat
+  bergerak tepat 1 slot (halus, tanpa lintasan menyeberang tengah); semua slot
+  pakai daftar transform yang sama (`translate → translate3d → rotateY → scale`)
+  supaya interpolasi per-fungsi. Easing `cubic-bezier(0.16,1,0.3,1)` 0.7s.
+  Transform slot mereproduksi kotak Figma: centre `translate(-50%,-50%)
+translateX(0.039cqw)` (Figma centre 0.5px kanan dari tengah stage), sisi
+  `translate(±18.75cqw, +0.625/+1.17cqw) scale(0.85746)`.
+- **Hanya `no-preference`:** sisi dapat `rotateY(±10deg) translateZ(-40px)` +
+  `blur(6px) brightness(.72)`; glow `hof-glow` 7s alternate (di-pause off-screen
+  lewat `is-idle` + IntersectionObserver). **Reduce = komposisi Figma statis**.
+- **Panah** `.project-arrow` 52px di sisi stage `80/678` & `1308/678` (desktop),
+  ≤1050px pindah bawah; dots `<button>`; keyboard ←/→ + drag; cue sound `select`.
+  Slides = `src/data/projects.ts` slice(0,3) (placeholder), kartu pakai shot HoF.
+- **Verifikasi:** `verify.mjs` `hofProjects` (geometri + panah) **MAE 3.05**
+  (dari 2.96 — side card kini menampilkan project tetangga), `browserErrors: []`;
+  `responsive-audit` **468 ALL PASS**; `build` 19 halaman; `format:check` OK.
+- **Gotcha:** `.hof-project-card` WAJIB tetap `container-type: inline-size` (kalau
+  tidak, `cqw` isi kartu resolve ke stage 1280 → konten membesar); override mobile
+  `transform:none` butuh spesifisitas `.is-center` (2 class) supaya menang.
 
 ## Baru saja: Contact precision pass — Figma GLASS effect (1 Oct 2026)
 
@@ -1261,6 +1298,10 @@ sound atau navigasi; detail P0–P2 ada di "Perf audit & rencana" di atas.
      di pill (win kecil ~2 MAE), submit inset shadow, footer 5.91, artwork 3.9.
      **Cek juga** surface glass di halaman lain (About/Partners/HoF) via REST —
      `glow`/`card` Figma sering GLASS dan MCP tidak menampilkannya.
+   - **Side task (HoF Project highlights 3D carousel, 1 Oct 2026):** **selesai**
+     (lihat "Baru saja"). Sisa opsional: project/shot asli (sekarang pakai shot
+     yang sama untuk 3 slide), clone/lebih banyak slide biar wrap mulus, dan
+     samakan perilaku di homepage `Our Project` (`1430:2146`) kalau mau konsisten.
 1. **Perf P0 — SELESAI (28 Sep 2026).** (a) `sizes` Snippets + 960w, (d)
    `logo.png`/hero `background`/`figure` (lihat "P0 pass"), lalu (b) **sorcerer →
    AVIF** (`sorcerer-2x` 481→196 KB), (c) **video hero di-re-encode** (home webm
