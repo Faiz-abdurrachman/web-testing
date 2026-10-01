@@ -1,5 +1,33 @@
 # Asset provenance
 
+## Recruitment Page — Hero Section & Apply Now Button (2 October 2026)
+
+- Section node **`1436:3506`** ("About Us Hero Section", 1440 × 866, `padding: 0 80px`), frame page Recruitment `1436:3505`, file `JYUzJK1hFqaEwL6DpdDvjp`.
+  Reference: `assets/assets recruitment page/hero section/Recruitment-Hero-Revisi-1x.png` (1440 × 866) & `Recruitment-Hero-Revisi-2x.png` (2880 × 1732).
+  Isolated nodes: `Recruitment-Hero-Header1-2x.png` (`1436:3508`), `Recruitment-Hero-Header2-2x.png` (`1436:4043`), `Recruitment-Button-Set-2x.png` (`1436:3502`).
+- Content Frame 2733 (`1436:4047`): 1280 × 310 at `x: 80, y: 278`, vertical gap `48px` to button:
+  - Hero Content Frame (`1436:3507`): 1280 × 219, vertical gap `16px` between heading and description.
+  - Heading Frame 2732 (`1436:4044`): 900 × 176 at `x: 270, y: 278`, vertical gap `4px` between 2 lines:
+    - Line 1 (`1436:3508`): "Your Next Chapter", **Bluu Next Bold 700 72px / 86px** (token `--font-display`), linear gradient per line `linear-gradient(180deg, #FFFFFF 15%, #999999 42%, #FFFFFF 80%)` (`background-clip: text`), text-align center. Ink width 621px (CSS) matching reference ±0.5px.
+    - Line 2 (`1436:4043`): "Start here", **Bluu Next Bold 700 72px / 86px** (token `--font-display`), linear gradient per line `linear-gradient(180deg, #FFFFFF 15%, #999999 42%, #FFFFFF 80%)`, text-align center. Ink width 330.5px (CSS).
+  - Hero Description (`1436:3509`): "Join Data Sorcerers and turn your curiosity into capability, experiments, research, and real-world projects.", Manrope Medium 500 18px / 27px, color `#EDE8FF`, 900 × 27px at `x: 270, y: 470`. Letter-spacing `-0.176px` ensures single-line rendering without premature word wrapping.
+  - Vertical spacing: `h1` at y=278 (height 176), gap `16px`, description at y=470 (height 27), gap `48px`, button at y=545 (height 43, ends at 588). Symmetrical vertical centering: top space 278px, bottom space 278px (`278 + 310 + 278 = 866px`).
+- Button Component Set `Apply Noww Button` (`1436:3502`):
+  - Size: 120 × 43px (with "Apply Now" text), padding `8px 16px`, border-radius `20px`, font Manrope Medium 500 18px / 27px white. Sits at `x: 660, y: 545`.
+  - Primary default (`1436:3501`): radial gradient `#6C3BFF` (0%) -> `#9B7BFF` (50%) -> `#6C3BFF` (100%), specular inner shadows `inset 0 2px 1.2px rgb(255 255 255 / 50%), inset -2px -2px 1.4px #bca6ff, inset -2px -2px 4px rgb(188 166 255 / 90%)`.
+  - Primary hover (`1436:3499`): background smoothly transitions to solid `#2F196F` (`rgba(47, 25, 111, 1)`).
+  - Secondary default (`1436:3498`): solid `#1A1A1A` (`rgba(26, 26, 26, 1)`), 12px blur, inner shadows.
+  - Secondary hover (`1436:3500`): background solid `#4C3B7E` (`rgba(76, 59, 126, 1)`).
+- Measurements & Verification:
+  - `verify.mjs` assertions:
+    - section: `{ width: 1440, height: 866, top: 0 }`
+    - h1: `{ x: 270, y: 278, width: 900, height: 176 }`
+    - copy: `{ x: 270, y: 470, width: 900, height: 27 }`
+    - button: `{ x: 660, y: 545, width: 120, height: 43 }`
+  - Responsive audit: 18 routes × 26 widths (468/468) **ALL PASS**.
+  - Navbar audit: **ALL PASS**.
+  - ClientRouter (VT): **ALL PASS**, pageerrors: none.
+
 ## Detail HoDS Pages (/hods/[id]) — Frame Height 1280px & Spacing (2 October 2026)
 
 - Frame nodes Figma (file `JYUzJK1hFqaEwL6DpdDvjp`, page `Design`):

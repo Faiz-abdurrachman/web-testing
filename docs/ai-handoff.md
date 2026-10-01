@@ -10,7 +10,20 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
 
-- **Detail HoDS Pages (/hods/[id]) — penyesuaian height 1280px & spacing (PALING BARU, 2 Oct 2026).**
+- **Recruitment Hero Section & Button Component — revisi font, button & 8pt grid (PALING BARU, 2 Oct 2026).**
+  `RecruitmentHero.astro` & `Button.astro` direvisi presisi sesuai Frame Figma `1436:3506` (Page Recruitment `1436:3505`) dan Component Set `1436:3502` (`Apply Noww Button`):
+  - Heading 2 baris Bluu Next Bold 700 72px / 86px (`--font-display`): "Your Next Chapter" (ink width 621px) & "Start here" (ink width 330.5px), gap 4px, linear gradient per-line `linear-gradient(180deg, #FFFFFF 15%, #999999 42%, #FFFFFF 80%)`.
+  - Hero description Manrope Medium 500 18px / 27px color `#EDE8FF` 900 × 27px (gap ke heading 16px, letter-spacing -0.176px single line).
+  - Button Component Set `Apply Noww Button` (`1436:3502`, 120 × 43px, padding 8px 16px, border-radius 20px, gap ke description 48px):
+    - Primary default (`1436:3501`): radial gradient #6C3BFF (0%) -> #9B7BFF (50%) -> #6C3BFF (100%), specular inner shadows.
+    - Primary hover (`1436:3499`): background transisi halus ke solid `#2F196F`.
+    - Secondary default (`1436:3498`): solid `#1A1A1A`, 12px blur, inner shadows.
+    - Secondary hover (`1436:3500`): background solid `#4C3B7E`.
+  - Section desktop 1440 × 866px exact. Vertically centered Frame 2733 (1280 × 310) dengan top space 278px dan bottom space 278px exact (`278 + 310 + 278 = 866px`).
+  - Geometri di-assert di `scripts/verify.mjs`: `width: 1440, height: 866, top: 0, h1: (270, 278, 900, 176), copy: (270, 470, 900, 27), button: (660, 545, 120, 43)`.
+  - Full audit: build 0 errors, verify.mjs exit 0, responsive audit 18 rute × 26 widths (468/468) ALL PASS, navbar audit ALL PASS, verify:vt ALL PASS, seo:audit ALL PASS, format:check ALL PASS.
+  - Detail: `docs/assets.md` §Recruitment Page — Hero Section & Apply Now Button.
+- **Detail HoDS Pages (/hods/[id]) — penyesuaian height 1280px & spacing (2 Oct 2026).**
   `HoDSDetail.astro` direvisi presisi sesuai Frame Figma `864:18857`, `864:18904`, `864:18959`, `864:19013`, `864:19024`, `864:19035` dan callout resmi Gembala ("Penyesuaian Height (tinggi card) menjadi 1280px untuk ALL Detile HoDS"):
   - Container `.hods-detail-inner`: `width: 100%; max-width: 1440px; min-height: 1280px; padding: 80px; gap: 56px;` (desktop 1440 × 1280 exact).
   - Back Link (`Frame 2391`): `151 × 27px` di `x: 80, y: 80`. Gap ke hero card `56px`.

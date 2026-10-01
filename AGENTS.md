@@ -338,6 +338,17 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   Situs pakai Astro **`<ClientRouter />`** (navigasi klien + `AudioContext`
   persist; semua komponen re-init `astro:page-load` + cleanup
   `astro:before-swap` — `docs/sound-sop.md` §9).
+- **Recruitment Page Hero & Apply Now Button — revisi font, buttons & spacing (2 Oct 2026).**
+  Frame Figma `1436:3506` (1440×866px, padding `0 80px`), Content Frame 2733 (1280×310px, gap `48px`
+  ke button, vertically centered top 278px / bottom 278px). Header Frame 2732 (900×176px, gap `4px`):
+  Line 1 `1436:3508` "Your Next Chapter", Line 2 `1436:4043` "Start here" dengan **Bluu Next Bold 700 72/86**
+  (token `--font-display`), linear gradient per line, text-align center. Hero description `1436:3509` Manrope Medium 500
+  18/27 `#EDE8FF` (900×27px, gap ke heading 16px, `letter-spacing: -0.176px` 1 baris). Button Component Set
+  `Apply Noww Button` (`1436:3502`, 120×43px, radius 20px, Manrope Medium 500 18/27): Primary default `1436:3501`
+  (radial gradient `#6C3BFF` -> `#9B7BFF` -> `#6C3BFF`, specular inner shadow) & hover `#2F196F`; Secondary default
+  `1436:3498` (`#1A1A1A` 12px blur) & hover `#4C3B7E`. Legacy button base `.primary` (205px) dipertahankan untuk
+  homepage & Cta. Audit responsif 18 rute × 26 widths (468/468) & verify.mjs exit 0. Geometri diff 0.0px.
+  Detail: `docs/assets.md` §Recruitment Page — Hero Section & Apply Now Button.
 - **Detail HoDS Pages (/hods/[id]) — penyesuaian height 1280px & spacing (2 Oct 2026).**
   Frame Figma `864:18857`, `864:18904`, `864:18959`, `864:19013`, `864:19024`, `864:19035`
   dan callout Gembala: "Penyesuaian Height (tinggi card) menjadi 1280px untuk ALL Detile HoDS".

@@ -20,16 +20,18 @@ import Button from './Button.astro';
   </div>
   <canvas class="hero-canvas" aria-hidden="true"></canvas>
   <div class="hero-content">
-    <h1 id="recruitment-hero-title">
-      <span>YOUR NEXT CHAPTER</span>
-      <span>START HERE.</span>
-    </h1>
-    <p>
-      Join Data Sorcerers and turn your curiosity into capability, experiments,
-      research, and real-world projects.
-    </p>
+    <div class="hero-header-group">
+      <h1 id="recruitment-hero-title">
+        <span>Your Next Chapter</span>
+        <span>Start here</span>
+      </h1>
+      <p>
+        Join Data Sorcerers and turn your curiosity into capability,
+        experiments, research, and real-world projects.
+      </p>
+    </div>
+    <Button variant="apply">Apply Now</Button>
   </div>
-  <Button variant="secondary">Apply Now</Button>
 </section>
 <script>
   import { mountHeroParticles } from '../scripts/hero-particles';
@@ -174,9 +176,8 @@ import Button from './Button.astro';
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 63px;
-    min-height: min(866px, 100svh);
-    padding: 140px var(--page-gutter) 80px;
+    height: 866px;
+    padding: 0 var(--page-gutter);
     overflow: clip;
     text-align: center;
   }
@@ -235,38 +236,56 @@ import Button from './Button.astro';
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 34px;
+    gap: 48px;
+    width: 1280px;
+    max-width: 100%;
+  }
+  .hero-header-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
     width: 100%;
   }
-  /* Keep the CTA above the particle canvas. */
-  .recruitment-hero > .button {
+  /* Keep the CTA above the particle canvas and match Figma 120px hug width. */
+  .hero-content :global(.button) {
     position: relative;
     z-index: 1;
+    width: 120px;
   }
   h1 {
     margin: 0;
     width: 900px;
     max-width: 100%;
-    font-family: var(--font-heading);
-    font-size: 80px;
-    font-weight: 400;
-    line-height: 98px;
-    background: linear-gradient(180deg, #fff 0%, #d8d1ed 55%, #fff 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-display);
+    font-size: 72px;
+    font-weight: 700;
+    line-height: 86px;
+    letter-spacing: 0;
+    text-align: center;
   }
   h1 span {
     display: block;
+    height: 86px;
+    background: linear-gradient(180deg, #ffffff 15%, #999999 42%, #ffffff 80%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
   p {
     margin: 0;
     width: 900px;
     max-width: 100%;
     color: #ede8ff;
+    font-family: var(--font-body);
     font-size: 18px;
     font-weight: 500;
     line-height: 27px;
+    letter-spacing: -0.176px;
   }
   @media (min-width: 1921px) {
     .artwork {
@@ -288,30 +307,46 @@ import Button from './Button.astro';
   }
   @media (max-width: 1100px) {
     .recruitment-hero {
+      height: auto;
       min-height: min(760px, 100svh);
-      gap: 48px;
+      padding: 120px var(--page-gutter) 60px;
+    }
+    .hero-content {
+      gap: 32px;
+    }
+    .hero-header-group {
+      gap: 16px;
     }
     h1 {
       font-size: clamp(40px, 6vw, 72px);
       line-height: 1.225;
     }
+    h1 span {
+      height: auto;
+    }
   }
   @media (max-width: 600px) {
     .recruitment-hero {
       /* svh, not dvh — see Hero.astro: dvh reflows with the address bar. */
+      height: auto;
       min-height: 100vh;
       min-height: 100svh;
-      gap: clamp(28px, 7vw, 48px);
       justify-content: center;
       padding-top: clamp(96px, 12svh, 120px);
       padding-bottom: clamp(64px, 9svh, 96px);
     }
     .hero-content {
-      gap: clamp(16px, 4.5vw, 24px);
+      gap: clamp(24px, 6vw, 36px);
+    }
+    .hero-header-group {
+      gap: clamp(12px, 3.5vw, 16px);
     }
     h1 {
       font-size: clamp(23px, 6.7vw, 40px);
       line-height: 1.2;
+    }
+    h1 span {
+      height: auto;
     }
     p {
       font-size: clamp(15px, 3.9vw, 18px);

@@ -877,9 +877,9 @@ try {
     width: 1440,
     height: 866,
     top: 0,
-    h1: { x: 270, y: 277.5, width: 900, height: 196 },
-    copy: { x: 270, y: 507.5, width: 900, height: 27 },
-    button: { x: 659.21875, y: 597.5, width: 121.546875, height: 51 },
+    h1: { x: 270, y: 278, width: 900, height: 176 },
+    copy: { x: 270, y: 470, width: 900, height: 27 },
+    button: { x: 660, y: 545, width: 120, height: 43 },
   });
   assert.equal(
     await page.locator('.desktop-nav .nav-link.active').textContent(),
@@ -887,7 +887,7 @@ try {
     'Recruitment must be the active navigation link on its page',
   );
   const recruitHeroReference = await sharp(
-    'assets/assets recruitment page/hero section/About Us Hero Section.png',
+    'assets/assets recruitment page/hero section/Recruitment-Hero-Revisi-1x.png',
   )
     .resize(1440, 866)
     .removeAlpha()

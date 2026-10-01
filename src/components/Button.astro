@@ -69,8 +69,6 @@ const { href, variant = 'primary', compact = false } = Astro.props;
       inset -2px -2px 4px rgb(178 211 255 / 90%);
     outline: 2px solid #cbc5ff;
     outline-offset: -1px;
-  }
-  .primary {
     width: 205px;
     background: #6c3bff;
     overflow: hidden;
@@ -106,6 +104,12 @@ const { href, variant = 'primary', compact = false } = Astro.props;
       inset -8px -6px 8px rgb(226 202 255 / 25%),
       inset -2px -2px 4px rgb(178 211 255 / 90%);
   }
+  .primary:hover {
+    background: #2f196f;
+  }
+  .primary:hover::before {
+    opacity: 0;
+  }
   /* Figma CTA Navbar (component set 97:483 / Component 5): white pill,
      4px/16px padding, 2px gradient rim (148deg), 172x43px. */
   .white {
@@ -138,43 +142,37 @@ const { href, variant = 'primary', compact = false } = Astro.props;
     mask-composite: exclude;
     pointer-events: none;
   }
-  /* Figma "Secondary Buttom" (component set 97:442): dark glass pill that hugs
-     its label. The rim highlights are baked from the reference PNG: a bright
-     diagonal ring (top-left and bottom-right) plus two soft inset rims, which
-     matches the exported rasterization more closely than the CSS translation of
-     the raw Figma shadows (Figma's inset blur washes the whole pill). */
+  /* Figma "Apply Noww Button" Secondary (1436:3498):
+     solid #1A1A1A, 12px blur, inner shadows, 43px tall, border-radius 20px;
+     Secondary hover (1436:3500) = solid #4C3B7E. */
   .secondary {
-    overflow: hidden;
-    background: #333;
-    backdrop-filter: blur(6px);
+    height: 43px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+    background-color: #1a1a1a;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     box-shadow:
-      inset -6px -6px 2px -4px #b3b3b3,
-      inset 4px 4px 2px -4px #b3b3b3,
-      inset -3px -3px 3px -1px rgb(255 255 255 / 50%);
+      inset 0 0 40px rgb(242 242 242 / 25%),
+      inset 0 0 0 1px rgb(153 153 153 / 60%),
+      inset 0 2px 2px -1px rgb(255 255 255 / 80%),
+      inset 2px 2px 3px -2px rgb(255 255 255 / 35%),
+      inset -2px -2px 3px -2px rgb(196 191 220 / 45%);
   }
-  .secondary::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 2px;
-    background: linear-gradient(
-      135deg,
-      #fff 0%,
-      rgb(255 255 255 / 0%) 26%,
-      rgb(255 255 255 / 0%) 74%,
-      #fff 100%
-    );
-    mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    mask-composite: exclude;
-    pointer-events: none;
+  .secondary:hover {
+    background-color: #4c3b7e;
   }
-  /* Figma "Secondary Buttom" instance used by the role detail pages
-     (97:442 / 563:530): violet radial pill that hugs its label. */
+  /* Apply Now variant for role detail pages & instances: radial violet, hover #2F196F. */
   .apply {
-    overflow: hidden;
+    height: 43px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
     background: radial-gradient(
       circle at 26% 0%,
       #6c3bff 0%,
@@ -182,28 +180,12 @@ const { href, variant = 'primary', compact = false } = Astro.props;
       #6c3bff 100%
     );
     box-shadow:
-      inset -2px -2px 4px rgba(178 211 255 / 90%),
-      inset -8px -6px 8px rgb(226 202 255 / 25%),
-      inset -2px -2px 1.4px #97bfff,
-      inset 0 2px 1.2px #cfdfff;
+      inset 0 2px 1.2px rgb(255 255 255 / 50%),
+      inset -2px -2px 1.4px #bca6ff,
+      inset -2px -2px 4px rgb(188 166 255 / 90%);
   }
-  .apply::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 2px;
-    background: linear-gradient(
-      148deg,
-      rgb(203 197 255 / 50%) 0%,
-      rgb(47 90 255 / 50%) 50%,
-      rgb(238 245 255 / 50%) 100%
-    );
-    mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    mask-composite: exclude;
-    pointer-events: none;
+  .apply:hover {
+    background: #2f196f;
   }
   .glass {
     width: 198px;
@@ -303,9 +285,8 @@ const { href, variant = 'primary', compact = false } = Astro.props;
   .explore:hover {
     background: #4c3b7e;
   }
-  /* Hover: dark pills turn violet, violet pills turn dark, white turns violet. */
+  /* Hover: glass and white turn violet. */
   .glass:hover,
-  .secondary:hover,
   .white:hover {
     background: radial-gradient(
       circle at 26% 0%,
@@ -325,42 +306,12 @@ const { href, variant = 'primary', compact = false } = Astro.props;
   .glass:hover::before {
     opacity: 0;
   }
-  .glass:hover::after,
-  .secondary:hover::after {
+  .glass:hover::after {
     background: linear-gradient(
       148deg,
       rgb(203 197 255 / 50%) 0%,
       rgb(47 90 255 / 50%) 50%,
       rgb(238 245 255 / 50%) 100%
-    );
-  }
-  .primary:hover,
-  .apply:hover {
-    background: #333;
-    box-shadow:
-      inset -6px -6px 2px -4px #b3b3b3,
-      inset 4px 4px 2px -4px #b3b3b3,
-      inset -3px -3px 3px -1px rgb(255 255 255 / 50%);
-  }
-  .primary:hover {
-    outline-color: #999;
-  }
-  .primary:hover::before {
-    opacity: 0;
-  }
-  .primary:hover::after {
-    box-shadow:
-      inset -6px -6px 2px -4px #b3b3b3,
-      inset 4px 4px 2px -4px #b3b3b3,
-      inset -3px -3px 3px -1px rgb(255 255 255 / 50%);
-  }
-  .apply:hover::after {
-    background: linear-gradient(
-      135deg,
-      #fff 0%,
-      rgb(255 255 255 / 0%) 26%,
-      rgb(255 255 255 / 0%) 74%,
-      #fff 100%
     );
   }
   @media (prefers-reduced-motion: reduce) {
