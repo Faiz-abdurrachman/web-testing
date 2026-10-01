@@ -85,85 +85,76 @@ KONDISI SEKARANG (detail: docs/ai-handoff.md):
 - **18 rute publik**: `/`, `/about`, `/partners`, `/recruitment`,
   `/hall-of-frames`, `/contact`, `/recruitment/roles/{6}`, `/hods/{6}`
   (+ `/lab/sound` internal, noindex). **Semua link navbar aktif.**
-- **Hall of Frames SELESAI** (`/hall-of-frames`, file Figma
-  `JYUzJK1hFqaEwL6DpdDvjp`): Hero `1439:4507` (MAE 4.34), Featured Sorcerers
-  `1439:4512` (2.01), Project highlights `1439:4655` (2.96), Community
-  Milestone `1439:4699` (1.33). Aset: `npm run assets:hof`.
-- **Contact SELESAI** (`/contact`, page `1445:5065`): `ContactHero.astro`
-  (hero `1445:5066`, MAE 3.00; form panel 0.57) — hero kiri + form asli +
-  artwork swirl. Aset: `npm run assets:contact`. Kartu info sengaja **non-link**
-  (destinasi belum diberikan — jangan bikin URL karangan).
-- **Homepage hero — revisi font & spacing (1 Oct 2026).** Frame Figma
-  `1430:2040`/hero `1430:2041`. Judul **Bluu Next Bold 72/86** (SIL OFL di-bundle,
-  token `--font-display`; Nasalization tetap untuk halaman lain), 2 baris gap 4,
-  gradient per baris; paragraf Manrope 18/25 lebar 655; spacing 80/64/16/24; tombol
-  `community` (hover #2F196F) & `explore` (hover #4C3B7E); navbar CTA **"Join Us"
-  93×43** (shared). **Art hero = image fill Figma persis** → hero MAE 27.96 → 3.18.
-- **Homepage Our Philosophy — revisi font & spacing (2 Oct 2026).** Frame Figma
-  `1430:2040`, section `1430:2052`. Judul **Bluu Next Bold 700 56/67** (token
-  `--font-display`), 2 baris `gap: 4px`, `&nbsp;` menjaga double-space Figma (587px width exact).
-  Kolom desktop 591px di `x: 766, y: 205`. Strict 8pt spacing: eyebrow gap 8px, title-to-grid 48px,
-  icon-to-font 24px (sesuai desainer Gembala), title-to-subtitle 8px, grid 30px×92px. Section MAE **2.568**.
-- **Homepage What We Do — revisi font, cards & spacing (2 Oct 2026).** Frame Figma
+- **Detail HoDS Pages (/hods/[id]) SELESAI (2 Oct 2026).**
+  Frame Figma `864:18857`, `864:18904`, `864:18959`, `864:19013`, `864:19024`, `864:19035`
+  dan callout Gembala: "Penyesuaian Height (tinggi card) menjadi 1280px untuk ALL Detile HoDS".
+  Container `.hods-detail-inner` `min-height: 1280px`, gap `56px`, padding `80px`.
+  Back link di `(80, 80)`, hero card di `(80, 163)` (1280×279), tabs di `(80, 498)` (gap 8px),
+  role body gap `32px`, block gap `16px`. Geometri di-assert pada seluruh 6 rute (`/hods/{data,core,language,vision,product,growth}`).
+  Regional MAE `/hods/language`: Top **0.5816**, Content **1.3456**, Bottom **2.3912**.
+- **Homepage Choose Your Domain (HoDS) SELESAI (2 Oct 2026).** Frame Figma
+  `1430:2040`, section `1430:2138`. Judul **Bluu Next Bold 700 56/67.2** (token
+  `--font-display`), gradient per baris, Eyebrow `House of Data Sorcerers`
+  (Figma `GLASS` effect, 159×26, gap ke heading 8px). Subtitle Manrope 16/24 white
+  (gap ke heading 24px). Gap header ke rail kartu 74px. Rail Frame 2509 (1280×436),
+  gap antar card diperkecil ke 32px dan ukuran kartu diperlebar ke 405×436px di koordinat
+  `x: [80, 517, 954, 1391, 1828, 2265], y: 303`. Judul kartu Manrope Bold 700 22/33,
+  deskripsi Manrope 400 16/24 white, gap teks 8px. Keyboard navigation (step 437px) &
+  attract-mode step scroll utuh. Section MAE **2.4051**. Geometri diff 0.0px.
+- **Homepage What We Do SELESAI (2 Oct 2026).** Frame Figma
   `1430:2040`, section `1430:2089`. Judul **Bluu Next Bold 700 56/67.2** (token `--font-display`),
   2 baris `gap: 4px`. Eyebrow `What We Do` (Figma `GLASS` effect, gap ke heading 8px).
   4 kartu pillar diperlebar ke **391px × 254px** di `(80,80)`, `(969,80)`, `(80,506)`, `(969,506)`.
   Judul kartu **Manrope Bold 700 26/39**, gap nomor-ke-judul 0px, gap judul-ke-desc 16px, gradient rim 1px `135deg`.
   Section MAE **2.5790**. Geometri diff 0.0px.
-- **About Us §1–4 SELESAI** (`/about`, dibangun dari file Figma LAMA
-  `RntmRWAgLrh5utgzcjrUik`): ambient glow = **fill per-section Figma**
-  (`Philosophy` 163deg 63%/126%; `Ecosystem` 24.75deg 53%/133%) — MCP menormalkan
-  handle (lossy), fit dari PNG. **CATATAN:** ada desain About Us BARU di file
-  `JYUzJK1hFqaEwL6DpdDvjp` node `1439:4184` (hero Bluu Next 80 + section Our
-  Team) — user minta **JANGAN disentuh dulu**; `/about` masih versi lama.
-- **Partners page SELESAI** (`/partners`): hero/OurPartners/WhyPartners, geometri
-  di-assert; logo partner masih placeholder DS.
-- **Recruitment LENGKAP** + 6 detail role + 6 detail HoDS.
-- **Navbar = persis Figma** (`Navbar.astro`): padding 24/80, logo 54×58.8 di 80/24,
-  link #707070/aktif #fff + underline gradient, menu 743 / gap 16 / space-between
-  (gap 195), CTA "Join Us" 93×43; scroll = backing kaca transparan, tanpa morph.
-  Mobile ≤1050 = hamburger full-screen.
-- **Motion GSAP + Three.js AKTIF** (Motion.astro/motion.ts): hero pinned + partikel
-  (lazy), scroll reveal, tilt, magnetic. Semua inert saat reduce. Idle hero = idle
-  halus seluruh plate (`animatePlate`, overscan 1.05).
-- **Sound prosedural SELESAI** (`docs/sound-sop.md`), 0 dependency/0 file audio.
-- **View Transitions AKTIF**; **SEO/OG/sitemap** selesai (origin dari `SITE_URL`).
-- Konvensi: carousel/rail pakai ←/→ saat section di tengah viewport (Projects &
-  DomainRail 1050px, Snippets 760px); button hover = swap warna; jangan pakai lebar
-  fixed-px yang bisa overflow (tes 320–3840).
+- **Homepage Our Philosophy SELESAI (2 Oct 2026).** Frame Figma
+  `1430:2040`, section `1430:2052`. Judul **Bluu Next Bold 700 56/67** (token
+  `--font-display`), 2 baris `gap: 4px`, `&nbsp;` menjaga double-space Figma (587px width exact).
+  Kolom desktop 591px di `x: 766, y: 205`. Strict 8pt spacing: eyebrow gap 8px, title-to-grid 48px,
+  icon-to-font 24px (sesuai desainer Gembala), title-to-subtitle 8px, grid 30px×92px. Section MAE **2.568**.
+- **Homepage hero SELESAI (1 Oct 2026).** Frame Figma
+  `1430:2040`/hero `1430:2041`. Judul **Bluu Next Bold 72/86** (SIL OFL di-bundle,
+  token `--font-display`), 2 baris gap 4, gradient per baris; paragraf Manrope 18/25 lebar 655;
+  tombol `community` (hover #2F196F) & `explore` (hover #4C3B7E); navbar CTA **"Join Us" 93×43**. Hero MAE **3.18**.
+- **Hall of Frames SELESAI** (`/hall-of-frames`): Hero 4.34, Featured 2.01, Projects 3D 2.96, Milestone 1.33.
+- **Contact SELESAI** (`/contact`): Hero 2.76 (konten 1.28), form 0.57.
+- **About Us §1–4 SELESAI** (`/about`): versi lama (jangan diubah sebelum izin user).
+- **Partners SELESAI** (`/partners`): hero, OurPartners, WhyPartners.
 
-PRIORITAS BERIKUTNYA (lihat docs/ai-handoff.md §"Next plan"):
-1. **Lanjutkan revisi font & spacing homepage: House of Data Sorcerers (HoDS) / "Choose Your Domain" (`1430:2138`)**:
-   - Frame Figma: `1430:2138` (1440 × 819, `padding: 80px`).
-   - Header group `1430:2139` (`Frame 2284`, 1280 × 149):
-     - `Frame 2283` (`1280 × 101`, `VERTICAL gap: 8px`):
-       - Eyebrow CTA `1430:2141` (`159 × 26px`, padding `4px 12px`, border-radius 32px, `rgba(255,255,255,0.15)` with Figma `GLASS` effect, text: "House of Data Sorcerers").
-       - Heading `1430:2143` ("Choose Your Domain", `538 × 67px`, **Bluu Next Bold 700 56px / 67.2px**, per-line clipped `linear-gradient(211.54deg, #FFFFFF 32.8%, #999999 49.8%, #FFFFFF 73.04%)`, gap ke eyebrow: **8px**).
-     - Subtitle `1430:2144` (Manrope Regular 16/24 white, `1280 × 24px`, gap ke heading: **24px**).
-   - Gap header group ke rail kartu: **74px** (`Frame 2284` ke `HoDS Card`).
-   - Rail kartu `HoDS Card` (`1430:2145` / `DomainRail.astro`): `1280 × 436px` (`Frame 2509`, `gap: 32px`, 6 kartu domain `405 × 436px`).
-   - Lanjut per section: **Our Project (`1430:2146`) → CTA Recruitment (`1430:2162`)**.
-2. **About Us revisi ke file baru** (`1439:4184`, hero + Our Team) — **tunggu
-   izin user** (sekarang masih versi lama).
-3. Konten asli (`projects.ts`, tanggal recruitment, logo partner 20 slot, member/
-   project/milestone HoF) — butuh material user.
-4. Webfont Nasalization (berlisensi — jangan diakali).
-
-Kalau bikin/ubah section: WAJIB update `docs/assets.md` + `docs/ai-handoff.md` dan
-tambah/cek assertion + path referensi di `scripts/verify.mjs`.
+PRIORITAS BERIKUTNYA:
+1. **Revisi Recruitment Page — Hero Section (`1436:3506`) & Button Component (`1436:3502`)**:
+   - Frame Figma: `1436:3506` ("About Us Hero Section" di file `JYUzJK1hFqaEwL6DpdDvjp`, page `1436:3505`). Ukuran frame 1440 × 866.
+   - Heading `1436:4044` (`Frame 2732`, 900 × 176): **Bluu Next Bold 700 72px / 86.4px** (token `--font-display`), 2 baris gap 4px: "Your Next Chapter" (`1436:3508`) & "Start here" (`1436:4043`), linear-gradient.
+   - Description `1436:3509`: Manrope Medium 500 18px / 27px, `#EDE8FF`, 900 × 27px, gap ke heading 16px.
+   - Frame 2733 (`1280 × 310`): gap 48px ke tombol Apply Now.
+   - Button component set `Apply Noww Button` (`1436:3502`):
+     - Primary default (`1436:3501`): 120 × 43px, padding 8px 16px, radial gradient `#6C3BFF` (0%), `#9B7BFF` (50%), `#6C3BFF` (100%), inner shadows, Manrope Medium 500 18/27 white.
+     - Primary hover (`1436:3499`): background berubah solid ke `#2F196F` (`rgba(47, 25, 111, 1)`), transisi halus.
+     - Secondary default (`1436:3498`): `#1A1A1A` (`rgba(26, 26, 26, 1)`).
+     - Secondary hover (`1436:3500`): `#4C3B7E` (`rgba(76, 59, 126, 1)`).
+2. Lanjut ke section Recruitment berikutnya:
+   - What You Will Do (`1436:3522`)
+   - Who Should Join (`1436:3523`)
+   - Available Roles (`1436:3540`)
+   - Selection Timeline (`1436:3582`)
+   - FAQ (`1436:3597`)
+   - Snippets (`1436:3612`)
+   - CTA Recruitment (`1436:3622`)
 
 Sebelum mulai task di bawah: ringkas dulu pemahamanmu + rencana singkat, lalu kerjakan.
 
 TASK:
-Revisi section House of Data Sorcerers (HoDS) / "Choose Your Domain" pada homepage
-berdasarkan Figma node 1430:2138 (frame 1430:2040, file JYUzJK1hFqaEwL6DpdDvjp).
+Revisi Recruitment Hero Section (`src/components/RecruitmentHero.astro`) dan Button Component (`src/components/Button.astro`) berdasarkan Figma node 1436:3506 dan component set 1436:3502 (file JYUzJK1hFqaEwL6DpdDvjp).
 Ikuti SOP presisi piksel (docs/pixel-precision-sop.md):
-1. Export referensi 1x & 2x: node 1430:2138 ke assets/assets home page/hods/Home-HoDS-Revisi-{1x,2x}.png
-   lewat node scripts/figma.mjs export 1430:2138 1 png ...
-2. Export cutouts header Frame 2284 dan Eyebrow 1430:2141.
-3. Update Heading font ke Bluu Next Bold 700 56px / 67.2px, gradient per baris, gap eyebrow 8px.
-4. Update Subtitle Manrope 16/24, gap 24px.
-5. Pertahankan attract-mode rail dan interaksi keyboard pada DomainRail.astro.
-6. Ukur dengan sharp, sesuaikan geometri di scripts/verify.mjs, jalankan responsive audit,
-   pastikan MAE seminimal mungkin (<3.0) dan semua tes exit 0.
+1. Export referensi 1x & 2x: node 1436:3506 ke assets/assets recruitment page/hero section/Recruitment-Hero-Revisi-{1x,2x}.png lewat:
+   node scripts/figma.mjs export 1436:3506 1 png "assets/assets recruitment page/hero section/Recruitment-Hero-Revisi-1x.png"
+   node scripts/figma.mjs export 1436:3506 2 png "assets/assets recruitment page/hero section/Recruitment-Hero-Revisi-2x.png"
+2. Update Heading font ke Bluu Next Bold 700 72px / 86.4px (token --font-display), 2 baris ("Your Next Chapter" & "Start here"), gap 4px, gradient per baris (background-clip: text).
+3. Update Hero Description Manrope Medium 500 18/27 #EDE8FF, gap 16px dari heading.
+4. Update Button Component (src/components/Button.astro) dengan hover state persis component set 1436:3502:
+   - primary default: radial gradient #6C3BFF -> #9B7BFF -> #6C3BFF dengan specular inner shadow.
+   - primary hover: solid background #2F196F (rgba(47, 25, 111, 1)).
+   - sec default: solid #1A1A1A, sec hover: solid #4C3B7E.
+5. Pertahankan Three.js / background visual effect, sound cue (data-sfx="open" / hover), dan responsive behavior.
+6. Ukur dengan sharp, sesuaikan assertions di scripts/verify.mjs, jalankan responsive audit, dan pastikan seluruh test suite lolos exit 0.
 ```
