@@ -9,6 +9,7 @@ export interface RoleDetail {
   about: string;
   requirements: string[];
   contact: string;
+  whatsapp?: string;
   cardImage: string;
   // The Figma "Detile Roles - DATA INTELLIGENCE" frame centers its content,
   // while the other role frames are top-aligned. Data and core group the back
