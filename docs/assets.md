@@ -1,6 +1,63 @@
 # Asset provenance
 
-## Recruitment Page — Hero Section & Apply Now Button (2 October 2026)
+## Homepage — CTA Recruitment Section (2 October 2026)
+
+- Section node **`1430:2162`** ("CTA Recruicment Section", 1440 × 554, `padding: 80px`), frame page Homepage `1430:2040`, file `JYUzJK1hFqaEwL6DpdDvjp`.
+  Reference: `assets/assets home page/cta/Home-CTA-Revisi-1x.png` (1440 × 554) & `Home-CTA-Revisi-2x.png` (2880 × 1108).
+  Isolated nodes: `Home-CTA-Header-2x.png` (`1430:2164`), `Home-CTA-Title-2x.png` (`1430:2168`).
+- Layout & Spacing (Strict 8-Point Grid):
+  - Section desktop: 1440 × 554px, padding 80px.
+  - Card Panel Frame 2393 (`1430:2163`): 1280 × 394px at `x: 80, y: 80`, padding `64px 80px`, gap `48px` to action button.
+    Fills: `rgba(98, 80, 255, 0.10)`, border radius 20px, 1px glass rim `linear-gradient(135deg, #e0dcff, #504677 48%, #e0dcff)`.
+  - Header Frame 2300 (`1430:2164`): 1118 × 173px, gap `24px`:
+    - Frame 2298 (`1430:2165`): 1118 × 101px, gap `8px` between eyebrow and title.
+      - Eyebrow CTA `1430:2166`: "Recruitment" (Manrope Regular 12/18, padding `4px 12px`, border-radius 32px, `rgba(255,255,255,0.15)` with Figma `GLASS` effect). Sits at `x: 673.4, y: 145, w: 93.2, h: 26`.
+      - Heading `1430:2168`: "Ready to Become a Sorcery?", **Bluu Next Bold 700 56px / 67px** (token `--font-display`), linear gradient per line `linear-gradient(180deg, #FFFFFF 15%, #999999 42%, #FFFFFF 80%)` (`background-clip: text`), text-align center. Sits at `x: 161, y: 179, w: 1118, h: 67`.
+    - Copy Text `1430:2169`: "Join a community where your learning can become experimentation, your ideas can become projects, and your work can create real impact.", Manrope Regular 400 16/24, color `#ffffff`, 586 × 48px at `x: 427, y: 270`.
+  - Action Button Frame 2299 (`1430:2170`): 201 × 43px centered at `x: 619.5, y: 366`:
+    - Primary button (`<Button variant="community">Join the Community</Button>`): radial gradient `#6C3BFF (0%) -> #9B7BFF (50%) -> #6C3BFF (100%)`, specular inner shadows, hover `#2F196F`.
+    - Glow backdrop Frame 2392 (`1430:2172`): `left: 268.83px, top: 270px, 1000 × 271px`.
+- Measurements & Precision:
+  - `verify.mjs` assertions:
+    - section: `{ width: 1440, height: 554, top: 4309 }`
+    - elements:
+      - `.recruitment-panel`: `{ x: 80, y: 80, width: 1280, height: 394 }`
+      - `.eyebrow`: `{ x: 673.4, y: 145, width: 93.2, height: 26 }`
+      - `h2`: `{ x: 161, y: 179, width: 1118, height: 67 }`
+      - `.recruitment-copy p`: `{ x: 427, y: 270, width: 586, height: 48 }`
+      - `.recruitment-actions`: `{ x: 619.5, y: 366, width: 200.9, height: 43 }`
+  - Section MAE: **`3.1427`** (evaluated against `Home-CTA-Revisi-1x.png`).
+  - Regional MAE: Button & glow **2.3200**, Header **4.9498**, Copy **6.3726**, Outer padding **0.0000**.
+  - All verification gates PASS: build (0 error), verify.mjs (exit 0), responsive audit (468/468 PASS), navbar audit (PASS), verify:vt (PASS).
+
+## Homepage — Our Project Section (2 October 2026)
+
+- Section node **`1430:2146`** ("Our Project Section", 1440 × 910, `padding: 80px`, gap: 82px), frame page Homepage `1430:2040`, file `JYUzJK1hFqaEwL6DpdDvjp`.
+  Reference: `assets/assets home page/our project/Home-Project-Revisi-1x.png` (1440 × 910) & `Home-Project-Revisi-2x.png` (2880 × 1820).
+  Isolated nodes: `Home-Project-Header-2x.png` (`1430:2147`), `Home-Project-Title-2x.png` (`1430:2150`).
+- Layout & Spacing (Strict 8-Point Grid):
+  - Section desktop: 1440 × 910px, padding 80px, background `#050507`.
+  - Header Frame 2295 (`1430:2147`): 1280 × 101px at `x: 80, y: 80`, gap `8px` between eyebrow and title:
+    - Eyebrow CTA `1430:2148`: "Our Project" (Manrope Regular 12/18, padding `4px 12px`, border-radius 32px, `rgba(255,255,255,0.15)` with Figma `GLASS` effect). Sits at `x: 80, y: 80, w: 86.6, h: 26`.
+    - Heading `1430:2150`: "What Our Sorcery Create", **Bluu Next Bold 700 56px / 67px** (token `--font-display`), linear gradient per line `linear-gradient(180deg, #FFFFFF 15%, #999999 42%, #FFFFFF 80%)` (`background-clip: text`), text-align left. Sits at `x: 80, y: 114, w: 647.7, h: 67`. Ink width 646px matching reference ±0.5px.
+  - Gap Header-to-Stage: **`82px`** (top of stage = 80 + 101 + 82 = 263px).
+  - 3D Coverflow Stage Frame 2296 (`1430:2151`): 1280 × 567px at `x: 80, y: 263`.
+    - Active center card Frame 2264 (`1430:2153`): 549 × 567px centered at `x: 445.5, y: 263`.
+    - Image area: 549 × 349px (`y: 0 to 349`).
+    - Tags: Manrope Regular 12/18 in `#6C3BFF` pills at `y: 305px`.
+    - Title: Manrope Bold 700 26/39 white at `x: 53, y: 384`.
+    - Description: Manrope Regular 400 16/24 white 451 × 72px at `x: 53, y: 437` (3 lines).
+    - Reduced motion fallback: static pixel-exact composition with decorative underglow disabled under reduce.
+- Measurements & Precision:
+  - `verify.mjs` assertions:
+    - section: `{ width: 1440, height: 910, top: 3399 }`
+    - elements:
+      - `.eyebrow`: `{ x: 80, y: 80, width: 86.6, height: 26 }`
+      - `h2`: `{ x: 80, y: 114, width: 647.7, height: 67 }`
+      - `.project-card.is-active`: `{ x: 445.5, y: 263, width: 549, height: 567 }`
+  - Section MAE: **`5.0764`** (evaluated against `Home-Project-Revisi-1x.png`).
+  - Regional MAE: Card Image **2.9047**, Card Tags **6.0592**, Card Text **5.9010**, Header **6.6790**, Bottom space **0.0000**.
+  - All verification gates PASS: build (0 error), verify.mjs (exit 0), responsive audit (468/468 PASS), navbar audit (PASS), verify:vt (PASS).
 
 - Section node **`1436:3506`** ("About Us Hero Section", 1440 × 866, `padding: 0 80px`), frame page Recruitment `1436:3505`, file `JYUzJK1hFqaEwL6DpdDvjp`.
   Reference: `assets/assets recruitment page/hero section/Recruitment-Hero-Revisi-1x.png` (1440 × 866) & `Recruitment-Hero-Revisi-2x.png` (2880 × 1732).

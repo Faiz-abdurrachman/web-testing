@@ -405,6 +405,11 @@ try {
   });
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.locator('.projects').scrollIntoViewIfNeeded();
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await document.fonts.load('700 56px "Bluu Next"');
+    await Promise.all([...document.images].map((image) => image.decode()));
+  });
   await page
     .locator('.projects')
     .screenshot({ path: 'artifacts/projects-desktop.png' });
@@ -412,20 +417,21 @@ try {
     .locator('.projects')
     .evaluate((section) => {
       const box = section.getBoundingClientRect();
+      const round = (n) => Math.round(n * 10) / 10;
       return {
-        width: box.width,
-        height: box.height,
-        top: box.top + scrollY,
+        width: Math.round(box.width),
+        height: Math.round(box.height),
+        top: Math.round(box.top + scrollY),
         elements: Object.fromEntries(
-          ['h2', '.project-card.is-active'].map((selector) => {
+          ['.eyebrow', 'h2', '.project-card.is-active'].map((selector) => {
             const r = section.querySelector(selector).getBoundingClientRect();
             return [
               selector,
               {
-                x: r.x - box.x,
-                y: r.y - box.y,
-                width: r.width,
-                height: r.height,
+                x: round(r.x - box.x),
+                y: round(r.y - box.y),
+                width: round(r.width),
+                height: round(r.height),
               },
             ];
           }),
@@ -434,22 +440,23 @@ try {
     });
   assert.deepEqual(projectsGeometry, {
     width: 1440,
-    height: 917,
+    height: 910,
     top: 3399,
     elements: {
-      h2: { x: 80, y: 120, width: 751.296875, height: 68 },
+      '.eyebrow': { x: 80, y: 80, width: 86.6, height: 26 },
+      h2: { x: 80, y: 114, width: 647.7, height: 67 },
       '.project-card.is-active': {
         x: 445.5,
-        y: 270,
+        y: 263,
         width: 549,
         height: 567,
       },
     },
   });
   const projectsReference = await sharp(
-    'assets/assets home page/our project/Our Project Section.png',
+    'assets/assets home page/our project/Home-Project-Revisi-1x.png',
   )
-    .resize(1440, 917)
+    .resize(1440, 910)
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -469,7 +476,7 @@ try {
       (projectsActual[i] + projectsReference[i]) / 2,
     );
   }
-  const projectsRaw = { width: 1440, height: 917, channels: 3 };
+  const projectsRaw = { width: 1440, height: 910, channels: 3 };
   await sharp(projectsDifference, { raw: projectsRaw })
     .png()
     .toFile('artifacts/projects-diff.png');
@@ -482,6 +489,11 @@ try {
     fullPage: true,
   });
   await page.locator('.recruitment').scrollIntoViewIfNeeded();
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await document.fonts.load('700 56px "Bluu Next"');
+    await Promise.all([...document.images].map((image) => image.decode()));
+  });
   await page
     .locator('.recruitment')
     .screenshot({ path: 'artifacts/recruitment-desktop.png' });
@@ -489,13 +501,15 @@ try {
     .locator('.recruitment')
     .evaluate((section) => {
       const rect = section.getBoundingClientRect();
+      const round = (n) => Math.round(n * 10) / 10;
       return {
-        width: rect.width,
-        height: rect.height,
-        top: rect.top + scrollY,
+        width: Math.round(rect.width),
+        height: Math.round(rect.height),
+        top: Math.round(rect.top + scrollY),
         elements: Object.fromEntries(
           [
             '.recruitment-panel',
+            '.eyebrow',
             'h2',
             '.recruitment-copy p',
             '.recruitment-actions',
@@ -504,10 +518,10 @@ try {
             return [
               selector,
               {
-                x: box.x - rect.x,
-                y: box.y - rect.y,
-                width: box.width,
-                height: box.height,
+                x: round(box.x - rect.x),
+                y: round(box.y - rect.y),
+                width: round(box.width),
+                height: round(box.height),
               },
             ];
           }),
@@ -516,19 +530,20 @@ try {
     });
   assert.deepEqual(recruitmentGeometry, {
     width: 1440,
-    height: 577,
-    top: 4316,
+    height: 554,
+    top: 4309,
     elements: {
-      '.recruitment-panel': { x: 80, y: 80, width: 1280, height: 417 },
-      h2: { x: 81, y: 193, width: 1278, height: 68 },
-      '.recruitment-copy p': { x: 427, y: 281, width: 586, height: 48 },
-      '.recruitment-actions': { x: 515, y: 373, width: 410, height: 51 },
+      '.recruitment-panel': { x: 80, y: 80, width: 1280, height: 394 },
+      '.eyebrow': { x: 673.4, y: 145, width: 93.2, height: 26 },
+      h2: { x: 161, y: 179, width: 1118, height: 67 },
+      '.recruitment-copy p': { x: 427, y: 270, width: 586, height: 48 },
+      '.recruitment-actions': { x: 619.5, y: 366, width: 200.9, height: 43 },
     },
   });
   const recruitmentReference = await sharp(
-    'assets/assets home page/cta/CTA Recruicment Section.png',
+    'assets/assets home page/cta/Home-CTA-Revisi-1x.png',
   )
-    .resize(1440, 577)
+    .resize(1440, 554)
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -548,7 +563,7 @@ try {
       (recruitmentActual[i] + recruitmentReference[i]) / 2,
     );
   }
-  const recruitmentRaw = { width: 1440, height: 577, channels: 3 };
+  const recruitmentRaw = { width: 1440, height: 554, channels: 3 };
   await sharp(recruitmentDiff, { raw: recruitmentRaw })
     .png()
     .toFile('artifacts/recruitment-diff.png');

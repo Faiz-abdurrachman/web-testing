@@ -287,7 +287,7 @@ import { projects } from '../data/projects';
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 14px;
+    gap: 8px;
   }
   .eyebrow {
     display: inline-flex;
@@ -303,8 +303,12 @@ import { projects } from '../data/projects';
   }
   h2 {
     margin: 0;
-    font: 400 56px/68px var(--font-heading);
-    background: linear-gradient(270deg, #fff, #ede8ff);
+    font-family: var(--font-display);
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 67px;
+    letter-spacing: 0;
+    background: linear-gradient(180deg, #ffffff 15%, #999999 42%, #ffffff 80%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -646,6 +650,9 @@ import { projects } from '../data/projects';
     .project-card::before,
     .project-dots .dot {
       transition: none;
+    }
+    .project-card::before {
+      display: none;
     }
   }
 </style>

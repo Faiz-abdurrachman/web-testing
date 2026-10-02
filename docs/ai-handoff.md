@@ -10,8 +10,24 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
 
-- **Recruitment Hero Section & Button Component — revisi font, button & 8pt grid (PALING BARU, 2 Oct 2026).**
-  `RecruitmentHero.astro` & `Button.astro` direvisi presisi sesuai Frame Figma `1436:3506` (Page Recruitment `1436:3505`) dan Component Set `1436:3502` (`Apply Noww Button`):
+- **Homepage 100% Selesai — Our Project (1430:2146) & CTA Recruitment (1430:2162) — revisi font, button & 8pt spacing (PALING BARU, 2 Oct 2026).**
+  Seluruh 6 section pada Homepage (Hero, Philosophy, What We Do, Choose Your Domain / HoDS, Our Project, CTA Recruitment) kini **100% selesai dan terverifikasi presisi**:
+  - **Our Project (`1430:2146`, 1440 × 910px, padding 80px):**
+    - Eyebrow `Our Project` (Figma `GLASS` effect, 86.6 × 26px at `x: 80, y: 80`, gap ke title `8px`).
+    - Heading `What Our Sorcery Create` **Bluu Next Bold 700 56px / 67px** (`--font-display`), gradient `linear-gradient(180deg, #FFFFFF 15%, #999999 42%, #FFFFFF 80%)`, text-align left, sits at `x: 80, y: 114, w: 647.7, h: 67` (ink width 646px matching reference ±0.5px).
+    - Gap header ke stage coverflow **`82px`**. Stage 1280 × 567px di `x: 80, y: 263`.
+    - Active center card Frame 2264 (`1430:2153`): 549 × 567px centered at `x: 445.5, y: 263`. Underglow dekoratif dinonaktifkan pada reduced motion agar statis pixel-exact.
+    - Section MAE **5.0764** (Card Image 2.9047, Card Tags 6.0592, Card Text 5.9010, Header 6.6790, Bottom space 0.0000). Geometri bboxes diff 0.0px.
+  - **CTA Recruitment (`1430:2162`, 1440 × 554px, padding 80px):**
+    - Card Panel Frame 2393 (`1430:2163`): 1280 × 394px at `x: 80, y: 80`, padding `64px 80px`, gap `48px` ke button, background `rgba(98, 80, 255, 0.10)` + 1px glass rim.
+    - Eyebrow `Recruitment` (Figma `GLASS` effect, 93.2 × 26px at `x: 673.4, y: 145`, gap ke title `8px`).
+    - Heading `Ready to Become a Sorcery?` **Bluu Next Bold 700 56px / 67px** (`--font-display`), gradient 180deg per line, text-align center at `x: 161, y: 179, w: 1118, h: 67`.
+    - Copy text Manrope Regular 400 16/24, 586 × 48px at `x: 427, y: 270` (gap ke heading 24px).
+    - Single Button Frame 2299 (`1430:2170`): `<Button variant="community">Join the Community</Button>` (201 × 43px centered at `x: 619.5, y: 366`) dengan radial gradient violet, specular inner shadows, hover `#2F196F`. Glow backdrop Frame 2392 utuh.
+    - Section MAE **3.1427** (Button & glow 2.3200, Header 4.9498, Copy 6.3726, Outer padding 0.0000). Geometri bboxes diff 0.0px.
+  - Full verification: `npm run build` (0 error), `verify.mjs` (exit 0, `browserErrors: []`), `responsive-audit.mjs` (18 rute × 26 widths = 468/468 ALL PASS), `audit:navbar` (ALL PASS), `verify:vt` (ALL PASS), `format:check` (ALL PASS).
+  - Detail: `docs/assets.md` §Homepage — CTA Recruitment Section & §Homepage — Our Project Section.
+    `RecruitmentHero.astro` & `Button.astro` direvisi presisi sesuai Frame Figma `1436:3506` (Page Recruitment `1436:3505`) dan Component Set `1436:3502` (`Apply Noww Button`):
   - Heading 2 baris Bluu Next Bold 700 72px / 86px (`--font-display`): "Your Next Chapter" (ink width 621px) & "Start here" (ink width 330.5px), gap 4px, linear gradient per-line `linear-gradient(180deg, #FFFFFF 15%, #999999 42%, #FFFFFF 80%)`.
   - Hero description Manrope Medium 500 18px / 27px color `#EDE8FF` 900 × 27px (gap ke heading 16px, letter-spacing -0.176px single line).
   - Button Component Set `Apply Noww Button` (`1436:3502`, 120 × 43px, padding 8px 16px, border-radius 20px, gap ke description 48px):

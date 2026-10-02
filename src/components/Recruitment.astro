@@ -11,7 +11,7 @@ import Button from './Button.astro';
     <div class="recruitment-copy">
       <header>
         <span class="eyebrow">Recruitment</span>
-        <h2 id="recruitment-title">READY TO BECOME A SORCERY?</h2>
+        <h2 id="recruitment-title">Ready to Become a Sorcery?</h2>
       </header>
       <p>
         Join a community where your learning can become experimentation, your
@@ -19,10 +19,7 @@ import Button from './Button.astro';
       </p>
     </div>
     <div class="recruitment-actions">
-      <Button>Join the Community</Button>
-      <Button variant="glass" compact>
-        See How It Works
-      </Button>
+      <Button variant="community">Join the Community</Button>
     </div>
     <div class="glow-frame" aria-hidden="true">
       <div class="glow-art">
@@ -40,12 +37,13 @@ import Button from './Button.astro';
     position: relative;
     isolation: isolate;
     max-width: 1280px;
+    height: 394px;
     margin-inline: auto;
-    padding: 72px 0;
+    padding: 64px 80px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 44px;
+    gap: 48px;
     border: 1px solid transparent;
     border-radius: 20px;
     overflow: hidden;
@@ -69,14 +67,14 @@ import Button from './Button.astro';
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 24px;
   }
   header {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 14px;
+    gap: 8px;
   }
   .eyebrow {
     display: inline-flex;
@@ -93,9 +91,13 @@ import Button from './Button.astro';
   h2 {
     margin: 0;
     width: 100%;
-    font: 400 56px/68px var(--font-heading);
+    font-family: var(--font-display);
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 67px;
+    letter-spacing: 0;
     text-align: center;
-    background: linear-gradient(270deg, #fff, #ede8ff);
+    background: linear-gradient(180deg, #ffffff 15%, #999999 42%, #ffffff 80%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -112,7 +114,7 @@ import Button from './Button.astro';
   .recruitment-actions {
     display: flex;
     align-items: center;
-    gap: 26px;
+    justify-content: center;
   }
   .glow-frame {
     position: absolute;
