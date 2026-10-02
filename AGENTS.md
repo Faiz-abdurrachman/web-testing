@@ -346,7 +346,16 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   Seluruh 6 section Homepage (`1430:2040`) kini 100% selesai dan tervalidasi:
   - Section 5: **Our Project Section (`1430:2146`)** — Frame 1440×910px, padding 80px, gap 82px. Eyebrow 86.6×26px di `(80, 80)`, heading "What Our Sorcery Create" Bluu Next Bold 700 56/67px di `(80, 114)` (ink width 646px), 3D coverflow active card 549×567px di `(445.5, 263)`. MAE 5.0764 (Image 2.90, Tags 6.05, Text 5.90, Header 6.67, Bottom 0.0).
   - Section 6: **CTA Recruitment Section (`1430:2162`)** — Frame 1440×554px, padding 80px. Card panel 1280×394px di `(80, 80)` (padding 64px 80px, gap 48px). Eyebrow "Recruitment" 93.2×26px di `(673.4, 145)`, heading "Ready to Become a Sorcery?" Bluu Next Bold 700 56/67px di `(161, 179)`, copy Manrope 400 16/24 586×48px di `(427, 270)`. Single button `<Button variant="community">Join the Community</Button>` (201×43px) di `(619.5, 366)`. MAE 3.1427 (Button & glow 2.32, Header 4.94, Copy 6.37, Outer 0.0).
-  - Verifikasi: build 0 error, verify.mjs exit 0, responsive audit 468/468 PASS, navbar audit ALL PASS, verify:vt ALL PASS, format:check ALL PASS. Geometri diff 0.0px.
+- **Recruitment Page Section 4: Available Roles (`1436:3564`) & Detail Roles (`774:17392` dkk) (2 Oct 2026).**
+  Frame Figma `1436:3564` (1440×843px, padding `80px 80px 80px 80px`, gap header ke grid `58px`). Header Frame 2496 (`1436:3565`, 1280×115px, gap 24px):
+  Heading "Available Roles" **Bluu Next Bold 700 56/67px** (`--font-display`) di `(80, 80)`,
+  fill `linear-gradient(180deg, #ffffff 15%, #999999 42%, #ffffff 80%)`. Subtitle Manrope Medium 500 18/27px (`--font-body`), `#ffffff`
+  di `(80, 168)`. Card Grid Frame 2605 (`1436:3568`, 1280×510.375px) di `(80, 253)`: enam kartu `413.33×235.17px` (gap horizontal 20px, gap vertikal 40px),
+  padding `18px 28px`, 1px glass rim `linear-gradient(135deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%)`.
+  Detail Roles 6 halaman (`/recruitment/roles/{data,core,language,vision,product,growth}`):
+  Seluruh frame 1440×1280px (strict callout Gembala). Hero Card H1 diupdate ke **Bluu Next Bold 700 48/57.6px** (`--font-display`),
+  top-aligned dengan padding 80px dan gap 56px (strict 8-point grid).
+  Semua 6 gates verifikasi ALL PASS (build 0 error, verify.mjs exit 0, responsive audit 468/468 PASS, navbar audit ALL PASS, verify:vt ALL PASS, format:check ALL PASS). Geometri diff 0.0px.
 - **Recruitment Page Section 3: What You Will Do (`1436:3517`) (2 Oct 2026).**
   Frame Figma `1436:3517` (1440×903px, padding `80px 80px 80px 80px`, gap header ke body `20px`). Header Frame 2734 (`1436:4048`, 1280×118px, gap 24px):
   Heading "What You Will Do" **Bluu Next Bold 700 56/67px** (`--font-display`) di `(80, 80)`,

@@ -47,7 +47,6 @@ export const roles: RoleDetail[] = [
     ],
     contact: 'Zidan Amikul',
     cardImage: cardImage('data'),
-    centered: true,
     tight: true,
   },
   {

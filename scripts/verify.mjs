@@ -1111,44 +1111,44 @@ try {
     {
       id: 'data',
       reference: 'Detile Roles - DATA INTELLIGENCE.png',
-      cardY: 210.5,
-      backY: 155.5,
-      contactY: 990.5,
+      cardY: 135,
+      backY: 80,
+      contactY: 909,
     },
     {
       id: 'core',
       reference: 'Detile Roles - DATA INTELLIGENCE-1.png',
       cardY: 135,
       backY: 80,
-      contactY: 875,
+      contactY: 869,
     },
     {
       id: 'language',
       reference: 'Detile Roles - LANGUANGE & REASONING.png',
-      cardY: 165,
+      cardY: 163,
       backY: 80,
-      contactY: 945,
+      contactY: 937,
     },
     {
       id: 'vision',
       reference: 'Detile Roles - VISION & MULTIMODEL.png',
-      cardY: 165,
+      cardY: 163,
       backY: 80,
-      contactY: 945,
+      contactY: 937,
     },
     {
       id: 'product',
       reference: 'Detile Roles - PRODUCT & SOFTWARE.png',
-      cardY: 165,
+      cardY: 163,
       backY: 80,
-      contactY: 1026,
+      contactY: 1018,
     },
     {
       id: 'growth',
       reference: 'Detile Roles - GROWTH & COMMUNITY.png',
-      cardY: 165,
+      cardY: 163,
       backY: 80,
-      contactY: 986,
+      contactY: 978,
     },
   ];
   await page.setViewportSize({ width: 1440, height: 1400 });
@@ -1559,17 +1559,17 @@ try {
     });
   assert.deepEqual(availableRolesGeometry, {
     width: 1440,
-    height: 851.375,
+    height: 843.375,
     top: 2558,
-    heading: { x: 80, y: 80, width: 1280, height: 68 },
+    heading: { x: 80, y: 80, width: 1280, height: 67 },
     copy: { x: 80, y: 168, width: 1280, height: 27 },
-    list: { x: 80, y: 253, width: 1280, height: 518.375 },
-    rows: [253, 532.1875].flatMap((y) =>
+    list: { x: 80, y: 253, width: 1280, height: 510.375 },
+    rows: [253, 528.1875].flatMap((y) =>
       [80, 513.328125, 946.65625].map((x, col) => ({
         x,
         y,
         width: col === 2 ? 413.34375 : 413.328125,
-        height: 239.1875,
+        height: col === 2 ? 235.1875 : 235.171875,
       })),
     ),
   });
@@ -1706,7 +1706,7 @@ try {
   assert.deepEqual(selectionTimelineGeometry, {
     width: 1440,
     height: 815,
-    top: 3409.375,
+    top: 3401.375,
     heading: { x: 80, y: 80, width: 1280, height: 68 },
     head: { x: 80, y: 206, width: 1280, height: 78 },
     body: { x: 80, y: 284, width: 1280, height: 451 },
@@ -1833,7 +1833,7 @@ try {
   assert.deepEqual(faqGeometry, {
     width: 1440,
     height: 986,
-    top: 4224.375,
+    top: 4216.375,
     heading: { x: 80, y: 80, width: 1280, height: 68 },
     list: { x: 80, y: 206, width: 1280, height: 700 },
     items: [
@@ -1951,7 +1951,7 @@ try {
   assert.deepEqual(snippetsGeometry, {
     width: 1440,
     height: 900,
-    top: 5210.375,
+    top: 5202.375,
     heading: { x: 80, y: 40, width: 1280, height: 68 },
     gallery: { x: 80, y: 166, width: 1280, height: 694 },
     hero: { x: 80, y: 166, width: 1280, height: 556 },
@@ -2074,7 +2074,7 @@ try {
     {
       width: 1440,
       height: 537,
-      top: 6110.375,
+      top: 6102.375,
       panel: { x: 80, y: 80, width: 1280, height: 377 },
       actions: { x: 617.5, y: 327, width: 205, height: 51 },
       glow: { x: 349.828125, y: 351, width: 1000.328125, height: 271.5 },
@@ -2171,7 +2171,7 @@ try {
   assert.deepEqual(recruitFooterGeometry, {
     width: 1440,
     height: 556,
-    top: 6647.375,
+    top: 6639.375,
   });
   await page.locator('.footer').scrollIntoViewIfNeeded();
   await page

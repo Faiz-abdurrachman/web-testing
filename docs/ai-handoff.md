@@ -6,9 +6,9 @@ harus menebak dari git log. Ini dokumen hidup — update kalau ada perubahan bes
 Baca dulu, urut: `AGENTS.md` (aturan operasional) → `HANDOVER.md` (konteks
 panjang) → `docs/assets.md` (provenance per section) → file ini.
 
-## TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
+### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
-**Target Prioritas: Recruitment Page Section 4: Available Roles (Figma node `1436:3564`) & Penyesuaian 6 Detail Role Pages (`774:17392` dkk)**
+**Target Prioritas: Recruitment Page Section 5: Selection Timeline (Figma node `1436:3637`, 1440 × 812px)**
 
 ================================================================================
 ATURAN HUKUM & PROTOKOL STRICT PIXEL ACCURACY (WAJIB DIIKUTI TANPA KECUALI):
@@ -37,47 +37,17 @@ ATURAN HUKUM & PROTOKOL STRICT PIXEL ACCURACY (WAJIB DIIKUTI TANPA KECUALI):
 RINCIAN SPESIFIKASI TUGAS:
 ================================================================================
 
-### 1. Section 4: Available Roles (Figma node `1436:3564` — "Available Roles Section Revisi Card")
+### 1. Section 5: Selection Timeline (Figma node `1436:3637` — 1440 × 812px)
 
-- **Link Figma**: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3564&t=4QQ3FA6KwgUEnWHL-4`
-- **File Komponen**: `src/components/AvailableRoles.astro`
-- **Dimensi Frame Figma `1436:3564` (1440 × 843px)**:
-  - Container section: 1440 × 843px, padding: `80px` (Strict 8-Point Grid), layout VERTICAL, gap: `58px`, background: `#050507`.
-  - Header Frame 2496 (`1436:3565`): 1280 × 115px di `(80, 80)`, layout VERTICAL, gap: `24px`:
-    - Heading `1436:3566` "Available Roles": Bluu Next Bold 700 56px / 67px (`--font-display`), gradient 180deg.
-    - Subtitle `1436:3567`: "Choose the domain that matches your passion and start your journey with us." -> Manrope Medium 500 18px / 27px (`--font-body`), `#ffffff`.
-  - Card Grid Frame 2605 (`1436:3568`): 1280 × 510px di `(80, 253)`, layout VERTICAL, gap: `40px`:
-    - Row 1 (Frame 2603): 3 card role (`Card Role 1`, `card role 2`, `card role 3`) ukuran 413 × 235px, gap: `20px`, padding: `18px 28px`, background: `rgba(255, 255, 255, 0.15)`.
-    - Row 2 (Frame 2604): 3 card role (`card role 4`, `card role 5`, `card role 6`) ukuran 413 × 235px, gap: `20px`, padding: `18px 28px`, background: `rgba(255, 255, 255, 0.15)`.
-- **Export Referensi Baru**:
-  - `node scripts/figma.mjs export 1436:3564 1 png "assets/assets recruitment page/available roles/Recruitment-AvailableRoles-Revisi-1x.png"`
-  - `node scripts/figma.mjs export 1436:3564 2 png "assets/assets recruitment page/available roles/Recruitment-AvailableRoles-Revisi-2x.png"`
+- **Link Figma**: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3637`
+- **File Komponen**: `src/components/SelectionTimeline.astro`
+- **Dimensi Frame Figma `1436:3637` (1440 × 812px)**:
+  - Container section: 1440 × 812px, padding: `80px` (Strict 8-Point Grid), background: `#050507`.
+  - Heading: "Selection Timeline": Bluu Next Bold 700 56px / 67px (`--font-display`).
+  - Timeline table header (padding 18px 32px) + 6 timeline rows (gap 18px).
 
-### 2. Penyesuaian 6 Detail Role Pages (`/recruitment/roles/[id]`)
+### 2. Sisa Section Recruitment Page Selanjutnya (Urutan Eksekusi):
 
-- **Link Figma Contoh (Data Intelligence)**: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=774-17392&t=4QQ3FA6KwgUEnWHL-4`
-- **File Komponen & Data**:
-  - Komponen: `src/components/RoleDetail.astro`
-  - Route: `src/pages/recruitment/roles/[id].astro`
-  - Data: `src/data/roles.ts`
-- **Spesifikasi 6 Detail Role Frames di Figma (1440 × 1280px)**:
-  - Callout: "Penyesuaian Height (tinggi card) menjadi 1280px untuk ALL Detile Roles / HoDS".
-  - Frame Figma:
-    1. Data Intelligence: `774:17392` (1440 × 1280px)
-    2. Core AI & Engineering
-    3. Language & Reasoning: `760:14975` (1440 × 1280px)
-    4. Vision & Multimodal: `760:15276` (1440 × 1280px)
-    5. Product & Software: `760:15347` (1440 × 1280px)
-    6. Growth & Community: `760:15439` (1440 × 1280px)
-  - Layout & Spacing:
-    - Container: 1440 × 1280px, padding `80px`.
-    - Back Link Frame 2391 di `(80, 80)`.
-    - Hero Card (`card detile role (HoDS)`) 1280 × 279px di `(80, 163)`.
-    - Gap 56px, Block gap 24px/16px, Contact Box 347 × 134px di `(80, 810)`.
-
-### 3. Sisa Section Recruitment Page Selanjutnya (Urutan Eksekusi):
-
-- Section 5: Selection Timeline (`1436:3637`, 1440 × 812px)
 - Section 6: FAQ Section (`1436:3675`, 1440 × 983px)
 - Section 7: Snippets of Life (`1436:3684`, 1440 × 897px)
 - Section 8: CTA Recruitment (`1436:3687`, 1440 × 520px)
@@ -103,6 +73,20 @@ WORKFLOW & 6 GATE VERIFIKASI (SEMUA WAJIB PASS SEBELUM COMMIT):
 ## Ringkasan cepat (untuk AI baru) — 2 Oct 2026
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
+
+- **Recruitment Page Section 4: Available Roles (`1436:3564`) & Detail Roles (`774:17392` dkk) — revisi font, copy, card 413×235 & spacing 8pt (PALING BARU, 2 Oct 2026).**
+  Section 4 pada halaman Recruitment (`1436:3505`) beserta 6 halaman Detail Role kini selesai dan tervalidasi presisi:
+  - Frame Figma `1436:3564` (1440 × 843px, padding `80px 80px 80px 80px`, gap header ke grid `58px`).
+  - Header Frame 2496 (`1436:3565`): 1280 × 115px di `(80, 80)`, layout vertical, gap `24px`:
+    - Heading `Available Roles` **Bluu Next Bold 700 56px / 67px** (`--font-display`), fill `linear-gradient(180deg, #ffffff 15%, #999999 42%, #ffffff 80%)` di `(80, 80, 1280 × 67)`.
+    - Subtitle `Select a role to view full details, requirements, and apply.` Manrope Medium 500 18/27px (`--font-body`), `#ffffff` di `(80, 168, 1280 × 27)`.
+  - Card Grid Frame 2605 (`1436:3568`): 1280 × 510.375px di `(80, 253)` dengan enam kartu `413.33 × 235.17px` (gap horizontal 20px, gap vertikal 40px), padding `18px 28px`, 1px glass rim `linear-gradient(135deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%)`.
+  - Detail Roles 6 halaman (`/recruitment/roles/{data,core,language,vision,product,growth}`):
+    - Seluruh frame 1440 × 1280px (strict callout Gembala).
+    - Hero Card H1 diupdate ke **Bluu Next Bold 700 48px / 57.6px** (`--font-display`).
+    - Top-aligned dengan padding 80px dan gap 56px (strict 8-point grid).
+  - Verifikasi: build 0 error, verify.mjs exit 0, responsive audit 468/468 PASS, navbar audit ALL PASS, verify:vt ALL PASS, format:check ALL PASS. Geometri diff 0.0px.
+  - Detail: `docs/assets.md` §Recruitment page — Available Roles & §Detail Roles Pages.
 
 - **Recruitment Page Section 3: What You Will Do (`1436:3517`) — revisi font, header & spacing 8pt (PALING BARU, 2 Oct 2026).**
   Section 3 pada halaman Recruitment (`1436:3505`) kini selesai dan tervalidasi presisi:

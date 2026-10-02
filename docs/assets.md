@@ -1,5 +1,61 @@
 # Asset provenance
 
+## Recruitment page — Available Roles (2 October 2026)
+
+- Section node **`1436:3564`** ("Available Roles Section Revisi Card", 1440 × 843, `padding: 80px`, gap: 58px), frame page Recruitment `1436:3505`, file `JYUzJK1hFqaEwL6DpdDvjp`.
+  Reference: `assets/assets recruitment page/available roles/Recruitment-AvailableRoles-Revisi-1x.png` (1440 × 843) & `Recruitment-AvailableRoles-Revisi-2x.png` (2880 × 1686).
+  Isolated nodes: `Recruitment-AvailableRoles-Heading-2x.png` (`1436:3566`).
+- Layout & Spacing (Strict 8-Point Grid):
+  - Section desktop: 1440 × 843px, padding 80px, background `#050507`.
+  - Header Frame 2496 (`1436:3565`): 1280 × 115px at `x: 80, y: 80`, gap `24px` between heading and subtitle:
+    - Heading `1436:3566`: "Available Roles", **Bluu Next Bold 700 56px / 67px** (token `--font-display`), linear gradient per line `linear-gradient(180deg, #FFFFFF 15%, #999999 42%, #FFFFFF 80%)` (`background-clip: text`), text-align left at `x: 80, y: 80, w: 1280, h: 67`. Ink width 387px matching reference ±0.5px.
+    - Subtitle `1436:3567`: "Select a role to view full details, requirements, and apply.", Manrope Medium 500 18px / 27px, color `#ffffff`, single-line text at `x: 80, y: 168, w: 1280, h: 27`.
+  - Gap Header-to-Grid: **`58px`** (top of grid = 80 + 115 + 58 = 253px).
+  - Card Grid Frame 2605 (`1436:3568`): 1280 × 510.375px at `x: 80, y: 253`, layout 2 rows × 3 columns, vertical gap `40px`, horizontal gap `20px`:
+    - Row 1 Frame 2603 (`1436:3569`): `x: 80, y: 253`, 3 cards each 413.33 × 235.17px (`Card Role 1` Data Intelligence, `card role 2` Core AI & Engineering, `card role 3` Language & Reasoning).
+    - Row 2 Frame 2604 (`1436:3603`): `x: 80, y: 528.1875`, 3 cards each 413.33 × 235.17px (`card role 4` Vision & Multimodal, `card role 5` Product & Software, `card role 6` Growth & Community).
+    - Card styling: `aspect-ratio: 413 / 235`, `border-radius: 4.843cqw` (20px), `background: rgba(255, 255, 255, 0.15)` (#2a2a2c), 1px glass rim `linear-gradient(135deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%)` via `::after` ring + `mask-composite: exclude` (hover `135deg #fff -> #6c3bff -> #fff`).
+    - Internal metrics: `padding: 4.358cqw 6.78cqw` (18px 28px).
+    - Head Frame 2592: title Manrope Bold 700 26/39 white, gap 16px (`3.874cqw`), summary Manrope Regular 400 16/24 `#ede8ff`.
+    - Foot Frame 2593: 1px divider + "View Details" (Manrope Medium 500 16/32) + 20px arrow icon.
+    - Glow backdrop: `public/images/recruitment/role-glow.webp` with interactive hover pointer tracking (`--gx/--gy`), static under `prefers-reduced-motion`.
+- Measurements & Precision:
+  - `verify.mjs` assertions:
+    - section: `{ width: 1440, height: 843.375, top: 2558 }`
+    - heading: `{ x: 80, y: 80, width: 1280, height: 67 }`
+    - copy: `{ x: 80, y: 168, width: 1280, height: 27 }`
+    - list: `{ x: 80, y: 253, width: 1280, height: 510.375 }`
+    - rows: 6 cards matching `[253, 528.1875]` and `[80, 513.328, 946.656]` with width `413.33px` and height `235.17px`.
+  - Section MAE: Regional top space **0.0000**, Header **4.2334**, Bottom space **0.0000**, Card background MAE < 1.0 (residual is text font rasterization).
+  - All verification gates PASS: build (0 error), verify.mjs (exit 0), responsive audit (468/468 PASS), navbar audit (PASS), verify:vt (PASS), format:check (PASS).
+
+## Detail Roles Pages (/recruitment/roles/[id]) — Frame Height 1280px, Bluu Next Bold 700 & 8pt Spacing (2 October 2026)
+
+- Frame nodes Figma (file `JYUzJK1hFqaEwL6DpdDvjp`, 1440 × 1280px, padding 80px):
+  - Data Intelligence: node `774:17392` (1440 × 1280, padding 80px)
+  - Core AI & Engineering: node `733:15781` (1440 × 1280, padding 80px)
+  - Language & Reasoning: node `760:14975` (1440 × 1280, padding 80px)
+  - Vision & Multimodal: node `760:15276` (1440 × 1280, padding 80px)
+  - Product & Software: node `760:15347` (1440 × 1280, padding 80px)
+  - Growth & Community: node `760:15439` (1440 × 1280, padding 80px)
+- Perintah / Callout Gembala:
+  - "Penyesuaian Height (tinggi card) menjadi 1280px untuk ALL Detile Roles / HoDS"
+  - Seluruh frame halaman diseragamkan ke **1440 × 1280px**.
+- Typography & Spacing:
+  - Hero Card H1 Title: Updated to **Bluu Next Bold 700 48px / 57.6px** (token `--font-display`), gradient `linear-gradient(270deg, #fff, #ede8ff)`.
+  - Strict 8-Point Grid: `.role-detail-inner` `padding: 80px`, `min-height: 1280px`, `gap: 56px`. Removed old `centered` vertical justification so layout is strictly top-aligned matching Figma.
+  - Back link: `x: 80, y: 80`.
+  - Hero card: `x: 80, y: 135` (for Data & Core with gap 28px in Frame 2526) and `x: 80, y: 163` (for Language, Vision, Product, Growth with gap 56px).
+  - Role sections gap: `56px`. Block gap: `24px` (title to copy).
+  - Contact box Frame 2256 (`347 × 134px`): sits with gap 56px at `x: 80`.
+- Measurements & Precision:
+  - `verify.mjs` assertions verified for all 6 routes (`/recruitment/roles/{data,core,language,vision,product,growth}`):
+    - Container: `1440 × 1280` exact.
+    - Back link: `{ x: 80, y: 80 }` exact.
+    - Hero Card: `{ x: 80, y: 135/163, width: 1280, height: 279 }` exact.
+    - Contact box: y matches measured Figma coordinates within ±2px.
+    - Apply button: `y: cardY + 58` exact.
+
 ## Homepage — CTA Recruitment Section (2 October 2026)
 
 - Section node **`1430:2162`** ("CTA Recruicment Section", 1440 × 554, `padding: 80px`), frame page Homepage `1430:2040`, file `JYUzJK1hFqaEwL6DpdDvjp`.
