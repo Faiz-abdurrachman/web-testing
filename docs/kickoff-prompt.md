@@ -151,14 +151,15 @@ CHECKLIST STATUS PER-SECTION:
    - Heading "Selection Timeline": Bluu Next Bold 700 56/67.2px (`--font-display`), gradient 181deg per baris.
    - Timeline table 1280px: Header 1280×78px (padding 18px 32px), Body 1280×451px (padding 18px 32px, gap 18px, 6 rows dengan separator linear gradient).
    - Section MAE: **4.3059/255** vs reference `Recruitment-SelectionTimeline-Revisi-1x.png`. All 6 verification gates pass.
-6. **FAQ Section (`1436:3675`)** — [STATUS: TARGET BERIKUTNYA / CURRENT PRIORITY]
-   - URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3675`
-   - Frame 1440 × 983px, padding 80px.
-   - Heading "FAQ": Bluu Next Bold 700 56/67px uppercase (`--font-display`).
-   - 6 FAQ accordion cards: stroke 1px #CBC5FF/0.3, radius 20px, gap 16px/24px.
-7. **Snippets of Life at Data Sorcerers (`1436:3684`)** — [STATUS: UPCOMING]
-   - Frame 1440 × 897px, padding 40px 80px, gap 56px.
-   - Heading "Snippets of Life at data sorcerers": Bluu Next Bold 700 56/67px.
+6. **FAQ Section (`1436:3675`)** — [STATUS: 100% SELESAI]
+   - Frame 1440 × 983px, padding 80px, gap header ke list **56px** (Strict 8-Point Grid kelipatan 8, mengoreksi 58px lama).
+   - Heading "FAQ": Bluu Next Bold 700 56/67.2px uppercase (`--font-display`), linear gradient 181deg per baris.
+   - List 1280px (Frame 2546, gap 32px): 6 accordion cards (stroke 1px glass rim, radius 20px, gap 32px, 4 cards 77px + 2 cards 116px).
+   - Section MAE: **7.7518/255** (Header MAE 0.7854, List MAE 10.2983, Bottom MAE 2.7911) vs reference `Recruitment-Faq-Revisi-1x.png`. All 6 verification gates pass.
+7. **Snippets of Life at Data Sorcerers (`1436:3684`)** — [STATUS: TARGET BERIKUTNYA / CURRENT PRIORITY]
+   - URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3684`
+   - Frame 1440 × 897px / 900px, padding 40px 80px, gap 56px.
+   - Heading "Snippets of Life at data sorcerers": Bluu Next Bold 700 56/67px center.
    - Gallery 1280px (hero frame 556px + 5 thumbnails bar gap 35px).
 8. **CTA Recruitment Section (`1436:3687`)** — [STATUS: UPCOMING]
    - Frame 1440 × 520px, padding 80px.

@@ -1676,42 +1676,34 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
 
 ## Recruitment page — FAQ
 
-- Figma node: `661:1553`; reference
-  `assets/assets recruitment page/faq section/Frame 2495.png`, 5760 × 3944
-  (1440 × 986 at 4×). The section sits at homepage y=4283.
-- Frame: 1440 × 986, `padding 80`, `gap 58`. Background (26 Sep 2026): the
-  **shared living sky** (`src/components/Starfield.astro`, same base tile +
-  `far`/`near` drift as the home "Four Pillars" section), added when the mentor
-  asked for these recruitment backdrops to be alive too. The supplied
-  `Background.png` — the same near-black starfield as Who Should Join — was
-  previously served as the shared `public/images/backgrounds/stars.webp`; both it
-  and the earlier lossless `recruitment/faq-background-{1440,2880}.webp` exports
-  are removed, and the geometry is unchanged (`.faq` stays `1440 × 986`).
-- Heading: "FAQ" (Figma "faq" with uppercase case), Nasalization Regular 400,
-  56 / 68, **left**, gradient `linear-gradient(180deg, #fff 0%, #707070 74%)`,
-  (80, 80, 1280 × 68). The 1280 content is centred on wide viewports.
-- List: 1280 at y=206, `gap 32`; six `<details>` accordion items, closed by
-  default (matching the reference). Each item is `rgba(255,255,255,.15)`, a 1px
-  `linear-gradient(135deg, #ede8ff, #2e276c, #ede8ff)` border, `border-radius
-20px`, `padding 19px 32px`, with the question (Manrope Medium 500, 26 / 39,
-  white) and a `vuesax/outline/arrow` chevron. The reference render shows it
-  **pointing down** when the item is closed (the `arrow-right` path rotated 90°,
-  shipped as `public/images/recruitment/chevron-down.svg`); it rotates 180° to
-  point up when open. Items 1–4 are one line (77px); items 5–6 are two lines
-  (116px).
-- Answers come from the open (A) variants of the six FAQ components
-  (component sets `830:4263`, `830:4362`, `830:4367`, `830:4372`, `830:4377`,
-  `830:4382`): Manrope Medium 18 / 27, revealed below the question with a 42px
-  gap. Answer 5 duplicates answer 1 in Figma and is kept as-is. The toggle is
-  animated: the arrow transition is pure CSS (`rotate(180deg)` on
-  `[open]`/`.is-open`), while a small inline script measures and transitions
-  the answer panel height (320ms) so expansion never snaps. Both transitions
-  are disabled under `prefers-reduced-motion` (instant toggle), and the
-  `[open]` selector keeps the native `<details>` usable without JS.
-- Verification: `scripts/verify.mjs` asserts the section, heading, list and all
-  six item boxes exactly, diffs against the reference (~5.0/255; the six long
-  questions dominate the rasterization residual), and checks overflow and text
-  from 320px to 1920px.
+- Figma node: `1436:3675` (Frame 2495 di page `1436:3505`); referensi:
+  `assets/assets recruitment page/faq section/Recruitment-Faq-Revisi-1x.png` (1440 × 983)
+  dan `Recruitment-Faq-Revisi-2x.png` (2880 × 1966). Heading 2x:
+  `assets/assets recruitment page/faq section/faq-title-2x.png`.
+- Frame: 1440 × 983px, `padding 80px`, gap vertikal **`56px`** (`7 × 8px` — Strict 8-Point
+  Grid, mengoreksi nilai lama 58px). Background: living sky starfield via
+  `src/components/Starfield.astro` (inert & pixel-exact saat `prefers-reduced-motion: reduce`).
+- Heading: "FAQ" (`1436:3676`), **Bluu Next Bold 700 56px / 67.2px** (`--font-display`),
+  uppercase, gradient linear 181deg `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)`,
+  di `(80, 80, 1280 × 67.2)`. Ink width terukur: 103.5px, ink height 46px.
+- List Container Frame 2546 (`1436:3677`): width 1280px at `(80, 203.2)`, height 700px,
+  gap `32px` (`4 × 8px`), padding `0`.
+- 6 Accordion Items (`1436:3678` s/d `1436:3683`):
+  - Items 1–4: `1280 × 77px` di y = `[203.2, 312.2, 421.2, 530.2]`.
+  - Items 5–6: `1280 × 116px` di y = `[639.2, 787.2]` (2 baris teks).
+  - Background `rgba(255, 255, 255, 0.15)`, border-radius 20px, 1px glass rim specular
+    `linear-gradient(135deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%)` via pseudo `::after`
+    dengan `mask-composite: exclude` (mencegah border mengecilkan content box).
+  - Pertanyaan Manrope Medium 500 26/39px putih, padding `19px 32px`.
+  - Chevron down 24×24px (`public/images/recruitment/chevron-down.svg`) rotasi 180° saat terbuka.
+- Answers: Manrope Medium 18/27px (`.faq-a`), padding `0 32px 19px`, margin `24px 0 0`.
+  Toggle dianimasikan via JS height transition (320ms) dengan fallback instan pada reduce motion.
+  Sound SFX cues: `data-sfx-hover="hover"` dan `ds:sfx` event `{ cue: 'open' | 'close' }`.
+- Verifikasi: `scripts/verify.mjs` asserts section `{ width: 1440, height: 983.2, top: 4213.578125 }`,
+  heading `{ x: 80, y: 80, width: 1280, height: 67.2 }`, list `{ x: 80, y: 203.2, width: 1280, height: 700 }`,
+  dan 6 items y offset exact. Section MAE: 7.75/255 (Header MAE 0.78, List MAE 10.29, Bottom MAE 2.79).
+  Downstream section tops (`.snippets` 5196.78, `.cta` 6096.78, `.footer` 6633.78) terkalibrasi presisi.
+  Semua 6 gate verifikasi ALL PASS.
 
 ## Recruitment page — Snippets
 

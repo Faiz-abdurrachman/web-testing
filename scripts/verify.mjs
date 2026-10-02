@@ -1798,10 +1798,11 @@ try {
     );
   }
   // Recruitment page — FAQ (heading + six closed accordion items).
-  await page.setViewportSize({ width: 1440, height: 986 });
+  await page.setViewportSize({ width: 1440, height: 983 });
   await page.goto(`${baseUrl}/recruitment`, { waitUntil: 'networkidle' });
   await page.evaluate(async () => {
     await document.fonts.ready;
+    await document.fonts.load('700 56px "Bluu Next"');
     await Promise.all(
       [...document.images].map(async (image) => {
         image.loading = 'eager';
@@ -1836,31 +1837,31 @@ try {
   });
   assert.deepEqual(faqGeometry, {
     width: 1440,
-    height: 986,
+    height: 983.203125,
     top: 4213.578125,
-    heading: { x: 80, y: 80, width: 1280, height: 68 },
-    list: { x: 80, y: 206, width: 1280, height: 700 },
+    heading: { x: 80, y: 80, width: 1280, height: 67.203125 },
+    list: { x: 80, y: 203.203125, width: 1280, height: 700 },
     items: [
-      { y: 206, height: 77 },
-      { y: 315, height: 77 },
-      { y: 424, height: 77 },
-      { y: 533, height: 77 },
-      { y: 642, height: 116 },
-      { y: 790, height: 116 },
+      { y: 203.203125, height: 77 },
+      { y: 312.203125, height: 77 },
+      { y: 421.203125, height: 77 },
+      { y: 530.203125, height: 77 },
+      { y: 639.203125, height: 116 },
+      { y: 787.203125, height: 116 },
     ],
   });
   await page.locator('.faq').scrollIntoViewIfNeeded();
   await page.locator('.faq').screenshot({ path: 'artifacts/faq-desktop.png' });
   const faqReference = await sharp(
-    'assets/assets recruitment page/faq section/Frame 2495.png',
+    'assets/assets recruitment page/faq section/Recruitment-Faq-Revisi-1x.png',
   )
-    .resize(1440, 986)
+    .resize(1440, 983)
     .removeAlpha()
     .raw()
     .toBuffer();
   const faqActual = await sharp('artifacts/faq-desktop.png')
     // Fractional section origins round screenshot bounds outward by one pixel.
-    .extract({ left: 0, top: 0, width: 1440, height: 986 })
+    .extract({ left: 0, top: 0, width: 1440, height: 983 })
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -1874,7 +1875,7 @@ try {
     faqDiff[i] = Math.min(255, delta * 4);
     faqOverlay[i] = Math.round((faqActual[i] + faqReference[i]) / 2);
   }
-  const faqRaw = { width: 1440, height: 986, channels: 3 };
+  const faqRaw = { width: 1440, height: 983, channels: 3 };
   await sharp(faqDiff, { raw: faqRaw }).png().toFile('artifacts/faq-diff.png');
   await sharp(faqOverlay, { raw: faqRaw })
     .png()
@@ -1955,7 +1956,7 @@ try {
   assert.deepEqual(snippetsGeometry, {
     width: 1440,
     height: 900,
-    top: 5199.578125,
+    top: 5196.78125,
     heading: { x: 80, y: 40, width: 1280, height: 68 },
     gallery: { x: 80, y: 166, width: 1280, height: 694 },
     hero: { x: 80, y: 166, width: 1280, height: 556 },
@@ -2078,7 +2079,7 @@ try {
     {
       width: 1440,
       height: 537,
-      top: 6099.578125,
+      top: 6096.78125,
       panel: { x: 80, y: 80, width: 1280, height: 377 },
       actions: { x: 617.5, y: 327, width: 205, height: 51 },
       glow: { x: 349.828125, y: 351, width: 1000.328125, height: 271.5 },
@@ -2175,7 +2176,7 @@ try {
   assert.deepEqual(recruitFooterGeometry, {
     width: 1440,
     height: 556,
-    top: 6636.578125,
+    top: 6633.78125,
   });
   await page.locator('.footer').scrollIntoViewIfNeeded();
   await page

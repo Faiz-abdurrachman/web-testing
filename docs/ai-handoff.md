@@ -8,9 +8,9 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
-**Target Prioritas: Recruitment Page Section 6: FAQ Section (Figma node `1436:3675`, 1440 × 983px)**
+**Target Prioritas: Recruitment Page Section 7: Snippets of Life at Data Sorcerers (Figma node `1436:3684`, 1440 × 897px / 900px)**
 
-- **URL Figma Langsung**: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3675`
+- **URL Figma Langsung**: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3684`
 
 ================================================================================
 ATURAN HUKUM & PROTOKOL STRICT PIXEL ACCURACY (WAJIB DIIKUTI TANPA KECUALI):
@@ -21,28 +21,26 @@ ATURAN HUKUM & PROTOKOL STRICT PIXEL ACCURACY (WAJIB DIIKUTI TANPA KECUALI):
    - Cantumkan secara lengkap:
      a. Node ID Figma & URL langsung node section.
      b. Ukuran frame (width × height) dan autolayout mode.
-     c. Rincian Strict 8-Point Grid Spacing & Padding: padding section, gap header-to-content, padding card/accordion, gap internal.
+     c. Rincian Strict 8-Point Grid Spacing & Padding: padding section, gap header-to-content, padding gallery/thumbnails, gap internal.
      d. Rincian Tipografi: font-family (`--font-display` untuk heading), weight, size, line-height, text fill/gradient per baris, letter-spacing.
      e. Artwork & Assets provenance: raw image fill vs SVG vs pure CSS (dilarang screenshot mati/flattened UI).
-     f. Interaktivitas & Sound: accordion toggle, hover lift, glow, specular rim, Web Audio SFX cues.
+     f. Interaktivitas & Sound: thumbnail click/hover, carousel slide transition, arrow buttons, Web Audio SFX cues.
      g. Target Pengujian: assertions geometri `verify.mjs`, target MAE, dan 6 gate verifikasi.
    - **DILARANG KERAS MELOMPATI SECTION ATAU MENGGABUNGKAN MULTIPLE SECTION SEKALIGUS.**
      Setiap section dieksekusi, diukur, dan diverifikasi satu per satu hingga selesai 100%.
 
 2. **STRICT 8-POINT GRID SPACING & PADDING (HUKUM MUTLAK):**
    - Seluruh padding container, margin, dan gap layout WAJIB mematuhi kelipatan 8px (8px, 16px, 24px, 32px, 40px, 48px, 56px, 64px, 72px, 80px) sesuai spesifikasi autolayout frame Figma.
-   - Container section: 1440 × ...px, padding desktop: `padding: 80px` (`80px 80px 80px 80px`) atau `padding: 0 80px`.
+   - Container section: 1440 × ...px, padding desktop: `padding: 40px 80px` atau `padding: 80px`.
    - Hierarki jarak vertikal:
-     - Eyebrow ke heading: **8px** (atau 4px jika antar-baris heading).
-     - Heading ke subtitle/deskripsi: **16px** atau **24px**.
-     - Header frame ke container/content/grid/rail/accordion: **48px**, **56px**, **74px**, atau **80px**.
+     - Header frame ke container/gallery: **48px**, **56px**, atau **64px**.
    - Dilarang keras memakai magic numbers acak kecuali koordinat absolut terukur hasil ukur sharp.
 
 3. **PNG NODE HASIL EXPORT FIGMA = SUMBER KEBENARAN:**
    - Ekspor node 1x & 2x:
      - Section: node PNG 1x dan 2x via download/export figma.
    - Ukur dengan `sharp` (±1px ink precision). Jangan pernah menebak atau meng-eyeball!
-   - Jangan paste string MCP/CSS mentah karena string gradient MCP lossy (stop terakhir sering dipaksa 100%).
+   - Jangan paste string MCP/CSS mentah karena string gradient MCP lossy.
 
 4. **TYPOGRAPHY REVISI — BLUU NEXT BOLD 700:**
    - Semua Heading Section: **Bluu Next Bold 700** (`--font-display`), line-height sesuai frame Figma, gradient linear per baris (`-webkit-background-clip: text; color: transparent`).
@@ -53,20 +51,15 @@ ATURAN HUKUM & PROTOKOL STRICT PIXEL ACCURACY (WAJIB DIIKUTI TANPA KECUALI):
 RINCIAN SPESIFIKASI TUGAS:
 ================================================================================
 
-### 1. Section 6: FAQ Section (Figma node `1436:3675` — 1440 × 983px)
+### 1. Section 7: Snippets of Life at Data Sorcerers (Figma node `1436:3684` — 1440 × 897px / 900px)
 
-- **Link Figma**: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3675`
-- **File Komponen**: `src/components/Faq.astro`
-- **Dimensi Frame Figma `1436:3675`**:
-  - Container section: 1440 × 983px, padding: `80px` (Strict 8-Point Grid), background: `#050507`.
-  - Heading "FAQ": **Bluu Next Bold 700 56px / 67.2px** (`--font-display`), uppercase, gradient linear 180deg.
-  - List container 1280px dengan 6 accordion items: border radius 20px, stroke 1px, gap 16px/24px.
+- **Link Figma**: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3684`
+- **File Komponen**: `src/components/Snippets.astro`
+- **Heading**: "Snippets of Life at data sorcerers" **Bluu Next Bold 700 56px / 67.2px** (`--font-display`), center-aligned.
+- **Gallery**: 1280px wide (hero frame 1280 × 556px + 5 thumbnails bar 246 × 103px).
 
-### 2. Sisa Section Recruitment Page Selanjutnya (Urutan Eksekusi Rinci):
+### 2. Sisa Section Recruitment Page Selanjutnya:
 
-- **Section 7: Snippets of Life at Data Sorcerers (`1436:3684`, 1440 × 897px)**
-  - Heading "Snippets of Life at data sorcerers" Bluu Next Bold 700 56/67px.
-  - Gallery 1280px (hero frame 556px + 5 thumbnails bar).
 - **Section 8: CTA Recruitment Section (`1436:3687`, 1440 × 520px)**
   - Heading "Ready to Become a Sorcery?" Bluu Next Bold 700 56/67px.
   - Single Button "Join the Community" (201 × 43px).
@@ -94,6 +87,22 @@ WORKFLOW & 6 GATE VERIFIKASI (SEMUA WAJIB PASS SEBELUM COMMIT):
 ## Ringkasan cepat (untuk AI baru) — 2 Oct 2026
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
+
+- **Recruitment Page Section 6: FAQ Section (`1436:3675`) — 100% SELESAI (2 Oct 2026).**
+  Section 6 pada halaman Recruitment (`1436:3505`) kini 100% selesai dan tervalidasi presisi:
+  - Frame Figma `1436:3675` ("Frame 2495", 1440 × 983px, padding `80px 80px 80px 80px`, gap header ke list **`56px`** — strict 8-point grid kelipatan 8, mengoreksi nilai lama 58px).
+  - Heading `FAQ` (`1436:3676`): **Bluu Next Bold 700 56px / 67.2px** (`--font-display`), linear gradient 181deg `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)`. Ink width terukur: 103.5px, ink height 46px.
+  - List Container Frame 2546 (`1436:3677`): width 1280px at `(80, 203.2)`, height 700px, gap `32px` (`4 × 8px`), padding `0`.
+  - 6 Accordion Items:
+    - Items 1–4: `1280 × 77px` di y = `[203.2, 312.2, 421.2, 530.2]`.
+    - Items 5–6: `1280 × 116px` di y = `[639.2, 787.2]` (2 baris teks).
+    - Background `rgba(255, 255, 255, 0.15)`, 1px specular glass rim `linear-gradient(135deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%)`.
+    - Pertanyaan Manrope Medium 500 26/39px putih, chevron down rotasi 180°.
+  - Geometri Chromium terverifikasi: section `{ width: 1440, height: 983.2, top: 4213.578125 }`, heading `{ x: 80, y: 80, width: 1280, height: 67.2 }`, list `{ x: 80, y: 203.2, width: 1280, height: 700 }`, 6 items exact.
+  - Downstream section tops (`.snippets` 5196.78, `.cta` 6096.78, `.footer` 6633.78) terkalibrasi presisi.
+  - Section MAE: **`7.7518/255`** vs reference `Recruitment-Faq-Revisi-1x.png` (Header MAE 0.7854, Accordion List MAE 10.2983, Bottom MAE 2.7911). Geometri diff 0.0px.
+  - Semua 6 gate verifikasi ALL PASS (`build`, `verify.mjs`, `navbar-audit`, `verify-vt`, `responsive-audit`, `format:check`).
+  - Detail: `docs/assets.md` §Recruitment page — FAQ.
 
 - **Recruitment Page Section 5: Selection Timeline (`1436:3637`) — 100% SELESAI (2 Oct 2026).**
   Section 5 pada halaman Recruitment (`1436:3505`) kini 100% selesai dan tervalidasi presisi:
@@ -1524,29 +1533,30 @@ Fokus utama AI berikutnya adalah mengaudit dan mengeksekusi secara **strict pixe
 
 ### TABEL BREAKDOWN & STATUS PER-SECTION:
 
-#### A. HOMEPAGE REVISI FONT & SPACING (`1430:2040`)
+#### A. HOMEPAGE REVISI FONT & SPACING (`1430:2040`) — [100% SELESAI]
 
-| No  | Section & Node ID                           | Dimensi & Padding              | Spacing & Gap                     | Typography                                    | Status & Verifikasi                       |
-| --- | ------------------------------------------- | ------------------------------ | --------------------------------- | --------------------------------------------- | ----------------------------------------- |
-| 1   | **Hero Section** (`1430:2041`)              | 1440 × 903, padding 80px       | Gap content 64px, gap heading 4px | Bluu Next Bold 72/86, Manrope 18/25           | **SELESAI** (MAE 3.18, commit `e515b26`)  |
-| 2   | **Philosophy Section** (`1430:2052`)        | 1440 × 837, padding 80px       | Gap 48px/8px, grid 30×92          | Bluu Next Bold 56/67, Manrope 16/24           | **SELESAI** (MAE 2.568, commit `d080334`) |
-| 3   | **What We Do** (`1430:2089`)                | 1440 × 840, padding 80px       | 4 kartu 391×254, gap 0/16px       | Bluu Next Bold 56/67.2, Manrope Bold 26/39    | **SELESAI** (MAE 2.579, commit `390ee5f`) |
-| 4   | **Choose Your Domain (HoDS)** (`1430:2138`) | 1440 × 819, padding 80px       | Gap header 74px, gap kartu 32px   | Bluu Next Bold 56/67.2, Manrope 22/33 & 16/24 | **SELESAI** (MAE 2.405, commit `8da8277`) |
-| 5   | **Our Project** (`1430:2146`)               | 1440, padding 80px             | Gap header 82px, gap 4px          | Bluu Next Bold 56/67.2, Manrope               | **PENDING AUDIT & REVISI**                |
-| 6   | **CTA Recruitment** (`1430:2162`)           | 1440, padding 80px, card 64×80 | Gap content 48px, action gap 26px | Bluu Next Bold 56/67.2, Manrope 16/24         | **PENDING AUDIT & REVISI**                |
+| No  | Section & Node ID                           | Dimensi & Padding        | Spacing & Gap                     | Typography                                    | Status & Verifikasi                       |
+| --- | ------------------------------------------- | ------------------------ | --------------------------------- | --------------------------------------------- | ----------------------------------------- |
+| 1   | **Hero Section** (`1430:2041`)              | 1440 × 903, padding 80px | Gap content 64px, gap heading 4px | Bluu Next Bold 72/86, Manrope 18/25           | **SELESAI** (MAE 3.18, commit `e515b26`)  |
+| 2   | **Philosophy Section** (`1430:2052`)        | 1440 × 837, padding 80px | Gap 48px/8px, grid 30×92          | Bluu Next Bold 56/67, Manrope 16/24           | **SELESAI** (MAE 2.568, commit `d080334`) |
+| 3   | **What We Do** (`1430:2089`)                | 1440 × 840, padding 80px | 4 kartu 391×254, gap 0/16px       | Bluu Next Bold 56/67.2, Manrope Bold 26/39    | **SELESAI** (MAE 2.579, commit `390ee5f`) |
+| 4   | **Choose Your Domain (HoDS)** (`1430:2138`) | 1440 × 819, padding 80px | Gap header 74px, gap kartu 32px   | Bluu Next Bold 56/67.2, Manrope 22/33 & 16/24 | **SELESAI** (MAE 2.405, commit `8da8277`) |
+| 5   | **Our Project** (`1430:2146`)               | 1440 × 910, padding 80px | Gap header 82px, coverflow        | Bluu Next Bold 56/67.2, Manrope               | **SELESAI** (MAE 5.076, commit `3870311`) |
+| 6   | **CTA Recruitment** (`1430:2162`)           | 1440 × 554, padding 80px | Gap content 48px, button 201×43   | Bluu Next Bold 56/67.2, Manrope 16/24         | **SELESAI** (MAE 3.142, commit `3870311`) |
 
 #### B. RECRUITMENT PAGE REVISI FONT & SPACING (`1436:3505`)
 
 | No  | Section & Node ID                    | Dimensi & Padding          | Spacing & Gap                           | Typography                                         | Status & Verifikasi                          |
 | --- | ------------------------------------ | -------------------------- | --------------------------------------- | -------------------------------------------------- | -------------------------------------------- |
 | 1   | **Recruitment Hero** (`1436:3506`)   | 1440 × 866, padding 0 80px | Vertically centered (278px), gap 48px   | Bluu Next Bold 72/86, Manrope 18/27, Button 120×43 | **SELESAI** (assert exact, commit `978d468`) |
-| 2   | **Who Should Join** (`1436:3512`)    | 1440, padding 80px         | Gap header 74px, rail cards gap 32px    | Bluu Next Bold 56/67.2, Manrope                    | **PENDING AUDIT & REVISI**                   |
-| 3   | **What You Will Do** (`1436:3517`)   | 1440 × 903, padding 80px   | Gap header 20px, body 1312×625          | Bluu Next Bold 56/67.2, Manrope 18/27              | **PENDING AUDIT & REVISI**                   |
-| 4   | **Available Roles** (`1436:3564`)    | 1440, padding 80px         | Gap header 58px, grid gap 40px          | Bluu Next Bold 56/67.2, 6 cards role revisi        | **PENDING AUDIT & REVISI**                   |
-| 5   | **Selection Timeline** (`1436:3637`) | 1440, padding 80px         | Header padding 18×32, row gap 18px      | Bluu Next Bold 56/67.2, 6 phase rows               | **PENDING AUDIT & REVISI**                   |
-| 6   | **FAQ** (`1436:3675`)                | 1440, padding 80px         | Gap items 16px/24px                     | Bluu Next Bold 56/67.2 ("FAQ"), Manrope            | **PENDING AUDIT & REVISI**                   |
-| 7   | **Snippets of Life** (`1436:3684`)   | 1440, padding 40px 80px    | Gap 56px, gallery 1280, thumbs gap 35px | Bluu Next Bold 56/67.2, Manrope                    | **PENDING AUDIT & REVISI**                   |
+| 2   | **Who Should Join** (`1436:3512`)    | 1440 × 789, padding 80px   | Gap header 74px, rail cards gap 32px    | Bluu Next Bold 56/68, Manrope 18/27                | **SELESAI** (MAE 2.843, commit `f417b3c`)    |
+| 3   | **What You Will Do** (`1436:3517`)   | 1440 × 903, padding 80px   | Gap header 20px, body 1312×625          | Bluu Next Bold 56/67, Manrope 18/27                | **SELESAI** (MAE 3.254, commit `2d1f95a`)    |
+| 4   | **Available Roles** (`1436:3564`)    | 1440 × 843, padding 80px   | Gap header 58px, grid gap 40px          | Bluu Next Bold 56/67, 6 cards + WA direct link     | **SELESAI** (assert exact, commit `37032bb`) |
+| 5   | **Selection Timeline** (`1436:3637`) | 1440 × 812.2, padding 80px | Header padding 18×32, gap 56px          | Bluu Next Bold 56/67.2, 6 phase rows               | **SELESAI** (MAE 4.306, commit `c50a005`)    |
+| 6   | **FAQ** (`1436:3675`)                | 1440 × 983, padding 80px   | Gap header 56px, gap items 32px         | Bluu Next Bold 56/67.2 ("FAQ"), Manrope 26/39      | **SELESAI** (MAE 7.752, assert exact)        |
+| 7   | **Snippets of Life** (`1436:3684`)   | 1440, padding 40px 80px    | Gap 56px, gallery 1280, thumbs gap 35px | Bluu Next Bold 56/67.2, Manrope                    | **TARGET BERIKUTNYA / NEXT PRIORITY**        |
 | 8   | **CTA Recruitment** (`1436:3687`)    | 1440, padding 80px         | Gap content 24px/48px                   | Bluu Next Bold 56/67.2, Button Join                | **PENDING AUDIT & REVISI**                   |
+| 9   | **Footer** (`1436:3699`)             | 1440 × 556, padding 80px   | Branding, social links, alignment       | Manrope 400/500/700                                | **PENDING AUDIT & REVISI**                   |
 
 ---
 
