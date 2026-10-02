@@ -191,9 +191,11 @@
   - Back Link (`Frame 2391`): `151 × 27px` at `x: 80, y: 80`. Gap ke hero card: `56px`.
   - Hero Card (`card detile role (HoDS)`): `1280 × 279px` at `x: 80, y: 163` (`80 + 27 + 56 = 163`). Gap ke role-body (tabs): `56px`.
   - Content Tabs (`Frame 2491`): at `x: 80, y: 498` (`163 + 279 + 56 = 498`). Height `32px`, `gap: 8px` antar button.
+  - Hero title (`864:18900` data / `864:19238` language): **Bluu Next Bold 700 48/57.6** (`--font-display`), gradient `270deg #fff → #ede8ff`, **Title Case** (mis. "Data Intelligence", "Language & Reasoning" — bukan uppercase). `.role-copy` di `(42, 85)` (Figma `864:18898`), gap title→deskripsi `14px`. Mapping judul di `src/data/hods.ts` diselaraskan Title Case dengan `src/data/domains.ts` (revisi 3 Oct 2026; sebelumnya `--font-heading`/Nasalization 400 uppercase).
   - Role Body gap: `32px` antara tabs dan panels.
   - Block gap: `16px` antara title H2 (`Manrope Bold 700 26/39`) dan description/bullets (`Manrope Medium 500 18/27`).
   - Panel gap: `42px` antar block.
+  - Bullets: `gap: 8px` antar baris (Figma `798:2745`, **revisi 3 Oct 2026** — sebelumnya `13px`), tiap baris `gap: 23px` dot→teks (`798:2746`), dot `6×6` gradient `135deg`.
   - Mobile (`@media (max-width: 900px)`): `.hods-detail-inner` `min-height: 0; gap: 40px; padding: calc(40px + env(safe-area-inset-top, 0px)) 24px 40px;` dan `.hods-detail` `min-height: 100vh / 100lvh;`.
 - Measurements & Precision:
   - `verify.mjs` assertions (diuji pada seluruh 6 rute `/hods/{data,core,language,vision,product,growth}`):
@@ -201,10 +203,14 @@
     - Back link: `{ x: 80, y: 80 }` exact.
     - Hero Card: `{ x: 80, y: 163, width: 1280, height: 279 }` exact.
     - Tabs: `{ x: 80, y: 498, width: 1280, height: 32 }` exact.
-  - Regional MAE on `/hods/language`:
-    - Top (y 0–163): **0.5816**
-    - Content (y 442–800): **1.3456**
-    - Bottom space (y 800–1280): **2.3912**
+    - Heading: `font-family` mengandung **Bluu Next**, `font-weight: 700` (revisi 3 Oct 2026).
+  - Reference PNG `/hods/language` (`HoDS-Detail-Language-1x/2x.png`) **diregenerasi dari Figma node `864:18959`** (3 Oct 2026) — export lama masih memakai judul uppercase Nasalization + art lama.
+  - Regional MAE on `/hods/language` (reduce, 1440, vs reference baru):
+    - Top (y 0–163): **0.2225**
+    - Content (y 442–800): **0.5262**
+    - Bottom space (y 800–1280): **0.7981**
+    - Card (y 163–442, ilustrasi detail): **7.4359** (sisa resampler/kompresi webp, bukan offset — bbox tinta identik).
+    - Full: **2.0956**
   - Responsive audit: 18 routes × 26 widths (468/468) **ALL PASS**.
   - ClientRouter (VT): **ALL PASS**, pageerrors: none.
 

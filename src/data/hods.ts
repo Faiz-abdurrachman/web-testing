@@ -22,7 +22,7 @@ export interface HodDetail {
 export const hods: HodDetail[] = [
   {
     id: 'data',
-    title: 'DATA INTELLIGENCE',
+    title: 'Data Intelligence',
     description:
       'Transforming data into information, insights, and data systems that can be utilized for decision-making and AI development.',
     cardImage: '/images/hods/card-data.webp',
@@ -114,7 +114,7 @@ export const hods: HodDetail[] = [
   },
   {
     id: 'core',
-    title: 'CORE AI & ENGINEERING',
+    title: 'Core AI & Engineering',
     description:
       'Building AI models and transforming them into real-world AI systems.',
     cardImage: '/images/hods/card-core.webp',
@@ -198,7 +198,7 @@ export const hods: HodDetail[] = [
   },
   {
     id: 'language',
-    title: 'LANGUAGE & REASONING',
+    title: 'Language & Reasoning',
     description:
       'Building AI capable of understanding language, generating information, utilizing knowledge, and performing reasoning.',
     cardImage: '/images/hods/card-language.webp',
@@ -247,7 +247,7 @@ export const hods: HodDetail[] = [
   },
   {
     id: 'vision',
-    title: 'VISION & MULTIMODAL',
+    title: 'Vision & Multimodal',
     description:
       'Building AI capable of understanding visuals, video, and combinations of various information types.',
     cardImage: '/images/hods/card-vision.webp',
@@ -311,7 +311,7 @@ export const hods: HodDetail[] = [
   },
   {
     id: 'product',
-    title: 'PRODUCT & SOFTWARE',
+    title: 'Product & Software',
     description:
       'Turn ideas into impactful digital products through research, design, and development.',
     cardImage: '/images/hods/card-product.webp',
@@ -395,7 +395,7 @@ export const hods: HodDetail[] = [
   },
   {
     id: 'growth',
-    title: 'GROWTH & COMMUNITY',
+    title: 'Growth & Community',
     description:
       'Grow people, grow community, and make ideas, projects, and impact visible.',
     cardImage: '/images/hods/card-growth.webp',

@@ -45,14 +45,24 @@ Catatan tiap section:
 
 **NEXT (prioritas):**
 
-1. **Contact page (`1445:5065`) — audit/verifikasi strict per-section.** Sudah
-   diimplementasi & presisi (hero `1445:5066` MAE 2.76), tapi wajib diaudit ulang
-   strict 8pt spacing/padding + font + MAE, **satu section per pass** (inventaris
-   ada di `docs/kickoff-prompt.md` §TARGET WORKSPACE A).
-2. **Revisi detail HoDS (`HoDSDetail`)** — 6 rute `/hods/[id]` masih
-   `--font-heading` (Nasalization) → revisi ke **Bluu Next Bold 700** (`--font-display`)
-   - strict 8pt, satu section per pass.
-3. Konten asli (foto member, logo partner, `projects.ts`, tanggal recruitment,
+1. **Contact page (`1445:5065`) — audit strict per-section (3 Oct 2026).**
+   **Section 1 Hero `1445:5066` AUDIT PASS** — geometri Chromium exact (`1440×954`,
+   row `80/240/1280×594`, left 587, form 661, art `−131/−92/801×600`, cards
+   `564/662/760×74`, overflow 0), bbox tinta identik ±0 px, MAE full **2.757**
+   (below-navbar **1.338**); residual = AA font lintas-renderer (title 6.05, pill
+   8.82). Tidak ada kode yang perlu diubah. **Section 2 Footer `1445:5118`** =
+   komponen bersama `Footer.astro` yang sudah presisi (diverifikasi di
+   homepage/recruitment/partners). Inventaris: `docs/kickoff-prompt.md`
+   §TARGET WORKSPACE A.
+2. **Revisi detail HoDS (`HoDSDetail`) — SELESAI (3 Oct 2026).** 6 rute
+   `/hods/[id]` judul hero pindah dari `--font-heading` (Nasalization 400) ke
+   **Bluu Next Bold 700 48/57.6** (`--font-display`, Figma `864:18900`/`864:19238`),
+   **Title Case** (data `hods.ts` diselaraskan dgn `domains.ts`); `.bullets` gap
+   `13 → 8` (Figma `798:2745`); `.role-copy top 84.5 → 85`. Reference
+   `HoDS-Detail-Language-1x/2x.png` diregenerasi dari node `864:18959`. Assertion
+   font ditambah di `verify.mjs`. Semua 6 gate + seo PASS. Detail:
+   `docs/assets.md` §Detail HoDS.
+3. **Konten asli** (foto member, logo partner, `projects.ts`, tanggal recruitment,
    milestone HoF). Webfont Nasalization tetap tidak boleh di-bundle (lisensi desktop).
    **Pelajaran About Us + Partners wajib**: `docs/kickoff-prompt.md`
    §"PELAJARAN WAJIB DARI ABOUT US + PARTNERS".

@@ -1209,12 +1209,18 @@ try {
               }
             : null;
         };
+        const heading = section.querySelector('.role-copy h1');
+        const headingStyle = getComputedStyle(heading);
         return {
           width: rect.width,
           height: rect.height,
           back: relative('.back'),
           card: relative('.role-card'),
           tabs: relative('.tabs'),
+          heading: {
+            family: headingStyle.fontFamily,
+            weight: headingStyle.fontWeight,
+          },
         };
       });
     assert.equal(hodsGeometry.width, 1440, `HoDS ${domain.id} width`);
@@ -1233,6 +1239,16 @@ try {
     assert.equal(hodsGeometry.back.y, 80, `HoDS ${domain.id} back link y`);
     assert.equal(hodsGeometry.tabs.x, 80, `HoDS ${domain.id} tabs x`);
     assert.equal(hodsGeometry.tabs.y, 498, `HoDS ${domain.id} tabs y`);
+    assert.match(
+      hodsGeometry.heading.family,
+      /Bluu Next/,
+      `HoDS ${domain.id} heading uses the Bluu Next display font`,
+    );
+    assert.equal(
+      hodsGeometry.heading.weight,
+      '700',
+      `HoDS ${domain.id} heading weight`,
+    );
     await page
       .locator('.hods-detail')
       .screenshot({ path: `artifacts/hods-detail-${domain.id}.png` });

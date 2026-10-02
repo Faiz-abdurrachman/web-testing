@@ -355,19 +355,20 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   Situs pakai Astro **`<ClientRouter />`** (navigasi klien + `AudioContext`
   persist; semua komponen re-init `astro:page-load` + cleanup
   `astro:before-swap` — `docs/sound-sop.md` §9).
-- **STATUS RINGKAS (2 Oct 2026).** **Homepage 100% selesai** (Hero → Our
+- **STATUS RINGKAS (3 Oct 2026).** **Homepage 100% selesai** (Hero → Our
   Philosophy → What We Do → Choose Your Domain/HoDS → Our Project → CTA, node
-  `1430:2040`). **Recruitment Page 100% selesai** (Hero → Who Should Join → What
-  You Will Do → Available Roles → Selection Timeline → FAQ → Snippets → CTA →
-  Footer, node `1436:3505`). **Footer bersama** (`765:17071` / `1436:3699`) selesai
-  untuk 6 halaman. Semua heading section revised memakai **Bluu Next Bold 700**
-  (`--font-display`); tidak ada `--font-heading` (Nasalization) yang tersisa di
-  komponen Homepage/Recruitment.
+  `1430:2040`). **Recruitment Page 100% selesai** (node `1436:3505`). **About Us
+  (`1439:4184`) + Partners (`1439:4787`) 100% selesai.** **Footer bersama**
+  (`765:17071`) selesai untuk 6 halaman. Semua heading section revised memakai
+  **Bluu Next Bold 700** (`--font-display`); `--font-heading` (Nasalization) kini
+  hanya di label grup `OurTeam.astro` (sengaja) dan wordmark `Splash.astro`.
   **CURRENT: semua halaman konten 100% selesai** (Homepage, Recruitment,
-  About Us, Partners, Contact). Berikutnya (lihat "Next plan" &
-  `docs/kickoff-prompt.md`): **(1)** audit/verifikasi **strict per-section Contact
-  (`1445:5065`)** — 8pt + font + MAE, satu section per pass; **(2)** revisi
-  **Detail HoDS (`HoDSDetail`)** ke Bluu Next Bold 700 + strict 8pt.
+  About Us, Partners, Contact). **Detail HoDS (`HoDSDetail`, 6 rute) SELESAI
+  3 Oct 2026** — judul hero pindah ke **Bluu Next Bold 700 48/57.6** + Title
+  Case, `.bullets` gap `8`, reference diregenerasi; audit **Contact
+  (`1445:5065`) Section 1 Hero PASS** (geometri exact, MAE 2.757 / below-nav
+  1.338). Berikutnya: konten asli (foto member, logo partner, `projects.ts`,
+  tanggal recruitment, milestone HoF) — lihat `docs/ai-handoff.md`.
 - **About Us Section 1: Hero (`1439:4185`) — 100% SELESAI (2 Oct 2026).**
   Frame Figma `1439:4185` (1440×903, column, padding 80px, justify center,
   gap 16px, IMAGE fill `34bc68…` = `assets/assets about us/hero/raw-hero-bg.png`,
@@ -623,12 +624,20 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   `verify.mjs` kini juga mendiff footer halaman Partners vs
   `assets/partners/footer/Partners-Footer-1x.png` → MAE **5.873/255** (setara
   homepage 5.838). **Partners page 100% (4 section).**
-- **Next plan (prioritas).** Semua halaman konten 100% selesai. Berikutnya:
-  **(1)** audit/verifikasi **strict per-section Contact (`1445:5065`)** — 8pt +
-  font + MAE, satu section per pass; **(2)** revisi **detail HoDS (`HoDSDetail`)**
-  ke `--font-display` + strict 8pt (6 rute `/hods/[id]`; satu section per pass);
-  **(3)** konten asli (`projects.ts`, tanggal recruitment, logo partner,
-  foto/nama member team, member/project/milestone HoF). Detail:
+- **Detail HoDS revision (`HoDSDetail.astro`, 3 Oct 2026).** Judul hero 6 rute
+  `/hods/[id]` pindah dari `--font-heading` (Nasalization 400 uppercase) ke
+  **Bluu Next Bold 700 48/57.6** (`--font-display`, Figma `864:18900`/`864:19238`),
+  gradient `270deg #fff → #ede8ff`, **Title Case** (`src/data/hods.ts` titles
+  diselaraskan `src/data/domains.ts`). `.role-copy top 84.5 → 85`; `.bullets` gap
+  `13 → 8` (Figma `798:2745`). Reference `HoDS-Detail-Language-1x/2x.png`
+  diregenerasi dari node `864:18959`. `verify.mjs` sekarang assert heading
+  `font-family` Bluu Next + weight `700` per rute. Geometri tak berubah
+  (`back 80/80`, `card 80/163/1280×279`, `tabs 80/498`, height 1280).
+- **Next plan (prioritas).** Semua halaman konten + detail HoDS 100% selesai;
+  audit **Contact (`1445:5065`) Section 1 Hero PASS**. Berikutnya:
+  **(1)** konten asli (`projects.ts`, tanggal recruitment, logo partner,
+  foto/nama member team, member/project/milestone HoF); **(2)** regenerasi
+  reference HoDS lain bila art/desain berubah. Detail:
   `docs/ai-handoff.md` §"Next Task" & `docs/kickoff-prompt.md`.
 - **Deploy GANDA**: `git push origin main` → testing + production.
 - **Available Roles hover (`f92b88a`).** Kartu reaktif pointer: pool radial violet
