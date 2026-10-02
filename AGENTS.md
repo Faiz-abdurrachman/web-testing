@@ -364,8 +364,9 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   komponen Homepage/Recruitment.
   **CURRENT PAGE: About Us (`1439:4184`)** — 5 section konten + Footer shared,
   dikerjakan **satu per satu** (wajib Master Work Plan + inventaris section).
-  **Section 1 Hero selesai 2 Oct 2026; berikutnya Section 2 visi misi
-  (`1439:4190`).** Lihat "Next plan" di bawah & `docs/kickoff-prompt.md`.
+  **Section 1 Hero & Section 2 visi misi selesai 2 Oct 2026; berikutnya
+  Section 3 Philosophy (`1439:4219`).** Lihat "Next plan" di bawah &
+  `docs/kickoff-prompt.md`.
 - **About Us Section 1: Hero (`1439:4185`) — 100% SELESAI (2 Oct 2026).**
   Frame Figma `1439:4185` (1440×903, column, padding 80px, justify center,
   gap 16px, IMAGE fill `34bc68…` = `assets/assets about us/hero/raw-hero-bg.png`,
@@ -379,6 +380,19 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   exact (diff 0.0px); MAE hero **4.6874/255** full (3.7902 di bawah band navbar;
   headline 10.84 = edge AA di atas nebula terang, subtitle 5.43). Semua 6 gate
   ALL PASS. Referensi: `assets/about-us/hero/About-Hero-Revisi-1x.png`.
+- **About Us Section 2: visi misi (`1439:4190`) — 100% SELESAI (2 Oct 2026).**
+  Frame `1439:4190` (1440×840, column, padding 80px, gap 100px, IMAGE fill
+  starfield `ff47b4…` → `public/images/about/visi-misi-bg.webp`, generator
+  `npm run assets:about`). Vision block `1439:4191` 1280×145.2 di `(80, 80)`;
+  Mission block `1439:4195` 1280×435.2 di `(80, 325.2)`. Headings "OUR VISION"
+  / "OUR MISION" **Bluu Next Bold 700 56/67.2** (`--font-display`) di `(80, 80)`
+  / `(80, 325.2)`, gradient `181deg`. Body Manrope 500 18/27 putih 906 / 828.
+  List `1439:4199` 797×266 di `(80, 494.4)`, 6 bar `31px` (gap 16, padding
+  `2px 16px`, lebar `713/733/746/775/786/797`, gradient `100deg` hasil fit).
+  Tarot `1439:4218` 356×430 di `(1028, 261)` pakai `tarot-cards.webp` (MAE 0.9).
+  Section MAE **1.910/255** (vision 3.11, list 3.35, tarot 1.16, bg 0.49).
+  Geometri Chromium exact. Semua 6 gate ALL PASS. Referensi:
+  `assets/about-us/visi-misi/VisiMisi-Revisi-1x.png`.
 - **Homepage 100% Selesai — Our Project & CTA Recruitment Section (2 Oct 2026).**
   Seluruh 6 section Homepage (`1430:2040`) kini 100% selesai dan tervalidasi:
   - Section 5: **Our Project Section (`1430:2146`)** — Frame 1440×910px, padding 80px, gap 82px. Eyebrow 86.6×26px di `(80, 80)`, heading "What Our Sorcery Create" Bluu Next Bold 700 56/67px di `(80, 114)` (ink width 646px), 3D coverflow active card 549×567px di `(445.5, 263)`. MAE 5.0764 (Image 2.90, Tags 6.05, Text 5.90, Header 6.67, Bottom 0.0).
@@ -509,8 +523,8 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
 - **CURRENT PAGE — About Us (`1439:4184`).** Homepage & Recruitment sudah 100%.
   About Us ada **6 section** (wajib inventaris + Master Work Plan per-section dulu):
   1. Hero Section - About Us `1439:4185` (1440×903) — **SELESAI 2 Oct 2026**
-  2. visi misi section `1439:4190` (1440×840) — **berikutnya**
-  3. Philosophy Section `1439:4219` (1440×837)
+  2. visi misi section `1439:4190` (1440×840) — **SELESAI 2 Oct 2026**
+  3. Philosophy Section `1439:4219` (1440×837) — **berikutnya**
   4. Our Ecosystem Section `1439:4258` (1440×874)
   5. Our Team Section `1439:4305` (1440×1536) — **belum ada komponen** (`OurTeam.astro`)
   6. Footer `1439:4311` (shared, sudah presisi)

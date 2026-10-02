@@ -1,28 +1,46 @@
 ---
-import Starfield from './Starfield.astro';
 ---
 
 <section id="visi-misi" class="visi-misi" aria-labelledby="vision-title">
-  <Starfield />
+  <div class="artwork" aria-hidden="true">
+    <picture>
+      <source
+        type="image/webp"
+        srcset="/images/about/visi-misi-bg.webp 1x, /images/about/visi-misi-bg-2x.webp 2x"
+        width="1440"
+        height="840"
+      />
+      <img
+        class="art-bg"
+        src="/images/about/visi-misi-bg.webp"
+        width="1440"
+        height="840"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+  </div>
+
   <div class="visi-misi-inner">
-    <!-- Vision Block (Figma 1248:14769: 1280 x 146, y=80) -->
-    <div class="vision-block">
-      <h2 id="vision-title" class="section-heading">
+    <!-- Vision block (Figma 1439:4191: 1280 x 145 at y=80, gap 24). -->
+    <div class="vm-block vision-block">
+      <h2 id="vision-title" class="vm-heading">
         OUR VISION
       </h2>
-      <p class="section-desc vision-desc">
+      <p class="vm-desc vision-desc">
         Data Sorcerers is an AI &amp; Data Innovation Community dedicated to
         developing people, knowledge, research, and technology through
         collaborative learning and real-world experimentation.
       </p>
     </div>
 
-    <!-- Mission Block (Figma 1248:14795: 1280 x 426, y=326) -->
-    <div class="mission-block">
-      <h2 id="mission-title" class="section-heading">
+    <!-- Mission block (Figma 1439:4195: 1280 x 435, gap 24). -->
+    <div class="vm-block mission-block">
+      <h2 id="mission-title" class="vm-heading">
         OUR MISION
       </h2>
-      <p class="section-desc mission-desc">
+      <p class="vm-desc mission-desc">
         Data Sorcerers builds an environment where people can learn deeply,
         experiment boldly, conduct meaningful research, and build real-world
         solutions through collaboration
@@ -75,7 +93,7 @@ import Starfield from './Starfield.astro';
     </div>
   </div>
 
-  <!-- Floating Tarot Card Illustration (Figma 1248:14798: x=1028, y=262, 356x430, no glow) -->
+  <!-- Tarot card artwork (Figma 1439:4218: 356 x 430 at (1028, 261)). -->
   <div class="tarot-card-art" aria-hidden="true">
     <picture>
       <source
@@ -95,20 +113,35 @@ import Starfield from './Starfield.astro';
 </section>
 
 <style>
-  /* Matches Figma node 1248:14797 (1440 x 832).
-     Exact geometry:
-       Section: 1440 x 832, p: 80px 80px 80px 80px.
-       Vision block: x=80, y=80, w=1280, h=146.
-       Mission block: x=80, y=326, w=1280, h=426.
-       Tarot card: x=1028, y=262, w=356, h=430 (clean, no purple glow).
-       List items: Frame 2610-2615 with #ae93ff -> #6c3bff -> transparent fade. */
+  /* Matches Figma node 1439:4190 (1440 x 840), page 1439:4184.
+     Section: column, padding 80px, gap 100px, IMAGE fill (starfield).
+     Vision block 1439:4191 (1280 x 145): heading 586 x 67 + body 906 x 54.
+     Mission block 1439:4195 (1280 x 435): heading 586 x 67 + body 828 x 54 +
+     list 797 x 266 (6 rows, gap 16px). Tarot 1439:4218 at (1028, 261). */
   .visi-misi {
     position: relative;
     isolation: isolate;
-    min-height: 832px;
-    padding: 80px var(--page-gutter);
+    min-height: 840px;
+    padding: 80px;
     overflow: clip;
-    background-color: #000;
+    background-color: #050507;
+  }
+
+  .artwork {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .artwork picture,
+  .artwork .art-bg {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
   }
 
   .visi-misi-inner {
@@ -117,26 +150,34 @@ import Starfield from './Starfield.astro';
     display: flex;
     flex-direction: column;
     gap: 100px;
+    width: 100%;
     max-width: 1280px;
     margin-inline: auto;
   }
 
-  /* Shared heading & description */
-  .section-heading {
-    margin: 0 0 24px;
-    font-family: var(--font-heading);
+  .vm-block {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+  }
+
+  .vm-heading {
+    margin: 0;
+    width: 100%;
+    max-width: 586px;
+    font-family: var(--font-display);
     font-size: 56px;
-    font-weight: 400;
-    line-height: 68.26px;
+    font-weight: 700;
+    line-height: 67.2px;
     letter-spacing: 0;
-    background: linear-gradient(180deg, #ffffff 0%, #ede8ff 100%);
+    background: linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
     color: transparent;
   }
 
-  .section-desc {
+  .vm-desc {
     margin: 0;
     font-family: var(--font-body);
     font-size: 18px;
@@ -153,25 +194,18 @@ import Starfield from './Starfield.astro';
 
   .mission-desc {
     max-width: 828px;
-    margin-bottom: 24px;
   }
 
-  /* Mission block */
-  .mission-block {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    max-width: 828px;
-  }
-
-  /* Mission List & Gradient Bars (Figma node 1248:14776 Frame 2610) */
+  /* Mission list (Figma 1439:4199: 797 x 266, gap 16). */
   .mission-list {
     margin: 0;
     padding: 0;
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
+    width: 100%;
+    max-width: 797px;
   }
 
   .mission-item {
@@ -179,13 +213,13 @@ import Starfield from './Starfield.astro';
     align-items: center;
     gap: 10px;
     height: 31px;
-    padding: 0 16px;
+    padding: 2px 16px;
     box-sizing: border-box;
     background: linear-gradient(
-      90deg,
-      #ae93ff 0%,
-      #6c3bff 7%,
-      #6c3bff 58%,
+      100deg,
+      #ffffff -3.5%,
+      #6c3bff 3.6%,
+      #6c3bff 56.7%,
       rgba(108, 59, 255, 0) 100%
     );
   }
@@ -210,13 +244,15 @@ import Starfield from './Starfield.astro';
   }
 
   .item-num {
-    display: inline-block;
     flex: none;
     font-family: var(--font-body);
     font-size: 18px;
     font-weight: 500;
     line-height: 27px;
-    color: #ffffff;
+    background: linear-gradient(180deg, #9b7bff 0%, #ffffff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
   .item-text {
@@ -228,13 +264,10 @@ import Starfield from './Starfield.astro';
     white-space: nowrap;
   }
 
-  /* Tarot Card Art: Exact Figma node 1248:14798
-     Position: x=1028, y=262, width=356, height=430.
-     Clean crystal rendering without purple glow drop-shadow. */
   .tarot-card-art {
     position: absolute;
     left: calc(50% - 720px + 1028px);
-    top: 262px;
+    top: 261px;
     z-index: 2;
     width: 356px;
     height: 430px;
@@ -248,7 +281,6 @@ import Starfield from './Starfield.astro';
     object-fit: contain;
   }
 
-  /* Responsive Breakpoints */
   @media (max-width: 1300px) {
     .tarot-card-art {
       left: auto;
@@ -258,18 +290,14 @@ import Starfield from './Starfield.astro';
 
   @media (max-width: 1050px) {
     .visi-misi {
-      padding: 64px var(--page-gutter);
+      padding: 64px;
     }
     .visi-misi-inner {
       gap: 64px;
     }
-    .section-heading {
+    .vm-heading {
       font-size: clamp(36px, 5vw, 48px);
       line-height: 1.2;
-      margin-bottom: 18px;
-    }
-    .mission-block {
-      max-width: 100%;
     }
     .tarot-card-art {
       position: relative;
@@ -287,22 +315,18 @@ import Starfield from './Starfield.astro';
 
   @media (max-width: 760px) {
     .visi-misi {
-      padding: 48px var(--page-gutter);
+      padding: 48px;
     }
     .visi-misi-inner {
       gap: 48px;
     }
-    .section-heading {
+    .vm-heading {
       font-size: clamp(28px, 7vw, 38px);
       line-height: 1.2;
-      margin-bottom: 16px;
     }
-    .section-desc {
+    .vm-desc {
       font-size: 16px;
       line-height: 24px;
-    }
-    .mission-desc {
-      margin-bottom: 20px;
     }
     .mission-item {
       height: auto;

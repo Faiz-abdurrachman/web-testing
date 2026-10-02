@@ -2261,6 +2261,59 @@ try {
     .raw()
     .toBuffer();
   assert.equal(aboutHeroReference.length, aboutHeroActual.length);
+  // About Us vision & mission — geometry + diff vs Figma node 1439:4190 export.
+  const visiMisiGeometry = await page.evaluate(() => {
+    const section = document.querySelector('.visi-misi');
+    const sectionBox = section.getBoundingClientRect();
+    const relativeBox = (selector) => {
+      const box = section.querySelector(selector).getBoundingClientRect();
+      return {
+        x: Math.round((box.x - sectionBox.x) * 10) / 10,
+        y: Math.round((box.y - sectionBox.y) * 10) / 10,
+        width: Math.round(box.width * 10) / 10,
+        height: Math.round(box.height * 10) / 10,
+      };
+    };
+    return {
+      section: { width: sectionBox.width, height: sectionBox.height },
+      vision: relativeBox('.vision-block'),
+      mission: relativeBox('.mission-block'),
+      heading: relativeBox('.vm-heading'),
+      body: relativeBox('.vision-desc'),
+      list: relativeBox('.mission-list'),
+      tarot: relativeBox('.tarot-card-art'),
+      rows: [...section.querySelectorAll('.mission-item')].map((row) =>
+        Math.round(row.getBoundingClientRect().width),
+      ),
+      overflow: document.documentElement.scrollWidth - innerWidth,
+    };
+  });
+  assert.deepEqual(visiMisiGeometry, {
+    section: { width: 1440, height: 840.40625 },
+    vision: { x: 80, y: 80, width: 1280, height: 145.2 },
+    mission: { x: 80, y: 325.2, width: 1280, height: 435.2 },
+    heading: { x: 80, y: 80, width: 586, height: 67.2 },
+    body: { x: 80, y: 171.2, width: 906, height: 54 },
+    list: { x: 80, y: 494.4, width: 797, height: 266 },
+    tarot: { x: 1028, y: 261, width: 356, height: 430 },
+    rows: [713, 733, 746, 775, 786, 797],
+    overflow: 0,
+  });
+  await page
+    .locator('.visi-misi')
+    .screenshot({ path: 'artifacts/about-visi-misi-desktop.png' });
+  const visiMisiReference = await sharp(
+    'assets/about-us/visi-misi/VisiMisi-Revisi-1x.png',
+  )
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const visiMisiActual = await sharp('artifacts/about-visi-misi-desktop.png')
+    .extract({ left: 0, top: 0, width: 1440, height: 840 })
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(visiMisiReference.length, visiMisiActual.length);
   const ecosystemGeometry = await page.evaluate(() => {
     const section = document.querySelector('.ecosystem');
     const sectionBox = section.getBoundingClientRect();

@@ -9,7 +9,8 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
 **CURRENT PAGE: About Us (`1439:4184`)** — Homepage & Recruitment sudah 100%.
-**Section 1 Hero SELESAI 2 Oct 2026; lanjut Section 2 `1439:4190`.**
+**Section 1 Hero & Section 2 visi misi SELESAI 2 Oct 2026; lanjut Section 3
+`1439:4219`.**
 Link Figma: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4184`
 
 Wajib **inventaris semua section** dulu (checklist), lalu kerjakan **satu per satu**
@@ -18,7 +19,7 @@ Wajib **inventaris semua section** dulu (checklist), lalu kerjakan **satu per sa
 | #   | Node ID     | Frame                   | W×H       | Status komponen sekarang                                |
 | --- | ----------- | ----------------------- | --------- | ------------------------------------------------------- |
 | 1   | `1439:4185` | Hero Section - About Us | 1440×903  | **SELESAI 2 Oct 2026** (revised Bluu Next Bold 700)     |
-| 2   | `1439:4190` | visi misi section       | 1440×840  | ada (`VisiMisi.astro`) — masih Nasalization, revisi     |
+| 2   | `1439:4190` | visi misi section       | 1440×840  | **SELESAI 2 Oct 2026** (revised Bluu Next Bold 700)     |
 | 3   | `1439:4219` | Philosophy Section      | 1440×837  | ada (`Philosophy.astro` `variant="about"`) — revisi     |
 | 4   | `1439:4258` | Our Ecosystem Section   | 1440×874  | ada (`OurEcosystem.astro`) — masih Nasalization, revisi |
 | 5   | `1439:4305` | Our Team Section        | 1440×1536 | **BELUM ADA komponen** → buat `OurTeam.astro`           |
@@ -115,6 +116,17 @@ WORKFLOW & 6 GATE VERIFIKASI (SEMUA WAJIB PASS SEBELUM COMMIT):
 ## Ringkasan cepat (untuk AI baru) — 2 Oct 2026
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
+
+- **About Us Section 2: visi misi (`1439:4190`) — 100% SELESAI (2 Oct 2026).**
+  Frame `1439:4190` (1440×840, column, padding 80px, gap 100px, IMAGE fill starfield `ff47b4…` →
+  `public/images/about/visi-misi-bg.webp`, generator `npm run assets:about`). Vision block
+  `1439:4191` 1280×145.2 di `(80, 80)`; Mission block `1439:4195` 1280×435.2 di `(80, 325.2)`.
+  Headings "OUR VISION"/"OUR MISION" **Bluu Next Bold 700 56/67.2** (`--font-display`), gradient
+  `181deg`; body Manrope 500 18/27 putih 906 / 828; list `1439:4199` 797×266 dengan 6 bar `31px`
+  (gap 16, padding `2px 16px`, lebar `713/733/746/775/786/797`, gradient fit `100deg`); tarot
+  `1439:4218` 356×430 di `(1028, 261)` (`tarot-cards.webp`, MAE 0.9). Section MAE **1.910/255**,
+  geometri Chromium exact. Semua 6 gate ALL PASS. Referensi
+  `assets/about-us/visi-misi/VisiMisi-Revisi-1x.png`. Detail: `docs/assets.md` §About Us — Vision & Mission.
 
 - **About Us Section 1: Hero (`1439:4185`) — 100% SELESAI (2 Oct 2026).**
   Frame `1439:4185` (1440×903, column, padding 80px, justify center, gap 16px, IMAGE fill `34bc68…`
