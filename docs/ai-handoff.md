@@ -8,7 +8,8 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
-**NEXT PAGE: About Us (`1439:4184`)** — Homepage & Recruitment sudah 100%.
+**CURRENT PAGE: About Us (`1439:4184`)** — Homepage & Recruitment sudah 100%.
+**Section 1 Hero SELESAI 2 Oct 2026; lanjut Section 2 `1439:4190`.**
 Link Figma: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4184`
 
 Wajib **inventaris semua section** dulu (checklist), lalu kerjakan **satu per satu**
@@ -16,7 +17,7 @@ Wajib **inventaris semua section** dulu (checklist), lalu kerjakan **satu per sa
 
 | #   | Node ID     | Frame                   | W×H       | Status komponen sekarang                                |
 | --- | ----------- | ----------------------- | --------- | ------------------------------------------------------- |
-| 1   | `1439:4185` | Hero Section - About Us | 1440×903  | ada (`AboutHero.astro`) — masih Nasalization, revisi    |
+| 1   | `1439:4185` | Hero Section - About Us | 1440×903  | **SELESAI 2 Oct 2026** (revised Bluu Next Bold 700)     |
 | 2   | `1439:4190` | visi misi section       | 1440×840  | ada (`VisiMisi.astro`) — masih Nasalization, revisi     |
 | 3   | `1439:4219` | Philosophy Section      | 1440×837  | ada (`Philosophy.astro` `variant="about"`) — revisi     |
 | 4   | `1439:4258` | Our Ecosystem Section   | 1440×874  | ada (`OurEcosystem.astro`) — masih Nasalization, revisi |
@@ -114,6 +115,17 @@ WORKFLOW & 6 GATE VERIFIKASI (SEMUA WAJIB PASS SEBELUM COMMIT):
 ## Ringkasan cepat (untuk AI baru) — 2 Oct 2026
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
+
+- **About Us Section 1: Hero (`1439:4185`) — 100% SELESAI (2 Oct 2026).**
+  Frame `1439:4185` (1440×903, column, padding 80px, justify center, gap 16px, IMAGE fill `34bc68…`
+  = raw bg unchanged). Content `1439:4186` 1280×287.4 di `(80, 307.8)`: headline `1439:4187`
+  **Bluu Next Bold 700 80/95.2 ls -0.88px** (`--font-display`) 1124×190.4 di `(158, 307.8)`,
+  gradient `181deg #fff 15% / #999 42% / #fff 79%`, 2 baris (membungkus "Architecting the Future of AI"
+  / "& Data Innovation."); subtitle `1439:4188` Manrope Medium 500 18/27 `#fff` 680×81 di `(380, 514.2)`,
+  `text-shadow: 0 4px 20px #000`. `AboutHero.astro` pindah dari Nasalization ke `--font-display`.
+  Geometri Chromium diff 0.0px; MAE hero **4.6874/255** (3.7902 di bawah band navbar; headline 10.84 =
+  edge AA di atas nebula terang, subtitle 5.43). Semua 6 gate ALL PASS.
+  Referensi `assets/about-us/hero/About-Hero-Revisi-1x.png`. Detail: `docs/assets.md` §About Us — Hero.
 
 - **Recruitment Page Section 9: Footer (`1436:3699` / komponen `765:17071`) — 100% SELESAI (2 Oct 2026).**
   Footer adalah komponen bersama (`Footer.astro`) yang dipakai **6 halaman** (index, about, recruitment, partners, hall-of-frames, contact); revisi ini site-wide. Figma footer diperbarui:

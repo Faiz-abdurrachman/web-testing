@@ -30,8 +30,8 @@
   </div>
   <div class="hero-content">
     <h1 id="about-hero-title">
-      <span>Architecting the Future of</span>
-      <span>AI &amp; Data Innovation.</span>
+      <span>Architecting the Future of AI</span>
+      <span>&amp; Data Innovation.</span>
     </h1>
     <p>
       Data Sorcerers is an AI &amp; Data Innovation Community dedicated to
@@ -42,10 +42,11 @@
 </section>
 
 <style>
-  /* Matches Figma node 1248:14725 (1440 x 903).
-     Centered Frame 2607 (1280 x 287) at y = 308px:
-     Headline 80px/95.2px Nasalization, Subtitle 18px/27px Manrope 500,
-     gap 16px. Background = high-definition cosmic portal artwork. */
+  /* Matches Figma node 1439:4185 (1440 x 903), page 1439:4184.
+     Section: column, padding 80px, justify center, gap 16px, IMAGE fill.
+     Content frame 1439:4186 (1280 x 287.4, hug): headline 1439:4187
+     Bluu Next Bold 700 80/95.2 ls -0.88 (gradient per line) + subtitle
+     1439:4188 Manrope Medium 500 18/27 #fff, text-shadow 0 4px 20px #000. */
   .about-hero {
     position: relative;
     isolation: isolate;
@@ -54,7 +55,7 @@
     align-items: center;
     justify-content: center;
     min-height: 903px;
-    padding: 0 var(--page-gutter);
+    padding: 80px;
     overflow: clip;
     text-align: center;
   }
@@ -92,12 +93,11 @@
     margin: 0;
     width: 100%;
     max-width: 1124px;
-    font-family: var(--font-heading);
+    font-family: var(--font-display);
     font-size: 80px;
-    font-weight: 400;
+    font-weight: 700;
     line-height: 95.2px;
     letter-spacing: -0.88px;
-    color: #ffffff;
     text-align: center;
     word-break: break-word;
     overflow-wrap: break-word;
@@ -105,6 +105,10 @@
 
   h1 span {
     display: block;
+    background: linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
   p {
@@ -118,6 +122,7 @@
     line-height: 27px;
     letter-spacing: 0;
     text-align: center;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 1);
     word-break: break-word;
     overflow-wrap: break-word;
   }

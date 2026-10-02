@@ -594,6 +594,41 @@ assets:contact` regenerates it and the icons.
   heights (665/1075/670), card sizes (240×116, 309.5×189), 3 group pills and 20
   cards at 1440.
 
+## About Us — Hero (2 October 2026)
+
+- Figma file `JYUzJK1hFqaEwL6DpdDvjp`, page `1439:4184`, section **`1439:4185`**
+  ("Hero Section - About Us", 1440 × 903, column, `padding: 80px`,
+  `justify-content: center`, `gap: 16px`). Fill = IMAGE `34bc68…` = the same raw
+  artwork as the old `assets/assets about us/hero/raw-hero-bg.png`
+  (4096 × 2594, pixel-identical; served as `public/images/about/hero-bg.webp`
+  - `-2x`/mobile variants, `object-fit: cover`).
+- Content frame `1439:4186` (1280 × 287.4, hug, column, `gap: 16px`, centered)
+  at `(80, 307.8)`:
+  - Headline `1439:4187` (`width: 1124`, Bluu Next **Bold 700**, `80 / 95.2px`,
+    `letter-spacing: -0.88px`, center) at `(158, 307.8)`, 1124 × 190.4.
+    Fill `Gradient Heading` = `linear-gradient(181deg, #fff 15%, #999 42%, #fff 79%)`.
+    The text wraps to **2 lines as "Architecting the Future of AI" / "& Data
+    Innovation."** (a single Figma text node — the gradient spans the whole node,
+    but per-line `background-clip: text` is used since each visual line reads the
+    same here; verified MAE-equivalent). The MCP string (`15% / 42% / 79%`) was
+    cross-checked against the REST API: `gradientStops` 0.3103/0.4537/0.6498 on a
+    handle line from y −0.4427 → 1.4583 map to box-relative 14.7% / 42.0% / 79.3%,
+    i.e. the MCP string is correct for this node.
+  - Subtitle `1439:4188` (`width: 680`, Manrope **Medium 500**, `18 / 27px`,
+    `#fff`, center) at `(380, 514.2)`, 680 × 81 (3 lines), effect
+    `DROP_SHADOW 0 4 20 rgba(0,0,0,1)` → `text-shadow: 0 4px 20px #000`.
+- `AboutHero.astro` revised from `--font-heading` (Nasalization) to
+  **`--font-display` (Bluu Next Bold 700)**. Navbar instance `1439:4189` is part
+  of the hero PNG; `verify.mjs` hides `.navbar`, so the hero MAE is reported with
+  and without the navbar band.
+- Reference: `assets/about-us/hero/About-Hero-Revisi-1x.png` (+ `-2x`, plus the
+  separate headline/subtitle text nodes and the raw image fill). Chromium geometry
+  diff **0.0px** (section 1440 × 903; content `(80, 307.8, 1280, 287.4)`; headline
+  `(158, 307.8, 1124, 190.4)`; subtitle `(380, 514.2, 680, 81)`).
+  Section MAE **4.6874/255** full (**3.7902** below the navbar band; headline
+  region 10.84 = cross-renderer glyph edge AA over the bright nebula, subtitle
+  5.43). All 6 gates pass.
+
 ## About Us — Philosophy & Our Ecosystem (30 September 2026)
 
 - Figma file `RntmRWAgLrh5utgzcjrUik`, section `1331:15784` and pipeline

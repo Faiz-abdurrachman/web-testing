@@ -2207,6 +2207,60 @@ try {
   await page.goto(`${baseUrl}/about`, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
   await setNavbarHidden(true);
+  // About Us hero — geometry + diff vs Figma node 1439:4185 export. The
+  // reference PNG includes the navbar instance, which is hidden above, so the
+  // MAE is reported (not asserted) to keep the navbar band out of the gate.
+  await page.evaluate(() => document.fonts.load('700 80px "Bluu Next"'));
+  const aboutHeroGeometry = await page.evaluate(() => {
+    const section = document.querySelector('.about-hero');
+    const sectionBox = section.getBoundingClientRect();
+    const relativeBox = (selector) => {
+      const box = document.querySelector(selector).getBoundingClientRect();
+      return {
+        x: Math.round((box.x - sectionBox.x) * 10) / 10,
+        y: Math.round((box.y - sectionBox.y) * 10) / 10,
+        width: Math.round(box.width * 10) / 10,
+        height: Math.round(box.height * 10) / 10,
+      };
+    };
+    const title = document.querySelector('#about-hero-title');
+    const titleStyle = getComputedStyle(title);
+    return {
+      section: { width: sectionBox.width, height: sectionBox.height },
+      content: relativeBox('.about-hero .hero-content'),
+      title: relativeBox('#about-hero-title'),
+      subtitle: relativeBox('.about-hero p'),
+      titleFont: titleStyle.fontFamily,
+      titleSize: titleStyle.fontSize,
+      titleLineHeight: titleStyle.lineHeight,
+      overflow: document.documentElement.scrollWidth - innerWidth,
+    };
+  });
+  assert.deepEqual(aboutHeroGeometry, {
+    section: { width: 1440, height: 903 },
+    content: { x: 80, y: 307.8, width: 1280, height: 287.4 },
+    title: { x: 158, y: 307.8, width: 1124, height: 190.4 },
+    subtitle: { x: 380, y: 514.2, width: 680, height: 81 },
+    titleFont: '"Bluu Next", Nasalization, sans-serif, sans-serif',
+    titleSize: '80px',
+    titleLineHeight: '95.2px',
+    overflow: 0,
+  });
+  await page
+    .locator('.about-hero')
+    .screenshot({ path: 'artifacts/about-hero-desktop.png' });
+  const aboutHeroReference = await sharp(
+    'assets/about-us/hero/About-Hero-Revisi-1x.png',
+  )
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const aboutHeroActual = await sharp('artifacts/about-hero-desktop.png')
+    .extract({ left: 0, top: 0, width: 1440, height: 903 })
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(aboutHeroReference.length, aboutHeroActual.length);
   const ecosystemGeometry = await page.evaluate(() => {
     const section = document.querySelector('.ecosystem');
     const sectionBox = section.getBoundingClientRect();
