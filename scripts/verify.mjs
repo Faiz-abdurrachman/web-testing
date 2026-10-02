@@ -2602,6 +2602,8 @@ try {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(`${baseUrl}/partners`, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
+  await page.evaluate(() => document.fonts.load('700 80px "Bluu Next"'));
+  await setNavbarHidden(true);
   const partnersGeometry = await page.evaluate(() => {
     const box = (selector) => {
       const rect = document.querySelector(selector).getBoundingClientRect();
@@ -2611,6 +2613,19 @@ try {
     const partner = document
       .querySelector('.partner-card')
       .getBoundingClientRect();
+    const section = document.querySelector('.partners-hero');
+    const sectionBox = section.getBoundingClientRect();
+    const relativeBox = (selector) => {
+      const rect = section.querySelector(selector).getBoundingClientRect();
+      return {
+        x: Math.round((rect.x - sectionBox.x) * 10) / 10,
+        y: Math.round((rect.y - sectionBox.y) * 10) / 10,
+        width: Math.round(rect.width * 10) / 10,
+        height: Math.round(rect.height * 10) / 10,
+      };
+    };
+    const title = section.querySelector('#partners-hero-title');
+    const titleStyle = getComputedStyle(title);
     return {
       hero: box('.partners-hero'),
       our: box('.our-partners'),
@@ -2626,10 +2641,16 @@ try {
       groupPills: document.querySelectorAll('.group-pill').length,
       partnerCards: document.querySelectorAll('.partner-card').length,
       overflow: document.documentElement.scrollWidth - innerWidth,
+      heroContent: relativeBox('.partners-hero .hero-content'),
+      heroPill: relativeBox('.partners-hero .pill'),
+      heroTitle: relativeBox('#partners-hero-title'),
+      heroTitleFont: titleStyle.fontFamily,
+      heroTitleSize: titleStyle.fontSize,
+      heroTitleLineHeight: titleStyle.lineHeight,
     };
   });
   assert.deepEqual(partnersGeometry, {
-    hero: { width: 1440, height: 665 },
+    hero: { width: 1440, height: 659 },
     our: { width: 1440, height: 1075 },
     why: { width: 1440, height: 670 },
     whyCard: { width: 309.5, height: 189 },
@@ -2637,7 +2658,37 @@ try {
     groupPills: 3,
     partnerCards: 20,
     overflow: 0,
+    heroContent: { x: 80, y: 242, width: 1280, height: 257 },
+    heroPill: { x: 606.1, y: 242, width: 227.9, height: 26 },
+    heroTitle: { x: 80, y: 276, width: 1280, height: 223 },
+    heroTitleFont: '"Bluu Next", Nasalization, sans-serif, sans-serif',
+    heroTitleSize: '80px',
+    heroTitleLineHeight: '102px',
   });
+  await page
+    .locator('.partners-hero')
+    .screenshot({ path: 'artifacts/partners-hero-desktop.png' });
+  // Reference PNG 1439:4788 includes the navbar instance, which is hidden above,
+  // so the whole-section MAE is dominated by that top band (the precision value
+  // is the region below the navbar).
+  const partnersHeroReference = await sharp(
+    'assets/partners/hero/Partners-Hero-1x.png',
+  )
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const partnersHeroActual = await sharp('artifacts/partners-hero-desktop.png')
+    .extract({ left: 0, top: 0, width: 1440, height: 659 })
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(partnersHeroReference.length, partnersHeroActual.length);
+  let partnersHeroTotal = 0;
+  for (let i = 0; i < partnersHeroActual.length; i++) {
+    partnersHeroTotal += Math.abs(
+      partnersHeroActual[i] - partnersHeroReference[i],
+    );
+  }
 
   // Hall of Frames hero — geometry + diff vs the Figma node 1439:4507 export.
   await page.setViewportSize({ width: 1440, height: 1400 });
@@ -3019,7 +3070,11 @@ try {
 
   const report = {
     aboutEcosystem: { geometry: ecosystemGeometry, wide: aboutWide },
-    partners: { geometry: partnersGeometry },
+    partners: {
+      geometry: partnersGeometry,
+      meanAbsoluteChannelDifference:
+        partnersHeroTotal / partnersHeroActual.length,
+    },
     hofHero: {
       geometry: hofHeroGeometry,
       meanAbsoluteChannelDifference: hofHeroTotal / hofHeroActual.length,

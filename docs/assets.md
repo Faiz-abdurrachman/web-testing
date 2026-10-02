@@ -591,8 +591,41 @@ assets:contact` regenerates it and the icons.
   a real link (`/partners`); the navbar tab widths stay the Figma values.
 - Regenerate served art with `npm run assets:partners`
   (`scripts/generate-partners-assets.mjs`). `verify.mjs` asserts the section
-  heights (665/1075/670), card sizes (240×116, 309.5×189), 3 group pills and 20
-  cards at 1440.
+  heights (hero 659 after the 3 Oct revision; Our Partners / Why still
+  1075/670 pending their revision), card sizes (240×116, 309.5×189), 3 group
+  pills and 20 cards at 1440.
+
+## Partners — Hero revision (3 October 2026)
+
+- New Figma file `JYUzJK1hFqaEwL6DpdDvjp`, page `1439:4787`, section
+  **`1439:4788`** ("Hero Section - Partners", 1440 × 659, column, `align-items:
+center`, `padding: 242px 80px 160px`, `gap: 8px`, IMAGE fill `e79b1f65…`).
+  The old `assets/partners page/` exports (`RntmRWAgLrh5utgzcjrUik`) are hints
+  only; the new node is the source of truth.
+- **Content**: CTA pill `1439:4789` 228 × 26 at (606, 242), `padding: 4px 12px`,
+  radius 32, `rgba(255,255,255,.15)`; text `1439:4790` Manrope 400 12/18 #fff
+  "Create · Collaborate · Make an impact". Heading `1439:4791` **Bluu Next Bold
+  700 80/102** (`--font-display`) 1280 × 223 at (80, 276); ink bbox **789 × 180 at
+  (326, 295)**, wrapping to 2 lines ("Let's Build Something" / "Meaningful
+  Together.") — measured from the exported text node with `sharp`.
+- **Gradient**: MCP reports a single `Gradient Heading` on one text node, so the
+  `181deg #fff 15% / #999 42% / #fff 79%` fill spans the whole 223px box, **not
+  per line**. Fitting from the render: a per-line variant measured heading MAE
+  **10.17** vs **7.56** for the single block, so the block gradient is kept
+  (`background-clip: text` on the `h1`, spans `display: block`).
+- **Artwork**: raw `imageRef e79b1f65…` downloaded to
+  `assets/partners/hero/hero-fill-raw.png` (4096 × 1892) and baked as-is (SOP §5,
+  `fit: cover`); `generate-partners-assets.mjs` now reads this raw instead of the
+  older `Hero Section - Partners1.png`. `hero-bg.webp` (1440 × 665) + `-2x`.
+  Background region MAE **1.204/255**.
+- **Geometry (Chromium, reduced motion, 1440)**: section 1440 × 659; content
+  1280 × 257 at (80, 242); pill 227.9 × 26 at (606.1, 242); title 1280 × 223 at
+  (80, 276); `80px` / `102px` Bluu Next. Asserts added in `scripts/verify.mjs`.
+- **MAE**: full-section **4.128/255** (the reference PNG includes the navbar
+  instance, hidden by `verify.mjs`), **2.730** below the navbar band, heading
+  7.561 (AA edges over the bright nebula), pill 16.5 (12px cross-renderer
+  rasterisation). All 6 gates + `seo:audit` PASS. Reference
+  `assets/partners/hero/Partners-Hero-1x.png`.
 
 ## About Us — Hero (2 October 2026)
 

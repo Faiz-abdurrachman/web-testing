@@ -18,18 +18,18 @@ Wajib **inventaris semua section** dulu (checklist), lalu kerjakan **satu per sa
 
 | #   | Node ID     | Frame                   | W×H       | Status komponen sekarang                          |
 | --- | ----------- | ----------------------- | --------- | ------------------------------------------------- |
-| 1   | `1439:4788` | Hero Section - Partners | 1440×659  | ada (`PartnersHero.astro`) — Nasalization, revisi |
+| 1   | `1439:4788` | Hero Section - Partners | 1440×659  | **SELESAI 3 Oct 2026** (Bluu Next Bold 700 + 8pt) |
 | 2   | `1439:4793` | Our Partners Section    | 1440×1071 | ada (`OurPartners.astro`) — Nasalization, revisi  |
 | 3   | `1439:4937` | Why DS section          | 1440×656  | ada (`WhyPartners.astro`) — Nasalization, revisi  |
 | 4   | `1439:4983` | Footer                  | 1440×556  | shared `Footer.astro` — presisi, verifikasi saja  |
 
 Catatan tiap section:
 
-- Hero `1439:4788`: 1440×659, `padding: 242px 80px 160px`, gap 8, IMAGE fill;
-  eyebrow CTA `1439:4789` 228×26; heading `1439:4791` "Let's Build Something
-  Meaningful Together." **Bluu Next 700 80/102** 1280×223 (3 baris), gradient;
-  navbar instance `1439:4792` ikut ter-render di PNG hero → `verify.mjs`
-  menyembunyikan `.navbar` (hitung MAE di bawah band navbar).
+- Hero `1439:4788`: **SELESAI 3 Oct 2026.** 1440×659, `padding 242px 80px 160px`,
+  gap 8, IMAGE fill raw `hero-fill-raw.png`; pill `1439:4789` 228×26; heading
+  `1439:4791` **Bluu Next Bold 700 80/102** 1280×223 (2 baris), satu gradient
+  `181deg` membentang blok. MAE full 4.128 / below-nav 2.730 / bg 1.204. Semua 6
+  gate ALL PASS. Detail `docs/assets.md` §Partners — Hero revision.
 - Our Partners `1439:4793`: padding 80, gap 100; 3 sub-frame (Frame 2661 1280×325,
   Frame 2662 1280×193, Frame 2663 1280×193), masing-masing gap 42.
 - Why DS `1439:4937`: padding 80, align center, gap 48; Frame 2666 1280×263 (gap 8)

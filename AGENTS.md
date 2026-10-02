@@ -363,12 +363,12 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   untuk 6 halaman. Semua heading section revised memakai **Bluu Next Bold 700**
   (`--font-display`); tidak ada `--font-heading` (Nasalization) yang tersisa di
   komponen Homepage/Recruitment.
-  **CURRENT PAGE: About Us (`1439:4184`)** — 5 section konten + Footer shared,
+  **CURRENT PAGE: Partners (`1439:4787`)** — 4 section + Footer shared,
   dikerjakan **satu per satu** (wajib Master Work Plan + inventaris section).
   **About Us (`1439:4184`) 100% SELESAI (6 section: Hero, visi misi, Philosophy,
-  Our Ecosystem, Our Team, Footer) per 2 Oct 2026.** Semua heading revised
-  memakai **Bluu Next Bold 700** + strict 8pt. Lihat "Next plan" di bawah &
-  `docs/kickoff-prompt.md`.
+  Our Ecosystem, Our Team, Footer) per 2 Oct 2026.** **Partners Section 1 Hero
+  `1439:4788` SELESAI 3 Oct 2026** (Bluu Next Bold 700 + strict 8pt); Section 2–3
+  masih Nasalization (next). Lihat "Next plan" di bawah & `docs/kickoff-prompt.md`.
 - **About Us Section 1: Hero (`1439:4185`) — 100% SELESAI (2 Oct 2026).**
   Frame Figma `1439:4185` (1440×903, column, padding 80px, justify center,
   gap 16px, IMAGE fill `34bc68…` = `assets/assets about us/hero/raw-hero-bg.png`,
@@ -567,23 +567,29 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   lengkap, Hall of Frames, Contact, 6 detail role, 6 detail HoDS, Navbar exact
   Figma, motion, sound, SEO/OG, View Transitions. **18 rute publik** (+
   `/lab/sound` internal) — semua link navbar aktif.
-- **CURRENT PAGE — About Us (`1439:4184`).** Homepage & Recruitment sudah 100%.
-  About Us ada **6 section** (wajib inventaris + Master Work Plan per-section dulu):
-  1. Hero Section - About Us `1439:4185` (1440×903) — **SELESAI 2 Oct 2026**
-  2. visi misi section `1439:4190` (1440×840) — **SELESAI 2 Oct 2026**
-  3. Philosophy Section `1439:4219` (1440×837) — **SELESAI 2 Oct 2026**
-  4. Our Ecosystem Section `1439:4258` (1440×874) — **SELESAI 2 Oct 2026**
-  5. Our Team Section `1439:4305` (1440×1536) — **SELESAI 2 Oct 2026** (`OurTeam.astro` baru)
-  6. Footer `1439:4311` (1440×556, shared `Footer.astro`) — **SELESAI** (verified)
-     Section 1–6 sudah direvisi/terverifikasi **Bluu Next Bold 700** + strict 8pt.
-     About Us 100%. Detail: `docs/ai-handoff.md` §"Next Task",
-     `docs/kickoff-prompt.md`.
-- **NEXT PAGE — Partners (`1439:4787`).** Frame 1440×2942, 4 section: Hero
-  `1439:4788` (1440×659), Our Partners `1439:4793` (1440×1071), Why DS `1439:4937`
-  (1440×656), Footer `1439:4983` (shared). Komponen `PartnersHero`/`OurPartners`/
-  `WhyPartners` masih `--font-heading` (Nasalization) → revisi ke **Bluu Next Bold
-  700** + strict 8pt, **satu section per pass + 6 gate**. Lihat
-  `docs/kickoff-prompt.md` (checklist Partners + "PELAJARAN WAJIB DARI ABOUT US").
+- **CURRENT PAGE — Partners (`1439:4787`, file `JYUzJK1hFqaEwL6DpdDvjp`).**
+  Homepage (`1430:2040`), Recruitment (`1436:3505`) & About Us (`1439:4184`) sudah
+  100%. Partners: 4 section (wajib Master Work Plan per-section + 6 gate):
+  1. Hero Section - Partners `1439:4788` (1440×659) — **SELESAI 3 Oct 2026**
+  2. Our Partners Section `1439:4793` (1440×1071) — BELUM (Nasalization)
+  3. Why DS section `1439:4937` (1440×656) — BELUM (Nasalization)
+  4. Footer `1439:4983` (1440×556, shared `Footer.astro`) — presisi (verifikasi)
+     Detail: `docs/ai-handoff.md` §"Next Task", `docs/kickoff-prompt.md`.
+- **Partners Section 1: Hero (`1439:4788`) — 100% SELESAI (3 Oct 2026).**
+  Frame 1440×659, column, `padding 242px 80px 160px`, align center, `gap 8px`,
+  IMAGE fill `e79b1f65…` (= raw `assets/partners/hero/hero-fill-raw.png` →
+  `hero-bg.webp` via `npm run assets:partners`; generator kini baca raw baru,
+  bukan `Hero Section - Partners1.png` lama). CTA `1439:4789` 228×26 di
+  `(606,242)`, `padding 4px 12px`, radius 32, `rgba(255,255,255,.15)`, teks
+  `1439:4790` Manrope 400 12/18. Heading `1439:4791` **Bluu Next Bold 700
+  80/102** (`--font-display`) 1280×223 di `(80,276)`, ink 789×180 @ `(326,295)`,
+  2 baris ("Let's Build Something" / "Meaningful Together."), **satu gradient
+  `181deg #fff 15% / #999 42% / #fff 79%` membentang blok 223px** (bukan per
+  baris — per-line terbukti lebih buruk, heading MAE 10.2 vs 7.6). Navbar
+  instance `1439:4792` ada di PNG → `.navbar` disembunyikan verify. Geometri
+  Chromium exact; MAE **4.128/255** full (2.730 di bawah band navbar, bg 1.204,
+  heading 7.561, pill 16.5). Semua 6 gate ALL PASS. Referensi
+  `assets/partners/hero/Partners-Hero-1x.png`.
 - **Next plan (prioritas).** Setelah Partners: detail HoDS (`HoDSDetail`) dan/atau
   konten asli (`projects.ts`, tanggal recruitment, logo partner, foto/nama member team,
   member/project/milestone HoF). Detail: `docs/ai-handoff.md` §"Next Task".

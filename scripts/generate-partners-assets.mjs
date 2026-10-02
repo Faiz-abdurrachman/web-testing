@@ -2,7 +2,10 @@
 // `assets/partners page/`. Run with `npm run assets:partners`.
 //
 // Sources of truth (see docs/assets.md §Partners):
-// - Hero Section - Partners1.png → the "Let's Build Something" hero backdrop
+// - assets/partners/hero/hero-fill-raw.png → the raw IMAGE fill of the new
+//   Figma Hero node 1439:4788 (imageRef e79b1f65…) = "Let's Build Something"
+//   backdrop, used verbatim (SOP §5). The old assets/partners page/ exports are
+//   hints only.
 // - Frame 2655.png               → the empty partner card (base + violet glow)
 // - ChatGPT Image ... 2*.png     → the four feature icons (transparent)
 // - Logo_transparan (1) 4.png    → the placeholder partner logo
@@ -13,7 +16,7 @@ import sharp from 'sharp';
 const src = 'assets/partners page';
 const out = 'public/images/partners';
 
-const hero = path.join(src, 'Hero Section - Partners1.png');
+const hero = 'assets/partners/hero/hero-fill-raw.png';
 const card = path.join(src, 'Frame 2655.png');
 const logo = path.join(src, 'Logo_transparan (1) 4.png');
 
