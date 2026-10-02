@@ -677,6 +677,14 @@ center`, `padding: 242px 80px 160px`, `gap: 8px`, IMAGE fill `e79b1f65…`).
   `scripts/verify.mjs`. Section MAE **3.216/255** (heading 4.87, pill 16.4,
   cards 8.57, bg 0.000). Reference `assets/partners/why-ds/WhyDS-1x.png`.
 
+## Partners — Footer (3 October 2026)
+
+- Page node `1439:4983` (1440 × 556) is **pixel-identical** to the recruitment
+  footer export (`Recruitment-Footer-Revisi-1x.png`, MAE **0.060**) — the shared
+  `Footer.astro` already matches. `verify.mjs` now also diffs the Partners page
+  footer against `assets/partners/footer/Partners-Footer-1x.png` → MAE
+  **5.873/255** (on par with the homepage 5.838). **Partners page complete.**
+
 ## About Us — Hero (2 October 2026)
 
 - Figma file `JYUzJK1hFqaEwL6DpdDvjp`, page `1439:4184`, section **`1439:4185`**

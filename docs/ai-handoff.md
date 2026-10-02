@@ -8,20 +8,20 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
-**NEXT PAGE: Partners (`1439:4787`)** — Homepage (`1430:2040`), Recruitment
-(`1436:3505`), dan About Us (`1439:4184`) sudah **100% SELESAI** (2 Oct 2026).
-Link Figma: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4787`
+**PARTNERS PAGE (`1439:4787`) — 100% SELESAI (3 Oct 2026).** Homepage
+(`1430:2040`), Recruitment (`1436:3505`), About Us (`1439:4184`), dan Partners
+semua selesai. Link Figma:
+`https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4787`
 
-Wajib **inventaris semua section** dulu (checklist), lalu kerjakan **satu per satu**
-(Master Work Plan + 6 gate per section). Urutan section Partners (frame `1439:4787`,
-1440 × 2942, `depth 1`):
+Section partners dikerjakan **satu per satu** (Master Work Plan + 6 gate per
+section). Inventaris (frame `1439:4787`, 1440 × 2942, `depth 1`):
 
 | #   | Node ID     | Frame                   | W×H       | Status komponen sekarang                                     |
 | --- | ----------- | ----------------------- | --------- | ------------------------------------------------------------ |
 | 1   | `1439:4788` | Hero Section - Partners | 1440×659  | **SELESAI 3 Oct 2026** (Bluu Next Bold 700 + 8pt)            |
 | 2   | `1439:4793` | Our Partners Section    | 1440×1071 | **SELESAI 3 Oct 2026** (gap 16, kartu 243.2×116)             |
 | 3   | `1439:4937` | Why DS section          | 1440×656  | **SELESAI 3 Oct 2026** (Bluu Next Bold 700, kartu 309.5×185) |
-| 4   | `1439:4983` | Footer                  | 1440×556  | shared `Footer.astro` — presisi, verifikasi saja             |
+| 4   | `1439:4983` | Footer                  | 1440×556  | **SELESAI (verified 3 Oct 2026)** — shared, MAE 5.873        |
 
 Catatan tiap section:
 
@@ -32,24 +32,23 @@ Catatan tiap section:
   gate ALL PASS. Detail `docs/assets.md` §Partners — Hero revision.
 - Our Partners `1439:4793`: **SELESAI 3 Oct 2026.** 1440×1071, padding 80, gap 100,
   fill #050507; 3 grup (Industry 10 / Academia 5 / Community 5), grid **gap 16**
-  (dulu 20) → kartu **243.2×116**, logo ter-center. MAE **2.860** (header 2.62,
-  card 6.82). Semua 6 gate + seo ALL PASS. Detail `docs/assets.md` §Partners —
-  Our Partners revision.
+  (dulu 20) → kartu **243.2×116**, logo ter-center. MAE **2.860**. Detail
+  `docs/assets.md` §Partners — Our Partners revision.
 - Why DS `1439:4937`: **SELESAI 3 Oct 2026.** 1440×656, padding 80, gap 48, fill
   #050507; heading **Bluu Next Bold 700 80/102**, satu gradient 181deg; grid 4
   kartu **309.5×185** gap 16 (lebar 1286); glow IMAGE-SVG `1439:4949` +
-  icon crop sprite `imageRef 36308539…`. MAE **3.216** (heading 4.87, cards 8.57,
-  bg 0.000). Semua 6 gate + seo ALL PASS. Detail `docs/assets.md` §Partners —
-  Why DS revision.
-- Our Partners `1439:4793`: padding 80, gap 100; 3 sub-frame (Frame 2661 1280×325,
-  Frame 2662 1280×193, Frame 2663 1280×193), masing-masing gap 42.
-- Why DS `1439:4937`: padding 80, align center, gap 48; Frame 2666 1280×263 (gap 8)
-  - Frame 2704 1286×185 (gap 16).
+  icon crop sprite `imageRef 36308539…`. MAE **3.216**. Detail `docs/assets.md`
+  §Partners — Why DS revision.
+- Footer `1439:4983`: **SELESAI (verified).** Shared `Footer.astro`; node
+  pixel-identik dengan reference recruitment (MAE 0.060); render Partners MAE
+  **5.873**.
 
-Setelah Partners: detail HoDS (`HoDSDetail`), lalu konten asli (foto member, logo
-partner, `projects.ts`, tanggal recruitment, milestone HoF). Webfont Nasalization
-tetap tidak boleh di-bundle (lisensi desktop). Detail lengkap + **pelajaran About Us
-wajib**: `docs/kickoff-prompt.md` §"PELAJARAN WAJIB DARI ABOUT US".
+**NEXT: detail HoDS (`HoDSDetail`)** — 6 rute `/hods/[id]` masih `--font-heading`
+(Nasalization) → revisi ke **Bluu Next Bold 700** + strict 8pt, satu section per
+pass. Lalu konten asli (foto member, logo partner, `projects.ts`, tanggal
+recruitment, milestone HoF). Webfont Nasalization tetap tidak boleh di-bundle
+(lisensi desktop). Detail lengkap + **pelajaran About Us wajib**:
+`docs/kickoff-prompt.md` §"PELAJARAN WAJIB DARI ABOUT US".
 
 **SELESAI: Section 9: Footer (`1436:3699` / komponen `765:17071`, 1440 × 556px)** — lihat ringkasan di bawah.
 

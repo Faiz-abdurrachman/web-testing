@@ -2763,6 +2763,33 @@ try {
     );
   }
 
+  // Partners footer (shared Footer.astro) — node 1439:4983 is pixel-identical
+  // to the recruitment footer export, so the diff reuses the same art.
+  await page.locator('.footer').scrollIntoViewIfNeeded();
+  await page
+    .locator('.footer')
+    .screenshot({ path: 'artifacts/partners-footer-desktop.png' });
+  const partnersFooterReference = await sharp(
+    'assets/partners/footer/Partners-Footer-1x.png',
+  )
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const partnersFooterActual = await sharp(
+    'artifacts/partners-footer-desktop.png',
+  )
+    .extract({ left: 0, top: 0, width: 1440, height: 556 })
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(partnersFooterReference.length, partnersFooterActual.length);
+  let partnersFooterTotal = 0;
+  for (let i = 0; i < partnersFooterActual.length; i++) {
+    partnersFooterTotal += Math.abs(
+      partnersFooterActual[i] - partnersFooterReference[i],
+    );
+  }
+
   // Hall of Frames hero — geometry + diff vs the Figma node 1439:4507 export.
   await page.setViewportSize({ width: 1440, height: 1400 });
   await page.goto(`${baseUrl}/hall-of-frames`, { waitUntil: 'networkidle' });
@@ -3151,6 +3178,8 @@ try {
         partnersOurTotal / partnersOurActual.length,
       whyMeanAbsoluteChannelDifference:
         partnersWhyTotal / partnersWhyActual.length,
+      footerMeanAbsoluteChannelDifference:
+        partnersFooterTotal / partnersFooterActual.length,
     },
     hofHero: {
       geometry: hofHeroGeometry,
