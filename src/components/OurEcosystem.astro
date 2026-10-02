@@ -106,9 +106,9 @@ const steps: Step[] = [
   .canvas {
     position: relative;
     max-width: 1440px;
-    height: 880px;
+    height: 874px;
     margin-inline: auto;
-    padding: 80px 80px 78px;
+    padding: 80px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -142,15 +142,16 @@ const steps: Step[] = [
     background: rgba(255, 255, 255, 0.15);
     color: #ffffff;
     font: 400 12px/18px var(--font-body, 'Manrope', sans-serif);
-    margin-bottom: 14px;
+    margin-bottom: 8px;
     user-select: none;
   }
 
   .title {
     margin: 0 0 24px;
-    font: 400 56px/67px var(--font-heading, 'Nasalization', sans-serif);
+    /* Figma lineHeight 67.2 but node bbox 67; 67 keeps header at 172 / pipeline 368. */
+    font: 700 56px/67px var(--font-display);
     text-align: center;
-    background: linear-gradient(270deg, #ffffff 0%, #ede8ff 100%);
+    background: linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -219,7 +220,7 @@ const steps: Step[] = [
 
   .step-number {
     font: 700 56px/54px var(--font-body, 'Manrope', sans-serif);
-    background: linear-gradient(180deg, #6c3bff 21%, rgba(5, 5, 7, 0) 78%);
+    background: linear-gradient(180deg, #6c3bff 20.8%, rgba(5, 5, 7, 0) 75%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -229,7 +230,7 @@ const steps: Step[] = [
 
   .step-title {
     margin: -18px 0 0;
-    font: 700 18px/27px var(--font-body, 'Manrope', sans-serif);
+    font: 500 18px/27px var(--font-body, 'Manrope', sans-serif);
     color: #ffffff;
     text-align: center;
     position: relative;

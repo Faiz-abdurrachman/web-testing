@@ -364,9 +364,9 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   komponen Homepage/Recruitment.
   **CURRENT PAGE: About Us (`1439:4184`)** — 5 section konten + Footer shared,
   dikerjakan **satu per satu** (wajib Master Work Plan + inventaris section).
-  **Section 1 Hero, Section 2 visi misi & Section 3 Philosophy selesai 2 Oct
-  2026; berikutnya Section 4 Our Ecosystem (`1439:4258`).** Lihat "Next plan" di
-  bawah & `docs/kickoff-prompt.md`.
+  **Section 1 Hero, Section 2 visi misi, Section 3 Philosophy & Section 4 Our
+  Ecosystem selesai 2 Oct 2026; berikutnya Section 5 Our Team (`1439:4305`).**
+  Lihat "Next plan" di bawah & `docs/kickoff-prompt.md`.
 - **About Us Section 1: Hero (`1439:4185`) — 100% SELESAI (2 Oct 2026).**
   Frame Figma `1439:4185` (1440×903, column, padding 80px, justify center,
   gap 16px, IMAGE fill `34bc68…` = `assets/assets about us/hero/raw-hero-bg.png`,
@@ -406,6 +406,19 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   `canvas::before:none`). Section MAE **2.316/255** (artwork 1.92, content 2.89).
   Geometri Chromium exact. Semua 6 gate ALL PASS. Referensi:
   `assets/about-us/philosophy/Philosophy-Revisi-1x.png`.
+- **About Us Section 4: Our Ecosystem (`1439:4258`) — 100% SELESAI (2 Oct 2026).**
+  Frame `1439:4258` (1440×874, column, padding 80px, gap 116px, gradient
+  `24.87deg #050507 52.9% → #6c3bff 132.9%` ≈ tetap `24.75deg 53%/133%`).
+  Header `1439:4259` 931×172 di `(254.5, 80)`: eyebrow "Our Ecosystem" 100×26
+  (GLASS, gap 8 ke heading), heading "From Community to Impact" **Bluu Next
+  Bold 700 56/67** (`--font-display`, line-height **67px** — bbox Figma bulat 67,
+  bukan 67.2, agar header pas 172), gradient `181deg`; subtitle Manrope 500 18/27 911. Pipeline `1439:4266` 1280×426 di `(80, 368)` (gap 18): 5 kolom
+  bottom-aligned (bottom 776), lebar `188/175/188/175/175`, connector `188/116/
+188/116/217`, baseline Line 11 1280 di y `794`. Number Manrope 700 56/54
+  gradient `180deg #6c3bff 20.8% → transparent 75%`; step title **Manrope 500**
+  18/27 (dulu 700); desc Manrope 400 14/21. Section MAE **2.221/255** (header
+  4.18, pipeline 3.20). Geometri Chromium exact. Semua 6 gate ALL PASS.
+  Referensi: `assets/about-us/ecosystem/Ecosystem-Revisi-1x.png`.
 - **Homepage 100% Selesai — Our Project & CTA Recruitment Section (2 Oct 2026).**
   Seluruh 6 section Homepage (`1430:2040`) kini 100% selesai dan tervalidasi:
   - Section 5: **Our Project Section (`1430:2146`)** — Frame 1440×910px, padding 80px, gap 82px. Eyebrow 86.6×26px di `(80, 80)`, heading "What Our Sorcery Create" Bluu Next Bold 700 56/67px di `(80, 114)` (ink width 646px), 3D coverflow active card 549×567px di `(445.5, 263)`. MAE 5.0764 (Image 2.90, Tags 6.05, Text 5.90, Header 6.67, Bottom 0.0).
@@ -538,13 +551,12 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   1. Hero Section - About Us `1439:4185` (1440×903) — **SELESAI 2 Oct 2026**
   2. visi misi section `1439:4190` (1440×840) — **SELESAI 2 Oct 2026**
   3. Philosophy Section `1439:4219` (1440×837) — **SELESAI 2 Oct 2026**
-  4. Our Ecosystem Section `1439:4258` (1440×874) — **berikutnya**
-  5. Our Team Section `1439:4305` (1440×1536) — **belum ada komponen** (`OurTeam.astro`)
+  4. Our Ecosystem Section `1439:4258` (1440×874) — **SELESAI 2 Oct 2026**
+  5. Our Team Section `1439:4305` (1440×1536) — **berikutnya**, belum ada komponen (`OurTeam.astro`)
   6. Footer `1439:4311` (shared, sudah presisi)
-     Komponen lama (`src/pages/about.astro`: VisiMisi/Philosophy `variant=about`/OurEcosystem)
-     masih memakai **`--font-heading` (Nasalization) + file Figma lama** → harus direvisi ke
-     **Bluu Next Bold 700** + strict 8pt dan diukur ulang dari node baru. Detail:
-     `docs/ai-handoff.md` §"Next Task", `docs/kickoff-prompt.md`.
+     Section 1–4 sudah direvisi ke **Bluu Next Bold 700** + strict 8pt. Tersisa
+     Section 5 Our Team (komponen baru `OurTeam.astro`) lalu verifikasi Footer.
+     Detail: `docs/ai-handoff.md` §"Next Task", `docs/kickoff-prompt.md`.
 - **Next plan (prioritas).** Setelah About Us: halaman lain (Partners `PartnersHero`/
   `WhyPartners`, detail HoDS `HoDSDetail`, dll masih `--font-heading`) dan/atau konten
   asli (`projects.ts`, tanggal recruitment, logo partner, member/project/milestone HoF);

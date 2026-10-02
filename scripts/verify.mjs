@@ -2388,15 +2388,27 @@ try {
     };
   });
   assert.deepEqual(ecosystemGeometry, {
-    section: { width: 1440, height: 880 },
-    header: { x: 254.5, y: 80, width: 931, height: 178 },
-    pipeline: { x: 80, y: 374, width: 1280, height: 426 },
-    baseline: { x: 80, y: 799, width: 1280, height: 2 },
-    lineBottoms: [782, 782, 782, 782, 782],
+    section: { width: 1440, height: 874 },
+    header: { x: 254.5, y: 80, width: 931, height: 172 },
+    pipeline: { x: 80, y: 368, width: 1280, height: 426 },
+    baseline: { x: 80, y: 793, width: 1280, height: 2 },
+    lineBottoms: [776, 776, 776, 776, 776],
   });
   await page.locator('.ecosystem').screenshot({
     path: 'artifacts/about-ecosystem-desktop.png',
   });
+  const ecosystemReference = await sharp(
+    'assets/about-us/ecosystem/Ecosystem-Revisi-1x.png',
+  )
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const ecosystemActual = await sharp('artifacts/about-ecosystem-desktop.png')
+    .extract({ left: 0, top: 0, width: 1440, height: 874 })
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(ecosystemReference.length, ecosystemActual.length);
   await page.setViewportSize({ width: 1920, height: 900 });
   const aboutWide = await page.evaluate(() => {
     const ecosystem = document.querySelector('.ecosystem');
@@ -2491,8 +2503,8 @@ try {
     assert.equal(pipelineFit.display, expectedDisplay);
     assert.equal(pipelineFit.contained, true);
     if (expectedDisplay === 'flex') {
-      assert.deepEqual(pipelineFit.lineEnds, [782, 782, 782, 782, 782]);
-      assert.equal(pipelineFit.baselineY, 799);
+      assert.deepEqual(pipelineFit.lineEnds, [776, 776, 776, 776, 776]);
+      assert.equal(pipelineFit.baselineY, 793);
     }
     assert.ok(pipelineFit.overflow <= 1);
   }

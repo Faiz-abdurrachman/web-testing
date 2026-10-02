@@ -685,6 +685,31 @@ fitting the rendered pixels gives an effective CSS gradient of
   `(766, 205, 591, 468)`; principles `(766, 425, 591, 248)`). Section MAE
   **2.316/255** (artwork 1.92, content 2.89). All 6 gates pass.
 
+## About Us — Our Ecosystem (2 October 2026)
+
+- New Figma page `1439:4184`, section **`1439:4258`** ("Our Ecosystem Section",
+  1440 × 874, column, `padding: 80px`, `gap: 116px`). Fill gradient handles
+  `p0(0.471,0.426) #050507 → p1(0.798,−0.735) #6c3bff` map to CSS
+  `linear-gradient(24.87deg, #050507 52.9%, #6c3bff 132.9%)` — the previous
+  `24.75deg 53% / 133%` is within rounding, so it is retained.
+- Header `1439:4259` (931 × 172) at `(254.5, 80)`, `padding: 10px`: eyebrow
+  `1439:4262` "Our Ecosystem" (100 × 26, GLASS, `margin-bottom: 8px`) + heading
+  `1439:4264` "From Community to Impact" (Bluu Next **Bold 700** 56 / **67px**,
+  gradient `181deg #fff 15% / #999 42% / #fff 79%`) + subtitle `1439:4265`
+  (911 × 27, Manrope 500 18 / 27). The heading **line-height is 67px, not
+  67.2** — Figma reports `lineHeightPx 67.2` but the node bbox is 67; using 67
+  keeps the header at exactly 172 (and the pipeline at 368). With 67.2 the
+  section MAE read 3.45, with 67 it is 2.22.
+- Pipeline `1439:4266` (1280 × 426) at `(80, 368)`, `gap: 18px`: 5 bottom-aligned
+  columns (`188/175/188/175/175`, connector heights `188/116/188/116/217`),
+  bottoms at y 776, baseline Line 11 at y 794. Step number Manrope 700 56 / 54,
+  fill gradient `180deg #6c3bff 20.8% → rgba(5,5,7,0) 75%`; step title **Manrope
+  500 18 / 27** (was 700 in the old design); description Manrope 400 14 / 21.
+- Reference `assets/about-us/ecosystem/Ecosystem-Revisi-1x.png`. Chromium
+  geometry exact (section 1440 × 874; header `(254.5, 80, 931, 172)`; pipeline
+  `(80, 368, 1280, 426)`; line bottoms 776). Section MAE **2.221/255**
+  (header 4.18, pipeline 3.20). All 6 gates pass.
+
 ## About Us — Philosophy & Our Ecosystem (30 September 2026)
 
 - Figma file `RntmRWAgLrh5utgzcjrUik`, section `1331:15784` and pipeline
