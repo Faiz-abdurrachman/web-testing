@@ -649,6 +649,34 @@ center`, `padding: 242px 80px 160px`, `gap: 8px`, IMAGE fill `e79b1f65…`).
   2.62, Academia card row 6.82, bg 2.86). Reference
   `assets/partners/our-partners/OurPartners-1x.png`.
 
+## Partners — Why DS revision (3 October 2026)
+
+- New Figma file `JYUzJK1hFqaEwL6DpdDvjp`, page `1439:4787`, section
+  **`1439:4937`** ("Why DS section", 1440 × 656, column, `padding: 80px`,
+  `align-items: center`, `gap: 48px`, fill `#050507`). Header `1439:4938`
+  (fixed 263, `gap: 8`): pill "Why Data Sorcerers?" (`1439:4939`, Manrope 400
+  12/18, `rgba(255,255,255,.15)`, radius 32) + heading `1439:4941`
+  **Bluu Next Bold 700 80/102** 1280 × 229 at (80, 114), wrapping to "More Than
+  A Network" / "A Building Partner"; single `181deg #fff 15% / #999 42% / #fff
+79%` gradient across the 2-line node (not per line).
+- **Cards**: `1439:4942` row `gap 16`, four fixed **309.5 × 185** frames at
+  x `77 / 402.5 / 728 / 1053.5` (row width 1286, centred). Card `padding 28`,
+  `gap 16`, `rgba(255,255,255,.15)`, 1px `135deg #EDE8FF → #2E276C → #EDE8FF`
+  rim, radius 20. Icon row `gap 16`: 58 × 63 icon + Manrope 700 26/39 title;
+  desc Manrope 400 16/24 `#EDE8FF`.
+- **Glow**: raw IMAGE-SVG `1439:4949` (710.51 × 336.07 at `(-145.16, 50.11)`),
+  exported and used verbatim (`why-glow.webp`, fitted placement `(-184, -18)` on
+  the card → expressed as percentages). **Icons**: the four features are crops of
+  one sprite (`imageRef 36308539…`, `imageTransform` `[[0.2143,0,tx],[0,0.4606,
+0.2369]]`, tx `0.0255 / 0.2656 / 0.5021 / 0.7533`); `generate-partners-assets.mjs`
+  now `extract`s each crop and resizes to 58 × 63 (`why-*.webp`, 2×) — the old
+  placeholder icons were replaced. Icon node diff MAE 3.19, alpha bbox identical.
+- **Geometry (Chromium, reduced motion, 1440)**: section 1440 × 656; header
+  1280 × 263 at (80, 80); pill 139.8 × 26 at (650.1, 80); title 1280 × 229 at
+  (80, 114); grid 1286 × 185 at (77, 391); card 309.5 × 185. Asserts in
+  `scripts/verify.mjs`. Section MAE **3.216/255** (heading 4.87, pill 16.4,
+  cards 8.57, bg 0.000). Reference `assets/partners/why-ds/WhyDS-1x.png`.
+
 ## About Us — Hero (2 October 2026)
 
 - Figma file `JYUzJK1hFqaEwL6DpdDvjp`, page `1439:4184`, section **`1439:4185`**

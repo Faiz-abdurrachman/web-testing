@@ -2626,6 +2626,19 @@ try {
     };
     const title = section.querySelector('#partners-hero-title');
     const titleStyle = getComputedStyle(title);
+    const whySection = document.querySelector('.why-partners');
+    const whyBox = whySection.getBoundingClientRect();
+    const whyRelative = (selector) => {
+      const rect = whySection.querySelector(selector).getBoundingClientRect();
+      return {
+        x: Math.round((rect.x - whyBox.x) * 10) / 10,
+        y: Math.round((rect.y - whyBox.y) * 10) / 10,
+        width: Math.round(rect.width * 10) / 10,
+        height: Math.round(rect.height * 10) / 10,
+      };
+    };
+    const whyTitle = whySection.querySelector('#why-partners-title');
+    const whyTitleStyle = getComputedStyle(whyTitle);
     return {
       hero: box('.partners-hero'),
       our: box('.our-partners'),
@@ -2647,13 +2660,20 @@ try {
       heroTitleFont: titleStyle.fontFamily,
       heroTitleSize: titleStyle.fontSize,
       heroTitleLineHeight: titleStyle.lineHeight,
+      whyHead: whyRelative('.why-head'),
+      whyPill: whyRelative('.why-partners .pill'),
+      whyTitle: whyRelative('#why-partners-title'),
+      whyGrid: whyRelative('.why-grid'),
+      whyTitleFont: whyTitleStyle.fontFamily,
+      whyTitleSize: whyTitleStyle.fontSize,
+      whyTitleLineHeight: whyTitleStyle.lineHeight,
     };
   });
   assert.deepEqual(partnersGeometry, {
     hero: { width: 1440, height: 659 },
     our: { width: 1440, height: 1071 },
-    why: { width: 1440, height: 670 },
-    whyCard: { width: 309.5, height: 189 },
+    why: { width: 1440, height: 656 },
+    whyCard: { width: 309.5, height: 185 },
     partnerCard: { width: 243.2, height: 116 },
     groupPills: 3,
     partnerCards: 20,
@@ -2664,6 +2684,13 @@ try {
     heroTitleFont: '"Bluu Next", Nasalization, sans-serif, sans-serif',
     heroTitleSize: '80px',
     heroTitleLineHeight: '102px',
+    whyHead: { x: 80, y: 80, width: 1280, height: 263 },
+    whyPill: { x: 650.1, y: 80, width: 139.8, height: 26 },
+    whyTitle: { x: 80, y: 114, width: 1280, height: 229 },
+    whyGrid: { x: 77, y: 391, width: 1286, height: 185 },
+    whyTitleFont: '"Bluu Next", Nasalization, sans-serif, sans-serif',
+    whyTitleSize: '80px',
+    whyTitleLineHeight: '102px',
   });
   await page
     .locator('.partners-hero')
@@ -2710,6 +2737,29 @@ try {
   for (let i = 0; i < partnersOurActual.length; i++) {
     partnersOurTotal += Math.abs(
       partnersOurActual[i] - partnersOurReference[i],
+    );
+  }
+
+  // Partners "Why DS" (node 1439:4937) — diff.
+  await page
+    .locator('.why-partners')
+    .screenshot({ path: 'artifacts/partners-why-desktop.png' });
+  const partnersWhyReference = await sharp(
+    'assets/partners/why-ds/WhyDS-1x.png',
+  )
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const partnersWhyActual = await sharp('artifacts/partners-why-desktop.png')
+    .extract({ left: 0, top: 0, width: 1440, height: 656 })
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(partnersWhyReference.length, partnersWhyActual.length);
+  let partnersWhyTotal = 0;
+  for (let i = 0; i < partnersWhyActual.length; i++) {
+    partnersWhyTotal += Math.abs(
+      partnersWhyActual[i] - partnersWhyReference[i],
     );
   }
 
@@ -3099,6 +3149,8 @@ try {
         partnersHeroTotal / partnersHeroActual.length,
       ourMeanAbsoluteChannelDifference:
         partnersOurTotal / partnersOurActual.length,
+      whyMeanAbsoluteChannelDifference:
+        partnersWhyTotal / partnersWhyActual.length,
     },
     hofHero: {
       geometry: hofHeroGeometry,

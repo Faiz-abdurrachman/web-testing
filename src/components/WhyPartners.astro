@@ -6,15 +6,27 @@ import { whyPartners } from '../data/partners';
   <div class="why-head">
     <span class="pill">Why Data Sorcerers?</span>
     <h2 id="why-partners-title">
-      <span>More Than a Network</span>
+      <span>More Than A Network</span>
       <span>A Building Partner</span>
     </h2>
   </div>
   <ul class="why-grid">
     {whyPartners.map((card) => (
       <li class="why-card">
+        <img
+          class="card-glow"
+          src="/images/partners/why-glow.webp"
+          srcset="/images/partners/why-glow.webp 1x, /images/partners/why-glow-2x.webp 2x"
+          width="792"
+          height="413"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+        />
         <div class="card-head">
           <img
+            class="card-icon"
             src={card.icon}
             width="58"
             height="63"
@@ -32,14 +44,17 @@ import { whyPartners } from '../data/partners';
 </section>
 
 <style>
-  /* Matches Figma node 1331:15711 (1440 x 670): padding 80px, gap 58px,
-     #050507. Header pill + 80/102 Nasalization headline, then four 309.5px
-     cards (gap 14px) with a 1px 135deg gradient rim and a violet base glow. */
+  /* Matches Figma node 1439:4937 (1440 x 656, page 1439:4787): column,
+     padding 80px, align centre, gap 48px, #050507. Header 1439:4938 (fixed
+     263, gap 8): pill + Bluu Next Bold 700 80/102 headline (single 181deg
+     gradient across the 2-line node). Four 309.5px cards (gap 16, min-height
+     185), rgba(255,255,255,.15) + 1px 135deg rim; the violet glow is the raw
+     IMAGE-SVG 1439:4949 (why-glow.webp) positioned at (-59.45%, -9.73%). */
   .why-partners {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 58px;
+    gap: 48px;
     padding: 80px;
     box-sizing: border-box;
     background: #050507;
@@ -50,8 +65,9 @@ import { whyPartners } from '../data/partners';
     align-items: center;
     /* Figma top-aligns this fixed 263px frame, not centres it. */
     justify-content: flex-start;
+    width: 100%;
     height: 263px;
-    gap: 14px;
+    gap: 8px;
     text-align: center;
   }
   .pill {
@@ -70,22 +86,28 @@ import { whyPartners } from '../data/partners';
   }
   h2 {
     margin: 0;
-    font-family: var(--font-heading);
+    width: 100%;
+    height: 229px;
+    font-family: var(--font-display);
     font-size: 80px;
-    font-weight: 400;
+    font-weight: 700;
     line-height: 102px;
-    color: #fff;
     text-align: center;
+    /* One gradient across the whole 2-line text node (not per line). */
+    background: linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
   h2 span {
     display: block;
   }
   .why-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 14px;
-    width: 100%;
-    max-width: 1280px;
+    grid-template-columns: repeat(4, 309.5px);
+    gap: 16px;
+    width: 1286px;
+    max-width: none;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -95,27 +117,25 @@ import { whyPartners } from '../data/partners';
     isolation: isolate;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
     padding: 28px;
     box-sizing: border-box;
-    min-height: 189px;
+    min-height: 185px;
     border-radius: 20px;
-    background: #262626;
+    background: rgb(255 255 255 / 15%);
     overflow: hidden;
   }
-  /* Violet glow bleeding in from the bottom-right (the Figma sweep). */
-  .why-card::after {
-    content: '';
+  /* Raw IMAGE-SVG 1439:4949: 792x413 node placed at (-184,-18) of a 309.5x185
+     card (fitted), expressed as percentages so it scales with the card. */
+  .card-glow {
     position: absolute;
-    inset: 0;
-    z-index: -1;
+    left: -59.45%;
+    top: -9.73%;
+    width: 255.9%;
+    height: 223.24%;
+    z-index: 0;
     pointer-events: none;
-    background: radial-gradient(
-      108% 48% at 100% 100%,
-      rgb(150 118 240 / 92%) 0%,
-      rgb(112 66 224 / 52%) 40%,
-      rgb(108 59 255 / 0%) 100%
-    );
+    object-fit: fill;
   }
   /* 1px 135deg gradient rim. */
   .why-card::before {
@@ -141,7 +161,7 @@ import { whyPartners } from '../data/partners';
     z-index: 1;
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 16px;
   }
   .card-head img {
     width: 58px;
@@ -172,6 +192,7 @@ import { whyPartners } from '../data/partners';
   @media (min-width: 1051px) and (max-width: 1365px) {
     .why-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
+      width: 100%;
     }
   }
   @media (max-width: 1050px) {
@@ -183,11 +204,13 @@ import { whyPartners } from '../data/partners';
       height: auto;
     }
     h2 {
+      height: auto;
       font-size: clamp(38px, 6.5vw, 56px);
       line-height: 1.2;
     }
     .why-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      width: 100%;
     }
   }
   @media (max-width: 700px) {

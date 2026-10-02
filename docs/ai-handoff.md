@@ -16,12 +16,12 @@ Wajib **inventaris semua section** dulu (checklist), lalu kerjakan **satu per sa
 (Master Work Plan + 6 gate per section). Urutan section Partners (frame `1439:4787`,
 1440 × 2942, `depth 1`):
 
-| #   | Node ID     | Frame                   | W×H       | Status komponen sekarang                          |
-| --- | ----------- | ----------------------- | --------- | ------------------------------------------------- |
-| 1   | `1439:4788` | Hero Section - Partners | 1440×659  | **SELESAI 3 Oct 2026** (Bluu Next Bold 700 + 8pt) |
-| 2   | `1439:4793` | Our Partners Section    | 1440×1071 | **SELESAI 3 Oct 2026** (gap 16, kartu 243.2×116)  |
-| 3   | `1439:4937` | Why DS section          | 1440×656  | ada (`WhyPartners.astro`) — Nasalization, revisi  |
-| 4   | `1439:4983` | Footer                  | 1440×556  | shared `Footer.astro` — presisi, verifikasi saja  |
+| #   | Node ID     | Frame                   | W×H       | Status komponen sekarang                                     |
+| --- | ----------- | ----------------------- | --------- | ------------------------------------------------------------ |
+| 1   | `1439:4788` | Hero Section - Partners | 1440×659  | **SELESAI 3 Oct 2026** (Bluu Next Bold 700 + 8pt)            |
+| 2   | `1439:4793` | Our Partners Section    | 1440×1071 | **SELESAI 3 Oct 2026** (gap 16, kartu 243.2×116)             |
+| 3   | `1439:4937` | Why DS section          | 1440×656  | **SELESAI 3 Oct 2026** (Bluu Next Bold 700, kartu 309.5×185) |
+| 4   | `1439:4983` | Footer                  | 1440×556  | shared `Footer.astro` — presisi, verifikasi saja             |
 
 Catatan tiap section:
 
@@ -35,6 +35,12 @@ Catatan tiap section:
   (dulu 20) → kartu **243.2×116**, logo ter-center. MAE **2.860** (header 2.62,
   card 6.82). Semua 6 gate + seo ALL PASS. Detail `docs/assets.md` §Partners —
   Our Partners revision.
+- Why DS `1439:4937`: **SELESAI 3 Oct 2026.** 1440×656, padding 80, gap 48, fill
+  #050507; heading **Bluu Next Bold 700 80/102**, satu gradient 181deg; grid 4
+  kartu **309.5×185** gap 16 (lebar 1286); glow IMAGE-SVG `1439:4949` +
+  icon crop sprite `imageRef 36308539…`. MAE **3.216** (heading 4.87, cards 8.57,
+  bg 0.000). Semua 6 gate + seo ALL PASS. Detail `docs/assets.md` §Partners —
+  Why DS revision.
 - Our Partners `1439:4793`: padding 80, gap 100; 3 sub-frame (Frame 2661 1280×325,
   Frame 2662 1280×193, Frame 2663 1280×193), masing-masing gap 42.
 - Why DS `1439:4937`: padding 80, align center, gap 48; Frame 2666 1280×263 (gap 8)

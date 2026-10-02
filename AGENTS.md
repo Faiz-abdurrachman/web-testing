@@ -367,9 +367,11 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   dikerjakan **satu per satu** (wajib Master Work Plan + inventaris section).
   **About Us (`1439:4184`) 100% SELESAI (6 section: Hero, visi misi, Philosophy,
   Our Ecosystem, Our Team, Footer) per 2 Oct 2026.** **Partners Section 1 Hero
-  `1439:4788` SELESAI 3 Oct 2026** (Bluu Next Bold 700 + strict 8pt) dan
+  `1439:4788` SELESAI 3 Oct 2026** (Bluu Next Bold 700 + strict 8pt),
   **Section 2 Our Partners `1439:4793` SELESAI 3 Oct 2026** (gap 16, kartu
-  243.2×116); Section 3 Why DS masih Nasalization (next). Lihat "Next plan" di
+  243.2×116), dan **Section 3 Why DS `1439:4937` SELESAI 3 Oct 2026** (Bluu Next
+  Bold 700, kartu 309.5×185, glow IMAGE-SVG + icon crop sprite). Partners 3
+  section konten 100%; tinggal verifikasi Footer (shared). Lihat "Next plan" di
   bawah & `docs/kickoff-prompt.md`.
 - **About Us Section 1: Hero (`1439:4185`) — 100% SELESAI (2 Oct 2026).**
   Frame Figma `1439:4185` (1440×903, column, padding 80px, justify center,
@@ -574,8 +576,9 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   100%. Partners: 4 section (wajib Master Work Plan per-section + 6 gate):
   1. Hero Section - Partners `1439:4788` (1440×659) — **SELESAI 3 Oct 2026**
   2. Our Partners Section `1439:4793` (1440×1071) — **SELESAI 3 Oct 2026**
-  3. Why DS section `1439:4937` (1440×656) — BELUM (Nasalization)
+  3. Why DS section `1439:4937` (1440×656) — **SELESAI 3 Oct 2026**
   4. Footer `1439:4983` (1440×556, shared `Footer.astro`) — presisi (verifikasi)
+     Partners 3 section konten 100% — tinggal verifikasi Footer (shared).
      Detail: `docs/ai-handoff.md` §"Next Task", `docs/kickoff-prompt.md`.
 - **Partners Section 1: Hero (`1439:4788`) — 100% SELESAI (3 Oct 2026).**
   Frame 1440×659, column, `padding 242px 80px 160px`, align center, `gap 8px`,
@@ -604,6 +607,18 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   Manrope). Geometri Chromium exact; MAE **2.860/255** (header/pill 2.62, card row
   6.82). Semua 6 gate + seo ALL PASS. Referensi
   `assets/partners/our-partners/OurPartners-1x.png`.
+- **Partners Section 3: Why DS (`1439:4937`) — 100% SELESAI (3 Oct 2026).**
+  Frame 1440×656, column, `padding 80px`, align center, `gap 48px`, fill `#050507`.
+  Header `1439:4938` (fixed 263, `gap 8`): pill "Why Data Sorcerers?" (Manrope 400
+  12/18, `rgba(255,255,255,.15)`, radius 32) + heading `1439:4941` **Bluu Next
+  Bold 700 80/102** (`--font-display`) 1280×229, 2 baris ("More Than A Network" /
+  "A Building Partner"), **satu gradient `181deg` membentang blok**. Grid 4 kartu
+  `309.5×185` `gap 16` lebar 1286 (x77); kartu `rgba(255,255,255,.15)` + rim 1px
+  `135deg`, glow = raw IMAGE-SVG `1439:4949` (`why-glow.webp`, fit `(-184,-18)`),
+  icon = crop sprite `imageRef 36308539…` (imageTransform) → `why-*.webp` 58×63,
+  judul Manrope 700 26/39, desc Manrope 400 16/24 `#EDE8FF`. Geometri Chromium
+  exact; MAE **3.216/255** (heading 4.87, cards 8.57, bg 0.000). Semua 6 gate +
+  seo ALL PASS. Referensi `assets/partners/why-ds/WhyDS-1x.png`.
 - **Next plan (prioritas).** Setelah Partners: detail HoDS (`HoDSDetail`) dan/atau
   konten asli (`projects.ts`, tanggal recruitment, logo partner, foto/nama member team,
   member/project/milestone HoF). Detail: `docs/ai-handoff.md` §"Next Task".
