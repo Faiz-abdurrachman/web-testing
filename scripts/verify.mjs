@@ -2466,6 +2466,38 @@ try {
     .raw()
     .toBuffer();
   assert.equal(ourTeamReference.length, ourTeamActual.length);
+  // About Us shared footer (same component as homepage/recruitment).
+  await page.evaluate(async () => {
+    await Promise.all(
+      [...document.querySelectorAll('.footer img')].map(async (image) => {
+        image.loading = 'eager';
+        await image.decode().catch(() => {});
+      }),
+    );
+  });
+  const aboutFooterGeometry = await page
+    .locator('.footer')
+    .evaluate((footer) => {
+      const rect = footer.getBoundingClientRect();
+      return { width: rect.width, height: rect.height };
+    });
+  assert.deepEqual(aboutFooterGeometry, { width: 1440, height: 556 });
+  await page.locator('.footer').scrollIntoViewIfNeeded();
+  await page
+    .locator('.footer')
+    .screenshot({ path: 'artifacts/about-footer-desktop.png' });
+  const aboutFooterReference = await sharp(
+    'assets/about-us/footer/About-Footer-Revisi-1x.png',
+  )
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const aboutFooterActual = await sharp('artifacts/about-footer-desktop.png')
+    .extract({ left: 0, top: 0, width: 1440, height: 556 })
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(aboutFooterReference.length, aboutFooterActual.length);
   await page.setViewportSize({ width: 1920, height: 900 });
   const aboutWide = await page.evaluate(() => {
     const ecosystem = document.querySelector('.ecosystem');

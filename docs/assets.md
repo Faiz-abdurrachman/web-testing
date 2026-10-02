@@ -741,6 +741,16 @@ rgba(108,59,255,.3) 50%, #0e0626)`; info frame `…;1260:16770` (222 × 94 at
   `(649.8, 1413, 140.5, 43)`). Section MAE **2.679/255** (header 3.20, leader
   cards 6.20, button 1.97). All 6 gates pass.
 
+## About Us — Footer (2 October 2026)
+
+- Section `1439:4311` in page `1439:4184` is the shared `Footer.astro` component
+  instance (`765:17071`), 1440 × 556. It renders identically to the homepage and
+  recruitment footers (already verified there). Reference
+  `assets/about-us/footer/About-Footer-Revisi-1x.png`; `verify.mjs` asserts
+  `{ width: 1440, height: 556 }` and diffs it (MAE **6.38/255**, in line with the
+  homepage 5.84 / recruitment 7.71 — residual is the hero/artwork-independent
+  cross-renderer text offset documented in §Footer).
+
 ## About Us — Philosophy & Our Ecosystem (30 September 2026)
 
 - Figma file `RntmRWAgLrh5utgzcjrUik`, section `1331:15784` and pipeline

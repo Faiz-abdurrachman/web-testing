@@ -9,8 +9,9 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
 **CURRENT PAGE: About Us (`1439:4184`)** — Homepage & Recruitment sudah 100%.
-**Section 1–5 (Hero, visi misi, Philosophy, Our Ecosystem, Our Team) SELESAI
-2 Oct 2026; tersisa verifikasi Section 6 Footer `1439:4311`.**
+**About Us (`1439:4184`) 100% SELESAI 2 Oct 2026 — 6 section (Hero, visi misi,
+Philosophy, Our Ecosystem, Our Team, Footer).** Berikutnya: halaman lain
+(Partners/HoF/Contact) & isi konten asli.
 Link Figma: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4184`
 
 Wajib **inventaris semua section** dulu (checklist), lalu kerjakan **satu per satu**
@@ -23,7 +24,7 @@ Wajib **inventaris semua section** dulu (checklist), lalu kerjakan **satu per sa
 | 3   | `1439:4219` | Philosophy Section      | 1440×837  | **SELESAI 2 Oct 2026** (unified with home variant)        |
 | 4   | `1439:4258` | Our Ecosystem Section   | 1440×874  | **SELESAI 2 Oct 2026** (revised Bluu Next Bold 700)       |
 | 5   | `1439:4305` | Our Team Section        | 1440×1536 | **SELESAI 2 Oct 2026** (`OurTeam.astro` + `team.ts` baru) |
-| 6   | `1439:4311` | Footer                  | 1440×556  | shared `Footer.astro`, sudah presisi                      |
+| 6   | `1439:4311` | Footer                  | 1440×556  | **SELESAI** (shared `Footer.astro`, verified MAE 6.38)    |
 
 Catatan hero `1439:4185`: 1440×903, VERTICAL gap 16, padding 80, IMAGE fill; child
 `1439:4186` (1280×287, gap 16) berisi headline `1439:4187` "Architecting the Future
@@ -116,6 +117,13 @@ WORKFLOW & 6 GATE VERIFIKASI (SEMUA WAJIB PASS SEBELUM COMMIT):
 ## Ringkasan cepat (untuk AI baru) — 2 Oct 2026
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
+
+- **About Us page (`1439:4184`) — 100% SELESAI (2 Oct 2026).** 6 section direvisi
+  presisi: Hero `1439:4185` (MAE 4.69), visi misi `1439:4190` (1.91), Philosophy
+  `1439:4219` (2.32, = home), Our Ecosystem `1439:4258` (2.22), Our Team
+  `1439:4305` (2.68, komponen+data baru), Footer `1439:4311` (shared, 6.38).
+  Semua heading memakai **Bluu Next Bold 700** (`--font-display`) + strict 8pt.
+  Referensi baru di `assets/about-us/`. Berikutnya: Partners/HoF/Contact.
 
 - **About Us Section 5: Our Team (`1439:4305`) — 100% SELESAI (2 Oct 2026).**
   Frame 1440×1536, padding 80px, gap 80px, fill `#050507`. Header `1439:4306` 1280×101

@@ -365,9 +365,10 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   komponen Homepage/Recruitment.
   **CURRENT PAGE: About Us (`1439:4184`)** — 5 section konten + Footer shared,
   dikerjakan **satu per satu** (wajib Master Work Plan + inventaris section).
-  **Section 1–5 (Hero, visi misi, Philosophy, Our Ecosystem, Our Team) selesai
-  2 Oct 2026; tersisa verifikasi Section 6 Footer (`1439:4311`).**
-  Lihat "Next plan" di bawah & `docs/kickoff-prompt.md`.
+  **About Us (`1439:4184`) 100% SELESAI (6 section: Hero, visi misi, Philosophy,
+  Our Ecosystem, Our Team, Footer) per 2 Oct 2026.** Semua heading revised
+  memakai **Bluu Next Bold 700** + strict 8pt. Lihat "Next plan" di bawah &
+  `docs/kickoff-prompt.md`.
 - **About Us Section 1: Hero (`1439:4185`) — 100% SELESAI (2 Oct 2026).**
   Frame Figma `1439:4185` (1440×903, column, padding 80px, justify center,
   gap 16px, IMAGE fill `34bc68…` = `assets/assets about us/hero/raw-hero-bg.png`,
@@ -573,9 +574,9 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   3. Philosophy Section `1439:4219` (1440×837) — **SELESAI 2 Oct 2026**
   4. Our Ecosystem Section `1439:4258` (1440×874) — **SELESAI 2 Oct 2026**
   5. Our Team Section `1439:4305` (1440×1536) — **SELESAI 2 Oct 2026** (`OurTeam.astro` baru)
-  6. Footer `1439:4311` (shared, sudah presisi) — **berikutnya**, verifikasi saja
-     Section 1–5 sudah direvisi ke **Bluu Next Bold 700** + strict 8pt. Tersisa
-     verifikasi Footer Section 6. Detail: `docs/ai-handoff.md` §"Next Task",
+  6. Footer `1439:4311` (1440×556, shared `Footer.astro`) — **SELESAI** (verified)
+     Section 1–6 sudah direvisi/terverifikasi **Bluu Next Bold 700** + strict 8pt.
+     About Us 100%. Detail: `docs/ai-handoff.md` §"Next Task",
      `docs/kickoff-prompt.md`.
 - **Next plan (prioritas).** Setelah About Us: halaman lain (Partners `PartnersHero`/
   `WhyPartners`, detail HoDS `HoDSDetail`, dll masih `--font-heading`) dan/atau konten
