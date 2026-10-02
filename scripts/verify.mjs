@@ -1425,34 +1425,29 @@ try {
     width: 1440,
     height: 903,
     top: 1655,
-    heading: { x: 80, y: 80, width: 1280, height: 68 },
-    body: { x: 64, y: 215, width: 1312, height: 625 },
-    content: { x: 158, y: 345, width: 1125, height: 409 },
+    heading: { x: 80, y: 80, width: 1280, height: 67 },
+    body: { x: 64, y: 218, width: 1312, height: 625 },
+    content: { x: 158, y: 348, width: 1125, height: 409 },
     labels: [
-      [158, 462],
-      [158, 461],
-      [380, 462],
-      [380, 462],
-      [600, 462],
-      [600, 462],
-      [821, 462],
-      [821, 462],
-    ].map(([x, width], index) => ({
-      x,
-      y: 345 + index * 54,
-      width,
-      height: 31,
-    })),
-    card1: { x: 983, y: 215, width: 356, height: 430 },
-    card2: { x: 129, y: 431, width: 295.375, height: 361.765625 },
-    connector: { x: 64, y: 310, width: 1312, height: 531 },
+      { x: 158, y: 348, width: 462, height: 31 },
+      { x: 158, y: 395, width: 461, height: 31 },
+      { x: 380, y: 450, width: 462, height: 31 },
+      { x: 380, y: 497, width: 462, height: 31 },
+      { x: 600, y: 552, width: 462, height: 31 },
+      { x: 600, y: 599, width: 462, height: 31 },
+      { x: 821, y: 654, width: 462, height: 31 },
+      { x: 821, y: 701, width: 462, height: 31 },
+    ],
+    card1: { x: 983, y: 218, width: 356, height: 430 },
+    card2: { x: 129, y: 434, width: 295.375, height: 361.765625 },
+    connector: { x: 64, y: 313, width: 1312, height: 531 },
   });
   await page.locator('.what-you-will-do').scrollIntoViewIfNeeded();
   await page
     .locator('.what-you-will-do')
     .screenshot({ path: 'artifacts/what-you-will-do-desktop.png' });
   const whatYouWillDoReference = await sharp(
-    'assets/assets recruitment page/what you will do/What You Will Do Section.png',
+    'assets/assets recruitment page/what you will do/Recruitment-WhatYouWillDo-Revisi-1x.png',
   )
     .resize(1440, 903)
     .removeAlpha()

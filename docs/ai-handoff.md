@@ -8,24 +8,20 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ## TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
-**Target: Recruitment Page Section 3: What You Will Do (Figma node `1436:3517`)**
+**Target: Recruitment Page Section 4: Available Roles (Figma node `1436:3564` — "Available Roles Section Revisi Card")**
 
-- **Link Figma**: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3517`
-- **File Komponen**: `src/components/WhatYouWillDo.astro`
-- **Spesifikasi Frame Figma `1436:3517` (1440 × 903px)**:
-  - Padding: `80px 80px 80px 80px` (Strict 8-Point Grid).
-  - Header Frame 2734 (`1436:4048`): 1280 × 118px, `layoutMode: VERTICAL`, `gap: 24px` di `(80, 80)`.
-    - Heading `1436:3518`: "What You Will Do" -> **Bluu Next Bold 700 56px / 67.2px** (`--font-display`), line-height 67px, gradient `linear-gradient(180deg, #ffffff 15%, #999999 42%, #ffffff 80%)` (`-webkit-background-clip: text`).
-    - Subtitle `1436:3519`: "Life inside the Data Sorcerers ecosystem" -> **Manrope Medium 500 18px / 27px** (`--font-body`), `#ffffff`, text-align center.
-  - Gap Header ke Body: **20px** (y=80 + 118 + 20 = 218 -> Body sits at y=218 / Figma y=68180).
-  - Body Frame 2542 (`1436:3520`): 1312 × 625px (kolase 8 label + 2 kartu tarot + connector line). Komponen `.wyd-body` sudah ada, hanya perlu disesuaikan posisi & containment-nya agar 0px diff.
+- **Link Figma**: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3564`
+- **File Komponen**: `src/components/AvailableRoles.astro`
+- **Spesifikasi Frame Figma `1436:3564` (1440 × 843px)**:
+  - Container section: 1440 × 843px, padding `80px` (Strict 8-Point Grid).
+  - Header Frame & Roles Card Grid: sesuaikan dengan revisi card terbaru dari Figma node `1436:3564`.
 - **Export Referensi Baru**:
-  - `node scripts/figma.mjs export 1436:3517 1 png "assets/assets recruitment page/what you will do/Recruitment-WhatYouWillDo-Revisi-1x.png"`
-  - `node scripts/figma.mjs export 1436:3517 2 png "assets/assets recruitment page/what you will do/Recruitment-WhatYouWillDo-Revisi-2x.png"`
+  - `node scripts/figma.mjs export 1436:3564 1 png "assets/assets recruitment page/available roles/Recruitment-AvailableRoles-Revisi-1x.png"`
+  - `node scripts/figma.mjs export 1436:3564 2 png "assets/assets recruitment page/available roles/Recruitment-AvailableRoles-Revisi-2x.png"`
 - **Verifikasi & Assertion di `scripts/verify.mjs`**:
-  - Cek `recruitmentWhatYouWillDo` assertion dan arahkan `whatYouWillDoReference` ke file 1x yang baru diekspor.
+  - Update assertion `recruitmentAvailableRoles` dan path reference ke file 1x yang baru diekspor.
 - **Semua 6 Gates Wajib PASS**:
-  - `npm run build` (0 error)
+  - `npm run build` (0 error, 19 halaman)
   - `PREVIEW_URL=http://localhost:4331 node scripts/verify.mjs` (exit 0)
   - `PREVIEW_URL=http://localhost:4331 node scripts/navbar-audit.mjs` (ALL PASS)
   - `PREVIEW_URL=http://localhost:4331 node scripts/verify-vt.mjs` (ALL PASS)
@@ -35,6 +31,22 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 ## Ringkasan cepat (untuk AI baru) — 2 Oct 2026
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
+
+- **Recruitment Page Section 3: What You Will Do (`1436:3517`) — revisi font, header & spacing 8pt (PALING BARU, 2 Oct 2026).**
+  Section 3 pada halaman Recruitment (`1436:3505`) kini selesai dan tervalidasi presisi:
+  - Frame Figma `1436:3517` (1440 × 903px, padding `80px 80px 80px 80px`, gap header ke body `20px`).
+  - Header Frame 2734 (`1436:4048`): 1280 × 118px di `(80, 80)`, layout vertical, gap `24px`:
+    - Heading `What You Will Do` **Bluu Next Bold 700 56px / 67px** (`--font-display`), fill `linear-gradient(180deg, #ffffff 15%, #999999 42%, #ffffff 80%)` di `(80, 80, 1280 × 67)`.
+    - Subtitle `Life inside the Data Sorcerers ecosystem` Manrope Medium 500 18/27px (`--font-body`), `#ffffff` di `(544.5, 171, 351 × 27)`.
+  - Body Frame 2542 (`1436:3520`): 1312 × 625px di `(64, 218)`:
+    - Tarot Card 1 di `(983, 218, 356 × 430)`.
+    - Tarot Card 2 di `(129, 434, 295.39 × 361.78)`.
+    - Connector SVG di `(64, 313, 1312 × 531)`.
+    - Content 8 labels di `(158, 348, 1125 × 409)` dengan 8-point grid intra-pair gap 16px dan inter-pair gap 24px (y: 348, 395, 450, 497, 552, 599, 654, 701).
+  - Living sky starfield background via `Starfield.astro`.
+  - Section MAE: **3.2541/255** vs exported node reference `Recruitment-WhatYouWillDo-Revisi-1x.png`.
+  - Verifikasi: build 0 error, verify.mjs exit 0, responsive audit 468/468 PASS, navbar audit ALL PASS, verify:vt ALL PASS, format:check ALL PASS. Geometri diff 0.0px.
+  - Detail: `docs/assets.md` §Recruitment page — What You Will Do.
 
 - **Recruitment Page Section 2: Who Should Join (`1436:3512`) — revisi font & spacing (PALING BARU, 2 Oct 2026).**
   Section 2 pada halaman Recruitment (`1436:3505`) kini selesai dan tervalidasi presisi:

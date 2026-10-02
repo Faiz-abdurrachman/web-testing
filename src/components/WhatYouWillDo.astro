@@ -1,23 +1,25 @@
 ---
 import Starfield from './Starfield.astro';
 
-// Layout comes from Figma node 770:16251. The Body is a fixed 1312x625 collage
-// and the eight labels live in the 1125x409 "Content" frame; offsets below are
-// the Figma values (Content at 94,130 inside the Body).
+// Layout comes from Figma node 1436:3517 (Section 3 Recruitment Page).
+// The Header Frame 2734 is 1280x118 at (80, 80) with 24px gap.
+// Section gap to Body is 20px (Body at 64, 218).
+// The Body Frame 2542 is a fixed 1312x625 collage and the eight labels live in
+// the 1125x409 "Content" frame (at 94, 130 of the Body; absolute 158, 348).
 const labels: [string, number, number, number | null, number][] = [
-  ['LEARN WITH OTHERS', 0, 0, 57, 462],
-  ['PRACTICE YOUR SKILLS', 0, 54, 56, 461],
-  ['WORK ON EXPERIMENTS', 222, 108, null, 462],
-  ['CONTRIBUTE TO PROJECTS', 222, 162, null, 462],
-  ['PARTICIPATE IN RESEARCH', 442, 216, 26, 462],
-  ['SHARE KNOWLEDGE', 442, 270, 26, 462],
-  ['BUILD YOUR PORTOFOLIO', 663, 324, 43, 462],
-  ['COLLABORATE ACROSS DISCIPLINES', 663, 378, 43, 462],
+  ['LEARN WITH OTHERS', 0, 0, 58, 462],
+  ['PRACTICE YOUR SKILLS', 0, 47, 58, 461],
+  ['WORK ON EXPERIMENTS', 222, 102, null, 462],
+  ['CONTRIBUTE TO PROJECTS', 222, 149, null, 462],
+  ['PARTICIPATE IN RESEARCH', 442, 204, 30, 462],
+  ['SHARE KNOWLEDGE', 442, 251, 30, 462],
+  ['BUILD YOUR PORTOFOLIO', 663, 306, 46, 462],
+  ['COLLABORATE ACROSS DISCIPLINES', 663, 353, 46, 462],
 ];
 const gradient = (stop: number | null) =>
   stop === null
-    ? 'linear-gradient(134deg, #fff 0%, #6c3bff 4%, rgb(108 59 255 / 0%) 100%)'
-    : `linear-gradient(134deg, #fff 0%, #6c3bff 4%, #6c3bff ${stop}%, rgb(108 59 255 / 0%) 100%)`;
+    ? 'linear-gradient(134deg, #fff 0%, #6c3bff 8%, rgb(108 59 255 / 0%) 100%)'
+    : `linear-gradient(134deg, #fff 0%, #6c3bff 8%, #6c3bff ${stop}%, rgb(108 59 255 / 0%) 100%)`;
 ---
 
 <section
@@ -26,8 +28,10 @@ const gradient = (stop: number | null) =>
   aria-labelledby="what-you-will-do-title"
 >
   <Starfield />
-  <h2 id="what-you-will-do-title">What You Will Do</h2>
-  <p>Life inside the Data Sorcerers ecosystem</p>
+  <header class="wyd-header">
+    <h2 id="what-you-will-do-title">What You Will Do</h2>
+    <p>Life inside the Data Sorcerers ecosystem</p>
+  </header>
 
   <div class="wyd-body">
     <img
@@ -94,34 +98,48 @@ const gradient = (stop: number | null) =>
     background-color: #000;
     overflow: clip;
   }
-  h2,
-  p,
-  .wyd-body {
+  .wyd-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    width: 1280px;
+    max-width: 100%;
     flex: none;
   }
   h2 {
     margin: 0;
     width: 1280px;
     max-width: 100%;
-    font: 400 56px/68px var(--font-heading);
+    font-family: var(--font-display);
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 67px;
+    letter-spacing: 0;
     text-align: center;
-    background: linear-gradient(180deg, #fff 0%, #707070 78%);
+    background: linear-gradient(180deg, #ffffff 15%, #999999 42%, #ffffff 80%);
     -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     background-clip: text;
     color: transparent;
+    flex: none;
   }
   p {
     margin: 0;
+    font-family: var(--font-body);
     font-size: 18px;
     font-weight: 500;
     line-height: 27px;
+    letter-spacing: 0;
     color: #fff;
     text-align: center;
+    flex: none;
   }
   .wyd-body {
     position: relative;
     width: 1312px;
     height: 625px;
+    flex: none;
   }
   .card {
     position: absolute;
@@ -186,9 +204,15 @@ const gradient = (stop: number | null) =>
       height: auto;
       padding: 64px 24px;
     }
+    .wyd-header {
+      width: 100%;
+    }
     h2 {
       font-size: clamp(30px, 7vw, 48px);
       line-height: 1.214286;
+    }
+    p {
+      font-size: 16px;
     }
     .wyd-body {
       display: flex;

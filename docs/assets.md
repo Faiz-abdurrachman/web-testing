@@ -1481,47 +1481,47 @@ role/Detile Roles - …png` (5760 × 5120, i.e. 1440 × 1280 at 4×). Note the
 
 ## Recruitment page — What You Will Do
 
-- Figma node: `770:16251`; reference
-  `assets/assets recruitment page/what you will do/What You Will Do Section.png`,
-  5760 × 3612 (1440 × 903 at 4×). The section sits at homepage y=1655.
-- Frame: 1440 × 903, `padding 80 80 63` (the bottom is 63, not 80, so the
-  section matches the reference height), column, centered, `gap 20`.
-- Background (26 Sep 2026): the **shared living sky** —
-  `src/components/Starfield.astro`, same base tile + `far`/`near` drift as the
-  home "Four Pillars of Innovation" section (`public/images/starfield/`). The
-  supplied `Background.png` frame fill (a near-black starfield, MAD 0.11 vs the
-  Figma export) previously shipped as `public/images/what-you-will-do/background-
-{1440,2880}.webp` / `backgrounds/stars.webp` painted `cover` (Figma
-  `scaleMode: FILL`); that flat fill is superseded by the drifting sky the mentor
-  requested. The component is `position: absolute; inset: 0; overflow: hidden;
-z-index: -1`, so nothing about the section geometry changes.
-- Heading: "What You Will Do", Nasalization Regular 400, 56 / 68, centered in a
-  1280px box, gradient `linear-gradient(180deg, #fff 0%, #707070 78%)`.
-- Copy: "Life inside the Data Sorcerers ecosystem", Manrope Medium 500, 18 / 27,
-  `#fff`, centered.
-- Body: a fixed 1312 × 625 collage at (64, 215) holding:
-  - two tarot card artworks — `card-1` (356 × 430 at 983, 215) and `card-2`
-    (295.39 × 361.78 at 129, 431), exported from the supplied PNGs to lossless
+- Figma node: `1436:3517`; reference
+  `assets/assets recruitment page/what you will do/Recruitment-WhatYouWillDo-Revisi-1x.png`,
+  1440 × 903 (2× at `Recruitment-WhatYouWillDo-Revisi-2x.png`). The section sits at
+  recruitment y=1655.
+- Frame: 1440 × 903, `padding: 80px` (strict 8-point grid), vertical column,
+  centered, `gap: 20px`.
+- Background: the **shared living sky** — `src/components/Starfield.astro`, same
+  base tile + `far`/`near` drift as the home "Four Pillars of Innovation" section
+  (`public/images/starfield/`). The component is `position: absolute; inset: 0;
+overflow: hidden; z-index: -1`, so nothing about the section geometry changes.
+- Header Frame 2734 (`1436:4048`): 1280 × 118px at (80, 80), vertical column,
+  `gap: 24px`.
+  - Heading (`1436:3518`): "What You Will Do", Bluu Next Bold 700, 56 / 67px
+    (`--font-display`), gradient `linear-gradient(180deg, #ffffff 15%, #999999 42%, #ffffff 80%)`,
+    centered in 1280px box.
+  - Subtitle (`1436:3519`): "Life inside the Data Sorcerers ecosystem", Manrope
+    Medium 500, 18 / 27px, `#ffffff`, centered.
+- Gap header ke body: **20px** (Body sits at y=218).
+- Body Frame 2542 (`1436:3520`): a fixed 1312 × 625 collage at (64, 218) holding:
+  - two tarot card artworks — `card-1` (356 × 430 at 983, 218) and `card-2`
+    (295.39 × 361.78 at 129, 434), exported from the supplied PNGs to lossless
     WebP at 1×/2× under `public/images/what-you-will-do/`;
-  - a decorative connector vector (`connector.svg`, 1312 × 531). Figma places it
-    at y=96 in the Body and reports 529px; the SVG's own height is 531 and the
-    reference PNG aligns it at y=95, so it sits at 64, 310 (lines and 7px nodes
-    in `#6C3BFF`/white);
+  - a decorative connector vector (`connector.svg`, 1312 × 531 at 64, 313);
   - eight HTML/CSS label pills inside the 1125 × 409 "Content" frame (at 94, 130
-    of the Body; absolute 158, 345), in a diagonal staircase at x 158 / 380 / 600
-    / 821 and y 345 / 399 / 453 / 507 / 561 / 615 / 669 / 723. Each is 462 × 31
-    (label 2 is 461 in Figma) with a
-    `linear-gradient(134deg, #fff 0%, #6c3bff 4%, #6c3bff X%, transparent)`
-    (X = 57 / 56 / – / – / 26 / 26 / 43 / 43%), a 6px gradient dot and Manrope
+    of the Body; absolute 158, 348), in diagonal pairs at x 158 / 380 / 600 / 821
+    and y 348 / 395 / 450 / 497 / 552 / 599 / 654 / 701 (following strict 8-point
+    grid: 16px intra-pair gap, 24px inter-pair gap). Each is 462 × 31 (label 2 is
+    461 in Figma) with a
+    `linear-gradient(134deg, #fff 0%, #6c3bff 8%, #6c3bff X%, transparent)`
+    (X = 58 / 58 / – / – / 30 / 30 / 46 / 46%), a 6px gradient dot and Manrope
     Medium 18 / 27 text: LEARN WITH OTHERS, PRACTICE YOUR SKILLS, WORK ON
     EXPERIMENTS, CONTRIBUTE TO PROJECTS, PARTICIPATE IN RESEARCH, SHARE
     KNOWLEDGE, BUILD YOUR PORTOFOLIO, COLLABORATE ACROSS DISCIPLINES.
 - Below 1320px the collage becomes a stacked column of the eight labels (cards
   and connector hidden) — an adaptation, since no mobile reference exists.
+- Section MAE: **3.25/255** vs exported node reference
+  `Recruitment-WhatYouWillDo-Revisi-1x.png`.
 - Verification: `scripts/verify.mjs` asserts the section, heading, body, all
   eight labels, both cards and the connector exactly, diffs against the
-  reference (~1.24/255; the residual is anti-aliasing on the connector lines and
-  the label edges), and checks overflow and text from 320px to 1920px.
+  reference, and checks overflow and text from 320px to 1920px. All 6 verification
+  gates PASS.
 
 ## Recruitment page — Available Roles
 
