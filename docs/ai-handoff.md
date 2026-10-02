@@ -1341,29 +1341,69 @@ Section.png` (5760×3376 → 1440×844). Patch glow terukur: center REF
   Hall of Frames / Partners / Contact (About Us sudah selesai), dan lanjutan
   animasi What We Do.
 
-## Next plan — untuk AI berikutnya (update 2 Oct 2026)
+## Next plan — Audit & Eksekusi Per-Section (Update 2 Oct 2026)
 
-Urutan yang disarankan. Baca `docs/sound-sop.md` (khususnya §9) kalau menyentuh
-sound atau navigasi; detail P0–P2 ada di "Perf audit & rencana" di atas.
+Fokus utama AI berikutnya adalah mengaudit dan mengeksekusi secara **strict pixel-accurate per section** pada dua page revisi utama:
 
-1. **Homepage — revisi font & spacing (SEDANG JALAN, frame `1430:2040`).**
-   - **Hero (`1430:2041`) SELESAI** (Bluu Next Bold 72/86, plate background webp, MAE 3.18).
-   - **Our Philosophy (`1430:2052`) SELESAI** (Bluu Next Bold 56/67, 591px col, 8pt spacing, MAE 2.568).
-   - **What We Do (`1430:2089`) SELESAI** (Bluu Next Bold 56/67.2, 4 kartu 391×254 di `(80,80)`, `(969,80)`, `(80,506)`, `(969,506)`, Manrope Bold 26/39 titles, MAE 2.5790).
-   - **TUGAS BERIKUTNYA: House of Data Sorcerers (HoDS) / "Choose Your Domain" (`1430:2138`)**:
-     - Frame Figma: `1430:2138` (1440 × 819, `padding: 80px`).
-     - Header group `1430:2139` (`Frame 2284`, 1280 × 149):
-       - `Frame 2283` (`1280 × 101`, `VERTICAL gap: 8px`):
-         - Eyebrow CTA `1430:2141` (`159 × 26px`, padding `4px 12px`, border-radius 32px, `rgba(255,255,255,0.15)` with Figma `GLASS` effect, text: "House of Data Sorcerers").
-         - Heading `1430:2143` ("Choose Your Domain", `538 × 67px`, **Bluu Next Bold 700 56px / 67.2px**, per-line clipped `linear-gradient(211.54deg, #FFFFFF 32.8%, #999999 49.8%, #FFFFFF 73.04%)`, gap ke eyebrow: **8px**).
-       - Subtitle `1430:2144` (Manrope Regular 16/24 white, `1280 × 24px`, gap ke heading: **24px**).
-     - Gap header group ke rail kartu: **74px** (`Frame 2284` ke `HoDS Card`).
-     - Rail kartu `HoDS Card` (`1430:2145` / `DomainRail.astro`): `1280 × 436px` (`Frame 2509`, `gap: 32px`, 6 kartu domain `405 × 436px`).
-     - Export referensi 1x & 2x: `assets/assets home page/hods/Home-HoDS-Revisi-{1x,2x}.png` via `node scripts/figma.mjs export 1430:2138 1 png ...`.
-     - Update assertion geometri di `verify.mjs` & cek `responsive-audit.mjs`.
-   - **Section sesudahnya:** Our Project (`1430:2146`) → CTA Recruitment (`1430:2162`).
-   - Sisa opsional surface glass di halaman lain via REST, dan konten asli saat material tersedia.
-1. **Perf P0 — SELESAI (28 Sep 2026).** (a) `sizes` Snippets + 960w, (d)
+1. **Homepage Revisi Font & Spacing**: [Figma Frame 1430:2040](https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1430-2040)
+2. **Recruitment Page Revisi Font & Spacing**: [Figma Frame 1436:3505](https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3505)
+
+### ATURAN HUKUM SPACING & TYPOGRAPHY:
+
+- **Strict 8-Point Grid:** Semua gap dan padding WAJIB kelipatan 8px (8px, 16px, 24px, 32px, 40px, 48px, 56px, 64px, 72px, 80px). Dilarang angka ajaib (magic numbers).
+- **Typography:** Semua heading utama telah beralih dari Nasalization ke **Bluu Next Bold 700** (`--font-display`), dengan font-size 56px (line-height 67.2px) atau 72px (line-height 86.4px) dan linear gradient per baris (`background-clip: text`). Body & subtitle memakai **Manrope** (400/500/700).
+
+---
+
+### TABEL BREAKDOWN & STATUS PER-SECTION:
+
+#### A. HOMEPAGE REVISI FONT & SPACING (`1430:2040`)
+
+| No  | Section & Node ID                           | Dimensi & Padding              | Spacing & Gap                     | Typography                                    | Status & Verifikasi                       |
+| --- | ------------------------------------------- | ------------------------------ | --------------------------------- | --------------------------------------------- | ----------------------------------------- |
+| 1   | **Hero Section** (`1430:2041`)              | 1440 × 903, padding 80px       | Gap content 64px, gap heading 4px | Bluu Next Bold 72/86, Manrope 18/25           | **SELESAI** (MAE 3.18, commit `e515b26`)  |
+| 2   | **Philosophy Section** (`1430:2052`)        | 1440 × 837, padding 80px       | Gap 48px/8px, grid 30×92          | Bluu Next Bold 56/67, Manrope 16/24           | **SELESAI** (MAE 2.568, commit `d080334`) |
+| 3   | **What We Do** (`1430:2089`)                | 1440 × 840, padding 80px       | 4 kartu 391×254, gap 0/16px       | Bluu Next Bold 56/67.2, Manrope Bold 26/39    | **SELESAI** (MAE 2.579, commit `390ee5f`) |
+| 4   | **Choose Your Domain (HoDS)** (`1430:2138`) | 1440 × 819, padding 80px       | Gap header 74px, gap kartu 32px   | Bluu Next Bold 56/67.2, Manrope 22/33 & 16/24 | **SELESAI** (MAE 2.405, commit `8da8277`) |
+| 5   | **Our Project** (`1430:2146`)               | 1440, padding 80px             | Gap header 82px, gap 4px          | Bluu Next Bold 56/67.2, Manrope               | **PENDING AUDIT & REVISI**                |
+| 6   | **CTA Recruitment** (`1430:2162`)           | 1440, padding 80px, card 64×80 | Gap content 48px, action gap 26px | Bluu Next Bold 56/67.2, Manrope 16/24         | **PENDING AUDIT & REVISI**                |
+
+#### B. RECRUITMENT PAGE REVISI FONT & SPACING (`1436:3505`)
+
+| No  | Section & Node ID                    | Dimensi & Padding          | Spacing & Gap                           | Typography                                         | Status & Verifikasi                          |
+| --- | ------------------------------------ | -------------------------- | --------------------------------------- | -------------------------------------------------- | -------------------------------------------- |
+| 1   | **Recruitment Hero** (`1436:3506`)   | 1440 × 866, padding 0 80px | Vertically centered (278px), gap 48px   | Bluu Next Bold 72/86, Manrope 18/27, Button 120×43 | **SELESAI** (assert exact, commit `978d468`) |
+| 2   | **Who Should Join** (`1436:3512`)    | 1440, padding 80px         | Gap header 74px, rail cards gap 32px    | Bluu Next Bold 56/67.2, Manrope                    | **PENDING AUDIT & REVISI**                   |
+| 3   | **What You Will Do** (`1436:3517`)   | 1440 × 903, padding 80px   | Gap header 20px, body 1312×625          | Bluu Next Bold 56/67.2, Manrope 18/27              | **PENDING AUDIT & REVISI**                   |
+| 4   | **Available Roles** (`1436:3564`)    | 1440, padding 80px         | Gap header 58px, grid gap 40px          | Bluu Next Bold 56/67.2, 6 cards role revisi        | **PENDING AUDIT & REVISI**                   |
+| 5   | **Selection Timeline** (`1436:3637`) | 1440, padding 80px         | Header padding 18×32, row gap 18px      | Bluu Next Bold 56/67.2, 6 phase rows               | **PENDING AUDIT & REVISI**                   |
+| 6   | **FAQ** (`1436:3675`)                | 1440, padding 80px         | Gap items 16px/24px                     | Bluu Next Bold 56/67.2 ("FAQ"), Manrope            | **PENDING AUDIT & REVISI**                   |
+| 7   | **Snippets of Life** (`1436:3684`)   | 1440, padding 40px 80px    | Gap 56px, gallery 1280, thumbs gap 35px | Bluu Next Bold 56/67.2, Manrope                    | **PENDING AUDIT & REVISI**                   |
+| 8   | **CTA Recruitment** (`1436:3687`)    | 1440, padding 80px         | Gap content 24px/48px                   | Bluu Next Bold 56/67.2, Button Join                | **PENDING AUDIT & REVISI**                   |
+
+---
+
+### Rencana Eksekusi Per-Section (Wajib Urut, Tanpa Skip):
+
+1. **Audit & Plan**: AI berikutnya wajib membuka satu per satu section pending di atas, export PNG referensi (1x dan 2x), mengukur bounding box dan font dengan `sharp`.
+2. **Prioritas 1 (Homepage Sisa):**
+   - Section 5: `Our Project` (`1430:2146`) — pastikan heading Bluu Next Bold 56/67.2, gap 82px, dan 3D carousel coverflow presisi.
+   - Section 6: `CTA Recruitment` (`1430:2162`) — pastikan card border gradient, heading Bluu Next 56/67.2, dan button 8pt spacing.
+3. **Prioritas 2 (Recruitment Page Sisa):**
+   - Section 2: `Who Should Join` (`1436:3512`)
+   - Section 3: `What You Will Do` (`1436:3517`)
+   - Section 4: `Available Roles Section Revisi Card` (`1436:3564`)
+   - Section 5: `TIMELINE` (`1436:3637`)
+   - Section 6: `FAQ` (`1436:3675`)
+   - Section 7: `Snippets` (`1436:3684`)
+   - Section 8: `CTA Recruitment` (`1436:3687`)
+4. **Verifikasi Wajib Sebelum Commit:**
+   - `scripts/verify.mjs` (exit 0)
+   - `scripts/responsive-audit.mjs` (468/468 PASS)
+   - `npm run audit:navbar` (ALL PASS)
+   - `npm run verify:vt` (ALL PASS)
+   - `npm run format:check` (ALL PASS)
+5. **Perf P0 — SELESAI (28 Sep 2026).** (a) `sizes` Snippets + 960w, (d)
    `logo.png`/hero `background`/`figure` (lihat "P0 pass"), lalu (b) **sorcerer →
    AVIF** (`sorcerer-2x` 481→196 KB), (c) **video hero di-re-encode** (home webm
    0.38 MB, recruitment webm 0.76 MB; SSIM ≈ 0.983/0.989), dan **poster tak lagi
@@ -1378,22 +1418,22 @@ sound atau navigasi; detail P0–P2 ada di "Perf audit & rencana" di atas.
      teknik yang sama (AVIF + webp fallback), ukur MAE dulu. **Catatan:** P0(b)
      "splash jangan nunggu `three`" tetap **dibatalkan** — HP memang tidak
      menunggu `three`; desktop sengaja menunggu (jangan diubah).
-1. **View Transitions (DONE; sisa device nyata).** `verify-vt.mjs` sudah menguji
+6. **View Transitions (DONE; sisa device nyata).** `verify-vt.mjs` sudah menguji
    Back/Forward, reload deep-link, dan inert saat reduce. Sisa: uji Safari/Firefox
    & perangkat asli (Playwright firefox belum terpasang). `transition:persist`
    belum perlu. Smoke: **`npm run verify:vt`**.
-1. **Konten:** data project asli (`src/data/projects.ts` masih 4 placeholder) dan
+7. **Konten:** data project asli (`src/data/projects.ts` masih 4 placeholder) dan
    tanggal recruitment (`SelectionTimeline.astro` masih "Date"). Butuh material user.
-1. **Halaman baru:** ~~About Us~~ ~~Partners~~ ~~Hall of Frames~~ ~~Contact~~
+8. **Halaman baru:** ~~About Us~~ ~~Partners~~ ~~Hall of Frames~~ ~~Contact~~
    **ALL DONE** (18 rute publik, semua link navbar aktif). Sisa konten asli:
    logo partner (20 slot, sekarang placeholder DS), member HoF, project HoF,
    milestone. **Jangan bikin URL palsu** untuk kartu info Contact (sengaja
    non-link sampai destinasi diberikan).
-1. **Nasalization webfont:** butuh file berlisensi dari manusia — **jangan
+9. **Nasalization webfont:** butuh file berlisensi dari manusia — **jangan
    diakali**. Taruh `.woff2` di `public/fonts/`, update `@font-face` di
    `global.css` (pertahankan `local()`).
-1. **Sound (opsional):** tuning level cue/ambient (Bagian B, ditunda), pisah
-   kontrol SFX vs ambient, atau ganti ke sample AI lewat MCP ElevenLabs kalau mau
-   non-prosedural.
-1. ~~**OG hardening**~~ — **DONE:** `<html prefix="og: https://ogp.me/ns#">` +
-   `og:image:secure_url` di `BaseLayout.astro`, `seo:audit` PASS.
+10. **Sound (opsional):** tuning level cue/ambient (Bagian B, ditunda), pisah
+    kontrol SFX vs ambient, atau ganti ke sample AI lewat MCP ElevenLabs kalau mau
+    non-prosedural.
+11. ~~**OG hardening**~~ — **DONE:** `<html prefix="og: https://ogp.me/ns#">` +
+    `og:image:secure_url` di `BaseLayout.astro`, `seo:audit` PASS.

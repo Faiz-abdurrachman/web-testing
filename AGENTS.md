@@ -69,33 +69,37 @@ Full protocol: **`docs/pixel-precision-sop.md`**. The rules below are the law.
 2. **Start from the exported node, not the CSS.** For every section: get the
    Figma node (MCP) → export the node PNG (1× + 2×) and the individual text /
    component nodes via `figma_download_figma_images` → measure with `sharp`.
-3. **Bundle the exact font Figma uses** (check licence; OFL → vendor the woff2
+3. **Strict 8-Point Grid Spacing & Padding.** All layout padding, margins, and gaps
+   MUST strictly follow multiples of 8px (8px, 16px, 24px, 32px, 40px, 48px, 56px,
+   64px, 72px, 80px) matching Figma frame specifications. Never introduce arbitrary
+   magic numbers.
+4. **Bundle the exact font Figma uses** (check licence; OFL → vendor the woff2
    into `public/fonts/` + `@font-face`). Declare the real weight to avoid faux
    bold. Never swap a page's font globally mid-migration — unrevised pages keep
    the old token. Nasalization is **not** bundleable (desktop licence).
-4. **Use image-fill artwork verbatim.** If a node has an `imageRef`, download the
+5. **Use image-fill artwork verbatim.** If a node has an `imageRef`, download the
    raw image and bake it as-is (`fit: cover` mirroring the Figma FILL crop) — do
    not reconstruct it from layers. Reconstruction was ~24 MAE vs the hero node;
    the raw fill is ~2.7.
-5. **All UI is real HTML/CSS.** Images are only artwork/photos. Never flatten a
+6. **All UI is real HTML/CSS.** Images are only artwork/photos. Never flatten a
    screenshot (text, buttons, borders, cards, gradient text) into the UI.
    Text gradients are applied **per line** (`background-clip: text`).
-6. **Measure, don't guess.** Extract values from the reference PNG with `sharp`
+7. **Measure, don't guess.** Extract values from the reference PNG with `sharp`
    (bbox, per-region MAE) and hardcode the measured numbers. "Ink" positions must
    match the reference to **±1px**. Do not eyeball. If a region's diff is high,
    isolate whether it is font, gradient or artwork before "fixing" the CSS.
-7. **Keep geometry exact.** Existing values are asserted in `verify.mjs`
+8. **Keep geometry exact.** Existing values are asserted in `verify.mjs`
    (`assert.deepEqual`). If a design change is intentional, update the assertion
    and the reference PNG path in the same commit.
-8. **Always provide a `prefers-reduced-motion` fallback** for any animation; the
+9. **Always provide a `prefers-reduced-motion` fallback** for any animation; the
    reduced-motion render must remain pixel-exact (all audits run in `reduce`).
-9. **Never break the bundle budget.** Runtime deps are `astro` + `gsap` (approved)
-   and `three`. Do not add other UI libraries without asking; lazy-import heavy
-   code (the hero Three.js layer is a dynamic `import()`).
-10. **Commit per feature**, push to `main`. `origin` has **two push URLs**
+10. **Never break the bundle budget.** Runtime deps are `astro` + `gsap` (approved)
+    and `three`. Do not add other UI libraries without asking; lazy-import heavy
+    code (the hero Three.js layer is a dynamic `import()`).
+11. **Commit per feature**, push to `main`. `origin` has **two push URLs**
     (testing + production) — see "Git & deploy". Follow existing message style
     (`feat:`, `fix:`, `docs:`, `chore:`). Confirm with the user before pushing.
-11. **Update the docs with the code**: `docs/assets.md` (provenance + node ids),
+12. **Update the docs with the code**: `docs/assets.md` (provenance + node ids),
     `docs/ai-handoff.md` (state) and `AGENTS.md` (this file) whenever a section
     or rule changes.
 

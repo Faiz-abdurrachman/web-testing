@@ -21,6 +21,17 @@ dan `docs/ai-handoff.md` (state terkini).
 
 Aturan: kalau (1) berbeda dengan (4)/(5), **ikut (1)**.
 
+### Hukum Spacing & Padding (Strict 8-Point Grid)
+
+- **Seluruh gap, padding, dan margin layout WAJIB mematuhi kelipatan 8px** (mis. 8px, 16px, 24px, 32px, 40px, 48px, 56px, 64px, 72px, 80px) sesuai spesifikasi frame Figma.
+- Padding container utama desktop: `padding: 80px` atau `padding: 0 80px`.
+- Jarak antar-elemen (gap hirarki):
+  - Eyebrow ke heading: **8px** (atau 4px jika antar-baris heading).
+  - Heading ke subtitle/deskripsi: **16px** atau **24px**.
+  - Header frame ke content/grid/rail: **48px**, **56px**, **74px**, atau **80px**.
+  - Komponen kecil (button padding): `8px 16px`, badge: `4px 12px` / `4px 16px`.
+- **Dilarang memakai magic numbers acak** (misal 13px, 27px, 53px) kecuali merupakan koordinat offset absolut terukur atau kompensasi font descender/letter-spacing terkalibrasi.
+
 ## 2. Gotcha yang sudah terbukti (jangan diulang)
 
 - **String `linear-gradient(...)` dari Figma MCP menormalkan handle → lossy**
@@ -218,12 +229,13 @@ Semua di file Figma `JYUzJK1hFqaEwL6DpdDvjp`. Hasil akhir (reduced motion, 1440)
 - [ ] Image fill dipakai apa adanya (tidak direkonstruksi).
 - [ ] `effects`/`strokes` asli dicek via REST API (MCP menyembunyikan `GLASS`).
 - [ ] Gradient/efek di-fit dari piksel PNG, bukan string MCP.
+- [ ] Strict 8-point grid spacing & padding terverifikasi (gap/padding kelipatan 8px, tanpa magic numbers).
 - [ ] Posisi tinta ±1px; MAE per region diukur & dilaporkan.
 - [ ] Geometri di-assert di `verify.mjs`; navbar-audit diupdate bila perlu.
 - [ ] `prefers-reduced-motion` inert & tetap pixel-exact.
 - [ ] `format:check`, `build` 0 error, `verify.mjs` exit 0 (`browserErrors: []`),
-      `responsive-audit` 416 PASS, `navbar-audit` PASS, `seo:audit` PASS,
-      `verify:vt` PASS.
+      `responsive-audit` 468 PASS (18 rute × 26 lebar), `navbar-audit` PASS,
+      `seo:audit` PASS, `verify:vt` PASS.
 - [ ] `docs/assets.md` + `docs/ai-handoff.md` + `AGENTS.md` diupdate.
 - [ ] Commit per fitur; konfirmasi user sebelum `git push origin main`
       (deploy ganda).

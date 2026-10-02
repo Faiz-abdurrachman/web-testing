@@ -251,7 +251,13 @@ halaman detail role. Bagian di bawah ini merinci tiap section.
   `public/images/roles/role-*.webp`. Tombol Apply Now = `Button variant="apply"`.
   Layout: data centered (gap back→kartu 28), core gap 28 top-aligned, sisanya
   gap 58 top-aligned (flag `centered` / `tight`). Standalone tanpa navbar/footer.
-- "What You Will Do" (Figma `770:16251`, 1440 × 903, di y1655): heading
+- **Recruitment Page Revisi Font & Spacing (Frame `1436:3505`)**:
+  - Hero section `1436:3506` & Button `1436:3502` **SELESAI** (Bluu Next Bold 700 72/86, Manrope 18/27, Button 120×43, spacing 8pt grid, commit `978d468`).
+  - Section pending audit/revisi: Who Should Join (`1436:3512`), What You Will Do (`1436:3517`), Available Roles (`1436:3564`), Selection Timeline (`1436:3637`), FAQ (`1436:3675`), Snippets (`1436:3684`), CTA (`1436:3687`).
+- **Homepage Revisi Font & Spacing (Frame `1430:2040`)**:
+  - Hero `1430:2041`, Philosophy `1430:2052`, What We Do `1430:2089`, HoDS `1430:2138` **SELESAI** (Bluu Next Bold 700, 8pt spacing).
+  - Section pending: Our Project (`1430:2146`) & CTA Recruitment (`1430:2162`).
+- "What You Will Do" (Figma `770:16251` / revisi `1436:3517`, 1440 × 903, di y1655): heading
   Nasalization 56/68 + copy Manrope 18/27, lalu collage 1312 × 625 berisi 2
   kartu tarot (artwork), connector SVG dekoratif, dan 8 label HTML/CSS di
   staircase diagonal (462 × 31). Background hitam. Di <1320px label distack,
