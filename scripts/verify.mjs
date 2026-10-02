@@ -2314,6 +2314,56 @@ try {
     .raw()
     .toBuffer();
   assert.equal(visiMisiReference.length, visiMisiActual.length);
+  // About Us Philosophy — geometry + diff vs Figma node 1439:4219 export.
+  // (The About section is identical to the homepage Philosophy node.)
+  const aboutPhilosophyGeometry = await page.evaluate(() => {
+    const section = document.querySelector('.philosophy.is-about');
+    const sectionBox = section.getBoundingClientRect();
+    const relativeBox = (selector) => {
+      const box = section.querySelector(selector).getBoundingClientRect();
+      return {
+        x: Math.round((box.x - sectionBox.x) * 10) / 10,
+        y: Math.round((box.y - sectionBox.y) * 10) / 10,
+        width: Math.round(box.width * 10) / 10,
+        height: Math.round(box.height * 10) / 10,
+      };
+    };
+    return {
+      section: { width: sectionBox.width, height: sectionBox.height },
+      canvas: relativeBox('.canvas'),
+      content: relativeBox('.content'),
+      heading: relativeBox('.heading'),
+      principles: relativeBox('.principles'),
+      eyebrow: relativeBox('.eyebrow'),
+      overflow: document.documentElement.scrollWidth - innerWidth,
+    };
+  });
+  assert.deepEqual(aboutPhilosophyGeometry, {
+    section: { width: 1440, height: 837 },
+    canvas: { x: 0, y: 0, width: 1440, height: 837 },
+    content: { x: 766, y: 205, width: 591, height: 468 },
+    heading: { x: 766, y: 205, width: 591, height: 172 },
+    principles: { x: 766, y: 425, width: 591, height: 248 },
+    eyebrow: { x: 766, y: 205, width: 92.4, height: 26 },
+    overflow: 0,
+  });
+  await page
+    .locator('.philosophy.is-about')
+    .screenshot({ path: 'artifacts/about-philosophy-desktop.png' });
+  const aboutPhilosophyReference = await sharp(
+    'assets/about-us/philosophy/Philosophy-Revisi-1x.png',
+  )
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const aboutPhilosophyActual = await sharp(
+    'artifacts/about-philosophy-desktop.png',
+  )
+    .extract({ left: 0, top: 0, width: 1440, height: 837 })
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(aboutPhilosophyReference.length, aboutPhilosophyActual.length);
   const ecosystemGeometry = await page.evaluate(() => {
     const section = document.querySelector('.ecosystem');
     const sectionBox = section.getBoundingClientRect();

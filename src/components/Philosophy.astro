@@ -97,18 +97,8 @@ const principles = [
       <div class="heading">
         <span class="eyebrow">Our Philosphy</span>
         <h2 id="philosophy-title">
-          {variant === 'about' ? (
-            <>
-              <span>We Don't</span>
-              <span>Just Learn AI</span>
-              <span>We Build With It</span>
-            </>
-          ) : (
-            <>
-              <span>We Don't&nbsp; Just Learn AI</span>
-              <span>We Build With It</span>
-            </>
-          )}
+          <span>We Don't&nbsp; Just Learn AI</span>
+          <span>We Build With It</span>
         </h2>
       </div>
       <ul class="principles" aria-label="Our principles">
@@ -143,12 +133,6 @@ const principles = [
   }
   .philosophy.is-about {
     background: var(--color-background);
-  }
-  .philosophy.is-about .canvas {
-    background: linear-gradient(163deg, #050507 63%, #6c3bff 126%);
-  }
-  .philosophy.is-about .canvas::before {
-    display: none;
   }
   .canvas {
     position: relative;
@@ -435,7 +419,7 @@ const principles = [
     background-clip: text;
     color: transparent;
   }
-  .philosophy:not(.is-about) h2 {
+  .philosophy h2 {
     font-family: var(--font-display);
     font-weight: 700;
     display: flex;
@@ -446,7 +430,7 @@ const principles = [
     display: block;
     white-space: nowrap;
   }
-  .philosophy:not(.is-about) h2 span {
+  .philosophy h2 span {
     background: linear-gradient(
       211.54deg,
       #ffffff 32.8%,
@@ -472,11 +456,11 @@ const principles = [
     gap: 20px;
     min-width: 0;
   }
-  .philosophy:not(.is-about) li {
+  .philosophy li {
     gap: 24px;
   }
   @media (min-width: 1400px) {
-    .philosophy:not(.is-about) .content {
+    .philosophy .content {
       position: absolute;
       left: 766px;
       top: 205px;
@@ -485,20 +469,20 @@ const principles = [
       width: 591px;
       gap: 48px;
     }
-    .philosophy:not(.is-about) .heading {
+    .philosophy .heading {
       gap: 8px;
       width: 591px;
     }
-    .philosophy:not(.is-about) h2 {
+    .philosophy h2 {
       width: 591px;
       font-size: 56px;
       line-height: 67px;
       letter-spacing: 0;
     }
-    .philosophy:not(.is-about) h2 span {
+    .philosophy h2 span {
       white-space: nowrap;
     }
-    .philosophy:not(.is-about) .principles {
+    .philosophy .principles {
       width: 591px;
       height: 248px;
     }

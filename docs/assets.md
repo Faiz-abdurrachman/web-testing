@@ -663,6 +663,28 @@ fitting the rendered pixels gives an effective CSS gradient of
   `(1028, 261, 356, 430)`). Section MAE **1.910/255**
   (vision 3.11, list 3.35, tarot 1.16, background 0.49). All 6 gates pass.
 
+## About Us — Philosophy (2 October 2026)
+
+- New Figma page `1439:4184`, section **`1439:4219`** ("Philosophy Section",
+  1440 × 837, fill `#050507`). The exported reference
+  `assets/about-us/philosophy/Philosophy-Revisi-1x.png` is **pixel-identical
+  (MAE 0.000)** to the homepage Philosophy reference
+  `assets/assets home page/ourphilosophy/Home-Philosophy-Revisi-1x.png` — the
+  About section is the same design as `1430:2052`.
+- Content frame `1439:4221` (591 × 468) at `(766, 205)`, `gap: 48px`: eyebrow
+  `1439:4223` "Our Philosphy" (93 × 26, glass pill), heading `1439:4226`/`4227`
+  ("We Don't Just Learn AI" / "We Build With It", Bluu Next **Bold 700**
+  56 / 67.2, `gap: 4px`), principles grid `1439:4228` (591 × 248, grid
+  `30px 92px`) with 5 items (LEARN / SHIP / EXPERIMENT / IMPACT / RESEARCH
+  BUILD). Artwork = the same sorcerer + glow as the homepage.
+- `Philosophy.astro` was unified: the `about` variant now uses the home layout
+  and artwork (the old `linear-gradient(163deg…)` canvas fill and
+  `canvas::before { display:none }` were removed; the wide-screen uncapped zoom
+  for `.is-about` is retained). Homepage rendering is unchanged.
+- Chromium geometry exact (section 1440 × 837; content
+  `(766, 205, 591, 468)`; principles `(766, 425, 591, 248)`). Section MAE
+  **2.316/255** (artwork 1.92, content 2.89). All 6 gates pass.
+
 ## About Us — Philosophy & Our Ecosystem (30 September 2026)
 
 - Figma file `RntmRWAgLrh5utgzcjrUik`, section `1331:15784` and pipeline
