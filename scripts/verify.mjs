@@ -2078,32 +2078,31 @@ try {
     },
     {
       width: 1440,
-      height: 537,
+      height: 520,
       top: 6093.984375,
-      panel: { x: 80, y: 80, width: 1280, height: 377 },
-      actions: { x: 617.5, y: 327, width: 205, height: 51 },
+      panel: { x: 80, y: 80, width: 1280, height: 360 },
+      actions: { x: 619.546875, y: 332.09375, width: 200.890625, height: 43 },
       glow: { x: 349.828125, y: 351, width: 1000.328125, height: 271.5 },
     },
   );
   assert.ok(
-    Math.abs(ctaGeometry.heading.y - 153) < 1.5 &&
+    Math.abs(ctaGeometry.heading.y - 145) < 1.5 &&
       Math.abs(ctaGeometry.copy.x - 427) < 1.5 &&
-      Math.abs(ctaGeometry.copy.y - 235) < 1.5,
+      Math.abs(ctaGeometry.copy.y - 236) < 1.5,
     'CTA heading and copy must match the Figma reference',
   );
-  await page
-    .locator('.cta-panel')
-    .screenshot({ path: 'artifacts/cta-panel-desktop.png' });
+  await page.locator('.cta').scrollIntoViewIfNeeded();
+  await page.locator('.cta').screenshot({ path: 'artifacts/cta-desktop.png' });
   const ctaReference = await sharp(
-    'assets/assets recruitment page/cta section/Frame 2393.png',
+    'assets/assets recruitment page/cta section/Recruitment-Cta-Revisi-1x.png',
   )
-    .resize(1280, 377)
-    .flatten({ background: '#050507' })
+    .resize(1440, 520)
+    .removeAlpha()
     .raw()
     .toBuffer();
-  const ctaActual = await sharp('artifacts/cta-panel-desktop.png')
+  const ctaActual = await sharp('artifacts/cta-desktop.png')
     // Fractional section origins round screenshot bounds outward by one pixel.
-    .extract({ left: 0, top: 0, width: 1280, height: 377 })
+    .extract({ left: 0, top: 0, width: 1440, height: 520 })
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -2117,7 +2116,7 @@ try {
     ctaDiff[i] = Math.min(255, delta * 4);
     ctaOverlay[i] = Math.round((ctaActual[i] + ctaReference[i]) / 2);
   }
-  const ctaRaw = { width: 1280, height: 377, channels: 3 };
+  const ctaRaw = { width: 1440, height: 520, channels: 3 };
   await sharp(ctaDiff, { raw: ctaRaw }).png().toFile('artifacts/cta-diff.png');
   await sharp(ctaOverlay, { raw: ctaRaw })
     .png()
@@ -2176,7 +2175,7 @@ try {
   assert.deepEqual(recruitFooterGeometry, {
     width: 1440,
     height: 556,
-    top: 6630.984375,
+    top: 6613.984375,
   });
   await page.locator('.footer').scrollIntoViewIfNeeded();
   await page

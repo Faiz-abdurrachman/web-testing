@@ -1749,38 +1749,40 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
   1px cross-renderer sub-pixel offset between the Figma render and Chromium, aligned
   MAE ≈ 3.3), hides the `.snippet-arrow` overlay, and checks overflow from 320px to
   1920px. Downstream tops shift −2.796875 (`.cta` 6093.984375, `.footer`
-  6630.984375). Semua 6 gate verifikasi ALL PASS.
+  6613.984375). Semua 6 gate verifikasi ALL PASS.
 
 ## Recruitment page — CTA
 
-- Figma nodes: section `839:4659`, panel `839:4660`; reference
-  `assets/assets recruitment page/cta section/Frame 2393.png`, 5120 × 1508
-  (1280 × 377 at 4×). The section sits at homepage y=6169 and is 1440 × 537.
-- Section: `padding 80`, `#050507`. Panel: 1280 × 377 at (80, 80), `padding
-73px 0 79px` (the reference wants the content higher than Figma's symmetric
-  72px), `gap 44`, `rgba(98,80,255,.1)`, 1px
-  `linear-gradient(135deg, #e0dcff, #2e276c, #e0dcff)` border,
-  `border-radius 20px`, `overflow: hidden`. The panel is capped at `max-width:
-1280px` and centred, so on viewports wider than 1440 it stays on the 1440 grid
-  instead of stretching (and the glow keeps its Figma position relative to it).
-- Heading: "READY TO BECOME A SORCERY?", Nasalization Regular 400, 56 / 68,
-  center, gradient `linear-gradient(270deg, #fff, #ede8ff)`.
+- Figma node: section `1436:3687` ("CTA Recruicment Section", revisi 2 Oct 2026),
+  panel `1438:4072`; reference
+  `assets/assets recruitment page/cta section/Recruitment-Cta-Revisi-1x.png`,
+  1440 × 520 (+ `…-2x.png`). The section sits at recruitment y=6093.98 and is
+  1440 × 520.
+- Section: `padding 80`, `#050507`. Panel: 1280 × 360 at (80, 80), `height:
+360px` + `justify-content: center` (content 230px di celah 232px → y145, persis
+  render), `padding 64px 80px`, `gap 48`, `rgba(98,80,255,.1)`, 1px
+  `linear-gradient(135deg, #e0dcff 0%, #2e276c 50%, #e0dcff 100%)` rim via
+  ring `::after` + mask, `border-radius 20px`, `overflow: hidden`. The panel is
+  capped at `max-width: 1280px` and centred.
+- Heading: "Ready to Become a Sorcery?" (Title Case), **Bluu Next Bold 700,
+  56 / 67.2** (`--font-display`), center, gradient
+  `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)`. Ink terukur
+  710.25 × 52 di y158.
 - Copy: "Join a community where your learning can become experimentation, your
   ideas can become projects, and your work can create real impact." Manrope
-  Regular 400, 16 / 1.5, `letter-spacing -0.011em`, width 586, center.
-- Button: "Join the Community" (`Button` `variant="primary"`), 205 × 51.
-- Decorative glow: Figma `IMAGE-SVG` `839:4672`, 1000.33 × 271.5 at (269.83, 271) inside the panel. It reuses the homepage CTA's treatment
+  Regular 400, 16 / 24, `letter-spacing -0.176px`, width 586, center (586 × 48
+  di (427, 236)).
+- Button: "Join the Community" (`Button` `variant="community"`), 201 × 43.
+- Decorative glow: Figma `IMAGE-SVG` `1438:4081`, 1000.33 × 271.5 at (269.84, 271) inside the panel (abs 349.83, 351). It reuses the homepage CTA treatment
   (`public/images/recruitment/glow.svg`, rotated -2.23deg and oversized inside a
-  1000.331 × 271.502 frame), which matches the reference far better than the raw
-  Figma SVG/PNG export (browser blur rasterization differs). It now shares the
-  homepage CTA's one-way `cta-glow-sweep` (left -> right, 6.5s linear, opacity
-  never below 0.5), paused via `.cta.is-idle` when off-screen.
-- Note: `Frame 2393.png` is a **transparent** export (the panel fill is
-  `rgba(98,80,255,.1)`); comparisons must composite it over `#050507`.
-- Verification: `scripts/verify.mjs` asserts the section, panel, actions and
-  glow boxes exactly (plus the heading/copy positions), diffs the panel against
-  the reference (~5.1/255; font and glow rasterization remain),
-  and checks overflow from 320px to 1920px.
+  1000.331 × 271.502 frame). Shares the one-way `cta-glow-sweep` (left → right,
+  6.5s linear), paused via `.cta.is-idle` when off-screen.
+- Verification: `scripts/verify.mjs` asserts section `{1440, 520, top 6093.984375}`,
+  panel `{80, 80, 1280, 360}`, actions `{619.55, 332.09, 200.89, 43}`, glow
+  `{349.83, 351, 1000.33, 271.5}`, heading `y145` and copy `(427, 236)`, then
+  diffs the full section against the reference (section MAE **2.25/255**) and
+  checks overflow 320→1920px. Downstream `.footer` top → **6613.984375**. Semua
+  6 gate verifikasi ALL PASS.
 
 ## Buttons (shared)
 

@@ -162,13 +162,15 @@ CHECKLIST STATUS PER-SECTION:
    - Heading "Snippets of Life at data sorcerers": Bluu Next Bold 700 56/67.2px center, gradient 181deg.
    - Gallery 1280px (hero frame 556px + 5 thumbnails bar 246×103px, gap 35px autolayout).
    - Section MAE: **8.6288/255** vs `Recruitment-Snippets-Revisi-1x.png`. All 6 verification gates pass.
-8. **CTA Recruitment Section (`1436:3687`)** — [STATUS: TARGET BERIKUTNYA / CURRENT PRIORITY]
+8. **CTA Recruitment Section (`1436:3687`)** — [STATUS: 100% SELESAI]
    - URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3687`
-   - Frame 1440 × 520px, padding 80px.
-   - Heading "Ready to Become a Sorcery?": Bluu Next Bold 700 56/67.2px.
-   - Button "Join the Community" (201 × 43px).
-9. **Footer (`1436:3699`)** — [STATUS: UPCOMING]
-   - Frame 1440 × 556px, padding 80px.
+   - Frame 1440 × 520px, padding 80px. Panel 1280×360px (padding 64px 80px, gap 48px, `height:360px` + center).
+   - Heading "Ready to Become a Sorcery?": Bluu Next Bold 700 56/67.2px center, gradient 181deg.
+   - Button "Join the Community" 201×43px (`variant="community"`).
+   - Section MAE: **2.2488/255** vs `Recruitment-Cta-Revisi-1x.png`. All 6 verification gates pass.
+9. **Footer (`1436:3699`)** — [STATUS: TARGET BERIKUTNYA / CURRENT PRIORITY]
+   - URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3699`
+   - Frame 1440 × 556px, padding 80px. Section terakhir Recruitment Page.
 
 ================================================================================
 INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
@@ -189,5 +191,5 @@ INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
    - Update dokumentasi (`docs/assets.md`, `docs/ai-handoff.md`, `AGENTS.md`).
    - Lakukan git commit per fitur dan sinkronkan push ke origin main.
 3. **Mulai dari mana?**
-   Target saat ini: **Section 8: CTA Recruitment Section (Node 1436:3687)** pada Recruitment Page.
+   Target saat ini: **Section 9: Footer (Node 1436:3699)** pada Recruitment Page.
 ```
