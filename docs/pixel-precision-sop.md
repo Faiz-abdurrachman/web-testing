@@ -92,6 +92,25 @@ Aturan: kalau (1) berbeda dengan (4)/(5), **ikut (1)**.
 
 ## 3. Alur kerja presisi (per section)
 
+### Langkah 0 — Buat Rencana Kerja Per-Section (Master Work Plan Wajib)
+
+Sebelum menyentuh satu baris kode pun pada section baru, AI agent WAJIB memaparkan rencana kerja (Master Work Plan) secara mendalam:
+
+1. **Identitas Node**: Node ID Figma, URL link langsung node, frame title, and parent page.
+2. **Geometri & Autolayout**: Lebar × tinggi frame, layout direction (row/column), alignment.
+3. **Strict 8-Point Grid Spacing & Padding**:
+   - Container section padding (mis. `padding: 80px`).
+   - Gap vertikal antara header frame ke content/grid/table (mis. `gap: 56px` — pastikan kelipatan 8px, ganti jika ada magic number lama).
+   - Padding internal card atau table.
+   - Gap antar-elemen (eyebrow, heading, subtitle).
+4. **Tipografi**:
+   - Heading: **Bluu Next Bold 700** (`--font-display`), size/line-height, gradient text per line.
+   - Body/Subtitle: **Manrope** (`--font-body`), weight 400/500/700, size/line-height, color.
+5. **Aset & Artwork**: Image fill raw vs CSS ring rim vs SVG.
+6. **Testing & Verification Gates**: Target geometri `verify.mjs`, MAE target, dan 6 gate audit.
+
+> **PENTING**: Dilarang keras melompati section atau menggabungkan multiple section dalam satu pass. Selesaikan 100% per-section, verifikasi, dan kunci sebelum beralih ke section selanjutnya!
+
 ### Langkah A — Ambil struktur Figma
 
 - `figma_get_figma_data` pada node section (dan node anak yang perlu).

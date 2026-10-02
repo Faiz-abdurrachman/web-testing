@@ -134,7 +134,7 @@ CHECKLIST STATUS PER-SECTION:
    - Frame 1440 × 903px, padding 80px (8-point grid), gap header ke body 20px.
    - Header Frame 2734 (1280×118px, gap 24px): Heading Bluu Next Bold 700 56/67px di (80, 80), Subtitle Manrope 500 18/27px di (544.5, 171).
    - Body Frame 2542 (1312×625px) di (64, 218): Tarot Card 1 di (983, 218), Tarot Card 2 di (129, 434), Connector SVG di (64, 313), 8 labels di (158, 348) dengan 8pt grid intra-pair gap 16px dan inter-pair gap 24px. Section MAE: 3.2541.
-4. **Available Roles Section Revisi Card (`1436:3564`)** — [STATUS: TARGET BERIKUTNYA / CURRENT PRIORITY]
+4. **Available Roles Section Revisi Card (`1436:3564`) & Detail Roles (`774:17392` dkk)** — [STATUS: 100% SELESAI]
    - Frame 1440 × 843px, padding 80px (Strict 8-Point Grid), layout VERTICAL, gap: 58px.
    - Header Frame 2496 (`1436:3565`): 1280 × 115px di (80, 80), gap 24px:
      - Heading "Available Roles" (388 × 67px): Bluu Next Bold 700 56/67px (`--font-display`), gradient linear 180deg.
@@ -142,13 +142,15 @@ CHECKLIST STATUS PER-SECTION:
    - Card Grid Frame 2605 (`1436:3568`): 1280 × 510px di (80, 253), layout VERTICAL, gap: 40px:
      - Row 1 (Frame 2603): 3 card role (Card 1, 2, 3) 413 × 235px, gap: 20px, padding: 18px 28px, background `rgba(255, 255, 255, 0.15)`.
      - Row 2 (Frame 2604): 3 card role (Card 4, 5, 6) 413 × 235px, gap: 20px, padding: 18px 28px, background `rgba(255, 255, 255, 0.15)`.
-   - **Terkait Erat: 6 Detail Role Pages (`/recruitment/roles/[id]`)**:
-     - Frame Figma `774:17392` ("Detile Roles - DATA INTELLIGENCE", 1440 × 1280px) dan 5 role lainnya: Core AI, Language & Reasoning (`760:14975`), Vision & Multimodal (`760:15276`), Product & Software (`760:15347`), Growth & Community (`760:15439`).
-     - Pastikan penyesuaian height 1280px dan 8-point spacing konsisten dengan HoDS detail pages.
-5. **Selection Timeline (`1436:3637`)** — [STATUS: UPCOMING]
-   - Frame 1440 × 812px, padding 80px.
-   - Heading "Selection Timeline": Bluu Next Bold 700 56/67px.
-   - Timeline table header (padding 18px 32px) + 6 timeline rows (gap 18px).
+   - 6 Detail Role Pages (`/recruitment/roles/[id]`):
+     - Seluruh frame 1440 × 1280px (top-aligned, padding 80px, gap 56px).
+     - Hero Card H1 diupdate ke Bluu Next Bold 700 48/57.6px (`--font-display`).
+     - Kartu Contact Person: interactive direct link ke WhatsApp `+62 851-7151-6704` (Zidan Amikul) via `https://wa.me/6285171516704` dengan pre-filled role inquiry message, hover lift `translateY(-2px)`, glow violet `0 8px 24px -4px rgb(108 59 255 / 40%)`, specular rim, icon zoom `scale(1.12)`, dan Web Audio SFX cues.
+5. **Selection Timeline (`1436:3637`)** — [STATUS: TARGET BERIKUTNYA / CURRENT PRIORITY]
+   - URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3637`
+   - Frame 1440 × 812px / 815px, padding 80px, gap header-to-table **56px** (Strict 8-Point Grid kelipatan 8, menggantikan 58px lama).
+   - Heading "Selection Timeline": Bluu Next Bold 700 56/67.2px (`--font-display`), gradient 181deg per baris.
+   - Timeline table 1280px: Header 1280×78px (padding 18px 32px), Body 1280×451px (padding 18px 32px, gap 18px, 6 rows dengan separator linear gradient).
 6. **FAQ Section (`1436:3675`)** — [STATUS: UPCOMING]
    - Frame 1440 × 983px, padding 80px.
    - Heading "FAQ": Bluu Next Bold 700 56/67px uppercase.
@@ -161,17 +163,20 @@ CHECKLIST STATUS PER-SECTION:
    - Frame 1440 × 520px, padding 80px.
    - Heading "Ready to Become a Sorcery?": Bluu Next Bold 700 56/67px.
    - Button "Join the Community".
+9. **Footer (`1436:3699`)** — [STATUS: UPCOMING]
+   - Frame 1440 × 556px, padding 80px.
 
 ================================================================================
 INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
-===============================================================================
+================================================================================
 1. **WAJIB Membuat Rencana Kerja (Plan) Per-Section:**
-   Sebelum menyentuh satu baris kode pun, paparkan rencana kerjamu: urutan section yang akan
-   diaudit dan direvisi, node Figma yang ditargetkan, serta rincian geometri terukurnya.
-   JANGAN SEKALI-KALI MELOMPATI SECTION!
+   Sebelum menyentuh satu baris kode pun, paparkan rencana kerjamu (Master Work Plan):
+   ID node Figma dan URL langsung, dimensi frame terukur, strict 8-point grid breakdown,
+   typography breakdown, artwork assets provenance, dan testing criteria.
+   JANGAN SEKALI-KALI MELOMPATI SECTION ATAU MENGGABUNGKAN MULTIPLE SECTION!
 2. **Eksekusi Bertahap (Satu Section per Langkah, Presisi Penuh):**
    - Buka section yang ditargetkan.
-   - Export node PNG 1x dan 2x via `node scripts/figma.mjs export <nodeId> 1 png <path>`.
+   - Export node PNG 1x dan 2x via download/export figma.
    - Ukur dengan `sharp`: ukur bounding box, posisi x/y, lebar/tinggi, gap, dan padding (ink precision ±1px).
    - Pastikan mematuhi **Strict 8-Point Grid Spacing & Padding** (kelipatan 8px, tanpa magic numbers acak).
    - Terapkan font **Bluu Next Bold 700** (`--font-display`) untuk heading dan **Manrope** untuk body.
@@ -180,5 +185,5 @@ INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
    - Update dokumentasi (`docs/assets.md`, `docs/ai-handoff.md`, `AGENTS.md`).
    - Lakukan git commit per fitur dan sinkronkan push ke origin main.
 3. **Mulai dari mana?**
-   Target saat ini: **Section 4: Available Roles (Node 1436:3564)** beserta penyesuaian **Detail Roles (Node 774:17392 dkk)**.
+   Target saat ini: **Section 5: Selection Timeline (Node 1436:3637)** pada Recruitment Page.
 ```

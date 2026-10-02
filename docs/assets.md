@@ -48,6 +48,11 @@
   - Hero card: `x: 80, y: 135` (for Data & Core with gap 28px in Frame 2526) and `x: 80, y: 163` (for Language, Vision, Product, Growth with gap 56px).
   - Role sections gap: `56px`. Block gap: `24px` (title to copy).
   - Contact box Frame 2256 (`347 × 134px`): sits with gap 56px at `x: 80`.
+  - WhatsApp Direct Link & Micro-interactions:
+    - Contact box diubah menjadi interactive anchor `<a>` yang mengarah langsung ke `https://wa.me/6285171516704?text=...` (nomor WhatsApp Zidan Amikul: `+62 851-7151-6704`).
+    - Pesan otomatis spesifik per role (misal: "Halo Kak Zidan Amikul, saya ingin bertanya mengenai recruitment role DATA INTELLIGENCE di Data Sorcerers.").
+    - Hover lift: `transform: translateY(-2px)`, glow violet `box-shadow: 0 8px 24px -4px rgb(108 59 255 / 40%)`, background pendar `rgb(98 80 255 / 20%)`, border specular ring highlight, logo zoom `scale(1.12)`, dan Web Audio SFX cues (`data-sfx="click"`, `data-sfx-hover="hover"`).
+    - Reduced motion fallback (tetap statis pixel-exact saat reduce diaktifkan).
 - Measurements & Precision:
   - `verify.mjs` assertions verified for all 6 routes (`/recruitment/roles/{data,core,language,vision,product,growth}`):
     - Container: `1440 × 1280` exact.
@@ -55,6 +60,23 @@
     - Hero Card: `{ x: 80, y: 135/163, width: 1280, height: 279 }` exact.
     - Contact box: y matches measured Figma coordinates within ±2px.
     - Apply button: `y: cardY + 58` exact.
+
+## Recruitment page — Selection Timeline (Upcoming Target, 2 October 2026)
+
+- Section node **`1436:3637`** ("TIMELINE", 1440 × 812px / 815px, `padding: 80px`, gap: **56px**), frame page Recruitment `1436:3505`, file `JYUzJK1hFqaEwL6DpdDvjp`.
+  - URL Figma: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3637`
+- Layout & Spacing (Strict 8-Point Grid):
+  - Section container: 1440 × 812px, padding `80px` (`80px 80px 80px 80px`), background `#050507`.
+  - Gap header ke tabel timeline: **`56px`** (`7 × 8px` — strict kelipatan 8, mengoreksi nilai lama 58px).
+  - Heading Frame `1436:3638`: "Selection Timeline", **Bluu Next Bold 700 56px / 67.2px** (token `--font-display`), gradient linear 181deg `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)`.
+  - Timeline Table Container Frame `1436:3639`: width 1280px.
+    - Table Head Frame `1436:3640`: 1280 × 78px, padding `18px 32px`, border-radius `20px 20px 0 0`, background `rgba(108, 59, 255, 0.25)`, 1px glass rim `linear-gradient(135deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%)`.
+      - Phase: Manrope Bold 700 26px / 39px LEFT, color `#ffffff`.
+      - Date: container width 568px, Manrope Bold 700 26px / 39px CENTER, color `#ffffff`.
+    - Table Body Frame `1436:3645`: 1280 × 451px, padding `18px 32px`, border-radius `0 0 20px 20px`, gap `18px`, background `rgba(255, 255, 255, 0.15)`, 1px glass rim.
+      - 6 rows: OPEN RECRUITMENT, APPLICATION, FOUNDATION SCREENING, HOODS INTERVIEW, TRIAL / CHALLENGE, MEMBER.
+      - Separator 1px: `linear-gradient(90deg, rgba(155, 123, 255, 1) 0%, rgba(255, 255, 255, 0) 100%)`.
+      - Text: Manrope Medium 500 26px / 39px (Phase di kiri, Date di kanan lebar 568px center).
 
 ## Homepage — CTA Recruitment Section (2 October 2026)
 

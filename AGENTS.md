@@ -63,6 +63,13 @@ origin/main production/main` (all three should match).
 
 Full protocol: **`docs/pixel-precision-sop.md`**. The rules below are the law.
 
+0. **Mandatory Per-Section Planning Protocol.** Before touching or modifying any
+   code for a section, the agent MUST write out a detailed per-section execution
+   plan (Master Work Plan) covering: exact Figma node ID and URL, frame dimensions
+   (width × height), strict 8-point grid breakdown (padding, gap, margins),
+   typography (Bluu Next Bold 700 / Manrope), artwork assets, and testing criteria.
+   **NEVER skip sections or combine multiple sections into one pass.** Execute,
+   measure, and verify one section at a time.
 1. **The reference PNG node (exported from Figma) is the source of truth.**
    Figma CSS exports, MCP gradient strings and `effects` payloads are only hints
    and are frequently lossy. When they disagree, match the exported PNG.
@@ -346,7 +353,7 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   Seluruh 6 section Homepage (`1430:2040`) kini 100% selesai dan tervalidasi:
   - Section 5: **Our Project Section (`1430:2146`)** — Frame 1440×910px, padding 80px, gap 82px. Eyebrow 86.6×26px di `(80, 80)`, heading "What Our Sorcery Create" Bluu Next Bold 700 56/67px di `(80, 114)` (ink width 646px), 3D coverflow active card 549×567px di `(445.5, 263)`. MAE 5.0764 (Image 2.90, Tags 6.05, Text 5.90, Header 6.67, Bottom 0.0).
   - Section 6: **CTA Recruitment Section (`1430:2162`)** — Frame 1440×554px, padding 80px. Card panel 1280×394px di `(80, 80)` (padding 64px 80px, gap 48px). Eyebrow "Recruitment" 93.2×26px di `(673.4, 145)`, heading "Ready to Become a Sorcery?" Bluu Next Bold 700 56/67px di `(161, 179)`, copy Manrope 400 16/24 586×48px di `(427, 270)`. Single button `<Button variant="community">Join the Community</Button>` (201×43px) di `(619.5, 366)`. MAE 3.1427 (Button & glow 2.32, Header 4.94, Copy 6.37, Outer 0.0).
-- **Recruitment Page Section 4: Available Roles (`1436:3564`) & Detail Roles (`774:17392` dkk) (2 Oct 2026).**
+- **Recruitment Page Section 4: Available Roles (`1436:3564`) & Detail Roles (`774:17392` dkk) + WhatsApp Direct Link (2 Oct 2026).**
   Frame Figma `1436:3564` (1440×843px, padding `80px 80px 80px 80px`, gap header ke grid `58px`). Header Frame 2496 (`1436:3565`, 1280×115px, gap 24px):
   Heading "Available Roles" **Bluu Next Bold 700 56/67px** (`--font-display`) di `(80, 80)`,
   fill `linear-gradient(180deg, #ffffff 15%, #999999 42%, #ffffff 80%)`. Subtitle Manrope Medium 500 18/27px (`--font-body`), `#ffffff`
@@ -355,7 +362,14 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   Detail Roles 6 halaman (`/recruitment/roles/{data,core,language,vision,product,growth}`):
   Seluruh frame 1440×1280px (strict callout Gembala). Hero Card H1 diupdate ke **Bluu Next Bold 700 48/57.6px** (`--font-display`),
   top-aligned dengan padding 80px dan gap 56px (strict 8-point grid).
+  Kartu Contact Person diubah menjadi interactive link ke WhatsApp `+62 851-7151-6704` (Zidan Amikul) via `https://wa.me/6285171516704` dengan pre-filled text pesan per-role, hover lift `translateY(-2px)`, glow violet `0 8px 24px -4px rgb(108 59 255 / 40%)`, specular rim shimmer, icon scale 1.12x, dan Web Audio SFX cues (`data-sfx="click"`, `data-sfx-hover="hover"`).
   Semua 6 gates verifikasi ALL PASS (build 0 error, verify.mjs exit 0, responsive audit 468/468 PASS, navbar audit ALL PASS, verify:vt ALL PASS, format:check ALL PASS). Geometri diff 0.0px.
+- **NEXT TARGET: Recruitment Page Section 5: Selection Timeline (`1436:3637`).**
+  URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3637`.
+  Frame 1440×815px / 843px, padding 80px, gap 56px (strict 8-point grid, ganti yang lama 58px).
+  Heading "Selection Timeline": Bluu Next Bold 700 56/67px (`--font-display`), fill linear gradient 181deg per baris.
+  Tabel 1280px: Header 1280×78px (padding 18px 32px), Body 1280×451px (padding 18px 32px, gap 18px, 6 rows dengan separator linear gradient).
+  Wajib buat Master Work Plan per-section sebelum sentuh kode!
 - **Recruitment Page Section 3: What You Will Do (`1436:3517`) (2 Oct 2026).**
   Frame Figma `1436:3517` (1440×903px, padding `80px 80px 80px 80px`, gap header ke body `20px`). Header Frame 2734 (`1436:4048`, 1280×118px, gap 24px):
   Heading "What You Will Do" **Bluu Next Bold 700 56/67px** (`--font-display`) di `(80, 80)`,
