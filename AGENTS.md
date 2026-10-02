@@ -367,8 +367,10 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   dikerjakan **satu per satu** (wajib Master Work Plan + inventaris section).
   **About Us (`1439:4184`) 100% SELESAI (6 section: Hero, visi misi, Philosophy,
   Our Ecosystem, Our Team, Footer) per 2 Oct 2026.** **Partners Section 1 Hero
-  `1439:4788` SELESAI 3 Oct 2026** (Bluu Next Bold 700 + strict 8pt); Section 2–3
-  masih Nasalization (next). Lihat "Next plan" di bawah & `docs/kickoff-prompt.md`.
+  `1439:4788` SELESAI 3 Oct 2026** (Bluu Next Bold 700 + strict 8pt) dan
+  **Section 2 Our Partners `1439:4793` SELESAI 3 Oct 2026** (gap 16, kartu
+  243.2×116); Section 3 Why DS masih Nasalization (next). Lihat "Next plan" di
+  bawah & `docs/kickoff-prompt.md`.
 - **About Us Section 1: Hero (`1439:4185`) — 100% SELESAI (2 Oct 2026).**
   Frame Figma `1439:4185` (1440×903, column, padding 80px, justify center,
   gap 16px, IMAGE fill `34bc68…` = `assets/assets about us/hero/raw-hero-bg.png`,
@@ -571,7 +573,7 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   Homepage (`1430:2040`), Recruitment (`1436:3505`) & About Us (`1439:4184`) sudah
   100%. Partners: 4 section (wajib Master Work Plan per-section + 6 gate):
   1. Hero Section - Partners `1439:4788` (1440×659) — **SELESAI 3 Oct 2026**
-  2. Our Partners Section `1439:4793` (1440×1071) — BELUM (Nasalization)
+  2. Our Partners Section `1439:4793` (1440×1071) — **SELESAI 3 Oct 2026**
   3. Why DS section `1439:4937` (1440×656) — BELUM (Nasalization)
   4. Footer `1439:4983` (1440×556, shared `Footer.astro`) — presisi (verifikasi)
      Detail: `docs/ai-handoff.md` §"Next Task", `docs/kickoff-prompt.md`.
@@ -590,6 +592,18 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   Chromium exact; MAE **4.128/255** full (2.730 di bawah band navbar, bg 1.204,
   heading 7.561, pill 16.5). Semua 6 gate ALL PASS. Referensi
   `assets/partners/hero/Partners-Hero-1x.png`.
+- **Partners Section 2: Our Partners (`1439:4793`) — 100% SELESAI (3 Oct 2026).**
+  Frame 1440×1071, column, `padding 80px`, `gap 100px`, fill `#050507`. Tiga grup
+  (`1439:4794` Industry 10 kartu, `1439:4863` Academia 5, `1439:4900` Community
+  5), tiap grup column `gap 42px`. Header row `gap 20px`: pill (`padding 4px 16px`,
+  radius 20, radial `circle at 8% 19% #6C3BFF→#3C2188`, inset highlight, Manrope
+  500 18/27) + line wrapper `padding 10px` (line 1px `90deg #9B7BFF→transparent`).
+  Grid **`gap 16px`** (dulu 20) → kartu **243.2×116** (dulu 240), radius 20,
+  `rgba(255,255,255,.15)`; art `partner-card-bg.webp` (cocok node baru MAE 2.33),
+  logo ter-center (78×84). Tak ada heading → tak ada perubahan font (pill sudah
+  Manrope). Geometri Chromium exact; MAE **2.860/255** (header/pill 2.62, card row
+  6.82). Semua 6 gate + seo ALL PASS. Referensi
+  `assets/partners/our-partners/OurPartners-1x.png`.
 - **Next plan (prioritas).** Setelah Partners: detail HoDS (`HoDSDetail`) dan/atau
   konten asli (`projects.ts`, tanggal recruitment, logo partner, foto/nama member team,
   member/project/milestone HoF). Detail: `docs/ai-handoff.md` §"Next Task".

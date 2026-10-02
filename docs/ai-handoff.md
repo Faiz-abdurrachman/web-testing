@@ -19,7 +19,7 @@ Wajib **inventaris semua section** dulu (checklist), lalu kerjakan **satu per sa
 | #   | Node ID     | Frame                   | W×H       | Status komponen sekarang                          |
 | --- | ----------- | ----------------------- | --------- | ------------------------------------------------- |
 | 1   | `1439:4788` | Hero Section - Partners | 1440×659  | **SELESAI 3 Oct 2026** (Bluu Next Bold 700 + 8pt) |
-| 2   | `1439:4793` | Our Partners Section    | 1440×1071 | ada (`OurPartners.astro`) — Nasalization, revisi  |
+| 2   | `1439:4793` | Our Partners Section    | 1440×1071 | **SELESAI 3 Oct 2026** (gap 16, kartu 243.2×116)  |
 | 3   | `1439:4937` | Why DS section          | 1440×656  | ada (`WhyPartners.astro`) — Nasalization, revisi  |
 | 4   | `1439:4983` | Footer                  | 1440×556  | shared `Footer.astro` — presisi, verifikasi saja  |
 
@@ -30,6 +30,11 @@ Catatan tiap section:
   `1439:4791` **Bluu Next Bold 700 80/102** 1280×223 (2 baris), satu gradient
   `181deg` membentang blok. MAE full 4.128 / below-nav 2.730 / bg 1.204. Semua 6
   gate ALL PASS. Detail `docs/assets.md` §Partners — Hero revision.
+- Our Partners `1439:4793`: **SELESAI 3 Oct 2026.** 1440×1071, padding 80, gap 100,
+  fill #050507; 3 grup (Industry 10 / Academia 5 / Community 5), grid **gap 16**
+  (dulu 20) → kartu **243.2×116**, logo ter-center. MAE **2.860** (header 2.62,
+  card 6.82). Semua 6 gate + seo ALL PASS. Detail `docs/assets.md` §Partners —
+  Our Partners revision.
 - Our Partners `1439:4793`: padding 80, gap 100; 3 sub-frame (Frame 2661 1280×325,
   Frame 2662 1280×193, Frame 2663 1280×193), masing-masing gap 42.
 - Why DS `1439:4937`: padding 80, align center, gap 48; Frame 2666 1280×263 (gap 8)

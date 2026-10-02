@@ -42,9 +42,9 @@ import { partnerCategories, partnerLogo } from '../data/partners';
 </section>
 
 <style>
-  /* Matches Figma node 1297:3541 (1440 x 1075): padding 80px, gap 100px,
-     #050507. Three groups (gap 42px): a pill + gradient rule, then a 5-column
-     card grid (gap 20px, card 240 x 116, radius 20). */
+  /* Matches Figma node 1439:4793 (1440 x 1071, page 1439:4787): padding 80px,
+     gap 100px, #050507. Three groups (gap 42px): a pill + gradient rule, then a
+     5-column card grid (gap 16px, card 243.2 x 116, radius 20). */
   .our-partners {
     display: flex;
     flex-direction: column;
@@ -99,14 +99,14 @@ import { partnerCategories, partnerLogo } from '../data/partners';
   .partner-grid {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 20px;
+    gap: 16px;
     margin: 0;
     padding: 0;
     list-style: none;
   }
   .partner-card {
     position: relative;
-    aspect-ratio: 240 / 116;
+    aspect-ratio: 243.2 / 116;
     border-radius: 20px;
     overflow: hidden;
   }
@@ -119,10 +119,11 @@ import { partnerCategories, partnerLogo } from '../data/partners';
   }
   .card-logo {
     position: absolute;
-    left: 33.75%;
-    top: 13.79%;
-    width: 32.5%;
+    left: 50%;
+    top: 50%;
+    width: 32.07%;
     height: auto;
+    transform: translate(-50%, -50%);
   }
 
   @media (max-width: 1050px) {

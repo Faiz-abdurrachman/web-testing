@@ -627,6 +627,28 @@ center`, `padding: 242px 80px 160px`, `gap: 8px`, IMAGE fill `e79b1f65…`).
   rasterisation). All 6 gates + `seo:audit` PASS. Reference
   `assets/partners/hero/Partners-Hero-1x.png`.
 
+## Partners — Our Partners revision (3 October 2026)
+
+- New Figma file `JYUzJK1hFqaEwL6DpdDvjp`, page `1439:4787`, section
+  **`1439:4793`** ("Our Partners Section", 1440 × 1071, column, `padding: 80px`,
+  `gap: 100px`, fill `#050507`). The old `1297:3541` (1075) export is a hint.
+- **Groups**: `1439:4794` Industry (10 cards, 2 rows), `1439:4863` Academia (5),
+  `1439:4900` Community (5); each group is a column `gap: 42px`. Header row
+  `gap: 20px` = pill (`1439:4796` etc., `padding: 4px 16px`, radius 20, radial
+  `circle at 8% 19% #6C3BFF 0% → #3C2188 98%`, inset `0 -1px 1.9px rgba(255,
+255,255,.25)`, **Manrope 500 18/27**) + line wrapper `padding: 10px` holding a
+  1px `90deg #9B7BFF → transparent` rule.
+- **Grid**: column **and** row `gap: 16px` (was 20) → cards **243.2 × 116** (was
+  240), radius 20, `rgba(255,255,255,.15)`. The card artwork is unchanged
+  (`partner-card-bg.webp`, new node MAE 2.33); the placeholder logo is now
+  **centred** (`left/top: 50%`, translate −50%, width 32.07% → 78 × 84) instead
+  of the old left/top offsets. No heading exists, so no font change.
+- **Geometry (Chromium, reduced motion, 1440)**: section 1440 × 1071; groups
+  80 → 325/193/193 with gap 100; cards 243.2 × 116 (pitch 259.2, gap 16). Asserts
+  updated in `scripts/verify.mjs`. Section MAE **2.860/255** (header/pill row
+  2.62, Academia card row 6.82, bg 2.86). Reference
+  `assets/partners/our-partners/OurPartners-1x.png`.
+
 ## About Us — Hero (2 October 2026)
 
 - Figma file `JYUzJK1hFqaEwL6DpdDvjp`, page `1439:4184`, section **`1439:4185`**

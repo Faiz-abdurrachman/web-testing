@@ -2635,8 +2635,8 @@ try {
         height: Math.round(card.height * 10) / 10,
       },
       partnerCard: {
-        width: Math.round(partner.width),
-        height: Math.round(partner.height),
+        width: Math.round(partner.width * 10) / 10,
+        height: Math.round(partner.height * 10) / 10,
       },
       groupPills: document.querySelectorAll('.group-pill').length,
       partnerCards: document.querySelectorAll('.partner-card').length,
@@ -2651,10 +2651,10 @@ try {
   });
   assert.deepEqual(partnersGeometry, {
     hero: { width: 1440, height: 659 },
-    our: { width: 1440, height: 1075 },
+    our: { width: 1440, height: 1071 },
     why: { width: 1440, height: 670 },
     whyCard: { width: 309.5, height: 189 },
-    partnerCard: { width: 240, height: 116 },
+    partnerCard: { width: 243.2, height: 116 },
     groupPills: 3,
     partnerCards: 20,
     overflow: 0,
@@ -2687,6 +2687,29 @@ try {
   for (let i = 0; i < partnersHeroActual.length; i++) {
     partnersHeroTotal += Math.abs(
       partnersHeroActual[i] - partnersHeroReference[i],
+    );
+  }
+
+  // Partners "Our Partners" (node 1439:4793) — geometry + diff.
+  await page
+    .locator('.our-partners')
+    .screenshot({ path: 'artifacts/partners-our-desktop.png' });
+  const partnersOurReference = await sharp(
+    'assets/partners/our-partners/OurPartners-1x.png',
+  )
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const partnersOurActual = await sharp('artifacts/partners-our-desktop.png')
+    .extract({ left: 0, top: 0, width: 1440, height: 1071 })
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(partnersOurReference.length, partnersOurActual.length);
+  let partnersOurTotal = 0;
+  for (let i = 0; i < partnersOurActual.length; i++) {
+    partnersOurTotal += Math.abs(
+      partnersOurActual[i] - partnersOurReference[i],
     );
   }
 
@@ -3074,6 +3097,8 @@ try {
       geometry: partnersGeometry,
       meanAbsoluteChannelDifference:
         partnersHeroTotal / partnersHeroActual.length,
+      ourMeanAbsoluteChannelDifference:
+        partnersOurTotal / partnersOurActual.length,
     },
     hofHero: {
       geometry: hofHeroGeometry,
