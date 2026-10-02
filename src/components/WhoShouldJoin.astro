@@ -33,17 +33,23 @@ import Starfield from './Starfield.astro';
   }
   h2 {
     margin: 0;
-    font: 400 56px/68px var(--font-heading);
-    background: linear-gradient(14.17deg, #707070 16.09%, #fff 91.78%);
+    font-family: var(--font-display);
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 68px;
+    letter-spacing: 0;
+    background: linear-gradient(180deg, #ffffff 15%, #999999 42%, #ffffff 80%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
   header p {
     margin: 24px 0 0;
+    font-family: var(--font-body);
     font-size: 18px;
     font-weight: 500;
     line-height: 27px;
+    letter-spacing: 0;
     color: #fff;
   }
   @media (max-width: 760px) {

@@ -1034,7 +1034,7 @@ try {
     .locator('.who-should-join')
     .screenshot({ path: 'artifacts/who-should-join-desktop.png' });
   const whoShouldJoinReference = await sharp(
-    'assets/assets recruitment page/who sould join section/Who Should Join Section.png',
+    'assets/assets recruitment page/who sould join section/Recruitment-WhoShouldJoin-Revisi-1x.png',
   )
     .resize(1440, 789)
     .removeAlpha()

@@ -1418,45 +1418,16 @@ generate-recruitment-hero-video.mjs` → `public/images/recruitment/`
 
 ## Recruitment page — Who Should Join
 
-- Figma node: `770:15545`; reference
-  `assets/assets recruitment page/who sould join section/Who Should Join
-Section.png`, 5760 × 3156 (1440 × 789 at 4×).
-- Frame: 1440 × 789, `padding 80`, column, `gap 74`. The header is centered and
-  full-width; the card rail below is full-bleed.
-- Heading: "Who Should Join?", Nasalization Regular 400, 56 / 68, centered in a
-  1280px box, fill `linear-gradient(14.17deg, #707070 16.09%, #fff 91.78%)`
-  (verified against the PNG: brighter at the top, greyer at the bottom).
-- Copy: "We welcome passionate individuals across technical, creative, and
-  operational domains." Manrope Medium 500, 18 / 27, `#fff`, centered, 1280px.
-- Card rail: the **same** cards as the homepage's House of Data Sorcerers section
-  (`DomainCard` + `domains.ts`) — six 394 × 436 cards with a 40px gap, first at
-  x=80, the fourth clipped at the viewport edge. The rail markup, arrows,
-  keyboard/scroll behaviour and CSS were extracted into a shared
-  `DomainRail.astro` used by both `Domains.astro` and `WhoShouldJoin.astro`, so
-  the cards stay pixel-identical to the homepage. Arrows follow the shared
-  placement (sides on desktop, below on mobile ≤1050px).
-- Card links: the cards open the HoDS detail pages with a recruitment origin
-  (`/hods/{id}?from=recruitment`), so that page's back link returns to
-  `/recruitment#who-should-join` ("Back to Open Roles"); the homepage rail keeps
-  plain `/hods/{id}` and "Back to HoDS". The detail pages are static, so the
-  origin is applied on the client from the query (`HoDSDetail.astro`).
-- Background (26 Sep 2026): now the **shared living sky** —
-  `src/components/Starfield.astro`, the same base tile + `far`/`near` drift as
-  the home "Four Pillars of Innovation" section (`public/images/starfield/`),
-  matching the mentor's "bikin hidup kayak section Four Pillars, background
-  bintangnya disamain" revision. It is an absolutely positioned, `overflow: hidden`,
-  `z-index: -1` layer, so the section geometry is untouched. The previously
-  supplied `Background.png` frame fill (a near-black starfield) was served as
-  `public/images/backgrounds/stars.webp` (q88, `cover`, centered); both that file
-  and the lossless `recruitment/who-should-join-background-{1440,2880}.webp`
-  exports were removed on 26 Sep 2026 once all its consumers migrated.
-- Measured layout at 1440: section `1440 × 789` at homepage y=866; heading
-  `(80, 80, 1280 × 68)`; copy `(80, 172, 1280 × 27)`; cards at x 80 / 514 / 948
-  / 1382, y 273, 394 × 436.
-- Verification: `scripts/verify.mjs` asserts the section, heading, copy and card
-  boxes exactly, diffs against the reference (~3.0/255; the card art carries the
-  same residual as the homepage, and this reference PNG's cards differ slightly
-  from the homepage export), and checks overflow and text from 320px to 1920px.
+- Figma node: `1436:3512` (subnodes `1436:3513` header, `1436:3514` heading, `1436:3515` copy, `1436:3516` HoDS rail); references:
+  `assets/assets recruitment page/who sould join section/Recruitment-WhoShouldJoin-Revisi-{1x,2x}.png`, 1440 × 789 (1x) & 2880 × 1578 (2x), plus header export `Recruitment-WhoShouldJoin-Header-1x.png` (1280 × 119).
+- Frame: 1440 × 789, `padding: 80px 80px 80px 80px`, column, `gap: 74px` (header to rail).
+- Heading (revisi 2 Oct 2026): "Who Should Join?", Bluu Next Bold 700 (`--font-display`), 56 / 67.2 (line-height 68px), centered in 1280px box at `(80, 80)`, fill `linear-gradient(180deg, #ffffff 15%, #999999 42%, #ffffff 80%)` (`-webkit-background-clip: text`).
+- Copy: "We welcome passionate individuals across technical, creative, and operational domains.", Manrope Medium 500 (`--font-body`), 18 / 27px, `#ffffff`, centered in 1280px box at `(80, 172)`, `margin-top: 24px`.
+- Card rail: the **same** cards as the homepage's House of Data Sorcerers section (`DomainCard` + `domains.ts`) — six 405 × 436 cards with a 32px gap, first at x=80, y=273. Shared `DomainRail.astro` used by both `Domains.astro` and `WhoShouldJoin.astro`, so the cards stay pixel-identical to the homepage. Arrows on sides (desktop) / below (mobile ≤1050px).
+- Card links: the cards open the HoDS detail pages with a recruitment origin (`/hods/{id}?from=recruitment`), so that page's back link returns to `/recruitment#who-should-join` ("Back to Who Should Join").
+- Background: **shared living sky** — `src/components/Starfield.astro`, base tile + `far`/`near` drift (`public/images/starfield/`).
+- Measured layout at 1440: section `1440 × 789` at y=866; heading `(80, 80, 1280 × 68)`; copy `(80, 172, 1280 × 27)`; cards at x 80 / 517 / 954 / 1391, y 273, 405 × 436.
+- Verification: `scripts/verify.mjs` asserts the section, heading, copy and card boxes exactly, diffs against `Recruitment-WhoShouldJoin-Revisi-1x.png` (MAE 2.8430/255), and checks overflow and text across widths.
 - The remaining recruitment sections and the footer are documented below; the
   page reuses the shared `Footer.astro`.
 

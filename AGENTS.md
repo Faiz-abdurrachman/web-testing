@@ -347,7 +347,14 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   - Section 5: **Our Project Section (`1430:2146`)** — Frame 1440×910px, padding 80px, gap 82px. Eyebrow 86.6×26px di `(80, 80)`, heading "What Our Sorcery Create" Bluu Next Bold 700 56/67px di `(80, 114)` (ink width 646px), 3D coverflow active card 549×567px di `(445.5, 263)`. MAE 5.0764 (Image 2.90, Tags 6.05, Text 5.90, Header 6.67, Bottom 0.0).
   - Section 6: **CTA Recruitment Section (`1430:2162`)** — Frame 1440×554px, padding 80px. Card panel 1280×394px di `(80, 80)` (padding 64px 80px, gap 48px). Eyebrow "Recruitment" 93.2×26px di `(673.4, 145)`, heading "Ready to Become a Sorcery?" Bluu Next Bold 700 56/67px di `(161, 179)`, copy Manrope 400 16/24 586×48px di `(427, 270)`. Single button `<Button variant="community">Join the Community</Button>` (201×43px) di `(619.5, 366)`. MAE 3.1427 (Button & glow 2.32, Header 4.94, Copy 6.37, Outer 0.0).
   - Verifikasi: build 0 error, verify.mjs exit 0, responsive audit 468/468 PASS, navbar audit ALL PASS, verify:vt ALL PASS, format:check ALL PASS. Geometri diff 0.0px.
-  - Detail: `docs/assets.md` §Homepage — CTA Recruitment Section & §Homepage — Our Project Section.
+- **Recruitment Page Section 2: Who Should Join (`1436:3512`) (2 Oct 2026).**
+  Frame Figma `1436:3512` (1440×789px, padding `80px 80px 80px 80px`, gap `74px`). Header Frame 2547 (1280×119px, gap 24px):
+  Heading "Who Should Join?" **Bluu Next Bold 700 56/67.2px** (`--font-display`, line-height 68px) di `(80, 80)`,
+  fill `linear-gradient(180deg, #ffffff 15%, #999999 42%, #ffffff 80%)`. Subtitle Manrope Medium 500 18/27px (`--font-body`)
+  di `(80, 172)`. HoDS Card Rail Frame 2509 (1280×436px, cards 405×436px, gap 32px) di `(80, 273)`. Background living sky
+  `Starfield.astro`. Reference export `Recruitment-WhoShouldJoin-Revisi-1x.png`, MAE **2.8430/255**.
+  Audit responsif 18 rute × 26 widths (468/468) & verify.mjs exit 0. Geometri diff 0.0px.
+  Detail: `docs/assets.md` §Recruitment page — Who Should Join.
 - **Recruitment Page Hero & Apply Now Button — revisi font, buttons & spacing (2 Oct 2026).**
   Frame Figma `1436:3506` (1440×866px, padding `0 80px`), Content Frame 2733 (1280×310px, gap `48px`
   ke button, vertically centered top 278px / bottom 278px). Header Frame 2732 (900×176px, gap `4px`):
