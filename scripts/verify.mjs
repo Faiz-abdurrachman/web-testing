@@ -1955,14 +1955,14 @@ try {
     });
   assert.deepEqual(snippetsGeometry, {
     width: 1440,
-    height: 900,
+    height: 897.203125,
     top: 5196.78125,
-    heading: { x: 80, y: 40, width: 1280, height: 68 },
-    gallery: { x: 80, y: 166, width: 1280, height: 694 },
-    hero: { x: 80, y: 166, width: 1280, height: 556 },
+    heading: { x: 80, y: 40, width: 1280, height: 67.203125 },
+    gallery: { x: 80, y: 163.203125, width: 1280, height: 694 },
+    hero: { x: 80, y: 163.203125, width: 1280, height: 556 },
     thumbs: [80, 338.5, 597, 855.5, 1114].map((x) => ({
       x,
-      y: 757,
+      y: 754.203125,
       width: 246,
       height: 103,
     })),
@@ -1972,15 +1972,15 @@ try {
     .locator('.snippets')
     .screenshot({ path: 'artifacts/snippets-desktop.png' });
   const snippetsReference = await sharp(
-    'assets/assets recruitment page/snippets section/Frame 2502.png',
+    'assets/assets recruitment page/snippets section/Recruitment-Snippets-Revisi-1x.png',
   )
-    .resize(1440, 900)
+    .resize(1440, 897)
     .removeAlpha()
     .raw()
     .toBuffer();
   const snippetsActual = await sharp('artifacts/snippets-desktop.png')
     // Fractional section origins round screenshot bounds outward by one pixel.
-    .extract({ left: 0, top: 0, width: 1440, height: 900 })
+    .extract({ left: 0, top: 0, width: 1440, height: 897 })
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -1996,7 +1996,7 @@ try {
       (snippetsActual[i] + snippetsReference[i]) / 2,
     );
   }
-  const snippetsRaw = { width: 1440, height: 900, channels: 3 };
+  const snippetsRaw = { width: 1440, height: 897, channels: 3 };
   await sharp(snippetsDiff, { raw: snippetsRaw })
     .png()
     .toFile('artifacts/snippets-diff.png');
@@ -2079,7 +2079,7 @@ try {
     {
       width: 1440,
       height: 537,
-      top: 6096.78125,
+      top: 6093.984375,
       panel: { x: 80, y: 80, width: 1280, height: 377 },
       actions: { x: 617.5, y: 327, width: 205, height: 51 },
       glow: { x: 349.828125, y: 351, width: 1000.328125, height: 271.5 },
@@ -2176,7 +2176,7 @@ try {
   assert.deepEqual(recruitFooterGeometry, {
     width: 1440,
     height: 556,
-    top: 6633.78125,
+    top: 6630.984375,
   });
   await page.locator('.footer').scrollIntoViewIfNeeded();
   await page

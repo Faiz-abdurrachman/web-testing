@@ -8,9 +8,13 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
-**Target Prioritas: Recruitment Page Section 7: Snippets of Life at Data Sorcerers (Figma node `1436:3684`, 1440 × 897px / 900px)**
+**Target Prioritas: Recruitment Page Section 8: CTA Recruitment Section (Figma node `1436:3687`, 1440 × 520px)**
 
-- **URL Figma Langsung**: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3684`
+- **URL Figma Langsung**: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3687`
+- Heading "Ready to Become a Sorcery?" **Bluu Next Bold 700 56/67.2px** (`--font-display`), single button "Join the Community" (201 × 43px).
+- Setelah Section 8, lanjut Section 9: Footer (`1436:3699`, 1440 × 556px).
+
+**SELESAI: Section 7: Snippets of Life at Data Sorcerers (`1436:3684`, 1440 × 897.2px)** — lihat ringkasan di bawah.
 
 ================================================================================
 ATURAN HUKUM & PROTOKOL STRICT PIXEL ACCURACY (WAJIB DIIKUTI TANPA KECUALI):
@@ -51,18 +55,14 @@ ATURAN HUKUM & PROTOKOL STRICT PIXEL ACCURACY (WAJIB DIIKUTI TANPA KECUALI):
 RINCIAN SPESIFIKASI TUGAS:
 ================================================================================
 
-### 1. Section 7: Snippets of Life at Data Sorcerers (Figma node `1436:3684` — 1440 × 897px / 900px)
+### 1. Section 8: CTA Recruitment Section (Figma node `1436:3687` — 1440 × 520px)
 
-- **Link Figma**: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3684`
-- **File Komponen**: `src/components/Snippets.astro`
-- **Heading**: "Snippets of Life at data sorcerers" **Bluu Next Bold 700 56px / 67.2px** (`--font-display`), center-aligned.
-- **Gallery**: 1280px wide (hero frame 1280 × 556px + 5 thumbnails bar 246 × 103px).
+- **Link Figma**: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3687`
+- **Heading**: "Ready to Become a Sorcery?" **Bluu Next Bold 700 56px / 67.2px** (`--font-display`).
+- **Button**: Single "Join the Community" (201 × 43px).
 
 ### 2. Sisa Section Recruitment Page Selanjutnya:
 
-- **Section 8: CTA Recruitment Section (`1436:3687`, 1440 × 520px)**
-  - Heading "Ready to Become a Sorcery?" Bluu Next Bold 700 56/67px.
-  - Single Button "Join the Community" (201 × 43px).
 - **Section 9: Footer (`1436:3699`, 1440 × 556px)**
   - Footer copyright, branding, social links, and alignment.
 
@@ -87,6 +87,17 @@ WORKFLOW & 6 GATE VERIFIKASI (SEMUA WAJIB PASS SEBELUM COMMIT):
 ## Ringkasan cepat (untuk AI baru) — 2 Oct 2026
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
+
+- **Recruitment Page Section 7: Snippets of Life at Data Sorcerers (`1436:3684`) — 100% SELESAI (2 Oct 2026).**
+  Section 7 pada halaman Recruitment (`1436:3505`) kini selesai dan tervalidasi presisi:
+  - Frame Figma `1436:3684` ("Frame 2502", 1440 × 897.2px, padding `40px 80px`, gap header ke gallery **`56px`** — strict 8-point grid, mengoreksi nilai lama 58px), fill `#050507`.
+  - Heading `1436:3685`: "Snippets of Life at data sorcerers" **Bluu Next Bold 700 56px / 67.2px** (`--font-display`), `text-align: center`, fill `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)` per baris. Ink width terukur 840.75px.
+  - Gallery instance `1436:3686` ("galeryy ds"): 1280 × 694px VERTICAL, gap `35px` (nilai autolayout Figma, 556 + 35 + 103 = 694). Hero carousel 1280 × 556px radius 20px; 5 thumbnail 246 × 103px `space-between` di x `[80, 338.5, 597, 855.5, 1114]`.
+  - Geometri Chromium: section `{ width: 1440, height: 897.203125, top: 5196.78125 }`, heading `{ x: 80, y: 40, width: 1280, height: 67.203125 }`, gallery/hero `y: 163.203125`, thumbs `y: 754.203125`.
+  - Section MAE: **`8.6288/255`** vs reference `Recruitment-Snippets-Revisi-1x.png` (heading region 1.45; residual = documented 1px cross-renderer sub-pixel offset, aligned MAE ≈ 3.3). Geometri diff 0.0px.
+  - Downstream section tops bergeser −2.796875 (`.cta` 6093.984375, `.footer` 6630.984375).
+  - Semua 6 gate verifikasi ALL PASS (`build`, `verify.mjs`, `navbar-audit`, `verify-vt`, `responsive-audit`, `format:check`).
+  - Detail: `docs/assets.md` §Recruitment page — Snippets.
 
 - **Recruitment Page Section 6: FAQ Section (`1436:3675`) — 100% SELESAI (2 Oct 2026).**
   Section 6 pada halaman Recruitment (`1436:3505`) kini 100% selesai dan tervalidasi presisi:
@@ -1554,8 +1565,8 @@ Fokus utama AI berikutnya adalah mengaudit dan mengeksekusi secara **strict pixe
 | 4   | **Available Roles** (`1436:3564`)    | 1440 × 843, padding 80px   | Gap header 58px, grid gap 40px          | Bluu Next Bold 56/67, 6 cards + WA direct link     | **SELESAI** (assert exact, commit `37032bb`) |
 | 5   | **Selection Timeline** (`1436:3637`) | 1440 × 812.2, padding 80px | Header padding 18×32, gap 56px          | Bluu Next Bold 56/67.2, 6 phase rows               | **SELESAI** (MAE 4.306, commit `c50a005`)    |
 | 6   | **FAQ** (`1436:3675`)                | 1440 × 983, padding 80px   | Gap header 56px, gap items 32px         | Bluu Next Bold 56/67.2 ("FAQ"), Manrope 26/39      | **SELESAI** (MAE 7.752, assert exact)        |
-| 7   | **Snippets of Life** (`1436:3684`)   | 1440, padding 40px 80px    | Gap 56px, gallery 1280, thumbs gap 35px | Bluu Next Bold 56/67.2, Manrope                    | **TARGET BERIKUTNYA / NEXT PRIORITY**        |
-| 8   | **CTA Recruitment** (`1436:3687`)    | 1440, padding 80px         | Gap content 24px/48px                   | Bluu Next Bold 56/67.2, Button Join                | **PENDING AUDIT & REVISI**                   |
+| 7   | **Snippets of Life** (`1436:3684`)   | 1440 × 897.2, padding 40px 80px | Gap 56px, gallery 1280, thumbs gap 35px | Bluu Next Bold 56/67.2, Manrope                    | **SELESAI** (MAE 8.629, assert exact)        |
+| 8   | **CTA Recruitment** (`1436:3687`)    | 1440, padding 80px         | Gap content 24px/48px                   | Bluu Next Bold 56/67.2, Button Join                | **TARGET BERIKUTNYA / NEXT PRIORITY**        |
 | 9   | **Footer** (`1436:3699`)             | 1440 × 556, padding 80px   | Branding, social links, alignment       | Manrope 400/500/700                                | **PENDING AUDIT & REVISI**                   |
 
 ---

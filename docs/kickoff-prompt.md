@@ -156,15 +156,17 @@ CHECKLIST STATUS PER-SECTION:
    - Heading "FAQ": Bluu Next Bold 700 56/67.2px uppercase (`--font-display`), linear gradient 181deg per baris.
    - List 1280px (Frame 2546, gap 32px): 6 accordion cards (stroke 1px glass rim, radius 20px, gap 32px, 4 cards 77px + 2 cards 116px).
    - Section MAE: **7.7518/255** (Header MAE 0.7854, List MAE 10.2983, Bottom MAE 2.7911) vs reference `Recruitment-Faq-Revisi-1x.png`. All 6 verification gates pass.
-7. **Snippets of Life at Data Sorcerers (`1436:3684`)** — [STATUS: TARGET BERIKUTNYA / CURRENT PRIORITY]
+7. **Snippets of Life at Data Sorcerers (`1436:3684`)** — [STATUS: 100% SELESAI]
    - URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3684`
-   - Frame 1440 × 897px / 900px, padding 40px 80px, gap 56px.
-   - Heading "Snippets of Life at data sorcerers": Bluu Next Bold 700 56/67px center.
-   - Gallery 1280px (hero frame 556px + 5 thumbnails bar gap 35px).
-8. **CTA Recruitment Section (`1436:3687`)** — [STATUS: UPCOMING]
+   - Frame 1440 × 897.2px, padding 40px 80px, gap **56px** (Strict 8-Point Grid, mengoreksi 58px lama).
+   - Heading "Snippets of Life at data sorcerers": Bluu Next Bold 700 56/67.2px center, gradient 181deg.
+   - Gallery 1280px (hero frame 556px + 5 thumbnails bar 246×103px, gap 35px autolayout).
+   - Section MAE: **8.6288/255** vs `Recruitment-Snippets-Revisi-1x.png`. All 6 verification gates pass.
+8. **CTA Recruitment Section (`1436:3687`)** — [STATUS: TARGET BERIKUTNYA / CURRENT PRIORITY]
+   - URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3687`
    - Frame 1440 × 520px, padding 80px.
-   - Heading "Ready to Become a Sorcery?": Bluu Next Bold 700 56/67px.
-   - Button "Join the Community".
+   - Heading "Ready to Become a Sorcery?": Bluu Next Bold 700 56/67.2px.
+   - Button "Join the Community" (201 × 43px).
 9. **Footer (`1436:3699`)** — [STATUS: UPCOMING]
    - Frame 1440 × 556px, padding 80px.
 
@@ -187,5 +189,5 @@ INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
    - Update dokumentasi (`docs/assets.md`, `docs/ai-handoff.md`, `AGENTS.md`).
    - Lakukan git commit per fitur dan sinkronkan push ke origin main.
 3. **Mulai dari mana?**
-   Target saat ini: **Section 6: FAQ Section (Node 1436:3675)** pada Recruitment Page.
+   Target saat ini: **Section 8: CTA Recruitment Section (Node 1436:3687)** pada Recruitment Page.
 ```

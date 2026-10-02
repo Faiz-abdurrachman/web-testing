@@ -373,10 +373,16 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   Section MAE: **7.7518/255** vs reference `Recruitment-Faq-Revisi-1x.png` (Header MAE 0.7854, List MAE 10.2983, Bottom MAE 2.7911). Geometri Chromium diff 0.0px.
   Downstream section tops (`.snippets` 5196.78, `.cta` 6096.78, `.footer` 6633.78) terkalibrasi presisi.
   Semua 6 gate verifikasi ALL PASS (`build`, `verify.mjs`, `navbar-audit`, `verify-vt`, `responsive-audit`, `format:check`).
-- **NEXT TARGET: Recruitment Page Section 7: Snippets of Life at Data Sorcerers (`1436:3684`).**
-  URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3684`.
-  Frame 1440×897px / 900px, padding `40px 80px`. Heading "Snippets of Life at data sorcerers" Bluu Next Bold 700 56/67px center.
-  Gallery 1280px (hero frame 556px + 5 thumbnails bar 246×103px).
+- **Recruitment Page Section 7: Snippets of Life at Data Sorcerers (`1436:3684`) — 100% Selesai (2 Oct 2026).**
+  Frame Figma `1436:3684` ("Frame 2502", 1440×897.2px, padding `40px 80px`, gap header-ke-gallery **`56px`** — strict 8-point grid, mengoreksi 58px lama), fill `#050507`.
+  Heading `1436:3685`: "Snippets of Life at data sorcerers" **Bluu Next Bold 700 56/67.2px** (`--font-display`), `text-align: center`, fill `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)`. Ink width terukur 840.75px.
+  Gallery instance `1436:3686` ("galeryy ds"): 1280×694px VERTICAL gap `35px` (nilai autolayout Figma: 556 + 35 + 103). Hero carousel 1280×556 radius 20px; 5 thumbnail 246×103 `space-between` di x `[80, 338.5, 597, 855.5, 1114]`.
+  Section MAE: **8.6288/255** vs reference `Recruitment-Snippets-Revisi-1x.png` (heading region 1.45; residual = 1px cross-renderer sub-pixel offset, aligned MAE ≈ 3.3). Geometri Chromium diff 0.0px. Downstream tops (`.cta` 6093.984375, `.footer` 6630.984375).
+  Semua 6 gate verifikasi ALL PASS (`build`, `verify.mjs`, `navbar-audit`, `verify-vt`, `responsive-audit`, `format:check`).
+- **NEXT TARGET: Recruitment Page Section 8: CTA Recruitment (`1436:3687`).**
+  URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3687`.
+  Frame 1440×520px, padding `80px`. Heading "Ready to Become a Sorcery?" Bluu Next Bold 700 56/67.2px. Single button "Join the Community" (201×43px).
+  Lalu Section 9: Footer (`1436:3699`, 1440×556px).
   Wajib buat Master Work Plan per-section sebelum sentuh kode!
 - **Recruitment Page Section 3: What You Will Do (`1436:3517`) (2 Oct 2026).**
   Frame Figma `1436:3517` (1440×903px, padding `80px 80px 80px 80px`, gap header ke body `20px`). Header Frame 2734 (`1436:4048`, 1280×118px, gap 24px):
