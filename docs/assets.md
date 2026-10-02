@@ -1347,17 +1347,21 @@ score were unchanged when this section was added.
 
 ## Footer
 
-- Figma node: `765:17071`; reference: `assets/assets home page/footer/Footer.png`, 5760 × 2224.
+- Figma node: `765:17071` (component) / `1436:3699` (recruitment instance);
+  reference: `assets/assets recruitment page/footer/Recruitment-Footer-Revisi-1x.png`
+  (1440 × 556) + `…-2x.png`. The shared `Footer.astro` is used by all six pages.
 - Frame: 1440 × 556 at 1×; padding `80px 80px 28px`; column gap 60.
-- Row 1 is `1280 × 324`. Brand column at x=80: brand lockup 206 wide
-  (Nasalization Regular 32, gradient `linear-gradient(270deg, #fff, #EDE8FF)`;
-  Manrope Regular 16/24 tagline), a 17.5/28.44 `#CBC5FF` three-line statement,
-  then two 48 × 48 social buttons (0.75px `#CBC5FF` border, 24px icons).
-  Navigation column at x=652.73 and Contact column at x=1096.33; each header is
-  Manrope Bold 16/24, and each list uses a 16px gap.
-- Row 2: 1px divider `rgb(203 197 255 / 30%)` at y=463.69, then the legal bar at
-  y=484.69 — copyright at x=80 (320 wide) and Terms/Privacy/Cookies at x=640.72
-  (218 wide), Manrope Regular 16/24.
+- Row 1 is `1280 × 314`. Brand column at x=80: brand lockup 206 wide
+  (**Bluu Next Bold 700 32/38.4**, gradient `linear-gradient(270deg, #fff, #EDE8FF)`;
+  Manrope Regular 16/24 tagline; lockup gap 8), a 17.5/28.44 `#fff` three-line
+  statement (copy gap 24), then two 48 × 48 social buttons (0.75px `#fff` border,
+  24px white icons). Navigation column at x=652.73 and Contact column at x=1096.33;
+  each header is Manrope Bold 16/24, gap 32 to the list, and each list uses a 16px gap.
+- Row 2: 1px divider `rgb(203 197 255 / 30%)` at y=454.13, then the legal bar at
+  y=475.13 — copyright "© DATA SORCERERS 2026. All right reserved" at x=80
+  (matches the PNG copy), Manrope Regular 16/24. Terms/Privacy/Cookies are
+  **right-aligned** (approved mentor revision on 23 Sep 2026, superseding the
+  older PNG's left-grouped links at x≈640).
 - **Background update (29 Sep 2026, user-supplied):** the footer now uses
   `assets/assets home page/footer/Gambar Footer(2).png` (7200 × 2780, exactly
   5× the 1440 × 556 footer frame). This supersedes the 2017 × 780
@@ -1385,15 +1389,22 @@ assets:footer` converts the new source to q90 WebP variants at 1440, 2880,
 - Social, Navigation, Terms, Privacy, and Cookies destinations were not
   supplied, so they keep the preview's unavailable state. Below desktop width
   the columns wrap and then stack; no mobile Figma reference was supplied.
-- Visual validation compares the supplied PNG, asserts the 1440 × 556 frame,
-  column x positions (80 / 652.73 / 1096.33), the divider and legal bar y
-  positions, and checks text containment from 320px through 1920px. Anti-aliased
-  text over the bright lower background keeps a higher difference score than
-  the flat sections; alignment is exact (mask cross-correlation offset 0).
+- Visual validation compares the revised PNG, asserts the 1440 × 556 frame,
+  column x positions (80 / 652.73 / 1096.33), the divider (y 453.69 ± 1.5) and
+  legal bar (y 474.69 ± 1.5), and checks text containment from 320px through
+  1920px. Homepage footer MAE **5.84/255** (brand region 3.0; the right-aligned
+  legal links diverge from the PNG by design, plus anti-aliased text over the
+  bright landscape); recruitment footer MAE **7.71/255** (same component, but the
+  fractional page position adds the documented 1px sub-pixel offset).
+- **Revision (2 Oct 2026).** The Figma footer was updated: brand name
+  Nasalization → **Bluu Next Bold 700 32/38.4**; brand lockup gap 14 → 8, brand
+  copy gap 26 → 24, nav/contact gap 34 → 32; description `#CBC5FF` → `#fff`;
+  social borders + `instagram.svg`/`linkedin.svg` fills `#CBC5FF` → `#fff`;
+  copyright "All rights reserved" → "All right reserved" (per PNG). Top row is
+  now `1280 × 314` and the divider moved 463.69 → 454.13.
 - The Recruitment page reuses this same `Footer.astro` component (its
-  `footer.txt` points at the same Figma node `765:17071` and its `Footer.png`
-  is the same 1440 × 556 reference). It renders at homepage y=6706 with the
-  identical ~2.67/255 difference.
+  `footer.txt` points at the same Figma node `765:17071` / instance `1436:3699`
+  and the same 1440 × 556 reference).
 
 ## Recruitment page — Hero
 

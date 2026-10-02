@@ -168,9 +168,12 @@ CHECKLIST STATUS PER-SECTION:
    - Heading "Ready to Become a Sorcery?": Bluu Next Bold 700 56/67.2px center, gradient 181deg.
    - Button "Join the Community" 201×43px (`variant="community"`).
    - Section MAE: **2.2488/255** vs `Recruitment-Cta-Revisi-1x.png`. All 6 verification gates pass.
-9. **Footer (`1436:3699`)** — [STATUS: TARGET BERIKUTNYA / CURRENT PRIORITY]
+9. **Footer (`1436:3699` / komponen bersama `765:17071`)** — [STATUS: 100% SELESAI]
    - URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3699`
-   - Frame 1440 × 556px, padding 80px. Section terakhir Recruitment Page.
+   - Frame 1440 × 556px, padding 80px. Komponen bersama (`Footer.astro`) untuk 6 halaman.
+   - Brand name **Bluu Next Bold 700 32/38.4**; spacing brand lockup 8, copy 24, nav/contact 32; desc & ikon social putih.
+   - Section MAE: homepage **5.8380/255**, recruitment **7.7071/255**. All 6 verification gates pass.
+   - Legal links tetap right-aligned (mentor-approved 23 Sep 2026).
 
 ================================================================================
 INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
@@ -191,5 +194,6 @@ INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
    - Update dokumentasi (`docs/assets.md`, `docs/ai-handoff.md`, `AGENTS.md`).
    - Lakukan git commit per fitur dan sinkronkan push ke origin main.
 3. **Mulai dari mana?**
-   Target saat ini: **Section 9: Footer (Node 1436:3699)** pada Recruitment Page.
+   Target saat ini: **Recruitment Page sudah 100% (Section 1–9)**. Berikutnya revisi
+   halaman lain (About Us / Partners / Hall of Frames / Contact) atau isi konten asli.
 ```

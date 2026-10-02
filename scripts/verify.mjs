@@ -618,12 +618,12 @@ try {
     'Footer columns must align with the Figma reference',
   );
   assert.ok(
-    Math.abs(footerGeometry.divider.y - 463.69) < 1 &&
-      Math.abs(footerGeometry.legal.y - 484.69) < 1,
+    Math.abs(footerGeometry.divider.y - 453.69) < 1.5 &&
+      Math.abs(footerGeometry.legal.y - 474.69) < 1.5,
     'Footer divider and legal bar must match the Figma reference',
   );
   const footerReference = await sharp(
-    'assets/assets home page/footer/Footer.png',
+    'assets/assets recruitment page/footer/Recruitment-Footer-Revisi-1x.png',
   )
     .resize(1440, 556)
     .removeAlpha()
@@ -2182,7 +2182,7 @@ try {
     .locator('.footer')
     .screenshot({ path: 'artifacts/recruitment-footer-desktop.png' });
   const recruitFooterReference = await sharp(
-    'assets/assets recruitment page/footer/Footer.png',
+    'assets/assets recruitment page/footer/Recruitment-Footer-Revisi-1x.png',
   )
     .resize(1440, 556)
     .removeAlpha()

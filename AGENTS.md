@@ -385,10 +385,11 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   Button `community` "Join the Community" 201×43; glow `glow.svg` IMAGE-SVG `1438:4081` di `(349.83, 351)` 1000.33×271.5.
   Section MAE: **2.2488/255** vs reference `Recruitment-Cta-Revisi-1x.png`. Geometri diff 0.0px. Downstream `.footer` top → **6613.984375**.
   Semua 6 gate verifikasi ALL PASS (`build`, `verify.mjs`, `navbar-audit`, `verify-vt`, `responsive-audit`, `format:check`).
-- **NEXT TARGET: Recruitment Page Section 9: Footer (`1436:3699`).**
-  URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3699`.
-  Frame 1440×556px, padding `80px`. Section terakhir Recruitment Page.
-  Wajib buat Master Work Plan per-section sebelum sentuh kode!
+- **Recruitment Page Section 9: Footer (`1436:3699` / komponen bersama `765:17071`) — 100% Selesai (2 Oct 2026).**
+  `Footer.astro` dipakai **6 halaman** (index, about, recruitment, partners, hall-of-frames, contact) — revisi ini site-wide. Figma footer diperbarui:
+  Brand name Nasalization → **Bluu Next Bold 700 32/38.4** (`--font-display`), gradient `270deg #fff → #ede8ff`; brand lockup gap `14 → 8`, brand copy gap `26 → 24`, nav/contact gap `34 → 32`; brand desc `#CBC5FF → #fff`; border social + `instagram.svg`/`linkedin.svg` fill `#CBC5FF → #fff`; copyright "All rights reserved" → "All right reserved" (per PNG). Top row `1280×314`, divider y `454.13`, legal y `475.13`.
+  Legal links tetap **right-aligned** (approved mentor revision 23 Sep 2026, supersedes PNG left-grouped). Section MAE: homepage footer **5.8380/255** (brand region 3.0), recruitment footer **7.7071/255**. Semua 6 gate verifikasi ALL PASS.
+- **Recruitment Page 100% SELESAI (Section 1–9).** Berikutnya: revisi font/spacing halaman lain (About Us / Partners / Hall of Frames / Contact) atau isi konten asli. Wajib Master Work Plan per-section sebelum sentuh kode!
 - **Recruitment Page Section 3: What You Will Do (`1436:3517`) (2 Oct 2026).**
   Frame Figma `1436:3517` (1440×903px, padding `80px 80px 80px 80px`, gap header ke body `20px`). Header Frame 2734 (`1436:4048`, 1280×118px, gap 24px):
   Heading "What You Will Do" **Bluu Next Bold 700 56/67px** (`--font-display`) di `(80, 80)`,
