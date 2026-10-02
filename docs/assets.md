@@ -710,6 +710,37 @@ fitting the rendered pixels gives an effective CSS gradient of
   `(80, 368, 1280, 426)`; line bottoms 776). Section MAE **2.221/255**
   (header 4.18, pipeline 3.20). All 6 gates pass.
 
+## About Us — Our Team (2 October 2026)
+
+- New Figma page `1439:4184`, section **`1439:4305`** ("Our Team Section",
+  1440 × 1536, column, `padding: 80px`, `gap: 80px`, fill `#050507`). Header
+  `1439:4306` (1280 × 101): eyebrow `1439:4307` "Our Team" + heading `1439:4309`
+  "The Sorcerers Behind It All" (Bluu Next **Bold 700** 56 / **67px** — Figma
+  bbox 67; gradient `181deg`). Total = 80 + 101 + 80 + 1195 + 80 = 1536.
+- `team 2` instance `1439:4310` (1280 × 1195, `gap: 80`): group Leader
+  (`…;1260:17189`, 2 cards) + group Data Intelligence (`…;1260:17194`,
+  5 cards) + "see more" button. Group label = 8px gradient dot + Nasalization
+  400 32 / 48 (`--font-heading`, falls back to sans off the dev machine).
+- Card `card orang` (302 × 400, radius 10): `rgba(255,255,255,.1)` + GLASS rim;
+  decorative frame `…;1260:16765` "Mask group" (295 × 277 at 3,13) exported as
+  `card-frame.webp`; portrait `…;1260:16768` / `…;1260:16785` uses a Figma
+  `imageTransform` crop — baked to the node sizes (`public/images/team/{marchel,
+zidan-rose}.webp`, 302 × 532 / 302 × 442); fade `…;1260:16769`
+  (302 × 153, bottom) fitted to `linear-gradient(180deg, rgba(108,59,255,0),
+rgba(108,59,255,.3) 50%, #0e0626)`; info frame `…;1260:16770` (222 × 94 at
+  40,284): name Manrope 700 22 / 33, 1px divider `rgba(255,255,255,.3)`, role
+  Manrope 400 16 / 24, two 16px social icons. Placeholder member data lives in
+  `src/data/team.ts` (7 entries; the design only ships 2 unique portraits and
+  placeholder names — swap for real data, do not invent URLs).
+- "See More" button `…;1260:16901` (141 × 43, radius 200, glass pill) with a
+  chevron-down. New component `OurTeam.astro`. Generator additions in
+  `scripts/generate-about-assets.mjs` (`npm run assets:about`).
+- Reference `assets/about-us/team/OurTeam-Revisi-1x.png`. Chromium geometry
+  exact (section 1440 × 1536; header `(80, 80, 1280, 101)`; groups
+  `(80, 261, 1280, 1072)`; card `(80, 357, 302, 400)`; button
+  `(649.8, 1413, 140.5, 43)`). Section MAE **2.679/255** (header 3.20, leader
+  cards 6.20, button 1.97). All 6 gates pass.
+
 ## About Us — Philosophy & Our Ecosystem (30 September 2026)
 
 - Figma file `RntmRWAgLrh5utgzcjrUik`, section `1331:15784` and pipeline

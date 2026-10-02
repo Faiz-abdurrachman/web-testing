@@ -9,21 +9,21 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
 **CURRENT PAGE: About Us (`1439:4184`)** — Homepage & Recruitment sudah 100%.
-**Section 1 Hero, Section 2 visi misi, Section 3 Philosophy & Section 4 Our
-Ecosystem SELESAI 2 Oct 2026; lanjut Section 5 Our Team `1439:4305`.**
+**Section 1–5 (Hero, visi misi, Philosophy, Our Ecosystem, Our Team) SELESAI
+2 Oct 2026; tersisa verifikasi Section 6 Footer `1439:4311`.**
 Link Figma: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4184`
 
 Wajib **inventaris semua section** dulu (checklist), lalu kerjakan **satu per satu**
 (Master Work Plan + 6 gate per section). Urutan section (dari frame halaman, `depth 1`):
 
-| #   | Node ID     | Frame                   | W×H       | Status komponen sekarang                            |
-| --- | ----------- | ----------------------- | --------- | --------------------------------------------------- |
-| 1   | `1439:4185` | Hero Section - About Us | 1440×903  | **SELESAI 2 Oct 2026** (revised Bluu Next Bold 700) |
-| 2   | `1439:4190` | visi misi section       | 1440×840  | **SELESAI 2 Oct 2026** (revised Bluu Next Bold 700) |
-| 3   | `1439:4219` | Philosophy Section      | 1440×837  | **SELESAI 2 Oct 2026** (unified with home variant)  |
-| 4   | `1439:4258` | Our Ecosystem Section   | 1440×874  | **SELESAI 2 Oct 2026** (revised Bluu Next Bold 700) |
-| 5   | `1439:4305` | Our Team Section        | 1440×1536 | **BELUM ADA komponen** → buat `OurTeam.astro`       |
-| 6   | `1439:4311` | Footer                  | 1440×556  | shared `Footer.astro`, sudah presisi                |
+| #   | Node ID     | Frame                   | W×H       | Status komponen sekarang                                  |
+| --- | ----------- | ----------------------- | --------- | --------------------------------------------------------- |
+| 1   | `1439:4185` | Hero Section - About Us | 1440×903  | **SELESAI 2 Oct 2026** (revised Bluu Next Bold 700)       |
+| 2   | `1439:4190` | visi misi section       | 1440×840  | **SELESAI 2 Oct 2026** (revised Bluu Next Bold 700)       |
+| 3   | `1439:4219` | Philosophy Section      | 1440×837  | **SELESAI 2 Oct 2026** (unified with home variant)        |
+| 4   | `1439:4258` | Our Ecosystem Section   | 1440×874  | **SELESAI 2 Oct 2026** (revised Bluu Next Bold 700)       |
+| 5   | `1439:4305` | Our Team Section        | 1440×1536 | **SELESAI 2 Oct 2026** (`OurTeam.astro` + `team.ts` baru) |
+| 6   | `1439:4311` | Footer                  | 1440×556  | shared `Footer.astro`, sudah presisi                      |
 
 Catatan hero `1439:4185`: 1440×903, VERTICAL gap 16, padding 80, IMAGE fill; child
 `1439:4186` (1280×287, gap 16) berisi headline `1439:4187` "Architecting the Future
@@ -116,6 +116,18 @@ WORKFLOW & 6 GATE VERIFIKASI (SEMUA WAJIB PASS SEBELUM COMMIT):
 ## Ringkasan cepat (untuk AI baru) — 2 Oct 2026
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
+
+- **About Us Section 5: Our Team (`1439:4305`) — 100% SELESAI (2 Oct 2026).**
+  Frame 1440×1536, padding 80px, gap 80px, fill `#050507`. Header `1439:4306` 1280×101
+  (eyebrow "Our Team" + heading "The Sorcerers Behind It All" Bluu Next 700 56/67px, gradient
+  `181deg`). `team 2` `1439:4310` 1280×1195: grup Leader (2 kartu) & Data Intelligence (5 kartu),
+  kartu `card orang` **302×400** radius 10 (`rgba(255,255,255,.1)` + GLASS rim; frame dekoratif
+  `card-frame.webp` di `(3,13)` 295×277; potret crop `imageTransform` dibake; fade
+  `180deg #6c3bff→#0e0626`; nama Manrope 700 22/33, role Manrope 400 16/24, 2 ikon sosial).
+  Label grup Nasalization 400 32/48 (`--font-heading`). Tombol "See More" 141×43.
+  Komponen baru `OurTeam.astro` + `src/data/team.ts` (7 placeholder; generator `npm run assets:about`).
+  Section MAE **2.679/255**, geometri Chromium exact. Semua 6 gate ALL PASS. Referensi
+  `assets/about-us/team/OurTeam-Revisi-1x.png`. Detail: `docs/assets.md` §About Us — Our Team.
 
 - **About Us Section 4: Our Ecosystem (`1439:4258`) — 100% SELESAI (2 Oct 2026).**
   Frame 1440×874, column, padding 80px, gap 116px, gradient `24.87deg #050507 52.9% → #6c3bff 132.9%`

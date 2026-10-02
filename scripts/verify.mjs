@@ -2409,6 +2409,63 @@ try {
     .raw()
     .toBuffer();
   assert.equal(ecosystemReference.length, ecosystemActual.length);
+  // About Us Our Team — geometry + diff vs Figma node 1439:4305 export.
+  await page.evaluate(async () => {
+    await Promise.all(
+      [...document.querySelectorAll('.our-team img')].map(async (image) => {
+        image.loading = 'eager';
+        await image.decode().catch(() => {});
+      }),
+    );
+  });
+  const ourTeamGeometry = await page.evaluate(() => {
+    const section = document.querySelector('.our-team');
+    const sectionBox = section.getBoundingClientRect();
+    const relativeBox = (selector) => {
+      const box = section.querySelector(selector).getBoundingClientRect();
+      return {
+        x: Math.round((box.x - sectionBox.x) * 10) / 10,
+        y: Math.round((box.y - sectionBox.y) * 10) / 10,
+        width: Math.round(box.width * 10) / 10,
+        height: Math.round(box.height * 10) / 10,
+      };
+    };
+    return {
+      section: { width: sectionBox.width, height: sectionBox.height },
+      header: relativeBox('.team-header'),
+      title: relativeBox('.team-title'),
+      groups: relativeBox('.team-groups'),
+      card: relativeBox('.team-card'),
+      more: relativeBox('.team-more'),
+      cards: section.querySelectorAll('.team-card').length,
+      overflow: document.documentElement.scrollWidth - innerWidth,
+    };
+  });
+  assert.deepEqual(ourTeamGeometry, {
+    section: { width: 1440, height: 1536 },
+    header: { x: 80, y: 80, width: 1280, height: 101 },
+    title: { x: 80, y: 114, width: 1280, height: 67 },
+    groups: { x: 80, y: 261, width: 1280, height: 1072 },
+    card: { x: 80, y: 357, width: 302, height: 400 },
+    more: { x: 649.8, y: 1413, width: 140.5, height: 43 },
+    cards: 7,
+    overflow: 0,
+  });
+  await page
+    .locator('.our-team')
+    .screenshot({ path: 'artifacts/about-team-desktop.png' });
+  const ourTeamReference = await sharp(
+    'assets/about-us/team/OurTeam-Revisi-1x.png',
+  )
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const ourTeamActual = await sharp('artifacts/about-team-desktop.png')
+    .extract({ left: 0, top: 0, width: 1440, height: 1536 })
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  assert.equal(ourTeamReference.length, ourTeamActual.length);
   await page.setViewportSize({ width: 1920, height: 900 });
   const aboutWide = await page.evaluate(() => {
     const ecosystem = document.querySelector('.ecosystem');

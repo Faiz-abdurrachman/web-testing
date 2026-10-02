@@ -142,8 +142,9 @@ src/data/domains.ts      6 HoDS cards (title/desc/tint/chips)
 src/data/hods.ts         6 detail categories → 22 tabs (LEARNING/…/OUTPUT)
 src/data/projects.ts     4 placeholder projects (swap for real data)
 src/data/partners.ts     Partners categories + why-cards (logos placeholder)
+src/data/team.ts         About Us team groups (7 placeholder members)
 src/pages/index.astro    homepage composition
-src/pages/about.astro    About Us composition (sections 1–4, OLD Figma file)
+src/pages/about.astro    About Us composition (sections 1–5 + shared footer)
 src/pages/partners.astro Partners composition (hero + grids + why)
 src/pages/hall-of-frames.astro  HoF composition (hero/featured/projects/milestone)
 src/pages/contact.astro  Contact composition (hero + form + info cards)
@@ -364,8 +365,8 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   komponen Homepage/Recruitment.
   **CURRENT PAGE: About Us (`1439:4184`)** — 5 section konten + Footer shared,
   dikerjakan **satu per satu** (wajib Master Work Plan + inventaris section).
-  **Section 1 Hero, Section 2 visi misi, Section 3 Philosophy & Section 4 Our
-  Ecosystem selesai 2 Oct 2026; berikutnya Section 5 Our Team (`1439:4305`).**
+  **Section 1–5 (Hero, visi misi, Philosophy, Our Ecosystem, Our Team) selesai
+  2 Oct 2026; tersisa verifikasi Section 6 Footer (`1439:4311`).**
   Lihat "Next plan" di bawah & `docs/kickoff-prompt.md`.
 - **About Us Section 1: Hero (`1439:4185`) — 100% SELESAI (2 Oct 2026).**
   Frame Figma `1439:4185` (1440×903, column, padding 80px, justify center,
@@ -419,6 +420,25 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   18/27 (dulu 700); desc Manrope 400 14/21. Section MAE **2.221/255** (header
   4.18, pipeline 3.20). Geometri Chromium exact. Semua 6 gate ALL PASS.
   Referensi: `assets/about-us/ecosystem/Ecosystem-Revisi-1x.png`.
+- **About Us Section 5: Our Team (`1439:4305`) — 100% SELESAI (2 Oct 2026).**
+  Frame 1440×1536, column, padding 80px, gap 80px, fill `#050507`. Header
+  `1439:4306` 1280×101 di `(80, 80)`: eyebrow "Our Team" (glass) + heading
+  "The Sorcerers Behind It All" **Bluu Next Bold 700 56/67** (`--font-display`,
+  line-height 67px agar header 101), gradient `181deg`, center.
+  Instance `team 2` `1439:4310` 1280×1195 di `(80, 261)`, gap 80:
+  grup Leader (`1439:4310;1260:17189`, 2 kartu) & Data Intelligence
+  (`...;1260:17194`, 5 kartu). Label grup **Nasalization 400 32/48**
+  (`--font-heading`, tersedia lokal; fallback sans) + dot gradient. Kartu
+  `card orang` **302×400** radius 10, `rgba(255,255,255,.1)` + GLASS rim; frame
+  dekoratif `card-frame.webp` (Mask group) di `(3,13)` 295×277; potret (crop
+  `imageTransform` dibake ke `public/images/team/*.webp`, generator
+  `npm run assets:about`); fade `180deg #6c3bff→#0e0626 50%`; info `(40,284)`
+  222: nama Manrope 700 22/33, divider, role Manrope 400 16/24, 2 ikon sosial.
+  Tombol "See More" 141×43 (glass pill). Komponen baru `OurTeam.astro` + data
+  placeholder `src/data/team.ts` (7 member; foto/nama placeholder dari Figma,
+  jangan mengarang URL). Section MAE **2.679/255** (header 3.20, leader cards
+  6.20, data 3.56, button 1.97). Geometri Chromium exact. Semua 6 gate ALL PASS.
+  Referensi: `assets/about-us/team/OurTeam-Revisi-1x.png`.
 - **Homepage 100% Selesai — Our Project & CTA Recruitment Section (2 Oct 2026).**
   Seluruh 6 section Homepage (`1430:2040`) kini 100% selesai dan tervalidasi:
   - Section 5: **Our Project Section (`1430:2146`)** — Frame 1440×910px, padding 80px, gap 82px. Eyebrow 86.6×26px di `(80, 80)`, heading "What Our Sorcery Create" Bluu Next Bold 700 56/67px di `(80, 114)` (ink width 646px), 3D coverflow active card 549×567px di `(445.5, 263)`. MAE 5.0764 (Image 2.90, Tags 6.05, Text 5.90, Header 6.67, Bottom 0.0).
@@ -552,11 +572,11 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   2. visi misi section `1439:4190` (1440×840) — **SELESAI 2 Oct 2026**
   3. Philosophy Section `1439:4219` (1440×837) — **SELESAI 2 Oct 2026**
   4. Our Ecosystem Section `1439:4258` (1440×874) — **SELESAI 2 Oct 2026**
-  5. Our Team Section `1439:4305` (1440×1536) — **berikutnya**, belum ada komponen (`OurTeam.astro`)
-  6. Footer `1439:4311` (shared, sudah presisi)
-     Section 1–4 sudah direvisi ke **Bluu Next Bold 700** + strict 8pt. Tersisa
-     Section 5 Our Team (komponen baru `OurTeam.astro`) lalu verifikasi Footer.
-     Detail: `docs/ai-handoff.md` §"Next Task", `docs/kickoff-prompt.md`.
+  5. Our Team Section `1439:4305` (1440×1536) — **SELESAI 2 Oct 2026** (`OurTeam.astro` baru)
+  6. Footer `1439:4311` (shared, sudah presisi) — **berikutnya**, verifikasi saja
+     Section 1–5 sudah direvisi ke **Bluu Next Bold 700** + strict 8pt. Tersisa
+     verifikasi Footer Section 6. Detail: `docs/ai-handoff.md` §"Next Task",
+     `docs/kickoff-prompt.md`.
 - **Next plan (prioritas).** Setelah About Us: halaman lain (Partners `PartnersHero`/
   `WhyPartners`, detail HoDS `HoDSDetail`, dll masih `--font-heading`) dan/atau konten
   asli (`projects.ts`, tanggal recruitment, logo partner, member/project/milestone HoF);
