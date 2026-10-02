@@ -8,34 +8,37 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
-**CURRENT PAGE: About Us (`1439:4184`)** — Homepage & Recruitment sudah 100%.
-**About Us (`1439:4184`) 100% SELESAI 2 Oct 2026 — 6 section (Hero, visi misi,
-Philosophy, Our Ecosystem, Our Team, Footer).** Berikutnya: halaman lain
-(Partners/HoF/Contact) & isi konten asli.
-Link Figma: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4184`
+**NEXT PAGE: Partners (`1439:4787`)** — Homepage (`1430:2040`), Recruitment
+(`1436:3505`), dan About Us (`1439:4184`) sudah **100% SELESAI** (2 Oct 2026).
+Link Figma: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4787`
 
 Wajib **inventaris semua section** dulu (checklist), lalu kerjakan **satu per satu**
-(Master Work Plan + 6 gate per section). Urutan section (dari frame halaman, `depth 1`):
+(Master Work Plan + 6 gate per section). Urutan section Partners (frame `1439:4787`,
+1440 × 2942, `depth 1`):
 
-| #   | Node ID     | Frame                   | W×H       | Status komponen sekarang                                  |
-| --- | ----------- | ----------------------- | --------- | --------------------------------------------------------- |
-| 1   | `1439:4185` | Hero Section - About Us | 1440×903  | **SELESAI 2 Oct 2026** (revised Bluu Next Bold 700)       |
-| 2   | `1439:4190` | visi misi section       | 1440×840  | **SELESAI 2 Oct 2026** (revised Bluu Next Bold 700)       |
-| 3   | `1439:4219` | Philosophy Section      | 1440×837  | **SELESAI 2 Oct 2026** (unified with home variant)        |
-| 4   | `1439:4258` | Our Ecosystem Section   | 1440×874  | **SELESAI 2 Oct 2026** (revised Bluu Next Bold 700)       |
-| 5   | `1439:4305` | Our Team Section        | 1440×1536 | **SELESAI 2 Oct 2026** (`OurTeam.astro` + `team.ts` baru) |
-| 6   | `1439:4311` | Footer                  | 1440×556  | **SELESAI** (shared `Footer.astro`, verified MAE 6.38)    |
+| #   | Node ID     | Frame                   | W×H       | Status komponen sekarang                          |
+| --- | ----------- | ----------------------- | --------- | ------------------------------------------------- |
+| 1   | `1439:4788` | Hero Section - Partners | 1440×659  | ada (`PartnersHero.astro`) — Nasalization, revisi |
+| 2   | `1439:4793` | Our Partners Section    | 1440×1071 | ada (`OurPartners.astro`) — Nasalization, revisi  |
+| 3   | `1439:4937` | Why DS section          | 1440×656  | ada (`WhyPartners.astro`) — Nasalization, revisi  |
+| 4   | `1439:4983` | Footer                  | 1440×556  | shared `Footer.astro` — presisi, verifikasi saja  |
 
-Catatan hero `1439:4185`: 1440×903, VERTICAL gap 16, padding 80, IMAGE fill; child
-`1439:4186` (1280×287, gap 16) berisi headline `1439:4187` "Architecting the Future
-of AI & Data Innovation." **Bluu Next 700 80/95.2 ls -0.88** (gradient per baris) +
-subtitle `1439:4188` Manrope 500 18/27 putih. Navbar instance `1439:4189` ikut
-ter-render di PNG hero → `verify.mjs` menyembunyikan `.navbar` (hitung MAE di bawah
-band navbar).
+Catatan tiap section:
 
-Section lain (nanti, setelah About Us): Partners (`PartnersHero`/`WhyPartners`),
-detail HoDS (`HoDSDetail`), dan konten asli. Webfont Nasalization tetap tidak
-boleh di-bundle (lisensi desktop). Detail lengkap: `docs/kickoff-prompt.md`.
+- Hero `1439:4788`: 1440×659, `padding: 242px 80px 160px`, gap 8, IMAGE fill;
+  eyebrow CTA `1439:4789` 228×26; heading `1439:4791` "Let's Build Something
+  Meaningful Together." **Bluu Next 700 80/102** 1280×223 (3 baris), gradient;
+  navbar instance `1439:4792` ikut ter-render di PNG hero → `verify.mjs`
+  menyembunyikan `.navbar` (hitung MAE di bawah band navbar).
+- Our Partners `1439:4793`: padding 80, gap 100; 3 sub-frame (Frame 2661 1280×325,
+  Frame 2662 1280×193, Frame 2663 1280×193), masing-masing gap 42.
+- Why DS `1439:4937`: padding 80, align center, gap 48; Frame 2666 1280×263 (gap 8)
+  - Frame 2704 1286×185 (gap 16).
+
+Setelah Partners: detail HoDS (`HoDSDetail`), lalu konten asli (foto member, logo
+partner, `projects.ts`, tanggal recruitment, milestone HoF). Webfont Nasalization
+tetap tidak boleh di-bundle (lisensi desktop). Detail lengkap + **pelajaran About Us
+wajib**: `docs/kickoff-prompt.md` §"PELAJARAN WAJIB DARI ABOUT US".
 
 **SELESAI: Section 9: Footer (`1436:3699` / komponen `765:17071`, 1440 × 556px)** — lihat ringkasan di bawah.
 

@@ -1,6 +1,6 @@
 # Kickoff prompt — buat AI agent baru
 
-Copy-paste seluruh blok di bawah ini ke AI baru sebelum memberikan instruksi kerja. Prompt ini telah memuat seluruh konteks, aturan hukum presisi piksel, 8-point grid, serta checklist per-section. **Status: Homepage + Recruitment Page 100% selesai. Target berikutnya: About Us (`1439:4184`) — kerjakan 1 section per pass, jangan skip.**
+Copy-paste seluruh blok di bawah ini ke AI baru sebelum memberikan instruksi kerja. Prompt ini telah memuat seluruh konteks, aturan hukum presisi piksel, 8-point grid, serta checklist per-section. **Status: Homepage (`1430:2040`) + Recruitment Page (`1436:3505`) + About Us (`1439:4184`) 100% selesai. Target berikutnya: PARTNERS PAGE (`1439:4787`) — kerjakan 1 section per pass + 6 gate per section, JANGAN skip section.**
 
 ---
 
@@ -48,12 +48,19 @@ ATURAN INTI & SPACING (HUKUM, WAJIB PATUH, JANGAN DILANGGAR):
    - Emulasi rim dengan ring `::after` + `mask-composite: exclude` (JANGAN `border` — menggeser content box).
    - Kalibrasi alpha per sisi dari piksel PNG (rim glass lebih terang di atas).
 
-4. **TYPOGRAPHY REVISI — BLUU NEXT BOLD 700:**
-   - Semua heading utama pada Homepage Revisi (`1430:2040`) dan Recruitment Page Revisi (`1436:3505`)
-     telah berganti dari Nasalization ke **Bluu Next Bold 700** (`--font-display`).
-   - Heading 56px / line-height 67.2px atau 72px / line-height 86.4px.
-   - Gradient teks diterapkan per baris (`background-clip: text`).
-   - Body & subtitle memakai Manrope (400/500/700) dengan letter-spacing terkalibrasi (misal `-0.176px`).
+4. **TYPOGRAPHY REVISI — BLUU NEXT BOLD 700 (WAJIB, JANGAN PAKAI NASALIZATION UNTUK HEADING):**
+   - Homepage (`1430:2040`), Recruitment (`1436:3505`), dan About Us (`1439:4184`) sudah
+     **100%** berganti dari Nasalization ke **Bluu Next Bold 700** (`--font-display`).
+   - Halaman publik yang **MASIH** memakai `--font-heading` (Nasalization) = **Partners**
+     (`PartnersHero.astro`, `OurPartners.astro`, `WhyPartners.astro`) dan **Detail HoDS**
+     (`HoDSDetail.astro`). Itu target revisi berikutnya.
+   - Heading: 56px / line-height **67px** (Figma sering lapor 67.2 tapi bbox node = 67 —
+     pakai 67 agar container pas) atau 72px / 86px. **Cek bbox PNG sebelum menentukan.**
+   - Gradient teks WAJIB per baris (`background-clip: text`), nilai umum
+     `linear-gradient(181deg, #fff 15%, #999 42%, #fff 79%)` (fit dari PNG, bukan string MCP).
+   - Body & subtitle Manrope (400/500/700), letter-spacing terkalibrasi (mis. `-0.176px`).
+   - `--font-heading` masih dipakai HANYA untuk label grup Our Team (Nasalization 400 32/48,
+     sesuai Figma) dan fallback `--font-display`.
 
 5. **SEMUA UI = HTML/CSS ASLI:**
    - Teks, tombol, border, kartu, gradient-text dibangun di CSS. Dilarang menaruh screenshot mati/flattened UI.
@@ -71,7 +78,9 @@ PUSH GANDA (PENTING):
 ================================================================================
 Remote `origin` (= testing) punya DUA push URL (testing + production `Web-Data-Sorcerers/community-web`).
 `git push origin main` mengirim ke dua-duanya — jangan tambah remote/push URL lain.
-Cek sinkron: `git fetch production -q && git rev-parse --short main origin/main production/main`.
+Cek sinkron ( jalankan terpisah; `main`, `origin/main`, `production/main` harus sama ):
+`git fetch origin -q && git fetch production -q` lalu
+`git rev-parse --short main` / `git rev-parse --short origin/main` / `git rev-parse --short production/main`.
 
 COMMANDS:
 - npm ci                     → install (Node 22.x)
@@ -85,40 +94,76 @@ COMMANDS:
 - npm run seo:audit          → validasi meta/OG/canonical/sitemap di dist (setelah build)
 
 ================================================================================
-STATUS MISI: HOMEPAGE + RECRUITMENT 100% SELESAI → NEXT PAGE: ABOUT US
+STATUS MISI: HOMEPAGE + RECRUITMENT + ABOUT US 100% SELESAI → NEXT PAGE: PARTNERS
 ================================================================================
-Homepage (`1430:2040`) dan Recruitment Page (`1436:3505`) sudah 100% selesai dan
-tervalidasi presisi (checklist di bawah = referensi). Sekarang lanjut **About Us**.
+Homepage (`1430:2040`), Recruitment Page (`1436:3505`), dan About Us (`1439:4184`)
+sudah 100% selesai & tervalidasi presisi (checklist di bawah = referensi). Sekarang
+lanjut **Partners Page**.
 
 --------------------------------------------------------------------------------
-TARGET PAGE BERIKUTNYA: ABOUT US (`1439:4184`) — WAJIB PER-SECTION
+TARGET PAGE BERIKUTNYA: PARTNERS (`1439:4787`) — WAJIB PER-SECTION
 --------------------------------------------------------------------------------
-URL: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4184
-Hero: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4185
+URL page  : https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4787
+Hero      : https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4788
+Our Part. : https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4793
+Why DS    : https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4937
+Footer    : shared `1439:4983` / komponen `765:17071`
 
-LANGKAH WAJIB (dilarang skip): petakan dulu SEMUA section dari frame halaman
-(`depth 1`), tulis checklist-nya di Master Work Plan, lalu kerjakan satu section
-penuh + 6 gate sebelum lanjut berikutnya. Urutan section About Us:
+LANGKAH WAJIB (dilarang skip): petakan SEMUA section dari frame halaman (`depth 1`),
+tulis checklist di Master Work Plan, lalu kerjakan satu section penuh + 6 gate
+sebelum lanjut berikutnya. Inventaris Partners (frame `1439:4787`, 1440×2942, 4 section):
 
-[ ] 1. Hero Section - About Us   `1439:4185`  1440×903   (AboutHero.astro, revisi)
-[ ] 2. visi misi section         `1439:4190`  1440×840   (VisiMisi.astro, revisi)
-[ ] 3. Philosophy Section        `1439:4219`  1440×837   (Philosophy.astro variant=about, revisi)
-[ ] 4. Our Ecosystem Section     `1439:4258`  1440×874   (OurEcosystem.astro, revisi)
-[ ] 5. Our Team Section          `1439:4305`  1440×1536  (BELUM ADA -> buat OurTeam.astro)
-[ ] 6. Footer                    `1439:4311`  1440×556   (shared Footer.astro, sudah presisi -> verifikasi saja)
+[ ] 1. Hero Section - Partners  `1439:4788`  1440×659   (PartnersHero.astro, revisi)
+       padding 242px 80px 160px, gap 8, IMAGE fill. Eyebrow CTA 228×26;
+       heading "Let's Build Something Meaningful Together." Bluu Next 700 80/102,
+       1280×223 (3 baris), gradient. Navbar instance `1439:4792` ikut ter-render di
+       PNG hero → `verify.mjs` sembunyikan `.navbar`, hitung MAE di bawah band navbar.
+[ ] 2. Our Partners Section     `1439:4793`  1440×1071  (OurPartners.astro, revisi)
+       padding 80, gap 100, fill #050507. 3 sub-frame: Frame 2661 1280×325,
+       Frame 2662 1280×193, Frame 2663 1280×193 (masing-masing gap 42).
+[ ] 3. Why DS section           `1439:4937`  1440×656   (WhyPartners.astro, revisi)
+       padding 80, align center, gap 48, fill #050507. Frame 2666 1280×263 gap 8;
+       Frame 2704 1286×185 gap 16.
+[ ] 4. Footer                   `1439:4983`  1440×556   (shared Footer.astro, presisi → verifikasi saja)
 
-Catatan tiap section:
-- Komponen lama (AboutHero/VisiMisi/Philosophy about/OurEcosystem) masih memakai
-  `--font-heading` (Nasalization) + file Figma LAMA → revisi ke **Bluu Next Bold 700**
-  (`--font-display`) + strict 8pt, dan ukur ulang dari node BARU di atas.
-- Hero `1439:4185`: VERTICAL gap 16, padding 80, IMAGE fill. Child `1439:4186`
-  (1280×287, gap 16): headline `1439:4187` "Architecting the Future of AI & Data
-  Innovation." Bluu Next 700 80/95.2 ls -0.88 (gradient per baris) + subtitle
-  `1439:4188` Manrope 500 18/27 putih. Navbar `1439:4189` ikut di PNG hero →
-  `verify.mjs` menyembunyikan `.navbar`; hitung MAE di bawah band navbar.
-- Our Team `1439:4305`: heading Bluu Next 56/67.2, eyebrow glass, `team 2` instance
-  (1280×1195, 2 baris 1280×496 + see more button 141×43). Data member belum ada →
-  siapkan struktur data + placeholder, jangan mengarang foto/URL asli.
+Catatan Partners:
+- PartnersHero/OurPartners/WhyPartners masih `--font-heading` (Nasalization) → revisi
+  ke **Bluu Next Bold 700** (`--font-display`) + strict 8pt, ukur ulang dari node BARU
+  di atas. `assets/partners page/` = file Figma LAMA → hanya hint, node figma sekarang
+  = sumber kebenaran.
+- Generator aset: `npm run assets:partners` (`scripts/generate-partners-assets.mjs`).
+
+--------------------------------------------------------------------------------
+PELAJARAN WAJIB DARI ABOUT US (JANGAN DIULANG):
+--------------------------------------------------------------------------------
+1. **Cek dulu apakah section baru BENAR-BENAR beda.** About Us Philosophy (`1439:4219`)
+   ternyata PIXEL-IDENTIK (MAE 0.000) dengan homepage Philosophy (`1430:2052`). Bandingkan
+   dulu referensi baru vs referensi section lain yang sudah ada (`sharp` MAE). Kalau sama →
+   cukup samakan varian/layout (hemat besar, ini pernah memangkas kerjaan 1 section penuh).
+2. **Line-break heading WAJIB dicek dari PNG, jangan diasumsikan.** Hero About Us sempat
+   salah pecah baris ("...of" / "AI & ...") padahal Figma "...of AI" / "& ...". Export node
+   teks via `figma_download_figma_images`, ukur row-band pakai `sharp`.
+3. **`line-height` heading: Figma sering lapor 67.2 tapi bbox node = 67.** Pakai `67px`
+   (bukan 67.2) supaya header/pipeline pas integer (kasus Our Ecosystem & Our Team).
+   Selisih 0.2px menaikkan MAE header ~3→~5 dan menggeser pipeline.
+4. **`imageTransform` pada IMAGE fill = crop.** Node potret Our Team punya crop
+   `[[sx,0,tx],[0,sy,ty]]`; jangan `fit:fill` mentah — `sharp.extract(tx*W, ty*H, sx*W,
+   sy*H)` lalu resize ke ukuran node, baru bake. Lihat `scripts/generate-about-assets.mjs`.
+5. **String gradient MCP lossy.** Contoh: bar visi-misi MCP `134deg` tapi fit piksel =
+   `100deg`; card fade & heading juga perlu fit dari PNG. Ragu → sweep kecil via Playwright,
+   jangan paste string MCP/REST mentah.
+6. **Frame bisa punya effect `GLASS` yang tidak muncul di MCP** (eyebrow/card/panel/button).
+   Cek REST `/v1/files/<key>/nodes?ids=…` (`effects`/`strokes`), emulasi rim dengan `::after`
+   + `mask-composite: exclude` (JANGAN `border` — mengecilkan content box).
+7. **`responsive-audit.mjs` punya skip-list text "offscreen"** (`.domain-rail`,
+   `.project-card:not(.is-active)`). Rail yang sengaja di-clip (mis. `.team-cards` menampilkan
+   4 dari 5 kartu) harus ditambah ke skip-list, kalau tidak audit FAIL di lebar tertentu.
+8. **CSS comment harus SATU BARIS.** Comment `/* ... */` multi-baris bikin Prettier tidak
+   idempotent → `format:check` gagal terus.
+9. **Jangan commit aset raw yang tidak dipakai.** Simpan hanya sumber yang dipakai generator
+   (`assets/` sudah di `.vercelignore`).
+10. **Preseden lengkap About Us** (Hero/VisiMisi/Philosophy/Ecosystem/OurTeam/Footer) ada di
+    `docs/assets.md` §About Us & blok `/about` di `scripts/verify.mjs`. Pakai sebagai template.
 
 --------------------------------------------------------------------------------
 REFERENSI STATUS (SUDAH SELESAI — jangan diutak-atik tanpa alasan):
@@ -200,7 +245,37 @@ REFERENSI STATUS (SUDAH SELESAI — jangan diutak-atik tanpa alasan):
    - Frame 1440 × 556px, padding 80px. Komponen bersama (`Footer.astro`) untuk 6 halaman.
    - Brand name **Bluu Next Bold 700 32/38.4**; spacing brand lockup 8, copy 24, nav/contact 32; desc & ikon social putih.
    - Section MAE: homepage **5.8380/255**, recruitment **7.7071/255**. All 6 verification gates pass.
-   - Legal links tetap right-aligned (mentor-approved 23 Sep 2026).
+    - Legal links tetap right-aligned (mentor-approved 23 Sep 2026).
+
+### C. ABOUT US (Node `1439:4184`, 6 section) — [STATUS: 100% SELESAI 2 Oct 2026]:
+1. **Hero Section - About Us (`1439:4185`)** — 1440×903, padding 80, justify center,
+   gap 16, IMAGE fill. Content `1439:4186` 1280×287.4 di (80,307.8): headline
+   `1439:4187` **Bluu Next 700 80/95.2 ls -0.88** 1124×190.4 di (158,307.8),
+   gradient `181deg`, 2 baris ("Architecting the Future of AI" / "& Data Innovation.");
+   subtitle `1439:4188` Manrope 500 18/27 #fff 680×81 di (380,514.2),
+   `text-shadow: 0 4px 20px #000`. MAE **4.6874** (3.7902 di bawah navbar).
+2. **visi misi (`1439:4190`)** — 1440×840, padding 80, gap 100, IMAGE starfield
+   (`public/images/about/visi-misi-bg.webp`). Vision 1280×145.2 (80,80); Mission
+   1280×435.2 (80,325.2). Heading "OUR VISION"/"OUR MISION" Bluu Next 700 56/67.2
+   gradient 181deg; list 797×266 di (80,494.4), 6 bar 31px gap 16 pad 2/16 lebar
+   713/733/746/775/786/797 gradient fit `100deg`; tarot 356×430 di (1028,261)
+   (`tarot-cards.webp`). MAE **1.910**.
+3. **Philosophy (`1439:4219`)** — 1440×837, **identik dengan homepage** `1430:2052`
+   (ref MAE 0.000). Content 591×468 di (766,205) gap 48; heading Bluu Next 56/67
+   2 baris; grid prinsip 591×248 (gap 30/92). MAE **2.316**.
+4. **Our Ecosystem (`1439:4258`)** — 1440×874, padding 80, gap 116, gradient
+   `24.87deg #050507 52.9%→#6c3bff 132.9%`. Header 931×172 di (254.5,80);
+   pipeline 1280×426 di (80,368), 5 kolom bottom 776, baseline y794; step title
+   Manrope 500 (bukan 700). MAE **2.221**.
+5. **Our Team (`1439:4305`)** — 1440×1536, padding 80, gap 80. Header 1280×101;
+   `team 2` 1280×1195 di (80,261): Leader (2 kartu) + Data Intelligence (5 kartu),
+   kartu **302×400** radius 10 + GLASS rim, frame `card-frame.webp` (3,13) 295×277,
+   fade `180deg #6c3bff→#0e0626`, potret crop `imageTransform` dibake. Komponen
+   baru `OurTeam.astro` + `src/data/team.ts` (placeholder). MAE **2.679**.
+6. **Footer (`1439:4311`)** — shared `Footer.astro` 1440×556. MAE **6.38**.
+
+Semua section About Us sudah **Bluu Next Bold 700** + strict 8pt. Referensi
+`assets/about-us/`. Generator `npm run assets:about`.
 
 ================================================================================
 INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
@@ -221,8 +296,9 @@ INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
    - Update dokumentasi (`docs/assets.md`, `docs/ai-handoff.md`, `AGENTS.md`).
    - Lakukan git commit per fitur dan sinkronkan push ke origin main.
 3. **Mulai dari mana?**
-   Target saat ini: **About Us (`1439:4184`)**. Inventaris 6 section dulu (lihat
-   checklist di atas), lalu mulai dari **Section 1 Hero `1439:4185`** — buat Master
-   Work Plan-nya, export PNG referensi 1x/2x, ukur dengan sharp, baru sentuh kode.
-   Selesaikan + 6 gate sebelum pindah ke Section 2.
+   Target saat ini: **Partners (`1439:4787`)**. Inventaris 4 section dulu (lihat
+   checklist di atas), lalu mulai dari **Section 1 Hero `1439:4788`** — buat Master
+   Work Plan-nya, cek dulu apakah identik dengan section lain (MAE ref vs ref), export
+   PNG referensi 1x/2x, ukur dengan sharp, baru sentuh kode. Selesaikan + 6 gate
+   sebelum pindah ke Section 2. JANGAN skip section mana pun.
 ```

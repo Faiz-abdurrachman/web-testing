@@ -578,10 +578,15 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
      Section 1–6 sudah direvisi/terverifikasi **Bluu Next Bold 700** + strict 8pt.
      About Us 100%. Detail: `docs/ai-handoff.md` §"Next Task",
      `docs/kickoff-prompt.md`.
-- **Next plan (prioritas).** Setelah About Us: halaman lain (Partners `PartnersHero`/
-  `WhyPartners`, detail HoDS `HoDSDetail`, dll masih `--font-heading`) dan/atau konten
-  asli (`projects.ts`, tanggal recruitment, logo partner, member/project/milestone HoF);
-  detail fitur member di section Our Team About Us. Detail: `docs/ai-handoff.md`.
+- **NEXT PAGE — Partners (`1439:4787`).** Frame 1440×2942, 4 section: Hero
+  `1439:4788` (1440×659), Our Partners `1439:4793` (1440×1071), Why DS `1439:4937`
+  (1440×656), Footer `1439:4983` (shared). Komponen `PartnersHero`/`OurPartners`/
+  `WhyPartners` masih `--font-heading` (Nasalization) → revisi ke **Bluu Next Bold
+  700** + strict 8pt, **satu section per pass + 6 gate**. Lihat
+  `docs/kickoff-prompt.md` (checklist Partners + "PELAJARAN WAJIB DARI ABOUT US").
+- **Next plan (prioritas).** Setelah Partners: detail HoDS (`HoDSDetail`) dan/atau
+  konten asli (`projects.ts`, tanggal recruitment, logo partner, foto/nama member team,
+  member/project/milestone HoF). Detail: `docs/ai-handoff.md` §"Next Task".
 - **Deploy GANDA**: `git push origin main` → testing + production.
 - **Available Roles hover (`f92b88a`).** Kartu reaktif pointer: pool radial violet
   ikut kursor (`--mx/--my`), ember lean (`--gx/--gy` ±22/16px + `scale(1.06)`),

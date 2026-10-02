@@ -98,6 +98,25 @@ Kalau tidak bisa dijustifikasi, itu magic number → ganti ke kelipatan 8 terdek
   `1445:5066`) menyertakan navbar; karena `verify.mjs` menyembunyikan `.navbar`,
   MAE "seluruh section" jadi menggelembung. Hitung MAE presisi **tanpa region
   navbar** (Contact: full 2.76 → **~1.28** di bawah navbar).
+- **Cek dulu apakah section baru benar-benar beda dari section lain.** About Us
+  Philosophy `1439:4219` ternyata **pixel-identik** (MAE 0.000) dengan homepage
+  Philosophy `1430:2052`. Sebelum menulis CSS baru: export node PNG baru, bandingkan
+  (`sharp` MAE) vs referensi section existing. Kalau sama → samakan layout/varian
+  (di About Us ini memangkas satu section penuh dari kerja rekonstruksi).
+- **Line-break heading WAJIB diukur dari PNG**, jangan diasumsikan. Hero About Us
+  salah pecah baris ("...Future of" / "AI & ...") padahal Figma "...Future of AI"
+  / "& Data Innovation." Export node teks terpisah, ukur row-band `sharp` (alpha>200).
+- **`lineHeightPx` Figma ≠ bbox.** Figma lapor `67.2` tapi `absoluteBoundingBox` node
+  teks = `67`. Untuk heading satu baris/header, pakai **`line-height: 67px`** supaya
+  container pas integer; `67.2` menggeser header/pipeline 0.2px (Our Ecosystem MAE
+  3.45 → 2.22; Our Team header 101.2 → 101). Verifikasi dengan mengukur header frame.
+- **`imageTransform` pada IMAGE fill = crop.** Node gambar Figma bisa punya
+  `imageTransform` `[[sx,0,tx],[0,sy,ty]]`; **jangan** `fit: fill` gambar mentah —
+  `sharp.extract(tx*W, ty*H, sx*W, sy*H)` lalu resize ke ukuran node (Our Team potret).
+- **`responsive-audit.mjs` punya skip-list text "offscreen/clipped"** (`.domain-rail`,
+  `.project-card:not(.is-active)`). Rail yang sengaja di-clip (mis. `.team-cards`
+  menampilkan 4 dari 5 kartu) harus ditambahkan ke skip-list, kalau tidak audit FAIL
+  di lebar tertentu (`offscreen:h3.team-name`).
 
 ## 3. Alur kerja presisi (per section)
 
