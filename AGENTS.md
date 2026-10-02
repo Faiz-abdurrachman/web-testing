@@ -70,6 +70,11 @@ Full protocol: **`docs/pixel-precision-sop.md`**. The rules below are the law.
    typography (Bluu Next Bold 700 / Manrope), artwork assets, and testing criteria.
    **NEVER skip sections or combine multiple sections into one pass.** Execute,
    measure, and verify one section at a time.
+   Before a page, the agent MUST first **inventory every child section of the Figma
+   page frame** (`depth 1`) as a checklist (number, node ID, frame name, w×h,
+   status) — including sections that have no component yet. The checklist is the
+   work order: finish and lock section N (6 gates) before starting N+1. See
+   `docs/pixel-precision-sop.md` §3 Langkah 0b.
 1. **The reference PNG node (exported from Figma) is the source of truth.**
    Figma CSS exports, MCP gradient strings and `effects` payloads are only hints
    and are frequently lossy. When they disagree, match the exported PNG.
@@ -349,6 +354,17 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   Situs pakai Astro **`<ClientRouter />`** (navigasi klien + `AudioContext`
   persist; semua komponen re-init `astro:page-load` + cleanup
   `astro:before-swap` — `docs/sound-sop.md` §9).
+- **STATUS RINGKAS (2 Oct 2026).** **Homepage 100% selesai** (Hero → Our
+  Philosophy → What We Do → Choose Your Domain/HoDS → Our Project → CTA, node
+  `1430:2040`). **Recruitment Page 100% selesai** (Hero → Who Should Join → What
+  You Will Do → Available Roles → Selection Timeline → FAQ → Snippets → CTA →
+  Footer, node `1436:3505`). **Footer bersama** (`765:17071` / `1436:3699`) selesai
+  untuk 6 halaman. Semua heading section revised memakai **Bluu Next Bold 700**
+  (`--font-display`); tidak ada `--font-heading` (Nasalization) yang tersisa di
+  komponen Homepage/Recruitment.
+  **NEXT PAGE: About Us (`1439:4184`)** — 5 section konten + Footer shared, lihat
+  "Next plan" di bawah & `docs/kickoff-prompt.md` (wajib Master Work Plan +
+  inventaris section per halaman sebelum sentuh kode).
 - **Homepage 100% Selesai — Our Project & CTA Recruitment Section (2 Oct 2026).**
   Seluruh 6 section Homepage (`1430:2040`) kini 100% selesai dan tervalidasi:
   - Section 5: **Our Project Section (`1430:2146`)** — Frame 1440×910px, padding 80px, gap 82px. Eyebrow 86.6×26px di `(80, 80)`, heading "What Our Sorcery Create" Bluu Next Bold 700 56/67px di `(80, 114)` (ink width 646px), 3D coverflow active card 549×567px di `(445.5, 263)`. MAE 5.0764 (Image 2.90, Tags 6.05, Text 5.90, Header 6.67, Bottom 0.0).
@@ -476,11 +492,22 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   lengkap, Hall of Frames, Contact, 6 detail role, 6 detail HoDS, Navbar exact
   Figma, motion, sound, SEO/OG, View Transitions. **18 rute publik** (+
   `/lab/sound` internal) — semua link navbar aktif.
-- **Next plan (prioritas).** Konten asli (`projects.ts`, tanggal recruitment,
-  logo partner, member/project/milestone HoF); revisi font & spacing homepage
-  ke section lain (Philosophy → What We Do → HoDS → Our Project → CTA, pakai
-  `--font-display` + grid 8px); webfont Nasalization. Detail:
-  `docs/ai-handoff.md` §"Next plan".
+- **NEXT PAGE — About Us (`1439:4184`).** Homepage & Recruitment sudah 100%.
+  About Us ada **6 section** (wajib inventaris + Master Work Plan per-section dulu):
+  1. Hero Section - About Us `1439:4185` (1440×903)
+  2. visi misi section `1439:4190` (1440×840)
+  3. Philosophy Section `1439:4219` (1440×837)
+  4. Our Ecosystem Section `1439:4258` (1440×874)
+  5. Our Team Section `1439:4305` (1440×1536) — **belum ada komponen** (`OurTeam.astro`)
+  6. Footer `1439:4311` (shared, sudah presisi)
+     Komponen lama (`src/pages/about.astro`: AboutHero/VisiMisi/Philosophy `variant=about`/OurEcosystem)
+     masih memakai **`--font-heading` (Nasalization) + file Figma lama** → harus direvisi ke
+     **Bluu Next Bold 700** + strict 8pt dan diukur ulang dari node baru. Detail:
+     `docs/ai-handoff.md` §"Next Task", `docs/kickoff-prompt.md`.
+- **Next plan (prioritas).** Setelah About Us: halaman lain (Partners `PartnersHero`/
+  `WhyPartners`, detail HoDS `HoDSDetail`, dll masih `--font-heading`) dan/atau konten
+  asli (`projects.ts`, tanggal recruitment, logo partner, member/project/milestone HoF);
+  detail fitur member di section Our Team About Us. Detail: `docs/ai-handoff.md`.
 - **Deploy GANDA**: `git push origin main` → testing + production.
 - **Available Roles hover (`f92b88a`).** Kartu reaktif pointer: pool radial violet
   ikut kursor (`--mx/--my`), ember lean (`--gx/--gy` ±22/16px + `scale(1.06)`),

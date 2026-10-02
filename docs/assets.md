@@ -1361,7 +1361,9 @@ score were unchanged when this section was added.
   y=475.13 — copyright "© DATA SORCERERS 2026. All right reserved" at x=80
   (matches the PNG copy), Manrope Regular 16/24. Terms/Privacy/Cookies are
   **right-aligned** (approved mentor revision on 23 Sep 2026, superseding the
-  older PNG's left-grouped links at x≈640).
+  older PNG's left-grouped links at x≈640); the 30px gap between them is retained
+  from that approved revision (the PNG's left-grouped gaps measure ≈33–37px, so it
+  is not directly comparable).
 - **Background update (29 Sep 2026, user-supplied):** the footer now uses
   `assets/assets home page/footer/Gambar Footer(2).png` (7200 × 2780, exactly
   5× the 1440 × 556 footer frame). This supersedes the 2017 × 780

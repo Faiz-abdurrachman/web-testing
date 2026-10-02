@@ -32,6 +32,15 @@ Aturan: kalau (1) berbeda dengan (4)/(5), **ikut (1)**.
   - Komponen kecil (button padding): `8px 16px`, badge: `4px 12px` / `4px 16px`.
 - **Dilarang memakai magic numbers acak** (misal 13px, 27px, 53px) kecuali merupakan koordinat offset absolut terukur atau kompensasi font descender/letter-spacing terkalibrasi.
 
+**Pengecualian yang SAH (bukan magic number):** nilai autolayout Figma yang
+terukur memang bukan kelipatan 8 — mis. gap gallery Snippets `35`, gap footer
+section `60`, bottom padding footer `28`, header→rail `74`, section `100/116`,
+gap baris heading `4`, padding kartu `18px 28px`, dan line-height
+`67.2 / 95.2 / 38.4`. Nilai-nilai ini **dipertahankan** karena berasal dari frame
+Figma/PNG, bukan dikarang. Aturannya: **setiap angka non-8 wajib punya
+justifikasi terukur (node Figma / bbox PNG)** yang dicatat di `docs/assets.md`.
+Kalau tidak bisa dijustifikasi, itu magic number → ganti ke kelipatan 8 terdekat.
+
 ## 2. Gotcha yang sudah terbukti (jangan diulang)
 
 - **String `linear-gradient(...)` dari Figma MCP menormalkan handle → lossy**
@@ -110,6 +119,36 @@ Sebelum menyentuh satu baris kode pun pada section baru, AI agent WAJIB memapark
 6. **Testing & Verification Gates**: Target geometri `verify.mjs`, MAE target, dan 6 gate audit.
 
 > **PENTING**: Dilarang keras melompati section atau menggabungkan multiple section dalam satu pass. Selesaikan 100% per-section, verifikasi, dan kunci sebelum beralih ke section selanjutnya!
+
+### Langkah 0b — Inventaris WAJIB semua section halaman (anti-skip)
+
+Sebelum mengerjakan halaman baru, AI agent WAJIB memetakan **seluruh** section dari
+frame halaman Figma (node halaman, `depth 1`) dan menuliskan checklist-nya di
+Master Work Plan. Setiap section = satu entri dengan: nomor urut, Node ID, nama
+frame, dimensi (w × h), dan status (`BELUM / SEDANG / SELESAI`).
+
+- Section diambil **persis dari urutan anak frame halaman** — tidak boleh ada yang
+  dilewati, tidak boleh digabung, tidak boleh ditambah dari luar urutan.
+- Beberapa section mungkin **belum ada komponennya** di `src/components/` (mis.
+  section baru yang belum diimplementasikan) — tetap **wajib** didaftarkan dan
+  dibuat, bukan diabaikan.
+- Section bersama (mis. `Footer` instance) tetap didaftarkan; jika komponennya
+  sudah presisi, tandai `SELESAI (shared)` dengan bukti gate-nya.
+- Checklist ini yang dipakai untuk laporan progress: satu section selesai → baru
+  lanjut ke entri berikutnya. Jangan pernah menyentuh section ke-N+2 sebelum
+  ke-N lolos 6 gate.
+
+Contoh format checklist (wajib ada di Master Work Plan):
+
+```
+Halaman: About Us (1439:4184) — 6 section
+[ ] 1. 1439:4185  Hero Section - About Us      1440×903
+[ ] 2. 1439:4190  visi misi section            1440×840
+[ ] 3. 1439:4219  Philosophy Section           1440×837
+[ ] 4. 1439:4258  Our Ecosystem Section        1440×874
+[ ] 5. 1439:4305  Our Team Section             1440×1536
+[ ] 6. 1439:4311  Footer (shared, sudah presisi) 1440×556
+```
 
 ### Langkah A — Ambil struktur Figma
 

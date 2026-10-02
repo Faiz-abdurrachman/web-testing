@@ -319,6 +319,17 @@ inline-size` (semua metrik `cqw`), border emas inset (CSS `::after` +
 
 ## 8c. Halaman About Us (`/about`) — sections 1–4 (30 Sep 2026)
 
+> **REVISI BARU (2 Oct 2026) — baca sebelum kerja About Us.** Figma About Us
+> dipindahkan/direvisi ke file & node baru: halaman **`1439:4184`**
+> (`JYUzJK1hFqaEwL6DpdDvjp`, URL `…?node-id=1439-4184`). Ada **6 section** (Hero
+> `1439:4185`, visi misi `1439:4190`, Philosophy `1439:4219`, Our Ecosystem
+> `1439:4258`, **Our Team `1439:4305` (belum ada komponen)**, Footer `1439:4311`).
+> Semua heading sudah **Bluu Next Bold 700** (`--font-display`) — komponen lama di
+> §8c ini masih Nasalization/file lama dan **wajib direvisi** mengikuti SOP presisi
+> piksel per-section. Lihat `docs/kickoff-prompt.md` + `docs/ai-handoff.md` §"Next
+> Task". Isi §8c di bawah tetap berguna untuk konteks glow/gradient, tetapi **node
+> dan ukurannya digantikan oleh node baru** di atas.
+
 Route `/about`, komposisi di `src/pages/about.astro`: `AboutHero` → `VisiMisi` →
 `Philosophy variant="about"` → `OurEcosystem` (plus `Navbar active="About Us"`,
 `Footer`, `Motion`). Figma file `RntmRWAgLrh5utgzcjrUik`, halaman `1277:18477`.
@@ -590,9 +601,11 @@ projects 5.104 recruitment 2.174 footer 2.666
 - [x] ~~Halaman Recruitment~~ — **LENGKAP** (§8b).
 - [x] ~~Redesign kartu Available Roles (proporsional + border emas + sparkle)~~ dan
       ~~hero mobile fluid (home & recruitment)~~ — selesai 23 Sep 2026 (§21).
-- [x] ~~About Us (`/about`) sections 1–4~~ — **selesai 30 Sep 2026** (§8c).
-- [ ] Halaman lain yang ada di Figma tapi belum dibuat: **Hall of Frames,
-      Partners, Contact**.
+- [x] ~~About Us (`/about`) sections 1–4~~ — selesai 30 Sep 2026 (§8c), **tetapi
+      kini direvisi** ke file/node baru `1439:4184` (§8c catatan atas) + tambah
+      **Our Team `1439:4305`**. Target berikutnya, wajib per-section.
+- [ ] Halaman lain yang ada di Figma tapi belum dibuat/direvisi: **Partners,
+      Contact, Hall of Frames** (font/spacing revision), detail HoDS.
 - [ ] Audit tiap halaman detail HoDS / detail role kalau ada pembaruan Figma.
 - [~] **Optimasi berat web (P0–P2)** — detail di `docs/ai-handoff.md` §"Perf
       audit & rencana". **P0(a)+(d) selesai 28 Sep 2026:** `sizes` Snippets +

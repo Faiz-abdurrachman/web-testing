@@ -1,6 +1,6 @@
 # Kickoff prompt — buat AI agent baru
 
-Copy-paste seluruh blok di bawah ini ke AI baru sebelum memberikan instruksi kerja. Prompt ini telah memuat seluruh konteks, aturan hukum presisi piksel, 8-point grid, serta checklist per-section untuk **Homepage** dan **Recruitment Page**.
+Copy-paste seluruh blok di bawah ini ke AI baru sebelum memberikan instruksi kerja. Prompt ini telah memuat seluruh konteks, aturan hukum presisi piksel, 8-point grid, serta checklist per-section. **Status: Homepage + Recruitment Page 100% selesai. Target berikutnya: About Us (`1439:4184`) — kerjakan 1 section per pass, jangan skip.**
 
 ---
 
@@ -85,16 +85,43 @@ COMMANDS:
 - npm run seo:audit          → validasi meta/OG/canonical/sitemap di dist (setelah build)
 
 ================================================================================
-TARGET MISI UTAMA: AUDIT & EKSEKUSI PER-SECTION DUA HALAMAN REVISI
+STATUS MISI: HOMEPAGE + RECRUITMENT 100% SELESAI → NEXT PAGE: ABOUT US
 ================================================================================
-Dua halaman yang wajib dicek secara ketat spacing, padding, dan font-nya:
-1. **Homepage Revisi Font & Spacing**:
-   URL: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1430-2040
-2. **Recruitment Page Revisi Font & Spacing**:
-   URL: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3505
+Homepage (`1430:2040`) dan Recruitment Page (`1436:3505`) sudah 100% selesai dan
+tervalidasi presisi (checklist di bawah = referensi). Sekarang lanjut **About Us**.
 
 --------------------------------------------------------------------------------
-CHECKLIST STATUS PER-SECTION:
+TARGET PAGE BERIKUTNYA: ABOUT US (`1439:4184`) — WAJIB PER-SECTION
+--------------------------------------------------------------------------------
+URL: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4184
+Hero: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4185
+
+LANGKAH WAJIB (dilarang skip): petakan dulu SEMUA section dari frame halaman
+(`depth 1`), tulis checklist-nya di Master Work Plan, lalu kerjakan satu section
+penuh + 6 gate sebelum lanjut berikutnya. Urutan section About Us:
+
+[ ] 1. Hero Section - About Us   `1439:4185`  1440×903   (AboutHero.astro, revisi)
+[ ] 2. visi misi section         `1439:4190`  1440×840   (VisiMisi.astro, revisi)
+[ ] 3. Philosophy Section        `1439:4219`  1440×837   (Philosophy.astro variant=about, revisi)
+[ ] 4. Our Ecosystem Section     `1439:4258`  1440×874   (OurEcosystem.astro, revisi)
+[ ] 5. Our Team Section          `1439:4305`  1440×1536  (BELUM ADA -> buat OurTeam.astro)
+[ ] 6. Footer                    `1439:4311`  1440×556   (shared Footer.astro, sudah presisi -> verifikasi saja)
+
+Catatan tiap section:
+- Komponen lama (AboutHero/VisiMisi/Philosophy about/OurEcosystem) masih memakai
+  `--font-heading` (Nasalization) + file Figma LAMA → revisi ke **Bluu Next Bold 700**
+  (`--font-display`) + strict 8pt, dan ukur ulang dari node BARU di atas.
+- Hero `1439:4185`: VERTICAL gap 16, padding 80, IMAGE fill. Child `1439:4186`
+  (1280×287, gap 16): headline `1439:4187` "Architecting the Future of AI & Data
+  Innovation." Bluu Next 700 80/95.2 ls -0.88 (gradient per baris) + subtitle
+  `1439:4188` Manrope 500 18/27 putih. Navbar `1439:4189` ikut di PNG hero →
+  `verify.mjs` menyembunyikan `.navbar`; hitung MAE di bawah band navbar.
+- Our Team `1439:4305`: heading Bluu Next 56/67.2, eyebrow glass, `team 2` instance
+  (1280×1195, 2 baris 1280×496 + see more button 141×43). Data member belum ada →
+  siapkan struktur data + placeholder, jangan mengarang foto/URL asli.
+
+--------------------------------------------------------------------------------
+REFERENSI STATUS (SUDAH SELESAI — jangan diutak-atik tanpa alasan):
 --------------------------------------------------------------------------------
 
 ### A. HOMEPAGE REVISI FONT & SPACING (Node 1430:2040, Frame 1440) — [STATUS: 100% SELESAI]:
@@ -194,6 +221,8 @@ INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
    - Update dokumentasi (`docs/assets.md`, `docs/ai-handoff.md`, `AGENTS.md`).
    - Lakukan git commit per fitur dan sinkronkan push ke origin main.
 3. **Mulai dari mana?**
-   Target saat ini: **Recruitment Page sudah 100% (Section 1–9)**. Berikutnya revisi
-   halaman lain (About Us / Partners / Hall of Frames / Contact) atau isi konten asli.
+   Target saat ini: **About Us (`1439:4184`)**. Inventaris 6 section dulu (lihat
+   checklist di atas), lalu mulai dari **Section 1 Hero `1439:4185`** — buat Master
+   Work Plan-nya, export PNG referensi 1x/2x, ukur dengan sharp, baru sentuh kode.
+   Selesaikan + 6 gate sebelum pindah ke Section 2.
 ```

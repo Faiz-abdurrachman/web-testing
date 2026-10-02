@@ -8,13 +8,31 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
-**Recruitment Page 100% SELESAI (Section 1–9).** Semua section halaman Recruitment
-(`1436:3505`) kini tuntas presisi. Berikutnya (pilih salah satu, konfirmasi ke user):
+**NEXT PAGE: About Us (`1439:4184`)** — Homepage & Recruitment sudah 100%.
+Link Figma: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4184`
 
-- Revisi font & spacing halaman lain ke `--font-display` + strict 8pt grid
-  (About Us, Partners, Hall of Frames, Contact) — masing-masing wajib Master Work Plan per-section.
-- Konten asli: `src/data/projects.ts`, tanggal recruitment, logo partner, data member/project/milestone HoF.
-- Webfont Nasalization (lisensi desktop — tidak boleh di-bundle; harus dari manusia).
+Wajib **inventaris semua section** dulu (checklist), lalu kerjakan **satu per satu**
+(Master Work Plan + 6 gate per section). Urutan section (dari frame halaman, `depth 1`):
+
+| #   | Node ID     | Frame                   | W×H       | Status komponen sekarang                                |
+| --- | ----------- | ----------------------- | --------- | ------------------------------------------------------- |
+| 1   | `1439:4185` | Hero Section - About Us | 1440×903  | ada (`AboutHero.astro`) — masih Nasalization, revisi    |
+| 2   | `1439:4190` | visi misi section       | 1440×840  | ada (`VisiMisi.astro`) — masih Nasalization, revisi     |
+| 3   | `1439:4219` | Philosophy Section      | 1440×837  | ada (`Philosophy.astro` `variant="about"`) — revisi     |
+| 4   | `1439:4258` | Our Ecosystem Section   | 1440×874  | ada (`OurEcosystem.astro`) — masih Nasalization, revisi |
+| 5   | `1439:4305` | Our Team Section        | 1440×1536 | **BELUM ADA komponen** → buat `OurTeam.astro`           |
+| 6   | `1439:4311` | Footer                  | 1440×556  | shared `Footer.astro`, sudah presisi                    |
+
+Catatan hero `1439:4185`: 1440×903, VERTICAL gap 16, padding 80, IMAGE fill; child
+`1439:4186` (1280×287, gap 16) berisi headline `1439:4187` "Architecting the Future
+of AI & Data Innovation." **Bluu Next 700 80/95.2 ls -0.88** (gradient per baris) +
+subtitle `1439:4188` Manrope 500 18/27 putih. Navbar instance `1439:4189` ikut
+ter-render di PNG hero → `verify.mjs` menyembunyikan `.navbar` (hitung MAE di bawah
+band navbar).
+
+Section lain (nanti, setelah About Us): Partners (`PartnersHero`/`WhyPartners`),
+detail HoDS (`HoDSDetail`), dan konten asli. Webfont Nasalization tetap tidak
+boleh di-bundle (lisensi desktop). Detail lengkap: `docs/kickoff-prompt.md`.
 
 **SELESAI: Section 9: Footer (`1436:3699` / komponen `765:17071`, 1440 × 556px)** — lihat ringkasan di bawah.
 
@@ -34,13 +52,21 @@ ATURAN HUKUM & PROTOKOL STRICT PIXEL ACCURACY (WAJIB DIIKUTI TANPA KECUALI):
      g. Target Pengujian: assertions geometri `verify.mjs`, target MAE, dan 6 gate verifikasi.
    - **DILARANG KERAS MELOMPATI SECTION ATAU MENGGABUNGKAN MULTIPLE SECTION SEKALIGUS.**
      Setiap section dieksekusi, diukur, dan diverifikasi satu per satu hingga selesai 100%.
+   - **INVENTARIS SEMUA SECTION HALAMAN DULU (ANTI-SKIP).** Sebelum mengerjakan
+     halaman baru, petakan semua anak frame halaman Figma (`depth 1`) sebagai
+     checklist (nomor, Node ID, nama frame, w×h, status) — termasuk section yang
+     belum ada komponennya. Checklist = urutan kerja; tidak ada entri yang boleh
+     dilewati. Lihat `docs/pixel-precision-sop.md` §3 Langkah 0b.
 
 2. **STRICT 8-POINT GRID SPACING & PADDING (HUKUM MUTLAK):**
    - Seluruh padding container, margin, dan gap layout WAJIB mematuhi kelipatan 8px (8px, 16px, 24px, 32px, 40px, 48px, 56px, 64px, 72px, 80px) sesuai spesifikasi autolayout frame Figma.
    - Container section: 1440 × ...px, padding desktop: `padding: 40px 80px` atau `padding: 80px`.
    - Hierarki jarak vertikal:
      - Header frame ke container/gallery: **48px**, **56px**, atau **64px**.
-   - Dilarang keras memakai magic numbers acak kecuali koordinat absolut terukur hasil ukur sharp.
+   - Dilarang keras memakai magic numbers acak. Angka non-8 hanya sah bila
+     **terukur dari Figma/PNG** (mis. gap Snippets `35`, footer section `60`,
+     line-height `38.4/67.2/95.2`) dan wajib dicatat justifikasinya di `docs/assets.md`.
+     Kalau tidak bisa dijustifikasi → ganti ke kelipatan 8 terdekat.
 
 3. **PNG NODE HASIL EXPORT FIGMA = SUMBER KEBENARAN:**
    - Ekspor node 1x & 2x:
