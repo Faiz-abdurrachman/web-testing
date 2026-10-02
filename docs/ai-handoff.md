@@ -13,7 +13,7 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 semua selesai. Link Figma:
 `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4787`
 
-Section partners dikerjakan **satu per satu** (Master Work Plan + 6 gate per
+Section partners dikerjakan **satu per satu** (Master Work Plan + 7 gate per
 section). Inventaris (frame `1439:4787`, 1440 × 2942, `depth 1`):
 
 | #   | Node ID     | Frame                   | W×H       | Status komponen sekarang                                     |
@@ -45,6 +45,15 @@ Catatan tiap section:
 
 **NEXT (prioritas):**
 
+0. **Audit strict per-section — PLAN PER HALAMAN, EKSEKUSI PER SECTION.**
+   Benchmark **Homepage (`1430:2040`)** lalu **Recruitment (`1436:3505`)** diaudit
+   ulang satu section per pass (8pt + font Bluu Next + gradient + MAE), baru
+   Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk). Untuk SETIAP halaman:
+   inventaris dulu semua anak frame (`depth 1`) → Master Work Plan section 1 →
+   selesaikan sampai lolos **7 gate** → baru section 2. **Jangan lompat/gabung.**
+   Gate baru: `npm run audit:spacing` (`scripts/spacing-audit.mjs`) memastikan
+   setiap padding/gap/margin kelipatan 8 atau ada di tabel pengecualian SOP.
+   Checklist per-halaman + link Figma ada di `docs/kickoff-prompt.md` §Target A–C.
 1. **Contact page (`1445:5065`) — audit strict per-section (3 Oct 2026).**
    **Section 1 Hero `1445:5066` AUDIT PASS** — geometri Chromium exact (`1440×954`,
    row `80/240/1280×594`, left 587, form 661, art `−131/−92/801×600`, cards
@@ -52,15 +61,14 @@ Catatan tiap section:
    (below-navbar **1.338**); residual = AA font lintas-renderer (title 6.05, pill
    8.82). Tidak ada kode yang perlu diubah. **Section 2 Footer `1445:5118`** =
    komponen bersama `Footer.astro` yang sudah presisi (diverifikasi di
-   homepage/recruitment/partners). Inventaris: `docs/kickoff-prompt.md`
-   §TARGET WORKSPACE A.
+   homepage/recruitment/partners).
 2. **Revisi detail HoDS (`HoDSDetail`) — SELESAI (3 Oct 2026).** 6 rute
    `/hods/[id]` judul hero pindah dari `--font-heading` (Nasalization 400) ke
    **Bluu Next Bold 700 48/57.6** (`--font-display`, Figma `864:18900`/`864:19238`),
    **Title Case** (data `hods.ts` diselaraskan dgn `domains.ts`); `.bullets` gap
    `13 → 8` (Figma `798:2745`); `.role-copy top 84.5 → 85`. Reference
    `HoDS-Detail-Language-1x/2x.png` diregenerasi dari node `864:18959`. Assertion
-   font ditambah di `verify.mjs`. Semua 6 gate + seo PASS. Detail:
+   font ditambah di `verify.mjs`. Semua 7 gate + seo PASS. Detail:
    `docs/assets.md` §Detail HoDS.
 3. **Konten asli** (foto member, logo partner, `projects.ts`, tanggal recruitment,
    milestone HoF). Webfont Nasalization tetap tidak boleh di-bundle (lisensi desktop).
@@ -82,7 +90,7 @@ ATURAN HUKUM & PROTOKOL STRICT PIXEL ACCURACY (WAJIB DIIKUTI TANPA KECUALI):
      d. Rincian Tipografi: font-family (`--font-display` untuk heading), weight, size, line-height, text fill/gradient per baris, letter-spacing.
      e. Artwork & Assets provenance: raw image fill vs SVG vs pure CSS (dilarang screenshot mati/flattened UI).
      f. Interaktivitas & Sound: thumbnail click/hover, carousel slide transition, arrow buttons, Web Audio SFX cues.
-     g. Target Pengujian: assertions geometri `verify.mjs`, target MAE, dan 6 gate verifikasi.
+     g. Target Pengujian: assertions geometri `verify.mjs`, target MAE, dan 7 gate verifikasi.
    - **DILARANG KERAS MELOMPATI SECTION ATAU MENGGABUNGKAN MULTIPLE SECTION SEKALIGUS.**
      Setiap section dieksekusi, diukur, dan diverifikasi satu per satu hingga selesai 100%.
    - **INVENTARIS SEMUA SECTION HALAMAN DULU (ANTI-SKIP).** Sebelum mengerjakan
@@ -127,19 +135,20 @@ Contact) ke `--font-display` + strict 8pt grid, atau isi konten asli. Wajib Mast
 Work Plan per-section sebelum menyentuh kode.
 
 ================================================================================
-WORKFLOW & 6 GATE VERIFIKASI (SEMUA WAJIB PASS SEBELUM COMMIT):
+WORKFLOW & 7 GATE VERIFIKASI (SEMUA WAJIB PASS SEBELUM COMMIT):
 ================================================================================
 
 1. Ekspor node 1x & 2x ke `assets/<page>/<section>/`.
 2. Ukur dimensi, bbox tinta, padding, dan gap dengan `sharp`.
 3. Update komponen UI & data sesuai spesifikasi terukur.
 4. Update assertions geometri & reference path di `scripts/verify.mjs`.
-5. Jalankan 6 Gate Pengujian:
+5. Jalankan 7 Gate Pengujian:
    - `npm run build` (0 error, 19 halaman)
    - `PREVIEW_URL=http://localhost:4331 node scripts/verify.mjs` (exit 0)
    - `PREVIEW_URL=http://localhost:4331 node scripts/navbar-audit.mjs` (ALL PASS)
    - `PREVIEW_URL=http://localhost:4331 node scripts/verify-vt.mjs` (ALL PASS)
    - `PREVIEW_URL=http://localhost:4331 node scripts/responsive-audit.mjs` (468/468 PASS)
+   - `npm run audit:spacing` (strict 8pt: semua padding/gap/margin)
    - `npm run format:check` (ALL PASS)
 6. Update `docs/assets.md`, `docs/ai-handoff.md`, `AGENTS.md`.
 7. Commit per fitur & push ke origin main (ingat: `origin` otomatis push ke testing + production).

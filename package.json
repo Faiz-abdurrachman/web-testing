@@ -14,6 +14,7 @@
     "verify:visual": "node scripts/verify.mjs",
     "verify:vt": "node scripts/verify-vt.mjs",
     "audit:navbar": "node scripts/navbar-audit.mjs",
+    "audit:spacing": "node scripts/spacing-audit.mjs",
     "assets:optimize": "node scripts/optimize-images.mjs",
     "assets:og": "node scripts/generate-og.mjs",
     "assets:starfield": "node scripts/generate-star-tiles.mjs",

@@ -2,11 +2,12 @@
 
 Copy-paste seluruh blok di bawah ini ke AI baru sebelum memberikan instruksi kerja.
 Prompt ini memuat seluruh konteks, aturan hukum presisi piksel, strict 8-point grid,
-protokol per-section, dan checklist. **Status: Homepage (`1430:2040`) + Recruitment
-(`1436:3505`) + About Us (`1439:4184`) + Partners (`1439:4787`) + Contact (`1445:5065`)
-100% selesai. Target berikutnya: audit/verifikasi ulang **strict per-section** lalu
-revisi **Detail HoDS** (`/hods/[id]`, 6 rute) ke Bluu Next Bold 700. Kerjakan 1
-section per pass + 6 gate per section, JANGAN skip section mana pun.**
+protokol per-section, dan checklist. **Status (3 Oct 2026): Homepage (`1430:2040`) +
+Recruitment (`1436:3505`) + About Us (`1439:4184`) + Partners (`1439:4787`) + Contact
+(`1445:5065`) + 6 detail role + 6 detail HoDS (`864:18857` dkk) 100% selesai. Target
+berikutnya: audit/verifikasi ulang **strict per-section** (homepage & recruitment =
+benchmark paling penting), dengan **Plan per halaman → inventaris semua section →
+kerjakan 1 section per pass + 7 gate per section. JANGAN skip section mana pun.**
 
 ---
 
@@ -39,19 +40,22 @@ ATURAN INTI, SPACING & PADDING (HUKUM, WAJIB PATUH, JANGAN DILANGGAR):
      - Header frame → content/grid/rail: **48/56/74/80px**.
      - Button: `8px 16px`; badge/pill: `4px 12px` / `4px 16px`.
    - **Dilarang magic numbers acak.** Nilai non-8 HANYA sah bila terukur dari
-     frame Figma/PNG dan tertulis justifikasinya di `docs/assets.md`.
-   - **AUDIT WAJIB sebelum commit:** daftar semua `padding/gap/margin` di komponen
-     yang disentuh; setiap angka harus kelipatan 8 ATAU ada di tabel pengecualian
-     di bawah. Kalau tidak bisa dijustifikasi → ubah ke kelipatan 8 terdekat.
-     Pengecualian yang SUDAH terbukti & boleh (dari Figma, bukan karangan):
-       4px  → jarak antar-baris heading / eyebrow tipis.
-       12px, 14px, 18px, 20px, 22px, 26px, 30px, 31px, 35px → autolayout Figma
-              (pill, gap header-row kartu, tinggi bar visi-misi, gap galeri Snippets).
-       42px → gap group header → grid (Partners Our Partners).
-       58px/60px, 28px → footer / section gap (Figma).
-       74/82/100/116px → header frame → content (Figma).
-       67/67.2, 95.2, 38.4, 102px → line-height heading (cek bbox PNG).
-     Setiap pemakaian non-8 harus bisa ditunjuk node Figma/ukurannya.
+     frame Figma/PNG dan tertulis justifikasinya di `docs/pixel-precision-sop.md`
+     §"Hukum Spacing" (tabel pengecualian lengkap) + `docs/assets.md`.
+   - **GATE SPACING OTOMATIS:** `npm run audit:spacing`
+     (`scripts/spacing-audit.mjs`) memindai semua komponen — setiap
+     `padding/gap/margin` numerik harus kelipatan 8 ATAU ada di tabel
+     pengecualian; kalau tidak → **exit 1**. Per-komponen saat satu section:
+     `node scripts/spacing-audit.mjs src/components/<Komponen>.astro`.
+   - Pengecualian yang SUDAH terbukti (dari Figma/PNG, bukan karangan — daftar
+     penuh di SOP): `1`(ring) `2 3 4 5 6 7 10 12 13 14 15 18 19 20 21 22 23 26 28
+     30 31 35 36 42 44 52 58 60 66 74 82 92 100 116 146 150 242 855`, plus
+     line-height heading `67/67.2/95.2/38.4/102/57.6`. Nilai non-integer
+     (`0.5`, `6.789`, …), unit `cqw/%`, `calc()/clamp()/var()/env()/max()/min()`,
+     dan margin negatif = teknik (di luar scope audit).
+   - Setiap pemakaian non-8 harus bisa ditunjuk node Figma/ukurannya. Kalau tidak
+     bisa dijustifikasi → ukur ulang, ubah ke kelipatan 8 terdekat, dan update
+     assertion `scripts/verify.mjs` di commit yang sama.
 
 2. **PNG NODE HASIL EXPORT FIGMA = SUMBER KEBENARAN:**
    - CSS export Figma, string gradient MCP, dan `effects` payload = hint & sering LOSSY.
@@ -69,11 +73,15 @@ ATURAN INTI, SPACING & PADDING (HUKUM, WAJIB PATUH, JANGAN DILANGGAR):
      terang dari sisi/bawah).
 
 4. **TYPOGRAPHY — BLUU NEXT BOLD 700 (`--font-display`) UNTUK SEMUA HEADING:**
-   - Homepage, Recruitment, About Us, Partners sudah **100%** Bluu Next Bold 700.
-   - Sisa `--font-heading` (Nasalization, TIDAK di-bundle) HANYA:
-     `HoDSDetail.astro` (**target revisi berikutnya**), label grup `OurTeam.astro`
-     (Nasalization 400 32/48 sesuai Figma — sengaja), dan wordmark `Splash.astro`.
-     Jangan tambah Nasalization baru.
+   - Homepage, Recruitment, About Us, Partners, Contact, **6 detail role**, dan
+     **6 detail HoDS** sudah **100%** Bluu Next Bold 700.
+   - Sisa `--font-heading` (Nasalization, TIDAK di-bundle) HANYA: label grup
+     `OurTeam.astro` (Nasalization 400 32/48 sesuai Figma — sengaja) dan wordmark
+     `Splash.astro`. Jangan tambah Nasalization baru.
+   - Detail HoDS (revisi 3 Oct 2026): judul hero **Bluu Next Bold 700 48/57.6**
+     (`--font-display`), gradient `270deg #fff → #ede8ff`, **Title Case**
+     (Figma `864:18900`/`864:19238`). `verify.mjs` assert font-family Bluu Next +
+     weight 700 tiap rute.
    - Heading: 56px/line-height **67px** (Figma kadang lapor 67.2, bbox node = 67 —
      pakai 67 agar container integer) atau 72/86, 80/102, 48/57.6. Cek bbox PNG.
    - Gradient heading: **per baris kalau tiap baris node TERPISAH**; **satu gradient
@@ -111,17 +119,18 @@ SEBELUM menyentuh satu baris kode untuk suatu section, WAJIB:
   c. Cek dulu apakah section baru **pixel-identik** dengan section/node lain yang sudah
      ada (MAE ref vs ref via sharp). Kalau sama → cukup samakan varian (contoh: About
      Philosophy == Home Philosophy MAE 0.000; Partners Footer == Recruitment Footer MAE 0.060).
-  d. Kerjakan HANYA satu section, sampai lolos **6 gate**, baru pindah ke section
+  d. Kerjakan HANYA satu section, sampai lolos **7 gate**, baru pindah ke section
      berikutnya di checklist. **DILARANG melompat section atau menggabung beberapa
      section dalam satu pass.**
 
-6 GATE WAJIB (semua harus PASS sebelum commit):
+7 GATE WAJIB (semua harus PASS sebelum commit):
   1. `npm run build`                          → astro check + build, 0 error, 19 halaman
   2. `PREVIEW_URL=http://localhost:4331 node scripts/verify.mjs`      → exit 0, browserErrors []
   3. `PREVIEW_URL=http://localhost:4331 node scripts/navbar-audit.mjs` → ALL PASS
   4. `PREVIEW_URL=http://localhost:4331 node scripts/verify-vt.mjs`    → ALL PASS
   5. `PREVIEW_URL=http://localhost:4331 node scripts/responsive-audit.mjs` → 468/468
-  6. `npm run format:check`                   → ALL PASS
+  6. `npm run audit:spacing`                  → strict 8pt PASS (semua padding/gap/margin)
+  7. `npm run format:check`                   → ALL PASS
   (+ `npm run seo:audit` setelah build, PASS.)
 
 Cara jalankan preview (verify butuh server statis):
@@ -139,49 +148,85 @@ jangan tambah remote/push URL lain. Cek sinkron (jalankan terpisah):
 Confirm user sebelum push (deploy ke production).
 
 ================================================================================
-STATUS MISI: HOMEPAGE + RECRUITMENT + ABOUT US + PARTNERS + CONTACT 100% SELESAI
+STATUS MISI: SEMUA HALAMAN 100% SELESAI — SEKARANG AUDIT STRICT PER-SECTION
 ================================================================================
-Semua halaman publik sudah selesai & tervalidasi presisi (checklist di bawah =
-referensi). **Homepage (`1430:2040`) & Recruitment (`1436:3505`) adalah benchmark
-presisi — jangan rusak tanpa alasan.**
+Semua halaman publik tuntas & tervalidasi presisi. **Homepage (`1430:2040`) &
+Recruitment (`1436:3505`) = benchmark presisi — JANGAN rusak tanpa alasan.**
+Detail HoDS (`864:18857` dkk) **SELESAI 3 Oct 2026** (judul hero Bluu Next Bold
+700 48/57.6 Title Case, `.bullets` gap 8, reference diregenerasi). Contact
+(`1445:5065`) Hero **AUDIT PASS** (MAE 2.757 / below-nav 1.338).
 
-Target kerja berikutnya (urut prioritas):
-  A. **Audit/verifikasi strict per-section** halaman yang sudah ada (mulai dari
-     **Contact `1445:5065`**): pastikan 8pt + font + MAE, satu section per pass.
-  B. **Revisi `HoDSDetail`** (6 rute `/hods/[id]`) dari Nasalization → Bluu Next
-     Bold 700 + strict 8pt, satu section per pass.
-  C. Konten asli (foto member, logo partner, `projects.ts`, tanggal recruitment,
+================================================================================
+CARA KERJA AI BARU (WAJIB): PLAN PER HALAMAN → EKSEKUSI PER SECTION
+================================================================================
+Untuk SETIAP halaman, urutannya:
+  1. **Inventaris** semua anak frame halaman di Figma (`depth 1`) → checklist:
+     nomor, node ID, nama frame, w×h, status. (Checklist awal sudah disediakan di
+     bawah — WAJIB diverifikasi ulang via `depth 1` sebelum mulai.)
+  2. Tulis **Master Work Plan** untuk section ke-1: node ID + URL, dimensi frame,
+     layout, breakdown strict 8pt (padding/gap/margin), typography
+     (Bluu Next Bold 700 / Manrope), gradient per-node, artwork provenance, dan
+     testing criteria. Cek dulu pixel-identik vs node lain (MAE ref vs ref).
+  3. Kerjakan HANYA section ke-1 sampai lolos **7 GATE**, baru pindah ke-2. Dst.
+  **DILARANG lompat section / gabung beberapa section dalam satu pass.**
+
+Urutan target:
+  A. **Audit Homepage (`1430:2040`)** strict per-section (benchmark paling penting).
+  B. **Audit Recruitment (`1436:3505`)** strict per-section (benchmark).
+  C. **Audit Partners (`1439:4787`)** + **6 detail HoDS** per-section.
+  D. Konten asli (foto member, logo partner, `projects.ts`, tanggal recruitment,
      milestone HoF).
 
 --------------------------------------------------------------------------------
-TARGET WORKSPACE A: CONTACT PAGE (`1445:5065`) — AUDIT/VERIFIKASI PER-SECTION
---------------------------------------------------------------------------------
-URL page  : https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1445-5065
-Hero      : https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1445-5066
-Footer    : shared `1445:5118` / komponen `765:17071`
-
-Inventaris (frame `1445:5065`, `depth 1`, 2 section):
-[ ] 1. Hero Section - Contact  `1445:5066`  1440×954  (`ContactHero.astro`)
-       padding 240px 80px 120px, gap 160, fill #050507. Artwork `1445:5067`
-       di (-131,-92) 801×600 (imageRef 2bdd9942…). Row `1445:5068` 1280×594
-       di (80,240) gap 32 justify center: Left `1445:5069` width 587 (pill
-       "Contact Us" + h1 "Get in touch" Bluu Next Bold 700 56/67 + desc Manrope
-       500 18/27 + 3 info card) ; Form panel `1445:5098` width 661,
-       padding 20px 32px, gap 32, rgba(255,255,255,.12), radius 20.
-       Navbar `1445:5117` ikut ter-render di PNG → verify sembunyikan `.navbar`.
-       **Status: sudah diimplementasi & presisi (MAE hero 2.76, konten tanpa
-       navbar ~1.28). Audit ulang strict 8pt + font + MAE, satu section.**
-[ ] 2. Footer `1445:5118`  1440×556  (shared `Footer.astro`, presisi → verifikasi)
-       `verify.mjs` referensi: `assets/contact/hero/Contact-Hero-1x.png`.
+TARGET A: HOMEPAGE (`1430:2040`) — AUDIT STRICT PER-SECTION
+URL: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1430-2040
+Checklist (verifikasi ulang via `depth 1` sebelum mulai):
+[ ] 1. 1430:2041  Hero Section            1440×903  `Hero.astro`
+[ ] 2. 1430:2052  Our Philosophy          1440×837  `Philosophy.astro`
+[ ] 3. 1430:2089  What We Do              1440×840  `WhatWeDo.astro`
+[ ] 4. 1430:2138  House of Data Sorcerers 1440×819  `Domains.astro` + `DomainRail`
+[ ] 5. 1430:2146  Our Project             1440×910  `Projects.astro`
+[ ] 6. 1430:2162  CTA Recruitment         1440×554  `Cta.astro`
+Tiap section: cek 8pt (`node scripts/spacing-audit.mjs <komponen>`), font Bluu Next,
+gradient per-node, MAE region vs reference PNG, update assertion `verify.mjs`.
 
 --------------------------------------------------------------------------------
-TARGET WORKSPACE B: DETAIL HoDS (`HoDSDetail`) — REVISI FONT + 8PT
+TARGET B: RECRUITMENT (`1436:3505`) — AUDIT STRICT PER-SECTION
+URL: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3505
+Checklist (verifikasi ulang via `depth 1` sebelum mulai):
+[ ] 1. 1436:3506  Hero Section       1440×866  `RecruitmentHero.astro`
+[ ] 2. 1436:3512  Who Should Join    1440×789  `WhoShouldJoin` (DomainRail)
+[ ] 3. 1436:3517  What You Will Do   1440×903  `WhatYouWillDo.astro`
+[ ] 4. 1436:3564  Available Roles    1440×843  `AvailableRoles.astro`
+[ ] 5. 1436:3637  Selection Timeline 1440×812  `SelectionTimeline.astro`
+[ ] 6. 1436:3675  FAQ                 1440×983  `Faq.astro`
+[ ] 7. 1436:3684  Snippets            1440×897  `Snippets.astro`
+[ ] 8. 1436:3687  CTA                 1440×520  `Cta.astro`
+[ ] 9. 1436:3699  Footer              1440×556  `Footer.astro` (shared)
+
 --------------------------------------------------------------------------------
-- 6 rute `/hods/{data,core,language,vision,product,growth}`, frame Figma
-  `864:18857`, `864:18904`, `864:18959`, `864:19013`, `864:19024`, `864:19035`.
-- Semua heading masih `--font-heading` (Nasalization) → ganti **Bluu Next Bold 700**
-  (`--font-display`), strict 8pt, satu section per pass. Container `.hods-detail-inner`
-  `min-height: 1280px`, gap 56, padding 80. Referensi `docs/assets.md` §Detail HoDS.
+TARGET C: PARTNERS (`1439:4787`) + DETAIL HoDS (`864:18857` dkk) — AUDIT PER-SECTION
+Partners URL: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4787
+[ ] 1. 1439:4788  Hero Section - Partners  1440×659
+[ ] 2. 1439:4793  Our Partners             1440×1071
+[ ] 3. 1439:4937  Why DS                   1440×656
+[ ] 4. 1439:4983  Footer                   1440×556 (shared)
+
+Detail HoDS (6 rute `/hods/[id]`, `HoDSDetail.astro`) — 6 frame @1440×1280:
+[ ] 864:18857  Detile HoDS - Data Intelligence
+      https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=864-18857
+[ ] 864:18904  Detile HoDS - Core AI & Engineering
+[ ] 864:18959  Detile HoDS - Language & Reasoning
+      https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=864-18959
+[ ] 864:19013  Detile HoDS - Vision & Multimodal
+      https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=864-19013
+[ ] 864:19024  Detile HoDS - Product & Software
+      https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=864-19024
+[ ] 864:19035  Detile HoDS - Growth & Community
+      https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=864-19035
+Catatan: judul hero = Bluu Next Bold 700 48/57.6 Title Case (SELESAI); `.bullets`
+gap 8; reference `HoDS-Detail-Language-1x/2x.png` sudah diregenerasi dari node
+`864:18959`. Audit sisa (spacing/font/MAE) per section.
 
 --------------------------------------------------------------------------------
 REFERENSI STATUS (SUDAH SELESAI — jangan diutak-atik tanpa alasan):
@@ -353,6 +398,13 @@ PELAJARAN WAJIB DARI ABOUT US + PARTNERS (JANGAN DIULANG):
     hitung MAE di bawah band navbar.
 13. **`loading="lazy"` belum ter-decode saat screenshot** → `scrollIntoView` +
     `waitForFunction` semua `<img>` `complete && naturalWidth>0` + `img.decode()`.
+14. **Reference PNG bisa STALE** (export lama sebelum revisi Figma). Contoh: detail
+    HoDS — export lama masih judul uppercase Nasalization; Figma sekarang Bluu Next
+    Title Case (`864:18900`). Selalu cek `figma_get_figma_data` node terbaru dulu;
+    kalau beda, **regenerasi reference** dari node itu di commit yang sama
+    (node `864:18959` → `HoDS-Detail-Language-1x/2x.png`).
+15. **Judul mengikuti Figma, termasuk Title Case.** `src/data/hods.ts` diselaraskan
+    `domains.ts` ("Data Intelligence", bukan "DATA INTELLIGENCE").
 
 ================================================================================
 INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
@@ -366,15 +418,16 @@ INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
    - Inventaris semua section halaman (`depth 1`) dulu → checklist.
    - Export node PNG 1x & 2x + node teks/komponen terpisah.
    - Ukur `sharp`: bbox tinta, x/y, w/h, gap, padding (ink precision ±1px).
-   - Pastikan strict 8pt (audit angka, tanpa magic numbers).
+   - Pastikan strict 8pt (`node scripts/spacing-audit.mjs <komponen>`, tanpa magic numbers).
    - Font Bluu Next Bold 700 (`--font-display`) untuk heading, Manrope untuk body.
    - Update assertion geometri & reference path di `scripts/verify.mjs`.
-   - Jalankan 6 gate + `seo:audit`.
+   - Jalankan 7 gate + `seo:audit`.
    - Update dokumen (`docs/assets.md`, `docs/ai-handoff.md`, `AGENTS.md`).
    - Commit per fitur; confirm user sebelum push ke origin main.
 3. **Mulai dari mana?**
-   Target default: **Contact (`1445:5065`)** audit/verifikasi per-section, lalu
-   **Detail HoDS** revisi font. Inventaris dulu (checklist di atas), buat Master Work
-   Plan section pertama, cek pixel-identik vs node lain, export PNG referensi, ukur,
-   baru sentuh kode. Selesaikan + 6 gate sebelum pindah section. JANGAN skip.
+   Target default **A → B → C**: audit strict per-section **Homepage (`1430:2040`)**
+   dulu, lalu **Recruitment (`1436:3505`)**, lalu **Partners (`1439:4787`)** + **6
+   detail HoDS** (`864:18857` dkk). Inventaris dulu (checklist di atas), buat Master
+   Work Plan section pertama, cek pixel-identik vs node lain, export PNG referensi,
+   ukur, baru sentuh kode. Selesaikan + 7 gate sebelum pindah section. JANGAN skip.
 ```

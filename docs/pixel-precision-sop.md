@@ -41,30 +41,69 @@ Figma/PNG, bukan dikarang. Aturannya: **setiap angka non-8 wajib punya
 justifikasi terukur (node Figma / bbox PNG)** yang dicatat di `docs/assets.md`.
 Kalau tidak bisa dijustifikasi, itu magic number → ganti ke kelipatan 8 terdekat.
 
-**Tabel pengecualian (dipakai berulang, semua dari Figma):**
+**Tabel pengecualian (dipakai berulang, semua dari Figma/PNG atau teknik render):**
 
-| Nilai                     | Pemakaian terbukti                                             |
-| ------------------------- | -------------------------------------------------------------- |
-| `4`                       | gap antar-baris heading; jarak eyebrow tipis                   |
-| `12/14/18/20/22/26/30/31` | padding pill/badge, gap header-row kartu, tinggi bar visi-misi |
-| `35`                      | gap thumbnails gallery Snippets                                |
-| `42`                      | gap group header → grid (Partners Our Partners)                |
-| `58/60/28`                | footer/section gap                                             |
-| `74/82/100/116`           | header frame → content/grid                                    |
-| `67/67.2/95.2/38.4/102`   | line-height heading (cek bbox PNG)                             |
+| Nilai                        | Pemakaian terbukti (provenance)                       |
+| ---------------------------- | ----------------------------------------------------- |
+| `1`                          | ring/mask 1px (GLASS), offset hairline                |
+| `2`                          | stack judul/nilai kartu info; offset glow             |
+| `3`                          | offset glow/tepi terkalibrasi                         |
+| `4`                          | gap antar-baris heading; eyebrow → heading            |
+| `5`                          | gap hairline                                          |
+| `6`                          | dot / micro gap tag                                   |
+| `7`                          | gap info kartu team (Figma)                           |
+| `10`                         | padding pill/tag (Figma)                              |
+| `12`                         | padding pill/badge; gap header-row kartu (Figma)      |
+| `13`                         | gap tag kartu (Figma)                                 |
+| `14`                         | gap back-link; judul kartu → copy (Figma)             |
+| `15`                         | offset baseline judul kartu (terkalibrasi)            |
+| `18`                         | ikon→teks kartu info; padding item FAQ (Figma)        |
+| `19`                         | padding header/body FAQ (Figma)                       |
+| `20`                         | padding kartu (Figma)                                 |
+| `21`                         | header Available Roles → subtitle (Figma; header 115) |
+| `22`                         | padding kartu; gap FAQ (Figma)                        |
+| `23`                         | dot→teks bullets (Figma `798:2746`)                   |
+| `26`                         | ruang hover scroll-container / kalibrasi              |
+| `28`                         | gap section footer (Figma)                            |
+| `30`                         | gap kolom grid Philosophy (Figma)                     |
+| `31`                         | tinggi bar list Visi-Misi (Figma)                     |
+| `35`                         | gap thumbnail Snippets (Figma)                        |
+| `36`                         | gap connector pipeline (Figma)                        |
+| `42`                         | header → grid (Partners); gap panel (Figma)           |
+| `44`                         | gap grup footer/why/HoF (Figma)                       |
+| `52`                         | gap pipeline Our Ecosystem (Figma)                    |
+| `58`                         | gap section / timeline (Figma)                        |
+| `60`                         | gap section footer (Figma)                            |
+| `66`                         | margin rail → section / row-gap HoF (Figma)           |
+| `74`                         | header frame → rail (Figma)                           |
+| `82`                         | header → carousel Our Project (Figma)                 |
+| `92`                         | gap baris grid Philosophy (Figma)                     |
+| `100`                        | gap header section (Figma)                            |
+| `116`                        | gap Our Ecosystem (Figma)                             |
+| `146`                        | HoF Milestone year → content (Figma)                  |
+| `150`                        | padding atas mobile Philosophy (Figma)                |
+| `242`                        | padding atas hero Partners (Figma)                    |
+| `855`                        | x konten desktop Philosophy (Figma)                   |
+| `67/67.2/95.2/38.4/102/57.6` | line-height heading (cek bbox PNG)                    |
 
-**AUDIT SPACING WAJIB (jalankan sebelum commit tiap section):** daftar semua
-`padding/gap/margin` di komponen yang disentuh, lalu pastikan **setiap angka
-kelipatan 8 ATAU ada di tabel di atas** dan justifikasinya tertulis di
-`docs/assets.md`. Contoh perintah:
+**Di luar scope audit (teknik, bukan angka ajaib):** nilai non-integer
+(mis. `0.5`, `6.789`, `20.367`) = offset baseline sub-pixel terkalibrasi; unit
+`cqw/cqh`, `%`, serta `calc()/clamp()/var()/env()/max()/min()` = layout
+responsif/proporsional; margin negatif = offset glow/rail. Nilai-nilai ini tidak
+diperiksa karena memang bergantung konteks.
+
+**AUDIT SPACING WAJIB (jalankan sebelum commit tiap section):** `npm run
+audit:spacing` (`scripts/spacing-audit.mjs`) memindai semua komponen: setiap
+`padding/gap/margin` numerik harus kelipatan 8 ATAU ada di tabel di atas, kalau
+tidak → **exit 1**. Jalankan juga per-komponen saat mengerjakan satu section:
 
 ```sh
-rg -N --no-filename -o "(padding|padding-[a-z]+|gap|margin|margin-[a-z]+):[^;]+" \
-  src/components/<Komponen>.astro | sort | uniq -c | sort -rn
+node scripts/spacing-audit.mjs src/components/<Komponen>.astro
 ```
 
-Kalau ada angka yang tidak bisa dipertanggungjawabkan → ubah ke kelipatan 8
-terdekat, ukur ulang, dan update assertion di `scripts/verify.mjs`.
+Kalau ada angka yang tidak bisa dipertanggungjawabkan → ukur ulang dari Figma/PNG,
+lalu **ubah ke kelipatan 8 terdekat ATAU tambahkan ke tabel pengecualian dengan
+node Figma/bbox PNG sebagai bukti** dan update assertion di `scripts/verify.mjs`.
 
 ## 2. Gotcha yang sudah terbukti (jangan diulang)
 
@@ -160,7 +199,7 @@ Sebelum menyentuh satu baris kode pun pada section baru, AI agent WAJIB memapark
    - Heading: **Bluu Next Bold 700** (`--font-display`), size/line-height, gradient text per line.
    - Body/Subtitle: **Manrope** (`--font-body`), weight 400/500/700, size/line-height, color.
 5. **Aset & Artwork**: Image fill raw vs CSS ring rim vs SVG.
-6. **Testing & Verification Gates**: Target geometri `verify.mjs`, MAE target, dan 6 gate audit.
+6. **Testing & Verification Gates**: Target geometri `verify.mjs`, MAE target, dan 7 gate audit.
 
 > **PENTING**: Dilarang keras melompati section atau menggabungkan multiple section dalam satu pass. Selesaikan 100% per-section, verifikasi, dan kunci sebelum beralih ke section selanjutnya!
 
@@ -180,7 +219,7 @@ frame, dimensi (w × h), dan status (`BELUM / SEDANG / SELESAI`).
   sudah presisi, tandai `SELESAI (shared)` dengan bukti gate-nya.
 - Checklist ini yang dipakai untuk laporan progress: satu section selesai → baru
   lanjut ke entri berikutnya. Jangan pernah menyentuh section ke-N+2 sebelum
-  ke-N lolos 6 gate.
+  ke-N lolos 7 gate.
 
 Contoh format checklist (wajib ada di Master Work Plan):
 

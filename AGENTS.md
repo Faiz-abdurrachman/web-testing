@@ -32,6 +32,7 @@ npm run assets:contact    # Contact page artwork (swirl + info-card icons, sharp
 npm run seo:audit         # validate meta/OG/canonical/sitemap in dist (after build)
 npm run perf:audit        # scroll-jank report per section (set PERF_MAX_TASK to fail)
 npm run audit:navbar      # navbar states/containment/hug across widths
+npm run audit:spacing     # strict 8pt: every padding/gap/margin = 8-multiple or documented exception
 npm run verify:vt         # View Transitions + sound-cue smoke (client-side nav)
 ```
 
@@ -73,7 +74,7 @@ Full protocol: **`docs/pixel-precision-sop.md`**. The rules below are the law.
    Before a page, the agent MUST first **inventory every child section of the Figma
    page frame** (`depth 1`) as a checklist (number, node ID, frame name, w×h,
    status) — including sections that have no component yet. The checklist is the
-   work order: finish and lock section N (6 gates) before starting N+1. See
+   work order: finish and lock section N (7 gates) before starting N+1. See
    `docs/pixel-precision-sop.md` §3 Langkah 0b.
 1. **The reference PNG node (exported from Figma) is the source of truth.**
    Figma CSS exports, MCP gradient strings and `effects` payloads are only hints
@@ -164,6 +165,7 @@ scripts/generate-partners-assets.mjs  Partners page artwork (hero/cards/icons)
 scripts/generate-hof-assets.mjs  Hall of Frames artwork (hero/featured/projects/rail)
 scripts/generate-contact-assets.mjs  Contact artwork (swirl + info-card icons)
 scripts/navbar-audit.mjs  navbar states/containment/hug across widths
+scripts/spacing-audit.mjs  strict 8pt: every padding/gap/margin = 8-multiple or documented exception
 scripts/perf-audit.mjs   scroll-jank + long-task report per section
 scripts/seo-audit.mjs    validates title/meta/OG/canonical/sitemap in dist/
 src/pages/robots.txt.ts  robots.txt endpoint (uses Astro.site)
