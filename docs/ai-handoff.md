@@ -43,12 +43,19 @@ Catatan tiap section:
   pixel-identik dengan reference recruitment (MAE 0.060); render Partners MAE
   **5.873**.
 
-**NEXT: detail HoDS (`HoDSDetail`)** — 6 rute `/hods/[id]` masih `--font-heading`
-(Nasalization) → revisi ke **Bluu Next Bold 700** + strict 8pt, satu section per
-pass. Lalu konten asli (foto member, logo partner, `projects.ts`, tanggal
-recruitment, milestone HoF). Webfont Nasalization tetap tidak boleh di-bundle
-(lisensi desktop). Detail lengkap + **pelajaran About Us wajib**:
-`docs/kickoff-prompt.md` §"PELAJARAN WAJIB DARI ABOUT US".
+**NEXT (prioritas):**
+
+1. **Contact page (`1445:5065`) — audit/verifikasi strict per-section.** Sudah
+   diimplementasi & presisi (hero `1445:5066` MAE 2.76), tapi wajib diaudit ulang
+   strict 8pt spacing/padding + font + MAE, **satu section per pass** (inventaris
+   ada di `docs/kickoff-prompt.md` §TARGET WORKSPACE A).
+2. **Revisi detail HoDS (`HoDSDetail`)** — 6 rute `/hods/[id]` masih
+   `--font-heading` (Nasalization) → revisi ke **Bluu Next Bold 700** (`--font-display`)
+   - strict 8pt, satu section per pass.
+3. Konten asli (foto member, logo partner, `projects.ts`, tanggal recruitment,
+   milestone HoF). Webfont Nasalization tetap tidak boleh di-bundle (lisensi desktop).
+   **Pelajaran About Us + Partners wajib**: `docs/kickoff-prompt.md`
+   §"PELAJARAN WAJIB DARI ABOUT US + PARTNERS".
 
 **SELESAI: Section 9: Footer (`1436:3699` / komponen `765:17071`, 1440 × 556px)** — lihat ringkasan di bawah.
 

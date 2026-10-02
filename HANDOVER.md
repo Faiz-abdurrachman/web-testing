@@ -323,7 +323,8 @@ inline-size` (semua metrik `cqw`), border emas inset (CSS `::after` +
 > dipindahkan/direvisi ke file & node baru: halaman **`1439:4184`**
 > (`JYUzJK1hFqaEwL6DpdDvjp`, URL `…?node-id=1439-4184`). Ada **6 section** (Hero
 > `1439:4185`, visi misi `1439:4190`, Philosophy `1439:4219`, Our Ecosystem
-> `1439:4258`, **Our Team `1439:4305` (belum ada komponen)**, Footer `1439:4311`).
+> `1439:4258`, **Our Team `1439:4305` (komponen `OurTeam.astro`, SELESAI)**, Footer
+> `1439:4311`). **About Us 100% SELESAI 2 Oct 2026** (`docs/assets.md` §About Us).
 > Semua heading sudah **Bluu Next Bold 700** (`--font-display`) — komponen lama di
 > §8c ini masih Nasalization/file lama dan **wajib direvisi** mengikuti SOP presisi
 > piksel per-section. Lihat `docs/kickoff-prompt.md` + `docs/ai-handoff.md` §"Next
@@ -604,8 +605,11 @@ projects 5.104 recruitment 2.174 footer 2.666
 - [x] ~~About Us (`/about`) sections 1–4~~ — selesai 30 Sep 2026 (§8c), **tetapi
       kini direvisi** ke file/node baru `1439:4184` (§8c catatan atas) + tambah
       **Our Team `1439:4305`**. Target berikutnya, wajib per-section.
-- [ ] Halaman lain yang ada di Figma tapi belum dibuat/direvisi: **Partners,
-      Contact, Hall of Frames** (font/spacing revision), detail HoDS.
+- [x] ~~Halaman lain: **Partners, Contact, Hall of Frames**~~ — **SELESAI**:
+      Partners `1439:4787` 4 section (3 Oct 2026), Contact `1445:5065`, Hall of
+      Frames `1439:4507` (1 Oct 2026) sudah presisi (`--font-display` + 8pt).
+- [ ] **Target berikutnya:** audit strict per-section **Contact `1445:5065`**,
+      lalu revisi **detail HoDS** (`/hods/[id]`, 6 rute) ke Bluu Next Bold 700.
 - [ ] Audit tiap halaman detail HoDS / detail role kalau ada pembaruan Figma.
 - [~] **Optimasi berat web (P0–P2)** — detail di `docs/ai-handoff.md` §"Perf
       audit & rencana". **P0(a)+(d) selesai 28 Sep 2026:** `sizes` Snippets +

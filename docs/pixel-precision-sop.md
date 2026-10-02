@@ -41,6 +41,31 @@ Figma/PNG, bukan dikarang. Aturannya: **setiap angka non-8 wajib punya
 justifikasi terukur (node Figma / bbox PNG)** yang dicatat di `docs/assets.md`.
 Kalau tidak bisa dijustifikasi, itu magic number → ganti ke kelipatan 8 terdekat.
 
+**Tabel pengecualian (dipakai berulang, semua dari Figma):**
+
+| Nilai                     | Pemakaian terbukti                                             |
+| ------------------------- | -------------------------------------------------------------- |
+| `4`                       | gap antar-baris heading; jarak eyebrow tipis                   |
+| `12/14/18/20/22/26/30/31` | padding pill/badge, gap header-row kartu, tinggi bar visi-misi |
+| `35`                      | gap thumbnails gallery Snippets                                |
+| `42`                      | gap group header → grid (Partners Our Partners)                |
+| `58/60/28`                | footer/section gap                                             |
+| `74/82/100/116`           | header frame → content/grid                                    |
+| `67/67.2/95.2/38.4/102`   | line-height heading (cek bbox PNG)                             |
+
+**AUDIT SPACING WAJIB (jalankan sebelum commit tiap section):** daftar semua
+`padding/gap/margin` di komponen yang disentuh, lalu pastikan **setiap angka
+kelipatan 8 ATAU ada di tabel di atas** dan justifikasinya tertulis di
+`docs/assets.md`. Contoh perintah:
+
+```sh
+rg -N --no-filename -o "(padding|padding-[a-z]+|gap|margin|margin-[a-z]+):[^;]+" \
+  src/components/<Komponen>.astro | sort | uniq -c | sort -rn
+```
+
+Kalau ada angka yang tidak bisa dipertanggungjawabkan → ubah ke kelipatan 8
+terdekat, ukur ulang, dan update assertion di `scripts/verify.mjs`.
+
 ## 2. Gotcha yang sudah terbukti (jangan diulang)
 
 - **String `linear-gradient(...)` dari Figma MCP menormalkan handle → lossy**

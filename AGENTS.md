@@ -363,16 +363,11 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   untuk 6 halaman. Semua heading section revised memakai **Bluu Next Bold 700**
   (`--font-display`); tidak ada `--font-heading` (Nasalization) yang tersisa di
   komponen Homepage/Recruitment.
-  **CURRENT PAGE: Partners (`1439:4787`)** — 4 section + Footer shared,
-  dikerjakan **satu per satu** (wajib Master Work Plan + inventaris section).
-  **About Us (`1439:4184`) 100% SELESAI (6 section: Hero, visi misi, Philosophy,
-  Our Ecosystem, Our Team, Footer) per 2 Oct 2026.** **Partners Section 1 Hero
-  `1439:4788` SELESAI 3 Oct 2026** (Bluu Next Bold 700 + strict 8pt),
-  **Section 2 Our Partners `1439:4793` SELESAI 3 Oct 2026** (gap 16, kartu
-  243.2×116), dan **Section 3 Why DS `1439:4937` SELESAI 3 Oct 2026** (Bluu Next
-  Bold 700, kartu 309.5×185, glow IMAGE-SVG + icon crop sprite). Partners 4
-  section 100% (3 konten + Footer shared, footer MAE 5.873). Lihat "Next plan" di
-  bawah & `docs/kickoff-prompt.md`.
+  **CURRENT: semua halaman konten 100% selesai** (Homepage, Recruitment,
+  About Us, Partners, Contact). Berikutnya (lihat "Next plan" &
+  `docs/kickoff-prompt.md`): **(1)** audit/verifikasi **strict per-section Contact
+  (`1445:5065`)** — 8pt + font + MAE, satu section per pass; **(2)** revisi
+  **Detail HoDS (`HoDSDetail`)** ke Bluu Next Bold 700 + strict 8pt.
 - **About Us Section 1: Hero (`1439:4185`) — 100% SELESAI (2 Oct 2026).**
   Frame Figma `1439:4185` (1440×903, column, padding 80px, justify center,
   gap 16px, IMAGE fill `34bc68…` = `assets/assets about us/hero/raw-hero-bg.png`,
@@ -571,15 +566,18 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   lengkap, Hall of Frames, Contact, 6 detail role, 6 detail HoDS, Navbar exact
   Figma, motion, sound, SEO/OG, View Transitions. **18 rute publik** (+
   `/lab/sound` internal) — semua link navbar aktif.
-- **CURRENT PAGE — Partners (`1439:4787`, file `JYUzJK1hFqaEwL6DpdDvjp`).**
-  Homepage (`1430:2040`), Recruitment (`1436:3505`) & About Us (`1439:4184`) sudah
-  100%. Partners: 4 section (wajib Master Work Plan per-section + 6 gate):
+- **PARTNERS PAGE — 100% SELESAI (`1439:4787`, file `JYUzJK1hFqaEwL6DpdDvjp`).**
+  Homepage (`1430:2040`), Recruitment (`1436:3505`), About Us (`1439:4184`) &
+  Partners semua 100%. Partners 4 section (Master Work Plan per-section + 6 gate):
   1. Hero Section - Partners `1439:4788` (1440×659) — **SELESAI 3 Oct 2026**
   2. Our Partners Section `1439:4793` (1440×1071) — **SELESAI 3 Oct 2026**
   3. Why DS section `1439:4937` (1440×656) — **SELESAI 3 Oct 2026**
   4. Footer `1439:4983` (1440×556, shared `Footer.astro`) — **SELESAI (verified)**
-     Partners 4 section 100% (3 konten + Footer shared).
      Detail: `docs/ai-handoff.md` §"Next Task", `docs/kickoff-prompt.md`.
+- **CURRENT — Contact (`1445:5065`) audit strict per-section + Detail HoDS.**
+  Contact sudah diimplementasi (Hero `1445:5066` MAE 2.76, Footer `1445:5118`
+  shared) → audit ulang 8pt/font/MAE satu per satu. Lalu revisi `HoDSDetail`
+  (6 rute `/hods/[id]`) ke Bluu Next Bold 700 + strict 8pt.
 - **Partners Section 1: Hero (`1439:4788`) — 100% SELESAI (3 Oct 2026).**
   Frame 1440×659, column, `padding 242px 80px 160px`, align center, `gap 8px`,
   IMAGE fill `e79b1f65…` (= raw `assets/partners/hero/hero-fill-raw.png` →
@@ -625,11 +623,13 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   `verify.mjs` kini juga mendiff footer halaman Partners vs
   `assets/partners/footer/Partners-Footer-1x.png` → MAE **5.873/255** (setara
   homepage 5.838). **Partners page 100% (4 section).**
-- **Next plan (prioritas).** **Partners 100% selesai.** Berikutnya: revisi
-  **detail HoDS (`HoDSDetail`)** ke `--font-display` + strict 8pt (6 rute
-  `/hods/[id]`; satu section per pass) dan/atau konten asli (`projects.ts`,
-  tanggal recruitment, logo partner, foto/nama member team,
-  member/project/milestone HoF). Detail: `docs/ai-handoff.md` §"Next Task".
+- **Next plan (prioritas).** Semua halaman konten 100% selesai. Berikutnya:
+  **(1)** audit/verifikasi **strict per-section Contact (`1445:5065`)** — 8pt +
+  font + MAE, satu section per pass; **(2)** revisi **detail HoDS (`HoDSDetail`)**
+  ke `--font-display` + strict 8pt (6 rute `/hods/[id]`; satu section per pass);
+  **(3)** konten asli (`projects.ts`, tanggal recruitment, logo partner,
+  foto/nama member team, member/project/milestone HoF). Detail:
+  `docs/ai-handoff.md` §"Next Task" & `docs/kickoff-prompt.md`.
 - **Deploy GANDA**: `git push origin main` → testing + production.
 - **Available Roles hover (`f92b88a`).** Kartu reaktif pointer: pool radial violet
   ikut kursor (`--mx/--my`), ember lean (`--gx/--gy` ±22/16px + `scale(1.06)`),
