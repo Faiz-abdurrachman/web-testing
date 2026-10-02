@@ -364,11 +364,17 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   top-aligned dengan padding 80px dan gap 56px (strict 8-point grid).
   Kartu Contact Person diubah menjadi interactive link ke WhatsApp `+62 851-7151-6704` (Zidan Amikul) via `https://wa.me/6285171516704` dengan pre-filled text pesan per-role, hover lift `translateY(-2px)`, glow violet `0 8px 24px -4px rgb(108 59 255 / 40%)`, specular rim shimmer, icon scale 1.12x, dan Web Audio SFX cues (`data-sfx="click"`, `data-sfx-hover="hover"`).
   Semua 6 gates verifikasi ALL PASS (build 0 error, verify.mjs exit 0, responsive audit 468/468 PASS, navbar audit ALL PASS, verify:vt ALL PASS, format:check ALL PASS). Geometri diff 0.0px.
-- **NEXT TARGET: Recruitment Page Section 5: Selection Timeline (`1436:3637`).**
-  URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3637`.
-  Frame 1440×815px / 843px, padding 80px, gap 56px (strict 8-point grid, ganti yang lama 58px).
-  Heading "Selection Timeline": Bluu Next Bold 700 56/67px (`--font-display`), fill linear gradient 181deg per baris.
-  Tabel 1280px: Header 1280×78px (padding 18px 32px), Body 1280×451px (padding 18px 32px, gap 18px, 6 rows dengan separator linear gradient).
+- **Recruitment Page Section 5: Selection Timeline (`1436:3637`) — 100% Selesai (2 Oct 2026).**
+  Frame Figma `1436:3637` ("TIMELINE", 1440×812px / 815px, padding `80px`, gap header-ke-tabel **`56px`** — strict 8-point grid kelipatan 8, mengoreksi 58px lama).
+  Heading "Selection Timeline" (`1436:3638`): **Bluu Next Bold 700 56/67.2px** (`--font-display`), fill linear gradient 181deg `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)`.
+  Tabel 1280px (`1436:3639`): Header 1280×78px (padding 18px 32px), Body 1280×451px (padding 18px 32px, gap 18px, 6 rows dengan separator linear gradient).
+  Section MAE: **4.3059/255** vs reference `Recruitment-SelectionTimeline-Revisi-1x.png`.
+  Geometri terukur di Chromium: section `{ width: 1440, height: 812.203, top: 3401.375 }`, head `{ x: 80, y: 203.2 }`, body `{ x: 80, y: 281.2 }`, rows height `39px`.
+  Semua 6 gate verifikasi ALL PASS (`build`, `verify.mjs`, `navbar-audit`, `verify-vt`, `responsive-audit`, `format:check`).
+- **NEXT TARGET: Recruitment Page Section 6: FAQ Section (`1436:3675`).**
+  URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3675`.
+  Frame 1440×983px, padding 80px. Heading "FAQ" Bluu Next Bold 700 56/67px uppercase.
+  List 1280px dengan 6 accordion cards (stroke 1px, radius 20px, gap 16px/24px).
   Wajib buat Master Work Plan per-section sebelum sentuh kode!
 - **Recruitment Page Section 3: What You Will Do (`1436:3517`) (2 Oct 2026).**
   Frame Figma `1436:3517` (1440×903px, padding `80px 80px 80px 80px`, gap header ke body `20px`). Header Frame 2734 (`1436:4048`, 1280×118px, gap 24px):

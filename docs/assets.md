@@ -61,10 +61,12 @@
     - Contact box: y matches measured Figma coordinates within ±2px.
     - Apply button: `y: cardY + 58` exact.
 
-## Recruitment page — Selection Timeline (Upcoming Target, 2 October 2026)
+## Recruitment page — Selection Timeline (2 October 2026)
 
 - Section node **`1436:3637`** ("TIMELINE", 1440 × 812px / 815px, `padding: 80px`, gap: **56px**), frame page Recruitment `1436:3505`, file `JYUzJK1hFqaEwL6DpdDvjp`.
   - URL Figma: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3637`
+  - Reference: `assets/assets recruitment page/selection timeline/Recruitment-SelectionTimeline-Revisi-1x.png` (1440 × 812) & `Recruitment-SelectionTimeline-Revisi-2x.png` (2880 × 1624).
+  - Isolated heading: `Recruitment-SelectionTimeline-Heading-2x.png` (`1436:3638`).
 - Layout & Spacing (Strict 8-Point Grid):
   - Section container: 1440 × 812px, padding `80px` (`80px 80px 80px 80px`), background `#050507`.
   - Gap header ke tabel timeline: **`56px`** (`7 × 8px` — strict kelipatan 8, mengoreksi nilai lama 58px).
@@ -77,6 +79,15 @@
       - 6 rows: OPEN RECRUITMENT, APPLICATION, FOUNDATION SCREENING, HOODS INTERVIEW, TRIAL / CHALLENGE, MEMBER.
       - Separator 1px: `linear-gradient(90deg, rgba(155, 123, 255, 1) 0%, rgba(255, 255, 255, 0) 100%)`.
       - Text: Manrope Medium 500 26px / 39px (Phase di kiri, Date di kanan lebar 568px center).
+- Measurements & Precision:
+  - `verify.mjs` assertions verified:
+    - section: `{ width: 1440, height: 812.203125, top: 3401.375 }`
+    - heading: `{ x: 80, y: 80, width: 1280, height: 67.203125 }`
+    - head: `{ x: 80, y: 203.203125, width: 1280, height: 78 }`
+    - body: `{ x: 80, y: 281.203125, width: 1280, height: 451 }`
+    - rows: 6 rows exact at `[299.2, 374.2, 449.2, 524.2, 599.2, 674.2]` with height `39px`.
+  - Section MAE: **`4.3059/255`** vs reference `Recruitment-SelectionTimeline-Revisi-1x.png`.
+  - All 6 verification gates PASS: build (0 error), verify.mjs (exit 0), responsive audit (468/468 PASS), navbar audit (PASS), verify:vt (PASS), format:check (PASS).
 
 ## Homepage — CTA Recruitment Section (2 October 2026)
 

@@ -1705,12 +1705,14 @@ try {
     });
   assert.deepEqual(selectionTimelineGeometry, {
     width: 1440,
-    height: 815,
+    height: 812.203125,
     top: 3401.375,
-    heading: { x: 80, y: 80, width: 1280, height: 68 },
-    head: { x: 80, y: 206, width: 1280, height: 78 },
-    body: { x: 80, y: 284, width: 1280, height: 451 },
-    rows: [302, 377, 452, 527, 602, 677].map((y) => ({
+    heading: { x: 80, y: 80, width: 1280, height: 67.203125 },
+    head: { x: 80, y: 203.203125, width: 1280, height: 78 },
+    body: { x: 80, y: 281.203125, width: 1280, height: 451 },
+    rows: [
+      299.203125, 374.203125, 449.203125, 524.203125, 599.203125, 674.203125,
+    ].map((y) => ({
       x: 112,
       y,
       height: 39,
@@ -1721,9 +1723,10 @@ try {
     .locator('.selection-timeline')
     .screenshot({ path: 'artifacts/selection-timeline-desktop.png' });
   const selectionTimelineReference = await sharp(
-    'assets/assets recruitment page/selection timeline section/TIMELINE.png',
+    'assets/assets recruitment page/selection timeline/Recruitment-SelectionTimeline-Revisi-1x.png',
   )
-    .resize(1440, 815)
+    .resize(1440, 812)
+    .flatten({ background: '#050507' })
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -1731,7 +1734,8 @@ try {
     'artifacts/selection-timeline-desktop.png',
   )
     // Fractional section origins round screenshot bounds outward by one pixel.
-    .extract({ left: 0, top: 0, width: 1440, height: 815 })
+    .extract({ left: 0, top: 0, width: 1440, height: 812 })
+    .flatten({ background: '#050507' })
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -1752,7 +1756,7 @@ try {
       (selectionTimelineActual[i] + selectionTimelineReference[i]) / 2,
     );
   }
-  const selectionTimelineRaw = { width: 1440, height: 815, channels: 3 };
+  const selectionTimelineRaw = { width: 1440, height: 812, channels: 3 };
   await sharp(selectionTimelineDiff, { raw: selectionTimelineRaw })
     .png()
     .toFile('artifacts/selection-timeline-diff.png');
@@ -1833,7 +1837,7 @@ try {
   assert.deepEqual(faqGeometry, {
     width: 1440,
     height: 986,
-    top: 4216.375,
+    top: 4213.578125,
     heading: { x: 80, y: 80, width: 1280, height: 68 },
     list: { x: 80, y: 206, width: 1280, height: 700 },
     items: [
@@ -1951,7 +1955,7 @@ try {
   assert.deepEqual(snippetsGeometry, {
     width: 1440,
     height: 900,
-    top: 5202.375,
+    top: 5199.578125,
     heading: { x: 80, y: 40, width: 1280, height: 68 },
     gallery: { x: 80, y: 166, width: 1280, height: 694 },
     hero: { x: 80, y: 166, width: 1280, height: 556 },
@@ -2074,7 +2078,7 @@ try {
     {
       width: 1440,
       height: 537,
-      top: 6102.375,
+      top: 6099.578125,
       panel: { x: 80, y: 80, width: 1280, height: 377 },
       actions: { x: 617.5, y: 327, width: 205, height: 51 },
       glow: { x: 349.828125, y: 351, width: 1000.328125, height: 271.5 },
@@ -2171,7 +2175,7 @@ try {
   assert.deepEqual(recruitFooterGeometry, {
     width: 1440,
     height: 556,
-    top: 6639.375,
+    top: 6636.578125,
   });
   await page.locator('.footer').scrollIntoViewIfNeeded();
   await page

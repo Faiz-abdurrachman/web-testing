@@ -146,14 +146,15 @@ CHECKLIST STATUS PER-SECTION:
      - Seluruh frame 1440 × 1280px (top-aligned, padding 80px, gap 56px).
      - Hero Card H1 diupdate ke Bluu Next Bold 700 48/57.6px (`--font-display`).
      - Kartu Contact Person: interactive direct link ke WhatsApp `+62 851-7151-6704` (Zidan Amikul) via `https://wa.me/6285171516704` dengan pre-filled role inquiry message, hover lift `translateY(-2px)`, glow violet `0 8px 24px -4px rgb(108 59 255 / 40%)`, specular rim, icon zoom `scale(1.12)`, dan Web Audio SFX cues.
-5. **Selection Timeline (`1436:3637`)** — [STATUS: TARGET BERIKUTNYA / CURRENT PRIORITY]
-   - URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3637`
-   - Frame 1440 × 812px / 815px, padding 80px, gap header-to-table **56px** (Strict 8-Point Grid kelipatan 8, menggantikan 58px lama).
+5. **Selection Timeline (`1436:3637`)** — [STATUS: 100% SELESAI]
+   - Frame 1440 × 812px / 815px, padding 80px, gap header-to-table **56px** (Strict 8-Point Grid kelipatan 8, mengoreksi 58px lama).
    - Heading "Selection Timeline": Bluu Next Bold 700 56/67.2px (`--font-display`), gradient 181deg per baris.
    - Timeline table 1280px: Header 1280×78px (padding 18px 32px), Body 1280×451px (padding 18px 32px, gap 18px, 6 rows dengan separator linear gradient).
-6. **FAQ Section (`1436:3675`)** — [STATUS: UPCOMING]
+   - Section MAE: **4.3059/255** vs reference `Recruitment-SelectionTimeline-Revisi-1x.png`. All 6 verification gates pass.
+6. **FAQ Section (`1436:3675`)** — [STATUS: TARGET BERIKUTNYA / CURRENT PRIORITY]
+   - URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3675`
    - Frame 1440 × 983px, padding 80px.
-   - Heading "FAQ": Bluu Next Bold 700 56/67px uppercase.
+   - Heading "FAQ": Bluu Next Bold 700 56/67px uppercase (`--font-display`).
    - 6 FAQ accordion cards: stroke 1px #CBC5FF/0.3, radius 20px, gap 16px/24px.
 7. **Snippets of Life at Data Sorcerers (`1436:3684`)** — [STATUS: UPCOMING]
    - Frame 1440 × 897px, padding 40px 80px, gap 56px.
@@ -185,5 +186,5 @@ INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
    - Update dokumentasi (`docs/assets.md`, `docs/ai-handoff.md`, `AGENTS.md`).
    - Lakukan git commit per fitur dan sinkronkan push ke origin main.
 3. **Mulai dari mana?**
-   Target saat ini: **Section 5: Selection Timeline (Node 1436:3637)** pada Recruitment Page.
+   Target saat ini: **Section 6: FAQ Section (Node 1436:3675)** pada Recruitment Page.
 ```

@@ -8,9 +8,9 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
-**Target Prioritas: Recruitment Page Section 5: Selection Timeline (Figma node `1436:3637`, 1440 × 812px / 815px)**
+**Target Prioritas: Recruitment Page Section 6: FAQ Section (Figma node `1436:3675`, 1440 × 983px)**
 
-- **URL Figma Langsung**: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3637`
+- **URL Figma Langsung**: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3675`
 
 ================================================================================
 ATURAN HUKUM & PROTOKOL STRICT PIXEL ACCURACY (WAJIB DIIKUTI TANPA KECUALI):
@@ -21,10 +21,10 @@ ATURAN HUKUM & PROTOKOL STRICT PIXEL ACCURACY (WAJIB DIIKUTI TANPA KECUALI):
    - Cantumkan secara lengkap:
      a. Node ID Figma & URL langsung node section.
      b. Ukuran frame (width × height) dan autolayout mode.
-     c. Rincian Strict 8-Point Grid Spacing & Padding: padding section, gap header-to-content, padding card/tabel, gap internal.
+     c. Rincian Strict 8-Point Grid Spacing & Padding: padding section, gap header-to-content, padding card/accordion, gap internal.
      d. Rincian Tipografi: font-family (`--font-display` untuk heading), weight, size, line-height, text fill/gradient per baris, letter-spacing.
      e. Artwork & Assets provenance: raw image fill vs SVG vs pure CSS (dilarang screenshot mati/flattened UI).
-     f. Interaktivitas & Sound: hover lift, glow, specular rim, Web Audio SFX cues.
+     f. Interaktivitas & Sound: accordion toggle, hover lift, glow, specular rim, Web Audio SFX cues.
      g. Target Pengujian: assertions geometri `verify.mjs`, target MAE, dan 6 gate verifikasi.
    - **DILARANG KERAS MELOMPATI SECTION ATAU MENGGABUNGKAN MULTIPLE SECTION SEKALIGUS.**
      Setiap section dieksekusi, diukur, dan diverifikasi satu per satu hingga selesai 100%.
@@ -35,8 +35,7 @@ ATURAN HUKUM & PROTOKOL STRICT PIXEL ACCURACY (WAJIB DIIKUTI TANPA KECUALI):
    - Hierarki jarak vertikal:
      - Eyebrow ke heading: **8px** (atau 4px jika antar-baris heading).
      - Heading ke subtitle/deskripsi: **16px** atau **24px**.
-     - Header frame ke container/content/grid/rail/table: **48px**, **56px**, **74px**, atau **80px**.
-     - Gap autolayout di Section 5: jarak header ke timeline table adalah **56px** (`7 × 8px`), menggantikan nilai lama 58px.
+     - Header frame ke container/content/grid/rail/accordion: **48px**, **56px**, **74px**, atau **80px**.
    - Dilarang keras memakai magic numbers acak kecuali koordinat absolut terukur hasil ukur sharp.
 
 3. **PNG NODE HASIL EXPORT FIGMA = SUMBER KEBENARAN:**
@@ -54,27 +53,17 @@ ATURAN HUKUM & PROTOKOL STRICT PIXEL ACCURACY (WAJIB DIIKUTI TANPA KECUALI):
 RINCIAN SPESIFIKASI TUGAS:
 ================================================================================
 
-### 1. Section 5: Selection Timeline (Figma node `1436:3637` — 1440 × 812px / 815px)
+### 1. Section 6: FAQ Section (Figma node `1436:3675` — 1440 × 983px)
 
-- **Link Figma**: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3637`
-- **File Komponen**: `src/components/SelectionTimeline.astro`
-- **Dimensi Frame Figma `1436:3637` (1440 × 812px)**:
-  - Container section: 1440 × 812px, padding: `80px` (Strict 8-Point Grid), gap header ke table: **`56px`** (`7 × 8px`), background: `#050507`.
-  - Heading Frame `1436:3638`: "Selection Timeline", **Bluu Next Bold 700 56px / 67.2px** (`--font-display`), fill gradient linear 181deg `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)`.
-  - Table Container Frame `1436:3639`: width 1280px, layout column:
-    - Table Header Frame `1436:3640`: 1280 × 78px, padding `18px 32px`, border-radius `20px 20px 0 0`, background `rgba(108, 59, 255, 0.25)`, 1px glass rim `linear-gradient(135deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%)`.
-      - Text Phase: Manrope Bold 700 26/39px, text-align left, color `#ffffff`.
-      - Text Date container: 568px, Manrope Bold 700 26/39px, text-align center, color `#ffffff`.
-    - Table Body Frame `1436:3645`: 1280 × 451px, padding `18px 32px`, border-radius `0 0 20px 20px`, gap `18px`, background `rgba(255, 255, 255, 0.15)`, 1px glass rim.
-      - 6 rows: OPEN RECRUITMENT, APPLICATION, FOUNDATION SCREENING, HOODS INTERVIEW, TRIAL / CHALLENGE, MEMBER.
-      - Antar baris dipisahkan garis 1px `linear-gradient(90deg, rgba(155, 123, 255, 1) 0%, rgba(255, 255, 255, 0) 100%)`.
-      - Text: Manrope Medium 500 26/39px (Phase di kiri, Date di kanan lebar 568px center).
+- **Link Figma**: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3675`
+- **File Komponen**: `src/components/Faq.astro`
+- **Dimensi Frame Figma `1436:3675`**:
+  - Container section: 1440 × 983px, padding: `80px` (Strict 8-Point Grid), background: `#050507`.
+  - Heading "FAQ": **Bluu Next Bold 700 56px / 67.2px** (`--font-display`), uppercase, gradient linear 180deg.
+  - List container 1280px dengan 6 accordion items: border radius 20px, stroke 1px, gap 16px/24px.
 
 ### 2. Sisa Section Recruitment Page Selanjutnya (Urutan Eksekusi Rinci):
 
-- **Section 6: FAQ Section (`1436:3675`, 1440 × 983px)**
-  - Heading "FAQ" Bluu Next Bold 700 56/67px.
-  - 6 accordion cards: stroke 1px `#CBC5FF/0.3`, radius 20px, gap 16px/24px.
 - **Section 7: Snippets of Life at Data Sorcerers (`1436:3684`, 1440 × 897px)**
   - Heading "Snippets of Life at data sorcerers" Bluu Next Bold 700 56/67px.
   - Gallery 1280px (hero frame 556px + 5 thumbnails bar).
@@ -106,6 +95,18 @@ WORKFLOW & 6 GATE VERIFIKASI (SEMUA WAJIB PASS SEBELUM COMMIT):
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
 
+- **Recruitment Page Section 5: Selection Timeline (`1436:3637`) — 100% SELESAI (2 Oct 2026).**
+  Section 5 pada halaman Recruitment (`1436:3505`) kini 100% selesai dan tervalidasi presisi:
+  - Frame Figma `1436:3637` ("TIMELINE", 1440 × 812px / 815px, padding `80px 80px 80px 80px`, gap header ke tabel **`56px`** — strict 8-point grid kelipatan 8, mengoreksi nilai lama 58px).
+  - Heading `Selection Timeline` (`1436:3638`): **Bluu Next Bold 700 56px / 67.2px** (`--font-display`), linear gradient 181deg `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)`.
+  - Table Container Frame 1280px (`1436:3639`):
+    - Table Head Frame `1436:3640` (1280 × 78px, padding `18px 32px`, radius `20px 20px 0 0`, background `rgba(108, 59, 255, 0.25)`, 1px glass rim). Phase di kiri, Date di kanan (568px center), Manrope Bold 700 26/39px.
+    - Table Body Frame `1436:3645` (1280 × 451px, padding `18px 32px`, gap `18px`, radius `0 0 20px 20px`, background `rgba(255, 255, 255, 0.15)`, 1px glass rim). 6 rows dipisahkan garis 1px `linear-gradient(90deg, #9b7bff 0%, transparent 100%)`.
+  - Section MAE: **`4.3059/255`** vs reference `Recruitment-SelectionTimeline-Revisi-1x.png`.
+  - Geometri Chromium terverifikasi: section `{ width: 1440, height: 812.2, top: 3401.375 }`, head `{ x: 80, y: 203.2 }`, body `{ x: 80, y: 281.2 }`, 6 rows height `39px`.
+  - Semua 6 gate verifikasi ALL PASS (`build`, `verify.mjs`, `navbar-audit`, `verify-vt`, `responsive-audit`, `format:check`). Geometri diff 0.0px.
+  - Detail: `docs/assets.md` §Recruitment page — Selection Timeline.
+
 - **Recruitment Page Section 4: Available Roles (`1436:3564`) & Detail Roles (`774:17392` dkk) + Direct WhatsApp Link — 100% SELESAI (2 Oct 2026).**
   Section 4 pada halaman Recruitment (`1436:3505`) beserta 6 halaman Detail Role kini selesai dan tervalidasi presisi:
   - Frame Figma `1436:3564` (1440 × 843px, padding `80px 80px 80px 80px`, gap header ke grid `58px`).
@@ -113,6 +114,15 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
     - Heading `Available Roles` **Bluu Next Bold 700 56px / 67px** (`--font-display`), fill `linear-gradient(180deg, #ffffff 15%, #999999 42%, #ffffff 80%)` di `(80, 80, 1280 × 67)`.
     - Subtitle `Select a role to view full details, requirements, and apply.` Manrope Medium 500 18/27px (`--font-body`), `#ffffff` di `(80, 168, 1280 × 27)`.
   - Card Grid Frame 2605 (`1436:3568`): 1280 × 510.375px di `(80, 253)` dengan enam kartu `413.33 × 235.17px` (gap horizontal 20px, gap vertikal 40px), padding `18px 28px`, 1px glass rim `linear-gradient(135deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%)`.
+  - Detail Roles 6 halaman (`/recruitment/roles/{data,core,language,vision,product,growth}`):
+    - Seluruh frame 1440 × 1280px (strict callout Gembala).
+    - Hero Card H1 diupdate ke **Bluu Next Bold 700 48px / 57.6px** (`--font-display`).
+    - Top-aligned dengan padding 80px dan gap 56px (strict 8-point grid).
+    - **Fitur WhatsApp Direct Link & Hover Interaction**:
+      - Kartu Contact Person diubah menjadi interactive anchor link ke `https://wa.me/6285171516704?text=...` (nomor `+62 851-7151-6704`, Zidan Amikul) dengan pesan role inquiry otomatis.
+      - Hover lift `translateY(-2px)`, glow violet `0 8px 24px -4px rgb(108 59 255 / 40%)`, background lighten `rgb(98 80 255 / 20%)`, border specular shimmer, ikon zoom `scale(1.12)`, keyboard focus-visible ring, dan Web Audio SFX cues (`data-sfx="click"`, `data-sfx-hover="hover"`).
+  - Verifikasi: build 0 error, verify.mjs exit 0, responsive audit 468/468 PASS, navbar audit ALL PASS, verify:vt ALL PASS, format:check ALL PASS. Geometri diff 0.0px.
+  - Detail: `docs/assets.md` §Recruitment page — Available Roles & §Detail Roles Pages.
   - Detail Roles 6 halaman (`/recruitment/roles/{data,core,language,vision,product,growth}`):
     - Seluruh frame 1440 × 1280px (strict callout Gembala).
     - Hero Card H1 diupdate ke **Bluu Next Bold 700 48px / 57.6px** (`--font-display`).
