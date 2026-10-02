@@ -6,6 +6,32 @@ harus menebak dari git log. Ini dokumen hidup — update kalau ada perubahan bes
 Baca dulu, urut: `AGENTS.md` (aturan operasional) → `HANDOVER.md` (konteks
 panjang) → `docs/assets.md` (provenance per section) → file ini.
 
+## TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
+
+**Target: Recruitment Page Section 3: What You Will Do (Figma node `1436:3517`)**
+
+- **Link Figma**: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3517`
+- **File Komponen**: `src/components/WhatYouWillDo.astro`
+- **Spesifikasi Frame Figma `1436:3517` (1440 × 903px)**:
+  - Padding: `80px 80px 80px 80px` (Strict 8-Point Grid).
+  - Header Frame 2734 (`1436:4048`): 1280 × 118px, `layoutMode: VERTICAL`, `gap: 24px` di `(80, 80)`.
+    - Heading `1436:3518`: "What You Will Do" -> **Bluu Next Bold 700 56px / 67.2px** (`--font-display`), line-height 67px, gradient `linear-gradient(180deg, #ffffff 15%, #999999 42%, #ffffff 80%)` (`-webkit-background-clip: text`).
+    - Subtitle `1436:3519`: "Life inside the Data Sorcerers ecosystem" -> **Manrope Medium 500 18px / 27px** (`--font-body`), `#ffffff`, text-align center.
+  - Gap Header ke Body: **20px** (y=80 + 118 + 20 = 218 -> Body sits at y=218 / Figma y=68180).
+  - Body Frame 2542 (`1436:3520`): 1312 × 625px (kolase 8 label + 2 kartu tarot + connector line). Komponen `.wyd-body` sudah ada, hanya perlu disesuaikan posisi & containment-nya agar 0px diff.
+- **Export Referensi Baru**:
+  - `node scripts/figma.mjs export 1436:3517 1 png "assets/assets recruitment page/what you will do/Recruitment-WhatYouWillDo-Revisi-1x.png"`
+  - `node scripts/figma.mjs export 1436:3517 2 png "assets/assets recruitment page/what you will do/Recruitment-WhatYouWillDo-Revisi-2x.png"`
+- **Verifikasi & Assertion di `scripts/verify.mjs`**:
+  - Cek `recruitmentWhatYouWillDo` assertion dan arahkan `whatYouWillDoReference` ke file 1x yang baru diekspor.
+- **Semua 6 Gates Wajib PASS**:
+  - `npm run build` (0 error)
+  - `PREVIEW_URL=http://localhost:4331 node scripts/verify.mjs` (exit 0)
+  - `PREVIEW_URL=http://localhost:4331 node scripts/navbar-audit.mjs` (ALL PASS)
+  - `PREVIEW_URL=http://localhost:4331 node scripts/verify-vt.mjs` (ALL PASS)
+  - `PREVIEW_URL=http://localhost:4331 node scripts/responsive-audit.mjs` (468/468 PASS)
+  - `npm run format:check` (ALL PASS)
+
 ## Ringkasan cepat (untuk AI baru) — 2 Oct 2026
 
 Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
@@ -38,7 +64,8 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
     - Section MAE **3.1427** (Button & glow 2.3200, Header 4.9498, Copy 6.3726, Outer padding 0.0000). Geometri bboxes diff 0.0px.
   - Full verification: `npm run build` (0 error), `verify.mjs` (exit 0, `browserErrors: []`), `responsive-audit.mjs` (18 rute × 26 widths = 468/468 ALL PASS), `audit:navbar` (ALL PASS), `verify:vt` (ALL PASS), `format:check` (ALL PASS).
   - Detail: `docs/assets.md` §Homepage — CTA Recruitment Section & §Homepage — Our Project Section.
-    `RecruitmentHero.astro` & `Button.astro` direvisi presisi sesuai Frame Figma `1436:3506` (Page Recruitment `1436:3505`) dan Component Set `1436:3502` (`Apply Noww Button`):
+- **Recruitment Page Hero & Apply Now Button — revisi font, buttons & spacing (2 Oct 2026).**
+  `RecruitmentHero.astro` & `Button.astro` direvisi presisi sesuai Frame Figma `1436:3506` (Page Recruitment `1436:3505`) dan Component Set `1436:3502` (`Apply Noww Button`):
   - Heading 2 baris Bluu Next Bold 700 72px / 86px (`--font-display`): "Your Next Chapter" (ink width 621px) & "Start here" (ink width 330.5px), gap 4px, linear gradient per-line `linear-gradient(180deg, #FFFFFF 15%, #999999 42%, #FFFFFF 80%)`.
   - Hero description Manrope Medium 500 18px / 27px color `#EDE8FF` 900 × 27px (gap ke heading 16px, letter-spacing -0.176px single line).
   - Button Component Set `Apply Noww Button` (`1436:3502`, 120 × 43px, padding 8px 16px, border-radius 20px, gap ke description 48px):
