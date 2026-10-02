@@ -97,7 +97,7 @@ Dua halaman yang wajib dicek secara ketat spacing, padding, dan font-nya:
 CHECKLIST STATUS PER-SECTION:
 --------------------------------------------------------------------------------
 
-### A. HOMEPAGE REVISI FONT & SPACING (Node 1430:2040, Frame 1440):
+### A. HOMEPAGE REVISI FONT & SPACING (Node 1430:2040, Frame 1440) — [STATUS: 100% SELESAI]:
 1. **Hero Section (`1430:2041`)** — [STATUS: SELESAI]
    - Frame 1440 × 903, padding 80px, content centered.
    - Heading Bluu Next Bold 700 72/86, gradient per baris, Manrope 18/25 lebar 655.
@@ -111,14 +111,14 @@ CHECKLIST STATUS PER-SECTION:
 4. **House of Data Sorcerers / Choose Your Domain (`1430:2138`)** — [STATUS: SELESAI]
    - Frame 1440 × 819, padding 80px. Gap header 74px. Rail 1280×436 dengan 6 kartu 405×436px, gap 32px.
    - Heading Bluu Next Bold 700 56/67.2, kartu title Manrope Bold 22/33. Section MAE: 2.405.
-5. **Our Project Section (`1430:2146`)** — [STATUS: PENDING AUDIT & REVISI]
-   - Frame 1440, padding 80px, gap header 82px.
-   - Heading "Our Project": Bluu Next Bold 700 56/67.2, linear-gradient per baris.
-   - 3D Coverflow Project Cards & Action Button "View All Works".
-6. **CTA Recruitment Section (`1430:2162`)** — [STATUS: PENDING AUDIT & REVISI]
-   - Frame 1440, padding 80px. Container card padding 64px 80px, gap 48px.
-   - Heading "Ready to Become a Sorcerer?": Bluu Next Bold 700 56/67.2.
-   - Subtitle Manrope 16/24 white (gap 24px), action buttons gap 26px.
+5. **Our Project Section (`1430:2146`)** — [STATUS: SELESAI]
+   - Frame 1440 × 910px, padding 80px, gap header 82px. Eyebrow 86.6×26px di (80, 80).
+   - Heading "What Our Sorcery Create": Bluu Next Bold 700 56/67px di (80, 114) ink 646px.
+   - 3D Coverflow Project Cards 549×567px di (445.5, 263). Section MAE: 5.0764.
+6. **CTA Recruitment Section (`1430:2162`)** — [STATUS: SELESAI]
+   - Frame 1440 × 554px, padding 80px. Container card 1280×394px di (80, 80), padding 64px 80px, gap 48px.
+   - Eyebrow "Recruitment" di (673.4, 145), Heading "Ready to Become a Sorcery?": Bluu Next Bold 700 56/67px di (161, 179).
+   - Copy Manrope 400 16/24 di (427, 270), single button "Join the Community" 201×43px di (619.5, 366). Section MAE: 3.1427.
 
 ### B. RECRUITMENT PAGE REVISI FONT & SPACING (Node 1436:3505, Frame 1440):
 1. **Recruitment Hero Section (`1436:3506`)** — [STATUS: SELESAI]
@@ -126,54 +126,59 @@ CHECKLIST STATUS PER-SECTION:
    - Heading Bluu Next Bold 700 72/86 ("Your Next Chapter" & "Start here", gap 4px).
    - Description Manrope Medium 18/27 #EDE8FF 900×27 (gap 16px, letter-spacing -0.176px).
    - Button Apply Now 120×43 (gap 48px), Primary radial gradient violet (hover #2F196F).
-2. **Who Should Join Section (`1436:3512`)** — [STATUS: PENDING AUDIT & REVISI]
-   - Frame 1440, padding 80px, gap header 74px.
-   - Heading "Who Should Join": Bluu Next Bold 700 56/67.2.
-   - Domain tracks carousel: gap antar kartu 32px, kartu dimensions & typography check.
-3. **What You Will Do Section (`1436:3517`)** — [STATUS: PENDING AUDIT & REVISI]
-   - Frame 1440 × 903, padding 80px, gap 20px. Body 1312 × 625.
-   - Heading "What You Will Do": Bluu Next Bold 700 56/67.2.
-   - Pipeline stages/levels: gradient linear cards per role.
-4. **Available Roles Section Revisi Card (`1436:3564`)** — [STATUS: PENDING AUDIT & REVISI]
-   - Frame 1440, padding 80px, gap header 58px.
-   - Heading "Available Roles": Bluu Next Bold 700 56/67.2 + subtitle Manrope 18/27.
-   - 6 kartu role revisi (gap 40px, kartu layout & typography).
-5. **Selection Timeline (`1436:3637`)** — [STATUS: PENDING AUDIT & REVISI]
-   - Frame 1440, padding 80px.
-   - Heading "Selection Timeline": Bluu Next Bold 700 56/67.2.
+2. **Who Should Join Section (`1436:3512`)** — [STATUS: SELESAI]
+   - Frame 1440 × 789px, padding 80px, gap header ke rail 74px.
+   - Header Frame 2547 (1280×119px, gap 24px): Heading Bluu Next Bold 700 56/68px di (80, 80), Subtitle Manrope 500 18/27px di (80, 172).
+   - HoDS Card Rail Frame 2509 (1280×436px, cards 405×436px, gap 32px) di (80, 273). Section MAE: 2.8430.
+3. **What You Will Do Section (`1436:3517`)** — [STATUS: SELESAI]
+   - Frame 1440 × 903px, padding 80px (8-point grid), gap header ke body 20px.
+   - Header Frame 2734 (1280×118px, gap 24px): Heading Bluu Next Bold 700 56/67px di (80, 80), Subtitle Manrope 500 18/27px di (544.5, 171).
+   - Body Frame 2542 (1312×625px) di (64, 218): Tarot Card 1 di (983, 218), Tarot Card 2 di (129, 434), Connector SVG di (64, 313), 8 labels di (158, 348) dengan 8pt grid intra-pair gap 16px dan inter-pair gap 24px. Section MAE: 3.2541.
+4. **Available Roles Section Revisi Card (`1436:3564`)** — [STATUS: TARGET BERIKUTNYA / CURRENT PRIORITY]
+   - Frame 1440 × 843px, padding 80px (Strict 8-Point Grid), layout VERTICAL, gap: 58px.
+   - Header Frame 2496 (`1436:3565`): 1280 × 115px di (80, 80), gap 24px:
+     - Heading "Available Roles" (388 × 67px): Bluu Next Bold 700 56/67px (`--font-display`), gradient linear 180deg.
+     - Subtitle (1280 × 27px): Manrope Medium 500 18/27px (`--font-body`), `#ffffff`.
+   - Card Grid Frame 2605 (`1436:3568`): 1280 × 510px di (80, 253), layout VERTICAL, gap: 40px:
+     - Row 1 (Frame 2603): 3 card role (Card 1, 2, 3) 413 × 235px, gap: 20px, padding: 18px 28px, background `rgba(255, 255, 255, 0.15)`.
+     - Row 2 (Frame 2604): 3 card role (Card 4, 5, 6) 413 × 235px, gap: 20px, padding: 18px 28px, background `rgba(255, 255, 255, 0.15)`.
+   - **Terkait Erat: 6 Detail Role Pages (`/recruitment/roles/[id]`)**:
+     - Frame Figma `774:17392` ("Detile Roles - DATA INTELLIGENCE", 1440 × 1280px) dan 5 role lainnya: Core AI, Language & Reasoning (`760:14975`), Vision & Multimodal (`760:15276`), Product & Software (`760:15347`), Growth & Community (`760:15439`).
+     - Pastikan penyesuaian height 1280px dan 8-point spacing konsisten dengan HoDS detail pages.
+5. **Selection Timeline (`1436:3637`)** — [STATUS: UPCOMING]
+   - Frame 1440 × 812px, padding 80px.
+   - Heading "Selection Timeline": Bluu Next Bold 700 56/67px.
    - Timeline table header (padding 18px 32px) + 6 timeline rows (gap 18px).
-6. **FAQ Section (`1436:3675`)** — [STATUS: PENDING AUDIT & REVISI]
-   - Frame 1440, padding 80px.
-   - Heading "FAQ": Bluu Next Bold 700 56/67.2 uppercase.
+6. **FAQ Section (`1436:3675`)** — [STATUS: UPCOMING]
+   - Frame 1440 × 983px, padding 80px.
+   - Heading "FAQ": Bluu Next Bold 700 56/67px uppercase.
    - 6 FAQ accordion cards: stroke 1px #CBC5FF/0.3, radius 20px, gap 16px/24px.
-7. **Snippets of Life at Data Sorcerers (`1436:3684`)** — [STATUS: PENDING AUDIT & REVISI]
-   - Frame 1440, padding 40px 80px, gap 56px.
-   - Heading "Snippets of Life at data sorcerers": Bluu Next Bold 700 56/67.2.
+7. **Snippets of Life at Data Sorcerers (`1436:3684`)** — [STATUS: UPCOMING]
+   - Frame 1440 × 897px, padding 40px 80px, gap 56px.
+   - Heading "Snippets of Life at data sorcerers": Bluu Next Bold 700 56/67px.
    - Gallery 1280px (hero frame 556px + 5 thumbnails bar gap 35px).
-8. **CTA Recruitment Section (`1436:3687`)** — [STATUS: PENDING AUDIT & REVISI]
-   - Frame 1440, padding 80px.
-   - Heading "Ready to Become a Sorcery?": Bluu Next Bold 700 56/67.2.
+8. **CTA Recruitment Section (`1436:3687`)** — [STATUS: UPCOMING]
+   - Frame 1440 × 520px, padding 80px.
+   - Heading "Ready to Become a Sorcery?": Bluu Next Bold 700 56/67px.
    - Button "Join the Community".
 
 ================================================================================
 INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
-================================================================================
-1. **Paparkan Rencana Kerja Lengkap Per-Section:**
+===============================================================================
+1. **WAJIB Membuat Rencana Kerja (Plan) Per-Section:**
    Sebelum menyentuh satu baris kode pun, paparkan rencana kerjamu: urutan section yang akan
-   diaudit dan direvisi, node Figma yang ditargetkan, serta estimasi perubahannya.
-2. **Eksekusi Bertahap (Satu Section per Langkah, DILARANG Melompati Section):**
+   diaudit dan direvisi, node Figma yang ditargetkan, serta rincian geometri terukurnya.
+   JANGAN SEKALI-KALI MELOMPATI SECTION!
+2. **Eksekusi Bertahap (Satu Section per Langkah, Presisi Penuh):**
    - Buka section yang ditargetkan.
-   - Export node PNG 1x dan 2x via `node scripts/figma.mjs export <nodeId> 1 png <path>`
-     dan `figma_download_figma_images`.
-   - Ukur dengan `sharp`: ukur bounding box, posisi x/y, lebar/tinggi, gap, dan padding.
-   - Pastikan mematuhi **Strict 8-Point Grid Spacing**.
+   - Export node PNG 1x dan 2x via `node scripts/figma.mjs export <nodeId> 1 png <path>`.
+   - Ukur dengan `sharp`: ukur bounding box, posisi x/y, lebar/tinggi, gap, dan padding (ink precision ±1px).
+   - Pastikan mematuhi **Strict 8-Point Grid Spacing & Padding** (kelipatan 8px, tanpa magic numbers acak).
    - Terapkan font **Bluu Next Bold 700** (`--font-display`) untuk heading dan **Manrope** untuk body.
    - Update assertions di `scripts/verify.mjs`.
-   - Jalankan seluruh gate verifikasi (`build`, `verify.mjs`, `responsive-audit.mjs`, `audit:navbar`, `verify:vt`, `format:check`).
+   - Jalankan seluruh 6 gate verifikasi (`build`, `verify.mjs`, `navbar-audit`, `verify-vt`, `responsive-audit`, `format:check`).
    - Update dokumentasi (`docs/assets.md`, `docs/ai-handoff.md`, `AGENTS.md`).
-   - Lakukan git commit per fitur.
+   - Lakukan git commit per fitur dan sinkronkan push ke origin main.
 3. **Mulai dari mana?**
-   Pilih salah satu prioritas di bawah ini dan konfirmasikan ke user:
-   - **Opsi 1**: Selesaikan 2 section sisa di Homepage (`Our Project` 1430:2146 dan `CTA Recruitment` 1430:2162) sehingga Homepage 100% selesai.
-   - **Opsi 2**: Lanjutkan section-by-section di Recruitment Page mulai dari `Who Should Join` (1436:3512) ke bawah.
+   Target saat ini: **Section 4: Available Roles (Node 1436:3564)** beserta penyesuaian **Detail Roles (Node 774:17392 dkk)**.
 ```

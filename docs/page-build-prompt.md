@@ -41,14 +41,16 @@ LANGKAH 2 — Otoritas desain (hukum):
 - Ukur dari PNG 2x pakai sharp (bbox tinta, posisi x/y, lebar/tinggi, profil warna).
   "Ink" harus cocok ±1px. JANGAN nebak/eyeball.
 
-LANGKAH 3 — Bangun:
+LANGKAH 3 — Bangun (Strict 8-Point Grid):
+- **Wajib membuat plan per section**: paparkan rincian dimensi frame, padding, gap, dan koordinat sebelum coding.
+- **Strict 8-Point Grid Spacing & Padding**: Seluruh padding, margin, dan gap layout WAJIB mematuhi kelipatan 8px (8px, 16px, 24px, 32px, 40px, 48px, 56px, 64px, 72px, 80px) sesuai spesifikasi frame Figma. Dilarang memakai magic numbers acak!
 - Astro component + scoped CSS. Route: src/pages/<slug>.astro (static).
 - **Semua UI = HTML/CSS asli** (teks, tombol, border, kartu, gradient text).
   Gambar HANYA untuk artwork/foto. Gradient teks per baris (`background-clip:text`).
   Jangan flatten screenshot jadi UI.
 - **Font**: bundle font persis Figma (cek lisensi; OFL → public/fonts/*.woff2 +
   @font-face, weight asli biar tidak faux-bold). Selama migrasi, jangan ganti font
-  global — pakai token baru (mis. `--font-display`) untuk section yang direvisi.
+  global — pakai token baru (mis. `--font-display` Bluu Next Bold 700) untuk section yang direvisi.
 - **Artwork dengan `imageRef`**: download raw & pakai apa adanya (`fit:cover` sesuai
   crop FILL Figma). JANGAN rekonstruksi dari layer.
 - Aset tampil: WebP (sharp) di public/images/<page>/; artwork kualitas tinggi.

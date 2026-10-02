@@ -8,25 +8,97 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ## TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
-**Target: Recruitment Page Section 4: Available Roles (Figma node `1436:3564` — "Available Roles Section Revisi Card")**
+**Target Prioritas: Recruitment Page Section 4: Available Roles (Figma node `1436:3564`) & Penyesuaian 6 Detail Role Pages (`774:17392` dkk)**
 
-- **Link Figma**: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3564`
+================================================================================
+ATURAN HUKUM & PROTOKOL STRICT PIXEL ACCURACY (WAJIB DIIKUTI TANPA KECUALI):
+================================================================================
+
+1. **WAJIB MEMBUAT PLAN PER-SECTION SEBELUM EKSEKUSI:**
+   - Sebelum mengubah atau membuat kode apapun, paparkan rencana kerjamu (Plan) secara terperinci per-section.
+   - Cantumkan: ID node Figma, ukuran frame (width × height), padding frame, gap vertikal/horizontal, font family, font weight, font size, line-height, dan warna/gradient.
+   - **DILARANG MELOMPATI SECTION ATAU MENGGABUNGKAN MULTIPLE SECTION SEKALIGUS.** Setiap section dieksekusi, diukur, dan diverifikasi satu per satu.
+
+2. **STRICT 8-POINT GRID SPACING & PADDING:**
+   - Seluruh padding container, margin, dan gap layout WAJIB mematuhi kelipatan 8px (8px, 16px, 24px, 32px, 40px, 48px, 56px, 64px, 72px, 80px) sesuai spesifikasi frame Figma.
+   - Container section: 1440 × ...px, padding desktop: `padding: 80px` (`80px 80px 80px 80px`).
+   - Dilarang keras memakai magic numbers acak kecuali koordinat absolut terukur hasil ukur sharp.
+
+3. **PNG NODE HASIL EXPORT FIGMA = SUMBER KEBENARAN:**
+   - Ekspor node 1x & 2x via CLI:
+     - Section: `node scripts/figma.mjs export <nodeId> 1 png <target_path_1x>` dan `scale 2` untuk 2x.
+   - Ukur dengan `sharp` (±1px ink precision). Jangan pernah menebak atau meng-eyeball!
+
+4. **TYPOGRAPHY REVISI:**
+   - Heading Section: **Bluu Next Bold 700** (`--font-display`), line-height sesuai frame Figma, gradient `linear-gradient(180deg, #ffffff 15%, #999999 42%, #ffffff 80%)` (`-webkit-background-clip: text; color: transparent`).
+   - Subtitle & Copy: **Manrope** (`--font-body`), weight 400/500/700 sesuai Figma.
+
+================================================================================
+RINCIAN SPESIFIKASI TUGAS:
+================================================================================
+
+### 1. Section 4: Available Roles (Figma node `1436:3564` — "Available Roles Section Revisi Card")
+
+- **Link Figma**: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3564&t=4QQ3FA6KwgUEnWHL-4`
 - **File Komponen**: `src/components/AvailableRoles.astro`
-- **Spesifikasi Frame Figma `1436:3564` (1440 × 843px)**:
-  - Container section: 1440 × 843px, padding `80px` (Strict 8-Point Grid).
-  - Header Frame & Roles Card Grid: sesuaikan dengan revisi card terbaru dari Figma node `1436:3564`.
+- **Dimensi Frame Figma `1436:3564` (1440 × 843px)**:
+  - Container section: 1440 × 843px, padding: `80px` (Strict 8-Point Grid), layout VERTICAL, gap: `58px`, background: `#050507`.
+  - Header Frame 2496 (`1436:3565`): 1280 × 115px di `(80, 80)`, layout VERTICAL, gap: `24px`:
+    - Heading `1436:3566` "Available Roles": Bluu Next Bold 700 56px / 67px (`--font-display`), gradient 180deg.
+    - Subtitle `1436:3567`: "Choose the domain that matches your passion and start your journey with us." -> Manrope Medium 500 18px / 27px (`--font-body`), `#ffffff`.
+  - Card Grid Frame 2605 (`1436:3568`): 1280 × 510px di `(80, 253)`, layout VERTICAL, gap: `40px`:
+    - Row 1 (Frame 2603): 3 card role (`Card Role 1`, `card role 2`, `card role 3`) ukuran 413 × 235px, gap: `20px`, padding: `18px 28px`, background: `rgba(255, 255, 255, 0.15)`.
+    - Row 2 (Frame 2604): 3 card role (`card role 4`, `card role 5`, `card role 6`) ukuran 413 × 235px, gap: `20px`, padding: `18px 28px`, background: `rgba(255, 255, 255, 0.15)`.
 - **Export Referensi Baru**:
   - `node scripts/figma.mjs export 1436:3564 1 png "assets/assets recruitment page/available roles/Recruitment-AvailableRoles-Revisi-1x.png"`
   - `node scripts/figma.mjs export 1436:3564 2 png "assets/assets recruitment page/available roles/Recruitment-AvailableRoles-Revisi-2x.png"`
-- **Verifikasi & Assertion di `scripts/verify.mjs`**:
-  - Update assertion `recruitmentAvailableRoles` dan path reference ke file 1x yang baru diekspor.
-- **Semua 6 Gates Wajib PASS**:
-  - `npm run build` (0 error, 19 halaman)
-  - `PREVIEW_URL=http://localhost:4331 node scripts/verify.mjs` (exit 0)
-  - `PREVIEW_URL=http://localhost:4331 node scripts/navbar-audit.mjs` (ALL PASS)
-  - `PREVIEW_URL=http://localhost:4331 node scripts/verify-vt.mjs` (ALL PASS)
-  - `PREVIEW_URL=http://localhost:4331 node scripts/responsive-audit.mjs` (468/468 PASS)
-  - `npm run format:check` (ALL PASS)
+
+### 2. Penyesuaian 6 Detail Role Pages (`/recruitment/roles/[id]`)
+
+- **Link Figma Contoh (Data Intelligence)**: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=774-17392&t=4QQ3FA6KwgUEnWHL-4`
+- **File Komponen & Data**:
+  - Komponen: `src/components/RoleDetail.astro`
+  - Route: `src/pages/recruitment/roles/[id].astro`
+  - Data: `src/data/roles.ts`
+- **Spesifikasi 6 Detail Role Frames di Figma (1440 × 1280px)**:
+  - Callout: "Penyesuaian Height (tinggi card) menjadi 1280px untuk ALL Detile Roles / HoDS".
+  - Frame Figma:
+    1. Data Intelligence: `774:17392` (1440 × 1280px)
+    2. Core AI & Engineering
+    3. Language & Reasoning: `760:14975` (1440 × 1280px)
+    4. Vision & Multimodal: `760:15276` (1440 × 1280px)
+    5. Product & Software: `760:15347` (1440 × 1280px)
+    6. Growth & Community: `760:15439` (1440 × 1280px)
+  - Layout & Spacing:
+    - Container: 1440 × 1280px, padding `80px`.
+    - Back Link Frame 2391 di `(80, 80)`.
+    - Hero Card (`card detile role (HoDS)`) 1280 × 279px di `(80, 163)`.
+    - Gap 56px, Block gap 24px/16px, Contact Box 347 × 134px di `(80, 810)`.
+
+### 3. Sisa Section Recruitment Page Selanjutnya (Urutan Eksekusi):
+
+- Section 5: Selection Timeline (`1436:3637`, 1440 × 812px)
+- Section 6: FAQ Section (`1436:3675`, 1440 × 983px)
+- Section 7: Snippets of Life (`1436:3684`, 1440 × 897px)
+- Section 8: CTA Recruitment (`1436:3687`, 1440 × 520px)
+- Section 9: Footer (`1436:3699`, 1440 × 556px)
+
+================================================================================
+WORKFLOW & 6 GATE VERIFIKASI (SEMUA WAJIB PASS SEBELUM COMMIT):
+================================================================================
+
+1. Ekspor node 1x & 2x.
+2. Update komponen UI & data.
+3. Update assertions & reference di `scripts/verify.mjs`.
+4. Jalankan 6 Gate Pengujian:
+   - `npm run build` (0 error, 19 halaman)
+   - `PREVIEW_URL=http://localhost:4331 node scripts/verify.mjs` (exit 0)
+   - `PREVIEW_URL=http://localhost:4331 node scripts/navbar-audit.mjs` (ALL PASS)
+   - `PREVIEW_URL=http://localhost:4331 node scripts/verify-vt.mjs` (ALL PASS)
+   - `PREVIEW_URL=http://localhost:4331 node scripts/responsive-audit.mjs` (468/468 PASS)
+   - `npm run format:check` (ALL PASS)
+5. Update `docs/assets.md`, `docs/ai-handoff.md`, `AGENTS.md`.
+6. Commit & push ke origin main (ingat: `origin` otomatis push ke testing + production).
 
 ## Ringkasan cepat (untuk AI baru) — 2 Oct 2026
 
