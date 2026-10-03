@@ -408,15 +408,20 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   footer MAE **7.7071 → 7.658**; region ter-align brand 2.7 / nav 3.8 / contact 5.0.
   **RECRUITMENT SELESAI — 9/9 section diaudit.** Berikutnya: audit Partners
   (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).
-- **★ NEXT (untuk AI baru): About Us — Our Philosophy (`1439:4219`) — REVISI
-  BACKGROUND BLEND.** Tim minta background linear section ini **disatukan dengan
-  section di bawahnya** (Our Ecosystem `1439:4258`) supaya transisi menyatu.
-  Komen tim: _"perubahan linear bg agar nyatu sama section bawahnya"_.
-  Node: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4219&t=ACGP2ODKHPTFHpeX-4`.
-  Fokus: **glow presisi, responsive 320→3840, strict 8pt + warna**, 7 gate.
-  Catatan: dulu Philosophy About Us (`1439:4219`) **pixel-identik** dengan Homepage
-  Philosophy (`1430:2052`, MAE 0.000) — cek dulu; jangan rusak Homepage. Checklist
-  di `docs/kickoff-prompt.md` §TARGET NEXT; SOP di `docs/pixel-precision-sop.md` §9.
+- **★ NEXT (untuk AI baru): audit Partners (`1439:4787`) + 6 detail HoDS
+  (`864:18857` dkk) — strict per-section.** Satu section per pass, 7 gate.
+  **Wajib Master Work Plan per-section sebelum sentuh kode.**
+- **SELESAI (3 Oct 2026): About Us — Our Philosophy (`1439:4219`) — REVISI
+  BACKGROUND BLEND.** Tim minta background linear disatukan dengan Our Ecosystem
+  (`1439:4258`). Figma kini memberi node fill **gradient** (handles
+  `p0(0.553,0.545) → p1(0.798,1.681)`, stops `#050507 → #6c3bff`); di-fit dari PNG
+  → `linear-gradient(159.7deg, #050507 54.82%, #6c3bff 133.76%)` (fit MAE 0.554;
+  MCP `168deg` lossy). Dipasang di **section** (mirror gradient section-level
+  Ecosystem), glow home (`canvas::before`) di-hide untuk varian About. Seam
+  Philosophy↔Ecosystem max Δ **9** di 1440/1920/2560. Reference
+  `Philosophy-Revisi-1x.png` diregenerasi; MAE section **2.041/255**. **Homepage
+  Philosophy (`1430:2052`) TIDAK berubah** (flat + glow, MAE 0.000). `verify.mjs`
+  menyelaraskan scroll sebelum capture + assert seam. 7 gate + seo ALL PASS.
 - **STATUS RINGKAS (3 Oct 2026).** **Homepage 100% selesai** (Hero → Our
   Philosophy → What We Do → Choose Your Domain/HoDS → Our Project → CTA, node
   `1430:2040`). **Recruitment Page 100% selesai** (node `1436:3505`). **About Us
@@ -472,18 +477,20 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   Section MAE **1.910/255** (vision 3.11, list 3.35, tarot 1.16, bg 0.49).
   Geometri Chromium exact. Semua 6 gate ALL PASS. Referensi:
   `assets/about-us/visi-misi/VisiMisi-Revisi-1x.png`.
-- **About Us Section 3: Philosophy (`1439:4219`) — 100% SELESAI (2 Oct 2026).**
-  Node baru About Us Philosophy **identik dengan homepage Philosophy**
-  (`1430:2052`): reference `Philosophy-Revisi-1x.png` MAE **0.000** vs
-  `Home-Philosophy-Revisi-1x.png`. Frame 1440×837, fill `#050507`. Content frame
+- **About Us Section 3: Philosophy (`1439:4219`) — SELESAI (2 Oct 2026; background
+  blend 3 Oct 2026).** Node About Us Philosophy **tidak lagi identik** dengan
+  homepage Philosophy (`1430:2052`): Figma kini memberi fill **gradient**
+  `159.7deg #050507 54.82% → #6c3bff 133.76%` (fit dari PNG, MAE 0.554) supaya
+  menyatu ke Our Ecosystem (`1439:4258`); glow home (`canvas::before`) di-hide
+  untuk varian About. Homepage tetap flat + glow (MAE 0.000). Reference
+  `Philosophy-Revisi-1x.png` diregenerasi. Frame 1440×837. Content frame
   `1439:4221` 591×468 di `(766, 205)` (gap 48): eyebrow "Our Philosphy" 93×26,
   heading Bluu Next Bold 700 56/67.2 2 baris ("We Don't Just Learn AI" / "We
   Build With It", gap 4) di `(766, 239)`, grid prinsip 591×248 (`1439:4228`,
   gap 30/92), 5 item LEARN/SHIP/EXPERIMENT/IMPACT/RESEARCH BUILD. Artwork =
-  sorcerer + glow yang sama dengan home. `Philosophy.astro` disatukan: varian
-  `about` kini memakai layout & artwork home (hapus gradient lama &
-  `canvas::before:none`). Section MAE **2.316/255** (artwork 1.92, content 2.89).
-  Geometri Chromium exact. Semua 6 gate ALL PASS. Referensi:
+  sorcerer yang sama dengan home. Section MAE **2.041/255** (bottom-right 0.88).
+  Seam Philosophy↔Ecosystem max Δ **9** (1440/1920/2560). Geometri Chromium
+  exact. Semua 7 gate + seo ALL PASS. Referensi:
   `assets/about-us/philosophy/Philosophy-Revisi-1x.png`.
 - **About Us Section 4: Our Ecosystem (`1439:4258`) — 100% SELESAI (2 Oct 2026).**
   Frame `1439:4258` (1440×874, column, padding 80px, gap 116px, gradient

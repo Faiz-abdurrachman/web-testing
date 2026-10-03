@@ -132,7 +132,12 @@ const principles = [
     background: var(--color-background);
   }
   .philosophy.is-about {
-    background: var(--color-background);
+    /* Gradient fill (Figma handles p0(0.553,0.545) -> p1(0.798,1.681), stops #050507 -> #6c3bff) fitted from the node PNG; painted on the section so it blends continuously into the Our Ecosystem gradient below (which is also section-level). */
+    background: linear-gradient(159.7deg, #050507 54.82%, #6c3bff 133.76%);
+  }
+  /* The home node has a standalone bottom-right glow ellipse (1430:2053); the About node (1439:4219) does not, so hide the home glow on the About variant. */
+  .philosophy.is-about .canvas::before {
+    display: none;
   }
   .canvas {
     position: relative;

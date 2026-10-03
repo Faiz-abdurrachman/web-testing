@@ -772,27 +772,35 @@ fitting the rendered pixels gives an effective CSS gradient of
   unchanged vs the previous **1.910** (vision 3.11, list 3.35, tarot 1.16). All 6
   gates pass.
 
-## About Us — Philosophy (2 October 2026)
+## About Us — Philosophy (2 October 2026, background-blend revision 3 Oct 2026)
 
 - New Figma page `1439:4184`, section **`1439:4219`** ("Philosophy Section",
-  1440 × 837, fill `#050507`). The exported reference
-  `assets/about-us/philosophy/Philosophy-Revisi-1x.png` is **pixel-identical
-  (MAE 0.000)** to the homepage Philosophy reference
-  `assets/assets home page/ourphilosophy/Home-Philosophy-Revisi-1x.png` — the
-  About section is the same design as `1430:2052`.
+  1440 × 837). The fill is now a **gradient** (Figma handles
+  `p0(0.553,0.545) → p1(0.798,1.681)`, stops `#050507 → #6c3bff`) so the section
+  **blends into Our Ecosystem** (`1439:4258`) below. Fitted from the node PNG:
+  `linear-gradient(159.7deg, #050507 54.82%, #6c3bff 133.76%)` (fit
+  **MAE 0.554** on pure-background pixels; MCP's normalised `168deg` is lossy, as
+  documented in the SOP). Painted on the **section** (not the canvas) to mirror
+  Our Ecosystem's section-level gradient — the seam stays continuous
+  (max channel Δ **9** at 1440/1920/2560, identical to the reference's own
+  left-edge delta). The About node has **no** standalone bottom-right glow
+  ellipse (the home node `1430:2053` does), so
+  `.philosophy.is-about .canvas::before { display: none }`.
+- **Homepage Philosophy (`1430:2052`) is unchanged** — flat `#050507` + glow
+  (fresh export MAE **0.000**). Do not merge the two variants again.
+- `Philosophy.astro`: the `about` variant uses the same layout/artwork as home
+  but the section carries the gradient and the home glow is hidden. The uncapped
+  wide-screen `zoom` on the canvas is retained.
+- Reference `assets/about-us/philosophy/Philosophy-Revisi-1x.png` regenerated from
+  node `1439:4219`. Chromium geometry exact (section 1440 × 837; content
+  `(766, 205, 591, 468)`; principles `(766, 425, 591, 248)`). Section MAE
+  **2.041/255** (bottom-right region 0.88). All 6 gates pass.
 - Content frame `1439:4221` (591 × 468) at `(766, 205)`, `gap: 48px`: eyebrow
   `1439:4223` "Our Philosphy" (93 × 26, glass pill), heading `1439:4226`/`4227`
   ("We Don't Just Learn AI" / "We Build With It", Bluu Next **Bold 700**
   56 / 67.2, `gap: 4px`), principles grid `1439:4228` (591 × 248, grid
   `30px 92px`) with 5 items (LEARN / SHIP / EXPERIMENT / IMPACT / RESEARCH
   BUILD). Artwork = the same sorcerer + glow as the homepage.
-- `Philosophy.astro` was unified: the `about` variant now uses the home layout
-  and artwork (the old `linear-gradient(163deg…)` canvas fill and
-  `canvas::before { display:none }` were removed; the wide-screen uncapped zoom
-  for `.is-about` is retained). Homepage rendering is unchanged.
-- Chromium geometry exact (section 1440 × 837; content
-  `(766, 205, 591, 468)`; principles `(766, 425, 591, 248)`). Section MAE
-  **2.316/255** (artwork 1.92, content 2.89). All 6 gates pass.
 
 ## About Us — Our Ecosystem (2 October 2026)
 
@@ -915,6 +923,13 @@ rgba(108,59,255,.3) 50%, #0e0626)`; info frame `…;1260:16770` (222 × 94 at
   Philosophy↔Ecosystem seam stays continuous (channel Δ ≤ 2 at 1440/1920/2560).
   `verify.mjs` asserts the zoom, canvas width, artwork left/right containment at
   1920px and full-bleed (left 0 / right = clientWidth) at 3200px.
+- **Philosophy gradient re-fitted (3 Oct 2026).** The team updated node
+  `1439:4219` in the new file to a gradient (handles `p0(0.553,0.545) →
+p1(0.798,1.681)`) so About Philosophy blends into Our Ecosystem. The current
+  CSS is `linear-gradient(159.7deg, #050507 54.82%, #6c3bff 133.76%)` (fit
+  MAE 0.554), painted on the **section** (not the canvas) to mirror the
+  Ecosystem section-level fill; the home glow (`canvas::before`) is hidden for
+  the About variant. All wide-screen `zoom`/containment assertions still pass.
 - At 1051–1284px the five columns shrink proportionally within the section,
   while the pipeline keeps its 426px frame: all connector bottoms remain at
   y=782 and the baseline at y=799. At 701–1050px the

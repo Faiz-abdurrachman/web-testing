@@ -10,13 +10,16 @@ per-section berjalan.** Audit **Homepage (`1430:2040`)** Section 1–7 **SELESAI
 `181deg #fff 15% / #999 42% / #fff 79%`; temuan kunci: MCP gradient angle &
 `textAlign` sering LOSSY → fit dari PNG; rim gradient Figma bisa `90deg`/`110deg`
 bukan `135deg`; section origin fraksional bikin artefak screenshot 1px).
-**NEXT TARGET (khusus untuk AI baru): revisi About Us — Our Philosophy
-(`1439:4219`)** — tim minta **background linear-nya disatukan dengan section di
-bawahnya** (Our Ecosystem `1439:4258`), agar transisi antar-section menyatu.
-Komen tim: _"perubahan linear bg agar nyatu sama section bawahnya"_. Fokus:
-**glow presisi, responsive 320→3840, strict 8pt + warna**, 7 gate per section.
-Cara kerja: **Plan per halaman → inventaris semua section (`depth 1`) → 1 section
-per pass + 7 gate per section. JANGAN skip satu section pun.**
+**SELESAI (3 Oct 2026): revisi About Us — Our Philosophy
+(`1439:4219`)** — background linear disatukan dengan Our Ecosystem
+(`1439:4258`): fill gradient Figma `159.7deg #050507 54.82% → #6c3bff 133.76%`
+(fit dari PNG, MAE 0.554), dipasang di section + glow home di-hide untuk varian
+About; seam max Δ 9. **NEXT TARGET (untuk AI baru): audit Partners (`1439:4787`)
+
+- 6 detail HoDS (`864:18857` dkk) — strict per-section.** Fokus:
+  **glow presisi, responsive 320→3840, strict 8pt + warna**, 7 gate per section.
+  Cara kerja: **Plan per halaman → inventaris semua section (`depth 1`) → 1 section
+  per pass + 7 gate per section. JANGAN skip satu section pun.**
 
 ---
 
@@ -197,13 +200,10 @@ Untuk SETIAP halaman, urutannya:
   **DILARANG lompat section / gabung beberapa section dalam satu pass.**
 
 Urutan target (prioritas sekarang):
-  0. **NEXT — About Us: Our Philosophy (`1439:4219`) — REVISI BACKGROUND BLEND.**
-     Tim minta background linear section ini **disatukan dengan section di
-     bawahnya** (Our Ecosystem `1439:4258`) supaya transisi antar-section menyatu.
-     Komen tim: *"perubahan linear bg agar nyatu sama section bawahnya"*.
-     Fokus: **glow presisi, responsive 320→3840, strict 8pt + warna**. Catatan:
-     dulu About Philosophy (`1439:4219`) PIXEL-IDENTIK dengan Homepage Philosophy
-     (`1430:2052`, MAE 0.000) — cek dulu sebelum ubah, dan jangan rusak Homepage.
+  0. **SELESAI (3 Oct 2026) — About Us: Our Philosophy (`1439:4219`) — BACKGROUND
+     BLEND.** Fill gradient `159.7deg #050507 54.82% → #6c3bff 133.76%` (fit PNG),
+     section-level + glow home di-hide untuk varian About; seam max Δ 9.
+     **Homepage (`1430:2052`) tidak berubah.**
   A. Audit Homepage (`1430:2040`) — **SELESAI** (heading gradient dikoreksi ke
      `181deg` 3 Oct 2026). Tetap benchmark; jangan rusak tanpa alasan.
   B. Audit About Us (`1439:4184`) — **SELESAI** (Section 5 tombol GLASS
@@ -211,16 +211,17 @@ Urutan target (prioritas sekarang):
   C. Audit Recruitment (`1436:3505`) — **SELESAI 9/9 (3 Oct 2026)** (Heading
      gradient global, rim Figma `90deg`/`110deg` fit dari PNG, section Snippets
      line-height 67 → tinggi 897). Benchmark presisi; jangan rusak.
-  D. Audit Partners (`1439:4787`) + **6 detail HoDS** (`864:18857` dkk) per-section.
+  D. **NEXT — Audit Partners (`1439:4787`) + 6 detail HoDS** (`864:18857` dkk)
+     per-section. Satu section per pass, 7 gate.
   E. Konten asli (foto member, logo partner, `projects.ts`, tanggal recruitment,
      milestone HoF).
 
 --------------------------------------------------------------------------------
-TARGET NEXT: About Us — Our Philosophy (`1439:4219`) — REVISI BACKGROUND BLEND
+TARGET (SELESAI 3 Oct 2026): About Us — Our Philosophy (`1439:4219`) — BACKGROUND BLEND
 URL: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4219&t=ACGP2ODKHPTFHpeX-4
 Komen tim (Gembala): *"perubahan linear bg agar nyatu sama section bawahnya"*
 (section bawah = Our Ecosystem `1439:4258`).
-Checklist WAJIB:
+Checklist (SELESAI):
 [ ] 1. `figma_get_figma_data` node `1439:4219` (`depth 1`/arab) + node bawah
        `1439:4258`; ukur boundary (y, warna, gradient) di kedua section dari PNG.
 [ ] 2. Bandingkan background Philosophy sekarang (`<Starfield />`? gradient?) vs
@@ -543,11 +544,11 @@ INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
    - Update dokumen (`docs/assets.md`, `docs/ai-handoff.md`, `AGENTS.md`).
    - Commit per fitur; confirm user sebelum push ke origin main.
 3. **Mulai dari mana?**
-   Target pertama **TARGET NEXT — About Us: Our Philosophy (`1439:4219`)** revisi
-   background blend dengan section bawahnya (`1439:4258`): glow presisi, responsive
-   320→3840, strict 8pt + warna; 7 gate per section. Setelah itu **D Partners
-   (`1439:4787`)** + **6 detail HoDS** (`864:18857` dkk). Homepage (`1430:2040`),
-   About Us (`1439:4184`), dan Recruitment (`1436:3505`, 9/9) **sudah audit** —
+   Target **NEXT — D Partners (`1439:4787`)** + **6 detail HoDS**
+   (`864:18857` dkk), strict per-section (satu section per pass, 7 gate).
+   About Us Philosophy (`1439:4219`) background blend **sudah SELESAI 3 Oct 2026**.
+   Homepage (`1430:2040`), About Us (`1439:4184`), dan Recruitment
+   (`1436:3505`, 9/9) **sudah audit** —
    tetap benchmark, jangan rusak tanpa alasan.
    Inventaris dulu (checklist `depth 1` di atas), buat Master Work Plan section
    pertama, cek pixel-identik vs node lain, export PNG referensi, ukur, baru sentuh

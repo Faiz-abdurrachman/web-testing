@@ -2331,7 +2331,8 @@ try {
     .toBuffer();
   assert.equal(visiMisiReference.length, visiMisiActual.length);
   // About Us Philosophy — geometry + diff vs Figma node 1439:4219 export.
-  // (The About section is identical to the homepage Philosophy node.)
+  // The About node now carries a gradient fill (blends into Our Ecosystem),
+  // unlike the flat #050507 homepage node (1430:2052), and has no extra glow.
   const aboutPhilosophyGeometry = await page.evaluate(() => {
     const section = document.querySelector('.philosophy.is-about');
     const sectionBox = section.getBoundingClientRect();
@@ -2363,9 +2364,19 @@ try {
     eyebrow: { x: 766, y: 205, width: 92.4, height: 26 },
     overflow: 0,
   });
-  await page
-    .locator('.philosophy.is-about')
-    .screenshot({ path: 'artifacts/about-philosophy-desktop.png' });
+  // Align the section to the viewport top before capturing so the full 837px is
+  // painted; if `scrollIntoViewIfNeeded` leaves its bottom below the fold the
+  // gradient fill there is not composited and the seam check reads a dark band.
+  await page.evaluate(() => {
+    window.scrollBy(
+      0,
+      document.querySelector('.philosophy.is-about').getBoundingClientRect()
+        .top,
+    );
+  });
+  await page.locator('.philosophy.is-about').screenshot({
+    path: 'artifacts/about-philosophy-desktop.png',
+  });
   const aboutPhilosophyReference = await sharp(
     'assets/about-us/philosophy/Philosophy-Revisi-1x.png',
   )
@@ -2425,6 +2436,25 @@ try {
     .raw()
     .toBuffer();
   assert.equal(ecosystemReference.length, ecosystemActual.length);
+  // Philosophy -> Our Ecosystem seam: both per-node gradients are designed to
+  // meet continuously, so guard against a #050507 sliver (base section colour)
+  // showing where the gradient fill would be missing. Reference seam max delta
+  // is 8 (left edge); the rendered seam must stay in the same ballpark.
+  const seamMaxDelta = (bottom, top) => {
+    let max = 0;
+    for (let x = 0; x < 1440; x++) {
+      const b = (836 * 1440 + x) * 3;
+      const t = x * 3;
+      for (let c = 0; c < 3; c++)
+        max = Math.max(max, Math.abs(bottom[b + c] - top[t + c]));
+    }
+    return max;
+  };
+  const philosophySeam = seamMaxDelta(aboutPhilosophyActual, ecosystemActual);
+  assert.ok(
+    philosophySeam <= 16,
+    `Philosophy/Ecosystem seam gap too large: ${philosophySeam}`,
+  );
   // About Us Our Team — geometry + diff vs Figma node 1439:4305 export.
   await page.evaluate(async () => {
     await Promise.all(
@@ -2553,8 +2583,9 @@ try {
   assert.equal(aboutWide.philosophyWidth, aboutWide.clientWidth);
   assert.equal(aboutWide.canvasWidth, aboutWide.clientWidth);
   assert.equal(new Set(aboutWide.lineEnds).size, 1);
-  // The Philosophy background now lives on its zoomed canvas, so the artwork
-  // and glow scale together instead of the artwork drifting off the left edge.
+  // The zoomed canvas still scales with the artwork so it never drifts off the
+  // left edge; the About gradient itself is painted on the section (matching the
+  // Our Ecosystem section-level gradient) so the seam stays continuous.
   assert.ok(Math.abs(aboutWide.philosophyCanvasZoom - 1920 / 1440) < 0.01);
   assert.equal(aboutWide.philosophyCanvasWidth, aboutWide.clientWidth);
   assert.ok(Math.abs(aboutWide.philosophyIllustration.left) < 1);

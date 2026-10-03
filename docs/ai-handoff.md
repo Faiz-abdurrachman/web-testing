@@ -8,33 +8,31 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
-**★ NEXT = About Us — Our Philosophy (`1439:4219`) — REVISI BACKGROUND BLEND.**
-URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4219&t=ACGP2ODKHPTFHpeX-4`
-Tim minta background linear section ini **disatukan dengan section di bawahnya**
-(Our Ecosystem `1439:4258`) supaya transisi antar-section menyatu. Komen tim:
-_"perubahan linear bg agar nyatu sama section bawahnya"_.
-Fokus: **glow presisi, responsive 320→3840, strict 8pt + warna**. Checklist WAJIB
-(seperti biasa satu section per pass, 7 gate):
+**★ NEXT = audit Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk) — strict
+per-section** (satu section per pass, 7 gate). Urutan: Partners §1–4 (Hero/Our
+Partners/Why DS/Footer), lalu 6 rute `/hods/[id]` (judul hero sudah Bluu Next
+Bold 700 48/57.6 + Title Case; audit spacing/font/MAE). Referensi
+`assets/partners/`, `assets/hods/`. **Wajib Master Work Plan per-section sebelum
+sentuh kode!**
 
-1. `figma_get_figma_data` node `1439:4219` + `1439:4258`; ukur boundary (y, warna,
-   gradient) kedua section dari PNG.
-2. Cek dulu pixel-identik: dulu Philosophy About Us == Homepage Philosophy
-   (`1430:2052`, MAE 0.000). **Jangan rusak Homepage.**
-3. Export node PNG before/after; ukur MAE region boundary (harus mulus, tanpa
-   step/gari warna). Ecosystem atas = `24.87deg #050507 52.9% → #6c3bff 132.9%`.
-4. Glow presisi (cek REST `effects`/`strokes`; emulasi dari PNG). 7 gate + seo.
-5. Update `scripts/verify.mjs` + `docs/assets.md` + `docs/ai-handoff.md` +
-   `AGENTS.md`; commit per section.
+**SELESAI (3 Oct 2026) — About Us — Our Philosophy (`1439:4219`) background blend.**
+Tim memperbarui node: fill kini **gradient** (handles `p0(0.553,0.545) →
+p1(0.798,1.681)`, stops `#050507 → #6c3bff`) supaya menyatu ke Our Ecosystem
+(`1439:4258`). Di-fit dari PNG → `linear-gradient(159.7deg, #050507 54.82%,
+#6c3bff 133.76%)` (fit MAE 0.554; MCP `168deg` lossy). Dipasang di **section**
+(mirror gradient section-level Ecosystem) + glow home (`canvas::before`)
+di-hide untuk varian About. Seam Philosophy↔Ecosystem max Δ **9** di
+1440/1920/2560 (sama dgn delta tepi-kiri referensi sendiri). Reference
+`Philosophy-Revisi-1x.png` diregenerasi; MAE section **2.041/255** (bottom-right
+0.88). **Homepage Philosophy (`1430:2052`) TIDAK berubah** (flat + glow, export
+baru MAE 0.000). `verify.mjs` kini menyelaraskan scroll section sebelum capture +
+assert seam; 7 gate + seo ALL PASS.
 
-Checklist + protokol lengkap: `docs/kickoff-prompt.md` §TARGET NEXT. **Audit, bukan
-tulis ulang**: perbaiki HANYA region yang beda vs PNG node. Selalu regenerasi
-reference dari node terbaru dan cek pixel-identik vs node lain dulu.
-
-**SELESAI (3 Oct 2026) — jangan rusak tanpa alasan:** Homepage (`1430:2040`, §1–7),
-About Us (`1439:4184`, §1–6; `<Starfield />` visi-misi final), **Recruitment
-(`1436:3505`, 9/9: Hero → Who Should Join → What You Will Do → Available Roles →
-Selection Timeline → FAQ → Snippets → CTA → Footer)**. Setelah Philosophy, lanjut
-Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).
+**SELESAI (3 Oct 2026) — jangan rusak tanpa alasan:** Homepage (`1430:2040`,
+§1–7), About Us (`1439:4184`, §1–6; `<Starfield />` visi-misi final),
+**Recruitment (`1436:3505`, 9/9: Hero → Who Should Join → What You Will Do →
+Available Roles → Selection Timeline → FAQ → Snippets → CTA → Footer)**.
+Berikutnya: Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).
 
 **Section 1 Hero (`1436:3506`) — AUDIT PASS (3 Oct 2026).** Tiga temuan & perbaikan:
 (1) static fallback salah gambar — node kini pakai IMAGE fill 1672×941 dengan crop
@@ -155,8 +153,9 @@ Section 1–6 lolos 7 gate. Temuan & fix: **Section 5 Our Team "See More"**
 implementasi lama `#161616` + highlight terbaca terlalu gelap (interior ~22 vs
 ~46). Diperbaiki di `OurTeam.astro` (inset ring + sheen `::before` + `blur(6px)`)
 → section MAE **2.828 → 2.770**, region tombol 29.3 → **17.85** (floor = AA teks
-Manrope lintas-renderer). Section 1 Hero, 2 visi misi, 3 Philosophy (=home, ref
-MAE 0.000), 4 Our Ecosystem, 6 Footer PASS tanpa perubahan. Export ulang node
+Manrope lintas-renderer). Section 1 Hero, 2 visi misi, **3 Philosophy
+(background gradient blend 3 Oct 2026 — no longer identical to home)**, 4 Our
+Ecosystem, 6 Footer PASS tanpa perubahan. Export ulang node
 `1439:4185`/`1439:4305` = referensi (MAE 0.00). **JANGAN sentuh background
 bintang hidup visi-misi (`<Starfield />`).** Link: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4184`
 Inventaris (frame `1439:4184`, `depth 1` — verifikasi ulang sebelum mulai):
