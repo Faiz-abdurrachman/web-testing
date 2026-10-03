@@ -8,9 +8,14 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
-**★ NEXT = audit Partners (`1439:4787`, 4 section) + 6 detail HoDS (`864:18857` dkk)
-strict per-section** (Master Work Plan dulu, 1 section/pass, 7 gate). Referensi
-`assets/partners/`, `assets/hods/`; metodologi: `docs/kickoff-prompt.md` §TARGET C.
+**★ NEXT = VIDEO HERO — semua hero section jadi background video looping.**
+Home (`1430:2041`) & Recruitment (`1436:3506`) sudah video; About (`1439:4185`),
+Hall of Frames (`1439:4507`), Partners (`1439:4788`) aset video sudah disiapkan
+(lihat `docs/hero-video-plan.md` §1); Contact (`1445:5066`) menyusul. **Satu hero
+per pass + 7 gate**; geometri statis + reduce tidak boleh berubah. Master Work Plan
+rinci: **`docs/hero-video-plan.md`**. Setelah video: audit Partners (`1439:4787`)
+
+- 6 detail HoDS (`864:18857` dkk) per-section, lalu konten asli.
 
 **SELESAI (3 Oct 2026) — Hall of Frames card Project Highlight (`1439:4655`)
 disamakan dengan card "Our Project" homepage (`1430:2146`, `Projects.astro`).**

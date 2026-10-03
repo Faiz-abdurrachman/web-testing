@@ -14,12 +14,17 @@ bukan `135deg`; section origin fraksional bikin artefak screenshot 1px).
 background linear disatukan dengan Our Ecosystem (`1439:4258`): fill gradient
 Figma `159.7deg #050507 54.82% → #6c3bff 133.76%` (fit dari PNG, MAE 0.554),
 dipasang di section + glow home di-hide untuk varian About; seam max Δ 9.
-**NEXT TARGET (untuk AI baru): Hall of Frames — card Project Highlight
-(`1439:4655`) disamakan dengan card "Our Project / What Our Sorcery Create"
-homepage (`1430:2146`, `Projects.astro`) — strict per-section.** Fokus: **glow
-presisi, responsive 320→3840, strict 8pt + warna**, 7 gate per section. Cara
-kerja: **Plan per halaman → inventaris semua section (`depth 1`) → 1 section per
-pass + 7 gate per section. JANGAN skip satu section pun.**
+**SELESAI (3 Oct 2026): Hall of Frames — card Project Highlight (`1439:4655`)**
+disamakan dengan card "Our Project" homepage (`1430:2146`, `Projects.astro`) —
+kartu `549×567` + coverflow JS, 4 project/4 dot, glow bow-tie dihapus; section
+1440×1014; reference + assertion diregenerasi.
+**NEXT TARGET (untuk AI baru): VIDEO HERO — semua hero section jadi background
+video looping** (Home & Recruitment sudah; About/Hall of Frames/Partners aset siap;
+Contact menyusul). Master Work Plan rinci: `docs/hero-video-plan.md`. Fokus:
+**kualitas encode anti-burik, loop mulus, geometri statis + reduce tetap presisi
+(MAE tak berubah), responsive 320→3840, strict 8pt + font + warna**, 7 gate per
+hero. Cara kerja: **Plan per halaman → inventaris semua section (`depth 1`) → 1
+section per pass + 7 gate per section. JANGAN skip satu section pun.**
 
 ---
 
@@ -36,7 +41,10 @@ Sebelum ngapa-ngapain, WAJIB baca dulu (urut, jangan skip):
 3. docs/ai-handoff.md           → STATE PALING TERKINI ("dimana kita sekarang")
 4. HANDOVER.md                  → konteks panjang: stack, struktur, status, TODO
 5. docs/assets.md               → provenance tiap section + node Figma
-6. docs/sound-sop.md            → SOP sound (Web Audio prosedural) + porting
+6. docs/hero-video-plan.md      → **Master Work Plan VIDEO HERO (target berikutnya)** —
+                                  aturan encode anti-burik, loop, reduce/≤600px,
+                                  budget, urutan rollout per hero
+7. docs/sound-sop.md            → SOP sound (Web Audio prosedural) + porting
                                   (skill `.agents/skills/data-sorcerers-sound/SKILL.md`)
 
 ================================================================================
@@ -176,13 +184,26 @@ jangan tambah remote/push URL lain. Cek sinkron (jalankan terpisah):
 Confirm user sebelum push (deploy ke production).
 
 ================================================================================
-STATUS MISI: SEMUA HALAMAN 100% SELESAI — SEKARANG AUDIT STRICT PER-SECTION
+STATUS MISI: SEMUA HALAMAN 100% SELESAI — AUDIT + VIDEO HERO
 ================================================================================
 Semua halaman publik tuntas & tervalidasi presisi. **Homepage (`1430:2040`) &
 Recruitment (`1436:3505`) = benchmark presisi — JANGAN rusak tanpa alasan.**
 Detail HoDS (`864:18857` dkk) **SELESAI 3 Oct 2026** (judul hero Bluu Next Bold
 700 48/57.6 Title Case, `.bullets` gap 8, reference diregenerasi). Contact
-(`1445:5065`) Hero **AUDIT PASS** (MAE 2.757 / below-nav 1.338).
+(`1445:5065`) Hero **AUDIT PASS** (MAE 2.757 / below-nav 1.338). Hall of Frames
+card Project Highlight (`1439:4655`) **SELESAI 3 Oct 2026** (disamakan dengan card
+"our project" homepage `549×567` + coverflow JS; section 1440×1014; reference +
+assertion diregenerasi).
+
+**ATURAN STRICT (HUKUM — berlaku di setiap section, termasuk hero):**
+- **Spacing/padding/margin = kelipatan 8** (atau ada di tabel pengecualian SOP).
+  Gate: `npm run audit:spacing` (per-komponen: `node scripts/spacing-audit.mjs <file>`).
+- **Heading = Bluu Next Bold 700 (`--font-display`)** — sudah 100% di Homepage &
+  Recruitment (h1 72/86, h2 56/67–67.2). Body/subtitle = Manrope (400/500/700).
+- **Warna persis Figma**: solid = `fills` node (hex persis); gradient = fit dari
+  PNG (heading global `181deg #fff 15% / #999 42% / #fff 79%`); alpha persis.
+- **Ukur, jangan nebak**: geometri ±1px, MAE region dilaporkan, `verify.mjs`
+  assert. Jangan geser posisi untuk mengejar AA font lintas-renderer.
 
 ================================================================================
 CARA KERJA AI BARU (WAJIB): PLAN PER HALAMAN → EKSEKUSI PER SECTION
@@ -211,50 +232,40 @@ Urutan target (prioritas sekarang):
   C. Audit Recruitment (`1436:3505`) — **SELESAI 9/9 (3 Oct 2026)** (Heading
      gradient global, rim Figma `90deg`/`110deg` fit dari PNG, section Snippets
      line-height 67 → tinggi 897). Benchmark presisi; jangan rusak.
-  D. **★ NEXT — Hall of Frames: card Project Highlight (`1439:4655`) disamakan
-     dengan card "Our Project / What Our Sorcery Create" homepage (`1430:2146`,
-     `Projects.astro`).** Lihat blok TARGET NEXT di bawah. Setelah itu audit
-     Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk) per-section.
+  D. **★ NEXT — VIDEO HERO: semua hero section jadi background video looping**
+     (fallback gambar statis). Aset sudah disiapkan user (About Us dulu; Home &
+     Recruitment sudah video). **Master Work Plan lengkap: `docs/hero-video-plan.md`.**
+     Kerjakan **satu hero per pass + 7 gate**; geometri statis & reduce TIDAK boleh
+     berubah. Setelah video, audit Partners (`1439:4787`) + 6 detail HoDS
+     (`864:18857` dkk) per-section.
   E. Konten asli (foto member, logo partner, `projects.ts`, tanggal recruitment,
      milestone HoF).
 
 --------------------------------------------------------------------------------
-TARGET NEXT: HALL OF FRAMES — card Project Highlight (`1439:4655`) DISAMAKAN
-dengan card "Our Project / What Our Sorcery Create" homepage (`1430:2146`).
-URL: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4655
-Tujuan (mentor-approved): konsistensi desain — card project HoF harus **persis
-sama** dengan card homepage `Projects.astro`. Ini SENGAJA menyimpang dari PNG
-HoF lama di area card; regenerasi reference + update assertion di commit yang sama.
-Fakta & referensi:
-- Halaman Hall of Frames `1439:4508`; section Projects `1439:4655`; komponen
-  `HallOfFramesProjects.astro` (kelas `.hof-project-card`). **JANGAN rename ke
-  `.project-card`** — `verify.mjs` meng-hide `.project-card:not(.is-active)`.
-- Card referensi homepage (`Projects.astro`, node `1430:2146`):
-  - active card **549×567**, `border-radius: 20px`.
-  - `.project-inner` fill `rgb(98 80 255 / 10%)`; rim 1px
-    `linear-gradient(135deg, #e0dcff, #332959 52%, #332959 75%, #e0dcff)` via
-    `::after` + `mask-composite: exclude` (BUKAN `border`).
-  - image `top: .176%`, width `106.921676%`, height `61.552028%`, opacity `0.8`.
-  - tags + copy (title/desc) dari `src/data/projects.ts` (Bluu Next Bold 700 /
-    Manrope).
-  - glow `.project-card::before`: radial `rgb(108 59 255 / 68%)` di `bottom:-26px`,
-    `blur(24px)`, hanya card aktif.
-  - coverflow JS: `sideOffset = w*0.838`, `step = w*0.62`, `rotateY ±24deg`,
-    `depth = -110*d`, side `blur(6+(d-1)*3) brightness(0.72)`.
-- **About Us TIDAK punya section "Our Project"** — card referensi = homepage.
-Checklist WAJIB (satu section per pass; Master Work Plan dulu):
-[ ] 1. `figma_get_figma_data` node `1439:4655` + export PNG; bandingkan card aktif
-       vs homepage `1430:2146` (MAE ref-vs-ref) sebelum ubah kode.
-[ ] 2. Tulis Master Work Plan: struktur card, strict 8pt (padding/gap/margin),
-       typography (Bluu Next Bold 700 / Manrope), warna (fills + rim + glow via
-       REST `effects`), artwork, transform coverflow, testing criteria.
-[ ] 3. Implementasi di `HallOfFramesProjects.astro`: samakan `.hof-project-inner`
-       (structure, rim `135deg`, glow radial, image treatment, tag/copy style,
-       coverflow params) dengan `Projects.astro`.
-[ ] 4. Responsive 320→3840 (desktop arrows sisi, mobile bawah), reduced-motion
-       pixel-exact, tanpa overflow. Perbarui `responsive-audit`/`verify.mjs`.
-[ ] 5. 7 gate + seo; update `docs/assets.md`/`docs/ai-handoff.md`/`AGENTS.md`;
-       regenerasi reference HoF Projects + `assets/hall-of-frames/...`.
+TARGET NEXT: SEMUA HERO → BACKGROUND VIDEO (looping, anti-burik)
+Master Work Plan rinci ada di **`docs/hero-video-plan.md`** (WAJIB dibaca dulu).
+Ringkas:
+- State: Home `1430:2041` & Recruitment `1436:3506` SUDAH video (jangan dirusak).
+  About `1439:4185`, Hall of Frames `1439:4507`, Partners `1439:4788` aset video
+  SIAP (lihat §1 plan). Contact `1445:5066` tunggu aset.
+- Aturan kunci:
+  - Video = lapisan `position:absolute; inset:0; object-fit:cover` di `.artwork`
+    (`z-index:-1`, `aria-hidden`). **Geometri/padding/gap/font TIDAK berubah.**
+  - Fallback statis wajib; video hanya tampil di
+    `@media (prefers-reduced-motion: no-preference) and (min-width: 601px)`.
+    Reduce & ≤600px = gambar statis (verify reduce harus MAE sama).
+  - Markup `<video muted loop playsinline preload="none">` + `<source webm>` lalu
+    `mp4`. JANGAN poster/autoplay/preload=auto di markup — attach via JS.
+  - Encode: webm AV1 crf 43 + mp4 x264 crf 28–30, `yuv420p`, `-an`, poster frame 0
+    webp q82, `unsharp=5:5:0.5`. Budget webm ≤0.9MB / mp4 ≤1.1MB per hero.
+  - Loop: crossfade sirkular (1s) atau ping-pong; tanpa seam terlihat.
+  - Pause off-screen + tab hidden; cleanup `astro:before-swap`.
+- Ekstrak implementasi bersama (`HeroVideo.astro` + `src/scripts/hero-video.ts`)
+  agar tidak duplikat 6×; refactor Home & Recruitment dengan bukti MAE 0 regresi.
+- Checklist tiap hero: Master Work Plan → encode+cek frame 1:1 → pasang →
+  reduce/≤600px statis → 7 gate + seo → update docs → commit per hero.
+- Urutan: 1) About, 2) Hall of Frames, 3) Partners, 4) Contact (tunggu aset),
+  5) evaluasi Recruitment (opsional), 6) Home (tidak diubah).
 
 --------------------------------------------------------------------------------
 TARGET (SELESAI 3 Oct 2026): About Us — Our Philosophy (`1439:4219`) — BACKGROUND BLEND

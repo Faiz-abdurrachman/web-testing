@@ -2375,3 +2375,24 @@ tasks, max 76ms); desktop 1440 still runs the particles + pinned sequence.
 Gates: `format:check`, `build` 14/0, `responsive-audit` 364 ALL PASS,
 `verify-splash` PASS, `verify.mjs` `browserErrors: []`, `perf:audit` report-only
 (only the footer logs an 80ms task).
+
+## Hero background videos (3 Oct 2026)
+
+Semua hero memakai `<video>` looping sebagai background dengan fallback gambar
+statis. Aturan keras + Master Work Plan: **`docs/hero-video-plan.md`** dan
+`docs/pixel-precision-sop.md` §10.
+
+| Halaman        | Node        | Sumber mentah (`assets/`)                                                         | Output diserve                                                      | Status   |
+| -------------- | ----------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------- | -------- |
+| Home           | `1430:2041` | `assets home page/hero section/hero.mp4` (1280×720,10s)                           | `public/images/hero/hero-bg.{webm,mp4}` + `hero-poster.webp`        | DONE     |
+| Recruitment    | `1436:3506` | `assets recruitment page/hero section/recruitment-hero1.mp4` (1920×1080,10s)      | `public/images/recruitment/hero-bg.{webm,mp4}` + `hero-poster.webp` | DONE     |
+| About Us       | `1439:4185` | `assets about us/hero/Animating_sorcerer_image_ambient…_1080p_20261003164943.mp4` | `public/images/about/hero-bg.{webm,mp4}` + poster                   | **SIAP** |
+| Hall of Frames | `1439:4507` | `hall of frames/hero/Sealed_arcane_door_ambient_anima…_20261003171201.mp4`        | `public/images/hof/hero-bg.{webm,mp4}` + poster                     | **SIAP** |
+| Partners       | `1439:4788` | `partners/hero/Arcane_hands_establishing_magica…_1080p_20261003172522.mp4`        | `public/images/partners/hero-bg.{webm,mp4}` + poster                | **SIAP** |
+| Contact        | `1445:5066` | —                                                                                 | `public/images/contact/hero-bg.{webm,mp4}` + poster                 | PENDING  |
+
+Catatan: nama file sumber punya karakter unicode `…` (quote path-nya). Alternatif
+Recruitment: `assets recruitment page/hero section/Animating_static_planetary_space…_1080p_20261003170119.mp4`.
+Nilai sumber: 1920×1080, 24fps, H.264, tanpa audio; budget encode webm ≤0.9MB /
+mp4 ≤1.1MB per hero (lihat plan §3). Reference screenshot `verify.mjs` di-capture
+dalam `reduce` → video tersembunyi → MAE statis **tidak berubah**.

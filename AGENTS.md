@@ -175,6 +175,7 @@ assets/<page>/           raw PNGs read by verify/generate scripts (NOT served; u
 docs/assets.md           provenance per section (keep updated)
 docs/pixel-precision-sop.md  strict pixel-accuracy protocol (read before any UI)
 docs/sound-sop.md        sound system SOP (procedural Web Audio SFX + ambient)
+docs/hero-video-plan.md  Master Work Plan: semua hero → background video looping
 docs/ai-handoff.md       live "where we are now" handoff for the next AI agent
 artifacts/               verify output (git-ignored)
 ```
@@ -420,8 +421,14 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   Reference `HoF-Projects-1x.png` + assertion `verify.mjs` diregenerasi (kartu sengaja
   supersede PNG lama). `responsive-audit` skip `.hof-project-card:not(.is-active)`.
   7 gate + seo ALL PASS.
-- **★ NEXT (untuk AI baru): audit Partners (`1439:4787`, 4 section) + 6 detail HoDS
-  (`864:18857` dkk) strict per-section** (Master Work Plan dulu, 1 section/pass, 7 gate).
+- **★ NEXT (untuk AI baru): VIDEO HERO — semua hero section jadi background
+  video looping.** Home (`1430:2041`) & Recruitment (`1436:3506`) sudah video;
+  About (`1439:4185`), Hall of Frames (`1439:4507`), Partners (`1439:4788`) aset
+  video sudah disiapkan (lihat `docs/hero-video-plan.md` §1); Contact (`1445:5066`)
+  menyusul. Kerjakan **satu hero per pass + 7 gate**; geometri statis + render
+  reduce TIDAK boleh berubah. Master Work Plan rinci (encode anti-burik, loop,
+  reduce/≤600px, budget, urutan) ada di **`docs/hero-video-plan.md`**. Setelah
+  video: audit Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk) per-section.
 - **SELESAI (3 Oct 2026): About Us — Our Philosophy (`1439:4219`) — REVISI
   BACKGROUND BLEND.** Tim minta background linear disatukan dengan Our Ecosystem
   (`1439:4258`). Figma kini memberi node fill **gradient** (handles

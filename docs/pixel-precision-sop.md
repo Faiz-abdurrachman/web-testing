@@ -467,17 +467,52 @@ Semua di file Figma `JYUzJK1hFqaEwL6DpdDvjp`. Hasil akhir (reduced motion, 1440)
 
 ## 9. Target berjalan (3 Oct 2026)
 
-**NEXT: About Us — Our Philosophy (`1439:4219`) — REVISI BACKGROUND BLEND.**
-Tim minta background linear section ini **disatukan dengan section di bawahnya**
-(Our Ecosystem `1439:4258`) supaya transisi antar-section menyatu. Komen tim:
-_"perubahan linear bg agar nyatu sama section bawahnya"_. Fokus: **glow presisi,
-responsive 320→3840, strict 8pt + warna**.
-URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4219&t=ACGP2ODKHPTFHpeX-4`
-Catatan: dulu About Philosophy (`1439:4219`) **pixel-identik** dengan Homepage
-Philosophy (`1430:2052`, MAE 0.000) — cek dulu sebelum ubah, jangan rusak Homepage.
-Detail langkah + checklist ada di `docs/kickoff-prompt.md` §TARGET NEXT.
+**NEXT: SEMUA HERO SECTION jadi BACKGROUND VIDEO looping** (fallback gambar statis).
+Aset video sudah disiapkan user mulai dari **About Us** (lihat tabel di
+`docs/hero-video-plan.md` §1; Home & Recruitment sudah pakai video). Fokus:
+**kualitas encode anti-burik, loop mulus, geometri statis tak berubah, reduce/≤600px
+tetap gambar statis.** Kerjakan **satu hero per pass + 7 gate**.
+Master Work Plan lengkap: `docs/hero-video-plan.md`.
+URL Figma halaman terkait ada di `docs/kickoff-prompt.md`.
 
-**Selesai diaudit (jangan rusak tanpa alasan):** Homepage (`1430:2040`, §1–7),
-About Us (`1439:4184`, §1–6; visi-misi punya `<Starfield />` final — jangan
-disentuh), Recruitment (`1436:3505`, **9/9**). Setelah Philosophy, lanjut Partners
-(`1439:4787`) + 6 detail HoDS (`864:18857` dkk). State lengkap → `docs/ai-handoff.md`.
+**Selesai (jangan rusak tanpa alasan):**
+
+- Homepage (`1430:2040`, §1–7), Recruitment (`1436:3505`, 9/9), About Us
+  (`1439:4184`, §1–6; visi-misi punya `<Starfield />` final — **jangan disentuh**),
+  Partners (`1439:4787`, §1–4), Contact hero (`1445:5065`).
+- **Hall of Frames card Project Highlight (`1439:4655`) — SELESAI 3 Oct 2026**:
+  disamakan dengan card "Our Project" homepage (`Projects.astro`) — kartu 549×567 +
+  coverflow JS, 4 project/4 dot, glow bow-tie dihapus; section 1440×1014; reference
+  - assertion `verify.mjs` diregenerasi. Detail: `docs/assets.md`.
+- **Berikutnya setelah video:** audit Partners (`1439:4787`) + 6 detail HoDS
+  (`864:18857` dkk) per-section; lalu konten asli. State lengkap →
+  `docs/ai-handoff.md`.
+
+## 10. Video hero (aturan keras)
+
+Semua hero boleh pakai `<video>` looping sebagai background, dengan syarat:
+
+- **Fallback statis wajib.** `<picture>`/art plate tetap ada; video `opacity:0`
+  secara default, hanya tampil di
+  `@media (prefers-reduced-motion: no-preference) and (min-width: 601px)`.
+  Under `reduce` **dan** ≤600px: video tidak di-attach/di-load/play.
+- **Jangan ubah geometri.** Video `position:absolute; inset:0; object-fit:cover` di
+  dalam `.artwork` (`z-index:-1`, `aria-hidden`). Section height/padding/gap/font
+  tidak berubah; reference PNG (di-capture reduce) & MAE **tetap sama**.
+- **Markup:** `<video muted loop playsinline preload="none">` + `<source webm>` dulu
+  lalu `mp4`. **Jangan** set `poster`/`autoplay`/`preload="auto"` di markup — attach
+  `poster` + `preload='auto'` + `load()` via JS hanya saat akan play.
+- **Encode:** webm AV1 (`libsvtav1` crf 43, preset 8), mp4 H.264 (`libx264` crf
+  28–30, preset slow, `+faststart`), `yuv420p`, `-an`; poster = frame 0 webp q82;
+  `unsharp=5:5:0.5`. Resolusi ≥1920×1080; 2560×1440 untuk hero yang di-pin/zoom.
+  Budget ~ webm ≤0.9 MB / mp4 ≤1.1 MB per hero.
+- **Loop:** crossfade sirkular (1s) untuk motion terarah, atau ping-pong; tidak boleh
+  ada seam terlihat.
+- **A11y/UX:** `aria-hidden`, `muted`, `playsinline`; pause off-screen
+  (`IntersectionObserver`) dan saat tab hidden (`visibilitychange`); cleanup
+  `astro:before-swap` (`AbortController`/`dispose`), re-init `astro:page-load`.
+- **Kualitas:** cek frame 0/tengah/seam 1:1 sebelum lanjut; jangan "burik".
+  Detail langkah + rollout: `docs/hero-video-plan.md`.
+
+**Tabel pengecualian spacing** (§Hukum Spacing) berlaku juga di hero; seluruh
+padding/gap/margin hero tetap kelipatan 8 atau ada di tabel.
