@@ -650,10 +650,12 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   diregenerasi dari node `864:18959`. `verify.mjs` sekarang assert heading
   `font-family` Bluu Next + weight `700` per rute. Geometri tak berubah
   (`back 80/80`, `card 80/163/1280×279`, `tabs 80/498`, height 1280).
-- **Next plan (prioritas).** **NEXT: audit menyeluruh ABOUT US (`1439:4184`)
-  strict per-section** (presisi, glow, responsive, 8pt, font) — **JANGAN sentuh
-  background bintang hidup visi-misi (`<Starfield />`)**. Lalu benchmark **Homepage
-  (`1430:2040`)** & **Recruitment (`1436:3505`)**, lalu Partners + 6 detail HoDS.
+- **Next plan (prioritas).** **NEXT: audit menyeluruh RECRUITMENT (`1436:3505`)
+  strict per-section** (presisi, GLOW/GLASS, responsive, 8pt, font; 9 section) —
+  kerjakan **satu section per pass**. **Homepage (`1430:2040`) & About Us
+  (`1439:4184`) sudah diaudit 3 Oct 2026** (About Us: tombol "See More" `OurTeam`
+  = GLASS `1248:15694`, diperbaiki; **JANGAN sentuh `<Starfield />` visi-misi**).
+  Lalu Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).
   Protokol: inventaris `depth 1` → Master Work Plan per section → 7 gate per
   section; dilarang lompat/gabung. Setelah itu: **(1)** konten asli (`projects.ts`,
   tanggal recruitment, logo partner, foto/nama member team,

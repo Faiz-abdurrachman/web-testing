@@ -608,8 +608,12 @@ projects 5.104 recruitment 2.174 footer 2.666
 - [x] ~~Halaman lain: **Partners, Contact, Hall of Frames**~~ — **SELESAI**:
       Partners `1439:4787` 4 section (3 Oct 2026), Contact `1445:5065`, Hall of
       Frames `1439:4507` (1 Oct 2026) sudah presisi (`--font-display` + 8pt).
-- [ ] **Target berikutnya:** audit strict per-section **Contact `1445:5065`**,
-      lalu revisi **detail HoDS** (`/hods/[id]`, 6 rute) ke Bluu Next Bold 700.
+- [ ] **Target berikutnya:** audit strict per-section **Recruitment
+      (`1436:3505`, 9 section)** — presisi + GLOW/GLASS + responsive + 8pt + font
+      (Bluu Next Bold 700). Satu section per pass, 7 gate per section. Homepage
+      (`1430:2040`) & About Us (`1439:4184`) sudah diaudit 3 Oct 2026. Checklist:
+      `docs/kickoff-prompt.md` §TARGET 0; state: `docs/ai-handoff.md` §Next Task.
+      Lalu Partners (`1439:4787`) + audit 6 detail HoDS (`/hods/[id]`).
 - [ ] Audit tiap halaman detail HoDS / detail role kalau ada pembaruan Figma.
 - [~] **Optimasi berat web (P0–P2)** — detail di `docs/ai-handoff.md` §"Perf
       audit & rencana". **P0(a)+(d) selesai 28 Sep 2026:** `sizes` Snippets +

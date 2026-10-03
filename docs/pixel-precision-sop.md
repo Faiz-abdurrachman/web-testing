@@ -185,6 +185,16 @@ mencocokkannya ke Figma.
   piksel PNG** (glass rim lebih terang di atas: contoh terukur top ≈116, bottom
   ≈96, sisi ≈60 di 1×). Blur opsional (`backdrop-filter: blur(8px)` paling dekat;
   hanya berdampak bila ada artwork di belakang panel).
+- **Pill/tombol GLASS punya fill + lapisan "liquid" + rim, dan rimnya bisa
+  ASIMETRIS.** Contoh `OurTeam` "See More" (komponen `1248:15694`): fill `#1A1A1A`
+  - child "liquid" `rgba(217,217,217,.1)`, plus inset shadows; rim PNG terbaca
+    ≈226 di kanan-bawah dan ≈117 di kiri-atas (bukan seragam). Implementasi lama
+    `#161616` + radial highlight terang kiri-atas → interior ~22 vs referensi ~46
+    (region MAE ~29). Cara benar: ambil `fills`/`effects` node (REST), set
+    `background` = fill node, tambahkan lapisan liquid (`::before`) + rim via inset
+    shadow/ring `::after`, lalu **fit intensitasnya dari PNG**. Tombol ber-`hug`
+    punya **floor MAE dari AA teks** lintas-renderer — berhenti di floor, jangan
+    geser posisi. Catat nilai & provenance di `docs/assets.md`.
 - **Rasterisasi font lintas-renderer = sisa MAE yang sulit hilang.** Pada teks
   kecil (mis. pill Manrope 12px) Figma vs Chromium bisa beda ~1px/tepi glyph walau
   bbox tinta identik; **jangan** kejar dengan menggeser posisi/mengganti gradient.
@@ -420,9 +430,11 @@ Semua di file Figma `JYUzJK1hFqaEwL6DpdDvjp`. Hasil akhir (reduced motion, 1440)
 
 ## 9. Target berjalan (3 Oct 2026)
 
-**NEXT: audit menyeluruh ABOUT US (`1439:4184`) strict per-section** — presisi,
-glow, responsive. **JANGAN sentuh background bintang hidup section visi-misi
-(`<Starfield />`) — sudah final.** Checklist + URL ada di
-`docs/kickoff-prompt.md` §TARGET 0; state di `docs/ai-handoff.md` §Next Task.
-Setelah itu benchmark Homepage (`1430:2040`) & Recruitment (`1436:3505`), lalu
+**NEXT: audit menyeluruh RECRUITMENT (`1436:3505`) strict per-section** — presisi,
+**GLOW/GLASS**, responsive, 8pt, font Bluu Next Bold 700. 9 section (Hero → Who
+Should Join → What You Will Do → Available Roles → Selection Timeline → FAQ →
+Snippets → CTA → Footer). Checklist + URL ada di `docs/kickoff-prompt.md` §TARGET 0;
+state di `docs/ai-handoff.md` §Next Task. **Homepage (`1430:2040`) & About Us
+(`1439:4184`) sudah diaudit** (jangan rusak tanpa alasan; visi-misi punya
+`<Starfield />` yang sudah final — jangan disentuh). Setelah Recruitment, lanjut
 Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).

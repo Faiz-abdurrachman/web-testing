@@ -8,6 +8,35 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
+**NEXT = AUDIT MENYELURUH RECRUITMENT (`1436:3505`) strict per-section.**
+URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3505`
+Fokus: **presisi piksel, GLOW/GLASS, responsive 320→3840, strict 8pt, font**
+(Bluu Next Bold 700). Inventaris `depth 1` dulu → Master Work Plan section 1 →
+7 gate → section 2, dst. **JANGAN lewatkan section mana pun.** 9 section:
+
+| #   | Node ID     | Frame              | W×H      | Komponen sekarang            |
+| --- | ----------- | ------------------ | -------- | ---------------------------- |
+| 1   | `1436:3506` | Hero Section       | 1440×866 | `RecruitmentHero.astro`      |
+| 2   | `1436:3512` | Who Should Join    | 1440×789 | `WhoShouldJoin` (DomainRail) |
+| 3   | `1436:3517` | What You Will Do   | 1440×903 | `WhatYouWillDo.astro`        |
+| 4   | `1436:3564` | Available Roles    | 1440×843 | `AvailableRoles.astro`       |
+| 5   | `1436:3637` | Selection Timeline | 1440×812 | `SelectionTimeline.astro`    |
+| 6   | `1436:3675` | FAQ                | 1440×983 | `Faq.astro`                  |
+| 7   | `1436:3684` | Snippets           | 1440×897 | `Snippets.astro`             |
+| 8   | `1436:3687` | CTA                | 1440×520 | `Cta.astro`                  |
+| 9   | `1436:3699` | Footer             | 1440×556 | `Footer.astro` (shared)      |
+
+Checklist + protokol lengkap: `docs/kickoff-prompt.md` §TARGET 0. **Audit, bukan
+tulis ulang**: section yang sudah presisi (geometri ±0, 8pt PASS, font/warna cocok)
+cukup dilaporkan PASS; perbaiki HANYA region yang beda vs PNG node. Selalu
+regenerasi reference dari node terbaru dan cek pixel-identik vs node lain dulu.
+
+**Homepage (`1430:2040`) & About Us (`1439:4184`) = sudah diaudit (3 Oct 2026).**
+About Us temuan: tombol "See More" `OurTeam` ternyata GLASS (`1248:15694`),
+diperbaiki (section MAE 2.828 → 2.770). JANGAN sentuh `<Starfield />` visi-misi.
+
+---
+
 **PARTNERS PAGE (`1439:4787`) — 100% SELESAI (3 Oct 2026).** Homepage
 (`1430:2040`), Recruitment (`1436:3505`), About Us (`1439:4184`), dan Partners
 semua selesai. Link Figma:
@@ -90,10 +119,11 @@ reduce presisi, 7 gate + seo. Checklist lengkap + Master Work Plan:
 **NEXT (prioritas):**
 
 0. **Audit strict per-section — PLAN PER HALAMAN, EKSEKUSI PER SECTION.**
-   **About Us (`1439:4184`) SELESAI (3 Oct 2026)** — Section 5 button GLASS
-   diperbaiki; sisanya PASS. Lanjut benchmark **Homepage (`1430:2040`)** &
-   **Recruitment (`1436:3505`)** → **Partners (`1439:4787`)** + 6 detail HoDS
-   (`864:18857` dkk). Inventaris `depth 1` →
+   **NEXT = Recruitment (`1436:3505`)** strict per-section (9 section; presisi +
+   GLOW/GLASS + responsive + 8pt + font). Lalu **Homepage (`1430:2040`)** &
+   **About Us (`1439:4184`)** — keduanya **sudah diaudit 3 Oct 2026** (About Us:
+   Section 5 tombol GLASS `OurTeam` diperbaiki, sisanya PASS) → **Partners
+   (`1439:4787`)** + 6 detail HoDS (`864:18857` dkk). Inventaris `depth 1` →
    Master Work Plan section 1 → selesai 7 gate → section 2. **Jangan lompat/gabung.**
    Gate spacing: `npm run audit:spacing` memastikan setiap padding/gap/margin
    kelipatan 8 atau ada di tabel pengecualian SOP.
