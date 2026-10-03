@@ -395,75 +395,53 @@ assets:contact` regenerates it and the icons.
 
 ## Hall of Frames — Project highlights (1 October 2026)
 
-- **PENDING REVISION (approved 3 Oct 2026).** The card must be made **identical**
+- **REVISED (approved + implemented 3 Oct 2026).** The card was made **identical**
   to the homepage "Our Project / What Our Sorcery Create" card
   (`src/components/Projects.astro`, node `1430:2146`): active card **549×567**,
-  `.project-inner` fill `rgb(98 80 255 / 10%)`, 1px rim
+  `.hof-project-inner` fill `rgb(98 80 255 / 10%)`, 1px rim
   `linear-gradient(135deg, #e0dcff, #332959 52%, #332959 75%, #e0dcff)`,
   image `top .176% / 106.921676% × 61.552028% / opacity .8`, tags + copy, and the
-  `.project-card::before` radial violet glow. This **intentionally supersedes the
-  PNG above** for the card art — regenerate the reference + `verify.mjs`
-  assertions in the same commit. Keep the `.hof-project-card` class name.
-- Section node **`1439:4655`** ("Project highlights"), 1440 × 1181, `padding 80`,
-  `gap 19`, `#050507`. Header `1439:4661` (803 wide, `gap 24`): a "Project
-  Highlight" pill (`rgba(255,255,255,.15)`, radius 32, `4px 12px`, Manrope 400
-  12/18), title **Bluu Next Bold 56 / 67** gradient ("See What Our Sorcerers
-  Create") and a Manrope Medium 18/27 subtitle. A decorative **bow-tie glow**
-  (`1439:4656`, an IMAGE-SVG with `blur(43px)`) sits behind the stage.
-- Stage `1439:4667` is **1280 × 730**, an `inline-size` container so it scales
-  proportionally (`1cqw = 12.8px`). Three browser-window cards: centre
-  `1439:4686` **933 × 730** at `174/0` (on top), sides `1439:4677`/`1439:4668`
-  **800 × 625.94** at `0/60` and `480/67`. The card is itself a container
-  (base 933), so the side cards are just the centre scaled (0.8575). Class is
-  `hof-project-card` (renamed — `verify.mjs`'s `setNavbarHidden` hides
-  `.project-card:not(.is-active)` from the homepage carousel and was hiding
-  these).
-- Card layers: the **raw browser-mockup screenshot** (imageRef `44090885…`,
-  `HoF-Project-Shot-raw.png`) under a **20% black tint** — Figma's fill is
-  `[rgba(0,0,0,0.2), IMAGE]`; without the tint the mockup read far too white
-  (stage MAE 28 → 3). Then the `#0E0626` bar, title, lorem description and two
-  `#6C3BFF` pills. The **136deg gradient rim is an `::after` + mask overlay**,
-  not a border: a real 2px border shrank the content box (929 vs 933) and shifted
-  the mockup. The Figma drop shadow is reproduced with `box-shadow` in stage-cqw.
-- `1439:4695` dots: three 13px circles (`#707070`), the active one a
-  `153deg #6C3BFF → #9483C6` gradient. All text is **placeholder**
-  ("Arutala Aksara", lorem).
-- **3D carousel (1 Oct 2026).** The static stage became an interactive coverflow.
-  Each slot is a **class + transform** (`is-left` / `is-center` / `is-right`) on
-  the same `.hof-project-card`, so CSS `transition` (transform/filter/opacity
-  `0.62s cubic-bezier(0.22,0.61,0.36,1)`) animates the movement smoothly — no JS
-  transform maths, which keeps the reduced-motion geometry exact. Slot transforms
-  reproduce the Figma boxes: centre `translate(-50%,-50%) translateX(0.039cqw)`
-  (Figma centre is at x174 = 0.5px right of the stage centre), sides
-  `translate(±18.75cqw, +0.625/+1.17cqw) scale(0.85746)`.
-  - **Only under `prefers-reduced-motion: no-preference`:** side cards get
-    `rotateY(±10deg) translateZ(-40px)` + `blur(6px) brightness(.72)`, and the
-    glow animates (`hof-glow`, `7s alternate`, paused off-screen via
-    `is-idle`/IntersectionObserver). Under `reduce` / no-JS the render is the
-    static Figma composition (sharp, no rotation).
-  - **Arrows** `.project-arrow prev/next` (`.project-arrow` is in `verify.mjs`'s
-    hide-list, so it never affects the reference diff): 52px discs at the stage
-    sides `80/678` and `1308/678` on desktop; ≤1050px they move below the stage.
-    Dots are real `<button>`s driving the carousel; keyboard ←/→ (when the section
-    is centred) and drag/swipe work. Slides come from `src/data/projects.ts`
-    (first 3; placeholder), each card reusing the HoF browser-mockup shot. The
-    deck is **rendered twice (6 DOM cards)** so the ring wrap always happens
-    between off-window slots (`is-far-left`/`is-far-right`, `opacity: 0`) — with
-    a single copy the wrapping card visibly slid across the centre. Every visible
-    card therefore moves exactly one slot per step, and all slots share the same
-    `translate → translate3d → rotateY → scale` transform list so the browser
-    interpolates per-function (no matrix fallback).
-  - **View Transitions:** the controller re-inits on `astro:page-load` and tears
-    down on `astro:before-swap` via `AbortController`.
-- `npm run assets:hof` bakes `public/images/hof/projects/{shot,glow}.webp`
-  (the blur-baked glow ships as a single 1200w asset — the 3514px export was
-  visually identical and much heavier). `verify.mjs` asserts the `hofProjects`
-  geometry (section 1440 × 1181, header 318.5/80/803, stage 80/339/1280 × 730,
-  centre 933 × 730 at 254/339, sides 800 × 625.9, dots 49 × 13, arrows 52 × 52 at
-  80/678 & 1308/678, overflow 0) and diffs vs `HoF-Projects-1x.png` (MAE **3.05**
-  — the side cards now show the neighbouring project, up from 2.96 when all three
-  repeated "Arutala"). Responsive: the coverflow runs down to 900px, below which
-  only the centre card shows and the arrows sit under the dots row.
+  `.hof-project-card::before` radial violet glow. This **intentionally supersedes
+  the PNG above** for the card art — the reference + `verify.mjs` assertions were
+  regenerated in the same commit. The `.hof-project-card` class name is kept.
+- Section node **`1439:4655`** ("Project highlights"), now **1440 × 1014**,
+  `padding 80`, `gap 19`, `#050507`. Header `1439:4661` (803 wide, `gap 24`):
+  a "Project Highlight" pill (`rgba(255,255,255,.15)`, radius 32, `4px 12px`,
+  Manrope 400 12/18), title **Bluu Next Bold 56 / 67** gradient ("See What Our
+  Sorcerers Create") and a Manrope Medium 18/27 subtitle. The old decorative
+  **bow-tie glow** (`1439:4656`) was **removed** — the homepage has no
+  stage-level glow, only the card's radial glow.
+- Stage `.projects-stage` **1280 × 567** at `80/339`; the card is the homepage
+  **549 × 567** flat card: `.hof-project-inner` fill `rgb(98 80 255 / 10%)`,
+  1px rim `linear-gradient(135deg, #e0dcff, #332959 52%, #332959 75%, #e0dcff)`
+  via `::after` + `mask-composite: exclude` (never a real border), image
+  `top .176% / 106.921676% × 61.552028% / opacity .8`, tags (top `53.79%`,
+  left `10.02%`, gap 16, `#6c3bff` pills) and copy (left `9.56%`, top `67.72%`,
+  h3 Manrope 700 26/39, p 400 16/24). The active card shows the homepage radial
+  glow (`.hof-project-card::before`, `rgb(108 59 255 / 68%)`, `bottom -26`,
+  blur 24) — hidden under `reduce`, exactly like the homepage. Class stays
+  `hof-project-card` (`verify.mjs`'s `setNavbarHidden` hides
+  `.project-card:not(.is-active)`).
+- **Coverflow ported from `Projects.astro`** (JS inline transforms, no slot
+  classes): `base = min(1, stageW*0.9/549)`, `sideOffset = 549*0.838`,
+  `step = 549*0.62`, `rotateY ±24`, `depth = -110*d`, side
+  `blur(6+(d-1)*3) brightness(.72)`; ≤520px a single-card sliding track.
+  **4 slides** from `src/data/projects.ts` (shared with the homepage) and
+  **4 dots** (`.projects-dots`, 9px, `rgb(255 255 255 / 25%)`, active
+  `#9b7bff`). Arrows `.project-arrow` (52px, stage sides `80/596.5` and
+  `1308/596.5`; ≤1050 below the stage) drive the carousel; keyboard ←/→ (when
+  the section is centred) and drag/swipe work; `astro:page-load` re-init +
+  `AbortController` teardown on `astro:before-swap`.
+- `npm run assets:hof` no longer writes `public/images/hof/projects/{shot,glow}.webp`
+  (the card uses `public/images/projects/arutala-aksara.webp`, the shared Figma
+  image); those served files + the glow/bar treatment were removed. The reference
+  `assets/hall of frames/projects/HoF-Projects-1x.png` was **regenerated** from
+  the new render (1440 × 1014) in the same commit. `verify.mjs` asserts the new
+  `hofProjects` geometry (section 1440 × 1014, header 318.5/80/803 × 179, stage
+  80/339/1280 × 567, centre 549 × 567 at 445.5/339, sides 346.4 × 367.4 at
+  106.5/987, dots 66 × 9 at 687/925, arrows 52 × 52 at 80/596.5 & 1308/596.5,
+  overflow 0) and `responsive-audit.mjs` skips
+  `.hof-project-card:not(.is-active)` text.
 
 ## Hall of Frames — Featured Sorcerers (1 October 2026)
 

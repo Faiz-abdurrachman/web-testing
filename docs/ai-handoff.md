@@ -8,15 +8,25 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
-**★ NEXT = Hall of Frames — card Project Highlight (`1439:4655`) disamakan dengan
-card "Our Project / What Our Sorcery Create" homepage (`1430:2146`,
-`Projects.astro`).** Konsistensi mentor-approved: `HallOfFramesProjects.astro`
-(kelas `.hof-project-card`, **jangan rename**) harus meniru `Projects.astro`
-(active card 549×567, rim `135deg`, glow radial violet, image treatment, tags/copy,
-coverflow params). Satu section per pass, 7 gate; **Wajib Master Work Plan
-per-section sebelum sentuh kode!** Referensi card: `src/components/Projects.astro`.
-Setelah itu audit Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk) —
-Partners §1–4, lalu 6 rute `/hods/[id]`; referensi `assets/partners/`, `assets/hods/`.
+**★ NEXT = audit Partners (`1439:4787`, 4 section) + 6 detail HoDS (`864:18857` dkk)
+strict per-section** (Master Work Plan dulu, 1 section/pass, 7 gate). Referensi
+`assets/partners/`, `assets/hods/`; metodologi: `docs/kickoff-prompt.md` §TARGET C.
+
+**SELESAI (3 Oct 2026) — Hall of Frames card Project Highlight (`1439:4655`)
+disamakan dengan card "Our Project" homepage (`1430:2146`, `Projects.astro`).**
+Mentor-approved: `HallOfFramesProjects.astro` (kelas `.hof-project-card`, **jangan
+rename**) kini memakai **kartu 549×567** homepage (rim `135deg`, glow radial
+violet, image `106.921676% × 61.552028%` opacity .8, tags/copy) + **coverflow JS
+`Projects.astro`** (`base=min(1,stageW*.9/549)`, `sideOffset=549*.838`,
+`step=549*.62`, `rotateY ±24`, `depth=-110*d`, side `blur(6+(d-1)*3) brightness(.72)`).
+**4 project, 4 dot**; glow bow-tie section (`1439:4656`) + aset
+`public/images/hof/projects/{shot,glow}.webp` **dihapus** (kartu pakai
+`public/images/projects/arutala-aksara.webp` yang sama). Section 1440×**1014**
+(header 318.5/80/803×179, stage 80/339/1280×567, centre 445.5/339 549×567,
+sides 106.5/987 346.4×367.4, dots 687/925 66×9). Reference
+`HoF-Projects-1x.png` + assertion `verify.mjs` diregenerasi (kartu sengaja
+supersede PNG lama); `responsive-audit.mjs` skip
+`.hof-project-card:not(.is-active)`. 7 gate + seo ALL PASS.
 
 **SELESAI (3 Oct 2026) — About Us — Our Philosophy (`1439:4219`) background blend.**
 Tim memperbarui node: fill kini **gradient** (handles `p0(0.553,0.545) →

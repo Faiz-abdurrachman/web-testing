@@ -10,16 +10,13 @@ import sharp from 'sharp';
 
 const src = 'assets/hall of frames/hero';
 const featuredSrc = 'assets/hall of frames/featured';
-const projectsSrc = 'assets/hall of frames/projects';
 const milestoneSrc = 'assets/hall of frames/milestone';
 const out = 'public/images/hof';
 const featuredOut = path.join(out, 'featured');
-const projectsOut = path.join(out, 'projects');
 const milestoneOut = path.join(out, 'milestone');
 const bg = path.join(src, 'HoF-Hero-Bg-raw.png');
 
 await mkdir(featuredOut, { recursive: true });
-await mkdir(projectsOut, { recursive: true });
 await mkdir(milestoneOut, { recursive: true });
 
 const webp = (input, output, width, quality) =>
@@ -33,7 +30,6 @@ const webpIn = (dir) => (input, output, width, quality) =>
     .resize({ width })
     .webp({ quality, effort: 5 })
     .toFile(path.join(dir, output));
-const projectWebp = webpIn(projectsOut);
 const milestoneWebp = webpIn(milestoneOut);
 
 await Promise.all([
@@ -74,28 +70,6 @@ await Promise.all([
   // reference is markedly bluer), so the node's own render is used as overlay.
   webp(path.join(featuredSrc, 'HoF-Card-Fade-2x.png'), 'fade.webp', 302, 90),
   webp(path.join(featuredSrc, 'HoF-Card-Fade-2x.png'), 'fade-2x.webp', 604, 88),
-  // Project highlights: the browser-mockup screenshot is the raw image fill;
-  // the bow-tie glow is the exported (blur-baked) IMAGE-SVG node 1439:4656.
-  projectWebp(
-    path.join(projectsSrc, 'HoF-Project-Shot-raw.png'),
-    'shot.webp',
-    933,
-    88,
-  ),
-  projectWebp(
-    path.join(projectsSrc, 'HoF-Project-Shot-raw.png'),
-    'shot-2x.webp',
-    1799,
-    86,
-  ),
-  // Blur-baked glow: very soft/low-frequency, so a single downscaled asset is
-  // visually identical and far lighter than the 3514px export.
-  projectWebp(
-    path.join(projectsSrc, 'HoF-Projects-Glow-2x.png'),
-    'glow.webp',
-    1200,
-    70,
-  ),
   // Community Milestone rail: gradient line + three diamonds (node 1439:4709).
   milestoneWebp(
     path.join(milestoneSrc, 'HoF-Milestone-Line-2x.png'),

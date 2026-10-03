@@ -43,6 +43,9 @@ const measure = (page) =>
       if (!el.textContent || !el.textContent.trim()) continue;
       if (el.closest('.domain-rail')) continue;
       if (el.closest('.project-card:not(.is-active)')) continue;
+      // The HoF Project Highlight coverflow shows the same dimmed neighbour
+      // cards (homepage variant); their off-centre text is deliberate.
+      if (el.closest('.hof-project-card:not(.is-active)')) continue;
       // The team card row shows 4 of the 5 design cards (deliberate rail).
       if (el.closest('.team-cards')) continue;
       const rect = el.getBoundingClientRect();

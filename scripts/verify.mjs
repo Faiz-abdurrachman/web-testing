@@ -3014,9 +3014,9 @@ try {
       section: { width: Math.round(sb.width), height: Math.round(sb.height) },
       header: rel('.projects-header'),
       stage: rel('.projects-stage'),
-      center: rel('.hof-project-card.is-center'),
-      left: rel('.hof-project-card.is-left'),
-      right: rel('.hof-project-card.is-right'),
+      center: rel('.hof-project-card.is-active'),
+      left: rel('.hof-project-card:nth-child(4)'),
+      right: rel('.hof-project-card:nth-child(2)'),
       dots: rel('.projects-dots'),
       arrowPrev: rel('.project-arrow.prev'),
       arrowNext: rel('.project-arrow.next'),
@@ -3024,15 +3024,15 @@ try {
     };
   });
   assert.deepEqual(hofProjectsGeometry, {
-    section: { width: 1440, height: 1181 },
+    section: { width: 1440, height: 1014 },
     header: { x: 318.5, y: 80, width: 803, height: 179 },
-    stage: { x: 80, y: 339, width: 1280, height: 730 },
-    center: { x: 254, y: 339, width: 933, height: 730 },
-    left: { x: 80, y: 399, width: 800, height: 625.9 },
-    right: { x: 560, y: 406, width: 800, height: 625.9 },
-    dots: { x: 695.5, y: 1088, width: 49, height: 13 },
-    arrowPrev: { x: 80, y: 678, width: 52, height: 52 },
-    arrowNext: { x: 1308, y: 678, width: 52, height: 52 },
+    stage: { x: 80, y: 339, width: 1280, height: 567 },
+    center: { x: 445.5, y: 339, width: 549, height: 567 },
+    left: { x: 106.5, y: 438.8, width: 346.4, height: 367.4 },
+    right: { x: 987, y: 438.8, width: 346.4, height: 367.4 },
+    dots: { x: 687, y: 925, width: 66, height: 9 },
+    arrowPrev: { x: 80, y: 596.5, width: 52, height: 52 },
+    arrowNext: { x: 1308, y: 596.5, width: 52, height: 52 },
     overflow: 0,
   });
   await page
