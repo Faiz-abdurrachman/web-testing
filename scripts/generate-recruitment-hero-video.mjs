@@ -15,13 +15,12 @@ import { mkdir, stat } from 'node:fs/promises';
 //    `[tail][body]xfade=...:offset=0` does exactly that.
 // 2. Audio is dropped. `prefers-reduced-motion` (and <=600px) never start
 //    playback, so the static `recruitment.webp` stays the reference fallback.
-// 3. The clip is served at 2560x1440. At 1920x1080 the AV1 webm carried visible
-//    8x8/16x16 blocking through the dark sky, and the hero crops (`object-fit:
-//    cover`) then zooms (pinned to 1.35x), so a 1080p source is upscaled ~2x in
-//    device pixels on retina. The larger canvas keeps the star field crisp
-//    through the zoom. Encoding budget (Perf P0): crf 43 (AV1) / 30 (x264)
-//    keeps the WebM under 0.9 MB and MP4 under 1.1 MB. Chrome/Edge get WebM
-//    (listed first), Safari gets MP4 — only one is ever fetched.
+// 3. Sharpen the native 1080p luma adaptively before a Lanczos upscale to
+//    2560x1440. A light final unsharp pass preserves the planet's fine texture
+//    without adding a harsh rim around its glow. The hero crops and zooms to
+//    1.35x on desktop, so the larger output also avoids a soft second upscale
+//    in the browser. AV1 CRF 42 / x264 CRF 31 stay within the 0.9 / 1.1 MB
+//    budget. Chrome/Edge get WebM first; Safari gets MP4.
 const SRC =
   'assets/assets recruitment page/hero section/Animating_static_planetary_space…_1080p_20261003170119.mp4';
 const OUT_DIR = 'public/images/recruitment';
@@ -37,8 +36,9 @@ const loopChain =
   `[a]trim=start=${BODY_LEN},setpts=PTS-STARTPTS[tail];` +
   `[b]trim=0:${BODY_LEN},setpts=PTS-STARTPTS[body];` +
   `[tail][body]xfade=transition=fade:duration=${XFADE}:offset=0,` +
+  `cas=strength=0.6:planes=1,` +
   `scale=${ART_W}:${ART_H}:flags=lanczos,` +
-  `unsharp=5:5:0.5:5:5:0.0[v]`;
+  `unsharp=5:5:0.25:5:5:0.0[v]`;
 
 await mkdir(OUT_DIR, { recursive: true });
 
@@ -77,7 +77,7 @@ const encodes = [
       '-c:v',
       'libx264',
       '-crf',
-      '30',
+      '31',
       '-preset',
       'slow',
       '-pix_fmt',
@@ -92,7 +92,7 @@ const encodes = [
       '-c:v',
       'libsvtav1',
       '-crf',
-      '43',
+      '42',
       '-preset',
       '8',
       '-pix_fmt',

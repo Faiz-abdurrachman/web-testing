@@ -354,12 +354,18 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
 
 ## Current checkpoint
 
+- **Recruitment Hero penajaman (3 Oct 2026):** sumber video planetary 1080p
+  memang lembut pada permukaan planet. Generator kini memakai CAS luma 0.6
+  sebelum upscale Lanczos dan unsharp ringan 0.25 sesudahnya (AV1 CRF 42,
+  x264 CRF 31). Sharpness crop planet t=4 s naik 0.718 → 0.795; output tetap
+  dalam budget 0.9/1.1 MB. Fallback statis dan geometri tidak berubah.
+
 - **Recruitment Hero video source (3 Oct 2026):**
   `scripts/generate-recruitment-hero-video.mjs` sekarang memakai
   `Animating_static_planetary_space…_1080p_20261003170119.mp4` (1920×1080,
   24 fps, 10 s) sebagai sumber; `recruitment-hero1.mp4` adalah sumber lama.
   Loop 9 s baru diserve sebagai `public/images/recruitment/hero-bg.{webm,mp4}`
-  (0.78/1.00 MiB) + poster (0.05 MiB). Static fallback dan geometri tetap.
+  (0.85/0.90 MiB) + poster (0.06 MiB). Static fallback dan geometri tetap.
 
 - **Partners Hero VIDEO (`1439:4788`, 3 Oct 2026):** shared video component and
   runtime added to `PartnersHero.astro`; 7 s circular loop from the supplied

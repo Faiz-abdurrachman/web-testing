@@ -25,6 +25,13 @@ rinci: **`docs/hero-video-plan.md`**. Setelah video: audit Partners (`1439:4787`
 tetap; `verify.mjs` menegaskan video tidak dimuat pada reduced motion.
 Screenshot reduce sebelum/sesudah MAE 0; 7 gate + SEO lulus, responsive 468/468.
 
+**Recruitment Hero penajaman (3 Oct 2026):** sumber planetary memang lembut di
+permukaan. Generator sekarang memakai `cas=0.6` pada 1080p sebelum upscale
+Lanczos, lalu `unsharp=0.25`. Sharpness crop planet t=4 s naik 0.718 → 0.795;
+output WebM 0.85 MiB / MP4 0.90 MiB. Geometri, font, dan gambar fallback tetap.
+Seam loop MAE 1.232; fallback reduce MAE 0; 7 gate + SEO lulus, responsive
+468/468. Sumber asli masih 1080p, jadi detail asli 4K memerlukan master baru.
+
 **About Us Hero video (`1439:4185`, 3 Oct 2026):** shared `HeroVideo.astro` +
 `src/scripts/hero-video.ts` handles gated loading (motion allowed, ≥601px),
 off-screen/tab pause, and View Transition cleanup. A 7 s circular loop from the

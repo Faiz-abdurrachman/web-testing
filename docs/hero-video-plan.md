@@ -103,8 +103,8 @@ Script generator: **satu config-driven** `scripts/generate-hero-videos.mjs`
 Entri minimal: `{ page, src, outDir, w, h, loop, crfAv1, crfX264 }`.
 
 - **Format & codec**
-  - `hero-bg.webm` = `libsvtav1` crf **43**, preset 8, `yuv420p` (Chrome/Edge, listed first).
-  - `hero-bg.mp4` = `libx264` crf **28–30**, preset slow, `yuv420p`, `-movflags +faststart` (Safari).
+  - `hero-bg.webm` = `libsvtav1` crf **43** default (**42** Recruitment), preset 8, `yuv420p` (Chrome/Edge, listed first).
+  - `hero-bg.mp4` = `libx264` crf **28–30** default (**31** Recruitment), preset slow, `yuv420p`, `-movflags +faststart` (Safari).
   - `hero-poster.webp` = frame 0, `libwebp -quality 82`.
   - **Tanpa audio** (`-an`).
 - **Resolusi**: encode ≥ **1920×1080**. Untuk hero yang di-pin/zoom di `motion.ts`
@@ -116,7 +116,10 @@ Entri minimal: `{ page, src, outDir, w, h, loop, crfAv1, crfX264 }`.
     body), output = `LOOP_LEN - XFADE`.
   - motion ambigu → **ping-pong** (reverse+concat).
   - Uji: tidak boleh ada lompatan terlihat setelah 1 loop.
-- **Ketajaman**: `unsharp=5:5:0.5:5:5:0.0` (counter softening encoder).
+- **Ketajaman**: `unsharp=5:5:0.5:5:5:0.0` default. Untuk Recruitment, sumber
+  planet lembut: `cas=strength=0.6:planes=1` sebelum upscale, lalu
+  `unsharp=5:5:0.25:5:5:0.0`; jangan pakai penajaman ini di hero lain tanpa
+  membandingkan frame sumber dan hasil encode.
 - **Budget** (Perf — mobile load-bearing):
   - webm ≤ **~0.9 MB**, mp4 ≤ **~1.1 MB** per hero (naikkan hanya jika terbukti
     perlu; ukur SSIM vs near-lossless ≥ ~0.99).

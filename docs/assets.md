@@ -2446,6 +2446,19 @@ memutar WebM 2560×1440; reduce dan 390px tidak meminta berkas video. Screenshot
 reduce sebelum/sesudah MAE 0. Tujuh gate + SEO lulus; responsive 468/468.
 MAE statis terhadap PNG referensi tetap 1.600/255.
 
+**Recruitment hero sharpening pass (3 Oct 2026).** Screenshot user memperlihatkan
+permukaan planet lembut. Frame hasil encode sebelum revisi hampir sama dengan
+sumber (MAE ~0.84/255), jadi kenaikan bitrate saja tidak menyelesaikannya.
+Generator kini menerapkan FFmpeg `cas=strength=0.6:planes=1` pada sumber 1080p,
+baru `scale=2560:1440:flags=lanczos` dan `unsharp=5:5:0.25:5:5:0.0`. Sampel
+tekstur planet pada t=4 s naik dari sharpness 0.718 ke 0.795 (+10.8%) tanpa
+rim putih berlebihan. AV1 CRF 42 menghasilkan WebM 895,194 byte (0.85 MiB),
+x264 CRF 31 menghasilkan MP4 945,818 byte (0.90 MiB), dan poster 60,238 byte.
+Sumber tetap 1080p; filter ini memperjelas detail yang sudah ada, tanpa
+menciptakan detail asli baru. Seam loop WebM frame pertama/terakhir MAE 1.232;
+fallback reduce MAE 0 terhadap baseline, dan 7 gate + SEO lulus (responsive
+468/468). Browser desktop memutar output baru pada viewport 1349×633.
+
 Catatan: nama file sumber punya karakter unicode `…` (quote path-nya).
 Sumber 1920×1080, 24fps, H.264; audio dibuang pada output. Budget encode webm ≤0.9MB /
 mp4 ≤1.1MB per hero (lihat plan §3). Reference screenshot `verify.mjs` di-capture
