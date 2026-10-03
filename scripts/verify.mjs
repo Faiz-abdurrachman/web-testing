@@ -1971,14 +1971,14 @@ try {
     });
   assert.deepEqual(snippetsGeometry, {
     width: 1440,
-    height: 897.203125,
+    height: 897,
     top: 5196.78125,
-    heading: { x: 80, y: 40, width: 1280, height: 67.203125 },
-    gallery: { x: 80, y: 163.203125, width: 1280, height: 694 },
-    hero: { x: 80, y: 163.203125, width: 1280, height: 556 },
+    heading: { x: 80, y: 40, width: 1280, height: 67 },
+    gallery: { x: 80, y: 163, width: 1280, height: 694 },
+    hero: { x: 80, y: 163, width: 1280, height: 556 },
     thumbs: [80, 338.5, 597, 855.5, 1114].map((x) => ({
       x,
-      y: 754.203125,
+      y: 754,
       width: 246,
       height: 103,
     })),
@@ -2095,7 +2095,7 @@ try {
     {
       width: 1440,
       height: 520,
-      top: 6093.984375,
+      top: 6093.78125,
       panel: { x: 80, y: 80, width: 1280, height: 360 },
       actions: { x: 619.546875, y: 332.09375, width: 200.890625, height: 43 },
       glow: { x: 349.828125, y: 351, width: 1000.328125, height: 271.5 },
@@ -2191,7 +2191,7 @@ try {
   assert.deepEqual(recruitFooterGeometry, {
     width: 1440,
     height: 556,
-    top: 6613.984375,
+    top: 6613.78125,
   });
   await page.locator('.footer').scrollIntoViewIfNeeded();
   await page

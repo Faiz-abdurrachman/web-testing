@@ -389,6 +389,13 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   → screenshot bounds dibulatkan ke luar 1px → konten tergeser sub-pixel `0.578px`;
   diff heatmap hanya **outline** glyph/rim (bukan fill), region bebas-teks MAE
   0.4–2.8. Geometri DOM tak berubah. Lanjut section 7–9.
+- **Section 7 Snippets (`1436:3684`) PASS (3 Oct 2026)** — ref MAE 0.000; koreksi:
+  heading line-height `67.2` → **`67`** (Figma bbox/kickoff convention; section kini
+  tepat **897** = tinggi reference PNG). Full MAE **8.6288** (tak berubah) —
+  **didominasi artefak screenshot**: section top `5196.781` fraksional + thumbnail 2
+  & 4 di x setengah-piksel `338.5/855.5` (tekstur foto tergeser sub-pixel); aligned
+  ≈ **3.03**, thumb 1/3/5 ≈ 3 vs 2/4 ≈ 10–14, isi foto identik. Downstream tops
+  −0.2 (`.cta` 6093.78125, `.footer` 6613.78125). Lanjut section 8–9.
 - **STATUS RINGKAS (3 Oct 2026).** **Homepage 100% selesai** (Hero → Our
   Philosophy → What We Do → Choose Your Domain/HoDS → Our Project → CTA, node
   `1430:2040`). **Recruitment Page 100% selesai** (node `1436:3505`). **About Us
@@ -511,14 +518,14 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   6 Accordion Items: Items 1–4 `1280×77px` di y = `[203.2, 312.2, 421.2, 530.2]`, Items 5–6 `1280×116px` di y = `[639.2, 787.2]` (2 baris teks).
   Background `rgba(255, 255, 255, 0.15)`, 1px glass rim **`linear-gradient(90deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%)`** (audit 3 Oct 2026: MCP `135deg` lossy; ref top/bottom rims identik per-x).
   Section MAE: **7.7518 → 7.803/255** (audit 3 Oct 2026, rim `90deg`). **Didominasi artefak screenshot, bukan bug CSS:** section top `4213.578` fraksional → screenshot bounds dibulatkan ke luar 1px → konten tergeser sub-pixel `0.578px`; diff heatmap hanya **outline** glyph/rim, region bebas-teks 0.4–2.8, ter-align (top:1) ~5.04. Sisa = AA font irreducible. Geometri Chromium diff 0.0px.
-  Downstream section tops (`.snippets` 5196.78, `.cta` 6096.78, `.footer` 6633.78) terkalibrasi presisi.
+  Downstream section tops (`.snippets` 5196.78, `.cta` 6093.78, `.footer` 6613.78) terkalibrasi presisi.
   Semua 7 gate + seo ALL PASS.
-- **Recruitment Page Section 7: Snippets of Life at Data Sorcerers (`1436:3684`) — 100% Selesai (2 Oct 2026).**
-  Frame Figma `1436:3684` ("Frame 2502", 1440×897.2px, padding `40px 80px`, gap header-ke-gallery **`56px`** — strict 8-point grid, mengoreksi 58px lama), fill `#050507`.
-  Heading `1436:3685`: "Snippets of Life at data sorcerers" **Bluu Next Bold 700 56/67.2px** (`--font-display`), `text-align: center`, fill `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)`. Ink width terukur 840.75px.
+- **Recruitment Page Section 7: Snippets of Life at Data Sorcerers (`1436:3684`) — AUDIT PASS (3 Oct 2026).**
+  Frame Figma `1436:3684` ("Frame 2502", 1440×**897**px, padding `40px 80px`, gap header-ke-gallery **`56px`** — strict 8-point grid, mengoreksi 58px lama), fill `#050507`.
+  Heading `1436:3685`: "Snippets of Life at data sorcerers" **Bluu Next Bold 700 56/67px** (`--font-display` — audit 3 Oct 2026: `67.2` → `67`, Figma bbox/kickoff convention → section tepat 897 = tinggi reference PNG), `text-align: center`, fill `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)`. Ink width terukur 840.75px.
   Gallery instance `1436:3686` ("galeryy ds"): 1280×694px VERTICAL gap `35px` (nilai autolayout Figma: 556 + 35 + 103). Hero carousel 1280×556 radius 20px; 5 thumbnail 246×103 `space-between` di x `[80, 338.5, 597, 855.5, 1114]`.
-  Section MAE: **8.6288/255** vs reference `Recruitment-Snippets-Revisi-1x.png` (heading region 1.45; residual = 1px cross-renderer sub-pixel offset, aligned MAE ≈ 3.3). Geometri Chromium diff 0.0px. Downstream tops (`.cta` 6093.984375, `.footer` 6613.984375).
-  Semua 6 gate verifikasi ALL PASS (`build`, `verify.mjs`, `navbar-audit`, `verify-vt`, `responsive-audit`, `format:check`).
+  Section MAE: **8.6288/255** (audit 3 Oct 2026 — tak berubah, **didominasi artefak screenshot**: section top `5196.781` fraksional + thumbnail 2 & 4 di x setengah-piksel `338.5/855.5` → tekstur foto tergeser sub-pixel; aligned ≈ **3.03**, thumb 1/3/5 ≈ 3 vs 2/4 ≈ 10–14, isi foto identik). Geometri DOM kini persis Figma. Downstream tops −0.2 (`.cta` **6093.78125**, `.footer` 6613.78125).
+  Semua 7 gate + seo ALL PASS (`build`, `verify.mjs`, `navbar-audit`, `verify-vt`, `responsive-audit`, `audit:spacing`, `format:check`).
 - **Recruitment Page Section 8: CTA Recruitment (`1436:3687`) — 100% Selesai (2 Oct 2026).**
   Frame Figma `1436:3687` ("CTA Recruicment Section", 1440×520px, padding `80px`), fill `#050507`. Panel `1438:4072`: 1280×360px di `(80, 80)`, `height:360px` + `justify-content:center`, padding `64px 80px`, gap `48px`, fill `rgba(98,80,255,.1)`, 1px glass rim `135deg`.
   Heading `1438:4077`: "Ready to Become a Sorcery?" **Bluu Next Bold 700 56/67.2px** (`--font-display`), center, fill `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)` (ink 710.25×52). Copy `1438:4078`: Manrope 400 16/24, `letter-spacing:-0.176px`, width 586 (teks lama sesuai PNG).
@@ -694,8 +701,10 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   gradient sebenarnya `90deg` bukan `135deg`, junction 1px → header base 2px +
   body no-top, separator fade-putih via mask, heading nudge 1px); Section 6 FAQ
   `1436:3675` SELESAI (rim `135deg` → `90deg` sesuai PNG; MAE ~7.80 didominasi
-  artefak screenshot sub-pixel — section top 4213.578 fraksional); NEXT = Section 7
-  Snippets `1436:3684`.** **Homepage (`1430:2040`) & About Us
+  artefak screenshot sub-pixel — section top 4213.578 fraksional); Section 7 Snippets
+  `1436:3684` SELESAI (line-height `67.2` → `67`, section tepat 897; MAE dominan
+  artefak screenshot — thumb 2/4 di x setengah-piksel); NEXT = Section 8 CTA
+  `1436:3687`.** **Homepage (`1430:2040`) & About Us
   (`1439:4184`) sudah diaudit 3 Oct 2026** (About Us: tombol "See More" `OurTeam`
   = GLASS `1248:15694`, diperbaiki; **JANGAN sentuh `<Starfield />` visi-misi**).
   Lalu Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).
