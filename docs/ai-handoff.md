@@ -46,11 +46,12 @@ for this video-only pass.
 
 **Hall of Frames Hero video (`1439:4507`, 3 Oct 2026; source refreshed 3 Oct
 2026):** shared component/runtime with About. Active source
-`terbaruSorcerer_casting_subtle_ambient_…_20261003194412.mp4` (1920×1080, 24 fps,
+`Sorcerer_in_chamber_with_electri…_20261003212122.mp4` (1920×1080, 24 fps,
 8 s) → 7 s seamless crossfade loop via `scripts/generate-hero-videos.mjs hof`;
-AV1 WebM 0.27 MiB, H.264 MP4 0.28 MiB, poster 0.09 MiB (budget). Encoded frame
-sharpness 1.18× vs source; loop seam MAE 2.27/255. The earlier
-`Sealed_arcane_door_ambient_anima…` source was archived (removed). Static fallback,
+AV1 WebM 0.30 MiB, H.264 MP4 0.35 MiB, poster 0.08 MiB (budget). Encoded frame
+sharpness 1.23× vs source; loop seam MAE 2.55/255. The earlier
+`terbaruSorcerer_casting_subtle_ambient…` and `Sealed_arcane_door_ambient_anima…`
+sources were archived (removed). Static fallback,
 geometry, fonts, and reference retained (hero MAE 4.338; reduce MAE 0).
 
 **Partners Hero video (`1439:4788`, 3 Oct 2026):** shared component/runtime;

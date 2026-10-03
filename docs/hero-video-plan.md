@@ -32,7 +32,7 @@ Baca bareng: `AGENTS.md`, `docs/pixel-precision-sop.md` (§Video hero),
 | 1   | Home           | `1430:2041` | `Hero.astro`             | plate webp + video  | `assets/assets home page/hero section/hero.mp4` (1280×720,10s)                                                           | **DONE**    |
 | 2   | Recruitment    | `1436:3506` | `RecruitmentHero.astro`  | image + video       | `assets/assets recruitment page/hero section/Animating_static_planetary_space…_1080p_20261003170119.mp4` (1920×1080,10s) | **DONE**    |
 | 3   | About Us       | `1439:4185` | `AboutHero.astro`        | webp + video        | `assets/assets about us/hero/Animating_sorcerer_image_ambient…_1080p_20261003164943.mp4` (1920×1080,8s,4.8Mbps)          | **DONE**    |
-| 4   | Hall of Frames | `1439:4507` | `HallOfFramesHero.astro` | webp + video        | `assets/hall of frames/hero/Sealed_arcane_door_ambient_anima…_20261003171201.mp4` (1920×1080,8s,2.3Mbps)                 | **DONE**    |
+| 4   | Hall of Frames | `1439:4507` | `HallOfFramesHero.astro` | webp + video        | `assets/hall of frames/hero/Sorcerer_in_chamber_with_electri…_20261003212122.mp4` (1920×1080,8s,2.5Mbps)                 | **DONE**    |
 | 5   | Partners       | `1439:4788` | `PartnersHero.astro`     | webp + video        | `assets/partners/hero/Arcane_hands_establishing_magica…_1080p_20261003172522.mp4` (1920×1080,8s,2.6Mbps)                 | **DONE**    |
 | 6   | Contact        | `1445:5066` | `ContactHero.astro`      | webp + artwork      | —                                                                                                                        | **PENDING** |
 
