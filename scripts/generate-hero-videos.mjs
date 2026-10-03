@@ -10,6 +10,13 @@ const videos = {
     duration: 8,
     fade: 1,
   },
+  hof: {
+    source:
+      'assets/hall of frames/hero/Sealed_arcane_door_ambient_anima…_20261003171201.mp4',
+    output: 'public/images/hof',
+    duration: 8,
+    fade: 1,
+  },
 };
 
 const page = process.argv[2];

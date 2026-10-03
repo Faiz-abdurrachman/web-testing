@@ -2869,6 +2869,11 @@ try {
       content: box('.hero-content'),
       title: box('#hof-hero-title'),
       subtitle: box('.hof-hero p'),
+      staticFallback: !!document.querySelector('.hof-hero .art-bg'),
+      videoOpacity: getComputedStyle(
+        document.querySelector('.hof-hero .art-video'),
+      ).opacity,
+      videoPreload: document.querySelector('.hof-hero .art-video').preload,
       overflow: document.documentElement.scrollWidth - innerWidth,
     };
   });
@@ -2905,6 +2910,9 @@ try {
       fontSize: '18px',
       lineHeight: '27px',
     },
+    staticFallback: true,
+    videoOpacity: '0',
+    videoPreload: 'none',
     overflow: 0,
   });
   await page

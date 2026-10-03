@@ -9,8 +9,8 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
 **★ NEXT = VIDEO HERO — semua hero section jadi background video looping.**
-Home (`1430:2041`), Recruitment (`1436:3506`), dan About Us (`1439:4185`) sudah video;
-Hall of Frames (`1439:4507`) dan Partners (`1439:4788`) aset video sudah disiapkan
+Home (`1430:2041`), Recruitment (`1436:3506`), About Us (`1439:4185`), dan Hall
+of Frames (`1439:4507`) sudah video; Partners (`1439:4788`) aset video sudah disiapkan
 (lihat `docs/hero-video-plan.md` §1); Contact (`1445:5066`) menyusul. **Satu hero
 per pass + 7 gate**; geometri statis + reduce tidak boleh berubah. Master Work Plan
 rinci: **`docs/hero-video-plan.md`**. Setelah video: audit Partners (`1439:4787`)
@@ -24,7 +24,13 @@ off-screen/tab pause, and View Transition cleanup. A 7 s circular loop from the
 WebM AV1 1.01 MiB, MP4 H.264 0.98 MiB, poster 0.20 MiB. The current Figma hero
 export differs from the stored PNG by MAE 5.178 because the navbar active state
 and title render changed; the static fallback/reference were deliberately kept
-for this video-only pass. Next hero in the video rollout: **Hall of Frames**.
+for this video-only pass.
+
+**Hall of Frames Hero video (`1439:4507`, 3 Oct 2026):** shared component/runtime
+with About. Source 1920×1080, 8 s → 7 s seamless crossfade loop via
+`scripts/generate-hero-videos.mjs hof`; AV1 WebM 0.27 MiB, H.264 MP4 0.34 MiB,
+poster 0.09 MiB. Static fallback, geometry, and reference retained. Next hero:
+**Partners**.
 
 **SELESAI (3 Oct 2026) — Hall of Frames card Project Highlight (`1439:4655`)
 disamakan dengan card "Our Project" homepage (`1430:2146`, `Projects.astro`).**

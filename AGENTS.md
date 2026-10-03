@@ -354,6 +354,12 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
 
 ## Current checkpoint
 
+- **Hall of Frames Hero VIDEO (`1439:4507`, 3 Oct 2026):** shared video component
+  and runtime added to `HallOfFramesHero.astro`; 7 s circular loop from the
+  supplied 1920×1080 clip. WebM 0.27 MiB, MP4 0.34 MiB; fallback static.
+  Current Figma export differs from stored reference by MAE 3.627, so this
+  video-only pass retains the approved static baseline. Next: Partners hero.
+
 - **About Us Hero VIDEO (`1439:4185`, 3 Oct 2026):** 7 s circular loop from the
   supplied 1920×1080 clip, encoded as AV1 WebM 1.01 MiB and H.264 MP4 0.98 MiB
   by `scripts/generate-hero-videos.mjs about`. `HeroVideo.astro` and
@@ -432,7 +438,7 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   7 gate + seo ALL PASS.
 - **★ NEXT (untuk AI baru): VIDEO HERO — semua hero section jadi background
   video looping.** Home (`1430:2041`), Recruitment (`1436:3506`), dan About
-  (`1439:4185`) sudah video; Hall of Frames (`1439:4507`) dan Partners
+  (`1439:4185`) dan Hall of Frames (`1439:4507`) sudah video; Partners
   (`1439:4788`) aset video sudah disiapkan (lihat `docs/hero-video-plan.md` §1); Contact (`1445:5066`)
   menyusul. Kerjakan **satu hero per pass + 7 gate**; geometri statis + render
   reduce TIDAK boleh berubah. Master Work Plan rinci (encode anti-burik, loop,
