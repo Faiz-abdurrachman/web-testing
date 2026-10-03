@@ -2386,10 +2386,26 @@ statis. Aturan keras + Master Work Plan: **`docs/hero-video-plan.md`** dan
 | -------------- | ----------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------- | -------- |
 | Home           | `1430:2041` | `assets home page/hero section/hero.mp4` (1280×720,10s)                           | `public/images/hero/hero-bg.{webm,mp4}` + `hero-poster.webp`        | DONE     |
 | Recruitment    | `1436:3506` | `assets recruitment page/hero section/recruitment-hero1.mp4` (1920×1080,10s)      | `public/images/recruitment/hero-bg.{webm,mp4}` + `hero-poster.webp` | DONE     |
-| About Us       | `1439:4185` | `assets about us/hero/Animating_sorcerer_image_ambient…_1080p_20261003164943.mp4` | `public/images/about/hero-bg.{webm,mp4}` + poster                   | **SIAP** |
+| About Us       | `1439:4185` | `assets about us/hero/Animating_sorcerer_image_ambient…_1080p_20261003164943.mp4` | `public/images/about/hero-bg.{webm,mp4}` + poster                   | DONE     |
 | Hall of Frames | `1439:4507` | `hall of frames/hero/Sealed_arcane_door_ambient_anima…_20261003171201.mp4`        | `public/images/hof/hero-bg.{webm,mp4}` + poster                     | **SIAP** |
 | Partners       | `1439:4788` | `partners/hero/Arcane_hands_establishing_magica…_1080p_20261003172522.mp4`        | `public/images/partners/hero-bg.{webm,mp4}` + poster                | **SIAP** |
 | Contact        | `1445:5066` | —                                                                                 | `public/images/contact/hero-bg.{webm,mp4}` + poster                 | PENDING  |
+
+**About Us hero video (3 Oct 2026).** Node `1439:4185` now has a looping artwork
+layer in `AboutHero.astro`, rendered by `HeroVideo.astro` and mounted through
+`src/scripts/hero-video.ts`. Source: `assets/assets about us/hero/Animating_sorcerer_image_ambient…_1080p_20261003164943.mp4`
+(1920×1080, 24 fps, 8 s). `node scripts/generate-hero-videos.mjs about` makes a
+7 s circular loop with a 1 s tail-to-head dissolve, removes audio, sharpens the
+image, and writes `hero-bg.webm` (AV1 CRF 50, 1.01 MiB), `hero-bg.mp4` (H.264
+CRF 33, 0.98 MiB), and `hero-poster.webp` (0.20 MiB) under
+`public/images/about/`. The 1× export fetched from the current Figma node
+differs from the stored `About-Hero-Revisi-1x.png` by MAE 5.178: the Figma
+navbar is now on About Us and the title rendering differs. The established
+static fallback, hero geometry, typography, and stored verification reference
+remain unchanged for this video pass. At reduce and ≤600px, the video is not
+loaded; desktop motion plays only while visible and the tab is active. The
+reduced-motion screenshot is byte-identical to the pre-video render (MAE 0);
+MAE against the stored hero reference remains 4.6874.
 
 Catatan: nama file sumber punya karakter unicode `…` (quote path-nya). Alternatif
 Recruitment: `assets recruitment page/hero section/Animating_static_planetary_space…_1080p_20261003170119.mp4`.

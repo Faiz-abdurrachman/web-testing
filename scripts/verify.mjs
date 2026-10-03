@@ -2249,6 +2249,10 @@ try {
       titleFont: titleStyle.fontFamily,
       titleSize: titleStyle.fontSize,
       titleLineHeight: titleStyle.lineHeight,
+      staticFallback: !!section.querySelector('.art-bg'),
+      videoOpacity: getComputedStyle(section.querySelector('.art-video'))
+        .opacity,
+      videoPreload: section.querySelector('.art-video').preload,
       overflow: document.documentElement.scrollWidth - innerWidth,
     };
   });
@@ -2260,6 +2264,9 @@ try {
     titleFont: '"Bluu Next", Nasalization, sans-serif, sans-serif',
     titleSize: '80px',
     titleLineHeight: '95.2px',
+    staticFallback: true,
+    videoOpacity: '0',
+    videoPreload: 'none',
     overflow: 0,
   });
   await page

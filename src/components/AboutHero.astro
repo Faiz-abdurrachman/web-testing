@@ -1,4 +1,5 @@
 ---
+import HeroVideo from './HeroVideo.astro';
 ---
 
 <section class="about-hero" aria-labelledby="about-hero-title">
@@ -27,6 +28,11 @@
         decoding="async"
       />
     </picture>
+    <HeroVideo
+      webm="/images/about/hero-bg.webm"
+      mp4="/images/about/hero-bg.mp4"
+      poster="/images/about/hero-poster.webp"
+    />
   </div>
   <div class="hero-content">
     <h1 id="about-hero-title">
@@ -40,6 +46,29 @@
     </p>
   </div>
 </section>
+
+<script>
+  import { mountHeroVideo } from '../scripts/hero-video';
+
+  let currentVideo: HTMLVideoElement | null = null;
+  let disposeVideo: (() => void) | undefined;
+  const initVideo = () => {
+    const video = document.querySelector<HTMLVideoElement>(
+      '.about-hero .art-video',
+    );
+    if (!video || video === currentVideo) return;
+    disposeVideo?.();
+    currentVideo = video;
+    disposeVideo = mountHeroVideo(video);
+  };
+  initVideo();
+  document.addEventListener('astro:page-load', initVideo);
+  document.addEventListener('astro:before-swap', () => {
+    disposeVideo?.();
+    disposeVideo = undefined;
+    currentVideo = null;
+  });
+</script>
 
 <style>
   /* Matches Figma node 1439:4185 (1440 x 903), page 1439:4184.
@@ -67,7 +96,8 @@
   }
 
   .artwork picture,
-  .artwork .art-bg {
+  .artwork .art-bg,
+  .artwork :global(.art-video) {
     position: absolute;
     inset: 0;
     display: block;
@@ -75,6 +105,16 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
+  }
+
+  .artwork :global(.art-video) {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) and (min-width: 601px) {
+    .artwork :global(.art-video.is-ready) {
+      opacity: 1;
+    }
   }
 
   .hero-content {
