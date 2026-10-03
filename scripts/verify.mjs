@@ -896,6 +896,65 @@ try {
     copy: { x: 270, y: 470, width: 900, height: 27 },
     button: { x: 660, y: 545, width: 120, height: 43 },
   });
+  const recruitHeroStyles = await page
+    .locator('.recruitment-hero')
+    .evaluate((section) => {
+      const content = section.querySelector('.hero-content');
+      const header = section.querySelector('.hero-header-group');
+      const heading = section.querySelector('h1');
+      const headingLine = section.querySelector('h1 span');
+      const description = section.querySelector('p');
+      const button = section.querySelector('.button');
+      const h1Style = getComputedStyle(heading);
+      const pStyle = getComputedStyle(description);
+      const buttonStyle = getComputedStyle(button);
+      return {
+        sectionPadding: getComputedStyle(section).padding,
+        contentGap: getComputedStyle(content).gap,
+        headerGap: getComputedStyle(header).gap,
+        headingGap: h1Style.gap,
+        headingFontLoaded: [...document.fonts].some(
+          (face) =>
+            face.family === 'Bluu Next' &&
+            face.weight === '700' &&
+            face.status === 'loaded',
+        ),
+        headingFont: h1Style.fontFamily.startsWith('"Bluu Next"'),
+        headingWeight: h1Style.fontWeight,
+        headingSize: h1Style.fontSize,
+        headingLineHeight: h1Style.lineHeight,
+        headingGradient: getComputedStyle(headingLine).backgroundImage,
+        descriptionFont: pStyle.fontFamily.startsWith('Manrope'),
+        descriptionWeight: pStyle.fontWeight,
+        descriptionSize: pStyle.fontSize,
+        descriptionLineHeight: pStyle.lineHeight,
+        descriptionColor: pStyle.color,
+        buttonPadding: buttonStyle.padding,
+        buttonFont: buttonStyle.fontFamily.startsWith('Manrope'),
+        buttonWeight: buttonStyle.fontWeight,
+      };
+    });
+  assert.deepEqual(recruitHeroStyles, {
+    sectionPadding: '0px 80px',
+    contentGap: '48px',
+    headerGap: '16px',
+    headingGap: '4px',
+    headingFontLoaded: true,
+    headingFont: true,
+    headingWeight: '700',
+    headingSize: '72px',
+    headingLineHeight: '86px',
+    headingGradient:
+      'linear-gradient(181deg, rgb(255, 255, 255) 15%, rgb(153, 153, 153) 42%, rgb(255, 255, 255) 79%)',
+    descriptionFont: true,
+    descriptionWeight: '500',
+    descriptionSize: '18px',
+    descriptionLineHeight: '27px',
+    descriptionColor: 'rgb(237, 232, 255)',
+    buttonPadding: '8px 16px',
+    buttonFont: true,
+    buttonWeight: '500',
+  });
   const recruitVideoFallback = await page
     .locator('.recruitment-hero')
     .evaluate((section) => {
