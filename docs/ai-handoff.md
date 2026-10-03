@@ -31,6 +31,16 @@ tulis ulang**: section yang sudah presisi (geometri ±0, 8pt PASS, font/warna co
 cukup dilaporkan PASS; perbaiki HANYA region yang beda vs PNG node. Selalu
 regenerasi reference dari node terbaru dan cek pixel-identik vs node lain dulu.
 
+**Section 1 Hero (`1436:3506`) — AUDIT PASS (3 Oct 2026).** Tiga temuan & perbaikan:
+(1) static fallback salah gambar — node kini pakai IMAGE fill 1672×941 dengan crop
+`imageTransform` (raw di-vendor `recruitment-hero-fill-raw.png`; bake crop
+`86,0,1500,902` → 1440×866 di `generate-backgrounds.mjs`); (2) `.artwork::after`
+overlay gelap **tidak ada di node** → dihapus; (3) copy `letter-spacing: -0.176px`
+salah (Figma 0) → baris menyusut ~20px, dihapus. Heading gradient diselaraskan ke
+global `181deg #fff 15% / #999 42% / #fff 79%`. Full MAE **11.909 → 1.600**
+(below-nav 1.412), geometri tak berubah, 7 gate ALL PASS. Sisa section 2–9 (Who
+Should Join → Footer) masih menunggu audit — kerjakan satu per satu.
+
 **Homepage (`1430:2040`) & About Us (`1439:4184`) = sudah diaudit (3 Oct 2026).**
 About Us temuan: tombol "See More" `OurTeam` ternyata GLASS (`1248:15694`),
 diperbaiki (section MAE 2.828 → 2.770). JANGAN sentuh `<Starfield />` visi-misi.

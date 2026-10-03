@@ -1788,9 +1788,38 @@ generate-recruitment-hero-video.mjs` → `public/images/recruitment/`
   its original 49px so the homepage comparison is unchanged.
 - Verification: `scripts/verify.mjs` asserts the section, heading, description,
   and button boxes exactly, checks the active nav link, diffs the section
-  against the reference PNG (~2.0/255; the residual is font and glass
-  rasterization), and checks horizontal overflow and clipped hero text from
-  320px to 1920px.
+  against the reference PNG (MAE **1.60/255**; residual is font/glass
+  rasterization and the reference's embedded navbar band), and checks horizontal
+  overflow and clipped hero text from 320px to 1920px.
+
+- **Hero precision revision (3 Oct 2026).** Strict per-section audit of node
+  `1436:3506` found the static fallback was stale and repaired three issues:
+  - **Artwork.** The node now carries a **1672 × 941 IMAGE fill**
+    (`imageRef eb3f5f4e…`) cropped by its `imageTransform`
+    (`scaleX .8975 / tx .05126`, `scaleY .9590`) and stretched to 1440 × 866.
+    The raw fill is vendored as
+    `assets/assets recruitment page/hero section/recruitment-hero-fill-raw.png`
+    and baked (crop `86,0,1500,902` → resize 1440 × 866) by
+    `scripts/generate-backgrounds.mjs` → `public/images/backgrounds/recruitment.webp`.
+    The old `assets/background/hd/recruitment.png` (1586 × 992) was a different
+    image (background MAE 8.4 → **1.28** with the correct crop).
+  - **Overlay.** The `.artwork::after` dark gradient is **not in the node**
+    (the reference background is pixel-identical to the raw crop, e.g. at
+    x=200 the rows match 12/12, 45/45, 51/51). Removed — keeping it cost ~3 MAE.
+  - **Copy tracking.** The description had `letter-spacing: -0.176px`, but the
+    Figma style `Typography/Manrope - Body/B-1` has **no** letter-spacing; it
+    shrank the line ~20px (ink 862 vs 882). Removed → copy-region MAE
+    16.6 → 3.3.
+  - Heading fill aligned to the global Figma `181deg #fff 15% / #999 42% /
+#fff 79%` (was `180deg … 80%`; heading band 2.92 → 2.73).
+  - Net: full-section MAE **11.909 → 1.600** (below-nav 1.412); geometry
+    unchanged (`h1 270/278/900×176`, copy `270/470/900×27`, button
+    `660/545/120×43`). Note: the node's `Navbar` instance means the reference's
+    top 110px is the navbar while `verify.mjs` screenshots the section alone, so
+    that band reads ~2.9 regardless.
+  - The animated `recruitment-hero1.mp4` layer is a different scene (small
+    planet + starfield) and is unchanged; it only plays at
+    `(prefers-reduced-motion: no-preference) and (min-width: 601px)`.
 
 ## Recruitment page — Who Should Join
 

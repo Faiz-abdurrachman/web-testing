@@ -8,7 +8,7 @@ import Button from './Button.astro';
       class="art-fallback"
       src="/images/backgrounds/recruitment.webp"
       width="1440"
-      height="901"
+      height="866"
       alt=""
       fetchpriority="high"
       decoding="async"
@@ -211,17 +211,6 @@ import Button from './Button.astro';
   .artwork.is-video .art-fallback {
     opacity: 0;
   }
-  .artwork::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      180deg,
-      rgb(5 5 7 / 15%),
-      rgb(5 5 7 / 45%) 50%,
-      transparent
-    );
-  }
   .hero-canvas {
     position: absolute;
     inset: 0;
@@ -271,7 +260,7 @@ import Button from './Button.astro';
   h1 span {
     display: block;
     height: 86px;
-    background: linear-gradient(180deg, #ffffff 15%, #999999 42%, #ffffff 80%);
+    background: linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -285,7 +274,6 @@ import Button from './Button.astro';
     font-size: 18px;
     font-weight: 500;
     line-height: 27px;
-    letter-spacing: -0.176px;
   }
   @media (min-width: 1921px) {
     .artwork {

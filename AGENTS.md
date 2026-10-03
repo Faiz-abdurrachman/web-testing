@@ -353,10 +353,16 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
 
 ## Current checkpoint
 
-- **HEAD (2 Oct 2026; `main` lokal).**
+- **HEAD (3 Oct 2026).**
   Situs pakai Astro **`<ClientRouter />`** (navigasi klien + `AudioContext`
   persist; semua komponen re-init `astro:page-load` + cleanup
   `astro:before-swap` — `docs/sound-sop.md` §9).
+- **AUDIT RECRUITMENT — Section 1 Hero (`1436:3506`) PASS (3 Oct 2026).**
+  Static fallback diperbaiki: art dari IMAGE fill baru (`recruitment-hero-fill-raw.png`,
+  crop `86,0,1500,902` → 1440×866 via `generate-backgrounds.mjs`), `.artwork::after`
+  overlay dihapus (tidak ada di node), copy `letter-spacing` dibuang (Figma 0),
+  heading gradient `181deg`. Full MAE **11.909 → 1.600**; geometri tetap; 7 gate ALL
+  PASS. Lanjut section 2–9 satu per satu.
 - **STATUS RINGKAS (3 Oct 2026).** **Homepage 100% selesai** (Hero → Our
   Philosophy → What We Do → Choose Your Domain/HoDS → Our Project → CTA, node
   `1430:2040`). **Recruitment Page 100% selesai** (node `1436:3505`). **About Us
@@ -650,9 +656,11 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   diregenerasi dari node `864:18959`. `verify.mjs` sekarang assert heading
   `font-family` Bluu Next + weight `700` per rute. Geometri tak berubah
   (`back 80/80`, `card 80/163/1280×279`, `tabs 80/498`, height 1280).
-- **Next plan (prioritas).** **NEXT: audit menyeluruh RECRUITMENT (`1436:3505`)
+- **Next plan (prioritas).** **SEDANG: audit menyeluruh RECRUITMENT (`1436:3505`)
   strict per-section** (presisi, GLOW/GLASS, responsive, 8pt, font; 9 section) —
-  kerjakan **satu section per pass**. **Homepage (`1430:2040`) & About Us
+  kerjakan **satu section per pass**. **Section 1 Hero `1436:3506` SELESAI
+  (3 Oct 2026, MAE 11.909 → 1.600); NEXT = Section 2 Who Should Join
+  `1436:3512`.** **Homepage (`1430:2040`) & About Us
   (`1439:4184`) sudah diaudit 3 Oct 2026** (About Us: tombol "See More" `OurTeam`
   = GLASS `1248:15694`, diperbaiki; **JANGAN sentuh `<Starfield />` visi-misi**).
   Lalu Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).
