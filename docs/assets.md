@@ -1672,8 +1672,13 @@ assets:footer` converts the new source to q90 WebP variants at 1440, 2880,
   legal bar (y 474.69 ± 1.5), and checks text containment from 320px through
   1920px. Homepage footer MAE **5.84/255** (brand region 3.0; the right-aligned
   legal links diverge from the PNG by design, plus anti-aliased text over the
-  bright landscape); recruitment footer MAE **7.71/255** (same component, but the
-  fractional page position adds the documented 1px sub-pixel offset).
+  bright landscape); recruitment footer MAE **7.71 → 7.66/255** (audit 3 Oct 2026;
+  same component, but the fractional page position adds the documented 1px
+  sub-pixel offset). **Audit 3 Oct 2026 (Section 9): no code change** — Figma fill
+  (`imageRef 89bb3b26…`, 4096×1576) dicocokkan dengan bake kita (MAE ~4 = resampling
+  tekstur landscape, irreducible); region ter-align brand 2.7 / nav 3.8 / contact
+  5.0; socials & legal lebih tinggi karena duduk di atas tekstur terang. Diff utama
+  = legal links right-aligned (disengaja) + backdrop resampling + sub-pixel origin.
 - **Revision (2 Oct 2026).** The Figma footer was updated: brand name
   Nasalization → **Bluu Next Bold 700 32/38.4**; brand lockup gap 14 → 8, brand
   copy gap 26 → 24, nav/contact gap 34 → 32; description `#CBC5FF` → `#fff`;

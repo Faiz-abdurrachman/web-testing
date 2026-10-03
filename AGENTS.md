@@ -401,6 +401,13 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   6.9 → 0.6). Full MAE **2.2488 → 2.2509** (tak berubah — **didominasi artefak
   screenshot**, section top `6093.781` fraksional); aligned ≈ **1.107** (terbaik).
   Geometri DOM tak berubah. Lanjut section 9.
+- **Section 9 Footer (`1436:3699`, shared) PASS (3 Oct 2026)** — ref MAE 0.060
+  (homepage footer ≈ recruitment). **Tanpa perubahan kode.** Diff didominasi: legal
+  links sengaja **right-aligned** (mentor-approved, menyimpang dari PNG), backdrop
+  landscape bertekstur (resampling ~4 + sub-pixel origin), dan AA teks. Recruitment
+  footer MAE **7.7071 → 7.658**; region ter-align brand 2.7 / nav 3.8 / contact 5.0.
+  **RECRUITMENT SELESAI — 9/9 section diaudit.** Berikutnya: audit Partners
+  (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).
 - **STATUS RINGKAS (3 Oct 2026).** **Homepage 100% selesai** (Hero → Our
   Philosophy → What We Do → Choose Your Domain/HoDS → Our Project → CTA, node
   `1430:2040`). **Recruitment Page 100% selesai** (node `1436:3505`). **About Us
@@ -537,11 +544,11 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   Button `community` "Join the Community" 201×43; glow `glow.svg` IMAGE-SVG `1438:4081` di `(349.83, 351)` 1000.33×271.5.
   Section MAE: **2.2488 → 2.2509/255** (audit 3 Oct 2026, rim `110deg`; tak berubah — **didominasi artefak screenshot**, section top `6093.781` fraksional). Aligned MAE ≈ **1.107** (terbaik dari semua section). Geometri diff 0.0px. Downstream `.footer` top → **6613.78125**.
   Semua 7 gate + seo ALL PASS (`build`, `verify.mjs`, `navbar-audit`, `verify-vt`, `responsive-audit`, `audit:spacing`, `format:check`).
-- **Recruitment Page Section 9: Footer (`1436:3699` / komponen bersama `765:17071`) — 100% Selesai (2 Oct 2026).**
+- **Recruitment Page Section 9: Footer (`1436:3699` / komponen bersama `765:17071`) — AUDIT PASS (3 Oct 2026).**
   `Footer.astro` dipakai **6 halaman** (index, about, recruitment, partners, hall-of-frames, contact) — revisi ini site-wide. Figma footer diperbarui:
   Brand name Nasalization → **Bluu Next Bold 700 32/38.4** (`--font-display`), gradient `270deg #fff → #ede8ff`; brand lockup gap `14 → 8`, brand copy gap `26 → 24`, nav/contact gap `34 → 32`; brand desc `#CBC5FF → #fff`; border social + `instagram.svg`/`linkedin.svg` fill `#CBC5FF → #fff`; copyright "All rights reserved" → "All right reserved" (per PNG). Top row `1280×314`, divider y `454.13`, legal y `475.13`.
-  Legal links tetap **right-aligned** (approved mentor revision 23 Sep 2026, supersedes PNG left-grouped). Section MAE: homepage footer **5.8380/255** (brand region 3.0), recruitment footer **7.7071/255**. Semua 6 gate verifikasi ALL PASS.
-- **Recruitment Page 100% SELESAI (Section 1–9).** Berikutnya: revisi font/spacing halaman lain (About Us / Partners / Hall of Frames / Contact) atau isi konten asli. Wajib Master Work Plan per-section sebelum sentuh kode!
+  Legal links tetap **right-aligned** (approved mentor revision 23 Sep 2026, supersedes PNG left-grouped). Section MAE: homepage footer **5.8380/255** (brand region 3.0), recruitment footer **7.7071 → 7.658/255** (audit 3 Oct 2026, **tanpa perubahan kode**). Diff didominasi: legal links sengaja right-aligned (struktural), backdrop landscape bertekstur (resampling ~4 + sub-pixel origin), dan AA teks. Region ter-align brand 2.7 / nav 3.8 / contact 5.0. Semua 7 gate + seo ALL PASS.
+- **Recruitment Page SELESAI — 9/9 section diaudit (3 Oct 2026).** Berikutnya: audit Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk) per-section, atau isi konten asli. Wajib Master Work Plan per-section sebelum sentuh kode!
 - **Recruitment Page Section 3: What You Will Do (`1436:3517`) (2 Oct 2026).**
   Frame Figma `1436:3517` (1440×903px, padding `80px 80px 80px 80px`, gap header ke body `20px`). Header Frame 2734 (`1436:4048`, 1280×118px, gap 24px):
   Heading "What You Will Do" **Bluu Next Bold 700 56/67px** (`--font-display`) di `(80, 80)`,
@@ -710,7 +717,9 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   `1436:3684` SELESAI (line-height `67.2` → `67`, section tepat 897; MAE dominan
   artefak screenshot — thumb 2/4 di x setengah-piksel); Section 8 CTA `1436:3687`
   SELESAI (rim `135deg` → `110deg`; MAE dominan artefak screenshot, aligned 1.107);
-  NEXT = Section 9 Footer `1436:3699` (shared).** **Homepage (`1430:2040`) & About Us
+  Section 9 Footer `1436:3699` SELESAI (tanpa perubahan kode — deviasi legal
+  disengaja + backdrop resampling). **RECRUITMENT SELESAI 9/9.** NEXT = audit
+  Partners `1439:4787` + 6 detail HoDS `864:18857` dkk.** **Homepage (`1430:2040`) & About Us
   (`1439:4184`) sudah diaudit 3 Oct 2026** (About Us: tombol "See More" `OurTeam`
   = GLASS `1248:15694`, diperbaiki; **JANGAN sentuh `<Starfield />` visi-misi**).
   Lalu Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).

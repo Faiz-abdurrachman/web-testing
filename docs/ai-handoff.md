@@ -82,7 +82,8 @@ transparent)` (MAE/baris 12 → 1.2); (6) tinta heading 1px lebih rendah → spa
 (0-230: 1.197, 230-812: 2.447; rim atas 1.0 / bawah 0.9 / junction 0.8). Sisa =
 AA font lintas-renderer irreducible. Geometri DOM tak berubah (head 78, body 451,
 rows `[299.2…]`, height 39). 7 gate + seo ALL PASS.
-**NEXT = Section 9 Footer (`1436:3699`, shared `Footer.astro`).**
+**RECRUITMENT (`1436:3505`) SELESAI — 9/9 section diaudit (3 Oct 2026).**
+**NEXT = audit Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk) per-section.**
 
 **Homepage (`1430:2040`) & About Us (`1439:4184`) = sudah diaudit (3 Oct 2026).**
 About Us temuan: tombol "See More" `OurTeam` ternyata GLASS (`1248:15694`),
@@ -352,8 +353,10 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   - Warna: brand desc `#CBC5FF → #fff`; border social + `instagram.svg`/`linkedin.svg` `#CBC5FF → #fff`.
   - Copyright `All rights reserved` → `All right reserved` (sesuai PNG). Legal links tetap **right-aligned** (mentor-approved 23 Sep, menyimpang dari PNG left-grouped).
   - Geometri Chromium: footer `{1440 × 556}`, divider y `454.125`, legal y `475.125`, brand col height `314.125`.
-  - Section MAE: homepage footer **`5.8380/255`** (brand region 3.0), recruitment footer **`7.7071/255`** (offset sub-pixel posisi halaman). Semua 6 gate ALL PASS.
+  - Section MAE: homepage footer **`5.8380/255`** (brand region 3.0), recruitment footer **`7.7071 → 7.658/255`** (audit 3 Oct 2026). **Didominasi (bukan bug CSS):** (1) legal links sengaja **right-aligned** (mentor-approved 23 Sep, menyimpang dari PNG left/center-grouped) — ini menyumbang diff struktural besar di baris legal; (2) backdrop landscape bertekstur — resampling ~4 MAE (bake 1440 vs render Figma) + sub-pixel origin; (3) section top `6613.781` fraksional → artefak screenshot; (4) AA teks. Region ter-align: brand name 2.7, nav 3.8, contact 5.0; socials/legal lebih tinggi karena duduk di atas tekstur terang. **Tidak ada perubahan kode** (section sudah presisi; deviasi legal disengaja). Semua 7 gate + seo ALL PASS.
   - Detail: `docs/assets.md` §Footer.
+
+**RECRUITMENT (`1436:3505`) SELESAI — 9/9 section diaudit (3 Oct 2026).**
 
 - **Recruitment Page Section 8: CTA Recruitment (`1436:3687`) — 100% SELESAI (2 Oct 2026).**
   Section 8 pada halaman Recruitment (`1436:3505`) kini selesai dan tervalidasi presisi:
@@ -1846,7 +1849,7 @@ Fokus utama AI berikutnya adalah mengaudit dan mengeksekusi secara **strict pixe
 | 6   | **FAQ** (`1436:3675`)                | 1440 × 983, padding 80px      | Gap header 56px, gap items 32px         | Bluu Next Bold 56/67.2 ("FAQ"), Manrope 26/39      | **AUDIT PASS** (rim `90deg`; MAE artifact-dominated)           |
 | 7   | **Snippets of Life** (`1436:3684`)   | 1440 × 897, padding 40px 80px | Gap 56px, gallery 1280, thumbs gap 35px | Bluu Next Bold 56/67, Manrope                      | **AUDIT PASS** (line-height 67.2 → 67; MAE artifact-dominated) |
 | 8   | **CTA Recruitment** (`1436:3687`)    | 1440 × 520, padding 80px      | Panel 1280×360, gap 48px                | Bluu Next Bold 56/67.2, Button Join 201×43         | **AUDIT PASS** (rim `110deg`; MAE artifact-dominated)          |
-| 9   | **Footer** (`1436:3699`)             | 1440 × 556, padding 80px      | Brand lockup 8, copy 24, nav 32         | Bluu Next Bold 32/38.4, Manrope 400/700            | **SELESAI** (MAE 5.84 home/7.71 recruit)                       |
+| 9   | **Footer** (`1436:3699`)             | 1440 × 556, padding 80px      | Brand lockup 8, copy 24, nav 32         | Bluu Next Bold 32/38.4, Manrope 400/700            | **AUDIT PASS** (deviasi legal disengaja; MAE backdrop)         |
 
 ---
 
