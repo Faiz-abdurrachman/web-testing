@@ -839,14 +839,24 @@ rgba(108,59,255,.3) 50%, #0e0626)`; info frame `…;1260:16770` (222 × 94 at
   Manrope 400 16 / 24, two 16px social icons. Placeholder member data lives in
   `src/data/team.ts` (7 entries; the design only ships 2 unique portraits and
   placeholder names — swap for real data, do not invent URLs).
-- "See More" button `…;1260:16901` (141 × 43, radius 200, glass pill) with a
-  chevron-down. New component `OurTeam.astro`. Generator additions in
-  `scripts/generate-about-assets.mjs` (`npm run assets:about`).
-- Reference `assets/about-us/team/OurTeam-Revisi-1x.png`. Chromium geometry
-  exact (section 1440 × 1536; header `(80, 80, 1280, 101)`; groups
-  `(80, 261, 1280, 1072)`; card `(80, 357, 302, 400)`; button
-  `(649.8, 1413, 140.5, 43)`). Section MAE **2.679/255** (header 3.20, leader
-  cards 6.20, button 1.97). All 6 gates pass.
+- "See More" button `…;1260:16901` (component `1248:15694`, 141 × 43, radius
+  200, **GLASS**): fill `#1A1A1A` + a "liquid" child `rgba(217,217,217,.1)` and
+  a bottom-right specular rim (reference rim reads ~226 bottom-right / ~117
+  top-left). Emulated in `OurTeam.astro` with `background:#1a1a1a`, a `::before`
+  radial sheen over `rgba(217,217,217,.1)` and inset shadows
+  (`-2px -2px 3px rgba(255,255,255,1)`, `2px 2px 3px rgba(255,255,255,.28)`,
+  `0 0 0 1px rgba(153,153,153,.55)`) + `backdrop-filter: blur(6px)`. The earlier
+  `#161616` + top-left radial highlight read far too dark (interior ~22 vs the
+  reference ~46; button-region MAE ~29). New component `OurTeam.astro`.
+  Generator additions in `scripts/generate-about-assets.mjs`
+  (`npm run assets:about`).
+- Reference `assets/about-us/team/OurTeam-Revisi-1x.png` (a fresh export of node
+  `1439:4305` is pixel-identical, MAE 0.000). Chromium geometry exact (section
+  1440 × 1536; header `(80, 80, 1280, 101)`; groups `(80, 261, 1280, 1072)`;
+  card `(80, 357, 302, 400)`; button `(649.8, 1413, 140.5, 43)`). Section MAE
+  **2.770/255** after the button fix (was 2.828 with the dark button); the button
+  region is ~17.85, bounded by the Manrope text cross-renderer AA floor (~22.6).
+  All gates pass.
 
 ## About Us — Footer (2 October 2026)
 

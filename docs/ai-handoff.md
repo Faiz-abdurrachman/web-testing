@@ -60,9 +60,17 @@ sebagai `tarot-cards.webp` 1×/2×/3× (`npm run assets:about`). `visi-misi-bg.w
 dihapus (tidak dipakai). Geometri exact; MAE vs reference lama ~5.85 (background
 sengaja berubah). All 7 gate PASS.
 
-**NEXT TARGET — AUDIT ABOUT US (`1439:4184`) strict per-section** (presisi + glow +
-responsive). **JANGAN sentuh background bintang hidup visi-misi (`<Starfield />`).**
-Link: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4184`
+**AUDIT ABOUT US (`1439:4184`) — SELESAI (3 Oct 2026), strict per-section.**
+Section 1–6 lolos 7 gate. Temuan & fix: **Section 5 Our Team "See More"**
+(`…;1260:16901`, komponen `1248:15694`) ternyata **GLASS** — fill `#1A1A1A` +
+"liquid" `rgba(217,217,217,.1)` + rim specular kanan-bawah (PNG ≈226/117);
+implementasi lama `#161616` + highlight terbaca terlalu gelap (interior ~22 vs
+~46). Diperbaiki di `OurTeam.astro` (inset ring + sheen `::before` + `blur(6px)`)
+→ section MAE **2.828 → 2.770**, region tombol 29.3 → **17.85** (floor = AA teks
+Manrope lintas-renderer). Section 1 Hero, 2 visi misi, 3 Philosophy (=home, ref
+MAE 0.000), 4 Our Ecosystem, 6 Footer PASS tanpa perubahan. Export ulang node
+`1439:4185`/`1439:4305` = referensi (MAE 0.00). **JANGAN sentuh background
+bintang hidup visi-misi (`<Starfield />`).** Link: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4184`
 Inventaris (frame `1439:4184`, `depth 1` — verifikasi ulang sebelum mulai):
 
 | #   | Node ID     | Frame                   | W×H       | Komponen                                   |
@@ -82,9 +90,10 @@ reduce presisi, 7 gate + seo. Checklist lengkap + Master Work Plan:
 **NEXT (prioritas):**
 
 0. **Audit strict per-section — PLAN PER HALAMAN, EKSEKUSI PER SECTION.**
-   Mulai **About Us (`1439:4184`)** (Target 0 di kickoff-prompt) → lalu benchmark
-   **Homepage (`1430:2040`)** & **Recruitment (`1436:3505`)** → **Partners
-   (`1439:4787`)** + 6 detail HoDS (`864:18857` dkk). Inventaris `depth 1` →
+   **About Us (`1439:4184`) SELESAI (3 Oct 2026)** — Section 5 button GLASS
+   diperbaiki; sisanya PASS. Lanjut benchmark **Homepage (`1430:2040`)** &
+   **Recruitment (`1436:3505`)** → **Partners (`1439:4787`)** + 6 detail HoDS
+   (`864:18857` dkk). Inventaris `depth 1` →
    Master Work Plan section 1 → selesai 7 gate → section 2. **Jangan lompat/gabung.**
    Gate spacing: `npm run audit:spacing` memastikan setiap padding/gap/margin
    kelipatan 8 atau ada di tabel pengecualian SOP.
