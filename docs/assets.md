@@ -71,15 +71,16 @@
 - Layout & Spacing (Strict 8-Point Grid):
   - Section container: 1440 × 812px, padding `80px` (`80px 80px 80px 80px`), background `#050507`.
   - Gap header ke tabel timeline: **`56px`** (`7 × 8px` — strict kelipatan 8, mengoreksi nilai lama 58px).
-  - Heading Frame `1436:3638`: "Selection Timeline", **Bluu Next Bold 700 56px / 67.2px** (token `--font-display`), gradient linear 181deg `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)`.
+  - Heading Frame `1436:3638`: "Selection Timeline", **Bluu Next Bold 700 56px / 67.2px** (token `--font-display`), gradient linear 181deg `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)`. Ink glyphs sit **1px lower** than a plain CSS render → wrapped in `.tl-heading-text { position: relative; top: 1px }` (visual nudge only; `h2` box geometry unchanged).
   - Timeline Table Container Frame `1436:3639`: width 1280px.
-    - Table Head Frame `1436:3640`: 1280 × 78px, padding `18px 32px`, border-radius `20px 20px 0 0`, background `rgba(108, 59, 255, 0.25)`, 1px glass rim `linear-gradient(135deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%)`.
+    - Table Head Frame `1436:3640`: 1280 × 78px, padding `18px 32px`, border-radius `20px 20px 0 0`, background `rgba(108, 59, 255, 0.25)`, 1px glass rim.
       - Phase: Manrope Bold 700 26px / 39px LEFT, color `#ffffff`.
-      - Date: container width 568px, Manrope Bold 700 26px / 39px CENTER, color `#ffffff`.
+      - Date: container width 568px, Manrope Bold 700 26px / 39px **LEFT** (PNG is source of truth — MCP `textAlignHorizontal: CENTER` is wrong; reference header Date sits at x761, identical to the body rows), color `#ffffff`.
     - Table Body Frame `1436:3645`: 1280 × 451px, padding `18px 32px`, border-radius `0 0 20px 20px`, gap `18px`, background `rgba(255, 255, 255, 0.15)`, 1px glass rim.
       - 6 rows: OPEN RECRUITMENT, APPLICATION, FOUNDATION SCREENING, HOODS INTERVIEW, TRIAL / CHALLENGE, MEMBER.
-      - Separator 1px: `linear-gradient(90deg, rgba(155, 123, 255, 1) 0%, rgba(255, 255, 255, 0) 100%)`.
-      - Text: Manrope Medium 500 26px / 39px (Phase di kiri, Date di kanan lebar 568px center).
+      - Separator 1px, Figma fades to **white non-premultiplied** → emulated with `background: linear-gradient(90deg, #9b7bff, #ffffff)` + `mask-image: linear-gradient(90deg, #000, transparent)` (a straight `→ transparent` stop premultiplies and keeps the violet RGB, ~12 MAE/row → 1.2).
+      - Text: Manrope Medium 500 26px / 39px (Phase di kiri, Date di kiri lebar 568px).
+  - **Rim gradient is horizontal, not 135deg.** The reference top and bottom rims are pixel-identical per x (bright at both ends, darkest at x720 = table centre) → true fill is `linear-gradient(90deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%)` over the 1280 table. MCP's `135deg` string is lossy (bottom rim centre read 96 vs ref 48). The junction is 1px higher than a naive stack: header `::after` bottom ring is 2px (`padding: 1px 1px 2px 1px`) and body `::after` has no top ring (`padding: 0 1px 1px 1px`) → junction at ref rows 279-280.
 - Measurements & Precision:
   - `verify.mjs` assertions verified:
     - section: `{ width: 1440, height: 812.203125, top: 3401.375 }`
@@ -87,8 +88,8 @@
     - head: `{ x: 80, y: 203.203125, width: 1280, height: 78 }`
     - body: `{ x: 80, y: 281.203125, width: 1280, height: 451 }`
     - rows: 6 rows exact at `[299.2, 374.2, 449.2, 524.2, 599.2, 674.2]` with height `39px`.
-  - Section MAE: **`4.3059/255`** vs reference `Recruitment-SelectionTimeline-Revisi-1x.png`.
-  - All 6 verification gates PASS: build (0 error), verify.mjs (exit 0), responsive audit (468/468 PASS), navbar audit (PASS), verify:vt (PASS), format:check (PASS).
+  - Section MAE: **`4.3059/255` → `2.093/255`** vs reference `Recruitment-SelectionTimeline-Revisi-1x.png` (audit 3 Oct 2026: heading `181deg/79%`, header Date left-aligned, rim `90deg`, junction 2px/0px, separator white-fade mask). Residual = Manrope/Bluu Next cross-renderer AA (irreducible) + 1px heading glyph-height AA.
+  - All 7 gates PASS: build (0 error), verify.mjs (exit 0), navbar audit (PASS), verify:vt (PASS), responsive audit (468/468 PASS), audit:spacing (PASS), format:check (PASS) + seo:audit (PASS).
 
 ## Homepage — CTA Recruitment Section (2 October 2026)
 

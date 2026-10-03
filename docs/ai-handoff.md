@@ -66,7 +66,23 @@ kanan-bawah; card1 BR ref `134,103,229` → act `133,109,212` setelah fix. **Ful
 rendah; rim kaca 1px render ~1px lebih tinggi dari DOM box karena origin screenshot
 elemen dibulatkan) — protokol melarang menggeser posisi untuk ini; geometri DOM
 (card top 253, grid 3×413.33 gap 20/40) & warna/glow cocok. 7 gate + seo ALL PASS.
-**NEXT = Section 5 Selection Timeline (`1436:3637`).**
+**Section 5 Selection Timeline (`1436:3637`) — AUDIT PASS (3 Oct 2026).**
+Reference re-export node MAE **0.000** (tidak stale). Koreksi: (1) heading fill
+`180deg …80%` → global `181deg …79%`; (2) **header "Date" ternyata LEFT-aligned**
+di PNG (x761, sama dengan baris body) padahal MCP lapor `textAlignHorizontal:
+CENTER` → hapus `text-align: center` (error 255px!); (3) **rim gradient sebenarnya
+horizontal `90deg`**, bukan `135deg` — rim atas & bawah identik per-x (terang di
+kedua ujung, tergelap di x720 pusat tabel); MCP `135deg` lossy (bottom rim centre
+act 96 vs ref 48); (4) **junction 1px terlalu rendah** → header `::after` bottom
+2px (`padding: 1px 1px 2px 1px`), body `::after` tanpa top (`padding: 0 1px 1px
+1px`); (5) separator Figma memudar ke putih **non-premultiplied** → `background:
+linear-gradient(90deg,#9b7bff,#fff)` + `mask-image: linear-gradient(90deg,#000,
+transparent)` (MAE/baris 12 → 1.2); (6) tinta heading 1px lebih rendah → span
+`.tl-heading-text { position: relative; top: 1px }`. **Full MAE 4.3059 → 2.093**
+(0-230: 1.197, 230-812: 2.447; rim atas 1.0 / bawah 0.9 / junction 0.8). Sisa =
+AA font lintas-renderer irreducible. Geometri DOM tak berubah (head 78, body 451,
+rows `[299.2…]`, height 39). 7 gate + seo ALL PASS.
+**NEXT = Section 6 FAQ (`1436:3675`).**
 
 **Homepage (`1430:2040`) & About Us (`1439:4184`) = sudah diaudit (3 Oct 2026).**
 About Us temuan: tombol "See More" `OurTeam` ternyata GLASS (`1248:15694`),
@@ -382,9 +398,9 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   - Frame Figma `1436:3637` ("TIMELINE", 1440 × 812px / 815px, padding `80px 80px 80px 80px`, gap header ke tabel **`56px`** — strict 8-point grid kelipatan 8, mengoreksi nilai lama 58px).
   - Heading `Selection Timeline` (`1436:3638`): **Bluu Next Bold 700 56px / 67.2px** (`--font-display`), linear gradient 181deg `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)`.
   - Table Container Frame 1280px (`1436:3639`):
-    - Table Head Frame `1436:3640` (1280 × 78px, padding `18px 32px`, radius `20px 20px 0 0`, background `rgba(108, 59, 255, 0.25)`, 1px glass rim). Phase di kiri, Date di kanan (568px center), Manrope Bold 700 26/39px.
-    - Table Body Frame `1436:3645` (1280 × 451px, padding `18px 32px`, gap `18px`, radius `0 0 20px 20px`, background `rgba(255, 255, 255, 0.15)`, 1px glass rim). 6 rows dipisahkan garis 1px `linear-gradient(90deg, #9b7bff 0%, transparent 100%)`.
-  - Section MAE: **`4.3059/255`** vs reference `Recruitment-SelectionTimeline-Revisi-1x.png`.
+    - Table Head Frame `1436:3640` (1280 × 78px, padding `18px 32px`, radius `20px 20px 0 0`, background `rgba(108, 59, 255, 0.25)`, 1px glass rim). Phase di kiri, Date **di kiri** (568px, PNG ≠ MCP CENTER), Manrope Bold 700 26/39px.
+    - Table Body Frame `1436:3645` (1280 × 451px, padding `18px 32px`, gap `18px`, radius `0 0 20px 20px`, background `rgba(255, 255, 255, 0.15)`, 1px glass rim). 6 rows dipisahkan garis 1px (fade ke putih non-premultiplied via mask).
+  - Section MAE: **`4.3059/255` → `2.093/255`** (audit 3 Oct 2026 — rim `90deg`, junction 2px/0px, Date left, separator mask, heading nudge 1px) vs reference `Recruitment-SelectionTimeline-Revisi-1x.png`.
   - Geometri Chromium terverifikasi: section `{ width: 1440, height: 812.2, top: 3401.375 }`, head `{ x: 80, y: 203.2 }`, body `{ x: 80, y: 281.2 }`, 6 rows height `39px`.
   - Semua 6 gate verifikasi ALL PASS (`build`, `verify.mjs`, `navbar-audit`, `verify-vt`, `responsive-audit`, `format:check`). Geometri diff 0.0px.
   - Detail: `docs/assets.md` §Recruitment page — Selection Timeline.
@@ -1826,7 +1842,7 @@ Fokus utama AI berikutnya adalah mengaudit dan mengeksekusi secara **strict pixe
 | 2   | **Who Should Join** (`1436:3512`)    | 1440 × 789, padding 80px        | Gap header 74px, rail cards gap 32px    | Bluu Next Bold 56/68, Manrope 18/27                | **SELESAI** (MAE 2.843, commit `f417b3c`)    |
 | 3   | **What You Will Do** (`1436:3517`)   | 1440 × 903, padding 80px        | Gap header 20px, body 1312×625          | Bluu Next Bold 56/67, Manrope 18/27                | **SELESAI** (MAE 3.254, commit `2d1f95a`)    |
 | 4   | **Available Roles** (`1436:3564`)    | 1440 × 843, padding 80px        | Gap header 58px, grid gap 40px          | Bluu Next Bold 56/67, 6 cards + WA direct link     | **SELESAI** (assert exact, commit `37032bb`) |
-| 5   | **Selection Timeline** (`1436:3637`) | 1440 × 812.2, padding 80px      | Header padding 18×32, gap 56px          | Bluu Next Bold 56/67.2, 6 phase rows               | **SELESAI** (MAE 4.306, commit `c50a005`)    |
+| 5   | **Selection Timeline** (`1436:3637`) | 1440 × 812.2, padding 80px      | Header padding 18×32, gap 56px          | Bluu Next Bold 56/67.2, 6 phase rows               | **AUDIT PASS** (MAE 4.306 → 2.093)           |
 | 6   | **FAQ** (`1436:3675`)                | 1440 × 983, padding 80px        | Gap header 56px, gap items 32px         | Bluu Next Bold 56/67.2 ("FAQ"), Manrope 26/39      | **SELESAI** (MAE 7.752, assert exact)        |
 | 7   | **Snippets of Life** (`1436:3684`)   | 1440 × 897.2, padding 40px 80px | Gap 56px, gallery 1280, thumbs gap 35px | Bluu Next Bold 56/67.2, Manrope                    | **SELESAI** (MAE 8.629, assert exact)        |
 | 8   | **CTA Recruitment** (`1436:3687`)    | 1440 × 520, padding 80px        | Panel 1280×360, gap 48px                | Bluu Next Bold 56/67.2, Button Join 201×43         | **SELESAI** (MAE 2.249, assert exact)        |

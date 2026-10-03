@@ -19,7 +19,9 @@ const date = 'Date';
   class="selection-timeline"
   aria-labelledby="selection-timeline-title"
 >
-  <h2 id="selection-timeline-title">Selection Timeline</h2>
+  <h2 id="selection-timeline-title">
+    <span class="tl-heading-text">Selection Timeline</span>
+  </h2>
 
   <div class="timeline">
     <div class="tl-head">
@@ -55,6 +57,10 @@ const date = 'Date';
     background-clip: text;
     color: transparent;
   }
+  .tl-heading-text {
+    position: relative;
+    top: 1px;
+  }
   .timeline {
     width: 100%;
     max-width: 1280px;
@@ -89,12 +95,19 @@ const date = 'Date';
     inset: 0;
     border-radius: inherit;
     padding: 1px;
-    background: linear-gradient(135deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%);
+    background: linear-gradient(90deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%);
     mask:
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0);
     mask-composite: exclude;
     pointer-events: none;
+  }
+  /* Figma draws the junction 1px higher: a 2px header base + no body top edge. */
+  .tl-head::after {
+    padding: 1px 1px 2px 1px;
+  }
+  .tl-body::after {
+    padding: 0 1px 1px 1px;
   }
   .tl-row {
     position: relative;
@@ -109,7 +122,10 @@ const date = 'Date';
     /* Reaches the body's right edge (content width + the 32px right padding). */
     width: calc(100% + 32px);
     height: 1px;
-    background: linear-gradient(90deg, #9b7bff 0%, rgb(255 255 255 / 0%) 100%);
+    /* Figma fades to white (non-premultiplied); split colour + alpha ramps. */
+    background: linear-gradient(90deg, #9b7bff, #ffffff);
+    -webkit-mask-image: linear-gradient(90deg, #000, transparent);
+    mask-image: linear-gradient(90deg, #000, transparent);
   }
   .phase {
     flex: 1;
@@ -132,7 +148,6 @@ const date = 'Date';
   }
   .date-col.head {
     font-weight: 700;
-    text-align: center;
   }
   @media (max-width: 760px) {
     .selection-timeline {

@@ -372,6 +372,16 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   `134,103,229` vs act `133,109,212`). Full MAE **8.329** (grid kartu 10.203, sisa =
   residual lintas-renderer irreducible: tinta Bluu Next ~1px + rim kaca 1px — jangan
   digeser). Lanjut section 5–9.
+- **Section 5 Selection Timeline (`1436:3637`) PASS (3 Oct 2026)** — ref MAE 0.000;
+  koreksi: heading gradient → `181deg/79%`; **header "Date" ternyata LEFT-aligned di
+  PNG** (x761, sama dgn body) walau MCP bilang CENTER (hapus `text-align:center`,
+  error 255px); **rim gradient sebenarnya `90deg`** (bukan `135deg` — MCP lossy; rim
+  atas & bawah identik per-x, tergelap di x720); **junction 1px terlalu rendah** →
+  header `::after` bottom 2px + body `::after` tanpa top; **separator** Figma memudar
+  ke putih non-premultiplied → background `#9b7bff→#fff` + `mask-image` (MAE/baris
+  12→1.2); tinta heading 1px lebih rendah → span `top: 1px`. Full MAE **4.3059 →
+  2.093** (rim 0.9–1.0, junction 0.8; sisa = AA font irreducible). Geometri DOM tak
+  berubah. Lanjut section 6–9.
 - **STATUS RINGKAS (3 Oct 2026).** **Homepage 100% selesai** (Hero → Our
   Philosophy → What We Do → Choose Your Domain/HoDS → Our Project → CTA, node
   `1430:2040`). **Recruitment Page 100% selesai** (node `1436:3505`). **About Us
@@ -672,7 +682,11 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   (heading gradient → global `181deg`; sisanya PASS); Section 3 What You Will Do
   `1436:3517` SELESAI (MAE 3.25 → 1.84, heading gradient → `181deg`); Section 4
   Available Roles `1436:3564` SELESAI (MAE 8.329, heading gradient + `.role-glow`
-  base opacity 0.85); NEXT = Section 5 Selection Timeline `1436:3637`.** **Homepage (`1430:2040`) & About Us
+  base opacity 0.85); Section 5 Selection Timeline `1436:3637` SELESAI (MAE 4.306 →
+  2.093: header Date ternyata LEFT-aligned di PNG walau MCP bilang CENTER, rim
+  gradient sebenarnya `90deg` bukan `135deg`, junction 1px → header base 2px +
+  body no-top, separator fade-putih via mask, heading nudge 1px); NEXT = Section 6
+  FAQ `1436:3675`.** **Homepage (`1430:2040`) & About Us
   (`1439:4184`) sudah diaudit 3 Oct 2026** (About Us: tombol "See More" `OurTeam`
   = GLASS `1248:15694`, diperbaiki; **JANGAN sentuh `<Starfield />` visi-misi**).
   Lalu Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).
