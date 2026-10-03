@@ -8,7 +8,7 @@
 - Layout & Spacing (Strict 8-Point Grid):
   - Section desktop: 1440 × 843px, padding 80px, background `#050507`.
   - Header Frame 2496 (`1436:3565`): 1280 × 115px at `x: 80, y: 80`, gap `24px` between heading and subtitle:
-    - Heading `1436:3566`: "Available Roles", **Bluu Next Bold 700 56px / 67px** (token `--font-display`), linear gradient per line `linear-gradient(180deg, #FFFFFF 15%, #999999 42%, #FFFFFF 80%)` (`background-clip: text`), text-align left at `x: 80, y: 80, w: 1280, h: 67`. Ink width 387px matching reference ±0.5px.
+    - Heading `1436:3566`: "Available Roles", **Bluu Next Bold 700 56px / 67px** (token `--font-display`), linear gradient `linear-gradient(181deg, #FFFFFF 15%, #999999 42%, #FFFFFF 79%)` (`background-clip: text`, global Figma `Gradient Heading`), text-align left at `x: 80, y: 80, w: 1280, h: 67`. Ink width 387px matching reference ±0.5px.
     - Subtitle `1436:3567`: "Select a role to view full details, requirements, and apply.", Manrope Medium 500 18px / 27px, color `#ffffff`, single-line text at `x: 80, y: 168, w: 1280, h: 27`.
   - Gap Header-to-Grid: **`58px`** (top of grid = 80 + 115 + 58 = 253px).
   - Card Grid Frame 2605 (`1436:3568`): 1280 × 510.375px at `x: 80, y: 253`, layout 2 rows × 3 columns, vertical gap `40px`, horizontal gap `20px`:
@@ -18,7 +18,7 @@
     - Internal metrics: `padding: 4.358cqw 6.78cqw` (18px 28px).
     - Head Frame 2592: title Manrope Bold 700 26/39 white, gap 16px (`3.874cqw`), summary Manrope Regular 400 16/24 `#ede8ff`.
     - Foot Frame 2593: 1px divider + "View Details" (Manrope Medium 500 16/32) + 20px arrow icon.
-    - Glow backdrop: `public/images/recruitment/role-glow.webp` with interactive hover pointer tracking (`--gx/--gy`), static under `prefers-reduced-motion`.
+    - Glow backdrop: `public/images/recruitment/role-glow.webp`, base `opacity: 0.85` so the reduced-motion (static) render matches the reference / the animation's 0% frame; interactive hover pointer tracking (`--gx/--gy`), static under `prefers-reduced-motion`.
 - Measurements & Precision:
   - `verify.mjs` assertions:
     - section: `{ width: 1440, height: 843.375, top: 2558 }`
@@ -26,8 +26,9 @@
     - copy: `{ x: 80, y: 168, width: 1280, height: 27 }`
     - list: `{ x: 80, y: 253, width: 1280, height: 510.375 }`
     - rows: 6 cards matching `[253, 528.1875]` and `[80, 513.328, 946.656]` with width `413.33px` and height `235.17px`.
-  - Section MAE: Regional top space **0.0000**, Header **4.2334**, Bottom space **0.0000**, Card background MAE < 1.0 (residual is text font rasterization).
-  - All verification gates PASS: build (0 error), verify.mjs (exit 0), responsive audit (468/468 PASS), navbar audit (PASS), verify:vt (PASS), format:check (PASS).
+  - Audit 3 Oct 2026 (strict per-section): reference re-export `Recruitment-AvailableRoles-Revisi-1x.png` MAE **0.000** vs node (not stale). Fixes: heading fill `180deg/80%` → global `181deg/79%`; `.role-glow` base opacity `0.85` (reduce render was opacity 1, glow read ~6–11 too bright at the bottom-right corner; card1 BR now ref `134,103,229` vs act `133,109,212`).
+  - Section MAE **8.329/255** full (header band 2.497, card grid 10.203). Per-card 14–17 MAE is **irreducible** cross-renderer residual: Figma text engine places Bluu Next ink ~1px lower and the 1px glass rim renders ~1px higher than the DOM box (section screenshot origin rounds) — the protocol says do NOT chase this by shifting position. Card glow/background and geometry match.
+  - All verification gates PASS: build (0 error), verify.mjs (exit 0, browserErrors []), responsive audit (468/468 PASS), navbar audit (PASS), verify:vt (PASS), audit:spacing (PASS), format:check (PASS), seo:audit (PASS).
 
 ## Detail Roles Pages (/recruitment/roles/[id]) — Frame Height 1280px, Bluu Next Bold 700 & 8pt Spacing (2 October 2026)
 

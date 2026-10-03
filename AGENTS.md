@@ -365,7 +365,13 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   PASS. **Section 2 Who Should Join (`1436:3512`) PASS (3 Oct 2026)** — ref MAE 0.000,
   hanya heading gradient → global `181deg`; sisa MAE 2.836 = AA font + Starfield hidup.
   **Section 3 What You Will Do (`1436:3517`) PASS (3 Oct 2026)** — ref MAE 0.000, hanya
-  heading gradient → global `181deg`; full MAE 3.25 → 1.84. Lanjut section 4–9.
+  heading gradient → global `181deg`; full MAE 3.25 → 1.84.
+  **Section 4 Available Roles (`1436:3564`) PASS (3 Oct 2026)** — ref MAE 0.000; dua
+  koreksi: heading gradient → global `181deg/79%`, dan `.role-glow` base `opacity: 0.85`
+  (render reduce tadinya opacity 1 → glow ~6–11 terlalu terang; card1 BR kini ref
+  `134,103,229` vs act `133,109,212`). Full MAE **8.329** (grid kartu 10.203, sisa =
+  residual lintas-renderer irreducible: tinta Bluu Next ~1px + rim kaca 1px — jangan
+  digeser). Lanjut section 5–9.
 - **STATUS RINGKAS (3 Oct 2026).** **Homepage 100% selesai** (Hero → Our
   Philosophy → What We Do → Choose Your Domain/HoDS → Our Project → CTA, node
   `1430:2040`). **Recruitment Page 100% selesai** (node `1436:3505`). **About Us
@@ -664,8 +670,9 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   kerjakan **satu section per pass**. **Section 1 Hero `1436:3506` SELESAI
   (3 Oct 2026, MAE 11.909 → 1.600); Section 2 Who Should Join `1436:3512` SELESAI
   (heading gradient → global `181deg`; sisanya PASS); Section 3 What You Will Do
-  `1436:3517` SELESAI (MAE 3.25 → 1.84, heading gradient → `181deg`); NEXT =
-  Section 4 Available Roles `1436:3564`.** **Homepage (`1430:2040`) & About Us
+  `1436:3517` SELESAI (MAE 3.25 → 1.84, heading gradient → `181deg`); Section 4
+  Available Roles `1436:3564` SELESAI (MAE 8.329, heading gradient + `.role-glow`
+  base opacity 0.85); NEXT = Section 5 Selection Timeline `1436:3637`.** **Homepage (`1430:2040`) & About Us
   (`1439:4184`) sudah diaudit 3 Oct 2026** (About Us: tombol "See More" `OurTeam`
   = GLASS `1248:15694`, diperbaiki; **JANGAN sentuh `<Starfield />` visi-misi**).
   Lalu Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).

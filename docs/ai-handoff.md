@@ -55,6 +55,19 @@ re-export node MAE **0.000** (tidak stale). Satu perbaikan aturan: heading fill
 1.842/255** (dari catatan lama 3.2541) — sudah sangat presisi, tak ada temuan lain.
 Geometri/8pt/artwork tarot + connector tetap; 7 gate + seo ALL PASS.
 
+**Section 4 Available Roles (`1436:3564`) — AUDIT PASS (3 Oct 2026).** Reference
+re-export node MAE **0.000** (tidak stale). Dua koreksi: (1) heading fill
+`180deg …80%` → global `181deg …79%`; (2) **`.role-glow` base `opacity: 0.85`** —
+sebelumnya render reduce (statis) = opacity 1 (blok animasi `no-preference` tidak
+jalan di bawah reduce) sehingga glow terbaca ~6–11 terlalu terang di sudut
+kanan-bawah; card1 BR ref `134,103,229` → act `133,109,212` setelah fix. **Full MAE
+8.329/255** (header band 2.497, grid kartu 10.203). Sisa per-kartu MAE 14–17 =
+**residual lintas-renderer irreducible** (Figma menaruh tinta Bluu Next ~1px lebih
+rendah; rim kaca 1px render ~1px lebih tinggi dari DOM box karena origin screenshot
+elemen dibulatkan) — protokol melarang menggeser posisi untuk ini; geometri DOM
+(card top 253, grid 3×413.33 gap 20/40) & warna/glow cocok. 7 gate + seo ALL PASS.
+**NEXT = Section 5 Selection Timeline (`1436:3637`).**
+
 **Homepage (`1430:2040`) & About Us (`1439:4184`) = sudah diaudit (3 Oct 2026).**
 About Us temuan: tombol "See More" `OurTeam` ternyata GLASS (`1248:15694`),
 diperbaiki (section MAE 2.828 → 2.770). JANGAN sentuh `<Starfield />` visi-misi.
@@ -380,7 +393,7 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   Section 4 pada halaman Recruitment (`1436:3505`) beserta 6 halaman Detail Role kini selesai dan tervalidasi presisi:
   - Frame Figma `1436:3564` (1440 × 843px, padding `80px 80px 80px 80px`, gap header ke grid `58px`).
   - Header Frame 2496 (`1436:3565`): 1280 × 115px di `(80, 80)`, layout vertical, gap `24px`:
-    - Heading `Available Roles` **Bluu Next Bold 700 56px / 67px** (`--font-display`), fill `linear-gradient(180deg, #ffffff 15%, #999999 42%, #ffffff 80%)` di `(80, 80, 1280 × 67)`.
+    - Heading `Available Roles` **Bluu Next Bold 700 56px / 67px** (`--font-display`), fill `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)` di `(80, 80, 1280 × 67)`.
     - Subtitle `Select a role to view full details, requirements, and apply.` Manrope Medium 500 18/27px (`--font-body`), `#ffffff` di `(80, 168, 1280 × 27)`.
   - Card Grid Frame 2605 (`1436:3568`): 1280 × 510.375px di `(80, 253)` dengan enam kartu `413.33 × 235.17px` (gap horizontal 20px, gap vertikal 40px), padding `18px 28px`, 1px glass rim `linear-gradient(135deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%)`.
   - Detail Roles 6 halaman (`/recruitment/roles/{data,core,language,vision,product,growth}`):
@@ -401,12 +414,13 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
       - Hover lift `translateY(-2px)`, glow violet `0 8px 24px -4px rgb(108 59 255 / 40%)`, background lighten `rgb(98 80 255 / 20%)`, border specular shimmer, ikon zoom `scale(1.12)`, keyboard focus-visible ring, dan Web Audio SFX cues (`data-sfx="click"`, `data-sfx-hover="hover"`).
   - Verifikasi: build 0 error, verify.mjs exit 0, responsive audit 468/468 PASS, navbar audit ALL PASS, verify:vt ALL PASS, format:check ALL PASS. Geometri diff 0.0px.
   - Detail: `docs/assets.md` §Recruitment page — Available Roles & §Detail Roles Pages.
+  - **AUDIT strict per-section (3 Oct 2026): PASS.** Reference re-export MAE **0.000** vs node (tidak stale). Dua koreksi: (1) heading fill `180deg/80%` → global `181deg/79%`; (2) `.role-glow` base `opacity: 0.85` — sebelumnya render reduce (statis) = opacity 1 sehingga glow terbaca ~6–11 terlalu terang di sudut kanan-bawah (card1 BR ref `134,103,229` vs act `133,109,212` setelah fix). Section MAE **8.329/255** (header 2.497, grid 10.203); sisa per-kartu 14–17 = residual lintas-renderer (Figma menaruh tinta Bluu Next ~1px lebih rendah, rim kaca 1px render ~1px lebih tinggi dari DOM box) — **irreducible, jangan digeser**. Geometri/8pt/glow/bg cocok. 7 gate + seo ALL PASS.
 
 - **Recruitment Page Section 3: What You Will Do (`1436:3517`) — revisi font, header & spacing 8pt (PALING BARU, 2 Oct 2026).**
   Section 3 pada halaman Recruitment (`1436:3505`) kini selesai dan tervalidasi presisi:
   - Frame Figma `1436:3517` (1440 × 903px, padding `80px 80px 80px 80px`, gap header ke body `20px`).
   - Header Frame 2734 (`1436:4048`): 1280 × 118px di `(80, 80)`, layout vertical, gap `24px`:
-    - Heading `What You Will Do` **Bluu Next Bold 700 56px / 67px** (`--font-display`), fill `linear-gradient(180deg, #ffffff 15%, #999999 42%, #ffffff 80%)` di `(80, 80, 1280 × 67)`.
+    - Heading `What You Will Do` **Bluu Next Bold 700 56px / 67px** (`--font-display`), fill `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)` di `(80, 80, 1280 × 67)`.
     - Subtitle `Life inside the Data Sorcerers ecosystem` Manrope Medium 500 18/27px (`--font-body`), `#ffffff` di `(544.5, 171, 351 × 27)`.
   - Body Frame 2542 (`1436:3520`): 1312 × 625px di `(64, 218)`:
     - Tarot Card 1 di `(983, 218, 356 × 430)`.
@@ -422,7 +436,7 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   Section 2 pada halaman Recruitment (`1436:3505`) kini selesai dan tervalidasi presisi:
   - Frame Figma `1436:3512` (1440 × 789px, padding `80px 80px 80px 80px`, gap header ke rail `74px`).
   - Header Frame 2547 (1280 × 119px, gap 24px):
-    - Heading `Who Should Join?` **Bluu Next Bold 700 56px / 67.2px** (`--font-display`, line-height 68px), fill `linear-gradient(180deg, #ffffff 15%, #999999 42%, #ffffff 80%)` di `(80, 80, 1280 × 68)`.
+    - Heading `Who Should Join?` **Bluu Next Bold 700 56px / 67.2px** (`--font-display`, line-height 68px), fill `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)` di `(80, 80, 1280 × 68)`.
     - Subtitle `We welcome passionate individuals...` Manrope Medium 500 18/27px (`--font-body`), `#ffffff` di `(80, 172, 1280 × 27)`.
   - HoDS Card Rail Frame 2509 (`1436:3516`): 1280 × 436px di `(80, 273)` dengan enam kartu 405 × 436px gap 32px (memakai `DomainRail.astro` yang sudah tervalidasi di Homepage).
   - Living sky starfield background via `Starfield.astro` (inert di reduce).
