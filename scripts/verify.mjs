@@ -896,6 +896,26 @@ try {
     copy: { x: 270, y: 470, width: 900, height: 27 },
     button: { x: 660, y: 545, width: 120, height: 43 },
   });
+  const recruitVideoFallback = await page
+    .locator('.recruitment-hero')
+    .evaluate((section) => {
+      const video = section.querySelector('.art-video');
+      const image = section.querySelector('.art-fallback');
+      return {
+        videoOpacity: getComputedStyle(video).opacity,
+        imageOpacity: getComputedStyle(image).opacity,
+        videoPreload: video.preload,
+        videoPoster: video.poster,
+        videoPaused: video.paused,
+      };
+    });
+  assert.deepEqual(recruitVideoFallback, {
+    videoOpacity: '0',
+    imageOpacity: '1',
+    videoPreload: 'none',
+    videoPoster: '',
+    videoPaused: true,
+  });
   assert.equal(
     await page.locator('.desktop-nav .nav-link.active').textContent(),
     'Recruitment',

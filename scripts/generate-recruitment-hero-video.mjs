@@ -2,14 +2,13 @@ import { execFileSync } from 'node:child_process';
 import { mkdir, stat } from 'node:fs/promises';
 
 // Animated background for the Recruitment hero. The source is a 1920x1080,
-// 24fps, ten-second loop of a purple planet horizon with a drifting aurora —
-// the motion version of the static `backgrounds/recruitment.webp`.
+// 24fps, ten-second purple planet horizon clip. The static reference remains
+// `backgrounds/recruitment.webp` under reduced motion and on small screens.
 //
 // Three decisions shape the export:
 //
-// 1. The clip does NOT loop seamlessly on its own (frame 0 vs frame 239 differ
-//    by ~7/255), so a plain loop seams. We make a circular crossfade: the last
-//    `XFADE` seconds are blended into the first `XFADE` seconds, and the output
+// 1. The clip does not loop seamlessly on its own. A circular crossfade blends
+//    the last `XFADE` seconds into the first `XFADE` seconds; the output
 //    is trimmed to the remaining length. Frame 0 of the export is therefore the
 //    tail frame, which makes the loop point continuous without reversing the
 //    aurora (a ping-pong boomerang would, and this clip visibly builds up).
@@ -21,11 +20,10 @@ import { mkdir, stat } from 'node:fs/promises';
 //    cover`) then zooms (pinned to 1.35x), so a 1080p source is upscaled ~2x in
 //    device pixels on retina. The larger canvas keeps the star field crisp
 //    through the zoom. Encoding budget (Perf P0): crf 43 (AV1) / 30 (x264)
-//    brings the webm 1.66 -> 0.78 MB and the mp4 2.38 -> 1.03 MB with ~0.1%
-//    SSIM loss against a near-lossless reference — the aurora stays smooth
-//    without the old crf-44 blocking. Chrome/Edge get the webm (listed first),
-//    Safari the mp4 — only one is ever fetched.
-const SRC = 'assets/assets recruitment page/hero section/recruitment-hero1.mp4';
+//    keeps the WebM under 0.9 MB and MP4 under 1.1 MB. Chrome/Edge get WebM
+//    (listed first), Safari gets MP4 — only one is ever fetched.
+const SRC =
+  'assets/assets recruitment page/hero section/Animating_static_planetary_space…_1080p_20261003170119.mp4';
 const OUT_DIR = 'public/images/recruitment';
 const ART_W = 2560;
 const ART_H = 1440;

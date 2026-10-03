@@ -17,6 +17,14 @@ rinci: **`docs/hero-video-plan.md`**. Setelah video: audit Partners (`1439:4787`
 
 - 6 detail HoDS (`864:18857` dkk) per-section, lalu konten asli.
 
+**Recruitment Hero video (3 Oct 2026):** sumber aktif kini
+`Animating_static_planetary_space…_1080p_20261003170119.mp4` (1920×1080,
+24 fps, 10 s), menggantikan `recruitment-hero1.mp4` melalui
+`scripts/generate-recruitment-hero-video.mjs`. Loop 9 s: WebM 0.78 MiB, MP4
+1.00 MiB, poster 0.05 MiB. Fallback statis, geometri, font, dan referensi PNG
+tetap; `verify.mjs` menegaskan video tidak dimuat pada reduced motion.
+Screenshot reduce sebelum/sesudah MAE 0; 7 gate + SEO lulus, responsive 468/468.
+
 **About Us Hero video (`1439:4185`, 3 Oct 2026):** shared `HeroVideo.astro` +
 `src/scripts/hero-video.ts` handles gated loading (motion allowed, ≥601px),
 off-screen/tab pause, and View Transition cleanup. A 7 s circular loop from the
