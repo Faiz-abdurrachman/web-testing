@@ -12,7 +12,7 @@ const videos = {
   },
   hof: {
     source:
-      'assets/hall of frames/hero/Sealed_arcane_door_ambient_anima…_20261003171201.mp4',
+      'assets/hall of frames/hero/terbaruSorcerer_casting_subtle_ambient_…_20261003194412.mp4',
     output: 'public/images/hof',
     duration: 8,
     fade: 1,
