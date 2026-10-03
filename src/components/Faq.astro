@@ -103,7 +103,8 @@ const items: FaqItem[] = [
     inset: 0;
     border-radius: inherit;
     padding: 1px;
-    background: linear-gradient(135deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%);
+    /* Figma stroke maps the gradient horizontally (ref top/bottom rims match per x). */
+    background: linear-gradient(90deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%);
     mask:
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0);

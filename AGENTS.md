@@ -382,6 +382,13 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   12→1.2); tinta heading 1px lebih rendah → span `top: 1px`. Full MAE **4.3059 →
   2.093** (rim 0.9–1.0, junction 0.8; sisa = AA font irreducible). Geometri DOM tak
   berubah. Lanjut section 6–9.
+- **Section 6 FAQ (`1436:3675`) PASS (3 Oct 2026)** — ref MAE 0.000; koreksi: rim
+  `135deg` → **`90deg`** (MCP lossy; ref top/bottom rims identik per-x, top x720 =
+  `46,39,108` = 90deg-50%). Full MAE **7.7518 → 7.803** (aligned crop ~5.04) —
+  **didominasi artefak screenshot**, bukan bug CSS: section top `4213.578` fraksional
+  → screenshot bounds dibulatkan ke luar 1px → konten tergeser sub-pixel `0.578px`;
+  diff heatmap hanya **outline** glyph/rim (bukan fill), region bebas-teks MAE
+  0.4–2.8. Geometri DOM tak berubah. Lanjut section 7–9.
 - **STATUS RINGKAS (3 Oct 2026).** **Homepage 100% selesai** (Hero → Our
   Philosophy → What We Do → Choose Your Domain/HoDS → Our Project → CTA, node
   `1430:2040`). **Recruitment Page 100% selesai** (node `1436:3505`). **About Us
@@ -502,10 +509,10 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   Heading "FAQ" (`1436:3676`): **Bluu Next Bold 700 56/67.2px** (`--font-display`), fill linear gradient 181deg `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)`. Ink width terukur: 103.5px, ink height 46px.
   List 1280px (`1436:3677`): width 1280px at `(80, 203.2)`, height 700px, gap `32px` (`4 × 8px`), padding `0`.
   6 Accordion Items: Items 1–4 `1280×77px` di y = `[203.2, 312.2, 421.2, 530.2]`, Items 5–6 `1280×116px` di y = `[639.2, 787.2]` (2 baris teks).
-  Background `rgba(255, 255, 255, 0.15)`, 1px glass rim `linear-gradient(135deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%)`.
-  Section MAE: **7.7518/255** vs reference `Recruitment-Faq-Revisi-1x.png` (Header MAE 0.7854, List MAE 10.2983, Bottom MAE 2.7911). Geometri Chromium diff 0.0px.
+  Background `rgba(255, 255, 255, 0.15)`, 1px glass rim **`linear-gradient(90deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%)`** (audit 3 Oct 2026: MCP `135deg` lossy; ref top/bottom rims identik per-x).
+  Section MAE: **7.7518 → 7.803/255** (audit 3 Oct 2026, rim `90deg`). **Didominasi artefak screenshot, bukan bug CSS:** section top `4213.578` fraksional → screenshot bounds dibulatkan ke luar 1px → konten tergeser sub-pixel `0.578px`; diff heatmap hanya **outline** glyph/rim, region bebas-teks 0.4–2.8, ter-align (top:1) ~5.04. Sisa = AA font irreducible. Geometri Chromium diff 0.0px.
   Downstream section tops (`.snippets` 5196.78, `.cta` 6096.78, `.footer` 6633.78) terkalibrasi presisi.
-  Semua 6 gate verifikasi ALL PASS (`build`, `verify.mjs`, `navbar-audit`, `verify-vt`, `responsive-audit`, `format:check`).
+  Semua 7 gate + seo ALL PASS.
 - **Recruitment Page Section 7: Snippets of Life at Data Sorcerers (`1436:3684`) — 100% Selesai (2 Oct 2026).**
   Frame Figma `1436:3684` ("Frame 2502", 1440×897.2px, padding `40px 80px`, gap header-ke-gallery **`56px`** — strict 8-point grid, mengoreksi 58px lama), fill `#050507`.
   Heading `1436:3685`: "Snippets of Life at data sorcerers" **Bluu Next Bold 700 56/67.2px** (`--font-display`), `text-align: center`, fill `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)`. Ink width terukur 840.75px.
@@ -685,8 +692,10 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   base opacity 0.85); Section 5 Selection Timeline `1436:3637` SELESAI (MAE 4.306 →
   2.093: header Date ternyata LEFT-aligned di PNG walau MCP bilang CENTER, rim
   gradient sebenarnya `90deg` bukan `135deg`, junction 1px → header base 2px +
-  body no-top, separator fade-putih via mask, heading nudge 1px); NEXT = Section 6
-  FAQ `1436:3675`.** **Homepage (`1430:2040`) & About Us
+  body no-top, separator fade-putih via mask, heading nudge 1px); Section 6 FAQ
+  `1436:3675` SELESAI (rim `135deg` → `90deg` sesuai PNG; MAE ~7.80 didominasi
+  artefak screenshot sub-pixel — section top 4213.578 fraksional); NEXT = Section 7
+  Snippets `1436:3684`.** **Homepage (`1430:2040`) & About Us
   (`1439:4184`) sudah diaudit 3 Oct 2026** (About Us: tombol "See More" `OurTeam`
   = GLASS `1248:15694`, diperbaiki; **JANGAN sentuh `<Starfield />` visi-misi**).
   Lalu Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).

@@ -2019,8 +2019,9 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
   - Items 1–4: `1280 × 77px` di y = `[203.2, 312.2, 421.2, 530.2]`.
   - Items 5–6: `1280 × 116px` di y = `[639.2, 787.2]` (2 baris teks).
   - Background `rgba(255, 255, 255, 0.15)`, border-radius 20px, 1px glass rim specular
-    `linear-gradient(135deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%)` via pseudo `::after`
-    dengan `mask-composite: exclude` (mencegah border mengecilkan content box).
+    **`linear-gradient(90deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%)`** (audit 3 Oct 2026:
+    MCP `135deg` lossy; ref top & bottom rims identik per-x — top x720 = `46,39,108` = 90deg-50%)
+    via pseudo `::after` dengan `mask-composite: exclude` (mencegah border mengecilkan content box).
   - Pertanyaan Manrope Medium 500 26/39px putih, padding `19px 32px`.
   - Chevron down 24×24px (`public/images/recruitment/chevron-down.svg`) rotasi 180° saat terbuka.
 - Answers: Manrope Medium 18/27px (`.faq-a`), padding `0 32px 19px`, margin `24px 0 0`.
@@ -2028,9 +2029,13 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
   Sound SFX cues: `data-sfx-hover="hover"` dan `ds:sfx` event `{ cue: 'open' | 'close' }`.
 - Verifikasi: `scripts/verify.mjs` asserts section `{ width: 1440, height: 983.2, top: 4213.578125 }`,
   heading `{ x: 80, y: 80, width: 1280, height: 67.2 }`, list `{ x: 80, y: 203.2, width: 1280, height: 700 }`,
-  dan 6 items y offset exact. Section MAE: 7.75/255 (Header MAE 0.78, List MAE 10.29, Bottom MAE 2.79).
+  dan 6 items y offset exact. Section MAE: **7.7518 → 7.803/255** (audit 3 Oct 2026, rim `90deg`).
+  **MAE didominasi artefak screenshot, bukan bug CSS:** section top `4213.578` fraksional → Playwright
+  membulatkan screenshot bounds ke luar 1px → seluruh konten tergeser sub-pixel `0.578px`; diff heatmap
+  hanya menampilkan **outline** glyph/rim (bukan fill) = sub-pixel shift, region bebas-teks MAE 0.4–2.8,
+  dan perbandingan ter-align (crop top:1) ~5.04. Sisa = AA font lintas-renderer irreducible.
   Downstream section tops (`.snippets` 5196.78, `.cta` 6096.78, `.footer` 6633.78) terkalibrasi presisi.
-  Semua 6 gate verifikasi ALL PASS.
+  Semua 7 gate + seo ALL PASS.
 
 ## Recruitment page — Snippets
 

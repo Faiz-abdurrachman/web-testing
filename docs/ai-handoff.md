@@ -82,7 +82,7 @@ transparent)` (MAE/baris 12 → 1.2); (6) tinta heading 1px lebih rendah → spa
 (0-230: 1.197, 230-812: 2.447; rim atas 1.0 / bawah 0.9 / junction 0.8). Sisa =
 AA font lintas-renderer irreducible. Geometri DOM tak berubah (head 78, body 451,
 rows `[299.2…]`, height 39). 7 gate + seo ALL PASS.
-**NEXT = Section 6 FAQ (`1436:3675`).**
+**NEXT = Section 7 Snippets (`1436:3684`).**
 
 **Homepage (`1430:2040`) & About Us (`1439:4184`) = sudah diaudit (3 Oct 2026).**
 About Us temuan: tombol "See More" `OurTeam` ternyata GLASS (`1248:15694`),
@@ -385,11 +385,11 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   - 6 Accordion Items:
     - Items 1–4: `1280 × 77px` di y = `[203.2, 312.2, 421.2, 530.2]`.
     - Items 5–6: `1280 × 116px` di y = `[639.2, 787.2]` (2 baris teks).
-    - Background `rgba(255, 255, 255, 0.15)`, 1px specular glass rim `linear-gradient(135deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%)`.
+    - Background `rgba(255, 255, 255, 0.15)`, 1px specular glass rim **`linear-gradient(90deg, #ede8ff 0%, #2e276c 50%, #ede8ff 100%)`** (audit 3 Oct 2026 — MCP `135deg` lossy; ref top & bottom rims identik per-x, top x720 = `46,39,108` persis 90deg-50%).
     - Pertanyaan Manrope Medium 500 26/39px putih, chevron down rotasi 180°.
   - Geometri Chromium terverifikasi: section `{ width: 1440, height: 983.2, top: 4213.578125 }`, heading `{ x: 80, y: 80, width: 1280, height: 67.2 }`, list `{ x: 80, y: 203.2, width: 1280, height: 700 }`, 6 items exact.
   - Downstream section tops (`.snippets` 5196.78, `.cta` 6096.78, `.footer` 6633.78) terkalibrasi presisi.
-  - Section MAE: **`7.7518/255`** vs reference `Recruitment-Faq-Revisi-1x.png` (Header MAE 0.7854, Accordion List MAE 10.2983, Bottom MAE 2.7911). Geometri diff 0.0px.
+  - Section MAE: **`7.7518/255` → `7.803/255`** (audit 3 Oct 2026 — rim `90deg`). Catatan penting: **MAE didominasi artefak screenshot**, bukan bug CSS — section origin `4213.578` fraksional → Playwright membulatkan bounds ke luar 1px sehingga seluruh konten tergeser sub-pixel `0.578px`; diff heatmap hanya memperlihatkan **outline** glyph/rim (bukan fill) = sub-pixel shift, dan region bebas-teks MAE 0.4–2.8. Perbandingan yang di-align (crop top:1) turun ke ~5.04. Sisa = AA font lintas-renderer irreducible.
   - Semua 6 gate verifikasi ALL PASS (`build`, `verify.mjs`, `navbar-audit`, `verify-vt`, `responsive-audit`, `format:check`).
   - Detail: `docs/assets.md` §Recruitment page — FAQ.
 
@@ -1836,17 +1836,17 @@ Fokus utama AI berikutnya adalah mengaudit dan mengeksekusi secara **strict pixe
 
 #### B. RECRUITMENT PAGE REVISI FONT & SPACING (`1436:3505`)
 
-| No  | Section & Node ID                    | Dimensi & Padding               | Spacing & Gap                           | Typography                                         | Status & Verifikasi                          |
-| --- | ------------------------------------ | ------------------------------- | --------------------------------------- | -------------------------------------------------- | -------------------------------------------- |
-| 1   | **Recruitment Hero** (`1436:3506`)   | 1440 × 866, padding 0 80px      | Vertically centered (278px), gap 48px   | Bluu Next Bold 72/86, Manrope 18/27, Button 120×43 | **SELESAI** (assert exact, commit `978d468`) |
-| 2   | **Who Should Join** (`1436:3512`)    | 1440 × 789, padding 80px        | Gap header 74px, rail cards gap 32px    | Bluu Next Bold 56/68, Manrope 18/27                | **SELESAI** (MAE 2.843, commit `f417b3c`)    |
-| 3   | **What You Will Do** (`1436:3517`)   | 1440 × 903, padding 80px        | Gap header 20px, body 1312×625          | Bluu Next Bold 56/67, Manrope 18/27                | **SELESAI** (MAE 3.254, commit `2d1f95a`)    |
-| 4   | **Available Roles** (`1436:3564`)    | 1440 × 843, padding 80px        | Gap header 58px, grid gap 40px          | Bluu Next Bold 56/67, 6 cards + WA direct link     | **SELESAI** (assert exact, commit `37032bb`) |
-| 5   | **Selection Timeline** (`1436:3637`) | 1440 × 812.2, padding 80px      | Header padding 18×32, gap 56px          | Bluu Next Bold 56/67.2, 6 phase rows               | **AUDIT PASS** (MAE 4.306 → 2.093)           |
-| 6   | **FAQ** (`1436:3675`)                | 1440 × 983, padding 80px        | Gap header 56px, gap items 32px         | Bluu Next Bold 56/67.2 ("FAQ"), Manrope 26/39      | **SELESAI** (MAE 7.752, assert exact)        |
-| 7   | **Snippets of Life** (`1436:3684`)   | 1440 × 897.2, padding 40px 80px | Gap 56px, gallery 1280, thumbs gap 35px | Bluu Next Bold 56/67.2, Manrope                    | **SELESAI** (MAE 8.629, assert exact)        |
-| 8   | **CTA Recruitment** (`1436:3687`)    | 1440 × 520, padding 80px        | Panel 1280×360, gap 48px                | Bluu Next Bold 56/67.2, Button Join 201×43         | **SELESAI** (MAE 2.249, assert exact)        |
-| 9   | **Footer** (`1436:3699`)             | 1440 × 556, padding 80px        | Brand lockup 8, copy 24, nav 32         | Bluu Next Bold 32/38.4, Manrope 400/700            | **SELESAI** (MAE 5.84 home/7.71 recruit)     |
+| No  | Section & Node ID                    | Dimensi & Padding               | Spacing & Gap                           | Typography                                         | Status & Verifikasi                                  |
+| --- | ------------------------------------ | ------------------------------- | --------------------------------------- | -------------------------------------------------- | ---------------------------------------------------- |
+| 1   | **Recruitment Hero** (`1436:3506`)   | 1440 × 866, padding 0 80px      | Vertically centered (278px), gap 48px   | Bluu Next Bold 72/86, Manrope 18/27, Button 120×43 | **SELESAI** (assert exact, commit `978d468`)         |
+| 2   | **Who Should Join** (`1436:3512`)    | 1440 × 789, padding 80px        | Gap header 74px, rail cards gap 32px    | Bluu Next Bold 56/68, Manrope 18/27                | **SELESAI** (MAE 2.843, commit `f417b3c`)            |
+| 3   | **What You Will Do** (`1436:3517`)   | 1440 × 903, padding 80px        | Gap header 20px, body 1312×625          | Bluu Next Bold 56/67, Manrope 18/27                | **SELESAI** (MAE 3.254, commit `2d1f95a`)            |
+| 4   | **Available Roles** (`1436:3564`)    | 1440 × 843, padding 80px        | Gap header 58px, grid gap 40px          | Bluu Next Bold 56/67, 6 cards + WA direct link     | **SELESAI** (assert exact, commit `37032bb`)         |
+| 5   | **Selection Timeline** (`1436:3637`) | 1440 × 812.2, padding 80px      | Header padding 18×32, gap 56px          | Bluu Next Bold 56/67.2, 6 phase rows               | **AUDIT PASS** (MAE 4.306 → 2.093)                   |
+| 6   | **FAQ** (`1436:3675`)                | 1440 × 983, padding 80px        | Gap header 56px, gap items 32px         | Bluu Next Bold 56/67.2 ("FAQ"), Manrope 26/39      | **AUDIT PASS** (rim `90deg`; MAE artifact-dominated) |
+| 7   | **Snippets of Life** (`1436:3684`)   | 1440 × 897.2, padding 40px 80px | Gap 56px, gallery 1280, thumbs gap 35px | Bluu Next Bold 56/67.2, Manrope                    | **SELESAI** (MAE 8.629, assert exact)                |
+| 8   | **CTA Recruitment** (`1436:3687`)    | 1440 × 520, padding 80px        | Panel 1280×360, gap 48px                | Bluu Next Bold 56/67.2, Button Join 201×43         | **SELESAI** (MAE 2.249, assert exact)                |
+| 9   | **Footer** (`1436:3699`)             | 1440 × 556, padding 80px        | Brand lockup 8, copy 24, nav 32         | Bluu Next Bold 32/38.4, Manrope 400/700            | **SELESAI** (MAE 5.84 home/7.71 recruit)             |
 
 ---
 
