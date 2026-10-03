@@ -364,7 +364,8 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   heading gradient `181deg`. Full MAE **11.909 → 1.600**; geometri tetap; 7 gate ALL
   PASS. **Section 2 Who Should Join (`1436:3512`) PASS (3 Oct 2026)** — ref MAE 0.000,
   hanya heading gradient → global `181deg`; sisa MAE 2.836 = AA font + Starfield hidup.
-  Lanjut section 3–9 satu per satu.
+  **Section 3 What You Will Do (`1436:3517`) PASS (3 Oct 2026)** — ref MAE 0.000, hanya
+  heading gradient → global `181deg`; full MAE 3.25 → 1.84. Lanjut section 4–9.
 - **STATUS RINGKAS (3 Oct 2026).** **Homepage 100% selesai** (Hero → Our
   Philosophy → What We Do → Choose Your Domain/HoDS → Our Project → CTA, node
   `1430:2040`). **Recruitment Page 100% selesai** (node `1436:3505`). **About Us
@@ -662,8 +663,9 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   strict per-section** (presisi, GLOW/GLASS, responsive, 8pt, font; 9 section) —
   kerjakan **satu section per pass**. **Section 1 Hero `1436:3506` SELESAI
   (3 Oct 2026, MAE 11.909 → 1.600); Section 2 Who Should Join `1436:3512` SELESAI
-  (heading gradient → global `181deg`; sisanya PASS); NEXT = Section 3 What You
-  Will Do `1436:3517`.** **Homepage (`1430:2040`) & About Us
+  (heading gradient → global `181deg`; sisanya PASS); Section 3 What You Will Do
+  `1436:3517` SELESAI (MAE 3.25 → 1.84, heading gradient → `181deg`); NEXT =
+  Section 4 Available Roles `1436:3564`.** **Homepage (`1430:2040`) & About Us
   (`1439:4184`) sudah diaudit 3 Oct 2026** (About Us: tombol "See More" `OurTeam`
   = GLASS `1248:15694`, diperbaiki; **JANGAN sentuh `<Starfield />` visi-misi**).
   Lalu Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).

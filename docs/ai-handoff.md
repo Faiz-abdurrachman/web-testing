@@ -49,6 +49,12 @@ angle tak berpengaruh untuk 1 baris tapi nilainya harus sesuai hukum). Sisa MAE
 hidup yang disengaja (band background 0.85) — diff difus, tanpa pergeseran
 struktural. Geometri & 8pt tetap; 7 gate + seo ALL PASS.
 
+**Section 3 What You Will Do (`1436:3517`) — AUDIT PASS (3 Oct 2026).** Reference
+re-export node MAE **0.000** (tidak stale). Satu perbaikan aturan: heading fill
+`180deg …80%` → global `181deg …79%` (header 1.935 → 1.910). **Full MAE turun ke
+1.842/255** (dari catatan lama 3.2541) — sudah sangat presisi, tak ada temuan lain.
+Geometri/8pt/artwork tarot + connector tetap; 7 gate + seo ALL PASS.
+
 **Homepage (`1430:2040`) & About Us (`1439:4184`) = sudah diaudit (3 Oct 2026).**
 About Us temuan: tombol "See More" `OurTeam` ternyata GLASS (`1248:15694`),
 diperbaiki (section MAE 2.828 → 2.770). JANGAN sentuh `<Starfield />` visi-misi.

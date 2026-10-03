@@ -1907,7 +1907,7 @@ overflow: hidden; z-index: -1`, so nothing about the section geometry changes.
 - Header Frame 2734 (`1436:4048`): 1280 × 118px at (80, 80), vertical column,
   `gap: 24px`.
   - Heading (`1436:3518`): "What You Will Do", Bluu Next Bold 700, 56 / 67px
-    (`--font-display`), gradient `linear-gradient(180deg, #ffffff 15%, #999999 42%, #ffffff 80%)`,
+    (`--font-display`), gradient `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)`,
     centered in 1280px box.
   - Subtitle (`1436:3519`): "Life inside the Data Sorcerers ecosystem", Manrope
     Medium 500, 18 / 27px, `#ffffff`, centered.
@@ -1929,8 +1929,9 @@ overflow: hidden; z-index: -1`, so nothing about the section geometry changes.
     KNOWLEDGE, BUILD YOUR PORTOFOLIO, COLLABORATE ACROSS DISCIPLINES.
 - Below 1320px the collage becomes a stacked column of the eight labels (cards
   and connector hidden) — an adaptation, since no mobile reference exists.
-- Section MAE: **3.25/255** vs exported node reference
-  `Recruitment-WhatYouWillDo-Revisi-1x.png`.
+- Section MAE: **1.84/255** vs exported node reference
+  `Recruitment-WhatYouWillDo-Revisi-1x.png` (audit 3 Oct 2026; node re-export MAE
+  0.000, heading fill aligned to the global `181deg/79%`).
 - Verification: `scripts/verify.mjs` asserts the section, heading, body, all
   eight labels, both cards and the connector exactly, diffs against the
   reference, and checks overflow and text from 320px to 1920px. All 6 verification
