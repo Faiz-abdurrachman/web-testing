@@ -2090,14 +2090,15 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
 - Figma node: section `1436:3687` ("CTA Recruicment Section", revisi 2 Oct 2026),
   panel `1438:4072`; reference
   `assets/assets recruitment page/cta section/Recruitment-Cta-Revisi-1x.png`,
-  1440 × 520 (+ `…-2x.png`). The section sits at recruitment y=6093.98 and is
+  1440 × 520 (+ `…-2x.png`). The section sits at recruitment y=6093.78 and is
   1440 × 520.
 - Section: `padding 80`, `#050507`. Panel: 1280 × 360 at (80, 80), `height:
 360px` + `justify-content: center` (content 230px di celah 232px → y145, persis
   render), `padding 64px 80px`, `gap 48`, `rgba(98,80,255,.1)`, 1px
-  `linear-gradient(135deg, #e0dcff 0%, #2e276c 50%, #e0dcff 100%)` rim via
-  ring `::after` + mask, `border-radius 20px`, `overflow: hidden`. The panel is
-  capped at `max-width: 1280px` and centred.
+  **`linear-gradient(110deg, #e0dcff 0%, #2e276c 50%, #e0dcff 100%)`** rim via
+  ring `::after` + mask (audit 3 Oct 2026: MCP `135deg` lossy — sweep angle fit
+  dari PNG, top-rim MAE 6.9 → 0.6), `border-radius 20px`, `overflow: hidden`. The
+  panel is capped at `max-width: 1280px` and centred.
 - Heading: "Ready to Become a Sorcery?" (Title Case), **Bluu Next Bold 700,
   56 / 67.2** (`--font-display`), center, gradient
   `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)`. Ink terukur
@@ -2111,12 +2112,14 @@ arrow-right.svg`) on the right. Row names come from `domains.ts`.
   (`public/images/recruitment/glow.svg`, rotated -2.23deg and oversized inside a
   1000.331 × 271.502 frame). Shares the one-way `cta-glow-sweep` (left → right,
   6.5s linear), paused via `.cta.is-idle` when off-screen.
-- Verification: `scripts/verify.mjs` asserts section `{1440, 520, top 6093.984375}`,
+- Verification: `scripts/verify.mjs` asserts section `{1440, 520, top 6093.78125}`,
   panel `{80, 80, 1280, 360}`, actions `{619.55, 332.09, 200.89, 43}`, glow
   `{349.83, 351, 1000.33, 271.5}`, heading `y145` and copy `(427, 236)`, then
-  diffs the full section against the reference (section MAE **2.25/255**) and
-  checks overflow 320→1920px. Downstream `.footer` top → **6613.984375**. Semua
-  6 gate verifikasi ALL PASS.
+  diffs the full section against the reference (section MAE **2.25/255** — tak
+  berubah karena **didominasi artefak screenshot**: section top `6093.781`
+  fraksional → konten tergeser sub-pixel; aligned MAE ≈ **1.11** setelah rim
+  `110deg`) and checks overflow 320→1920px. Downstream `.footer` top →
+  **6613.78125**. Semua 7 gate + seo ALL PASS.
 
 ## Buttons (shared)
 

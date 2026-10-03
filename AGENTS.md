@@ -396,6 +396,11 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   & 4 di x setengah-piksel `338.5/855.5` (tekstur foto tergeser sub-pixel); aligned
   ≈ **3.03**, thumb 1/3/5 ≈ 3 vs 2/4 ≈ 10–14, isi foto identik. Downstream tops
   −0.2 (`.cta` 6093.78125, `.footer` 6613.78125). Lanjut section 8–9.
+- **Section 8 CTA (`1436:3687`) PASS (3 Oct 2026)** — ref MAE 0.000; koreksi: panel
+  rim `135deg` → **`110deg`** (MCP lossy; sweep angle fit dari PNG, top-rim MAE
+  6.9 → 0.6). Full MAE **2.2488 → 2.2509** (tak berubah — **didominasi artefak
+  screenshot**, section top `6093.781` fraksional); aligned ≈ **1.107** (terbaik).
+  Geometri DOM tak berubah. Lanjut section 9.
 - **STATUS RINGKAS (3 Oct 2026).** **Homepage 100% selesai** (Hero → Our
   Philosophy → What We Do → Choose Your Domain/HoDS → Our Project → CTA, node
   `1430:2040`). **Recruitment Page 100% selesai** (node `1436:3505`). **About Us
@@ -526,12 +531,12 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   Gallery instance `1436:3686` ("galeryy ds"): 1280×694px VERTICAL gap `35px` (nilai autolayout Figma: 556 + 35 + 103). Hero carousel 1280×556 radius 20px; 5 thumbnail 246×103 `space-between` di x `[80, 338.5, 597, 855.5, 1114]`.
   Section MAE: **8.6288/255** (audit 3 Oct 2026 — tak berubah, **didominasi artefak screenshot**: section top `5196.781` fraksional + thumbnail 2 & 4 di x setengah-piksel `338.5/855.5` → tekstur foto tergeser sub-pixel; aligned ≈ **3.03**, thumb 1/3/5 ≈ 3 vs 2/4 ≈ 10–14, isi foto identik). Geometri DOM kini persis Figma. Downstream tops −0.2 (`.cta` **6093.78125**, `.footer` 6613.78125).
   Semua 7 gate + seo ALL PASS (`build`, `verify.mjs`, `navbar-audit`, `verify-vt`, `responsive-audit`, `audit:spacing`, `format:check`).
-- **Recruitment Page Section 8: CTA Recruitment (`1436:3687`) — 100% Selesai (2 Oct 2026).**
-  Frame Figma `1436:3687` ("CTA Recruicment Section", 1440×520px, padding `80px`), fill `#050507`. Panel `1438:4072`: 1280×360px di `(80, 80)`, `height:360px` + `justify-content:center`, padding `64px 80px`, gap `48px`, fill `rgba(98,80,255,.1)`, 1px glass rim `135deg`.
+- **Recruitment Page Section 8: CTA Recruitment (`1436:3687`) — AUDIT PASS (3 Oct 2026).**
+  Frame Figma `1436:3687` ("CTA Recruicment Section", 1440×520px, padding `80px`), fill `#050507`. Panel `1438:4072`: 1280×360px di `(80, 80)`, `height:360px` + `justify-content:center`, padding `64px 80px`, gap `48px`, fill `rgba(98,80,255,.1)`, 1px glass rim **`110deg`** (audit 3 Oct 2026: MCP `135deg` lossy — sweep angle fit dari PNG, top-rim MAE 6.9 → 0.6).
   Heading `1438:4077`: "Ready to Become a Sorcery?" **Bluu Next Bold 700 56/67.2px** (`--font-display`), center, fill `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)` (ink 710.25×52). Copy `1438:4078`: Manrope 400 16/24, `letter-spacing:-0.176px`, width 586 (teks lama sesuai PNG).
   Button `community` "Join the Community" 201×43; glow `glow.svg` IMAGE-SVG `1438:4081` di `(349.83, 351)` 1000.33×271.5.
-  Section MAE: **2.2488/255** vs reference `Recruitment-Cta-Revisi-1x.png`. Geometri diff 0.0px. Downstream `.footer` top → **6613.984375**.
-  Semua 6 gate verifikasi ALL PASS (`build`, `verify.mjs`, `navbar-audit`, `verify-vt`, `responsive-audit`, `format:check`).
+  Section MAE: **2.2488 → 2.2509/255** (audit 3 Oct 2026, rim `110deg`; tak berubah — **didominasi artefak screenshot**, section top `6093.781` fraksional). Aligned MAE ≈ **1.107** (terbaik dari semua section). Geometri diff 0.0px. Downstream `.footer` top → **6613.78125**.
+  Semua 7 gate + seo ALL PASS (`build`, `verify.mjs`, `navbar-audit`, `verify-vt`, `responsive-audit`, `audit:spacing`, `format:check`).
 - **Recruitment Page Section 9: Footer (`1436:3699` / komponen bersama `765:17071`) — 100% Selesai (2 Oct 2026).**
   `Footer.astro` dipakai **6 halaman** (index, about, recruitment, partners, hall-of-frames, contact) — revisi ini site-wide. Figma footer diperbarui:
   Brand name Nasalization → **Bluu Next Bold 700 32/38.4** (`--font-display`), gradient `270deg #fff → #ede8ff`; brand lockup gap `14 → 8`, brand copy gap `26 → 24`, nav/contact gap `34 → 32`; brand desc `#CBC5FF → #fff`; border social + `instagram.svg`/`linkedin.svg` fill `#CBC5FF → #fff`; copyright "All rights reserved" → "All right reserved" (per PNG). Top row `1280×314`, divider y `454.13`, legal y `475.13`.
@@ -703,8 +708,9 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   `1436:3675` SELESAI (rim `135deg` → `90deg` sesuai PNG; MAE ~7.80 didominasi
   artefak screenshot sub-pixel — section top 4213.578 fraksional); Section 7 Snippets
   `1436:3684` SELESAI (line-height `67.2` → `67`, section tepat 897; MAE dominan
-  artefak screenshot — thumb 2/4 di x setengah-piksel); NEXT = Section 8 CTA
-  `1436:3687`.** **Homepage (`1430:2040`) & About Us
+  artefak screenshot — thumb 2/4 di x setengah-piksel); Section 8 CTA `1436:3687`
+  SELESAI (rim `135deg` → `110deg`; MAE dominan artefak screenshot, aligned 1.107);
+  NEXT = Section 9 Footer `1436:3699` (shared).** **Homepage (`1430:2040`) & About Us
   (`1439:4184`) sudah diaudit 3 Oct 2026** (About Us: tombol "See More" `OurTeam`
   = GLASS `1248:15694`, diperbaiki; **JANGAN sentuh `<Starfield />` visi-misi**).
   Lalu Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).

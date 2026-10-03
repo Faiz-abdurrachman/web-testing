@@ -82,7 +82,7 @@ transparent)` (MAE/baris 12 → 1.2); (6) tinta heading 1px lebih rendah → spa
 (0-230: 1.197, 230-812: 2.447; rim atas 1.0 / bawah 0.9 / junction 0.8). Sisa =
 AA font lintas-renderer irreducible. Geometri DOM tak berubah (head 78, body 451,
 rows `[299.2…]`, height 39). 7 gate + seo ALL PASS.
-**NEXT = Section 8 CTA (`1436:3687`).**
+**NEXT = Section 9 Footer (`1436:3699`, shared `Footer.astro`).**
 
 **Homepage (`1430:2040`) & About Us (`1439:4184`) = sudah diaudit (3 Oct 2026).**
 About Us temuan: tombol "See More" `OurTeam` ternyata GLASS (`1248:15694`),
@@ -357,13 +357,13 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
 
 - **Recruitment Page Section 8: CTA Recruitment (`1436:3687`) — 100% SELESAI (2 Oct 2026).**
   Section 8 pada halaman Recruitment (`1436:3505`) kini selesai dan tervalidasi presisi:
-  - Frame Figma `1436:3687` ("CTA Recruicment Section", 1440 × 520px, padding `80px`), fill `#050507`. Panel `1438:4072`: 1280 × 360px di `(80, 80)`, `height:360px` + `justify-content:center`, padding `64px 80px`, gap `48px`, fill `rgba(98,80,255,.1)`, 1px glass rim `135deg`.
+  - Frame Figma `1436:3687` ("CTA Recruicment Section", 1440 × 520px, padding `80px`), fill `#050507`. Panel `1438:4072`: 1280 × 360px di `(80, 80)`, `height:360px` + `justify-content:center`, padding `64px 80px`, gap `48px`, fill `rgba(98,80,255,.1)`, 1px glass rim **`110deg`** (audit 3 Oct 2026: MCP `135deg` lossy — sweep angle fit dari PNG, top-rim MAE 6.9 → 0.6).
   - Heading `1438:4077`: "Ready to Become a Sorcery?" **Bluu Next Bold 700 56px / 67.2px** (`--font-display`), center, fill `linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%)`. Ink 710.25 × 52px.
   - Copy `1438:4078`: Manrope Regular 400 16/24px, `letter-spacing:-0.176px`, width 586px, `#fff`, center (tetap teks lama sesuai PNG).
   - Button `<Button variant="community">Join the Community</Button>` (201 × 43px) dengan glow sweep `glow.svg` (IMAGE-SVG `1438:4081` di `(349.83, 351)`, 1000.33 × 271.5px).
-  - Geometri Chromium: section `{ width: 1440, height: 520, top: 6093.984375 }`, panel `{ x:80, y:80, width:1280, height:360 }`, actions `{ x:619.546875, y:332.09375, width:200.890625, height:43 }`, glow exact.
-  - Section MAE: **`2.2488/255`** vs reference `Recruitment-Cta-Revisi-1x.png`. Geometri diff 0.0px. Downstream `.footer` top → **6613.984375**.
-  - Semua 6 gate verifikasi ALL PASS (`build`, `verify.mjs`, `navbar-audit`, `verify-vt`, `responsive-audit`, `format:check`).
+  - Geometri Chromium: section `{ width: 1440, height: 520, top: 6093.78125 }`, panel `{ x:80, y:80, width:1280, height:360 }`, actions `{ x:619.546875, y:332.09375, width:200.890625, height:43 }`, glow exact.
+  - Section MAE: **`2.2488 → 2.2509/255`** (audit 3 Oct 2026, rim `110deg`; tak berubah karena **didominasi artefak screenshot** — section top `6093.781` fraksional; aligned MAE ≈ **1.107**, terbaik dari semua section). Geometri diff 0.0px. Downstream `.footer` top → **6613.78125**.
+  - Semua 7 gate + seo ALL PASS (`build`, `verify.mjs`, `navbar-audit`, `verify-vt`, `responsive-audit`, `audit:spacing`, `format:check`).
   - Detail: `docs/assets.md` §Recruitment page — CTA.
 
 - **Recruitment Page Section 7: Snippets of Life at Data Sorcerers (`1436:3684`) — 100% SELESAI (2 Oct 2026).**
@@ -1845,7 +1845,7 @@ Fokus utama AI berikutnya adalah mengaudit dan mengeksekusi secara **strict pixe
 | 5   | **Selection Timeline** (`1436:3637`) | 1440 × 812.2, padding 80px    | Header padding 18×32, gap 56px          | Bluu Next Bold 56/67.2, 6 phase rows               | **AUDIT PASS** (MAE 4.306 → 2.093)                             |
 | 6   | **FAQ** (`1436:3675`)                | 1440 × 983, padding 80px      | Gap header 56px, gap items 32px         | Bluu Next Bold 56/67.2 ("FAQ"), Manrope 26/39      | **AUDIT PASS** (rim `90deg`; MAE artifact-dominated)           |
 | 7   | **Snippets of Life** (`1436:3684`)   | 1440 × 897, padding 40px 80px | Gap 56px, gallery 1280, thumbs gap 35px | Bluu Next Bold 56/67, Manrope                      | **AUDIT PASS** (line-height 67.2 → 67; MAE artifact-dominated) |
-| 8   | **CTA Recruitment** (`1436:3687`)    | 1440 × 520, padding 80px      | Panel 1280×360, gap 48px                | Bluu Next Bold 56/67.2, Button Join 201×43         | **SELESAI** (MAE 2.249, assert exact)                          |
+| 8   | **CTA Recruitment** (`1436:3687`)    | 1440 × 520, padding 80px      | Panel 1280×360, gap 48px                | Bluu Next Bold 56/67.2, Button Join 201×43         | **AUDIT PASS** (rim `110deg`; MAE artifact-dominated)          |
 | 9   | **Footer** (`1436:3699`)             | 1440 × 556, padding 80px      | Brand lockup 8, copy 24, nav 32         | Bluu Next Bold 32/38.4, Manrope 400/700            | **SELESAI** (MAE 5.84 home/7.71 recruit)                       |
 
 ---
