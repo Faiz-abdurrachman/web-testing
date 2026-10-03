@@ -216,6 +216,43 @@ mencocokkannya ke Figma.
   teks = `67`. Untuk heading satu baris/header, pakai **`line-height: 67px`** supaya
   container pas integer; `67.2` menggeser header/pipeline 0.2px (Our Ecosystem MAE
   3.45 → 2.22; Our Team header 101.2 → 101). Verifikasi dengan mengukur header frame.
+  Konfirmasi terbaru: Snippets `1436:3684` heading `67.2` → `67` membuat section
+  **tepat 897** = tinggi reference PNG (sebelumnya 897.203).
+- **Sudut gradient stroke Figma dari MCP juga LOSSY, bukan cuma stop-nya.** String
+  `linear-gradient(135deg, …)` sering bukan sudut render asli. Seleksi & FAQ rim
+  (global `fill_9a45ebdb`) render **`90deg`**: rim atas & bawah **identik per-x**
+  (terang di kedua ujung, tergelap di pusat tabel x720) — 135deg mustahil begitu.
+  CTA panel `1436:3687` justru **`110deg`** (bukan 135deg): sweep sudut vs PNG
+  menurunkan top-rim MAE 6.9 → 0.6. **Cara pasti:** sweep sudut via Playwright
+  (inject `linear-gradient(<A>deg, …)`), ukur MAE region rim vs PNG, pilih minimum.
+- **`textAlignHorizontal` Figma bisa SALAH.** Header Date Selection Timeline
+  (`1436:3644`) MCP bilang `CENTER`, tapi PNG menaruh "Date" **LEFT** (x761, sama
+  dengan baris body). Selisihnya 255px! **PNG > MCP.** Jika bbox tinta vs PNG beda
+  jauh, percaya PNG.
+- **Section origin fraksional → artefak screenshot 1px (BUKAN bug CSS).** Kalau top
+  section bukan integer (mis. `6613.781`, `5196.781`, `4213.578`), Playwright
+  membulatkan `locator.screenshot()` bounds **ke luar** 1px → seluruh konten tergeser
+  sub-pixel. Gejalanya: diff heatmap hanya **outline** glyph/rim (bukan fill),
+  region bebas-teks MAE rendah, dan crop `top:1` menurunkan MAE drastis (mis. FAQ
+  7.80 → 5.04; Snippets 7.90 → 3.03; CTA 2.25 → 1.19). **Jangan kejar dengan
+  menggeser CSS** — laporkan sebagai artifak, ukur "aligned MAE" untuk menilai
+  presisi sebenarnya. (Screenshot bounds: `top=floor(rect.top)`, `height=ceil(bottom)-floor(top)`.)
+- **Garis separator yang fade ke putih = non-premultiplied.** Figma
+  `linear-gradient(90deg, #9b7bff, rgba(255,255,255,0))` merambat **warnanya ke
+  putih** saat alpha turun. CSS menginterpolasi **premultiplied** → RGB tetap ungu
+  (terlalu gelap di ujung kanan). Emulasi: pisahkan ramp warna & alpha —
+  `background: linear-gradient(90deg, #9b7bff, #fff)` +
+  `-webkit-mask-image: linear-gradient(90deg, #000, transparent)` (Selection
+  Timeline MAE/baris 12 → 1.2).
+- **Sambungan dua frame bertumpuk (junction) bisa 1px lebih tinggi dari tumpukan
+  naif.** Selection Timeline: header 78px + body 451px menaruh garis junction di
+  baris 280-281, sedangkan PNG di 279-280. Fix tanpa mengubah box/baris: header
+  `::after` base **2px** (`padding: 1px 1px 2px 1px`) + body `::after` **tanpa top**
+  (`padding: 0 1px 1px 1px`).
+- **Tinta heading kadang 1px lebih rendah dari render CSS.** Nudge lewat inner
+  `<span style="position:relative;top:1px">` agar **geometri `h2` (yang di-assert
+  `verify.mjs`) tidak berubah**; `transform`/`top` pada `h2` langsung akan menggeser
+  bbox yang di-assert.
 - **`imageTransform` pada IMAGE fill = crop.** Node gambar Figma bisa punya
   `imageTransform` `[[sx,0,tx],[0,sy,ty]]`; **jangan** `fit: fill` gambar mentah —
   `sharp.extract(tx*W, ty*H, sx*W, sy*H)` lalu resize ke ukuran node (Our Team potret).
@@ -430,11 +467,17 @@ Semua di file Figma `JYUzJK1hFqaEwL6DpdDvjp`. Hasil akhir (reduced motion, 1440)
 
 ## 9. Target berjalan (3 Oct 2026)
 
-**NEXT: audit menyeluruh RECRUITMENT (`1436:3505`) strict per-section** — presisi,
-**GLOW/GLASS**, responsive, 8pt, font Bluu Next Bold 700. 9 section (Hero → Who
-Should Join → What You Will Do → Available Roles → Selection Timeline → FAQ →
-Snippets → CTA → Footer). Checklist + URL ada di `docs/kickoff-prompt.md` §TARGET 0;
-state di `docs/ai-handoff.md` §Next Task. **Homepage (`1430:2040`) & About Us
-(`1439:4184`) sudah diaudit** (jangan rusak tanpa alasan; visi-misi punya
-`<Starfield />` yang sudah final — jangan disentuh). Setelah Recruitment, lanjut
-Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).
+**NEXT: About Us — Our Philosophy (`1439:4219`) — REVISI BACKGROUND BLEND.**
+Tim minta background linear section ini **disatukan dengan section di bawahnya**
+(Our Ecosystem `1439:4258`) supaya transisi antar-section menyatu. Komen tim:
+_"perubahan linear bg agar nyatu sama section bawahnya"_. Fokus: **glow presisi,
+responsive 320→3840, strict 8pt + warna**.
+URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4219&t=ACGP2ODKHPTFHpeX-4`
+Catatan: dulu About Philosophy (`1439:4219`) **pixel-identik** dengan Homepage
+Philosophy (`1430:2052`, MAE 0.000) — cek dulu sebelum ubah, jangan rusak Homepage.
+Detail langkah + checklist ada di `docs/kickoff-prompt.md` §TARGET NEXT.
+
+**Selesai diaudit (jangan rusak tanpa alasan):** Homepage (`1430:2040`, §1–7),
+About Us (`1439:4184`, §1–6; visi-misi punya `<Starfield />` final — jangan
+disentuh), Recruitment (`1436:3505`, **9/9**). Setelah Philosophy, lanjut Partners
+(`1439:4787`) + 6 detail HoDS (`864:18857` dkk). State lengkap → `docs/ai-handoff.md`.

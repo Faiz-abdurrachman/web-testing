@@ -408,6 +408,15 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   footer MAE **7.7071 → 7.658**; region ter-align brand 2.7 / nav 3.8 / contact 5.0.
   **RECRUITMENT SELESAI — 9/9 section diaudit.** Berikutnya: audit Partners
   (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).
+- **★ NEXT (untuk AI baru): About Us — Our Philosophy (`1439:4219`) — REVISI
+  BACKGROUND BLEND.** Tim minta background linear section ini **disatukan dengan
+  section di bawahnya** (Our Ecosystem `1439:4258`) supaya transisi menyatu.
+  Komen tim: _"perubahan linear bg agar nyatu sama section bawahnya"_.
+  Node: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4219&t=ACGP2ODKHPTFHpeX-4`.
+  Fokus: **glow presisi, responsive 320→3840, strict 8pt + warna**, 7 gate.
+  Catatan: dulu Philosophy About Us (`1439:4219`) **pixel-identik** dengan Homepage
+  Philosophy (`1430:2052`, MAE 0.000) — cek dulu; jangan rusak Homepage. Checklist
+  di `docs/kickoff-prompt.md` §TARGET NEXT; SOP di `docs/pixel-precision-sop.md` §9.
 - **STATUS RINGKAS (3 Oct 2026).** **Homepage 100% selesai** (Hero → Our
   Philosophy → What We Do → Choose Your Domain/HoDS → Our Project → CTA, node
   `1430:2040`). **Recruitment Page 100% selesai** (node `1436:3505`). **About Us

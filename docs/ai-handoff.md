@@ -8,28 +8,33 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
-**NEXT = AUDIT MENYELURUH RECRUITMENT (`1436:3505`) strict per-section.**
-URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3505`
-Fokus: **presisi piksel, GLOW/GLASS, responsive 320→3840, strict 8pt, font**
-(Bluu Next Bold 700). Inventaris `depth 1` dulu → Master Work Plan section 1 →
-7 gate → section 2, dst. **JANGAN lewatkan section mana pun.** 9 section:
+**★ NEXT = About Us — Our Philosophy (`1439:4219`) — REVISI BACKGROUND BLEND.**
+URL: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4219&t=ACGP2ODKHPTFHpeX-4`
+Tim minta background linear section ini **disatukan dengan section di bawahnya**
+(Our Ecosystem `1439:4258`) supaya transisi antar-section menyatu. Komen tim:
+_"perubahan linear bg agar nyatu sama section bawahnya"_.
+Fokus: **glow presisi, responsive 320→3840, strict 8pt + warna**. Checklist WAJIB
+(seperti biasa satu section per pass, 7 gate):
 
-| #   | Node ID     | Frame              | W×H      | Komponen sekarang            |
-| --- | ----------- | ------------------ | -------- | ---------------------------- |
-| 1   | `1436:3506` | Hero Section       | 1440×866 | `RecruitmentHero.astro`      |
-| 2   | `1436:3512` | Who Should Join    | 1440×789 | `WhoShouldJoin` (DomainRail) |
-| 3   | `1436:3517` | What You Will Do   | 1440×903 | `WhatYouWillDo.astro`        |
-| 4   | `1436:3564` | Available Roles    | 1440×843 | `AvailableRoles.astro`       |
-| 5   | `1436:3637` | Selection Timeline | 1440×812 | `SelectionTimeline.astro`    |
-| 6   | `1436:3675` | FAQ                | 1440×983 | `Faq.astro`                  |
-| 7   | `1436:3684` | Snippets           | 1440×897 | `Snippets.astro`             |
-| 8   | `1436:3687` | CTA                | 1440×520 | `Cta.astro`                  |
-| 9   | `1436:3699` | Footer             | 1440×556 | `Footer.astro` (shared)      |
+1. `figma_get_figma_data` node `1439:4219` + `1439:4258`; ukur boundary (y, warna,
+   gradient) kedua section dari PNG.
+2. Cek dulu pixel-identik: dulu Philosophy About Us == Homepage Philosophy
+   (`1430:2052`, MAE 0.000). **Jangan rusak Homepage.**
+3. Export node PNG before/after; ukur MAE region boundary (harus mulus, tanpa
+   step/gari warna). Ecosystem atas = `24.87deg #050507 52.9% → #6c3bff 132.9%`.
+4. Glow presisi (cek REST `effects`/`strokes`; emulasi dari PNG). 7 gate + seo.
+5. Update `scripts/verify.mjs` + `docs/assets.md` + `docs/ai-handoff.md` +
+   `AGENTS.md`; commit per section.
 
-Checklist + protokol lengkap: `docs/kickoff-prompt.md` §TARGET 0. **Audit, bukan
-tulis ulang**: section yang sudah presisi (geometri ±0, 8pt PASS, font/warna cocok)
-cukup dilaporkan PASS; perbaiki HANYA region yang beda vs PNG node. Selalu
-regenerasi reference dari node terbaru dan cek pixel-identik vs node lain dulu.
+Checklist + protokol lengkap: `docs/kickoff-prompt.md` §TARGET NEXT. **Audit, bukan
+tulis ulang**: perbaiki HANYA region yang beda vs PNG node. Selalu regenerasi
+reference dari node terbaru dan cek pixel-identik vs node lain dulu.
+
+**SELESAI (3 Oct 2026) — jangan rusak tanpa alasan:** Homepage (`1430:2040`, §1–7),
+About Us (`1439:4184`, §1–6; `<Starfield />` visi-misi final), **Recruitment
+(`1436:3505`, 9/9: Hero → Who Should Join → What You Will Do → Available Roles →
+Selection Timeline → FAQ → Snippets → CTA → Footer)**. Setelah Philosophy, lanjut
+Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).
 
 **Section 1 Hero (`1436:3506`) — AUDIT PASS (3 Oct 2026).** Tiga temuan & perbaikan:
 (1) static fallback salah gambar — node kini pakai IMAGE fill 1672×941 dengan crop
