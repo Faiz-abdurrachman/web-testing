@@ -41,6 +41,14 @@ global `181deg #fff 15% / #999 42% / #fff 79%`. Full MAE **11.909 → 1.600**
 (below-nav 1.412), geometri tak berubah, 7 gate ALL PASS. Sisa section 2–9 (Who
 Should Join → Footer) masih menunggu audit — kerjakan satu per satu.
 
+**Section 2 Who Should Join (`1436:3512`) — AUDIT PASS (3 Oct 2026).** Reference
+re-export dari node & MAE **0.000** vs PNG tersimpan (tidak stale). Hanya perbaikan
+aturan: heading fill `180deg …80%` → global `181deg …79%` (header MAE 1.75 → 1.73;
+angle tak berpengaruh untuk 1 baris tapi nilainya harus sesuai hukum). Sisa MAE
+2.836/255 = AA font lintas-renderer pada judul kartu bergradasi + `<Starfield />`
+hidup yang disengaja (band background 0.85) — diff difus, tanpa pergeseran
+struktural. Geometri & 8pt tetap; 7 gate + seo ALL PASS.
+
 **Homepage (`1430:2040`) & About Us (`1439:4184`) = sudah diaudit (3 Oct 2026).**
 About Us temuan: tombol "See More" `OurTeam` ternyata GLASS (`1248:15694`),
 diperbaiki (section MAE 2.828 → 2.770). JANGAN sentuh `<Starfield />` visi-misi.
