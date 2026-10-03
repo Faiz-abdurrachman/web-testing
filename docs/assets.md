@@ -395,6 +395,15 @@ assets:contact` regenerates it and the icons.
 
 ## Hall of Frames — Project highlights (1 October 2026)
 
+- **PENDING REVISION (approved 3 Oct 2026).** The card must be made **identical**
+  to the homepage "Our Project / What Our Sorcery Create" card
+  (`src/components/Projects.astro`, node `1430:2146`): active card **549×567**,
+  `.project-inner` fill `rgb(98 80 255 / 10%)`, 1px rim
+  `linear-gradient(135deg, #e0dcff, #332959 52%, #332959 75%, #e0dcff)`,
+  image `top .176% / 106.921676% × 61.552028% / opacity .8`, tags + copy, and the
+  `.project-card::before` radial violet glow. This **intentionally supersedes the
+  PNG above** for the card art — regenerate the reference + `verify.mjs`
+  assertions in the same commit. Keep the `.hof-project-card` class name.
 - Section node **`1439:4655`** ("Project highlights"), 1440 × 1181, `padding 80`,
   `gap 19`, `#050507`. Header `1439:4661` (803 wide, `gap 24`): a "Project
   Highlight" pill (`rgba(255,255,255,.15)`, radius 32, `4px 12px`, Manrope 400

@@ -8,12 +8,15 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
-**★ NEXT = audit Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk) — strict
-per-section** (satu section per pass, 7 gate). Urutan: Partners §1–4 (Hero/Our
-Partners/Why DS/Footer), lalu 6 rute `/hods/[id]` (judul hero sudah Bluu Next
-Bold 700 48/57.6 + Title Case; audit spacing/font/MAE). Referensi
-`assets/partners/`, `assets/hods/`. **Wajib Master Work Plan per-section sebelum
-sentuh kode!**
+**★ NEXT = Hall of Frames — card Project Highlight (`1439:4655`) disamakan dengan
+card "Our Project / What Our Sorcery Create" homepage (`1430:2146`,
+`Projects.astro`).** Konsistensi mentor-approved: `HallOfFramesProjects.astro`
+(kelas `.hof-project-card`, **jangan rename**) harus meniru `Projects.astro`
+(active card 549×567, rim `135deg`, glow radial violet, image treatment, tags/copy,
+coverflow params). Satu section per pass, 7 gate; **Wajib Master Work Plan
+per-section sebelum sentuh kode!** Referensi card: `src/components/Projects.astro`.
+Setelah itu audit Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk) —
+Partners §1–4, lalu 6 rute `/hods/[id]`; referensi `assets/partners/`, `assets/hods/`.
 
 **SELESAI (3 Oct 2026) — About Us — Our Philosophy (`1439:4219`) background blend.**
 Tim memperbarui node: fill kini **gradient** (handles `p0(0.553,0.545) →

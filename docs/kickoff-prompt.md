@@ -10,16 +10,16 @@ per-section berjalan.** Audit **Homepage (`1430:2040`)** Section 1–7 **SELESAI
 `181deg #fff 15% / #999 42% / #fff 79%`; temuan kunci: MCP gradient angle &
 `textAlign` sering LOSSY → fit dari PNG; rim gradient Figma bisa `90deg`/`110deg`
 bukan `135deg`; section origin fraksional bikin artefak screenshot 1px).
-**SELESAI (3 Oct 2026): revisi About Us — Our Philosophy
-(`1439:4219`)** — background linear disatukan dengan Our Ecosystem
-(`1439:4258`): fill gradient Figma `159.7deg #050507 54.82% → #6c3bff 133.76%`
-(fit dari PNG, MAE 0.554), dipasang di section + glow home di-hide untuk varian
-About; seam max Δ 9. **NEXT TARGET (untuk AI baru): audit Partners (`1439:4787`)
-
-- 6 detail HoDS (`864:18857` dkk) — strict per-section.** Fokus:
-  **glow presisi, responsive 320→3840, strict 8pt + warna**, 7 gate per section.
-  Cara kerja: **Plan per halaman → inventaris semua section (`depth 1`) → 1 section
-  per pass + 7 gate per section. JANGAN skip satu section pun.**
+**SELESAI (3 Oct 2026): revisi About Us — Our Philosophy (`1439:4219`)** —
+background linear disatukan dengan Our Ecosystem (`1439:4258`): fill gradient
+Figma `159.7deg #050507 54.82% → #6c3bff 133.76%` (fit dari PNG, MAE 0.554),
+dipasang di section + glow home di-hide untuk varian About; seam max Δ 9.
+**NEXT TARGET (untuk AI baru): Hall of Frames — card Project Highlight
+(`1439:4655`) disamakan dengan card "Our Project / What Our Sorcery Create"
+homepage (`1430:2146`, `Projects.astro`) — strict per-section.** Fokus: **glow
+presisi, responsive 320→3840, strict 8pt + warna**, 7 gate per section. Cara
+kerja: **Plan per halaman → inventaris semua section (`depth 1`) → 1 section per
+pass + 7 gate per section. JANGAN skip satu section pun.**
 
 ---
 
@@ -211,29 +211,57 @@ Urutan target (prioritas sekarang):
   C. Audit Recruitment (`1436:3505`) — **SELESAI 9/9 (3 Oct 2026)** (Heading
      gradient global, rim Figma `90deg`/`110deg` fit dari PNG, section Snippets
      line-height 67 → tinggi 897). Benchmark presisi; jangan rusak.
-  D. **NEXT — Audit Partners (`1439:4787`) + 6 detail HoDS** (`864:18857` dkk)
-     per-section. Satu section per pass, 7 gate.
+  D. **★ NEXT — Hall of Frames: card Project Highlight (`1439:4655`) disamakan
+     dengan card "Our Project / What Our Sorcery Create" homepage (`1430:2146`,
+     `Projects.astro`).** Lihat blok TARGET NEXT di bawah. Setelah itu audit
+     Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk) per-section.
   E. Konten asli (foto member, logo partner, `projects.ts`, tanggal recruitment,
      milestone HoF).
 
 --------------------------------------------------------------------------------
+TARGET NEXT: HALL OF FRAMES — card Project Highlight (`1439:4655`) DISAMAKAN
+dengan card "Our Project / What Our Sorcery Create" homepage (`1430:2146`).
+URL: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4655
+Tujuan (mentor-approved): konsistensi desain — card project HoF harus **persis
+sama** dengan card homepage `Projects.astro`. Ini SENGAJA menyimpang dari PNG
+HoF lama di area card; regenerasi reference + update assertion di commit yang sama.
+Fakta & referensi:
+- Halaman Hall of Frames `1439:4508`; section Projects `1439:4655`; komponen
+  `HallOfFramesProjects.astro` (kelas `.hof-project-card`). **JANGAN rename ke
+  `.project-card`** — `verify.mjs` meng-hide `.project-card:not(.is-active)`.
+- Card referensi homepage (`Projects.astro`, node `1430:2146`):
+  - active card **549×567**, `border-radius: 20px`.
+  - `.project-inner` fill `rgb(98 80 255 / 10%)`; rim 1px
+    `linear-gradient(135deg, #e0dcff, #332959 52%, #332959 75%, #e0dcff)` via
+    `::after` + `mask-composite: exclude` (BUKAN `border`).
+  - image `top: .176%`, width `106.921676%`, height `61.552028%`, opacity `0.8`.
+  - tags + copy (title/desc) dari `src/data/projects.ts` (Bluu Next Bold 700 /
+    Manrope).
+  - glow `.project-card::before`: radial `rgb(108 59 255 / 68%)` di `bottom:-26px`,
+    `blur(24px)`, hanya card aktif.
+  - coverflow JS: `sideOffset = w*0.838`, `step = w*0.62`, `rotateY ±24deg`,
+    `depth = -110*d`, side `blur(6+(d-1)*3) brightness(0.72)`.
+- **About Us TIDAK punya section "Our Project"** — card referensi = homepage.
+Checklist WAJIB (satu section per pass; Master Work Plan dulu):
+[ ] 1. `figma_get_figma_data` node `1439:4655` + export PNG; bandingkan card aktif
+       vs homepage `1430:2146` (MAE ref-vs-ref) sebelum ubah kode.
+[ ] 2. Tulis Master Work Plan: struktur card, strict 8pt (padding/gap/margin),
+       typography (Bluu Next Bold 700 / Manrope), warna (fills + rim + glow via
+       REST `effects`), artwork, transform coverflow, testing criteria.
+[ ] 3. Implementasi di `HallOfFramesProjects.astro`: samakan `.hof-project-inner`
+       (structure, rim `135deg`, glow radial, image treatment, tag/copy style,
+       coverflow params) dengan `Projects.astro`.
+[ ] 4. Responsive 320→3840 (desktop arrows sisi, mobile bawah), reduced-motion
+       pixel-exact, tanpa overflow. Perbarui `responsive-audit`/`verify.mjs`.
+[ ] 5. 7 gate + seo; update `docs/assets.md`/`docs/ai-handoff.md`/`AGENTS.md`;
+       regenerasi reference HoF Projects + `assets/hall-of-frames/...`.
+
+--------------------------------------------------------------------------------
 TARGET (SELESAI 3 Oct 2026): About Us — Our Philosophy (`1439:4219`) — BACKGROUND BLEND
 URL: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4219&t=ACGP2ODKHPTFHpeX-4
-Komen tim (Gembala): *"perubahan linear bg agar nyatu sama section bawahnya"*
-(section bawah = Our Ecosystem `1439:4258`).
-Checklist (SELESAI):
-[ ] 1. `figma_get_figma_data` node `1439:4219` (`depth 1`/arab) + node bawah
-       `1439:4258`; ukur boundary (y, warna, gradient) di kedua section dari PNG.
-[ ] 2. Bandingkan background Philosophy sekarang (`<Starfield />`? gradient?) vs
-       kebutuhan blend: gradient bawah Philosophy harus menyambung gradient atas
-       Ecosystem (`24.87deg #050507 52.9% → #6c3bff 132.9%`).
-[ ] 3. Export node PNG 1× (Philosophy + Ecosystem) sebelum & sesudah; ukur MAE
-       region boundary (harus mulus, tanpa garis/step warna).
-[ ] 4. Kerjakan HANYA section ini; jangan sentuh Homepage Philosophy sampai
-       diverifikasi tidak regresi (dulu identik).
-[ ] 5. Glow presisi (cek REST `effects`/`strokes`; emulasi dari PNG), responsive
-       320→3840, strict 8pt. 7 gate + seo. Update assertion `verify.mjs` +
-       `docs/assets.md`/`docs/ai-handoff.md`/`AGENTS.md`. Commit.
+Fill gradient `159.7deg #050507 54.82% → #6c3bff 133.76%` (fit PNG, MAE 0.554),
+section-level + glow home di-hide untuk varian About; seam max Δ 9; MAE 2.041.
+**Homepage (`1430:2052`) tidak berubah** (MAE 0.000). Commit `87836ff`.
 
 --------------------------------------------------------------------------------
 TARGET 0 (SELESAI): RECRUITMENT (`1436:3505`) — AUDIT STRICT PER-SECTION
@@ -544,12 +572,13 @@ INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
    - Update dokumen (`docs/assets.md`, `docs/ai-handoff.md`, `AGENTS.md`).
    - Commit per fitur; confirm user sebelum push ke origin main.
 3. **Mulai dari mana?**
-   Target **NEXT — D Partners (`1439:4787`)** + **6 detail HoDS**
-   (`864:18857` dkk), strict per-section (satu section per pass, 7 gate).
+   Target **NEXT — Hall of Frames card Project Highlight (`1439:4655`)**
+   disamakan dengan card "Our Project" homepage (`1430:2146`, `Projects.astro`),
+   strict per-section (Master Work Plan dulu, satu section per pass, 7 gate).
+   Setelah itu **Partners (`1439:4787`)** + **6 detail HoDS** (`864:18857` dkk).
    About Us Philosophy (`1439:4219`) background blend **sudah SELESAI 3 Oct 2026**.
    Homepage (`1430:2040`), About Us (`1439:4184`), dan Recruitment
-   (`1436:3505`, 9/9) **sudah audit** —
-   tetap benchmark, jangan rusak tanpa alasan.
+   (`1436:3505`, 9/9) **sudah audit** — tetap benchmark, jangan rusak tanpa alasan.
    Inventaris dulu (checklist `depth 1` di atas), buat Master Work Plan section
    pertama, cek pixel-identik vs node lain, export PNG referensi, ukur, baru sentuh
    kode. Selesaikan + 7 gate sebelum pindah section. JANGAN skip/lewatkan section.

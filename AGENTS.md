@@ -408,9 +408,13 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   footer MAE **7.7071 → 7.658**; region ter-align brand 2.7 / nav 3.8 / contact 5.0.
   **RECRUITMENT SELESAI — 9/9 section diaudit.** Berikutnya: audit Partners
   (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).
-- **★ NEXT (untuk AI baru): audit Partners (`1439:4787`) + 6 detail HoDS
-  (`864:18857` dkk) — strict per-section.** Satu section per pass, 7 gate.
-  **Wajib Master Work Plan per-section sebelum sentuh kode.**
+- **★ NEXT (untuk AI baru): Hall of Frames — card Project Highlight (`1439:4655`)
+  disamakan dengan card "Our Project / What Our Sorcery Create" homepage
+  (`1430:2146`, `Projects.astro`).** Konsistensi mentor-approved: `HallOfFramesProjects.astro`
+  (kelas `.hof-project-card`, JANGAN rename) harus meniru `Projects.astro` —
+  active card 549×567, rim `135deg`, glow radial violet, image treatment, tags/copy,
+  coverflow params. Satu section per pass, 7 gate; **wajib Master Work Plan dulu**.
+  Setelah itu audit Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).
 - **SELESAI (3 Oct 2026): About Us — Our Philosophy (`1439:4219`) — REVISI
   BACKGROUND BLEND.** Tim minta background linear disatukan dengan Our Ecosystem
   (`1439:4258`). Figma kini memberi node fill **gradient** (handles
