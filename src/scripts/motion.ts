@@ -608,6 +608,7 @@ export function initMotion() {
         '.what-you-will-do',
         '.faq',
         '.available-roles',
+        '.visi-misi',
       ]) {
         const section = document.querySelector(selector);
         if (!section) continue;

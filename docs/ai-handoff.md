@@ -51,6 +51,15 @@ memakai `211.54deg 32.8/49.8/73.04` (hero/philosophy/whatwedo/domains) dan
 heading hero **13.7 → 7.7**, heading section turun ~1 MAE; 7 gate ALL PASS.
 Detail/SOP: `docs/pixel-precision-sop.md` §Hukum Warna & §6.
 
+**ABOUT US — Our Vision/Mission living starfield + HD tarot (3 Oct 2026).**
+`VisiMisi.astro` background diganti dari plate bake ke komponen bersama
+**`<Starfield />`** (base `#050507`, drift hidup = What We Do; `.visi-misi`
+ditambahkan ke daftar `is-idle` di `motion.ts`). Tarot `1439:4218` di-serve dari
+sumber HD 4× (`assets/assets about us/visi misi/hd tarrot card Assets-1.png`)
+sebagai `tarot-cards.webp` 1×/2×/3× (`npm run assets:about`). `visi-misi-bg.webp`
+dihapus (tidak dipakai). Geometri exact; MAE vs reference lama ~5.85 (background
+sengaja berubah). All 7 gate PASS.
+
 **NEXT (prioritas):**
 
 0. **Audit strict per-section — PLAN PER HALAMAN, EKSEKUSI PER SECTION.**
@@ -203,14 +212,16 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
   Section MAE **2.316/255**, geometri Chromium exact. Semua 6 gate ALL PASS.
   Detail: `docs/assets.md` §About Us — Philosophy.
 
-- **About Us Section 2: visi misi (`1439:4190`) — 100% SELESAI (2 Oct 2026).**
-  Frame `1439:4190` (1440×840, column, padding 80px, gap 100px, IMAGE fill starfield `ff47b4…` →
-  `public/images/about/visi-misi-bg.webp`, generator `npm run assets:about`). Vision block
+- **About Us Section 2: visi misi (`1439:4190`) — 100% SELESAI (2 Oct 2026;
+  background living starfield + tarot HD 3 Oct 2026).**
+  Frame `1439:4190` (1440×840, column, padding 80px, gap 100px). Background kini
+  komponen bersama **`<Starfield />`** (base `#050507`, hidup seperti What We Do;
+  plate bake lama `visi-misi-bg.webp` dihapus). Vision block
   `1439:4191` 1280×145.2 di `(80, 80)`; Mission block `1439:4195` 1280×435.2 di `(80, 325.2)`.
   Headings "OUR VISION"/"OUR MISION" **Bluu Next Bold 700 56/67.2** (`--font-display`), gradient
   `181deg`; body Manrope 500 18/27 putih 906 / 828; list `1439:4199` 797×266 dengan 6 bar `31px`
   (gap 16, padding `2px 16px`, lebar `713/733/746/775/786/797`, gradient fit `100deg`); tarot
-  `1439:4218` 356×430 di `(1028, 261)` (`tarot-cards.webp`, MAE 0.9). Section MAE **1.910/255**,
+  `1439:4218` 356×430 di `(1028, 261)` (`tarot-cards.webp` 1×/2×/3× HD). Section MAE **~5.85/255** vs reference lama (background hidup sengaja berubah),
   geometri Chromium exact. Semua 6 gate ALL PASS. Referensi
   `assets/about-us/visi-misi/VisiMisi-Revisi-1x.png`. Detail: `docs/assets.md` §About Us — Vision & Mission.
 

@@ -2,8 +2,10 @@
 // `assets/about-us/`. Run with `npm run assets:about`.
 //
 // Source of truth (see docs/assets.md §About Us):
-// - visi-misi/visi-misi-bg-raw.png → the node 1439:4190 IMAGE fill (starfield
-//   backing). Served as a 1440 × 840 cover crop + a 2× variant.
+// - visi-misi/visi-misi-bg-raw.png → the old node 1439:4190 IMAGE fill. No
+//   longer served: the live section now paints the shared `<Starfield />`.
+// - `assets/assets about us/visi misi/hd tarrot card Assets-1.png` (1424 × 1720,
+//   4× the 356 × 430 node) → the clean tarot artwork, served at 1× / 2× / 3×.
 // - team/card-frame-2x.png → the node 1439:4310 card "Mask group" decoration
 //   (295 × 277).
 // - team/portrait-marchel.png / team/portrait-zidan-rose.png → the two card
@@ -42,30 +44,7 @@ const cropWebp = (input, output, sx, tx, sy, ty, outW, outH, quality) =>
         .toFile(path.join(team, output));
     });
 
-const cover = (input, output, width, height, quality) =>
-  webp(
-    input,
-    about,
-    output,
-    { width, height, fit: 'cover', position: 'center' },
-    quality,
-  );
-
 await Promise.all([
-  cover(
-    'assets/about-us/visi-misi/visi-misi-bg-raw.png',
-    'visi-misi-bg.webp',
-    1440,
-    840,
-    88,
-  ),
-  cover(
-    'assets/about-us/visi-misi/visi-misi-bg-raw.png',
-    'visi-misi-bg-2x.webp',
-    2880,
-    1680,
-    86,
-  ),
   webp(
     'assets/about-us/team/card-frame-2x.png',
     team,
@@ -123,5 +102,27 @@ await Promise.all([
     604,
     884,
     88,
+  ),
+  // Tarot artwork (node 1439:4218, 356 × 430) from the HD 4× source.
+  webp(
+    'assets/assets about us/visi misi/hd tarrot card Assets-1.png',
+    about,
+    'tarot-cards.webp',
+    { width: 356, height: 430, fit: 'contain' },
+    90,
+  ),
+  webp(
+    'assets/assets about us/visi misi/hd tarrot card Assets-1.png',
+    about,
+    'tarot-cards-2x.webp',
+    { width: 712, height: 860, fit: 'contain' },
+    88,
+  ),
+  webp(
+    'assets/assets about us/visi misi/hd tarrot card Assets-1.png',
+    about,
+    'tarot-cards-3x.webp',
+    { width: 1068, height: 1290, fit: 'contain' },
+    86,
   ),
 ]);

@@ -378,6 +378,14 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   philosophy/whatwedo/domains) dan `180deg …80%` (projects/cta) yang keliru.
   Ink-MAE heading hero **13.7 → 7.7**; section ~1 MAE turun. Geometri/8pt/warna
   solid tak berubah; 7 gate ALL PASS. `verify.mjs` tak meng-assert gradient.
+- **About Us — Our Vision/Mission (`1439:4190`) — living starfield + HD tarot
+  (3 Oct 2026).** Background diganti dari plate bake `visi-misi-bg.webp` ke
+  komponen bersama **`<Starfield />`** (`#050507` base, drift hidup sama seperti
+  What We Do; `.visi-misi` ditambah ke daftar idle `is-idle` di `motion.ts`).
+  Tarot kini di-serve dari sumber HD 4× (`hd tarrot card Assets-1.png`) sebagai
+  1×/2×/3× (`npm run assets:about`). Geometri tetap exact (section 1440×840,
+  tarot `(1028,261,356,430)`); MAE vs reference lama ~5.85 karena pola background
+  sengaja berubah. All 7 gate PASS.
 - **About Us Section 1: Hero (`1439:4185`) — 100% SELESAI (2 Oct 2026).**
   Frame Figma `1439:4185` (1440×903, column, padding 80px, justify center,
   gap 16px, IMAGE fill `34bc68…` = `assets/assets about us/hero/raw-hero-bg.png`,

@@ -340,12 +340,13 @@ REFERENSI STATUS (SUDAH SELESAI — jangan diutak-atik tanpa alasan):
    gradient `181deg`, 2 baris ("Architecting the Future of AI" / "& Data Innovation.");
    subtitle `1439:4188` Manrope 500 18/27 #fff 680×81 di (380,514.2),
    `text-shadow: 0 4px 20px #000`. MAE **4.6874** (3.7902 di bawah navbar).
-2. **visi misi (`1439:4190`)** — 1440×840, padding 80, gap 100, IMAGE starfield
-   (`public/images/about/visi-misi-bg.webp`). Vision 1280×145.2 (80,80); Mission
+2. **visi misi (`1439:4190`)** — 1440×840, padding 80, gap 100, background
+   komponen bersama `<Starfield />` (hidup; plate bake lama dihapus 3 Oct 2026).
+   Tarot `tarot-cards.webp` 1×/2×/3× dari sumber HD. Vision 1280×145.2 (80,80); Mission
    1280×435.2 (80,325.2). Heading "OUR VISION"/"OUR MISION" Bluu Next 700 56/67.2
    gradient 181deg; list 797×266 di (80,494.4), 6 bar 31px gap 16 pad 2/16 lebar
    713/733/746/775/786/797 gradient fit `100deg`; tarot 356×430 di (1028,261)
-   (`tarot-cards.webp`). MAE **1.910**.
+   (`tarot-cards.webp` 1×/2×/3× HD). MAE **~5.85** (background hidup sengaja berubah).
 3. **Philosophy (`1439:4219`)** — 1440×837, **identik dengan homepage** `1430:2052`
    (ref MAE 0.000). Content 591×468 di (766,205) gap 48; heading Bluu Next 56/67
    2 baris; grid prinsip 591×248 (gap 30/92). MAE **2.316**.
