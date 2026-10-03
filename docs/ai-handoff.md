@@ -8,6 +8,15 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
+**SELESAI (3 Oct 2026) — Hall of Frames Featured Sorcerers detail modal
+(`1554:2824`).** Klik kartu Featured membuka `<dialog>` detail: panel 997×576
+(centered, `padding 88/80`, gap 64, fill `rgba(5,5,7,.5)` + GLASS rim), backdrop
+`blur(7.7px)`, glow `1554:2898` verbatim, close `1554:2935`. Achievement bar
+grad `134deg` + dot, Contribution Manrope 400 16/24. `verify.mjs` assert dialog
+hidden default + open geometry (panel 997×576, card 302×400, body 471, 3 bar) +
+Esc close; closed-section MAE tetap **2.008**. Efek hidup gated reduce/hover;
+detail: `docs/assets.md` §Hall of Frames — Featured Sorcerers detail modal.
+
 **★ NEXT = CONTACT HERO VIDEO (`1445:5066`) — satu-satunya hero yang belum video.**
 Home (`1430:2041`), Recruitment (`1436:3506`), About Us (`1439:4185`), Hall of
 Frames (`1439:4507`), dan Partners (`1439:4788`) **sudah video** (lihat

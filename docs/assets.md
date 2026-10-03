@@ -474,6 +474,32 @@ assets:contact` regenerates it and the icons.
   83/308, 8 cards, overflow 0) and diffs vs `HoF-Featured-1x.png`
   (MAE **2.01**). Responsive: 4 columns > 1100px, 2 at 561–1100, 1 ≤ 560px.
 
+## Hall of Frames — Featured Sorcerers detail modal (3 October 2026)
+
+- Clicking a Featured card opens a native `<dialog>` detail card matching node
+  **`1554:2824`** / panel **`1554:2897`**: **997 × 576** centered, `padding 88px
+80px`, row, `gap 64`, radius 20, fill `rgba(5,5,7,0.5)`, GLASS rim (`::after`
+  - `mask-composite: exclude`, top ≈22% white). Backdrop `1554:2896` = full-view
+    `blur(7.7px)` + `rgba(217,217,217,0.01)`. Glow `1554:2898` served verbatim as
+    `public/images/hof/detail/glow.svg` (positioned `-266.75/190.75`, 1470 × 728,
+    clipped to the panel radius). Close `1554:2935` = 44 × 44 `#1A1A1A` + inset
+    specular stack + `backdrop blur(6px)`, 18px `codicon:chrome-close` inline.
+- Body `1554:2919` = 471 wide, gap 32; sections gap 16 ("Achievement" +
+  "Contribution", Manrope 700 18/27). Three achievement bars (full width, 24
+  tall, gap 12) with `linear-gradient(134deg,#fff 0%,#6c3bff 4–26%,transparent)`
+  - 6px gradient dot; contribution Manrope 400 16/24. The card slot clones the
+    clicked 302 × 400 card, so the art matches the section.
+- Content is placeholder (inline in `HallOfFramesFeatured.astro`; no data file).
+  The dynamic list items use `:global(...)` because Astro scoped CSS does not
+  reach JS-created nodes — without it the achievement bars do not paint.
+- `scripts/generate-hof-assets.mjs` writes `detail/glow.svg`. `verify.mjs`
+  asserts the dialog is hidden by default, the open geometry (panel 997 × 576
+  centered at 720, card 302 × 400, body 471, 3 bars) and that Esc closes it;
+  the closed-section diff vs `HoF-Featured-1x.png` is unchanged (MAE **2.008**).
+- Life effects (gated `hover` + `prefers-reduced-motion: no-preference`): card
+  lift + violet glow, panel pop-in, achievement-bar stagger, glow pulse, close
+  rotate; sound cue on open/close (`data-sfx="click"`). Reduce stays exact.
+
 ## Hall of Frames — Hero (1 October 2026)
 
 - New route `/hall-of-frames` (Figma page `1439:4506`, file

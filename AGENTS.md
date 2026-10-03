@@ -455,6 +455,18 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   Reference `HoF-Projects-1x.png` + assertion `verify.mjs` diregenerasi (kartu sengaja
   supersede PNG lama). `responsive-audit` skip `.hof-project-card:not(.is-active)`.
   7 gate + seo ALL PASS.
+- **SELESAI (3 Oct 2026): Hall of Frames — Featured Sorcerers detail modal
+  (`1554:2824`).** Klik kartu Featured membuka `<dialog>`: panel **997×576**
+  (centered, `padding 88/80`, `gap 64`, fill `rgba(5,5,7,.5)` + GLASS rim top
+  ≈22%), backdrop `blur(7.7px)` + `rgba(217,217,217,.01)`, glow `1554:2898`
+  served verbatim (`public/images/hof/detail/glow.svg`), close `1554:2935`
+  (44×44 `#1A1A1A` + inset specular). Achievement bar gradient `134deg` + 6px dot;
+  Contribution Manrope 400 16/24; title Manrope 700 18/27. Body `471`, gap 32.
+  Efek hidup (gated `hover`+`no-preference`): card lift + glow, panel pop,
+  bar stagger, glow pulse, close rotate; cue `data-sfx="click"`. **Penting:** list
+  item dibuat via JS → pakai `:global(...)` (Astro scoped CSS tak menjangkau node
+  JS). `verify.mjs` assert dialog hidden default + open geometry + Esc close;
+  closed-section MAE tetap **2.008**. 7 gate + seo ALL PASS.
 - **★ NEXT (untuk AI baru): CONTACT HERO VIDEO (`1445:5066`) — satu-satunya hero
   yang belum video.** Home (`1430:2041`), Recruitment (`1436:3506`), About
   (`1439:4185`), Hall of Frames (`1439:4507`, source di-refresh 3 Oct 2026), dan

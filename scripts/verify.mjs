@@ -3044,10 +3044,10 @@ try {
       section: { width: Math.round(sb.width), height: Math.round(sb.height) },
       header: rel('.featured-header'),
       grid: rel('.featured-grid'),
-      card1: rel('.featured-card'),
-      card2: rel('.featured-card:nth-child(2)'),
-      frame: rel('.featured-card .card-frame'),
-      cards: document.querySelectorAll('.featured-card').length,
+      card1: rel('.featured-grid .featured-card'),
+      card2: rel('.featured-grid .featured-card:nth-child(2)'),
+      frame: rel('.featured-grid .featured-card .card-frame'),
+      cards: document.querySelectorAll('.featured-grid .featured-card').length,
       overflow: document.documentElement.scrollWidth - innerWidth,
     };
   });
@@ -3081,6 +3081,44 @@ try {
       hofFeaturedActual[i] - hofFeaturedReference[i],
     );
   }
+
+  // Featured detail modal (node 1554:2824): hidden until a card is activated,
+  // then the reference panel geometry (997×576 centered, card 302×400, body
+  // 471, three achievement bars). Esc closes it.
+  const detailClosed = await page.evaluate(() => {
+    const d = document.querySelector('.featured-detail');
+    return d ? !d.open && getComputedStyle(d).display === 'none' : null;
+  });
+  assert.equal(detailClosed, true);
+  await page.locator('.hof-featured .card-open').first().click();
+  const detailGeometry = await page.evaluate(() => {
+    const d = document.querySelector('.featured-detail');
+    const r = (n) => Math.round(n * 10) / 10;
+    const panel = d.querySelector('.fd-panel').getBoundingClientRect();
+    const card = d.querySelector('.fd-card').getBoundingClientRect();
+    const body = d.querySelector('.fd-body').getBoundingClientRect();
+    return {
+      open: d.open,
+      panel: { width: r(panel.width), height: r(panel.height) },
+      centerX: r(panel.left + panel.width / 2),
+      card: { width: r(card.width), height: r(card.height) },
+      bodyWidth: r(body.width),
+      achievements: d.querySelectorAll('.fd-achievement').length,
+    };
+  });
+  assert.deepEqual(detailGeometry, {
+    open: true,
+    panel: { width: 997, height: 576 },
+    centerX: 720,
+    card: { width: 302, height: 400 },
+    bodyWidth: 471,
+    achievements: 3,
+  });
+  await page.keyboard.press('Escape');
+  const detailEscClosed = await page.evaluate(
+    () => !document.querySelector('.featured-detail').open,
+  );
+  assert.equal(detailEscClosed, true);
 
   // Hall of Frames — Project highlights (node 1439:4655) geometry + diff.
   await page.goto(`${baseUrl}/hall-of-frames`, { waitUntil: 'networkidle' });

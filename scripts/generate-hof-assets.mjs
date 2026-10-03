@@ -4,20 +4,23 @@
 // Source of truth (see docs/assets.md §Hall of Frames):
 // - HoF-Hero-Bg-raw.png → the raw Figma image-fill of the hero node 1439:4507.
 //   It is baked as-is (FILL = object-fit: cover) instead of being rebuilt.
-import { mkdir } from 'node:fs/promises';
+import { cp, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
 
 const src = 'assets/hall of frames/hero';
 const featuredSrc = 'assets/hall of frames/featured';
 const milestoneSrc = 'assets/hall of frames/milestone';
+const detailSrc = 'assets/hall of frames/detail-card';
 const out = 'public/images/hof';
 const featuredOut = path.join(out, 'featured');
 const milestoneOut = path.join(out, 'milestone');
+const detailOut = path.join(out, 'detail');
 const bg = path.join(src, 'HoF-Hero-Bg-raw.png');
 
 await mkdir(featuredOut, { recursive: true });
 await mkdir(milestoneOut, { recursive: true });
+await mkdir(detailOut, { recursive: true });
 
 const webp = (input, output, width, quality) =>
   sharp(input)
@@ -84,5 +87,12 @@ await Promise.all([
     88,
   ),
 ]);
+
+// Featured detail card glow (node 1554:2898): the exported IMAGE-SVG already
+// carries its blur filter, so it is served verbatim (positioned by the panel).
+await cp(
+  path.join(detailSrc, 'detail-glow.svg'),
+  path.join(detailOut, 'glow.svg'),
+);
 
 console.log(`Hall of Frames artwork written to ${out}/`);
