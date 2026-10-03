@@ -114,8 +114,8 @@ ATURAN INTI, SPACING & PADDING (HUKUM, WAJIB PATUH, JANGAN DILANGGAR):
      Jangan kira-kira.
    - **Teks gradient = fit dari PNG node** (angle+stop+posisi); string MCP
      `linear-gradient(...)` LOSSY (stop terakhir dipaksa 100%). Contoh homepage:
-     hero `211.54deg #fff 32.8% / #999 49.8% / #fff 73.04%` per baris; heading
-     section `181deg #fff 15% / #999 42% / #fff 79%`.
+     hero & heading section `181deg #fff 15% / #999 42% / #fff 79%` per baris
+     (global Figma `Gradient Heading`).
    - Satu text node 2 baris → satu gradient membentang blok; node per baris →
      gradient per `<span>`. Alpha persis (`rgb(r g b / a)`, `#6c3bff80`). Warna
      tombol/kartu/rim/glow juga dari fills/strokes/effects Figma (GLASS → REST).
@@ -211,7 +211,7 @@ Tiap section: cek 8pt (`node scripts/spacing-audit.mjs <komponen>`), font Bluu N
 Bold 700, **warna TIAP text node (fills Figma solid + gradient fit dari PNG)** =
 sama persis, gradient per-node, MAE region vs reference PNG, update assertion
 `verify.mjs`. Contoh baseline homepage: heading gradient `181deg #fff 15% / #999
-42% / #fff 79%` (hero `211.54deg`), copy `#FFFFFF`, subtitle `#EDE8FF`.
+42% / #fff 79%` (hero sama), copy `#FFFFFF`, subtitle `#EDE8FF`.
 
 --------------------------------------------------------------------------------
 TARGET B: RECRUITMENT (`1436:3505`) — AUDIT STRICT PER-SECTION

@@ -118,9 +118,11 @@ mencocokkannya ke Figma.
   kira-kira / jangan pakai "kira-kira mirip".**
 - **Teks gradient = fit dari PNG node** (angle + stop + posisi); string MCP
   `linear-gradient(...)` **lossy** (stop terakhir dipaksa 100%). Contoh homepage:
-  hero `211.54deg #fff 32.8% / #999 49.8% / #fff 73.04%` (per baris node);
-  heading section `181deg #fff 15% / #999 42% / #fff 79%`. Sekali lagi: **fit
-  dari piksel**, bukan paste MCP.
+  heading (hero **dan** section) `181deg #fff 15% / #999 42% / #fff 79%` —
+  global Figma `Gradient Heading`. Nilai lama hero `211.54deg 32.8/49.8/73.04`
+  **salah** (dikoreksi 3 Oct 2026: fit ulang dari PNG menurunkan ink-MAE hero
+  13.7 → 7.7 dan heading section ~1 MAE). Sekali lagi: **fit dari piksel**,
+  bukan paste MCP.
 - **Aturan per-node:** satu text node 2 baris → satu gradient membentang blok
   (satu `<span>`/elemen); tiap baris node terpisah → gradient per baris
   (`<span>` masing-masing).
@@ -345,8 +347,8 @@ text; background-clip: text; color: transparent;` **per baris**.
 ## 6. Studi kasus — Homepage hero (1 Oct 2026)
 
 - Frame `1430:2040`, hero `1430:2041`. Judul pindah **Nasalization → Bluu Next
-  Bold 72/86** (gradient per baris `211.54deg #fff 32.8% / #999 49.8% / #fff
-73.04%`), paragraf Manrope **18/25** lebar 655, spacing **80/64/16/24**,
+  Bold 72/86** (gradient per baris `181deg #fff 15% / #999 42% / #fff 79%`),
+  paragraf Manrope **18/25** lebar 655, spacing **80/64/16/24**,
   tombol Primary/Sec baru (hover `#2F196F` / `#4C3B7E`), navbar CTA **"Join Us"
   93×43** (shared).
 - **Art**: node hero punya image fill → diunduh (`Home-Hero-Plate.png`) dan

@@ -371,6 +371,13 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   (`1445:5065`) Section 1 Hero PASS** (geometri exact, MAE 2.757 / below-nav
   1.338). Berikutnya: konten asli (foto member, logo partner, `projects.ts`,
   tanggal recruitment, milestone HoF) — lihat `docs/ai-handoff.md`.
+- **AUDIT Homepage (Target A) — koreksi gradient heading (3 Oct 2026).** Semua
+  heading homepage (Hero, Philosophy, WhatWeDo, Domains, Projects, CTA
+  `Recruitment.astro`) memakai **`181deg #fff 15% / #999 42% / #fff 79%`** (global
+  Figma `Gradient Heading`) — menggantikan `211.54deg 32.8/49.8/73.04` (hero/
+  philosophy/whatwedo/domains) dan `180deg …80%` (projects/cta) yang keliru.
+  Ink-MAE heading hero **13.7 → 7.7**; section ~1 MAE turun. Geometri/8pt/warna
+  solid tak berubah; 7 gate ALL PASS. `verify.mjs` tak meng-assert gradient.
 - **About Us Section 1: Hero (`1439:4185`) — 100% SELESAI (2 Oct 2026).**
   Frame Figma `1439:4185` (1440×903, column, padding 80px, justify center,
   gap 16px, IMAGE fill `34bc68…` = `assets/assets about us/hero/raw-hero-bg.png`,

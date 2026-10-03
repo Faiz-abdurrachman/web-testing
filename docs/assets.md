@@ -227,7 +227,7 @@
       `rgba(255,255,255,0.15)` with Figma `GLASS` effect `box-shadow: inset 0 1px 1px rgb(255 255 255 / 40%)`). Sits at `x: 640.5, y: 80, w: 159, h: 26`.
     - Eyebrow to title gap: **`8px`** (was 14px in old layout).
     - Heading `1430:2143`: "Choose Your Domain", **Bluu Next Bold 700**, size **56px**, line-height **67.2px**,
-      letter-spacing `0`, gradient `linear-gradient(211.54deg, #FFFFFF 32.8%, #999999 49.8%, #FFFFFF 73.04%)` (`background-clip: text`). Sits at `x: 451, y: 114, w: 538, h: 67`.
+      letter-spacing `0`, gradient `linear-gradient(181deg, #FFFFFF 15%, #999999 42%, #FFFFFF 79%)` (`background-clip: text`). Sits at `x: 451, y: 114, w: 538, h: 67`.
   - Heading to subtitle gap: **`24px`**.
   - Subtitle `1430:2144`: "Every Sorcerer specializes. Find your domain and go deep with a community of experts.", Manrope Regular 16/24, letter-spacing -0.176px, white, sits at `x: 80, y: 205, w: 1280, h: 24`.
 - Card Rail & Domain Cards:
@@ -269,7 +269,7 @@
   - Eyebrow to title gap: **`8px`** (was 14px in old layout).
   - Title `1430:2420` (`Frame 2725`): **Bluu Next Bold 700**, size **56px**, line-height **67.2px**,
     letter-spacing `0`. Two lines: "Four Pillars" (`1430:2115`) and "of Innovation" (`1430:2418`), `gap: 4px`.
-  - Gradient per line: `linear-gradient(211.54deg, #FFFFFF 32.8%, #999999 49.8%, #FFFFFF 73.04%)` (`background-clip: text`).
+  - Gradient per line: `linear-gradient(181deg, #FFFFFF 15%, #999999 42%, #FFFFFF 79%)` (`background-clip: text`).
 - Four Pillars Cards:
   - All four cards resized to **391px × 254px** (previously 311px / 309px):
     - Pillar 01 (LEARNING): `x: 80, y: 80, width: 391, height: 254`
@@ -310,7 +310,7 @@
 - Heading & Typography:
   - Font moved to **Bluu Next Bold 700**, size **56px**, line-height **67px**, letter-spacing: `0%` (`0em`),
     2 lines (`We Don't  Just Learn AI` & `We Build With It`), `gap: 4px`.
-  - Gradient per line: `linear-gradient(211.54deg, #FFFFFF 32.8%, #999999 49.8%, #FFFFFF 73.04%)` (`background-clip: text`).
+  - Gradient per line: `linear-gradient(181deg, #FFFFFF 15%, #999999 42%, #FFFFFF 79%)` (`background-clip: text`).
   - Eyebrow pill `1430:2056`: `Our Philosphy` (Manrope Regular 12/18, padding `4px 8px`, border-radius 32px, bg `rgba(255,255,255,0.15)`).
 - Spacing 8-point grid strictly implemented:
   - Content column (`1430:2054`): `591px` wide at `x: 766px, y: 205px` (`@media (min-width: 1400px)`).
@@ -531,11 +531,16 @@ assets:contact` regenerates it and the icons.
   `*-2x.png`, plus the isolated text/button/navbar nodes used for measurement.
 - **Headline**: Figma switched the display face from Nasalization to **Bluu Next
   Bold 700**, **72 / 86**, two lines `gap 4`, gradient painted per line
-  (`linear-gradient(211.54deg, #fff 32.8%, #999 49.8%, #fff 73.04%)`). Bluu Next
+  (`linear-gradient(181deg, #fff 15%, #999 42%, #fff 79%)`). Bluu Next
   is **SIL OFL 1.1**, so it is now bundled: `public/fonts/bluu-next-700.woff2`
   (20 KB) + `BluuNext-OFL.txt`, declared at weight 700 (single cut, avoids faux
   bold) and exposed as the `--font-display` token. `--font-heading` (Nasalization)
   is untouched so other pages keep their current look until their own revision.
+- **Koreksi gradient (3 Oct 2026)**: heading homepage dipindah ke gradient global
+  Figma `Gradient Heading` **`181deg #fff 15% / #999 42% / #fff 79%`**
+  (sebelumnya `211.54deg 32.8/49.8/73.04`). Fit ulang dari PNG: ink-MAE heading
+  hero **13.7 → 7.7**. Berlaku juga untuk `Philosophy`, `WhatWeDo`, `Domains`,
+  `Projects`, dan CTA home (`Recruitment.astro`).
 - **Paragraph**: Manrope Regular **18 / 25**, width **655** (was 16/24, 619).
 - **Spacing** (design uses an 8px grid): hero `padding 80`, content `gap 64`,
   copy `gap 16`, actions `gap 24`; measured text ink rows match the reference to

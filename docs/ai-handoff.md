@@ -43,6 +43,14 @@ Catatan tiap section:
   pixel-identik dengan reference recruitment (MAE 0.060); render Partners MAE
   **5.873**.
 
+**AUDIT HOMEPAGE (Target A) — gradient heading dikoreksi (3 Oct 2026).** Section
+1–6 homepage diaudit: geometry/8pt/typografi/MAE-warna. Temuan: heading homepage
+memakai `211.54deg 32.8/49.8/73.04` (hero/philosophy/whatwedo/domains) dan
+`180deg …80%` (projects/cta) padahal global Figma `Gradient Heading` =
+**`181deg #fff 15% / #999 42% / #fff 79%`**. Koreksi di 6 komponen → ink-MAE
+heading hero **13.7 → 7.7**, heading section turun ~1 MAE; 7 gate ALL PASS.
+Detail/SOP: `docs/pixel-precision-sop.md` §Hukum Warna & §6.
+
 **NEXT (prioritas):**
 
 0. **Audit strict per-section — PLAN PER HALAMAN, EKSEKUSI PER SECTION.**
@@ -388,7 +396,7 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
 - **Homepage What We Do — revisi font, cards & spacing (2 Oct 2026).**
   `WhatWeDo.astro` (`1430:2089`, frame `1430:2040`) direvisi presisi:
   judul **Bluu Next Bold 700 56/67.2** (`--font-display`), 2 baris `gap: 4px`,
-  gradient per baris `linear-gradient(211.54deg, #FFFFFF 32.8%, #999999 49.8%, #FFFFFF 73.04%)`,
+  gradient per baris `linear-gradient(181deg, #FFFFFF 15%, #999999 42%, #FFFFFF 79%)`,
   eyebrow pill `What We Do` (Figma `GLASS` effect, gap ke heading `8px`),
   4 kartu pillar diperlebar ke **391px × 254px** di koordinat exact `[ (80, 80), (969, 80), (80, 506), (969, 506) ]`,
   judul kartu pindah dari Nasalization ke **Manrope Bold 700 26px / 39px**, gap nomor-ke-judul `0px`, gap judul-ke-desc `16px`,
@@ -398,7 +406,7 @@ Semua yang kamu butuhkan dalam ~30 detik. Detail/history ada di bawah.
 - **Homepage Our Philosophy — revisi font & spacing (2 Oct 2026).**
   `Philosophy.astro` (`1430:2052`, frame `1430:2040`) direvisi presisi:
   judul **Bluu Next Bold 700 56/67** (`--font-display`), 2 baris `gap: 4px`,
-  gradient per baris `linear-gradient(211.54deg, #FFFFFF 32.8%, #999999 49.8%, #FFFFFF 73.04%)`,
+  gradient per baris `linear-gradient(181deg, #FFFFFF 15%, #999999 42%, #FFFFFF 79%)`,
   `We Don't&nbsp; Just Learn AI` (double-space Figma dijaga via `&nbsp;` agar ink width persis 587px),
   kolom konten `591px` di `x: 766, y: 205` (`left: 766px, top: 205px` di desktop ≥1400px),
   spacing grid 8px: eyebrow→title `8px`, title→grid `48px`, icon→font `24px` (naik dari 20px), title→subtitle `8px`,
@@ -671,7 +679,7 @@ form panel` (+ commit docs). File berubah: `src/components/ContactHero.astro`
   lain tetap Nasalization (belum direvisi) supaya diff/ geometri halaman itu tidak
   berubah.
 - **Hero:** judul 72/86 dua baris `gap 4` + gradient per baris
-  (`211.54deg #fff 32.8% / #999 49.8% / #fff 73.04%`); paragraf Manrope 18/25
+  (`181deg #fff 15% / #999 42% / #fff 79%`); paragraf Manrope 18/25
   lebar 655; padding 80, gap 64/16/24. Posisi tinta cocok referensi ±1px.
 - **Tombol** (`Button.astro`): varian baru `community` (primary violet hug 43px,
   hover `#2F196F`) & `explore` (glass, hover `#4C3B7E`; rim di-fit dari export
