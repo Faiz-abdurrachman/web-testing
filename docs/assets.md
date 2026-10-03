@@ -2382,14 +2382,14 @@ Semua hero memakai `<video>` looping sebagai background dengan fallback gambar
 statis. Aturan keras + Master Work Plan: **`docs/hero-video-plan.md`** dan
 `docs/pixel-precision-sop.md` §10.
 
-| Halaman        | Node        | Sumber mentah (`assets/`)                                                         | Output diserve                                                      | Status   |
-| -------------- | ----------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------- | -------- |
-| Home           | `1430:2041` | `assets home page/hero section/hero.mp4` (1280×720,10s)                           | `public/images/hero/hero-bg.{webm,mp4}` + `hero-poster.webp`        | DONE     |
-| Recruitment    | `1436:3506` | `assets recruitment page/hero section/recruitment-hero1.mp4` (1920×1080,10s)      | `public/images/recruitment/hero-bg.{webm,mp4}` + `hero-poster.webp` | DONE     |
-| About Us       | `1439:4185` | `assets about us/hero/Animating_sorcerer_image_ambient…_1080p_20261003164943.mp4` | `public/images/about/hero-bg.{webm,mp4}` + poster                   | DONE     |
-| Hall of Frames | `1439:4507` | `hall of frames/hero/Sealed_arcane_door_ambient_anima…_20261003171201.mp4`        | `public/images/hof/hero-bg.{webm,mp4}` + poster                     | DONE     |
-| Partners       | `1439:4788` | `partners/hero/Arcane_hands_establishing_magica…_1080p_20261003172522.mp4`        | `public/images/partners/hero-bg.{webm,mp4}` + poster                | **SIAP** |
-| Contact        | `1445:5066` | —                                                                                 | `public/images/contact/hero-bg.{webm,mp4}` + poster                 | PENDING  |
+| Halaman        | Node        | Sumber mentah (`assets/`)                                                         | Output diserve                                                      | Status  |
+| -------------- | ----------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------- | ------- |
+| Home           | `1430:2041` | `assets home page/hero section/hero.mp4` (1280×720,10s)                           | `public/images/hero/hero-bg.{webm,mp4}` + `hero-poster.webp`        | DONE    |
+| Recruitment    | `1436:3506` | `assets recruitment page/hero section/recruitment-hero1.mp4` (1920×1080,10s)      | `public/images/recruitment/hero-bg.{webm,mp4}` + `hero-poster.webp` | DONE    |
+| About Us       | `1439:4185` | `assets about us/hero/Animating_sorcerer_image_ambient…_1080p_20261003164943.mp4` | `public/images/about/hero-bg.{webm,mp4}` + poster                   | DONE    |
+| Hall of Frames | `1439:4507` | `hall of frames/hero/Sealed_arcane_door_ambient_anima…_20261003171201.mp4`        | `public/images/hof/hero-bg.{webm,mp4}` + poster                     | DONE    |
+| Partners       | `1439:4788` | `partners/hero/Arcane_hands_establishing_magica…_1080p_20261003172522.mp4`        | `public/images/partners/hero-bg.{webm,mp4}` + poster                | DONE    |
+| Contact        | `1445:5066` | —                                                                                 | `public/images/contact/hero-bg.{webm,mp4}` + poster                 | PENDING |
 
 **About Us hero video (3 Oct 2026).** Node `1439:4185` now has a looping artwork
 layer in `AboutHero.astro`, rendered by `HeroVideo.astro` and mounted through
@@ -2418,6 +2418,18 @@ MAE 3.627, mostly navbar/title rendering. Static fallback and reference remain
 the approved baseline for this video-only pass. The reduced-motion screenshot
 is byte-identical to the pre-video render (MAE 0), and the stored-reference
 MAE remains 4.3377. All seven gates and SEO pass; 468/468 responsive cases pass.
+
+**Partners hero video (3 Oct 2026).** Node `1439:4788` uses the shared
+`HeroVideo.astro` and `hero-video.ts` runtime. Source:
+`assets/partners/hero/Arcane_hands_establishing_magica…_1080p_20261003172522.mp4`
+(1920×1080, 24 fps, 8 s). `node scripts/generate-hero-videos.mjs partners`
+writes a 7 s tail-to-head loop: AV1 WebM 0.54 MiB, H.264 MP4 0.47 MiB, poster
+0.10 MiB. Encoded frame 0 MAE is 1.29 against source t=1 s; seam first-vs-last
+MAE is 2.14. The current Figma export differs from stored `Partners-Hero-1x.png`
+by MAE 5.985, mainly navbar/title rendering. The static fallback/reference
+remain the baseline for this video-only pass. The reduced-motion screenshot is
+byte-identical to the pre-video render (MAE 0); stored-reference MAE remains
+4.1285. All seven gates and SEO pass; 468/468 responsive cases pass.
 
 Catatan: nama file sumber punya karakter unicode `…` (quote path-nya). Alternatif
 Recruitment: `assets recruitment page/hero section/Animating_static_planetary_space…_1080p_20261003170119.mp4`.

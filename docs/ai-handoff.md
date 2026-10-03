@@ -9,9 +9,9 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
 **★ NEXT = VIDEO HERO — semua hero section jadi background video looping.**
-Home (`1430:2041`), Recruitment (`1436:3506`), About Us (`1439:4185`), dan Hall
-of Frames (`1439:4507`) sudah video; Partners (`1439:4788`) aset video sudah disiapkan
-(lihat `docs/hero-video-plan.md` §1); Contact (`1445:5066`) menyusul. **Satu hero
+Home (`1430:2041`), Recruitment (`1436:3506`), About Us (`1439:4185`), Hall of
+Frames (`1439:4507`), dan Partners (`1439:4788`) sudah video (lihat
+`docs/hero-video-plan.md` §1); Contact (`1445:5066`) menunggu aset. **Satu hero
 per pass + 7 gate**; geometri statis + reduce tidak boleh berubah. Master Work Plan
 rinci: **`docs/hero-video-plan.md`**. Setelah video: audit Partners (`1439:4787`)
 
@@ -29,8 +29,13 @@ for this video-only pass.
 **Hall of Frames Hero video (`1439:4507`, 3 Oct 2026):** shared component/runtime
 with About. Source 1920×1080, 8 s → 7 s seamless crossfade loop via
 `scripts/generate-hero-videos.mjs hof`; AV1 WebM 0.27 MiB, H.264 MP4 0.34 MiB,
-poster 0.09 MiB. Static fallback, geometry, and reference retained. Next hero:
-**Partners**.
+poster 0.09 MiB. Static fallback, geometry, and reference retained.
+
+**Partners Hero video (`1439:4788`, 3 Oct 2026):** shared component/runtime;
+source 1920×1080, 8 s → 7 s circular loop via
+`scripts/generate-hero-videos.mjs partners`; AV1 WebM 0.54 MiB, H.264 MP4
+0.47 MiB, poster 0.10 MiB. Static fallback, geometry, and reference retained.
+Next video target: **Contact**, when its source clip is supplied.
 
 **SELESAI (3 Oct 2026) — Hall of Frames card Project Highlight (`1439:4655`)
 disamakan dengan card "Our Project" homepage (`1430:2146`, `Projects.astro`).**

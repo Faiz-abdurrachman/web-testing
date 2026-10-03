@@ -2714,6 +2714,12 @@ try {
       heroTitleFont: titleStyle.fontFamily,
       heroTitleSize: titleStyle.fontSize,
       heroTitleLineHeight: titleStyle.lineHeight,
+      heroStaticFallback: !!document.querySelector('.partners-hero .art-bg'),
+      heroVideoOpacity: getComputedStyle(
+        document.querySelector('.partners-hero .art-video'),
+      ).opacity,
+      heroVideoPreload: document.querySelector('.partners-hero .art-video')
+        .preload,
       whyHead: whyRelative('.why-head'),
       whyPill: whyRelative('.why-partners .pill'),
       whyTitle: whyRelative('#why-partners-title'),
@@ -2738,6 +2744,9 @@ try {
     heroTitleFont: '"Bluu Next", Nasalization, sans-serif, sans-serif',
     heroTitleSize: '80px',
     heroTitleLineHeight: '102px',
+    heroStaticFallback: true,
+    heroVideoOpacity: '0',
+    heroVideoPreload: 'none',
     whyHead: { x: 80, y: 80, width: 1280, height: 263 },
     whyPill: { x: 650.1, y: 80, width: 139.8, height: 26 },
     whyTitle: { x: 80, y: 114, width: 1280, height: 229 },

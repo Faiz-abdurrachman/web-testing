@@ -17,6 +17,13 @@ const videos = {
     duration: 8,
     fade: 1,
   },
+  partners: {
+    source:
+      'assets/partners/hero/Arcane_hands_establishing_magica…_1080p_20261003172522.mp4',
+    output: 'public/images/partners',
+    duration: 8,
+    fade: 1,
+  },
 };
 
 const page = process.argv[2];

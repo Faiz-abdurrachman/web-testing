@@ -33,7 +33,7 @@ Baca bareng: `AGENTS.md`, `docs/pixel-precision-sop.md` (§Video hero),
 | 2   | Recruitment    | `1436:3506` | `RecruitmentHero.astro`  | image + video       | `assets/assets recruitment page/hero section/recruitment-hero1.mp4` (1920×1080,10s)                             | **DONE**    |
 | 3   | About Us       | `1439:4185` | `AboutHero.astro`        | webp + video        | `assets/assets about us/hero/Animating_sorcerer_image_ambient…_1080p_20261003164943.mp4` (1920×1080,8s,4.8Mbps) | **DONE**    |
 | 4   | Hall of Frames | `1439:4507` | `HallOfFramesHero.astro` | webp + video        | `assets/hall of frames/hero/Sealed_arcane_door_ambient_anima…_20261003171201.mp4` (1920×1080,8s,2.3Mbps)        | **DONE**    |
-| 5   | Partners       | `1439:4788` | `PartnersHero.astro`     | webp saja           | `assets/partners/hero/Arcane_hands_establishing_magica…_1080p_20261003172522.mp4` (1920×1080,8s,2.6Mbps)        | **SIAP**    |
+| 5   | Partners       | `1439:4788` | `PartnersHero.astro`     | webp + video        | `assets/partners/hero/Arcane_hands_establishing_magica…_1080p_20261003172522.mp4` (1920×1080,8s,2.6Mbps)        | **DONE**    |
 | 6   | Contact        | `1445:5066` | `ContactHero.astro`      | webp + artwork      | —                                                                                                               | **PENDING** |
 
 Catatan: `assets/assets recruitment page/hero section/Animating_static_planetary_space…_1080p_20261003170119.mp4`
@@ -164,7 +164,7 @@ Untuk **setiap** hero tulis Master Work Plan lalu eksekusi:
 
 1. **About Us** (`1439:4185`) — DONE. Output `public/images/about/hero-bg.{webm,mp4}` + `hero-poster.webp`.
 2. **Hall of Frames** (`1439:4507`) — DONE. Output `public/images/hof/hero-bg.{webm,mp4}` + poster.
-3. **Partners** (`1439:4788`) — aset siap (video gelap: pastikan heading tetap
+3. **Partners** (`1439:4788`) — DONE (video gelap: pastikan heading tetap
    terbaca; scrim hanya bila perlu & **jangan ubah MAE statis**). Output
    `public/images/partners/hero-bg.{webm,mp4}` + poster.
 4. **Contact** (`1445:5066`) — **tunggu aset** dari user.
