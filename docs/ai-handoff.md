@@ -8,14 +8,17 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
-**★ NEXT = VIDEO HERO — semua hero section jadi background video looping.**
+**★ NEXT = CONTACT HERO VIDEO (`1445:5066`) — satu-satunya hero yang belum video.**
 Home (`1430:2041`), Recruitment (`1436:3506`), About Us (`1439:4185`), Hall of
-Frames (`1439:4507`), dan Partners (`1439:4788`) sudah video (lihat
-`docs/hero-video-plan.md` §1); Contact (`1445:5066`) menunggu aset. **Satu hero
+Frames (`1439:4507`), dan Partners (`1439:4788`) **sudah video** (lihat
+`docs/hero-video-plan.md` §1). Contact menunggu aset sumber dari user. **Satu hero
 per pass + 7 gate**; geometri statis + reduce tidak boleh berubah. Master Work Plan
-rinci: **`docs/hero-video-plan.md`**. Setelah video: audit Partners (`1439:4787`)
+rinci: **`docs/hero-video-plan.md`**.
 
-- 6 detail HoDS (`864:18857` dkk) per-section, lalu konten asli.
+Selain video: **Partners (`1439:4787`) 4/4 SELESAI** dan **revisi Detail HoDS
+(`864:18857` dkk) SELESAI**; sisa audit per-section HoDS (spacing/font/MAE) dan
+konten asli (foto member, logo partner, `projects.ts`, tanggal recruitment,
+milestone HoF).
 
 **Recruitment Hero video (3 Oct 2026):** sumber aktif kini
 `Animating_static_planetary_space…_1080p_20261003170119.mp4` (1920×1080,
@@ -41,10 +44,14 @@ export differs from the stored PNG by MAE 5.178 because the navbar active state
 and title render changed; the static fallback/reference were deliberately kept
 for this video-only pass.
 
-**Hall of Frames Hero video (`1439:4507`, 3 Oct 2026):** shared component/runtime
-with About. Source 1920×1080, 8 s → 7 s seamless crossfade loop via
-`scripts/generate-hero-videos.mjs hof`; AV1 WebM 0.27 MiB, H.264 MP4 0.34 MiB,
-poster 0.09 MiB. Static fallback, geometry, and reference retained.
+**Hall of Frames Hero video (`1439:4507`, 3 Oct 2026; source refreshed 3 Oct
+2026):** shared component/runtime with About. Active source
+`terbaruSorcerer_casting_subtle_ambient_…_20261003194412.mp4` (1920×1080, 24 fps,
+8 s) → 7 s seamless crossfade loop via `scripts/generate-hero-videos.mjs hof`;
+AV1 WebM 0.27 MiB, H.264 MP4 0.28 MiB, poster 0.09 MiB (budget). Encoded frame
+sharpness 1.18× vs source; loop seam MAE 2.27/255. The earlier
+`Sealed_arcane_door_ambient_anima…` source was archived (removed). Static fallback,
+geometry, fonts, and reference retained (hero MAE 4.338; reduce MAE 0).
 
 **Partners Hero video (`1439:4788`, 3 Oct 2026):** shared component/runtime;
 source 1920×1080, 8 s → 7 s circular loop via
@@ -84,8 +91,9 @@ assert seam; 7 gate + seo ALL PASS.
 **SELESAI (3 Oct 2026) — jangan rusak tanpa alasan:** Homepage (`1430:2040`,
 §1–7), About Us (`1439:4184`, §1–6; `<Starfield />` visi-misi final),
 **Recruitment (`1436:3505`, 9/9: Hero → Who Should Join → What You Will Do →
-Available Roles → Selection Timeline → FAQ → Snippets → CTA → Footer)**.
-Berikutnya: Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).
+Available Roles → Selection Timeline → FAQ → Snippets → CTA → Footer)**,
+**Partners (`1439:4787`, 4/4)**, **revisi Detail HoDS (`864:18857` dkk)**.
+Berikutnya: hero Contact video + audit sisa Detail HoDS + konten asli.
 
 **Section 1 Hero (`1436:3506`) — AUDIT PASS (3 Oct 2026).** Tiga temuan & perbaikan:
 (1) static fallback salah gambar — node kini pakai IMAGE fill 1672×941 dengan crop
@@ -139,7 +147,7 @@ transparent)` (MAE/baris 12 → 1.2); (6) tinta heading 1px lebih rendah → spa
 AA font lintas-renderer irreducible. Geometri DOM tak berubah (head 78, body 451,
 rows `[299.2…]`, height 39). 7 gate + seo ALL PASS.
 **RECRUITMENT (`1436:3505`) SELESAI — 9/9 section diaudit (3 Oct 2026).**
-**NEXT = audit Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk) per-section.**
+**NEXT = Contact hero video (`1445:5066`) + audit sisa Detail HoDS (`864:18857` dkk) per-section.**
 
 **Homepage (`1430:2040`) & About Us (`1439:4184`) = sudah diaudit (3 Oct 2026).**
 About Us temuan: tombol "See More" `OurTeam` ternyata GLASS (`1248:15694`),
@@ -230,20 +238,20 @@ reduce presisi, 7 gate + seo. Checklist lengkap + Master Work Plan:
 **NEXT (prioritas):**
 
 0. **Audit strict per-section — PLAN PER HALAMAN, EKSEKUSI PER SECTION.**
-   **NEXT = Recruitment (`1436:3505`)** strict per-section (9 section; presisi +
-   GLOW/GLASS + responsive + 8pt + font). Lalu **Homepage (`1430:2040`)** &
-   **About Us (`1439:4184`)** — keduanya **sudah diaudit 3 Oct 2026** (About Us:
-   Section 5 tombol GLASS `OurTeam` diperbaiki, sisanya PASS) → **Partners
-   (`1439:4787`)** + 6 detail HoDS (`864:18857` dkk). Inventaris `depth 1` →
-   Master Work Plan section 1 → selesai 7 gate → section 2. **Jangan lompat/gabung.**
-   Gate spacing: `npm run audit:spacing` memastikan setiap padding/gap/margin
-   kelipatan 8 atau ada di tabel pengecualian SOP.
-1. **Contact page (`1445:5065`) — audit strict per-section (3 Oct 2026).**
+   Homepage (`1430:2040`), About Us (`1439:4184`), Recruitment (`1436:3505`, 9/9),
+   dan Partners (`1439:4787`, 4/4) **sudah diaudit 3 Oct 2026** — benchmark presisi,
+   jangan rusak tanpa alasan. Sisa audit: Detail HoDS (`864:18857` dkk: spacing/font/
+   MAE per section). Inventaris `depth 1` → Master Work Plan section 1 → selesai 7
+   gate → section 2. **Jangan lompat/gabung.** Gate spacing: `npm run audit:spacing`
+   memastikan setiap padding/gap/margin kelipatan 8 atau ada di tabel pengecualian SOP.
+1. **★ NEXT = Contact hero video (`1445:5066`) — satu-satunya hero belum video.**
+   Tunggu aset sumber dari user; Master Work Plan `docs/hero-video-plan.md`. Page
+   Contact (`1445:5065`) sudah diimplementasi:
    **Section 1 Hero `1445:5066` AUDIT PASS** — geometri Chromium exact (`1440×954`,
    row `80/240/1280×594`, left 587, form 661, art `−131/−92/801×600`, cards
    `564/662/760×74`, overflow 0), bbox tinta identik ±0 px, MAE full **2.757**
    (below-navbar **1.338**); residual = AA font lintas-renderer (title 6.05, pill
-   8.82). Tidak ada kode yang perlu diubah. **Section 2 Footer `1445:5118`** =
+   8.82). **Section 2 Footer `1445:5118`** =
    komponen bersama `Footer.astro` yang sudah presisi (diverifikasi di
    homepage/recruitment/partners).
 2. **Revisi detail HoDS (`HoDSDetail`) — SELESAI (3 Oct 2026).** 6 rute

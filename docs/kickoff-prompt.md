@@ -3,13 +3,19 @@
 Copy-paste seluruh blok di bawah ini ke AI baru sebelum memberikan instruksi kerja.
 Prompt ini memuat seluruh konteks, aturan hukum presisi piksel, strict 8-point grid,
 **hukum warna (fills & gradient harus persis Figma)**, protokol per-section, dan
-checklist. **Status (3 Oct 2026): semua halaman konten 100% selesai; audit
-per-section berjalan.** Audit **Homepage (`1430:2040`)** Section 1–7 **SELESAI**,
-**About Us (`1439:4184`)** Section 1–6 **SELESAI**, dan **Recruitment
-(`1436:3505`) 9/9 SELESAI** (semua heading dikoreksi ke gradient global Figma
-`181deg #fff 15% / #999 42% / #fff 79%`; temuan kunci: MCP gradient angle &
-`textAlign` sering LOSSY → fit dari PNG; rim gradient Figma bisa `90deg`/`110deg`
-bukan `135deg`; section origin fraksional bikin artefak screenshot 1px).
+checklist. **Status (4 Oct 2026): semua halaman konten 100% selesai; audit
+per-section + video hero berjalan.** Audit **Homepage (`1430:2040`)** Section 1–7
+**SELESAI**, **About Us (`1439:4184`)** Section 1–6 **SELESAI**, **Recruitment
+(`1436:3505`) 9/9 SELESAI**, dan **Partners (`1439:4787`) 4/4 SELESAI** (semua
+heading dikoreksi ke gradient global Figma `181deg #fff 15% / #999 42% / #fff
+79%`; temuan kunci: MCP gradient angle & `textAlign` sering LOSSY → fit dari PNG;
+rim gradient Figma bisa `90deg`/`110deg` bukan `135deg`; section origin fraksional
+bikin artefak screenshot 1px).
+**VIDEO HERO (3 Oct 2026): Home (`1430:2041`), Recruitment (`1436:3506`), About Us
+(`1439:4185`), Hall of Frames (`1439:4507`, source di-refresh), dan Partners
+(`1439:4788`) sudah background video looping.** **Contact (`1445:5066`) menunggu
+aset — satu-satunya hero yang belum video.** Master Work Plan:
+`docs/hero-video-plan.md`.
 **SELESAI (3 Oct 2026): revisi About Us — Our Philosophy (`1439:4219`)** —
 background linear disatukan dengan Our Ecosystem (`1439:4258`): fill gradient
 Figma `159.7deg #050507 54.82% → #6c3bff 133.76%` (fit dari PNG, MAE 0.554),
@@ -18,9 +24,10 @@ dipasang di section + glow home di-hide untuk varian About; seam max Δ 9.
 disamakan dengan card "Our Project" homepage (`1430:2146`, `Projects.astro`) —
 kartu `549×567` + coverflow JS, 4 project/4 dot, glow bow-tie dihapus; section
 1440×1014; reference + assertion diregenerasi.
-**NEXT TARGET (untuk AI baru): VIDEO HERO — semua hero section jadi background
-video looping** (Home & Recruitment sudah; About/Hall of Frames/Partners aset siap;
-Contact menyusul). Master Work Plan rinci: `docs/hero-video-plan.md`. Fokus:
+**NEXT TARGET (untuk AI baru): CONTACT HERO VIDEO (`1445:5066`)** — satu-satunya
+hero yang belum video, tunggu aset sumber dari user. Master Work Plan rinci:
+`docs/hero-video-plan.md`. Setelah itu: audit per-section Detail HoDS
+(`864:18857` dkk) + konten asli. Fokus:
 **kualitas encode anti-burik, loop mulus, geometri statis + reduce tetap presisi
 (MAE tak berubah), responsive 320→3840, strict 8pt + font + warna**, 7 gate per
 hero. Cara kerja: **Plan per halaman → inventaris semua section (`depth 1`) → 1
@@ -186,11 +193,15 @@ Confirm user sebelum push (deploy ke production).
 ================================================================================
 STATUS MISI: SEMUA HALAMAN 100% SELESAI — AUDIT + VIDEO HERO
 ================================================================================
-Semua halaman publik tuntas & tervalidasi presisi. **Homepage (`1430:2040`) &
-Recruitment (`1436:3505`) = benchmark presisi — JANGAN rusak tanpa alasan.**
-Detail HoDS (`864:18857` dkk) **SELESAI 3 Oct 2026** (judul hero Bluu Next Bold
-700 48/57.6 Title Case, `.bullets` gap 8, reference diregenerasi). Contact
-(`1445:5065`) Hero **AUDIT PASS** (MAE 2.757 / below-nav 1.338). Hall of Frames
+Semua halaman publik tuntas & tervalidasi presisi. **Homepage (`1430:2040`),
+Recruitment (`1436:3505`), About Us (`1439:4184`), dan Partners (`1439:4787`) =
+benchmark presisi — JANGAN rusak tanpa alasan.** **Video hero:** Home, Recruitment,
+About Us, Hall of Frames (`1439:4507`, source di-refresh 3 Oct 2026), dan Partners
+sudah background video looping; **Contact (`1445:5066`) menunggu aset** (satu-
+satunya hero belum video). Detail HoDS (`864:18857` dkk) revisi **SELESAI 3 Oct
+2026** (judul hero Bluu Next Bold 700 48/57.6 Title Case, `.bullets` gap 8,
+reference diregenerasi) — sisa audit per-section. Contact (`1445:5065`) Hero
+**AUDIT PASS** (MAE 2.757 / below-nav 1.338). Hall of Frames
 card Project Highlight (`1439:4655`) **SELESAI 3 Oct 2026** (disamakan dengan card
 "our project" homepage `549×567` + coverflow JS; section 1440×1014; reference +
 assertion diregenerasi).
@@ -229,25 +240,27 @@ Urutan target (prioritas sekarang):
      `181deg` 3 Oct 2026). Tetap benchmark; jangan rusak tanpa alasan.
   B. Audit About Us (`1439:4184`) — **SELESAI** (Section 5 tombol GLASS
      diperbaiki; sisanya PASS). JANGAN sentuh background bintang hidup visi-misi.
-  C. Audit Recruitment (`1436:3505`) — **SELESAI 9/9 (3 Oct 2026)** (Heading
+   C. Audit Recruitment (`1436:3505`) — **SELESAI 9/9 (3 Oct 2026)** (Heading
      gradient global, rim Figma `90deg`/`110deg` fit dari PNG, section Snippets
      line-height 67 → tinggi 897). Benchmark presisi; jangan rusak.
-  D. **★ NEXT — VIDEO HERO: semua hero section jadi background video looping**
-     (fallback gambar statis). Aset sudah disiapkan user (About Us dulu; Home &
-     Recruitment sudah video). **Master Work Plan lengkap: `docs/hero-video-plan.md`.**
-     Kerjakan **satu hero per pass + 7 gate**; geometri statis & reduce TIDAK boleh
-     berubah. Setelah video, audit Partners (`1439:4787`) + 6 detail HoDS
-     (`864:18857` dkk) per-section.
-  E. Konten asli (foto member, logo partner, `projects.ts`, tanggal recruitment,
-     milestone HoF).
+   D. Audit Partners (`1439:4787`) — **SELESAI 4/4 (3 Oct 2026)**. Jangan rusak.
+   E. **★ NEXT — VIDEO HERO: semua hero section jadi background video looping**
+      (fallback gambar statis). **Home, Recruitment, About Us, Hall of Frames
+      (source di-refresh), dan Partners SUDAH video.** **NEXT = Contact
+      (`1445:5066`)**, tunggu aset sumber dari user. **Master Work Plan lengkap:
+      `docs/hero-video-plan.md`.** Kerjakan **satu hero per pass + 7 gate**;
+      geometri statis & reduce TIDAK boleh berubah. Setelah video, audit sisa
+      Detail HoDS (`864:18857` dkk) per-section + konten asli.
+   F. Konten asli (foto member, logo partner, `projects.ts`, tanggal recruitment,
+      milestone HoF).
 
 --------------------------------------------------------------------------------
-TARGET NEXT: SEMUA HERO → BACKGROUND VIDEO (looping, anti-burik)
+TARGET NEXT: CONTACT HERO VIDEO (`1445:5066`) — looping, anti-burik
 Master Work Plan rinci ada di **`docs/hero-video-plan.md`** (WAJIB dibaca dulu).
 Ringkas:
-- State: Home `1430:2041` & Recruitment `1436:3506` SUDAH video (jangan dirusak).
-  About `1439:4185`, Hall of Frames `1439:4507`, Partners `1439:4788` aset video
-  SIAP (lihat §1 plan). Contact `1445:5066` tunggu aset.
+- State: Home `1430:2041`, Recruitment `1436:3506`, About `1439:4185`,
+  Hall of Frames `1439:4507` (source di-refresh), dan Partners `1439:4788`
+  **SUDAH video** (jangan dirusak). **Contact `1445:5066` tunggu aset.**
 - Aturan kunci:
   - Video = lapisan `position:absolute; inset:0; object-fit:cover` di `.artwork`
     (`z-index:-1`, `aria-hidden`). **Geometri/padding/gap/font TIDAK berubah.**
@@ -260,12 +273,12 @@ Ringkas:
     webp q82, `unsharp=5:5:0.5`. Budget webm ≤0.9MB / mp4 ≤1.1MB per hero.
   - Loop: crossfade sirkular (1s) atau ping-pong; tanpa seam terlihat.
   - Pause off-screen + tab hidden; cleanup `astro:before-swap`.
-- Ekstrak implementasi bersama (`HeroVideo.astro` + `src/scripts/hero-video.ts`)
-  agar tidak duplikat 6×; refactor Home & Recruitment dengan bukti MAE 0 regresi.
+- Implementasi bersama = `HeroVideo.astro` + `src/scripts/hero-video.ts`
+  (About/HoF/Partners sudah pakai; Home & Recruitment masih punya jalur sendiri).
 - Checklist tiap hero: Master Work Plan → encode+cek frame 1:1 → pasang →
   reduce/≤600px statis → 7 gate + seo → update docs → commit per hero.
-- Urutan: 1) About, 2) Hall of Frames, 3) Partners, 4) Contact (tunggu aset),
-  5) evaluasi Recruitment (opsional), 6) Home (tidak diubah).
+- Urutan: 1) About ✅, 2) Hall of Frames ✅ (source di-refresh), 3) Partners ✅,
+  4) **Contact (tunggu aset)**, 5) Recruitment ✅, 6) Home ✅ (tidak diubah).
 
 --------------------------------------------------------------------------------
 TARGET (SELESAI 3 Oct 2026): About Us — Our Philosophy (`1439:4219`) — BACKGROUND BLEND
@@ -294,16 +307,16 @@ RESPONSIVE semua lebar (320→3840). Render reduced-motion tetap presisi.**
 Referensi `assets/recruitment/` (regenerasi dari node terbaru bila stale).
 
 --------------------------------------------------------------------------------
-TARGET A: HOMEPAGE (`1430:2040`) — AUDIT STRICT PER-SECTION
+TARGET A: HOMEPAGE (`1430:2040`) — AUDIT STRICT PER-SECTION (SELESAI 3 Oct 2026)
 URL: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1430-2040
 Checklist (verifikasi ulang via `depth 1` sebelum mulai):
-[ ] 1. 1430:2041  Hero Section            1440×903  `Hero.astro`
-[ ] 2. 1430:2052  Our Philosophy          1440×837  `Philosophy.astro`
-[ ] 3. 1430:2089  What We Do              1440×840  `WhatWeDo.astro`
-[ ] 4. 1430:2138  House of Data Sorcerers 1440×819  `Domains.astro` + `DomainRail`
-[ ] 5. 1430:2146  Our Project             1440×910  `Projects.astro`
-[ ] 6. 1430:2162  CTA Recruitment         1440×554  `Cta.astro`
-[ ] 7. 1430:2176  Footer (shared)         1440×556  `Footer.astro`
+[x] 1. 1430:2041  Hero Section            1440×903  `Hero.astro`
+[x] 2. 1430:2052  Our Philosophy          1440×837  `Philosophy.astro`
+[x] 3. 1430:2089  What We Do              1440×840  `WhatWeDo.astro`
+[x] 4. 1430:2138  House of Data Sorcerers 1440×819  `Domains.astro` + `DomainRail`
+[x] 5. 1430:2146  Our Project             1440×910  `Projects.astro`
+[x] 6. 1430:2162  CTA Recruitment         1440×554  `Cta.astro`
+[x] 7. 1430:2176  Footer (shared)         1440×556  `Footer.astro`
        (+ overlay gradient `1430:2177` 1440×136 di y809)
 Tiap section: cek 8pt (`node scripts/spacing-audit.mjs <komponen>`), font Bluu Next
 Bold 700, **warna TIAP text node (fills Figma solid + gradient fit dari PNG)** =
@@ -312,29 +325,30 @@ sama persis, gradient per-node, MAE region vs reference PNG, update assertion
 42% / #fff 79%` (hero sama), copy `#FFFFFF`, subtitle `#EDE8FF`.
 
 --------------------------------------------------------------------------------
-TARGET B: RECRUITMENT (`1436:3505`) — **= TARGET 0 (NEXT) di atas.**
+TARGET B: RECRUITMENT (`1436:3505`) — **= TARGET 0 (SELESAI 9/9).**
 Checklist 9 section + fokus (presisi, GLOW/GLASS, responsive, 8pt, font) ada di
-§TARGET 0. Kerjakan satu section per pass sampai 7 gate PASS, baru lanjut.
+§TARGET 0. Benchmark presisi; jangan rusak tanpa alasan.
 
 --------------------------------------------------------------------------------
-TARGET C: PARTNERS (`1439:4787`) + DETAIL HoDS (`864:18857` dkk) — AUDIT PER-SECTION
+TARGET C: PARTNERS (`1439:4787`) + DETAIL HoDS (`864:18857` dkk) — SELESAI / AUDIT
 Partners URL: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4787
-[ ] 1. 1439:4788  Hero Section - Partners  1440×659
-[ ] 2. 1439:4793  Our Partners             1440×1071
-[ ] 3. 1439:4937  Why DS                   1440×656
-[ ] 4. 1439:4983  Footer                   1440×556 (shared)
+[x] 1. 1439:4788  Hero Section - Partners  1440×659
+[x] 2. 1439:4793  Our Partners             1440×1071
+[x] 3. 1439:4937  Why DS                   1440×656
+[x] 4. 1439:4983  Footer                   1440×556 (shared)
 
 Detail HoDS (6 rute `/hods/[id]`, `HoDSDetail.astro`) — 6 frame @1440×1280:
-[ ] 864:18857  Detile HoDS - Data Intelligence
+Revisi judul/spacing **SELESAI 3 Oct 2026**; sisa audit presisi per-section.
+[x] 864:18857  Detile HoDS - Data Intelligence
       https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=864-18857
-[ ] 864:18904  Detile HoDS - Core AI & Engineering
-[ ] 864:18959  Detile HoDS - Language & Reasoning
+[x] 864:18904  Detile HoDS - Core AI & Engineering
+[x] 864:18959  Detile HoDS - Language & Reasoning
       https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=864-18959
-[ ] 864:19013  Detile HoDS - Vision & Multimodal
+[x] 864:19013  Detile HoDS - Vision & Multimodal
       https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=864-19013
-[ ] 864:19024  Detile HoDS - Product & Software
+[x] 864:19024  Detile HoDS - Product & Software
       https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=864-19024
-[ ] 864:19035  Detile HoDS - Growth & Community
+[x] 864:19035  Detile HoDS - Growth & Community
       https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=864-19035
 Catatan: judul hero = Bluu Next Bold 700 48/57.6 Title Case (SELESAI); `.bullets`
 gap 8; reference `HoDS-Detail-Language-1x/2x.png` sudah diregenerasi dari node
@@ -583,13 +597,16 @@ INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
    - Update dokumen (`docs/assets.md`, `docs/ai-handoff.md`, `AGENTS.md`).
    - Commit per fitur; confirm user sebelum push ke origin main.
 3. **Mulai dari mana?**
-   Target **NEXT — Hall of Frames card Project Highlight (`1439:4655`)**
-   disamakan dengan card "Our Project" homepage (`1430:2146`, `Projects.astro`),
-   strict per-section (Master Work Plan dulu, satu section per pass, 7 gate).
-   Setelah itu **Partners (`1439:4787`)** + **6 detail HoDS** (`864:18857` dkk).
+   Target **NEXT — Contact hero video (`1445:5066`)** (tunggu aset sumber dari user;
+   Master Work Plan `docs/hero-video-plan.md`), lalu audit per-section **6 detail
+   HoDS** (`864:18857` dkk) dan **konten asli**.
+   Hall of Frames card Project Highlight (`1439:4655`) **sudah SELESAI 3 Oct 2026**;
+   **Partners (`1439:4787`) 4/4 sudah SELESAI**; **revisi Detail HoDS SELESAI**.
    About Us Philosophy (`1439:4219`) background blend **sudah SELESAI 3 Oct 2026**.
-   Homepage (`1430:2040`), About Us (`1439:4184`), dan Recruitment
-   (`1436:3505`, 9/9) **sudah audit** — tetap benchmark, jangan rusak tanpa alasan.
+   Homepage (`1430:2040`), About Us (`1439:4184`), Recruitment (`1436:3505`, 9/9),
+   dan Partners (`1439:4787`, 4/4) **sudah audit** — tetap benchmark, jangan rusak
+   tanpa alasan. Video hero: Home, Recruitment, About Us, Hall of Frames (source
+   di-refresh), dan Partners **SUDAH video**.
    Inventaris dulu (checklist `depth 1` di atas), buat Master Work Plan section
    pertama, cek pixel-identik vs node lain, export PNG referensi, ukur, baru sentuh
    kode. Selesaikan + 7 gate sebelum pindah section. JANGAN skip/lewatkan section.

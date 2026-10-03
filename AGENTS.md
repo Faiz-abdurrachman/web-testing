@@ -441,8 +441,8 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   links sengaja **right-aligned** (mentor-approved, menyimpang dari PNG), backdrop
   landscape bertekstur (resampling ~4 + sub-pixel origin), dan AA teks. Recruitment
   footer MAE **7.7071 → 7.658**; region ter-align brand 2.7 / nav 3.8 / contact 5.0.
-  **RECRUITMENT SELESAI — 9/9 section diaudit.** Berikutnya: audit Partners
-  (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).
+  **RECRUITMENT SELESAI — 9/9 section diaudit.** Berikutnya: video hero Contact
+  (`1445:5066`, tunggu aset) + audit sisa Detail HoDS (`864:18857` dkk).
 - **SELESAI (3 Oct 2026): Hall of Frames — card Project Highlight (`1439:4655`)
   disamakan dengan card "Our Project" homepage (`1430:2146`, `Projects.astro`).**
   Mentor-approved konsistensi: `HallOfFramesProjects.astro` (kelas `.hof-project-card`,
@@ -455,14 +455,15 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   Reference `HoF-Projects-1x.png` + assertion `verify.mjs` diregenerasi (kartu sengaja
   supersede PNG lama). `responsive-audit` skip `.hof-project-card:not(.is-active)`.
   7 gate + seo ALL PASS.
-- **★ NEXT (untuk AI baru): VIDEO HERO — semua hero section jadi background
-  video looping.** Home (`1430:2041`), Recruitment (`1436:3506`), dan About
-  (`1439:4185`), Hall of Frames (`1439:4507`), dan Partners (`1439:4788`)
-  sudah video (lihat `docs/hero-video-plan.md` §1); Contact (`1445:5066`)
-  menyusul. Kerjakan **satu hero per pass + 7 gate**; geometri statis + render
-  reduce TIDAK boleh berubah. Master Work Plan rinci (encode anti-burik, loop,
-  reduce/≤600px, budget, urutan) ada di **`docs/hero-video-plan.md`**. Setelah
-  video: audit Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk) per-section.
+- **★ NEXT (untuk AI baru): CONTACT HERO VIDEO (`1445:5066`) — satu-satunya hero
+  yang belum video.** Home (`1430:2041`), Recruitment (`1436:3506`), About
+  (`1439:4185`), Hall of Frames (`1439:4507`, source di-refresh 3 Oct 2026), dan
+  Partners (`1439:4788`) sudah video (lihat `docs/hero-video-plan.md` §1). Contact
+  menunggu aset sumber dari user. Kerjakan **satu hero per pass + 7 gate**; geometri
+  statis + render reduce TIDAK boleh berubah. Master Work Plan rinci (encode
+  anti-burik, loop, reduce/≤600px, budget, urutan) ada di
+  **`docs/hero-video-plan.md`**. Setelah video: audit per-section Detail HoDS
+  (`864:18857` dkk) + konten asli.
 - **SELESAI (3 Oct 2026): About Us — Our Philosophy (`1439:4219`) — REVISI
   BACKGROUND BLEND.** Tim minta background linear disatukan dengan Our Ecosystem
   (`1439:4258`). Figma kini memberi node fill **gradient** (handles
@@ -486,8 +487,11 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   3 Oct 2026** — judul hero pindah ke **Bluu Next Bold 700 48/57.6** + Title
   Case, `.bullets` gap `8`, reference diregenerasi; audit **Contact
   (`1445:5065`) Section 1 Hero PASS** (geometri exact, MAE 2.757 / below-nav
-  1.338). Berikutnya: konten asli (foto member, logo partner, `projects.ts`,
-  tanggal recruitment, milestone HoF) — lihat `docs/ai-handoff.md`.
+  1.338). **Video hero:** Home, Recruitment, About Us, Hall of Frames (source
+  di-refresh), dan Partners sudah looping; **Contact tinggal menunggu aset**.
+  Berikutnya: video hero Contact + audit sisa Detail HoDS + konten asli (foto
+  member, logo partner, `projects.ts`, tanggal recruitment, milestone HoF) —
+  lihat `docs/ai-handoff.md`.
 - **AUDIT Homepage (Target A) — koreksi gradient heading (3 Oct 2026).** Semua
   heading homepage (Hero, Philosophy, WhatWeDo, Domains, Projects, CTA
   `Recruitment.astro`) memakai **`181deg #fff 15% / #999 42% / #fff 79%`** (global
@@ -769,34 +773,16 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   diregenerasi dari node `864:18959`. `verify.mjs` sekarang assert heading
   `font-family` Bluu Next + weight `700` per rute. Geometri tak berubah
   (`back 80/80`, `card 80/163/1280×279`, `tabs 80/498`, height 1280).
-- **Next plan (prioritas).** **SEDANG: audit menyeluruh RECRUITMENT (`1436:3505`)
-  strict per-section** (presisi, GLOW/GLASS, responsive, 8pt, font; 9 section) —
-  kerjakan **satu section per pass**. **Section 1 Hero `1436:3506` SELESAI
-  (3 Oct 2026, MAE 11.909 → 1.600); Section 2 Who Should Join `1436:3512` SELESAI
-  (heading gradient → global `181deg`; sisanya PASS); Section 3 What You Will Do
-  `1436:3517` SELESAI (MAE 3.25 → 1.84, heading gradient → `181deg`); Section 4
-  Available Roles `1436:3564` SELESAI (MAE 8.329, heading gradient + `.role-glow`
-  base opacity 0.85); Section 5 Selection Timeline `1436:3637` SELESAI (MAE 4.306 →
-  2.093: header Date ternyata LEFT-aligned di PNG walau MCP bilang CENTER, rim
-  gradient sebenarnya `90deg` bukan `135deg`, junction 1px → header base 2px +
-  body no-top, separator fade-putih via mask, heading nudge 1px); Section 6 FAQ
-  `1436:3675` SELESAI (rim `135deg` → `90deg` sesuai PNG; MAE ~7.80 didominasi
-  artefak screenshot sub-pixel — section top 4213.578 fraksional); Section 7 Snippets
-  `1436:3684` SELESAI (line-height `67.2` → `67`, section tepat 897; MAE dominan
-  artefak screenshot — thumb 2/4 di x setengah-piksel); Section 8 CTA `1436:3687`
-  SELESAI (rim `135deg` → `110deg`; MAE dominan artefak screenshot, aligned 1.107);
-  Section 9 Footer `1436:3699` SELESAI (tanpa perubahan kode — deviasi legal
-  disengaja + backdrop resampling). **RECRUITMENT SELESAI 9/9.** NEXT = audit
-  Partners `1439:4787` + 6 detail HoDS `864:18857` dkk.** **Homepage (`1430:2040`) & About Us
-  (`1439:4184`) sudah diaudit 3 Oct 2026** (About Us: tombol "See More" `OurTeam`
-  = GLASS `1248:15694`, diperbaiki; **JANGAN sentuh `<Starfield />` visi-misi**).
-  Lalu Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).
-  Protokol: inventaris `depth 1` → Master Work Plan per section → 7 gate per
-  section; dilarang lompat/gabung. Setelah itu: **(1)** konten asli (`projects.ts`,
-  tanggal recruitment, logo partner, foto/nama member team,
-  member/project/milestone HoF); **(2)** regenerasi reference HoDS lain bila
-  art/desain berubah. Detail: `docs/ai-handoff.md` §"Next Task" &
-  `docs/kickoff-prompt.md` §TARGET 0.
+- **Next plan (prioritas).** **Homepage (`1430:2040`), About Us (`1439:4184`),
+  Recruitment (`1436:3505`, 9/9), dan Partners (`1439:4787`, 4/4) SELESAI diaudit
+  (3 Oct 2026)** — benchmark presisi, jangan rusak tanpa alasan. Detail HoDS
+  (`864:18857` dkk) revisi judul/spacing **SELESAI**; sisa audit presisi
+  per-section. **NEXT = video hero Contact (`1445:5066`)** (tunggu aset) lalu audit
+  sisa Detail HoDS + konten asli (`projects.ts`, tanggal recruitment, logo partner,
+  foto/nama member team, member/project/milestone HoF). Protokol: inventaris
+  `depth 1` → Master Work Plan per section → 7 gate per section; dilarang
+  lompat/gabung. Detail: `docs/ai-handoff.md` §"Next Task" &
+  `docs/kickoff-prompt.md`.
 - **Deploy GANDA**: `git push origin main` → testing + production.
 - **Available Roles hover (`f92b88a`).** Kartu reaktif pointer: pool radial violet
   ikut kursor (`--mx/--my`), ember lean (`--gx/--gy` ±22/16px + `scale(1.06)`),
