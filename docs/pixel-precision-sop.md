@@ -105,6 +105,36 @@ Kalau ada angka yang tidak bisa dipertanggungjawabkan → ukur ulang dari Figma/
 lalu **ubah ke kelipatan 8 terdekat ATAU tambahkan ke tabel pengecualian dengan
 node Figma/bbox PNG sebagai bukti** dan update assertion di `scripts/verify.mjs`.
 
+### Hukum Warna — fills & gradient (WAJIB sama persis dengan Figma)
+
+Warna adalah bagian dari presisi piksel, bukan selera. Setiap section WAJIB mendata
+warna **tiap text node** (judul, subtitle, copy, eyebrow, label, placeholder) dan
+mencocokkannya ke Figma.
+
+- **Teks solid = `fills` node Figma apa adanya** (hex persis). Ambil dari
+  `figma_get_figma_data` → `fills`. Contoh palette homepage: copy `#FFFFFF`
+  (node `1430:2047`), putih `#FFFFFF`, lavender `#EDE8FF`, muted `#999999`,
+  disabled `#A3A3A3`, nav inactive `#707070`, nilai kartu `#ADADAD`. **Jangan
+  kira-kira / jangan pakai "kira-kira mirip".**
+- **Teks gradient = fit dari PNG node** (angle + stop + posisi); string MCP
+  `linear-gradient(...)` **lossy** (stop terakhir dipaksa 100%). Contoh homepage:
+  hero `211.54deg #fff 32.8% / #999 49.8% / #fff 73.04%` (per baris node);
+  heading section `181deg #fff 15% / #999 42% / #fff 79%`. Sekali lagi: **fit
+  dari piksel**, bukan paste MCP.
+- **Aturan per-node:** satu text node 2 baris → satu gradient membentang blok
+  (satu `<span>`/elemen); tiap baris node terpisah → gradient per baris
+  (`<span>` masing-masing).
+- **Alpha/opacity persis:** tulis `rgb(r g b / a)` sesuai `fills` (mis.
+  `rgb(255 255 255 / 12%)`, `rgb(255 255 255 / 15%)`, `rgb(108 59 255 / 50%)`,
+  `#6c3bff80`). Jangan bulatkan.
+- **Warna non-teks** (fill tombol, kartu, rim/stroke, glow) juga dari `fills`/
+  `strokes`/`effects` Figma — termasuk yang disembunyikan MCP (GLASS) → cek REST.
+- **Cara verifikasi:** `getComputedStyle(el).color` / `background-image` di
+  Chromium vs `fills` Figma. Hex solid harus **sama persis**; gradient target
+  MAE region ≤ ±2 level/channel (fit ulang dari PNG kalau lebih).
+- **Placeholder** (`::placeholder`) juga dari fill node (mis. Contact
+  `#A3A3A3`).
+
 ## 2. Gotcha yang sudah terbukti (jangan diulang)
 
 - **String `linear-gradient(...)` dari Figma MCP menormalkan handle → lossy**

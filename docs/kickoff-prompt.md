@@ -2,7 +2,8 @@
 
 Copy-paste seluruh blok di bawah ini ke AI baru sebelum memberikan instruksi kerja.
 Prompt ini memuat seluruh konteks, aturan hukum presisi piksel, strict 8-point grid,
-protokol per-section, dan checklist. **Status (3 Oct 2026): Homepage (`1430:2040`) +
+**hukum warna (fills & gradient harus persis Figma)**, protokol per-section, dan
+checklist. **Status (3 Oct 2026): Homepage (`1430:2040`) +
 Recruitment (`1436:3505`) + About Us (`1439:4184`) + Partners (`1439:4787`) + Contact
 (`1445:5065`) + 6 detail role + 6 detail HoDS (`864:18857` dkk) 100% selesai. Target
 berikutnya: audit/verifikasi ulang **strict per-section** (homepage & recruitment =
@@ -106,6 +107,22 @@ ATURAN INTI, SPACING & PADDING (HUKUM, WAJIB PATUH, JANGAN DILANGGAR):
      `astro:before-swap`.
    - Commit per fitur (`feat:`, `fix:`, `docs:`). Konfirmasi user sebelum push.
 
+7. **WARNA = SAMA PERSIS FIGMA (fills & gradient):**
+   - **Teks solid = `fills` node Figma apa adanya** (hex persis). Contoh homepage:
+     copy `#FFFFFF` (`1430:2047`), lavender `#EDE8FF`, muted `#999999`,
+     placeholder `#A3A3A3`, nav inactive `#707070`, value kartu `#ADADAD`.
+     Jangan kira-kira.
+   - **Teks gradient = fit dari PNG node** (angle+stop+posisi); string MCP
+     `linear-gradient(...)` LOSSY (stop terakhir dipaksa 100%). Contoh homepage:
+     hero `211.54deg #fff 32.8% / #999 49.8% / #fff 73.04%` per baris; heading
+     section `181deg #fff 15% / #999 42% / #fff 79%`.
+   - Satu text node 2 baris → satu gradient membentang blok; node per baris →
+     gradient per `<span>`. Alpha persis (`rgb(r g b / a)`, `#6c3bff80`). Warna
+     tombol/kartu/rim/glow juga dari fills/strokes/effects Figma (GLASS → REST).
+   - **Verifikasi:** `getComputedStyle(el).color`/`background-image` vs fills Figma;
+     hex harus **sama persis**, gradient target MAE region ≤ ±2/channel.
+   - Tabel langkah lengkap: `docs/pixel-precision-sop.md` §"Hukum Warna".
+
 ================================================================================
 PROTOKOL WAJIB PER-SECTION (ANTI-SKIP — INI YANG PALING SERING DILANGGAR):
 ================================================================================
@@ -165,8 +182,9 @@ Untuk SETIAP halaman, urutannya:
      bawah — WAJIB diverifikasi ulang via `depth 1` sebelum mulai.)
   2. Tulis **Master Work Plan** untuk section ke-1: node ID + URL, dimensi frame,
      layout, breakdown strict 8pt (padding/gap/margin), typography
-     (Bluu Next Bold 700 / Manrope), gradient per-node, artwork provenance, dan
-     testing criteria. Cek dulu pixel-identik vs node lain (MAE ref vs ref).
+     (Bluu Next Bold 700 / Manrope), **warna tiap text node** (fills solid + gradient
+     fit dari PNG), artwork provenance, dan testing criteria. Cek dulu pixel-identik
+     vs node lain (MAE ref vs ref).
   3. Kerjakan HANYA section ke-1 sampai lolos **7 GATE**, baru pindah ke-2. Dst.
   **DILARANG lompat section / gabung beberapa section dalam satu pass.**
 
@@ -187,8 +205,13 @@ Checklist (verifikasi ulang via `depth 1` sebelum mulai):
 [ ] 4. 1430:2138  House of Data Sorcerers 1440×819  `Domains.astro` + `DomainRail`
 [ ] 5. 1430:2146  Our Project             1440×910  `Projects.astro`
 [ ] 6. 1430:2162  CTA Recruitment         1440×554  `Cta.astro`
-Tiap section: cek 8pt (`node scripts/spacing-audit.mjs <komponen>`), font Bluu Next,
-gradient per-node, MAE region vs reference PNG, update assertion `verify.mjs`.
+[ ] 7. 1430:2176  Footer (shared)         1440×556  `Footer.astro`
+       (+ overlay gradient `1430:2177` 1440×136 di y809)
+Tiap section: cek 8pt (`node scripts/spacing-audit.mjs <komponen>`), font Bluu Next
+Bold 700, **warna TIAP text node (fills Figma solid + gradient fit dari PNG)** =
+sama persis, gradient per-node, MAE region vs reference PNG, update assertion
+`verify.mjs`. Contoh baseline homepage: heading gradient `181deg #fff 15% / #999
+42% / #fff 79%` (hero `211.54deg`), copy `#FFFFFF`, subtitle `#EDE8FF`.
 
 --------------------------------------------------------------------------------
 TARGET B: RECRUITMENT (`1436:3505`) — AUDIT STRICT PER-SECTION
