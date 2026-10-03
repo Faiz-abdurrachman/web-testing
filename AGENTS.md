@@ -650,12 +650,16 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   diregenerasi dari node `864:18959`. `verify.mjs` sekarang assert heading
   `font-family` Bluu Next + weight `700` per rute. Geometri tak berubah
   (`back 80/80`, `card 80/163/1280×279`, `tabs 80/498`, height 1280).
-- **Next plan (prioritas).** Semua halaman konten + detail HoDS 100% selesai;
-  audit **Contact (`1445:5065`) Section 1 Hero PASS**. Berikutnya:
-  **(1)** konten asli (`projects.ts`, tanggal recruitment, logo partner,
-  foto/nama member team, member/project/milestone HoF); **(2)** regenerasi
-  reference HoDS lain bila art/desain berubah. Detail:
-  `docs/ai-handoff.md` §"Next Task" & `docs/kickoff-prompt.md`.
+- **Next plan (prioritas).** **NEXT: audit menyeluruh ABOUT US (`1439:4184`)
+  strict per-section** (presisi, glow, responsive, 8pt, font) — **JANGAN sentuh
+  background bintang hidup visi-misi (`<Starfield />`)**. Lalu benchmark **Homepage
+  (`1430:2040`)** & **Recruitment (`1436:3505`)**, lalu Partners + 6 detail HoDS.
+  Protokol: inventaris `depth 1` → Master Work Plan per section → 7 gate per
+  section; dilarang lompat/gabung. Setelah itu: **(1)** konten asli (`projects.ts`,
+  tanggal recruitment, logo partner, foto/nama member team,
+  member/project/milestone HoF); **(2)** regenerasi reference HoDS lain bila
+  art/desain berubah. Detail: `docs/ai-handoff.md` §"Next Task" &
+  `docs/kickoff-prompt.md` §TARGET 0.
 - **Deploy GANDA**: `git push origin main` → testing + production.
 - **Available Roles hover (`f92b88a`).** Kartu reaktif pointer: pool radial violet
   ikut kursor (`--mx/--my`), ember lean (`--gx/--gy` ±22/16px + `scale(1.06)`),

@@ -3,12 +3,16 @@
 Copy-paste seluruh blok di bawah ini ke AI baru sebelum memberikan instruksi kerja.
 Prompt ini memuat seluruh konteks, aturan hukum presisi piksel, strict 8-point grid,
 **hukum warna (fills & gradient harus persis Figma)**, protokol per-section, dan
-checklist. **Status (3 Oct 2026): Homepage (`1430:2040`) +
-Recruitment (`1436:3505`) + About Us (`1439:4184`) + Partners (`1439:4787`) + Contact
-(`1445:5065`) + 6 detail role + 6 detail HoDS (`864:18857` dkk) 100% selesai. Target
-berikutnya: audit/verifikasi ulang **strict per-section** (homepage & recruitment =
-benchmark paling penting), dengan **Plan per halaman → inventaris semua section →
-kerjakan 1 section per pass + 7 gate per section. JANGAN skip section mana pun.**
+checklist. **Status (3 Oct 2026): semua halaman konten 100% selesai.** Audit
+Homepage (`1430:2040`) Section 1–7 sudah **SELESAI** — temuan: semua heading
+homepage dikoreksi ke gradient global Figma
+`181deg #fff 15% / #999 42% / #fff 79%` (sebelumnya `211.54deg`/`180deg` yang
+keliru; ink-MAE heading hero 13.7 → 7.7). About Us Our Vision/Mission (`1439:4190`)
+kini pakai **living `<Starfield />`** + tarot HD 1×/2×/3×. **NEXT TARGET: audit
+menyeluruh ABOUT US (`1439:4184`) strict per-section** — presisi, glow, responsive,
+8pt, font. **KECUALI background bintang hidup section visi-misi (`<Starfield />`),
+JANGAN disentuh.** Cara kerja: **Plan per halaman → inventaris semua section
+(`depth 1`) → 1 section per pass + 7 gate per section. JANGAN skip section mana pun.**
 
 ---
 
@@ -188,12 +192,33 @@ Untuk SETIAP halaman, urutannya:
   3. Kerjakan HANYA section ke-1 sampai lolos **7 GATE**, baru pindah ke-2. Dst.
   **DILARANG lompat section / gabung beberapa section dalam satu pass.**
 
-Urutan target:
-  A. **Audit Homepage (`1430:2040`)** strict per-section (benchmark paling penting).
-  B. **Audit Recruitment (`1436:3505`)** strict per-section (benchmark).
-  C. **Audit Partners (`1439:4787`)** + **6 detail HoDS** per-section.
+Urutan target (prioritas sekarang):
+  0. **NEXT — Audit About Us (`1439:4184`)** strict per-section (presisi + glow +
+     responsive). JANGAN sentuh background bintang hidup visi-misi (`<Starfield />`).
+  A. Audit Homepage (`1430:2040`) — benchmark (heading gradient dikoreksi ke
+     `181deg` 3 Oct 2026).
+  B. Audit Recruitment (`1436:3505`) — benchmark (paling penting selain homepage).
+  C. Audit Partners (`1439:4787`) + **6 detail HoDS** (`864:18857` dkk) per-section.
   D. Konten asli (foto member, logo partner, `projects.ts`, tanggal recruitment,
      milestone HoF).
+
+--------------------------------------------------------------------------------
+TARGET 0 (NEXT): ABOUT US (`1439:4184`) — AUDIT STRICT PER-SECTION
+URL: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4184
+Checklist (WAJIB verifikasi ulang via `depth 1` sebelum mulai):
+[ ] 1. 1439:4185  Hero Section - About Us  1440×903   `AboutHero.astro`
+[ ] 2. 1439:4190  visi misi                1440×840   `VisiMisi.astro`
+       ⚠️ JANGAN sentuh background bintang hidup (`<Starfield />`) + tarot HD.
+          Audit hanya heading/body/list/geometri/8pt/glow.
+[ ] 3. 1439:4219  Philosophy               1440×837   `Philosophy.astro` (varian about)
+[ ] 4. 1439:4258  Our Ecosystem            1440×874   `OurEcosystem.astro`
+[ ] 5. 1439:4305  Our Team                 1440×1536  `OurTeam.astro` + `src/data/team.ts`
+[ ] 6. 1439:4311  Footer                   1440×556   `Footer.astro` (shared)
+Fokus tiap section: **geometry presisi ±1px, strict 8pt (padding/gap/margin),
+font Bluu Next Bold 700 (`--font-display`) + Manrope, warna fills/gradient persis,
+GLOW/GLASS rim (cek REST `effects`, emulasi `::after`+mask — BUKAN `border`), dan
+RESPONSIVE semua lebar (320→3840). Render reduced-motion tetap presisi.**
+Referensi `assets/about-us/`; generator `npm run assets:about`.
 
 --------------------------------------------------------------------------------
 TARGET A: HOMEPAGE (`1430:2040`) — AUDIT STRICT PER-SECTION
@@ -256,9 +281,13 @@ REFERENSI STATUS (SUDAH SELESAI — jangan diutak-atik tanpa alasan):
 ================================================================================
 
 ### A. HOMEPAGE REVISI FONT & SPACING (Node 1430:2040, Frame 1440) — [STATUS: 100% SELESAI]:
+> **AUDIT 3 Oct 2026 (Target A):** Section 1–7 lolos 7 gate. Koreksi warna:
+> semua heading homepage = global Figma `181deg #fff 15% / #999 42% / #fff 79%`
+> (Hero/Philosophy/WhatWeDo/Domains sebelumnya `211.54deg`, Projects/CTA `180deg …80%`).
+> Geometri/8pt/warna solid tak berubah. `verify.mjs` tidak meng-assert gradient.
 1. **Hero Section (`1430:2041`)** — [STATUS: SELESAI]
    - Frame 1440 × 903, padding 80px, content centered.
-   - Heading Bluu Next Bold 700 72/86, gradient per baris, Manrope 18/25 lebar 655.
+   - Heading Bluu Next Bold 700 72/86, gradient per baris `181deg` (fit PNG), Manrope 18/25 lebar 655.
    - Spacing 80/64/16/24, tombol Primary violet & Sec glass, plate bg webp. Section MAE: 3.18.
 2. **Our Philosophy (`1430:2052`)** — [STATUS: SELESAI]
    - Frame 1440 × 837, padding 80px. Kolom 591px di x:766, y:205.
@@ -390,6 +419,34 @@ Semua section About Us sudah **Bluu Next Bold 700** + strict 8pt. Referensi
 2. **Footer (`1445:5118`)** — shared `Footer.astro`.
 
 ================================================================================
+CHECKLIST WAJIB PER-SECTION (SEMUA HARUS BERES SEBELUM PINDAH SECTION):
+================================================================================
+Sebelum menyentuh kode:
+  [ ] Inventaris semua section halaman (`depth 1`) → checklist (nomor/node/nama/w×h).
+  [ ] Master Work Plan section: node ID + URL, frame w×h, layout, breakdown 8pt
+      (padding/gap/margin), typography (font/weight/size/line-height), warna tiap
+      text node (solid hex + gradient fit PNG), artwork provenance, test criteria.
+  [ ] Cek pixel-identik vs node existing (MAE ref vs ref) sebelum tulis CSS.
+Saat mengerjakan:
+  [ ] Padding/gap/margin STRICT kelipatan 8 atau di tabel pengecualian SOP
+      (`node scripts/spacing-audit.mjs src/components/<Komponen>.astro`).
+  [ ] Heading = Bluu Next Bold 700 (`--font-display`); body/subtitle = Manrope
+      (weight sesuai Figma 400/500/700). Dilarang Nasalization di section revisi.
+  [ ] Warna solid = fills Figma (hex persis); gradient = fit dari PNG node
+      (heading homepage `181deg #fff 15% / #999 42% / #fff 79%`); alpha persis.
+  [ ] Glow / GLASS = cek REST `effects`/`strokes`; emulasi rim `::after` + mask
+      (JANGAN `border`); kalibrasi alpha per sisi dari PNG.
+  [ ] Artwork: image fill mentah verbatim; `imageTransform` = crop `sharp.extract`.
+  [ ] Geometri ±1px; update assertion `scripts/verify.mjs` + reference path.
+  [ ] Fallback `prefers-reduced-motion` tetap pixel-exact (render reduce).
+Setelah section:
+  [ ] 7 GATE: build 0 error · verify.mjs exit 0 · navbar-audit · verify-vt ·
+      responsive-audit 468/468 · audit:spacing · format:check (+ `seo:audit`).
+  [ ] Responsive 320→3840 (tanpa overflow/teks terpotong).
+  [ ] Update `docs/assets.md`, `docs/ai-handoff.md`, `AGENTS.md`.
+  [ ] Commit per section (`feat:`/`fix:`/`docs:`); confirm user sebelum push.
+
+================================================================================
 PELAJARAN WAJIB DARI ABOUT US + PARTNERS (JANGAN DIULANG):
 ================================================================================
 1. **Cek dulu apakah section baru BENAR-BENAR beda.** About Us Philosophy (`1439:4219`)
@@ -449,9 +506,10 @@ INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
    - Update dokumen (`docs/assets.md`, `docs/ai-handoff.md`, `AGENTS.md`).
    - Commit per fitur; confirm user sebelum push ke origin main.
 3. **Mulai dari mana?**
-   Target default **A → B → C**: audit strict per-section **Homepage (`1430:2040`)**
-   dulu, lalu **Recruitment (`1436:3505`)**, lalu **Partners (`1439:4787`)** + **6
-   detail HoDS** (`864:18857` dkk). Inventaris dulu (checklist di atas), buat Master
-   Work Plan section pertama, cek pixel-identik vs node lain, export PNG referensi,
-   ukur, baru sentuh kode. Selesaikan + 7 gate sebelum pindah section. JANGAN skip.
+   Target pertama **TARGET 0 — About Us (`1439:4184`)** strict per-section, lalu
+   **A Homepage (`1430:2040`)** → **B Recruitment (`1436:3505`)** → **C Partners
+   (`1439:4787`)** + **6 detail HoDS** (`864:18857` dkk). Inventaris dulu (checklist
+   di atas), buat Master Work Plan section pertama, cek pixel-identik vs node lain,
+   export PNG referensi, ukur, baru sentuh kode. Selesaikan + 7 gate sebelum pindah
+   section. JANGAN skip. **Khusus About Us visi-misi: JANGAN sentuh `<Starfield />`.**
 ```

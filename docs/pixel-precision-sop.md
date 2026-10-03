@@ -398,7 +398,12 @@ Semua di file Figma `JYUzJK1hFqaEwL6DpdDvjp`. Hasil akhir (reduced motion, 1440)
 ## 8. Checklist presisi (patokan "beres")
 
 - [ ] Referensi = PNG node terbaru yang diexport (bukan CSS).
-- [ ] Font persis Figma ter-bundle (weight benar, tanpa faux bold).
+- [ ] Font persis Figma ter-bundle (weight benar, tanpa faux bold). Heading =
+      `--font-display` (Bluu Next Bold 700); body/subtitle = Manrope (400/500/700);
+      Nasalization (`--font-heading`) HANYA di `Splash` wordmark + label grup
+      `OurTeam` (jangan di section revisi).
+- [ ] Gradient heading = fit dari PNG: `181deg #fff 15% / #999 42% / #fff 79%`
+      (bukan `211.54deg`); alpha persis.
 - [ ] Image fill dipakai apa adanya (tidak direkonstruksi).
 - [ ] `effects`/`strokes` asli dicek via REST API (MCP menyembunyikan `GLASS`).
 - [ ] Gradient/efek di-fit dari piksel PNG, bukan string MCP.
@@ -412,3 +417,12 @@ Semua di file Figma `JYUzJK1hFqaEwL6DpdDvjp`. Hasil akhir (reduced motion, 1440)
 - [ ] `docs/assets.md` + `docs/ai-handoff.md` + `AGENTS.md` diupdate.
 - [ ] Commit per fitur; konfirmasi user sebelum `git push origin main`
       (deploy ganda).
+
+## 9. Target berjalan (3 Oct 2026)
+
+**NEXT: audit menyeluruh ABOUT US (`1439:4184`) strict per-section** — presisi,
+glow, responsive. **JANGAN sentuh background bintang hidup section visi-misi
+(`<Starfield />`) — sudah final.** Checklist + URL ada di
+`docs/kickoff-prompt.md` §TARGET 0; state di `docs/ai-handoff.md` §Next Task.
+Setelah itu benchmark Homepage (`1430:2040`) & Recruitment (`1436:3505`), lalu
+Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk).

@@ -60,17 +60,34 @@ sebagai `tarot-cards.webp` 1×/2×/3× (`npm run assets:about`). `visi-misi-bg.w
 dihapus (tidak dipakai). Geometri exact; MAE vs reference lama ~5.85 (background
 sengaja berubah). All 7 gate PASS.
 
+**NEXT TARGET — AUDIT ABOUT US (`1439:4184`) strict per-section** (presisi + glow +
+responsive). **JANGAN sentuh background bintang hidup visi-misi (`<Starfield />`).**
+Link: `https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4184`
+Inventaris (frame `1439:4184`, `depth 1` — verifikasi ulang sebelum mulai):
+
+| #   | Node ID     | Frame                   | W×H       | Komponen                                   |
+| --- | ----------- | ----------------------- | --------- | ------------------------------------------ |
+| 1   | `1439:4185` | Hero Section - About Us | 1440×903  | `AboutHero.astro`                          |
+| 2   | `1439:4190` | visi misi               | 1440×840  | `VisiMisi.astro` (JANGAN sentuh Starfield) |
+| 3   | `1439:4219` | Philosophy              | 1440×837  | `Philosophy.astro` (varian about)          |
+| 4   | `1439:4258` | Our Ecosystem           | 1440×874  | `OurEcosystem.astro`                       |
+| 5   | `1439:4305` | Our Team                | 1440×1536 | `OurTeam.astro` + `src/data/team.ts`       |
+| 6   | `1439:4311` | Footer                  | 1440×556  | `Footer.astro` (shared)                    |
+
+Per section: geometry ±1px, strict 8pt, font Bluu Next Bold 700 / Manrope,
+fills+gradient persis, GLOW/GLASS (REST `effects`), responsive 320→3840, render
+reduce presisi, 7 gate + seo. Checklist lengkap + Master Work Plan:
+`docs/kickoff-prompt.md` §TARGET 0.
+
 **NEXT (prioritas):**
 
 0. **Audit strict per-section — PLAN PER HALAMAN, EKSEKUSI PER SECTION.**
-   Benchmark **Homepage (`1430:2040`)** lalu **Recruitment (`1436:3505`)** diaudit
-   ulang satu section per pass (8pt + font Bluu Next + gradient + MAE), baru
-   Partners (`1439:4787`) + 6 detail HoDS (`864:18857` dkk). Untuk SETIAP halaman:
-   inventaris dulu semua anak frame (`depth 1`) → Master Work Plan section 1 →
-   selesaikan sampai lolos **7 gate** → baru section 2. **Jangan lompat/gabung.**
-   Gate baru: `npm run audit:spacing` (`scripts/spacing-audit.mjs`) memastikan
-   setiap padding/gap/margin kelipatan 8 atau ada di tabel pengecualian SOP.
-   Checklist per-halaman + link Figma ada di `docs/kickoff-prompt.md` §Target A–C.
+   Mulai **About Us (`1439:4184`)** (Target 0 di kickoff-prompt) → lalu benchmark
+   **Homepage (`1430:2040`)** & **Recruitment (`1436:3505`)** → **Partners
+   (`1439:4787`)** + 6 detail HoDS (`864:18857` dkk). Inventaris `depth 1` →
+   Master Work Plan section 1 → selesai 7 gate → section 2. **Jangan lompat/gabung.**
+   Gate spacing: `npm run audit:spacing` memastikan setiap padding/gap/margin
+   kelipatan 8 atau ada di tabel pengecualian SOP.
 1. **Contact page (`1445:5065`) — audit strict per-section (3 Oct 2026).**
    **Section 1 Hero `1445:5066` AUDIT PASS** — geometri Chromium exact (`1440×954`,
    row `80/240/1280×594`, left 587, form 661, art `−131/−92/801×600`, cards
