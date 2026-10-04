@@ -364,13 +364,32 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   identik dengan Home. Geometry 1440 tetap, seam Δ 0. `verify.mjs` assertions
   diperbarui (zoom 1, canvas 1440 centered, art `{0,861}`); 7 gate + seo + spacing
   ALL PASS.
-- **★ NEXT (untuk AI baru) — terapkan SEMUA tombol/link sesuai prototype Figma.**
-  Peta lengkap: **`docs/figma-prototype-flow.md`** (+ SOP §"Hukum Navigasi &
-  Prototype"). **Satu elemen/halaman per pass + 7 gate**; setiap tujuan harus
-  **100% benar**, `aria-disabled` hanya untuk yang benar-benar tak punya tujuan,
-  dan **catat apa yang dikerjakan** di doc. Home (`1430:2040`) & Recruitment
-  (`1436:3505`) = **prioritas & benchmark presisi — jangan rusak**. Gap awal: 6
-  elemen di `docs/figma-prototype-flow.md` §9.
+- **SELESAI (4 Oct 2026): Semua tombol/link sesuai prototype Figma.** Gap §9
+  keenam elemen selesai: Hero Join→`/recruitment`, Explore→`#projects`,
+  RecruitmentHero→`#available-roles`, Recruitment Join→`#available-roles`,
+  Footer nav 5 link → halaman masing-masing, Cta→`/recruitment`, Navbar CTA
+  Join Us (desktop+mobile)→`/recruitment`. Button dengan
+  `href` render `<a>` (bukan `<button>`), jadi `verify.mjs` selector
+  `relative('button')` diganti `relative('.button')`. 7 gate + seo ALL PASS.
+  Detail: `docs/figma-prototype-flow.md` §9.
+- **SELESAI (4 Oct 2026): Footer scroll-up + HoF detail close button.**
+  `Footer.astro` dapat tombol panah `1564:3289` (absolute kanan-atas `.top`,
+  37×37, `rgba(255,255,255,.15)`, hover violet, `href="#"` → scroll atas) sesuai
+  prototype `SCROLL_TO` Navbar. `HallOfFramesFeatured.astro` modal close
+  (`1554:2935`): (a) `box-shadow` di-fit dari PNG node (stack inset mentah Figma
+  terlalu terang di Chromium → ring putih; kini 4 lapis: edge `#7d7b83`, crescent
+  bottom-right `#dee0e8`, glow `rgba(85,83,91,.5)`, gelap top-left `#232228`);
+  (b) panel dapat `tabindex="-1" autofocus` supaya `showModal()` tidak fokus ke
+  tombol close → outline `:focus-visible` putih 2px hilang saat modal dibuka
+  mouse (keyboard tetap dapat ring). (c) **Icon X tak center**: `place-items:
+center` menolak center item 18px di content-box 12px (padding 8/16) → SVG di
+  x=16 bukan 13 (X geser ~3px ke kanan); ganti ke **`place-content: center`**.
+  Icon codicon kini cocok reference persis (X 12×12 di (21.875,21.875)); MAE
+  close button 22.2 → **15.2**. 7 gate + seo ALL PASS.
+- **★ NEXT: video hero Contact (`1445:5066`) — satu-satunya hero belum video.**
+  Tunggu aset dari user. Lalu audit sisa Detail HoDS + konten asli (foto member,
+  logo partner, `projects.ts`, tanggal recruitment, milestone HoF). Lihat
+  `docs/hero-video-plan.md`.
 - **Recruitment Hero penajaman (3 Oct 2026):** sumber video planetary 1080p
   memang lembut pada permukaan planet. Generator kini memakai CAS luma 0.6
   sebelum upscale Lanczos dan unsharp ringan 0.25 sesudahnya (AV1 CRF 42,
@@ -488,11 +507,17 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   (Our Philosophy `1439:4219` & Our Ecosystem `1439:4258`).** Canvas zoom dihapus;
   gradient section-level; artwork anchor cqw (861px, nempel tepi); seam Δ 0.
   Detail: `docs/about-us-glow-plan.md`, `docs/ai-handoff.md`, `docs/assets.md`.
-- **★ NEXT (untuk AI baru): terapkan SEMUA tombol/link sesuai prototype Figma.**
-  Peta: `docs/figma-prototype-flow.md`; SOP §"Hukum Navigasi & Prototype". Satu
-  elemen/halaman per pass + 7 gate; tujuan 100% benar; catat tiap perubahan.
-  Prioritaskan Home (`1430:2040`) & Recruitment (`1436:3505`) — jangan rusak
-  presisinya. Gap awal: `docs/figma-prototype-flow.md` §9.
+- **SELESAI (4 Oct 2026): Semua tombol/link sesuai prototype Figma.** Gap §9
+  keenam elemen selesai: Hero Join→`/recruitment`, Explore→`#projects`,
+  RecruitmentHero→`#available-roles`, Recruitment Join→`#available-roles`,
+  Footer nav 5 link → halaman masing-masing, Cta→`/recruitment`. Button dengan
+  `href` render `<a>` (bukan `<button>`), jadi `verify.mjs` selector
+  `relative('button')` diganti `relative('.button')`. 7 gate + seo ALL PASS.
+  Detail: `docs/figma-prototype-flow.md` §9.
+- **★ NEXT: video hero Contact (`1445:5066`) — satu-satunya hero belum video.**
+  Tunggu aset dari user. Lalu audit sisa Detail HoDS + konten asli (foto member,
+  logo partner, `projects.ts`, tanggal recruitment, milestone HoF). Lihat
+  `docs/hero-video-plan.md`.
 - **PENDING — CONTACT HERO VIDEO (`1445:5066`) — satu-satunya hero belum video.**
   Home (`1430:2041`), Recruitment (`1436:3506`), About (`1439:4185`), Hall of
   Frames (`1439:4507`, source di-refresh 3 Oct 2026), dan Partners (`1439:4788`)

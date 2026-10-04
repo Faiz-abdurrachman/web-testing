@@ -618,6 +618,11 @@ try {
     'Footer columns must align with the Figma reference',
   );
   assert.ok(
+    footerGeometry.columns.length >= 4 &&
+      Math.abs(footerGeometry.columns[3].width - 37) < 2,
+    'Footer scroll-up button must be present at the right edge',
+  );
+  assert.ok(
     Math.abs(footerGeometry.divider.y - 453.69) < 1.5 &&
       Math.abs(footerGeometry.legal.y - 474.69) < 1.5,
     'Footer divider and legal bar must match the Figma reference',
@@ -885,7 +890,7 @@ try {
         top: rect.top + scrollY,
         h1: relative('h1'),
         copy: relative('p'),
-        button: relative('button'),
+        button: relative('.button'),
       };
     });
   assert.deepEqual(recruitHeroGeometry, {

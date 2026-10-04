@@ -147,7 +147,7 @@ const members: Member[] = [...row, ...row];
 
 <dialog class="featured-detail" aria-labelledby="hof-detail-name">
   <div class="fd-backdrop" data-fd-close></div>
-  <div class="fd-panel">
+  <div class="fd-panel" tabindex="-1" autofocus>
     <div class="fd-glow-wrap" aria-hidden="true">
       <img class="fd-glow" src="/images/hof/detail/glow.svg" alt="" />
     </div>
@@ -557,7 +557,7 @@ const members: Member[] = [...row, ...row];
     right: 20px;
     z-index: 3;
     display: grid;
-    place-items: center;
+    place-content: center;
     width: 44px;
     height: 44px;
     padding: 8px 16px;
@@ -569,12 +569,12 @@ const members: Member[] = [...row, ...row];
     cursor: pointer;
     -webkit-backdrop-filter: blur(6px);
     backdrop-filter: blur(6px);
+    /* Fitted from node 1554:2935 (Figma's raw inset stack reads too bright in Chromium). */
     box-shadow:
-      inset 0 0 40px 0 rgb(242 242 242 / 50%),
-      inset 0 0 0 2px #999,
-      inset -6px -6px 2px -4px #b3b3b3,
-      inset 4px 4px 2px -4px #b3b3b3,
-      inset 6px 6px 1.0656px -6px rgb(255 255 255 / 50%);
+      inset 0 0 0 1px rgb(125 123 131),
+      inset -3px -3px 2px 0 rgb(222 222 232),
+      inset 0 0 5px 0 rgb(85 83 91 / 50%),
+      inset 3px 3px 5px -2px rgb(35 34 40);
   }
   .fd-close::before {
     content: '';

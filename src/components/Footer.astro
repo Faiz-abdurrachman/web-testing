@@ -8,6 +8,14 @@ const navigation = [
   'Contact',
 ];
 const legal = ['Terms', 'Privacy', 'Cookies'];
+const destinations: Record<string, string> = {
+  Home: '/',
+  'About Us': '/about',
+  Recruitment: '/recruitment',
+  'Hall of Frames': '/hall-of-frames',
+  Partners: '/partners',
+  Contact: '/contact',
+};
 ---
 
 <footer class="footer">
@@ -67,15 +75,15 @@ const legal = ['Terms', 'Privacy', 'Cookies'];
     <nav class="footer-nav" aria-label="Footer navigation">
       <h2>Navigation</h2>
       <ul>
-        {navigation.map((label, index) => (
+        {navigation.map((label) => (
           <li>
-            {index === 0 ? (
-              <a href="/" data-sfx="select" data-sfx-hover="hover">
-                {label}
-              </a>
-            ) : (
-              <span aria-disabled="true">{label}</span>
-            )}
+            <a
+              href={destinations[label] || '#'}
+              data-sfx="select"
+              data-sfx-hover="hover"
+            >
+              {label}
+            </a>
           </li>
         ))}
       </ul>
@@ -101,6 +109,29 @@ const legal = ['Terms', 'Privacy', 'Cookies'];
         </li>
       </ul>
     </div>
+    <a
+      class="scroll-up"
+      href="#"
+      aria-label="Scroll to top"
+      data-sfx="select"
+      data-sfx-hover="hover"
+    >
+      <svg
+        width="12"
+        height="12"
+        viewBox="0 0 12 12"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M1 11L11 1M11 1H1M11 1V11"
+          stroke="white"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </a>
   </div>
   <div class="bottom">
     <hr class="divider" />
@@ -135,11 +166,6 @@ const legal = ['Terms', 'Privacy', 'Cookies'];
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-  .top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
   }
   .brand {
     display: flex;
@@ -245,6 +271,40 @@ const legal = ['Terms', 'Privacy', 'Cookies'];
   .footer-contact a:hover,
   .footer-contact a:focus-visible {
     text-decoration: underline;
+  }
+  .top {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .scroll-up {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 37px;
+    height: 37px;
+    padding: 12px;
+    border-radius: 20px;
+    background: rgb(255 255 255 / 15%);
+    transition: background 0.25s ease;
+  }
+  .scroll-up:hover {
+    background: rgb(108 59 255 / 60%);
+  }
+  .scroll-up svg {
+    display: block;
+    width: 11.31px;
+    height: 11.31px;
+  }
+  .brand,
+  .footer-nav,
+  .footer-contact {
+    position: relative;
   }
   .bottom {
     display: flex;

@@ -89,19 +89,25 @@ Pemetaan 6 role card → Detail Roles (prototype):
 - `submit button` (`1445:5116`): hanya ON_HOVER → `1445:5057`; tidak ada navigasi.
 - Footer ↖ → SCROLL_TO Navbar (scroll atas).
 
-## 9. Gap vs kode saat ini
+## 9. Gap vs kode saat ini — SELESAI 4 Oct 2026
 
-Elemen yang **masih `aria-disabled`** di kode tapi punya tujuan di prototype /
-yang disepakati:
+Keenam elemen berikut sudah diperbaiki (`href` diberikan sesuai prototype, `aria-disabled`
+dihapus). Semua 7 gate + seo PASS, geometry/MAE tidak berubah:
 
-| #   | Komponen                   | Elemen                                                        | Sekarang | Tujuan                                                               |
-| --- | -------------------------- | ------------------------------------------------------------- | -------- | -------------------------------------------------------------------- |
-| 1   | `Hero.astro:42`            | Join the Community                                            | disabled | `/recruitment`                                                       |
-| 2   | `Hero.astro:43`            | Explore Our Project                                           | disabled | `#projects` (smooth scroll)                                          |
-| 3   | `RecruitmentHero.astro:33` | Apply Now                                                     | disabled | `#available-roles` (smooth scroll)                                   |
-| 4   | `Recruitment.astro:22`     | Join the Community                                            | disabled | `#available-roles` (smooth scroll)                                   |
-| 5   | `Footer.astro:70`          | Nav: About Us, Recruitment, Hall of Frames, Partners, Contact | disabled | `/about`, `/recruitment`, `/hall-of-frames`, `/partners`, `/contact` |
-| 6   | `Cta.astro:15`             | Join the Community (home CTA)                                 | disabled | `/recruitment` (keputusan: Figma tidak specify)                      |
+| #   | Komponen                   | Elemen                                                        | Sekarang                  | Tujuan                                                               |
+| --- | -------------------------- | ------------------------------------------------------------- | ------------------------- | -------------------------------------------------------------------- |
+| 1   | `Hero.astro:42`            | Join the Community                                            | `href="/recruitment"`     | `/recruitment`                                                       |
+| 2   | `Hero.astro:43`            | Explore Our Project                                           | `href="#projects"`        | `#projects` (smooth scroll)                                          |
+| 3   | `RecruitmentHero.astro:33` | Apply Now                                                     | `href="#available-roles"` | `#available-roles` (smooth scroll)                                   |
+| 4   | `Recruitment.astro:22`     | Join the Community                                            | `href="#available-roles"` | `#available-roles` (smooth scroll)                                   |
+| 5   | `Footer.astro:70`          | Nav: About Us, Recruitment, Hall of Frames, Partners, Contact | `href="/about"` dll.      | `/about`, `/recruitment`, `/hall-of-frames`, `/partners`, `/contact` |
+| 6   | `Cta.astro:15`             | Join the Community (home CTA)                                 | `href="/recruitment"`     | `/recruitment`                                                       |
+| 7   | `Navbar.astro:66,100`      | Join Us (desktop + mobile)                                    | `href="/recruitment"`     | `/recruitment` (Figma: ON_CLICK → Recruitment `1436:3505`)           |
+| 8   | `Footer.astro`             | Scroll-up arrow (`1564:3289`)                                 | `href="#"` → scroll top   | `SCROLL_TO` Navbar (scroll ke atas)                                  |
+
+Penyesuaian `verify.mjs`: selector `relative('button')` → `relative('.button')`
+karena Button dengan `href` render `<a>` (class `.button`), bukan `<button>`.
+Assertion footer columns diperbarui (kolom ke-4 = tombol scroll-up, absolute kanan).
 
 Yang **sengaja tetap disabled** (tidak ada tujuan / di luar scope):
 
