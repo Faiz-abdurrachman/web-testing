@@ -163,6 +163,38 @@ presisi, bukan hiasan bebas. Aturannya:
   `prefers-reduced-motion: reduce` tetap pixel-exact.
 - Referensi: `docs/about-us-glow-plan.md`.
 
+### Hukum Navigasi & Prototype (tombol & link)
+
+Setiap tombol/CTA/kartu/link yang **punya tujuan di prototype Figma** WAJIB
+mengarah ke destinasi yang **100% benar** — bukan dikarang, bukan `aria-disabled`.
+
+- **Sumber kebenaran tujuan = prototype Figma.** MCP `figma_get_figma_data`
+  **TIDAK mengekspos** prototype interactions. Baca via REST API:
+  `GET /v1/files/<key>` (header `X-Figma-Token`), walk `document`, ambil
+  `node.interactions[]` → `trigger.type` + `actions[]` (`type: "NODE"`,
+  `destinationId`, `navigation`, `transition`), lalu resolve `destinationId`
+  ke nama/path. Peta hasil ekstraksi + gap vs kode: **`docs/figma-prototype-flow.md`**.
+- **Satu elemen per pass.** Terapkan satu tombol/link, verifikasi, catat, baru
+  lanjut. Jangan gabung. Home (`1430:2040`) & Recruitment (`1436:3505`) adalah
+  benchmark presisi — perubahan link tidak boleh menggeser geometri/MAE.
+- **`aria-disabled` hanya untuk yang benar-benar tak punya tujuan.** Contoh yang
+  sah: legal links (`Terms/Privacy/Cookies`), social footer/OurTeam, `Apply Now`
+  di detail role (Figma hanya hover). Selain itu → link asli.
+- **Perbedaan aksi prototype:** `NAVIGATE` → pindah halaman; `SCROLL_TO` →
+  anchor in-page (mis. `#available-roles`, `#projects`); `BACK` →
+  `history.back()`; `CHANGE_TO`/`SWAP`/`DRAG` → state lokal (accordion, carousel,
+  tab), **bukan** pindah halaman.
+- **Anchor in-page:** pakai id section yang ada (`#projects`,
+  `#available-roles`, `#who-should-join`, `#domains`, `#our-philosophy`). Sudah
+  di-handle View Transitions (`BaseLayout` re-apply hash; `section[id]` punya
+  `scroll-margin-top: 110px`).
+- **A11y & motion:** pakai `<a href>` untuk navigasi (bukan `<button>`), label
+  deskriptif, smooth-scroll harus menghormati `prefers-reduced-motion`, dan cue
+  suara lewat `data-sfx` (lihat `docs/sound-sop.md`).
+- **Verifikasi:** klik tiap link (manual + `verify:vt` untuk navigasi klien);
+  pastikan tidak ada `aria-disabled` yang tersisa untuk elemen yang punya tujuan.
+- Referensi: **`docs/figma-prototype-flow.md`** (peta + gap + bug prototype).
+
 ## 2. Gotcha yang sudah terbukti (jangan diulang)
 
 - **String `linear-gradient(...)` dari Figma MCP menormalkan handle → lossy**
@@ -491,14 +523,18 @@ Semua di file Figma `JYUzJK1hFqaEwL6DpdDvjp`. Hasil akhir (reduced motion, 1440)
 - [ ] Commit per fitur; konfirmasi user sebelum `git push origin main`
       (deploy ganda).
 
-## 9. Target berjalan (3 Oct 2026)
+## 9. Target berjalan (4 Oct 2026)
 
-**NEXT: SEMUA HERO SECTION jadi BACKGROUND VIDEO looping** (fallback gambar statis).
-Aset video sudah disiapkan user mulai dari **About Us** (lihat tabel di
-`docs/hero-video-plan.md` §1; Home & Recruitment sudah pakai video). Fokus:
-**kualitas encode anti-burik, loop mulus, geometri statis tak berubah, reduce/≤600px
-tetap gambar statis.** Kerjakan **satu hero per pass + 7 gate**.
-Master Work Plan lengkap: `docs/hero-video-plan.md`.
+**NEXT: TERAPKAN SEMUA TOMBOL/LINK SESUAI PROTOTYPE FIGMA** (lihat SOP §"Hukum
+Navigasi & Prototype" + peta **`docs/figma-prototype-flow.md`**). Setiap tujuan
+**100% benar**, `aria-disabled` hanya untuk yang benar-benar tak punya destinasi,
+**satu elemen per pass + 7 gate**, dan **catat tiap perubahan** di doc. Prioritaskan
+Home (`1430:2040`) & Recruitment (`1436:3505`) — benchmark presisi, jangan rusak.
+Gap awal: `docs/figma-prototype-flow.md` §9 (6 elemen).
+
+**PENDING: video hero Contact (`1445:5066`)** — tunggu aset. Sisanya sudah video
+(Home/Recruitment/About/HoF/Partners); lihat `docs/hero-video-plan.md` §1.
+Setelah itu: audit per-section Detail HoDS (`864:18857` dkk) + konten asli.
 URL Figma halaman terkait ada di `docs/kickoff-prompt.md`.
 
 **Selesai (jangan rusak tanpa alasan):**
@@ -506,6 +542,10 @@ URL Figma halaman terkait ada di `docs/kickoff-prompt.md`.
 - Homepage (`1430:2040`, §1–7), Recruitment (`1436:3505`, 9/9), About Us
   (`1439:4184`, §1–6; visi-misi punya `<Starfield />` final — **jangan disentuh**),
   Partners (`1439:4787`, §1–4), Contact hero (`1445:5065`).
+- **About Us glow responsif + karakter menempel tepi (`1439:4219`/`1439:4258`) —
+  SELESAI 4 Oct 2026**: canvas `zoom` dihapus, gradient section-level, artwork
+  anchor `left: calc((1440px - 100cqw) / 2)` (861px, nempel tepi), seam Δ 0.
+  Detail: `docs/about-us-glow-plan.md`.
 - **Hall of Frames card Project Highlight (`1439:4655`) — SELESAI 3 Oct 2026**:
   disamakan dengan card "Our Project" homepage (`Projects.astro`) — kartu 549×567 +
   coverflow JS, 4 project/4 dot, glow bow-tie dihapus; section 1440×1014; reference

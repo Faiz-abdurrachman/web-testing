@@ -176,7 +176,8 @@ docs/assets.md           provenance per section (keep updated)
 docs/pixel-precision-sop.md  strict pixel-accuracy protocol (read before any UI)
 docs/sound-sop.md        sound system SOP (procedural Web Audio SFX + ambient)
 docs/hero-video-plan.md  Master Work Plan: semua hero → background video looping
-docs/about-us-glow-plan.md  Master Work Plan: About Us glow responsif + karakter tepi (NEXT)
+docs/about-us-glow-plan.md  About Us glow responsif + karakter tepi (SELESAI 4 Oct 2026)
+docs/figma-prototype-flow.md  peta prototype Figma (REST `interactions`) → tombol/link tujuan + gap vs kode (NEXT)
 docs/ai-handoff.md       live "where we are now" handoff for the next AI agent
 artifacts/               verify output (git-ignored)
 ```
@@ -355,6 +356,21 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
 
 ## Current checkpoint
 
+- **★ SELESAI (4 Oct 2026) — About Us: glow responsif + karakter menempel tepi.**
+  Canvas `zoom: calc(100vw / 1440px)` **dihapus** dari Our Philosophy (`1439:4219`)
+  dan Our Ecosystem (`1439:4258`). Gradient tetap **section-level** (full-bleed)
+  → pita ungu konsisten di semua lebar; artwork Philosophy anchor
+  `left: calc((1440px - 100cqw) / 2)` (≥1441) → tetap 861px, nempel tepi section,
+  identik dengan Home. Geometry 1440 tetap, seam Δ 0. `verify.mjs` assertions
+  diperbarui (zoom 1, canvas 1440 centered, art `{0,861}`); 7 gate + seo + spacing
+  ALL PASS.
+- **★ NEXT (untuk AI baru) — terapkan SEMUA tombol/link sesuai prototype Figma.**
+  Peta lengkap: **`docs/figma-prototype-flow.md`** (+ SOP §"Hukum Navigasi &
+  Prototype"). **Satu elemen/halaman per pass + 7 gate**; setiap tujuan harus
+  **100% benar**, `aria-disabled` hanya untuk yang benar-benar tak punya tujuan,
+  dan **catat apa yang dikerjakan** di doc. Home (`1430:2040`) & Recruitment
+  (`1436:3505`) = **prioritas & benchmark presisi — jangan rusak**. Gap awal: 6
+  elemen di `docs/figma-prototype-flow.md` §9.
 - **Recruitment Hero penajaman (3 Oct 2026):** sumber video planetary 1080p
   memang lembut pada permukaan planet. Generator kini memakai CAS luma 0.6
   sebelum upscale Lanczos dan unsharp ringan 0.25 sesudahnya (AV1 CRF 42,
@@ -468,15 +484,15 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   item dibuat via JS → pakai `:global(...)` (Astro scoped CSS tak menjangkau node
   JS). `verify.mjs` assert dialog hidden default + open geometry + Esc close;
   closed-section MAE tetap **2.008**. 7 gate + seo ALL PASS.
-- **★ NEXT (untuk AI baru): About Us — glow responsif + karakter menempel tepi
-  (Our Philosophy `1439:4219` & Our Ecosystem `1439:4258`).** Saat zoom-out
-  (>1440) glow ungu tidak responsif (ungu cuma di sudut) karena gradient dilukis
-  di `<section>` full-bleed sementara konten di-`zoom`; karakter Philosophy About
-  ikut membesar alih-alih menempel tepi seperti Home. **Master Work Plan rinci:
-  `docs/about-us-glow-plan.md`** + `docs/pixel-precision-sop.md` §Hukum Glow,
-  Gradient & Artwork Responsif. Kerjakan **satu section per pass + 7 gate**;
-  geometri/MAE 1440 TIDAK boleh berubah (Philosophy 2.041 / Ecosystem 2.221);
-  Home (`1430:2052`) jangan disentuh.
+- **SELESAI (4 Oct 2026): About Us — glow responsif + karakter menempel tepi
+  (Our Philosophy `1439:4219` & Our Ecosystem `1439:4258`).** Canvas zoom dihapus;
+  gradient section-level; artwork anchor cqw (861px, nempel tepi); seam Δ 0.
+  Detail: `docs/about-us-glow-plan.md`, `docs/ai-handoff.md`, `docs/assets.md`.
+- **★ NEXT (untuk AI baru): terapkan SEMUA tombol/link sesuai prototype Figma.**
+  Peta: `docs/figma-prototype-flow.md`; SOP §"Hukum Navigasi & Prototype". Satu
+  elemen/halaman per pass + 7 gate; tujuan 100% benar; catat tiap perubahan.
+  Prioritaskan Home (`1430:2040`) & Recruitment (`1436:3505`) — jangan rusak
+  presisinya. Gap awal: `docs/figma-prototype-flow.md` §9.
 - **PENDING — CONTACT HERO VIDEO (`1445:5066`) — satu-satunya hero belum video.**
   Home (`1430:2041`), Recruitment (`1436:3506`), About (`1439:4185`), Hall of
   Frames (`1439:4507`, source di-refresh 3 Oct 2026), dan Partners (`1439:4788`)
@@ -798,9 +814,12 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   (3 Oct 2026)** — benchmark presisi, jangan rusak tanpa alasan. Verifikasi ulang
   3 Oct 2026: `npm run audit:spacing` PASS (38 komponen), semua heading halaman
   `--font-display` (Nasalization hanya `OurTeam`/`Splash`/`lab/sound`), `verify.mjs`
-  PASS. **★ NEXT = About Us glow responsif + karakter menempel tepi** — Our
-  Philosophy (`1439:4219`) & Our Ecosystem (`1439:4258`); **Master Work Plan:
-  `docs/about-us-glow-plan.md`** (satu section per pass + 7 gate). **PENDING =
+  PASS. **★ SELESAI (4 Oct 2026) = About Us glow responsif + karakter menempel
+  tepi** — Our Philosophy (`1439:4219`) & Our Ecosystem (`1439:4258`); canvas
+  zoom dihapus, gradient section-level, artwork anchor cqw (seam Δ 0). **★ NEXT =
+  terapkan SEMUA tombol/link sesuai prototype Figma** (`docs/figma-prototype-flow.md`;
+  SOP §"Hukum Navigasi & Prototype"): satu elemen/halaman per pass + 7 gate, tujuan
+  100% benar, catat tiap perubahan; Home & Recruitment jangan rusak. **PENDING =
   video hero Contact (`1445:5066`)** (tunggu aset). Lalu audit sisa Detail HoDS +
   konten asli (`projects.ts`, tanggal recruitment, logo partner, foto/nama member
   team, member/project/milestone HoF). Protokol: inventaris `depth 1` → Master

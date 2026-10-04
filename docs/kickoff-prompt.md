@@ -28,16 +28,19 @@ kartu `549×567` + coverflow JS, 4 project/4 dot, glow bow-tie dihapus; section
 (`1554:2824`)** — klik kartu → `<dialog>` detail 997×576 (GLASS rim, backdrop
 `blur(7.7px)`, glow `1554:2898` verbatim, 3 achievement bar, Contribution);
 `verify.mjs` assert hidden default + open geometry + Esc.
-**NEXT TARGET (untuk AI baru): About Us — glow responsif + karakter menempel tepi**
-(Our Philosophy `1439:4219` & Our Ecosystem `1439:4258`). Saat zoom-out (>1440)
-glow ungu tidak responsif (ungu cuma di sudut) karena gradient di `<section>`
-full-bleed sementara konten di-`zoom`; karakter Philosophy About ikut membesar
-alih-alih menempel tepi seperti Home. **Master Work Plan rinci:
-`docs/about-us-glow-plan.md`** + `docs/pixel-precision-sop.md` §Hukum Glow,
-Gradient & Artwork Responsif. **Satu section per pass + 7 gate**; geometri/MAE
-1440 TIDAK boleh berubah (Philosophy 2.041 / Ecosystem 2.221); Home (`1430:2052`)
-jangan disentuh. **PENDING:** video hero Contact (`1445:5066`) tunggu aset; lalu
-audit per-section Detail HoDS (`864:18857` dkk) + konten asli.
+**SELESAI (4 Oct 2026): About Us — glow responsif + karakter menempel tepi**
+(Our Philosophy `1439:4219` & Our Ecosystem `1439:4258`). Canvas zoom dihapus;
+gradient section-level (full-bleed); artwork anchor `left: calc((1440px - 100cqw)/2)`
+(≥1441) → 861px, nempel tepi, identik Home; seam Δ 0; geometri 1440 tetap. 7 gate +
+seo + spacing PASS.
+**★ NEXT (untuk AI baru): TERAPKAN SEMUA TOMBOL/LINK SESUAI PROTOTYPE FIGMA** —
+peta lengkap **`docs/figma-prototype-flow.md`** + SOP §"Hukum Navigasi & Prototype".
+**Satu elemen per pass + 7 gate**; setiap tujuan **100% benar**; `aria-disabled`
+hanya untuk yang benar-benar tak punya destinasi (legal/social); **catat tiap
+perubahan** di doc. Prioritaskan Home (`1430:2040`) & Recruitment (`1436:3505`) —
+benchmark presisi, jangan rusak. Gap awal: `docs/figma-prototype-flow.md` §9 (6
+elemen). **PENDING:** video hero Contact (`1445:5066`) tunggu aset; lalu audit
+per-section Detail HoDS (`864:18857` dkk) + konten asli.
 **ATURAN STRICT (jangan dilanggar):** spacing/padding/margin = **kelipatan 8**
 (gate `npm run audit:spacing`, per-komponen `node scripts/spacing-audit.mjs
 <file>`); heading = **Bluu Next Bold 700 (`--font-display`)**, body Manrope;
@@ -61,13 +64,16 @@ Sebelum ngapa-ngapain, WAJIB baca dulu (urut, jangan skip):
 3. docs/ai-handoff.md           → STATE PALING TERKINI ("dimana kita sekarang")
 4. HANDOVER.md                  → konteks panjang: stack, struktur, status, TODO
 5. docs/assets.md               → provenance tiap section + node Figma
-6. docs/about-us-glow-plan.md   → **Master Work Plan NEXT** — About Us glow responsif
-                                  + karakter menempel tepi (Our Philosophy/Ecosystem)
-7. docs/hero-video-plan.md      → Master Work Plan VIDEO HERO (Home/Recruitment/About/
-                                  HoF/Partners sudah; Contact pending) — aturan encode
-                                  anti-burik, loop, reduce/≤600px, budget
-8. docs/sound-sop.md            → SOP sound (Web Audio prosedural) + porting
-                                  (skill `.agents/skills/data-sorcerers-sound/SKILL.md`)
+6. docs/figma-prototype-flow.md → **peta PROTOTYPE FIGMA (tujuan tiap tombol/link)
+                                   dari REST `interactions` + gap vs kode — NEXT:**
+                                   terapkan semua tombol/link 100% benar
+7. docs/about-us-glow-plan.md   → About Us glow responsif + karakter menempel tepi
+                                   (SELESAI 4 Oct 2026 — catatan keputusan)
+8. docs/hero-video-plan.md      → Master Work Plan VIDEO HERO (Home/Recruitment/About/
+                                   HoF/Partners sudah; Contact pending) — aturan encode
+                                   anti-burik, loop, reduce/≤600px, budget
+9. docs/sound-sop.md            → SOP sound (Web Audio prosedural) + porting
+                                   (skill `.agents/skills/data-sorcerers-sound/SKILL.md`)
 
 ================================================================================
 ATURAN INTI, SPACING & PADDING (HUKUM, WAJIB PATUH, JANGAN DILANGGAR):
@@ -263,35 +269,42 @@ Urutan target (prioritas sekarang):
       di-refresh), dan Partners SUDAH video.** Contact (`1445:5066`) menunggu
       aset sumber dari user. Master Work Plan: `docs/hero-video-plan.md`.
       Satu hero per pass + 7 gate; geometri statis & reduce tidak boleh berubah.
-   F. **★ NEXT — About Us: glow responsif + karakter menempel tepi** (Our
-      Philosophy `1439:4219` & Our Ecosystem `1439:4258`). Master Work Plan:
-      **`docs/about-us-glow-plan.md`**; SOP: `docs/pixel-precision-sop.md`
-      §Hukum Glow, Gradient & Artwork Responsif. Satu section per pass + 7 gate;
-      geometri/MAE 1440 TIDAK berubah (Philosophy 2.041 / Ecosystem 2.221); Home
-      (`1430:2052`) jangan disentuh.
-   G. Konten asli (foto member, logo partner, `projects.ts`, tanggal recruitment,
-      milestone HoF).
+   F. **SELESAI (4 Oct 2026) — About Us: glow responsif + karakter menempel tepi**
+      (Our Philosophy `1439:4219` & Our Ecosystem `1439:4258`). Canvas zoom dihapus,
+      gradient section-level, artwork anchor `calc((1440px - 100cqw)/2)` → 861px
+      nempel tepi; seam Δ 0; geometri 1440 tetap. Catatan: `docs/about-us-glow-plan.md`.
+   G. **★ NEXT — TERAPKAN SEMUA TOMBOL/LINK SESUAI PROTOTYPE FIGMA.** Peta:
+      **`docs/figma-prototype-flow.md`**; SOP §"Hukum Navigasi & Prototype". Satu
+      elemen/halaman per pass + 7 gate; setiap tujuan 100% benar; `aria-disabled`
+      hanya untuk yang benar-benar tak punya destinasi; **catat tiap perubahan**.
+      Prioritaskan Home (`1430:2040`) & Recruitment (`1436:3505`) — jangan rusak.
+      Gap awal: `docs/figma-prototype-flow.md` §9.
+   H. PENDING — video hero Contact (`1445:5066`) tunggu aset. Lalu konten asli
+      (foto member, logo partner, `projects.ts`, tanggal recruitment, milestone HoF).
 
 --------------------------------------------------------------------------------
-TARGET NEXT: ABOUT US — GLOW RESPONSIF + KARAKTER MENEMPEL TEPI
-(`1439:4219` Our Philosophy & `1439:4258` Our Ecosystem)
-Master Work Plan rinci: **`docs/about-us-glow-plan.md`** (WAJIB dibaca dulu).
+TARGET NEXT: TERAPKAN SEMUA TOMBOL/LINK SESUAI PROTOTYPE FIGMA
+Peta lengkap + gap: **`docs/figma-prototype-flow.md`** (WAJIB dibaca dulu).
+SOP: **`docs/pixel-precision-sop.md` §"Hukum Navigasi & Prototype"**.
 Ringkas:
-- **Masalah 1 — glow ungu tidak responsif (zoom-out >1440):** gradient dilukis di
-  `<section>` full-bleed sedangkan konten 1440 di-`zoom` (`.canvas { zoom: calc(100vw
-  / 1440px) }`). Gradient di-fit untuk 1440×837 / 1440×874 → di lebar besar pita
-  ungu bergeser (cuma sudut) & seam Philosophy↔Ecosystem rusak.
-- **Masalah 2 — karakter Philosophy About tidak nempel tepi:** `.illustration`
-  `left:0` di dalam canvas zoom → art ikut membesar (861→1530px). Home pakai
-  `left: calc((1440px - 100cqw) / 2)` + art tetap 861px.
-- **Arah perbaikan:** satukan koordinat glow dengan kanvas (pindahkan gradient ke
-  `.canvas`/layer `.glow`, ikut zoom; atau buang `zoom` dan tiru Home); anchor
-  karakter ke tepi section tanpa ikut zoom. Uji 1440/1920/2560/3840; seam ≤ 9.
-- **Acceptance:** MAE 1440 tak berubah + geometri tetap; pita ungu atas/bawah
-  konsisten di lebar besar; karakter nempel kiri; responsive 320→3840; reduce
-  pixel-exact; 7 gate + seo + spacing PASS.
-- **PENDING:** video hero Contact (`1445:5066`) — tunggu aset. Detail hero (encode
-  anti-burik, loop, reduce/≤600px, budget) di `docs/hero-video-plan.md`.
+- Sumber tujuan = prototype Figma. MCP `figma_get_figma_data` **TIDAK expose**
+  interactions; baca via REST `GET /v1/files/<key>` (`node.interactions[].actions[]`
+  → `destinationId`/`navigation`) lalu resolve nama. Peta hasil sudah di
+  `docs/figma-prototype-flow.md`.
+- Aksi: `NAVIGATE` → pindah halaman; `SCROLL_TO` → anchor in-page
+  (`#projects`/`#available-roles`/`#who-should-join`/`#domains`/`#our-philosophy`);
+  `BACK` → `history.back()`; `CHANGE_TO`/`SWAP`/`DRAG` → state lokal (accordion/
+  carousel/tab), bukan navigasi.
+- Gap awal (§9 doc): `Hero.astro` (Join→`/recruitment`, Explore→`#projects`),
+  `RecruitmentHero.astro` (Apply Now→`#available-roles`), `Recruitment.astro`
+  (Join→`#available-roles`), `Cta.astro` (Join→`/recruitment`, keputusan user),
+  `Footer.astro` (5 nav → halaman). Yang tetap disabled: legal, social
+  footer/OurTeam, Apply Now detail role.
+- **Satu elemen per pass + 7 gate**; klik verifikasi manual + `verify:vt`; pastikan
+  tidak ada `aria-disabled` tersisa untuk elemen yang punya tujuan; **catat tiap
+  perubahan**. Jangan geser geometri/MAE Home & Recruitment.
+- Bug prototype Figma (jangan ditiru): Vision & Multimodal card → Core AI;
+  role card 2 dobel DATA INTELLIGENCE; link usang di Arsip.
 
 --------------------------------------------------------------------------------
 ARSIP — ATURAN VIDEO HERO (relevan saat Contact / hero baru dikerjakan):
