@@ -229,14 +229,20 @@ const destinations: Record<string, string> = {
   .nav-label {
     display: block;
   }
+  /* The underline is the state indicator: the active tab keeps it, and hover
+     previews it on any tab (fade in) so the active tab still reacts too. */
   .nav-underline {
     display: block;
     align-self: stretch;
     height: 1px;
     background: linear-gradient(90deg, #9b7bff 0%, #ede8ff 50%, #9b7bff 100%);
+    opacity: 0;
+    transition:
+      opacity 0.25s ease,
+      box-shadow 0.25s ease;
   }
-  .nav-link:not(.active) .nav-underline {
-    visibility: hidden;
+  .nav-link.active .nav-underline {
+    opacity: 1;
   }
   .nav-link[aria-disabled='true'] {
     cursor: default;
@@ -245,8 +251,21 @@ const destinations: Record<string, string> = {
   a.nav-link:focus-visible {
     color: #fff;
   }
+  a.nav-link:hover .nav-underline,
+  a.nav-link:focus-visible .nav-underline {
+    opacity: 1;
+  }
   .nav-link.active {
     color: #fff;
+  }
+  a.nav-link.active:hover .nav-underline,
+  a.nav-link.active:focus-visible .nav-underline {
+    box-shadow: 0 0 10px rgb(155 123 255 / 85%);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nav-underline {
+      transition: none;
+    }
   }
   .mobile-menu {
     display: none;

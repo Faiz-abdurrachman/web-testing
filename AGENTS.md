@@ -386,6 +386,12 @@ center` menolak center item 18px di content-box 12px (padding 8/16) → SVG di
   x=16 bukan 13 (X geser ~3px ke kanan); ganti ke **`place-content: center`**.
   Icon codicon kini cocok reference persis (X 12×12 di (21.875,21.875)); MAE
   close button 22.2 → **15.2**. 7 gate + seo ALL PASS.
+- **SELESAI (4 Oct 2026): Navbar hover = underline.** `.nav-underline` jadi
+  indikator state: link `.active` selalu menampilkan garis (opacity 1); hover/
+  focus link mana pun memunculkan garis (fade `opacity` 0.25s) + teks putih, jadi
+  hover pada link aktif pun terlihat (garisnya glow `0 0 10px rgb(155 123 255 /
+85%)`). Pill background dibatalkan (user minta garis). Garis tetap 1px/lebar
+  label (navbar-audit assert h≈1, w=label) — geometri tak berubah, ALL PASS.
 - **★ NEXT: video hero Contact (`1445:5066`) — satu-satunya hero belum video.**
   Tunggu aset dari user. Lalu audit sisa Detail HoDS + konten asli (foto member,
   logo partner, `projects.ts`, tanggal recruitment, milestone HoF). Lihat
@@ -834,6 +840,13 @@ center` menolak center item 18px di content-box 12px (padding 8/16) → SVG di
   diregenerasi dari node `864:18959`. `verify.mjs` sekarang assert heading
   `font-family` Bluu Next + weight `700` per rute. Geometri tak berubah
   (`back 80/80`, `card 80/163/1280×279`, `tabs 80/498`, height 1280).
+- **Detail HoDS tabs — transisi halus (4 Oct 2026).** Active pill pindah ke
+  pseudo `::before` (gradient radial) dengan `opacity` cross-fade 0.34s (gradient
+  tak bisa diinterpolasi, jadi lapisan pseudo yang di-fade) + hover lembut pada
+  `background-color`. Isi panel di-stagger masuk (`hods-block-in` 0.5s, delay
+  `--i * 70ms` per `.block`) dan restart tiap ganti tab (`display:none → block`).
+  Semua animasi di-gate `prefers-reduced-motion: no-preference`; reduce = instan
+  (render verify tetap identik). Tidak ada padding/gap/geometri baru.
 - **Next plan (prioritas).** **Homepage (`1430:2040`), About Us (`1439:4184`),
   Recruitment (`1436:3505`, 9/9), dan Partners (`1439:4787`, 4/4) SELESAI diaudit
   (3 Oct 2026)** — benchmark presisi, jangan rusak tanpa alasan. Verifikasi ulang
