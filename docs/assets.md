@@ -814,6 +814,11 @@ fitting the rendered pixels gives an effective CSS gradient of
   56 / 67.2, `gap: 4px`), principles grid `1439:4228` (591 × 248, grid
   `30px 92px`) with 5 items (LEARN / SHIP / EXPERIMENT / IMPACT / RESEARCH
   BUILD). Artwork = the same sorcerer + glow as the homepage.
+- **TODO (NEXT) — glow responsif + karakter tepi.** Gradient masih dipasang di
+  `<section>` sementara konten di-`zoom`; di lebar >1440 pita ungu bergeser
+  (cuma sudut) dan `.illustration` ikut membesar alih-alih menempel tepi. Rencana
+  - acceptance: **`docs/about-us-glow-plan.md`**. Baseline 1440 (MAE **2.041**)
+    tidak boleh berubah.
 
 ## About Us — Our Ecosystem (2 October 2026)
 
@@ -839,6 +844,10 @@ fitting the rendered pixels gives an effective CSS gradient of
   geometry exact (section 1440 × 874; header `(254.5, 80, 931, 172)`; pipeline
   `(80, 368, 1280, 426)`; line bottoms 776). Section MAE **2.221/255**
   (header 4.18, pipeline 3.20). All 6 gates pass.
+- **TODO (NEXT) — glow responsif.** Gradient di `<section>` melebar saat >1440
+  (pita ungu bergeser, seam rusak). Rencana + acceptance:
+  **`docs/about-us-glow-plan.md`**. Baseline 1440 (MAE **2.221**) tidak boleh
+  berubah; seam dengan Philosophy tetap Δ ≤ 9.
 
 ## About Us — Our Team (2 October 2026)
 

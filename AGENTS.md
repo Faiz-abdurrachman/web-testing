@@ -176,6 +176,7 @@ docs/assets.md           provenance per section (keep updated)
 docs/pixel-precision-sop.md  strict pixel-accuracy protocol (read before any UI)
 docs/sound-sop.md        sound system SOP (procedural Web Audio SFX + ambient)
 docs/hero-video-plan.md  Master Work Plan: semua hero → background video looping
+docs/about-us-glow-plan.md  Master Work Plan: About Us glow responsif + karakter tepi (NEXT)
 docs/ai-handoff.md       live "where we are now" handoff for the next AI agent
 artifacts/               verify output (git-ignored)
 ```
@@ -467,15 +468,22 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   item dibuat via JS → pakai `:global(...)` (Astro scoped CSS tak menjangkau node
   JS). `verify.mjs` assert dialog hidden default + open geometry + Esc close;
   closed-section MAE tetap **2.008**. 7 gate + seo ALL PASS.
-- **★ NEXT (untuk AI baru): CONTACT HERO VIDEO (`1445:5066`) — satu-satunya hero
-  yang belum video.** Home (`1430:2041`), Recruitment (`1436:3506`), About
-  (`1439:4185`), Hall of Frames (`1439:4507`, source di-refresh 3 Oct 2026), dan
-  Partners (`1439:4788`) sudah video (lihat `docs/hero-video-plan.md` §1). Contact
-  menunggu aset sumber dari user. Kerjakan **satu hero per pass + 7 gate**; geometri
-  statis + render reduce TIDAK boleh berubah. Master Work Plan rinci (encode
-  anti-burik, loop, reduce/≤600px, budget, urutan) ada di
-  **`docs/hero-video-plan.md`**. Setelah video: audit per-section Detail HoDS
-  (`864:18857` dkk) + konten asli.
+- **★ NEXT (untuk AI baru): About Us — glow responsif + karakter menempel tepi
+  (Our Philosophy `1439:4219` & Our Ecosystem `1439:4258`).** Saat zoom-out
+  (>1440) glow ungu tidak responsif (ungu cuma di sudut) karena gradient dilukis
+  di `<section>` full-bleed sementara konten di-`zoom`; karakter Philosophy About
+  ikut membesar alih-alih menempel tepi seperti Home. **Master Work Plan rinci:
+  `docs/about-us-glow-plan.md`** + `docs/pixel-precision-sop.md` §Hukum Glow,
+  Gradient & Artwork Responsif. Kerjakan **satu section per pass + 7 gate**;
+  geometri/MAE 1440 TIDAK boleh berubah (Philosophy 2.041 / Ecosystem 2.221);
+  Home (`1430:2052`) jangan disentuh.
+- **PENDING — CONTACT HERO VIDEO (`1445:5066`) — satu-satunya hero belum video.**
+  Home (`1430:2041`), Recruitment (`1436:3506`), About (`1439:4185`), Hall of
+  Frames (`1439:4507`, source di-refresh 3 Oct 2026), dan Partners (`1439:4788`)
+  sudah video (lihat `docs/hero-video-plan.md` §1). Contact menunggu aset sumber
+  dari user. **Satu hero per pass + 7 gate**; geometri statis + reduce tidak
+  boleh berubah. Setelah video: audit per-section Detail HoDS (`864:18857` dkk)
+  - konten asli.
 - **SELESAI (3 Oct 2026): About Us — Our Philosophy (`1439:4219`) — REVISI
   BACKGROUND BLEND.** Tim minta background linear disatukan dengan Our Ecosystem
   (`1439:4258`). Figma kini memberi node fill **gradient** (handles
@@ -787,14 +795,17 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   (`back 80/80`, `card 80/163/1280×279`, `tabs 80/498`, height 1280).
 - **Next plan (prioritas).** **Homepage (`1430:2040`), About Us (`1439:4184`),
   Recruitment (`1436:3505`, 9/9), dan Partners (`1439:4787`, 4/4) SELESAI diaudit
-  (3 Oct 2026)** — benchmark presisi, jangan rusak tanpa alasan. Detail HoDS
-  (`864:18857` dkk) revisi judul/spacing **SELESAI**; sisa audit presisi
-  per-section. **NEXT = video hero Contact (`1445:5066`)** (tunggu aset) lalu audit
-  sisa Detail HoDS + konten asli (`projects.ts`, tanggal recruitment, logo partner,
-  foto/nama member team, member/project/milestone HoF). Protokol: inventaris
-  `depth 1` → Master Work Plan per section → 7 gate per section; dilarang
-  lompat/gabung. Detail: `docs/ai-handoff.md` §"Next Task" &
-  `docs/kickoff-prompt.md`.
+  (3 Oct 2026)** — benchmark presisi, jangan rusak tanpa alasan. Verifikasi ulang
+  3 Oct 2026: `npm run audit:spacing` PASS (38 komponen), semua heading halaman
+  `--font-display` (Nasalization hanya `OurTeam`/`Splash`/`lab/sound`), `verify.mjs`
+  PASS. **★ NEXT = About Us glow responsif + karakter menempel tepi** — Our
+  Philosophy (`1439:4219`) & Our Ecosystem (`1439:4258`); **Master Work Plan:
+  `docs/about-us-glow-plan.md`** (satu section per pass + 7 gate). **PENDING =
+  video hero Contact (`1445:5066`)** (tunggu aset). Lalu audit sisa Detail HoDS +
+  konten asli (`projects.ts`, tanggal recruitment, logo partner, foto/nama member
+  team, member/project/milestone HoF). Protokol: inventaris `depth 1` → Master
+  Work Plan per section → 7 gate per section; **dilarang lompat/gabung section**.
+  Detail: `docs/ai-handoff.md` §"Next Task" & `docs/kickoff-prompt.md`.
 - **Deploy GANDA**: `git push origin main` → testing + production.
 - **Available Roles hover (`f92b88a`).** Kartu reaktif pointer: pool radial violet
   ikut kursor (`--mx/--my`), ember lean (`--gx/--gy` ±22/16px + `scale(1.06)`),

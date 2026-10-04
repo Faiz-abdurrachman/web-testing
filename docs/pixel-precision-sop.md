@@ -137,6 +137,32 @@ mencocokkannya ke Figma.
 - **Placeholder** (`::placeholder`) juga dari fill node (mis. Contact
   `#A3A3A3`).
 
+### Hukum Glow, Gradient & Artwork Responsif
+
+Glow/gradient latar yang di-fit ke frame **1440** adalah bagian dari komposisi
+presisi, bukan hiasan bebas. Aturannya:
+
+- **Glow/gradient besar WAJIB satu sistem koordinat dengan kanvas.** Kalau
+  konten 1440 di-`zoom`/`scale` (mis. `.canvas { zoom: calc(100vw / 1440px) }`),
+  maka gradient/glow HARUS berada **di dalam kanvas itu**, bukan di `<section>`
+  full-bleed. Gradient di section full-bleed melebar saat zoom-out → pita warna
+  bergeser (studi kasus: About Us Philosophy `1439:4219` & Our Ecosystem
+  `1439:4258`, ungu cuma di sudut saat >1440). Kalau memilih tak pakai `zoom`,
+  tiru pola Home (kanvas 1440 center + glow/art ekstensi ke luar).
+- **Artwork karakter yang menempel tepi** di-anchor dengan
+  `left: calc((1440px - 100cqw) / 2)` (≥1441) sehingga ia "nempel" ke tepi
+  section tanpa ikut membesar; JANGAN di-zoom. Kalau teks di-zoom, art ditaruh
+  **di luar** kanvas zoom supaya skalanya tetap.
+- **Seam antar-section** yang gradientnya di-desain menyatu (Philosophy ↔
+  Ecosystem) harus diuji: baris bawah section N vs baris atas section N+1,
+  **Δ maksimum ≤ ~10** (referensi sendiri ±8). Jangan sampai muncul sliver
+  `#050507` (warna dasar) di perbatasan.
+- **Uji multi-lebar, bukan cuma 1440.** Glow/gradient/art dicek di **1440, 1920,
+  2560, 3840** (dan 320–1440 untuk layout); 1440 tetap pixel-exact vs PNG,
+  lebar besar harus konsisten secara visual dengan komposisi 1440. Render
+  `prefers-reduced-motion: reduce` tetap pixel-exact.
+- Referensi: `docs/about-us-glow-plan.md`.
+
 ## 2. Gotcha yang sudah terbukti (jangan diulang)
 
 - **String `linear-gradient(...)` dari Figma MCP menormalkan handle → lossy**

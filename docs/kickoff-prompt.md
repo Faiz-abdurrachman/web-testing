@@ -24,14 +24,27 @@ dipasang di section + glow home di-hide untuk varian About; seam max Δ 9.
 disamakan dengan card "Our Project" homepage (`1430:2146`, `Projects.astro`) —
 kartu `549×567` + coverflow JS, 4 project/4 dot, glow bow-tie dihapus; section
 1440×1014; reference + assertion diregenerasi.
-**NEXT TARGET (untuk AI baru): CONTACT HERO VIDEO (`1445:5066`)** — satu-satunya
-hero yang belum video, tunggu aset sumber dari user. Master Work Plan rinci:
-`docs/hero-video-plan.md`. Setelah itu: audit per-section Detail HoDS
-(`864:18857` dkk) + konten asli. Fokus:
-**kualitas encode anti-burik, loop mulus, geometri statis + reduce tetap presisi
-(MAE tak berubah), responsive 320→3840, strict 8pt + font + warna**, 7 gate per
-hero. Cara kerja: **Plan per halaman → inventaris semua section (`depth 1`) → 1
-section per pass + 7 gate per section. JANGAN skip satu section pun.**
+**SELESAI (3 Oct 2026): Hall of Frames — Featured Sorcerers detail modal
+(`1554:2824`)** — klik kartu → `<dialog>` detail 997×576 (GLASS rim, backdrop
+`blur(7.7px)`, glow `1554:2898` verbatim, 3 achievement bar, Contribution);
+`verify.mjs` assert hidden default + open geometry + Esc.
+**NEXT TARGET (untuk AI baru): About Us — glow responsif + karakter menempel tepi**
+(Our Philosophy `1439:4219` & Our Ecosystem `1439:4258`). Saat zoom-out (>1440)
+glow ungu tidak responsif (ungu cuma di sudut) karena gradient di `<section>`
+full-bleed sementara konten di-`zoom`; karakter Philosophy About ikut membesar
+alih-alih menempel tepi seperti Home. **Master Work Plan rinci:
+`docs/about-us-glow-plan.md`** + `docs/pixel-precision-sop.md` §Hukum Glow,
+Gradient & Artwork Responsif. **Satu section per pass + 7 gate**; geometri/MAE
+1440 TIDAK boleh berubah (Philosophy 2.041 / Ecosystem 2.221); Home (`1430:2052`)
+jangan disentuh. **PENDING:** video hero Contact (`1445:5066`) tunggu aset; lalu
+audit per-section Detail HoDS (`864:18857` dkk) + konten asli.
+**ATURAN STRICT (jangan dilanggar):** spacing/padding/margin = **kelipatan 8**
+(gate `npm run audit:spacing`, per-komponen `node scripts/spacing-audit.mjs
+<file>`); heading = **Bluu Next Bold 700 (`--font-display`)**, body Manrope;
+warna solid = `fills` Figma persis, gradient = fit dari PNG; geometri ±1px + MAE
+dilaporkan; render reduce pixel-exact. Cara kerja: **Plan per halaman →
+inventaris semua section (`depth 1`) → 1 section per pass + 7 gate per section.
+JANGAN skip satu section pun.**
 
 ---
 
@@ -48,10 +61,12 @@ Sebelum ngapa-ngapain, WAJIB baca dulu (urut, jangan skip):
 3. docs/ai-handoff.md           → STATE PALING TERKINI ("dimana kita sekarang")
 4. HANDOVER.md                  → konteks panjang: stack, struktur, status, TODO
 5. docs/assets.md               → provenance tiap section + node Figma
-6. docs/hero-video-plan.md      → **Master Work Plan VIDEO HERO (target berikutnya)** —
-                                  aturan encode anti-burik, loop, reduce/≤600px,
-                                  budget, urutan rollout per hero
-7. docs/sound-sop.md            → SOP sound (Web Audio prosedural) + porting
+6. docs/about-us-glow-plan.md   → **Master Work Plan NEXT** — About Us glow responsif
+                                  + karakter menempel tepi (Our Philosophy/Ecosystem)
+7. docs/hero-video-plan.md      → Master Work Plan VIDEO HERO (Home/Recruitment/About/
+                                  HoF/Partners sudah; Contact pending) — aturan encode
+                                  anti-burik, loop, reduce/≤600px, budget
+8. docs/sound-sop.md            → SOP sound (Web Audio prosedural) + porting
                                   (skill `.agents/skills/data-sorcerers-sound/SKILL.md`)
 
 ================================================================================
@@ -244,23 +259,42 @@ Urutan target (prioritas sekarang):
      gradient global, rim Figma `90deg`/`110deg` fit dari PNG, section Snippets
      line-height 67 → tinggi 897). Benchmark presisi; jangan rusak.
    D. Audit Partners (`1439:4787`) — **SELESAI 4/4 (3 Oct 2026)**. Jangan rusak.
-   E. **★ NEXT — VIDEO HERO: semua hero section jadi background video looping**
-      (fallback gambar statis). **Home, Recruitment, About Us, Hall of Frames
-      (source di-refresh), dan Partners SUDAH video.** **NEXT = Contact
-      (`1445:5066`)**, tunggu aset sumber dari user. **Master Work Plan lengkap:
-      `docs/hero-video-plan.md`.** Kerjakan **satu hero per pass + 7 gate**;
-      geometri statis & reduce TIDAK boleh berubah. Setelah video, audit sisa
-      Detail HoDS (`864:18857` dkk) per-section + konten asli.
-   F. Konten asli (foto member, logo partner, `projects.ts`, tanggal recruitment,
+   E. **VIDEO HERO — Home, Recruitment, About Us, Hall of Frames (source
+      di-refresh), dan Partners SUDAH video.** Contact (`1445:5066`) menunggu
+      aset sumber dari user. Master Work Plan: `docs/hero-video-plan.md`.
+      Satu hero per pass + 7 gate; geometri statis & reduce tidak boleh berubah.
+   F. **★ NEXT — About Us: glow responsif + karakter menempel tepi** (Our
+      Philosophy `1439:4219` & Our Ecosystem `1439:4258`). Master Work Plan:
+      **`docs/about-us-glow-plan.md`**; SOP: `docs/pixel-precision-sop.md`
+      §Hukum Glow, Gradient & Artwork Responsif. Satu section per pass + 7 gate;
+      geometri/MAE 1440 TIDAK berubah (Philosophy 2.041 / Ecosystem 2.221); Home
+      (`1430:2052`) jangan disentuh.
+   G. Konten asli (foto member, logo partner, `projects.ts`, tanggal recruitment,
       milestone HoF).
 
 --------------------------------------------------------------------------------
-TARGET NEXT: CONTACT HERO VIDEO (`1445:5066`) — looping, anti-burik
-Master Work Plan rinci ada di **`docs/hero-video-plan.md`** (WAJIB dibaca dulu).
+TARGET NEXT: ABOUT US — GLOW RESPONSIF + KARAKTER MENEMPEL TEPI
+(`1439:4219` Our Philosophy & `1439:4258` Our Ecosystem)
+Master Work Plan rinci: **`docs/about-us-glow-plan.md`** (WAJIB dibaca dulu).
 Ringkas:
-- State: Home `1430:2041`, Recruitment `1436:3506`, About `1439:4185`,
-  Hall of Frames `1439:4507` (source di-refresh), dan Partners `1439:4788`
-  **SUDAH video** (jangan dirusak). **Contact `1445:5066` tunggu aset.**
+- **Masalah 1 — glow ungu tidak responsif (zoom-out >1440):** gradient dilukis di
+  `<section>` full-bleed sedangkan konten 1440 di-`zoom` (`.canvas { zoom: calc(100vw
+  / 1440px) }`). Gradient di-fit untuk 1440×837 / 1440×874 → di lebar besar pita
+  ungu bergeser (cuma sudut) & seam Philosophy↔Ecosystem rusak.
+- **Masalah 2 — karakter Philosophy About tidak nempel tepi:** `.illustration`
+  `left:0` di dalam canvas zoom → art ikut membesar (861→1530px). Home pakai
+  `left: calc((1440px - 100cqw) / 2)` + art tetap 861px.
+- **Arah perbaikan:** satukan koordinat glow dengan kanvas (pindahkan gradient ke
+  `.canvas`/layer `.glow`, ikut zoom; atau buang `zoom` dan tiru Home); anchor
+  karakter ke tepi section tanpa ikut zoom. Uji 1440/1920/2560/3840; seam ≤ 9.
+- **Acceptance:** MAE 1440 tak berubah + geometri tetap; pita ungu atas/bawah
+  konsisten di lebar besar; karakter nempel kiri; responsive 320→3840; reduce
+  pixel-exact; 7 gate + seo + spacing PASS.
+- **PENDING:** video hero Contact (`1445:5066`) — tunggu aset. Detail hero (encode
+  anti-burik, loop, reduce/≤600px, budget) di `docs/hero-video-plan.md`.
+
+--------------------------------------------------------------------------------
+ARSIP — ATURAN VIDEO HERO (relevan saat Contact / hero baru dikerjakan):
 - Aturan kunci:
   - Video = lapisan `position:absolute; inset:0; object-fit:cover` di `.artwork`
     (`z-index:-1`, `aria-hidden`). **Geometri/padding/gap/font TIDAK berubah.**
@@ -597,12 +631,15 @@ INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
    - Update dokumen (`docs/assets.md`, `docs/ai-handoff.md`, `AGENTS.md`).
    - Commit per fitur; confirm user sebelum push ke origin main.
 3. **Mulai dari mana?**
-   Target **NEXT — Contact hero video (`1445:5066`)** (tunggu aset sumber dari user;
-   Master Work Plan `docs/hero-video-plan.md`), lalu audit per-section **6 detail
-   HoDS** (`864:18857` dkk) dan **konten asli**.
-   Hall of Frames card Project Highlight (`1439:4655`) **sudah SELESAI 3 Oct 2026**;
-   **Partners (`1439:4787`) 4/4 sudah SELESAI**; **revisi Detail HoDS SELESAI**.
-   About Us Philosophy (`1439:4219`) background blend **sudah SELESAI 3 Oct 2026**.
+   Target **NEXT — About Us glow responsif + karakter menempel tepi** (Our
+   Philosophy `1439:4219` & Our Ecosystem `1439:4258`); **Master Work Plan:
+   `docs/about-us-glow-plan.md`** — satu section per pass + 7 gate. Lalu
+   **PENDING video hero Contact (`1445:5066`)** (tunggu aset, `docs/hero-video-plan.md`),
+   lalu audit per-section **6 detail HoDS** (`864:18857` dkk) dan **konten asli**.
+   Hall of Frames card Project Highlight (`1439:4655`) + **Featured detail modal
+   (`1554:2824`)** **sudah SELESAI 3 Oct 2026**; **Partners (`1439:4787`) 4/4 sudah
+   SELESAI**; **revisi Detail HoDS SELESAI**. About Us Philosophy (`1439:4219`)
+   background blend **sudah SELESAI 3 Oct 2026** (glow responsif belum).
    Homepage (`1430:2040`), About Us (`1439:4184`), Recruitment (`1436:3505`, 9/9),
    dan Partners (`1439:4787`, 4/4) **sudah audit** — tetap benchmark, jangan rusak
    tanpa alasan. Video hero: Home, Recruitment, About Us, Hall of Frames (source

@@ -17,7 +17,16 @@ hidden default + open geometry (panel 997×576, card 302×400, body 471, 3 bar) 
 Esc close; closed-section MAE tetap **2.008**. Efek hidup gated reduce/hover;
 detail: `docs/assets.md` §Hall of Frames — Featured Sorcerers detail modal.
 
-**★ NEXT = CONTACT HERO VIDEO (`1445:5066`) — satu-satunya hero yang belum video.**
+**★ NEXT = ABOUT US — GLOW RESPONSIF + KARAKTER MENEMPEL TEPI** (`1439:4219` Our
+Philosophy & `1439:4258` Our Ecosystem). Saat zoom-out (>1440) glow ungu tidak
+responsif (gradient dilukis di `<section>` full-bleed, konten di-`zoom`); karakter
+Philosophy About ikut membesar alih-alih menempel tepi seperti Home. **Master Work
+Plan rinci: `docs/about-us-glow-plan.md`** + `docs/pixel-precision-sop.md` §Hukum
+Glow, Gradient & Artwork Responsif. **Satu section per pass + 7 gate**; geometri/MAE
+1440 tidak boleh berubah (Philosophy 2.041 / Ecosystem 2.221); Home (`1430:2052`)
+jangan disentuh.
+
+**PENDING = CONTACT HERO VIDEO (`1445:5066`) — satu-satunya hero yang belum video.**
 Home (`1430:2041`), Recruitment (`1436:3506`), About Us (`1439:4185`), Hall of
 Frames (`1439:4507`), dan Partners (`1439:4788`) **sudah video** (lihat
 `docs/hero-video-plan.md` §1). Contact menunggu aset sumber dari user. **Satu hero
