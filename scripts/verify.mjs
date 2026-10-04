@@ -2664,23 +2664,20 @@ try {
     };
   });
   assert.equal(aboutWide.bodyZoom, 1);
-  assert.ok(Math.abs(aboutWide.canvasZoom - 1920 / 1440) < 0.01);
+  assert.equal(aboutWide.canvasZoom, 1);
   assert.equal(aboutWide.sectionWidth, aboutWide.clientWidth);
   assert.equal(aboutWide.philosophyWidth, aboutWide.clientWidth);
-  assert.equal(aboutWide.canvasWidth, aboutWide.clientWidth);
+  assert.equal(aboutWide.canvasWidth, 1440);
   assert.equal(new Set(aboutWide.lineEnds).size, 1);
-  // The zoomed canvas still scales with the artwork so it never drifts off the
-  // left edge; the About gradient itself is painted on the section (matching the
-  // Our Ecosystem section-level gradient) so the seam stays continuous.
-  assert.ok(Math.abs(aboutWide.philosophyCanvasZoom - 1920 / 1440) < 0.01);
-  assert.equal(aboutWide.philosophyCanvasWidth, aboutWide.clientWidth);
-  assert.ok(Math.abs(aboutWide.philosophyIllustration.left) < 1);
-  assert.ok(
-    aboutWide.philosophyIllustration.right <= aboutWide.clientWidth + 1,
-  );
+  // The canvas no longer zooms — the gradient stays section-level (full-bleed) so
+  // the glow stretches continuously across the viewport at any width, and the
+  // artwork is anchored to the section edge via the cqw formula.
+  assert.equal(aboutWide.philosophyCanvasZoom, 1);
+  assert.equal(aboutWide.philosophyCanvasWidth, 1440);
+  assert.equal(aboutWide.philosophyIllustration.left, 0);
+  assert.equal(aboutWide.philosophyIllustration.right, 861);
   assert.ok(aboutWide.overflow <= 1);
-  // Past 2880px the zoom must stay uncapped, otherwise a gutter appears at the
-  // edges (the original bug: the canvas froze at 2x and showed #050507 bars).
+  // The canvas is now centered (no zoom) so at 3200 its left edge is (3200-1440)/2 = 880.
   await page.setViewportSize({ width: 3200, height: 900 });
   const aboutUltraWide = await page.evaluate(() => {
     const box = document
@@ -2693,8 +2690,8 @@ try {
       overflow: document.documentElement.scrollWidth - innerWidth,
     };
   });
-  assert.equal(aboutUltraWide.left, 0);
-  assert.equal(aboutUltraWide.right, aboutUltraWide.clientWidth);
+  assert.equal(aboutUltraWide.left, 880);
+  assert.equal(aboutUltraWide.right, 2320);
   assert.ok(aboutUltraWide.overflow <= 1);
   for (const [width, expectedDisplay] of [
     [1050, 'grid'],

@@ -1,9 +1,14 @@
-# About Us — Responsive glow & character plan (NEXT)
+# About Us — Responsive glow & character plan (SELESAI 4 Oct 2026)
 
-**Status:** rencana untuk AI berikutnya. Kerjakan **satu section per pass + 7 gate**,
-jangan digabung. Baca dulu: `AGENTS.md`, `docs/pixel-precision-sop.md`
-(§Hukum Glow/Gradient/Artwork Responsif), `docs/assets.md`,
-`docs/ai-handoff.md`.
+**Status:** **SELESAI 4 Oct 2026.** Canvas `zoom` dihapus dari Our Philosophy
+(`1439:4219`) dan Our Ecosystem (`1439:4258`); gradient tetap **section-level**
+(full-bleed) sehingga pita ungu konsisten di semua lebar; artwork Philosophy
+anchor `left: calc((1440px - 100cqw) / 2)` (≥1441px) → tetap 861px, nempel tepi
+section, identik dengan Home. Geometri 1440 tetap, seam Δ 0. `verify.mjs`
+assertions diperbarui. Dokumen ini disimpan sebagai catatan keputusan (di bawah).
+
+Baca dulu: `AGENTS.md`, `docs/pixel-precision-sop.md` (§Hukum Glow/Gradient/Artwork
+Responsif), `docs/assets.md`, `docs/ai-handoff.md`.
 
 Target: **About Us (`1439:4184`)** — Section 3 Our Philosophy (`1439:4219`) dan
 Section 4 Our Ecosystem (`1439:4258`). Dua masalah: **glow ungu tidak responsif

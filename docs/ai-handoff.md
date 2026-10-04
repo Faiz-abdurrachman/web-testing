@@ -8,6 +8,24 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
+**SELESAI (4 Oct 2026) — About Us: glow responsif + karakter menempel tepi.**
+**Our Philosophy (`1439:4219`) & Our Ecosystem (`1439:4258`).** Canvas zoom
+`calc(100vw / 1440px)` dihapus dari kedua section — gradient tetap section-level
+(full-bleed) sehingga pita ungu konsisten di semua lebar; artwork Philosophy About
+kini anchor `left: calc((1440px - 100cqw) / 2)` (≥1441px) → tetap 861px, nempel tepi
+section tanpa ikut membesar, identik dengan Home. Geometry 1440 tetap, seam delta 0.
+verify.mjs assertions diperbarui (canvasZoom:1, canvasWidth:1440, artL:0, artR:861
+at 1920; canvas 880/2320 at 3200). 7 gate + seo + spacing ALL PASS.
+
+**★ NEXT (untuk AI baru) — terapkan SEMUA tombol/link sesuai prototype Figma.**
+Peta lengkap (dari REST API `interactions`, MCP tidak expose): **`docs/figma-prototype-flow.md`**
+
+- SOP §"Hukum Navigasi & Prototype". **Satu elemen/halaman per pass + 7 gate.**
+  Setiap tujuan harus **100% benar**; `aria-disabled` hanya untuk yang benar-benar
+  tak punya destinasi (legal/social). **Catat setiap perubahan** di doc. Home
+  (`1430:2040`) & Recruitment (`1436:3505`) = **prioritas & benchmark presisi —
+  jangan rusak**. Gap awal: `docs/figma-prototype-flow.md` §9 (6 elemen).
+
 **SELESAI (3 Oct 2026) — Hall of Frames Featured Sorcerers detail modal
 (`1554:2824`).** Klik kartu Featured membuka `<dialog>` detail: panel 997×576
 (centered, `padding 88/80`, gap 64, fill `rgba(5,5,7,.5)` + GLASS rim), backdrop
@@ -16,15 +34,6 @@ grad `134deg` + dot, Contribution Manrope 400 16/24. `verify.mjs` assert dialog
 hidden default + open geometry (panel 997×576, card 302×400, body 471, 3 bar) +
 Esc close; closed-section MAE tetap **2.008**. Efek hidup gated reduce/hover;
 detail: `docs/assets.md` §Hall of Frames — Featured Sorcerers detail modal.
-
-**★ NEXT = ABOUT US — GLOW RESPONSIF + KARAKTER MENEMPEL TEPI** (`1439:4219` Our
-Philosophy & `1439:4258` Our Ecosystem). Saat zoom-out (>1440) glow ungu tidak
-responsif (gradient dilukis di `<section>` full-bleed, konten di-`zoom`); karakter
-Philosophy About ikut membesar alih-alih menempel tepi seperti Home. **Master Work
-Plan rinci: `docs/about-us-glow-plan.md`** + `docs/pixel-precision-sop.md` §Hukum
-Glow, Gradient & Artwork Responsif. **Satu section per pass + 7 gate**; geometri/MAE
-1440 tidak boleh berubah (Philosophy 2.041 / Ecosystem 2.221); Home (`1430:2052`)
-jangan disentuh.
 
 **PENDING = CONTACT HERO VIDEO (`1445:5066`) — satu-satunya hero yang belum video.**
 Home (`1430:2041`), Recruitment (`1436:3506`), About Us (`1439:4185`), Hall of

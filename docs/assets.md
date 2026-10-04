@@ -945,6 +945,7 @@ rgba(108,59,255,.3) 50%, #0e0626)`; info frame `…;1260:16770` (222 × 94 at
   Philosophy↔Ecosystem seam stays continuous (channel Δ ≤ 2 at 1440/1920/2560).
   `verify.mjs` asserts the zoom, canvas width, artwork left/right containment at
   1920px and full-bleed (left 0 / right = clientWidth) at 3200px.
+- **Responsive glow + character fix (4 Oct 2026).** Canvas zoom `calc(100vw / 1440px)` removed from both Philosophy About and Our Ecosystem. The gradient stays **section-level** (full-bleed) so the purple band stretches predictably across the viewport at any width; the artwork anchors via `left: calc((1440px - 100cqw) / 2)` (≥1441px) so it stays 861px and hugs the left section edge, matching the Home variant. verify.mjs assertions updated — zoom is 1, canvas is 1440px centered, art at {0,861}. Seam delta 0 at 1440.
 - **Philosophy gradient re-fitted (3 Oct 2026).** The team updated node
   `1439:4219` in the new file to a gradient (handles `p0(0.553,0.545) →
 p1(0.798,1.681)`) so About Philosophy blends into Our Ecosystem. The current
