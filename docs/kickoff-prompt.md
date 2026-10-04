@@ -33,14 +33,21 @@ kartu `549×567` + coverflow JS, 4 project/4 dot, glow bow-tie dihapus; section
 gradient section-level (full-bleed); artwork anchor `left: calc((1440px - 100cqw)/2)`
 (≥1441) → 861px, nempel tepi, identik Home; seam Δ 0; geometri 1440 tetap. 7 gate +
 seo + spacing PASS.
-**★ NEXT (untuk AI baru): TERAPKAN SEMUA TOMBOL/LINK SESUAI PROTOTYPE FIGMA** —
-peta lengkap **`docs/figma-prototype-flow.md`** + SOP §"Hukum Navigasi & Prototype".
-**Satu elemen per pass + 7 gate**; setiap tujuan **100% benar**; `aria-disabled`
-hanya untuk yang benar-benar tak punya destinasi (legal/social); **catat tiap
-perubahan** di doc. Prioritaskan Home (`1430:2040`) & Recruitment (`1436:3505`) —
-benchmark presisi, jangan rusak. Gap awal: `docs/figma-prototype-flow.md` §9 (6
-elemen). **PENDING:** video hero Contact (`1445:5066`) tunggu aset; lalu audit
-per-section Detail HoDS (`864:18857` dkk) + konten asli.
+**SELESAI (4 Oct 2026): semua tombol/link prototype Figma + polish navbar/tab.**
+Semua link prototype terpasang (`docs/figma-prototype-flow.md` §9, 8 elemen:
+Hero/RecruitmentHero/Recruitment/Cta/Navbar CTA/Footer nav/scroll-up). Navbar
+hover = underline (aktif permanen, hover preview + glow). Tab Detail HoDS punya
+transisi halus (pill cross-fade + konten stagger) yang reduce-safe. Detail HoDS
+(`864:18857` dkk) & video hero (Home/Recruitment/About/HoF/Partners) selesai.
+**PENDING kecil:** video hero Contact (`1445:5066`) tunggu aset.
+**★ NEXT (untuk AI baru): BANGUN CMS / ADMIN DASHBOARD** — rencana lengkap di
+**`docs/cms-plan.md`** (3 opsi arsitektur, content model, jebakan, roadmap fase,
+5 pertanyaan terbuka). Target: editor non-teknis bisa update project, team/orang,
+role, prestasi, HoDS, partners **tanpa nyentuh kode**. Rekomendasi: mulai Fase 0 =
+refactor `src/data/*.ts` → **Astro Content Collections** (`src/content/`) + skema
+Zod, **tanpa mengubah tampilan/geometri**, satu collection per pass + 7 gate;
+lalu pasang **Keystatic** di atasnya. Prioritaskan jangan rusak presisi Home &
+Recruitment.
 **ATURAN STRICT (jangan dilanggar):** spacing/padding/margin = **kelipatan 8**
 (gate `npm run audit:spacing`, per-komponen `node scripts/spacing-audit.mjs
 <file>`); heading = **Bluu Next Bold 700 (`--font-display`)**, body Manrope;
@@ -273,38 +280,37 @@ Urutan target (prioritas sekarang):
       (Our Philosophy `1439:4219` & Our Ecosystem `1439:4258`). Canvas zoom dihapus,
       gradient section-level, artwork anchor `calc((1440px - 100cqw)/2)` → 861px
       nempel tepi; seam Δ 0; geometri 1440 tetap. Catatan: `docs/about-us-glow-plan.md`.
-   G. **★ NEXT — TERAPKAN SEMUA TOMBOL/LINK SESUAI PROTOTYPE FIGMA.** Peta:
-      **`docs/figma-prototype-flow.md`**; SOP §"Hukum Navigasi & Prototype". Satu
-      elemen/halaman per pass + 7 gate; setiap tujuan 100% benar; `aria-disabled`
-      hanya untuk yang benar-benar tak punya destinasi; **catat tiap perubahan**.
-      Prioritaskan Home (`1430:2040`) & Recruitment (`1436:3505`) — jangan rusak.
-      Gap awal: `docs/figma-prototype-flow.md` §9.
-   H. PENDING — video hero Contact (`1445:5066`) tunggu aset. Lalu konten asli
-      (foto member, logo partner, `projects.ts`, tanggal recruitment, milestone HoF).
+   G. **SELESAI (4 Oct 2026) — semua tombol/link prototype Figma** (8 elemen,
+      `docs/figma-prototype-flow.md` §9) + navbar hover underline + transisi tab
+      Detail HoDS (reduce-safe).
+   H. **★ NEXT — BANGUN CMS / ADMIN DASHBOARD.** Rencana: **`docs/cms-plan.md`**
+      (opsi arsitektur, content model, jebakan, roadmap, 5 pertanyaan terbuka).
+      Fase 0 = `src/data/*.ts` → **Astro Content Collections** + Zod, **tanpa
+      ubah tampilan**, satu collection per pass + 7 gate; lalu pasang **Keystatic**.
+   I. PENDING kecil — video hero Contact (`1445:5066`) tunggu aset.
 
 --------------------------------------------------------------------------------
-TARGET NEXT: TERAPKAN SEMUA TOMBOL/LINK SESUAI PROTOTYPE FIGMA
-Peta lengkap + gap: **`docs/figma-prototype-flow.md`** (WAJIB dibaca dulu).
-SOP: **`docs/pixel-precision-sop.md` §"Hukum Navigasi & Prototype"**.
-Ringkas:
-- Sumber tujuan = prototype Figma. MCP `figma_get_figma_data` **TIDAK expose**
-  interactions; baca via REST `GET /v1/files/<key>` (`node.interactions[].actions[]`
-  → `destinationId`/`navigation`) lalu resolve nama. Peta hasil sudah di
-  `docs/figma-prototype-flow.md`.
-- Aksi: `NAVIGATE` → pindah halaman; `SCROLL_TO` → anchor in-page
-  (`#projects`/`#available-roles`/`#who-should-join`/`#domains`/`#our-philosophy`);
-  `BACK` → `history.back()`; `CHANGE_TO`/`SWAP`/`DRAG` → state lokal (accordion/
-  carousel/tab), bukan navigasi.
-- Gap awal (§9 doc): `Hero.astro` (Join→`/recruitment`, Explore→`#projects`),
-  `RecruitmentHero.astro` (Apply Now→`#available-roles`), `Recruitment.astro`
-  (Join→`#available-roles`), `Cta.astro` (Join→`/recruitment`, keputusan user),
-  `Footer.astro` (5 nav → halaman). Yang tetap disabled: legal, social
-  footer/OurTeam, Apply Now detail role.
-- **Satu elemen per pass + 7 gate**; klik verifikasi manual + `verify:vt`; pastikan
-  tidak ada `aria-disabled` tersisa untuk elemen yang punya tujuan; **catat tiap
-  perubahan**. Jangan geser geometri/MAE Home & Recruitment.
-- Bug prototype Figma (jangan ditiru): Vision & Multimodal card → Core AI;
-  role card 2 dobel DATA INTELLIGENCE; link usang di Arsip.
+TARGET NEXT: BANGUN CMS / ADMIN DASHBOARD
+Rencana lengkap: **`docs/cms-plan.md`** (WAJIB dibaca dulu). Ringkas:
+- Tujuan: editor non-teknis bisa CRUD project, team/orang, role, prestasi,
+  HoDS, partners, site settings — **tanpa menyentuh kode**.
+- Rekomendasi: **Fase 0** pindahkan `src/data/*.ts` → **Astro Content
+  Collections** (`src/content/`) + skema **Zod**; **tampilan/geometri TIDAK boleh
+  berubah**. Lalu **Fase 1** pasang **Keystatic** (`@keystatic/astro`, admin di
+  `/keystatic`, git-based, tanpa DB). Alternatif/upgrade: Sanity / Payload.
+- Jebakan (detail di `docs/cms-plan.md` §7): geometri kartu (`domains.ts` `rows`,
+  `roles.ts` flag `centered`/`tight`) itu DESAIN, bukan konten → jangan
+  diekspos; gambar konten vs artwork-bake; `public/` bukan storage; `verify.mjs`
+  mengunci beberapa jumlah konten → jangan longgarkan assertion geometri; auth
+  OAuth proxy; deploy ganda testing+production.
+- Cara kerja: tulis **Master Plan Fase 0** dulu (daftar collection + skema Zod per
+  file), lalu **satu collection per pass + 7 gate**.
+- Jawab dulu **5 pertanyaan terbuka** di `docs/cms-plan.md` §9 bersama user.
+
+SELESAI (arsip): semua tombol/link prototype Figma sudah terpasang — peta di
+**`docs/figma-prototype-flow.md`** (§9, 8 elemen) + SOP §"Hukum Navigasi &
+Prototype". Bug prototype Figma jangan ditiru: Vision & Multimodal card → Core AI;
+role card 2 dobel DATA INTELLIGENCE; link usang di Arsip.
 
 --------------------------------------------------------------------------------
 ARSIP — ATURAN VIDEO HERO (relevan saat Contact / hero baru dikerjakan):
@@ -644,21 +650,20 @@ INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
    - Update dokumen (`docs/assets.md`, `docs/ai-handoff.md`, `AGENTS.md`).
    - Commit per fitur; confirm user sebelum push ke origin main.
 3. **Mulai dari mana?**
-   Target **NEXT — About Us glow responsif + karakter menempel tepi** (Our
-   Philosophy `1439:4219` & Our Ecosystem `1439:4258`); **Master Work Plan:
-   `docs/about-us-glow-plan.md`** — satu section per pass + 7 gate. Lalu
-   **PENDING video hero Contact (`1445:5066`)** (tunggu aset, `docs/hero-video-plan.md`),
-   lalu audit per-section **6 detail HoDS** (`864:18857` dkk) dan **konten asli**.
-   Hall of Frames card Project Highlight (`1439:4655`) + **Featured detail modal
-   (`1554:2824`)** **sudah SELESAI 3 Oct 2026**; **Partners (`1439:4787`) 4/4 sudah
-   SELESAI**; **revisi Detail HoDS SELESAI**. About Us Philosophy (`1439:4219`)
-   background blend **sudah SELESAI 3 Oct 2026** (glow responsif belum).
-   Homepage (`1430:2040`), About Us (`1439:4184`), Recruitment (`1436:3505`, 9/9),
-   dan Partners (`1439:4787`, 4/4) **sudah audit** — tetap benchmark, jangan rusak
-   tanpa alasan. Video hero: Home, Recruitment, About Us, Hall of Frames (source
-   di-refresh), dan Partners **SUDAH video**.
-   Inventaris dulu (checklist `depth 1` di atas), buat Master Work Plan section
-   pertama, cek pixel-identik vs node lain, export PNG referensi, ukur, baru sentuh
-   kode. Selesaikan + 7 gate sebelum pindah section. JANGAN skip/lewatkan section.
+   **★ NEXT — BANGUN CMS / ADMIN DASHBOARD. Rencana: `docs/cms-plan.md`**
+   (WAJIB dibaca). Fase 0 = `src/data/*.ts` → **Astro Content Collections**
+   (`src/content/`) + skema Zod, **tanpa mengubah tampilan/geometri**, satu
+   collection per pass + 7 gate; lalu Fase 1 pasang **Keystatic**. Jawab dulu 5
+   pertanyaan terbuka `docs/cms-plan.md` §9.
+   **SUDAH SELESAI** (arsip): semua tombol/link prototype Figma (8 elemen,
+   `docs/figma-prototype-flow.md` §9) + navbar hover underline + transisi tab
+   Detail HoDS. Halaman Homepage (`1430:2040`), About Us (`1439:4184`),
+   Recruitment (`1436:3505`, 9/9), Partners (`1439:4787`, 4/4) sudah audit —
+   benchmark presisi, JANGAN rusak. Detail HoDS + HoF project card/featured modal
+   + About glow + video hero (Home/Recruitment/About/HoF/Partners) selesai.
+   **PENDING kecil:** video hero Contact (`1445:5066`) tunggu aset.
+   Untuk kerja presisi apa pun: inventaris `depth 1` dulu, tulis Master Work Plan,
+   cek pixel-identik vs node lain, export PNG referensi, ukur, baru sentuh kode;
+   selesaikan + 7 gate sebelum pindah section. JANGAN skip/lewatkan section.
    **Khusus About Us visi-misi: JANGAN sentuh `<Starfield />`.**
 ```

@@ -392,10 +392,16 @@ center` menolak center item 18px di content-box 12px (padding 8/16) → SVG di
   hover pada link aktif pun terlihat (garisnya glow `0 0 10px rgb(155 123 255 /
 85%)`). Pill background dibatalkan (user minta garis). Garis tetap 1px/lebar
   label (navbar-audit assert h≈1, w=label) — geometri tak berubah, ALL PASS.
-- **★ NEXT: video hero Contact (`1445:5066`) — satu-satunya hero belum video.**
-  Tunggu aset dari user. Lalu audit sisa Detail HoDS + konten asli (foto member,
-  logo partner, `projects.ts`, tanggal recruitment, milestone HoF). Lihat
-  `docs/hero-video-plan.md`.
+- **★ NEXT: BANGUN CMS / ADMIN DASHBOARD.** Rencana lengkap: **`docs/cms-plan.md`**
+  (3 opsi arsitektur, content model, jebakan, roadmap fase, 5 pertanyaan terbuka).
+  Fase 0 = pindahkan `src/data/*.ts` → **Astro Content Collections** (`src/content/`)
+  - skema **Zod**, **tanpa ubah tampilan/geometri**, satu collection per pass + 7
+    gate; lalu Fase 1 pasang **Keystatic** (`@keystatic/astro`, git-based, admin
+    `/keystatic`). Jebakan: geometri kartu (`domains.ts` `rows`, `roles.ts`
+    `centered`/`tight`) = desain jangan diekspos; `verify.mjs` mengunci sebagian
+    jumlah konten. Upgrade path: Sanity / Payload.
+- **PENDING kecil: video hero Contact (`1445:5066`)** — satu-satunya hero belum
+  video; tunggu aset dari user. Lihat `docs/hero-video-plan.md`.
 - **Recruitment Hero penajaman (3 Oct 2026):** sumber video planetary 1080p
   memang lembut pada permukaan planet. Generator kini memakai CAS luma 0.6
   sebelum upscale Lanczos dan unsharp ringan 0.25 sesudahnya (AV1 CRF 42,
@@ -520,7 +526,9 @@ center` menolak center item 18px di content-box 12px (padding 8/16) → SVG di
   `href` render `<a>` (bukan `<button>`), jadi `verify.mjs` selector
   `relative('button')` diganti `relative('.button')`. 7 gate + seo ALL PASS.
   Detail: `docs/figma-prototype-flow.md` §9.
-- **★ NEXT: video hero Contact (`1445:5066`) — satu-satunya hero belum video.**
+- **★ NEXT: BANGUN CMS / ADMIN DASHBOARD** — rencana `docs/cms-plan.md` (Fase 0 =
+  Content Collections + Zod, lalu Keystatic). Lihat entri NEXT di atas.
+- **PENDING kecil: video hero Contact (`1445:5066`) — satu-satunya hero belum.**
   Tunggu aset dari user. Lalu audit sisa Detail HoDS + konten asli (foto member,
   logo partner, `projects.ts`, tanggal recruitment, milestone HoF). Lihat
   `docs/hero-video-plan.md`.
