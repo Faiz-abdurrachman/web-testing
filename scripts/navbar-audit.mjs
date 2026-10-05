@@ -151,6 +151,22 @@ for (const route of ROUTES) {
 
     await page.goto(`${BASE}${route}`, { waitUntil: 'load', timeout: 30000 });
     await page.evaluate(() => document.fonts.ready);
+    // The navbar entrance (`nav-in`, 0.6s + up to ~0.5s delay) starts at
+    // translateY(-12px); measuring mid-flight reads the logo ~1px high. Wait
+    // until every navbar animation has settled so geometry stays ±1px exact.
+    await page
+      .waitForFunction(
+        () => {
+          const nav = document.querySelector('.navbar');
+          if (!nav) return true;
+          const running = nav
+            .getAnimations({ subtree: true })
+            .some((a) => a.playState === 'running');
+          return !running;
+        },
+        { timeout: 4000 },
+      )
+      .catch(() => {});
     await sleep(350);
 
     const top = await probe(page);
@@ -201,7 +217,7 @@ for (const route of ROUTES) {
     if (width === 1440) {
       if (!close(top.navHeight, 106.8, 0.5))
         failures.push(`1440: navbar height ${top.navHeight} (want 106.8)`);
-      if (!close(top.brand.x, 80) || !close(top.brand.y, 24, 2))
+      if (!close(top.brand.x, 80) || !close(top.brand.y, 24))
         failures.push(
           `1440: logo at ${top.brand.x}/${top.brand.y} (want 80/24)`,
         );
