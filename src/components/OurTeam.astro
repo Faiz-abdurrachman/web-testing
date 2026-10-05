@@ -162,17 +162,32 @@ const STEP = 948;
     const total = chips.length;
     const pageSize = 3;
     let active = 0;
+    let shown = -1;
 
     const render = () => {
       const page = Math.floor(active / pageSize);
       chips.forEach((chip, i) =>
         chip.classList.toggle('is-active', i === active),
       );
-      panels.forEach((panel, i) =>
-        panel.classList.toggle('is-active', i === active),
-      );
+      panels.forEach((panel, i) => {
+        const isActive = i === active;
+        panel.classList.toggle('is-active', isActive);
+        // Restart the gated entrance on the newly shown panel. Skipped on the
+        // first render so the section's scroll-reveal owns the first appearance.
+        if (isActive && i !== shown && shown !== -1) {
+          panel
+            .querySelectorAll<HTMLElement>('.team-card')
+            .forEach((card, index) =>
+              card.style.setProperty('--i', String(index)),
+            );
+          panel.classList.remove('is-entering');
+          void panel.offsetWidth;
+          panel.classList.add('is-entering');
+        }
+      });
       dots.forEach((dot, i) => dot.classList.toggle('is-active', i === page));
       chipsEl?.style.setProperty('--hods-page', String(page));
+      shown = active;
     };
 
     chips.forEach((chip, i) =>
@@ -508,6 +523,7 @@ const STEP = 948;
   @media (prefers-reduced-motion: no-preference) {
     .hods-chips {
       transition: transform 0.4s cubic-bezier(0.33, 0, 0.2, 1);
+      will-change: transform;
     }
     .hods-chip,
     .hods-dot,
@@ -515,6 +531,20 @@ const STEP = 948;
       transition:
         background-color 0.25s ease,
         opacity 0.25s ease;
+    }
+    .hods-panel.is-active.is-entering :global(.team-card) {
+      animation: hods-card-in 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+      animation-delay: calc(var(--i, 0) * 60ms);
+    }
+    @keyframes hods-card-in {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   }
 

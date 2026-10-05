@@ -428,6 +428,25 @@ export function initMotion() {
       const recruitment = document.querySelector('.recruitment');
       reveal(recruitment, '.recruitment-panel > *', { y: 34 });
 
+      // About Us — Our Team: the header, both group titles, the leader cards and
+      // the HoDS carousel (chips row + active panel cards) settle in as the
+      // section scrolls into view. The active panel's cards are the Data set at
+      // init; other panels are only shown on click and start at natural opacity.
+      const ourTeam = document.querySelector<HTMLElement>('.our-team');
+      if (ourTeam) {
+        reveal(ourTeam, '.team-header > *');
+        reveal(ourTeam, '.team-group-title', { y: 28, stagger: 0.1 });
+        reveal(ourTeam, '.team-cards--leader .team-card', {
+          y: 44,
+          stagger: 0.1,
+        });
+        reveal(ourTeam, '.hods-top', { y: 24 });
+        reveal(ourTeam, '.hods-panel.is-active .team-card', {
+          y: 44,
+          stagger: 0.08,
+        });
+      }
+
       // Park the CTA glow sweep and the recruitment star skies while their
       // section is off-screen.
       for (const selector of [
