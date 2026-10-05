@@ -1,0 +1,199 @@
+---
+interface Props {
+  name: string;
+  role: string;
+  photo: 'marchel' | 'zidan-rose';
+  fade: string;
+}
+const { name, role, photo, fade } = Astro.props;
+---
+
+<article class="team-card">
+  <img
+    class="team-card-frame"
+    src="/images/team/card-frame.webp"
+    srcset="/images/team/card-frame.webp 1x, /images/team/card-frame-2x.webp 2x"
+    width="295"
+    height="277"
+    alt=""
+    loading="lazy"
+    decoding="async"
+  />
+  <img
+    class:list={['team-card-photo', `is-${photo}`]}
+    src={`/images/team/${photo}.webp`}
+    srcset={`/images/team/${photo}.webp 1x, /images/team/${photo}-2x.webp 2x`}
+    width="302"
+    height={photo === 'marchel' ? '532' : '442'}
+    alt=""
+    loading="lazy"
+    decoding="async"
+  />
+  <div
+    class="team-card-fade"
+    style={`background:${fade}`}
+    aria-hidden="true"
+  ></div>
+  <div class="team-info">
+    <h3 class="team-name">{name}</h3>
+    <span class="team-divider" aria-hidden="true"></span>
+    <p class="team-role">{role}</p>
+    <div class="team-socials">
+      <a class="team-social" href="#" aria-disabled="true" tabindex="-1">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.22.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.05.41 2.22.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.22-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.05.36-2.22.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.22-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.05-.41-2.22C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.22.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.05-.36 2.22-.41C8.42 2.17 8.8 2.16 12 2.16ZM12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63a6.5 6.5 0 0 0-2.13 1.39A6.5 6.5 0 0 0 .63 4.14C.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91a6.5 6.5 0 0 0 1.39 2.13 6.5 6.5 0 0 0 2.12 1.38c.77.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56a6.5 6.5 0 0 0 2.13-1.38 6.5 6.5 0 0 0 1.38-2.12c.3-.77.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91a6.5 6.5 0 0 0-1.38-2.13A6.5 6.5 0 0 0 19.86.63c-.77-.3-1.64-.5-2.91-.56C15.67.01 15.26 0 12 0Z"
+            fill="currentColor"
+          ></path>
+          <path
+            d="M12 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32Zm0 10.16a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z"
+            fill="currentColor"
+          ></path>
+          <path
+            d="M19.85 5.59a1.44 1.44 0 1 1-2.88 0 1.44 1.44 0 0 1 2.88 0Z"
+            fill="currentColor"
+          ></path>
+        </svg>
+      </a>
+      <a class="team-social" href="#" aria-disabled="true" tabindex="-1">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.22.79 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.73V1.73C24 .77 23.2 0 22.22 0ZM7.12 20.45H3.56V9H7.12v11.45ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM20.45 20.45h-3.56v-5.57c0-1.32-.02-3.03-1.85-3.03-1.85 0-2.13 1.44-2.13 2.94v5.66H9.36V9h3.41v1.57h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.28Z"
+            fill="currentColor"
+          ></path>
+        </svg>
+      </a>
+    </div>
+  </div>
+</article>
+
+<style>
+  /* Card 302 x 400 — Figma EL-4d874643 (node 1688:2933 / 1594:5144). */
+  .team-card {
+    position: relative;
+    flex: none;
+    width: 302px;
+    height: 400px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .team-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.35),
+      rgba(255, 255, 255, 0.06)
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .team-card-frame {
+    position: absolute;
+    left: 3px;
+    top: 13px;
+    width: 295px;
+    height: 277px;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .team-card-photo {
+    position: absolute;
+    left: 0;
+    width: 302px;
+    z-index: 2;
+    object-fit: contain;
+    object-position: top center;
+  }
+
+  .team-card-photo.is-marchel {
+    top: -132px;
+    height: 532px;
+  }
+
+  .team-card-photo.is-zidan-rose {
+    top: -42px;
+    height: 442px;
+  }
+
+  .team-card-fade {
+    position: absolute;
+    left: 0;
+    top: 247px;
+    width: 302px;
+    height: 153px;
+    z-index: 3;
+    border-radius: 0 0 10px 10px;
+  }
+
+  .team-info {
+    position: absolute;
+    left: 42px;
+    top: 284px;
+    z-index: 5;
+    width: 217px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    text-align: center;
+  }
+
+  .team-name {
+    margin: 0;
+    width: 100%;
+    height: 33px;
+    font: 700 22px/33px var(--font-body);
+    color: #ffffff;
+    white-space: nowrap;
+  }
+
+  .team-divider {
+    width: 217px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .team-role {
+    margin: 0;
+    width: 100%;
+    height: 24px;
+    font: 400 16px/24px var(--font-body);
+    color: #d8d1d1;
+  }
+
+  .team-socials {
+    display: flex;
+    gap: 10px;
+    height: 16px;
+  }
+
+  .team-social {
+    display: block;
+    width: 16px;
+    height: 16px;
+    color: #ffffff;
+  }
+
+  .team-social svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>

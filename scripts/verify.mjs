@@ -2550,7 +2550,8 @@ try {
     philosophySeam <= 16,
     `Philosophy/Ecosystem seam gap too large: ${philosophySeam}`,
   );
-  // About Us Our Team — geometry + diff vs Figma node 1439:4305 export.
+  // About Us Our Team — geometry + diff vs the revised Figma node 1688:2933
+  // export (1440 x 1562; the per-HoDS carousel component set is 1594:5145).
   await page.evaluate(async () => {
     await Promise.all(
       [...document.querySelectorAll('.our-team img')].map(async (image) => {
@@ -2562,8 +2563,8 @@ try {
   const ourTeamGeometry = await page.evaluate(() => {
     const section = document.querySelector('.our-team');
     const sectionBox = section.getBoundingClientRect();
-    const relativeBox = (selector) => {
-      const box = section.querySelector(selector).getBoundingClientRect();
+    const relativeBox = (el) => {
+      const box = el.getBoundingClientRect();
       return {
         x: Math.round((box.x - sectionBox.x) * 10) / 10,
         y: Math.round((box.y - sectionBox.y) * 10) / 10,
@@ -2571,42 +2572,98 @@ try {
         height: Math.round(box.height * 10) / 10,
       };
     };
+    const rel = (selector) => relativeBox(section.querySelector(selector));
+    const relAll = (selector) =>
+      [...section.querySelectorAll(selector)].map(relativeBox);
+    const activePanel = section.querySelector('.hods-panel.is-active');
     return {
       section: { width: sectionBox.width, height: sectionBox.height },
-      header: relativeBox('.team-header'),
-      title: relativeBox('.team-title'),
-      groups: relativeBox('.team-groups'),
-      card: relativeBox('.team-card'),
-      more: relativeBox('.team-more'),
-      cards: section.querySelectorAll('.team-card').length,
+      header: rel('.team-header'),
+      title: rel('.team-title'),
+      groups: rel('.team-groups'),
+      groupTitles: relAll('.team-group-title'),
+      leaderCards: relAll('.team-cards--leader .team-card'),
+      arrows: relAll('.hods-arrow'),
+      dots: relAll('.hods-dot'),
+      hodsCards: [...activePanel.querySelectorAll('.team-card')].map(
+        relativeBox,
+      ),
+      panelCount: section.querySelectorAll('.hods-panel').length,
+      activePanel: [...section.querySelectorAll('.hods-panel')].findIndex(
+        (panel) => panel.classList.contains('is-active'),
+      ),
       overflow: document.documentElement.scrollWidth - innerWidth,
     };
   });
   assert.deepEqual(ourTeamGeometry, {
-    section: { width: 1440, height: 1536 },
+    section: { width: 1440, height: 1562 },
     header: { x: 80, y: 80, width: 1280, height: 101 },
     title: { x: 80, y: 114, width: 1280, height: 67 },
-    groups: { x: 80, y: 261, width: 1280, height: 1072 },
-    card: { x: 80, y: 357, width: 302, height: 400 },
-    more: { x: 649.8, y: 1413, width: 140.5, height: 43 },
-    cards: 7,
+    groups: { x: 76.5, y: 229, width: 1287, height: 1253 },
+    groupTitles: [
+      { x: 76.5, y: 229, width: 1287, height: 67 },
+      { x: 76.5, y: 824, width: 1287, height: 67 },
+    ],
+    leaderCards: [
+      { x: 406, y: 344, width: 302, height: 400 },
+      { x: 732, y: 344, width: 302, height: 400 },
+    ],
+    arrows: [
+      { x: 201, y: 945, width: 37, height: 37 },
+      { x: 1202, y: 945, width: 37, height: 37 },
+    ],
+    dots: [
+      { x: 710, y: 1004, width: 6, height: 6 },
+      { x: 724, y: 1004, width: 6, height: 6 },
+    ],
+    hodsCards: [
+      { x: 76.5, y: 1082, width: 302, height: 400 },
+      { x: 402.5, y: 1082, width: 302, height: 400 },
+      { x: 728.5, y: 1082, width: 302, height: 400 },
+      { x: 1054.5, y: 1082, width: 302, height: 400 },
+    ],
+    panelCount: 6,
+    activePanel: 0,
     overflow: 0,
   });
   await page
     .locator('.our-team')
     .screenshot({ path: 'artifacts/about-team-desktop.png' });
   const ourTeamReference = await sharp(
-    'assets/about-us/team/OurTeam-Revisi-1x.png',
+    'assets/about-us/team/OurTeam-New-1x.png',
   )
+    .resize(1440, 1562)
     .removeAlpha()
     .raw()
     .toBuffer();
   const ourTeamActual = await sharp('artifacts/about-team-desktop.png')
-    .extract({ left: 0, top: 0, width: 1440, height: 1536 })
+    .extract({ left: 0, top: 0, width: 1440, height: 1562 })
     .removeAlpha()
     .raw()
     .toBuffer();
   assert.equal(ourTeamReference.length, ourTeamActual.length);
+  // HoDS carousel interaction: selecting the 4th chip activates its panel and
+  // advances the pager (page 1) so the dots/chip window follow.
+  const carouselState = await page.evaluate(() => {
+    document.querySelectorAll('[data-hods-chip]')[3].click();
+    const root = document.querySelector('[data-hods]');
+    return {
+      activePanel: [...root.querySelectorAll('.hods-panel')].findIndex(
+        (panel) => panel.classList.contains('is-active'),
+      ),
+      activeDot: [...root.querySelectorAll('.hods-dot')].findIndex((dot) =>
+        dot.classList.contains('is-active'),
+      ),
+      page: getComputedStyle(root.querySelector('.hods-chips'))
+        .getPropertyValue('--hods-page')
+        .trim(),
+    };
+  });
+  assert.deepEqual(carouselState, {
+    activePanel: 3,
+    activeDot: 1,
+    page: '1',
+  });
   // About Us shared footer (same component as homepage/recruitment).
   await page.evaluate(async () => {
     await Promise.all(

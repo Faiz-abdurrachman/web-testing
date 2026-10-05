@@ -48,6 +48,8 @@ const measure = (page) =>
       if (el.closest('.hof-project-card:not(.is-active)')) continue;
       // The team card row shows 4 of the 5 design cards (deliberate rail).
       if (el.closest('.team-cards')) continue;
+      // The HoDS chip pager shows 3 of 6 chips (deliberate; paged by arrows).
+      if (el.closest('.hods-chips-viewport')) continue;
       const rect = el.getBoundingClientRect();
       if (rect.width === 0 || rect.height === 0) continue;
       const name = `${el.tagName.toLowerCase()}.${(el.className || '').toString().split(/\s+/)[0] || ''}`;

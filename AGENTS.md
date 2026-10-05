@@ -147,12 +147,13 @@ Section.png` + logo + the `SORCERY IN DATA MAGIC IN AI.png` headline. Re-run
 
 ```
 src/components/*.astro   one section per file; scoped CSS inside
+src/components/TeamCard.astro  Our Team member card (302×400; used by OurTeam)
 src/components/Sound.astro  floating mute orb + delegated data-sfx wiring
 src/data/domains.ts      6 HoDS cards (title/desc/tint/chips)
 src/data/hods.ts         6 detail categories → 22 tabs (LEARNING/…/OUTPUT)
 src/data/projects.ts     4 placeholder projects (swap for real data)
 src/data/partners.ts     Partners categories + why-cards (logos placeholder)
-src/data/team.ts         About Us team groups (7 placeholder members)
+src/data/team.ts         Our Team leader + 6 HoDS carousel groups (placeholder)
 src/pages/index.astro    homepage composition
 src/pages/about.astro    About Us composition (sections 1–5 + shared footer)
 src/pages/partners.astro Partners composition (hero + grids + why)
@@ -375,9 +376,16 @@ Section homepage.png` (background, bukan teks) + `100svh`; Philosophy / What We
   animasi entrance, toleransi tetap ±1px). 7 gate + seo ALL PASS.
   **About Us SELESAI (5 Oct 2026):** hero gambar (`assets/hero gambar/Hero Section
   - About Us.png`) + `100svh`, video/partikel dihapus; VisiMisi (`<Starfield />`,
-canvas baru bungkus konten+tarot), Philosophy `is-about`(scope`:not(.is-about)`kini semua varian), Our Ecosystem, Our Team →`min-height: 100svh` + center
+canvas baru bungkus konten+tarot), Philosophy `is-about`(scope`:not(.is-about)`kini semua varian), Our Ecosystem, Our Team →`min-height: 100svh`+ center
 (Team konten 1536 > viewport tetap 1536); reference di-pad 31/32, 33/33, 14/15;
 seam Philosophy↔Ecosystem ≤16. 7 gate + seo ALL PASS.
+**About Us Our Team revision SELESAI (5 Oct 2026):** section`1688:2933`kini
+"Leader Team" (2 kartu) + "Hause of Data Sorcerers" **carousel 6 HoDS** (chips
+3-per-page + arrows + 2 dots; chip aktif & fade = tint domain; Growth #4 "Join
+Now!" →`/recruitment`); group title Bluu Next 700 56 gradient; grup container
+1287 -> kartu x76.5; section 1440×**1562**. Komponen `TeamCard.astro`+`src/data/team.ts` (`leaderTeam`/`hodsTeams`); reference
+`assets/about-us/team/OurTeam-New-1x.png`; MAE 3.305. Rencana:
+`docs/our-team-hods-plan.md`. 7 gate + seo ALL PASS.
 **NEXT = Recruitment (`1436:3505`)**, lalu Partners (`1439:4787`), Hall of
 Frames (`1439:4506`), Contact (`1445:5065`). Work order lengkap (resep teknik +
 checklist per-section + peta hero→gambar + jebakan):
@@ -662,7 +670,7 @@ center` menolak center item 18px di content-box 12px (padding 8/16) → SVG di
   18/27 (dulu 700); desc Manrope 400 14/21. Section MAE **2.221/255** (header
   4.18, pipeline 3.20). Geometri Chromium exact. Semua 6 gate ALL PASS.
   Referensi: `assets/about-us/ecosystem/Ecosystem-Revisi-1x.png`.
-- **About Us Section 5: Our Team (`1439:4305`) — 100% SELESAI (2 Oct 2026).**
+- **About Us Section 5: Our Team (`1439:4305`) — 100% SELESAI (2 Oct 2026; SUPERSEDED 5 Oct 2026 by `1688:2933` HoDS carousel — lihat entri checkpoint terbaru).**
   Frame 1440×1536, column, padding 80px, gap 80px, fill `#050507`. Header
   `1439:4306` 1280×101 di `(80, 80)`: eyebrow "Our Team" (glass) + heading
   "The Sorcerers Behind It All" **Bluu Next Bold 700 56/67** (`--font-display`,

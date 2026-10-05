@@ -899,7 +899,40 @@ fitting the rendered pixels gives an effective CSS gradient of
   **`docs/about-us-glow-plan.md`**. Baseline 1440 (MAE **2.221**) tidak boleh
   berubah; seam dengan Philosophy tetap Δ ≤ 9.
 
-## About Us — Our Team (2 October 2026)
+## About Us — Our Team revision: HoDS carousel (5 October 2026)
+
+- Figma section **`1688:2933`** ("Our Team Section") + component set
+  **`1594:5145`** ("Component per HoDS"). Reference export
+  `assets/about-us/team/OurTeam-New-1x.png` (1440 × **1562**). Master Work Plan:
+  `docs/our-team-hods-plan.md`.
+- Section: `padding 80px`, header→groups `gap 48px`, fill `#050507`. Header
+  `1688:2934`/`2935` (eyebrow `1688:2937` "Our Team" + heading `1688:2939` "The
+  Sorcerers Behind It All", Bluu Next 700 56/67 gradient 181°). Groups frame
+  `1688:2940` = **1287 wide centered** (→ x 76.5).
+- Group 1 `1688:2941` (**"Leader Team"**, title Bluu Next 700 56 gradient):
+  2 cards `302 × 400` gap 24, centered → x 406 / 732.
+- Group 2 `1688:2978` (**"Hause of Data Sorcerers"** — Figma spelling; title same
+  style): instance `1594:5144`. Top frame `gap 16`: chips row (arrow 37 + 3×
+  chip 300×49 gap 16 + arrow 37 = 1038, centered) + 2 dots `6×6` gap 8; then
+  `gap 72` to a 4-card row `302 × 400` gap 24, **left-aligned** → x 76.5 /
+  402.5 / 728.5 / 1054.5.
+- **6 variants** (Data, Core, Language, Vision, Product, Growth); chips paged
+  **3 at a time** (2 pages); arrows cycle the active HoDS (wrap); dots show the
+  page. Selected chip tint + card bottom fade = the domain tint (Figma `-12deg`
+  chip string is lossy → fitted `90deg` dark→light from the PNG; fade
+  `180deg rgb(tint/0) → dark`, Core keeps the mid-stop `30% @ 50%`). Card info
+  `x42 w217` gap 7; role `#D8D1D1`. Growth #4 = **"Join Now!"** card
+  (`1598:5506`, "?" 120/102 gradient white→violet) → links `/recruitment`.
+- Components: `TeamCard.astro` (card) + `OurTeam.astro` (section + carousel JS,
+  `AbortController` + `astro:page-load`/`astro:before-swap`, reduce = instant).
+  Data in `src/data/team.ts` (`leaderTeam` + `hodsTeams`). `verify.mjs` asserts
+  the full geometry + default panel + chip-click carousel state; reference has
+  no pad (1562 > viewport). `responsive-audit.mjs` excludes the deliberate
+  `.hods-chips-viewport` pager. Section MAE **3.305/255** (header 3.49, leader
+  cards 2.94, chips 6.82, hods cards 5.93 — residual = cross-renderer glyph AA +
+  the 0.5px container offset). 7 gate + seo ALL PASS.
+
+## About Us — Our Team (2 October 2026, superseded 5 Oct 2026)
 
 - New Figma page `1439:4184`, section **`1439:4305`** ("Our Team Section",
   1440 × 1536, column, `padding: 80px`, `gap: 80px`, fill `#050507`). Header

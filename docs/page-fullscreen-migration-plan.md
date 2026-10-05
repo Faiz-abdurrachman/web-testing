@@ -130,14 +130,14 @@ Legenda: **[HS]** = jadikan full-screen (100svh + center), **[HS-skip]** = CTA
 
 ### About Us `1439:4184` — ✅ SELESAI (5 Oct 2026)
 
-| #   | Node        | Section                       | Treatment                                                  |
-| --- | ----------- | ----------------------------- | ---------------------------------------------------------- |
-| 1   | `1439:4185` | Hero Section - About Us (903) | [H] ✅ hero gambar + 100svh (video/partikel dihapus)       |
-| 2   | `1439:4190` | Visi Misi                     | [HS] ✅ 100svh + center (canvas + tarot ikut center)       |
-| 3   | `1439:4219` | Philosophy (`is-about`, 837)  | [HS] ✅ 100svh + center (`:not(.is-about)` → semua varian) |
-| 4   | `1439:4258` | Our Ecosystem (874)           | [HS] ✅ 100svh + center (**seam Δ≤16** dgn Philosophy)     |
-| 5   | `1688:2933` | Our Team (1536)               | [HS] ✅ 100svh + center (konten > viewport tetap 1536)     |
-| 6   | `1439:4311` | Footer                        | [skip]                                                     |
+| #   | Node        | Section                       | Treatment                                                                          |
+| --- | ----------- | ----------------------------- | ---------------------------------------------------------------------------------- |
+| 1   | `1439:4185` | Hero Section - About Us (903) | [H] ✅ hero gambar + 100svh (video/partikel dihapus)                               |
+| 2   | `1439:4190` | Visi Misi                     | [HS] ✅ 100svh + center (canvas + tarot ikut center)                               |
+| 3   | `1439:4219` | Philosophy (`is-about`, 837)  | [HS] ✅ 100svh + center (`:not(.is-about)` → semua varian)                         |
+| 4   | `1439:4258` | Our Ecosystem (874)           | [HS] ✅ 100svh + center (**seam Δ≤16** dgn Philosophy)                             |
+| 5   | `1688:2933` | Our Team (1562)               | [HS] ✅ 100svh + center (revisi HoDS carousel 5 Oct; konten > viewport tetap 1562) |
+| 6   | `1439:4311` | Footer                        | [skip]                                                                             |
 
 ### Recruitment `1436:3505`
 

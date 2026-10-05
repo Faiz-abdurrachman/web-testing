@@ -40,6 +40,19 @@ warna `#050507`; assertion geometry `verify.mjs` diupdate (semua section About
 kini 903 kecuali Team 1536). Aset video About lama dihapus; generator hero About
 masuk `scripts/generate-about-assets.mjs`. **7 gate + seo ALL PASS.**
 
+**SELESAI (5 Oct 2026) — About Us Our Team revision (HoDS carousel, `1688:2933`).**
+Section diperbarui tim di Figma: dari 2 grup statis + "See More" menjadi **"Leader
+Team" (2 kartu) + "Hause of Data Sorcerers" (carousel 6 HoDS)**. Header→grup gap
+48; grup container **1287** centered (kartu HoDS mulai x 76.5); group title kini
+**Bluu Next 700 56 gradient 181°** (bukan Nasalization). Carousel: chips 3-per-page
+(2 halaman) + arrows (cycle HoDS wrap) + 2 dots; chip aktif + fade kartu = tint
+domain; **Growth #4 = "Join Now!"** (→ `/recruitment`). Komponen baru:
+`TeamCard.astro`; `OurTeam.astro` ditulis ulang; data `src/data/team.ts`
+(`leaderTeam` + `hodsTeams`). Section 1440×**1562** (konten > viewport, tanpa pad).
+Reference `assets/about-us/team/OurTeam-New-1x.png`; MAE **3.305/255** (chip string
+MCP lossy → fit `90deg` dari PNG). `responsive-audit` exclude `.hods-chips-viewport`.
+**7 gate + seo ALL PASS.** Rencana: `docs/our-team-hods-plan.md`.
+
 **★ NEXT (untuk AI baru) — terapkan SEMUA tombol/link sesuai prototype Figma.**
 Peta lengkap (dari REST API `interactions`, MCP tidak expose): **`docs/figma-prototype-flow.md`**
 

@@ -1,5 +1,9 @@
 ---
-import { teamGroups } from '../data/team';
+import TeamCard from './TeamCard.astro';
+import { leaderTeam, hodsTeams } from '../data/team';
+
+const PAGE_SIZE = 3;
+const STEP = 948;
 ---
 
 <section class="our-team" aria-labelledby="team-title">
@@ -14,105 +18,210 @@ import { teamGroups } from '../data/team';
     </header>
 
     <div class="team-groups">
-      {teamGroups.map((group) => (
-        <div class="team-group">
-          <div class="team-group-label">
-            <span class="team-dot" aria-hidden="true"></span>
-            <span class="team-label">{group.label}</span>
-          </div>
-          <div class="team-cards">
-            {group.members.map((member) => (
-              <article class="team-card">
-                <img
-                  class="team-card-frame"
-                  src="/images/team/card-frame.webp"
-                  srcset="/images/team/card-frame.webp 1x, /images/team/card-frame-2x.webp 2x"
-                  width="295"
-                  height="277"
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                />
-                <img
-                  class:list={['team-card-photo', `is-${member.photo}`]}
-                  src={`/images/team/${member.photo}.webp`}
-                  srcset={`/images/team/${member.photo}.webp 1x, /images/team/${member.photo}-2x.webp 2x`}
-                  width="302"
-                  height={member.photo === 'marchel' ? '532' : '442'}
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                />
-                <div class="team-card-fade" aria-hidden="true"></div>
-                <div class="team-info">
-                  <h3 class="team-name">{member.name}</h3>
-                  <span class="team-divider" aria-hidden="true"></span>
-                  <p class="team-role">{member.role}</p>
-                  <div class="team-socials">
-                    <a
-                      class="team-social"
-                      href="#"
-                      aria-disabled="true"
-                      tabindex="-1"
+      <!-- Leader Team (Figma 1688:2941). -->
+      <div class="team-group">
+        <h3 class="team-group-title">Leader Team</h3>
+        <div class="team-cards team-cards--leader">
+          {leaderTeam.map((member) => (
+            <TeamCard {...member} fade={hodsTeams[1].fade} />
+          ))}
+        </div>
+      </div>
+
+      <!-- Hause of Data Sorcerers — per-HoDS carousel (Figma 1688:2978 / 1594:5145). -->
+      <div class="team-group" data-hods>
+        <h3 class="team-group-title">Hause of Data Sorcerers</h3>
+
+        <div class="hods-carousel">
+          <div class="hods-top">
+            <div class="hods-chips-row">
+              <button
+                class="hods-arrow is-prev"
+                type="button"
+                data-hods-prev
+                aria-label="Previous house"
+              >
+                <svg viewBox="0 0 13 11" fill="none" aria-hidden="true">
+                  <path
+                    d="M0.754756 5.49939H12.1494M5.50252 0.751626L0.754756 5.49939L5.50252 10.2472"
+                    stroke="white"
+                    stroke-width="1.51073"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                </svg>
+              </button>
+
+              <div class="hods-chips-viewport">
+                <div class="hods-chips" data-hods-chips>
+                  {hodsTeams.map((group, i) => (
+                    <button
+                      class:list={['hods-chip', { 'is-active': i === 0 }]}
+                      type="button"
+                      data-hods-chip={i}
+                      style={`--chip:${group.chip}`}
                     >
-                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path
-                          d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.22.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.05.41 2.22.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.22-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.05.36-2.22.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.22-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.05-.41-2.22C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.22.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.05-.36 2.22-.41C8.42 2.17 8.8 2.16 12 2.16ZM12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63a6.5 6.5 0 0 0-2.13 1.39A6.5 6.5 0 0 0 .63 4.14C.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91a6.5 6.5 0 0 0 1.39 2.13 6.5 6.5 0 0 0 2.12 1.38c.77.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56a6.5 6.5 0 0 0 2.13-1.38 6.5 6.5 0 0 0 1.38-2.12c.3-.77.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91a6.5 6.5 0 0 0-1.38-2.13A6.5 6.5 0 0 0 19.86.63c-.77-.3-1.64-.5-2.91-.56C15.67.01 15.26 0 12 0Z"
-                          fill="currentColor"
-                        ></path>
-                        <path
-                          d="M12 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32Zm0 10.16a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z"
-                          fill="currentColor"
-                        ></path>
-                        <path
-                          d="M19.85 5.59a1.44 1.44 0 1 1-2.88 0 1.44 1.44 0 0 1 2.88 0Z"
-                          fill="currentColor"
-                        ></path>
-                      </svg>
-                    </a>
-                    <a
-                      class="team-social"
-                      href="#"
-                      aria-disabled="true"
-                      tabindex="-1"
-                    >
-                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path
-                          d="M22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.22.79 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.73V1.73C24 .77 23.2 0 22.22 0ZM7.12 20.45H3.56V9H7.12v11.45ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM20.45 20.45h-3.56v-5.57c0-1.32-.02-3.03-1.85-3.03-1.85 0-2.13 1.44-2.13 2.94v5.66H9.36V9h3.41v1.57h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.28Z"
-                          fill="currentColor"
-                        ></path>
-                      </svg>
-                    </a>
-                  </div>
+                      {group.title}
+                    </button>
+                  ))}
                 </div>
-              </article>
+              </div>
+
+              <button
+                class="hods-arrow is-next"
+                type="button"
+                data-hods-next
+                aria-label="Next house"
+              >
+                <svg viewBox="0 0 13 11" fill="none" aria-hidden="true">
+                  <path
+                    d="M0.754756 5.49939H12.1494M5.50252 0.751626L0.754756 5.49939L5.50252 10.2472"
+                    stroke="white"
+                    stroke-width="1.51073"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+
+            <div class="hods-dots" role="tablist" aria-label="Houses">
+              <button
+                class="hods-dot is-active"
+                type="button"
+                data-hods-dot="0"
+                aria-label="Houses 1"
+              ></button>
+              <button
+                class="hods-dot"
+                type="button"
+                data-hods-dot="1"
+                aria-label="Houses 2"
+              ></button>
+            </div>
+          </div>
+
+          <div class="hods-panels">
+            {hodsTeams.map((group, i) => (
+              <div
+                class:list={['hods-panel', { 'is-active': i === 0 }]}
+                data-hods-panel={i}
+              >
+                <div class="team-cards team-cards--hods">
+                  {group.members.map((member) => (
+                    <TeamCard {...member} fade={group.fade} />
+                  ))}
+                  {group.joinNow && (
+                    <a class="team-card team-card--join" href="/recruitment">
+                      <img
+                        class="team-card-frame"
+                        src="/images/team/card-frame.webp"
+                        srcset="/images/team/card-frame.webp 1x, /images/team/card-frame-2x.webp 2x"
+                        width="295"
+                        height="277"
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <span class="team-join-mark" aria-hidden="true">
+                        ?
+                      </span>
+                      <span class="team-join-divider" aria-hidden="true" />
+                      <span class="team-join-label">Join Now!</span>
+                    </a>
+                  )}
+                </div>
+              </div>
             ))}
           </div>
         </div>
-      ))}
+      </div>
     </div>
-
-    <button class="team-more" type="button">
-      <span>See More</span>
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path
-          d="M6 9l6 6 6-6"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></path>
-      </svg>
-    </button>
   </div>
 </section>
 
+<script>
+  let controller: AbortController | undefined;
+
+  const initHods = () => {
+    controller?.abort();
+    controller = new AbortController();
+    const { signal } = controller;
+
+    const root = document.querySelector<HTMLElement>('[data-hods]');
+    if (!root) return;
+
+    const chips = [...root.querySelectorAll<HTMLElement>('[data-hods-chip]')];
+    const panels = [...root.querySelectorAll<HTMLElement>('[data-hods-panel]')];
+    const dots = [...root.querySelectorAll<HTMLElement>('[data-hods-dot]')];
+    const chipsEl = root.querySelector<HTMLElement>('[data-hods-chips]');
+    const prev = root.querySelector<HTMLElement>('[data-hods-prev]');
+    const next = root.querySelector<HTMLElement>('[data-hods-next]');
+    if (!chips.length || !panels.length) return;
+
+    const total = chips.length;
+    const pageSize = 3;
+    let active = 0;
+
+    const render = () => {
+      const page = Math.floor(active / pageSize);
+      chips.forEach((chip, i) =>
+        chip.classList.toggle('is-active', i === active),
+      );
+      panels.forEach((panel, i) =>
+        panel.classList.toggle('is-active', i === active),
+      );
+      dots.forEach((dot, i) => dot.classList.toggle('is-active', i === page));
+      chipsEl?.style.setProperty('--hods-page', String(page));
+    };
+
+    chips.forEach((chip, i) =>
+      chip.addEventListener(
+        'click',
+        () => {
+          active = i;
+          render();
+        },
+        { signal },
+      ),
+    );
+    dots.forEach((dot, i) =>
+      dot.addEventListener(
+        'click',
+        () => {
+          active = i * pageSize;
+          render();
+        },
+        { signal },
+      ),
+    );
+    prev?.addEventListener(
+      'click',
+      () => {
+        active = (active - 1 + total) % total;
+        render();
+      },
+      { signal },
+    );
+    next?.addEventListener(
+      'click',
+      () => {
+        active = (active + 1) % total;
+        render();
+      },
+      { signal },
+    );
+
+    render();
+  };
+
+  initHods();
+  document.addEventListener('astro:page-load', initHods);
+  document.addEventListener('astro:before-swap', () => controller?.abort());
+</script>
+
 <style>
-  /* Matches Figma node 1439:4305 (1440 x 1536), page 1439:4184.
-     Section: padding 80px, gap 80px, fill #050507. Header 1439:4306 (1280 x 101):
-     eyebrow "Our Team" + heading "The Sorcerers Behind It All".
-     team 2 instance 1439:4310 (1280 x 1195, gap 80): two groups (Leader 2 cards,
-     Data Intelligence 5 cards, 302 x 400 each) + see more button (141 x 43). */
+  /* Matches Figma node 1688:2933 (1440 x 1562): padding 80px, gap 80px, fill #050507. Header + groups gap 48; groups container 1287 centered. Leader cards 2 x 302x400 centered; HoDS carousel: chips row + dots + 4 cards 302x400 (left-aligned in the 1287 container -> x 76). */
   .our-team {
     position: relative;
     background: #050507;
@@ -127,14 +236,14 @@ import { teamGroups } from '../data/team';
   .team-canvas {
     position: relative;
     max-width: 1440px;
+    width: 100%;
     margin-inline: auto;
     padding: 80px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 80px;
+    gap: 48px;
     box-sizing: border-box;
-    width: 100%;
   }
 
   .team-header {
@@ -180,8 +289,9 @@ import { teamGroups } from '../data/team';
     display: flex;
     flex-direction: column;
     gap: 80px;
-    width: 100%;
-    max-width: 1280px;
+    /* Figma group frame 1688:2940 is 1287 wide, centered in the 1280 content box -> x 76.5 (the 4 HoDS cards are left-aligned in it); margin:auto cannot create the negative offset for an overflowing child, so compute it explicitly. */
+    width: 1287px;
+    margin-inline: calc((100% - 1287px) / 2);
   }
 
   .team-group {
@@ -190,72 +300,167 @@ import { teamGroups } from '../data/team';
     gap: 48px;
   }
 
-  .team-group-label {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    height: 48px;
-  }
-
-  .team-dot {
-    flex: none;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #6c3bff, #ede8ff 50%, #6c3bff);
-  }
-
-  .team-label {
-    font-family: var(--font-heading);
-    font-size: 32px;
-    font-weight: 400;
-    line-height: 48px;
-    color: #ffffff;
+  .team-group-title {
+    margin: 0;
+    width: 100%;
+    font-family: var(--font-display);
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 67px;
+    text-align: center;
+    background: linear-gradient(181deg, #ffffff 15%, #999999 42%, #ffffff 79%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
   .team-cards {
     display: flex;
     gap: 24px;
-    width: 1280px;
+    width: 100%;
+  }
+
+  .team-cards--leader {
+    justify-content: center;
+  }
+
+  .team-cards--hods {
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .team-cards--hods::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* HoDS carousel */
+  .hods-carousel {
+    display: flex;
+    flex-direction: column;
+    gap: 72px;
+    width: 100%;
+  }
+
+  .hods-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .hods-chips-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .hods-arrow {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 37px;
+    height: 37px;
+    padding: 12px;
+    box-sizing: border-box;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+  }
+
+  .hods-arrow svg {
+    display: block;
+    width: 13px;
+    height: 11px;
+  }
+
+  .hods-arrow.is-next svg {
+    transform: scaleX(-1);
+  }
+
+  .hods-chips-viewport {
+    width: 932px;
     max-width: 100%;
     overflow: hidden;
   }
 
-  .team-card {
+  .hods-chips {
+    display: flex;
+    gap: 16px;
+    transform: translateX(calc(var(--hods-page, 0) * -948px));
+  }
+
+  .hods-chip {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    height: 49px;
+    padding: 8px 24px;
+    box-sizing: border-box;
+    border: 0;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    font: 700 22px/33px var(--font-body);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .hods-chip.is-active {
+    background-color: rgba(0, 0, 0, 0.2);
+    background-image: var(--chip);
+  }
+
+  .hods-dots {
+    display: flex;
+    gap: 8px;
+  }
+
+  .hods-dot {
+    width: 6px;
+    height: 6px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.35);
+    cursor: pointer;
+  }
+
+  .hods-dot.is-active {
+    background: #6c3bff;
+  }
+
+  .hods-panels {
+    width: 100%;
+  }
+
+  .hods-panel {
+    display: none;
+  }
+
+  .hods-panel.is-active {
+    display: block;
+  }
+
+  /* Join Now card (Growth #4, Figma 1598:5506). */
+  .team-card--join {
     position: relative;
+    display: block;
     flex: none;
     width: 302px;
     height: 400px;
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.1);
     overflow: hidden;
-    isolation: isolate;
+    text-decoration: none;
   }
 
-  .team-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 4;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.35),
-      rgba(255, 255, 255, 0.06)
-    );
-    -webkit-mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    mask-composite: exclude;
-    pointer-events: none;
-  }
-
-  .team-card-frame {
+  .team-card--join .team-card-frame {
     position: absolute;
     left: 3px;
     top: 13px;
@@ -265,181 +470,124 @@ import { teamGroups } from '../data/team';
     pointer-events: none;
   }
 
-  .team-card-photo {
+  .team-join-mark {
     position: absolute;
-    left: 0;
-    width: 302px;
+    left: 117px;
+    top: 132px;
+    width: 67px;
+    height: 102px;
     z-index: 2;
-    object-fit: contain;
-    object-position: top center;
-  }
-
-  .team-card-photo.is-marchel {
-    top: -132px;
-    height: 532px;
-  }
-
-  .team-card-photo.is-zidan-rose {
-    top: -42px;
-    height: 442px;
-  }
-
-  .team-card-fade {
-    position: absolute;
-    left: 0;
-    top: 247px;
-    width: 302px;
-    height: 153px;
-    z-index: 3;
-    border-radius: 0 0 10px 10px;
-    /* Fitted from the node PNG (Figma #6c3bff->#0e0626 reads more violet mid-band). */
-    background: linear-gradient(
-      180deg,
-      rgba(108, 59, 255, 0) 0%,
-      rgba(108, 59, 255, 0.3) 50%,
-      #0e0626 100%
-    );
-  }
-
-  .team-info {
-    position: absolute;
-    left: 40px;
-    top: 284px;
-    z-index: 5;
-    width: 222px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 7px;
+    font: 700 120px/102px var(--font-body);
     text-align: center;
+    background: linear-gradient(180deg, #ffffff 0%, #6c3bff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
-  .team-name {
-    margin: 0;
-    width: 100%;
-    height: 33px;
-    font: 700 22px/33px var(--font-body);
-    color: #ffffff;
-    white-space: nowrap;
-  }
-
-  .team-divider {
-    width: 222px;
+  .team-join-divider {
+    position: absolute;
+    left: 38px;
+    top: 323px;
+    width: 217px;
     height: 1px;
     background: rgba(255, 255, 255, 0.3);
   }
 
-  .team-role {
-    margin: 0;
-    width: 100%;
+  .team-join-label {
+    position: absolute;
+    left: 38px;
+    top: 336px;
+    width: 217px;
     height: 24px;
     font: 400 16px/24px var(--font-body);
-    color: #ffffff;
+    text-align: center;
+    color: #d8d1d1;
   }
 
-  .team-socials {
-    display: flex;
-    gap: 10px;
-    height: 16px;
+  @media (prefers-reduced-motion: no-preference) {
+    .hods-chips {
+      transition: transform 0.4s cubic-bezier(0.33, 0, 0.2, 1);
+    }
+    .hods-chip,
+    .hods-dot,
+    .hods-arrow {
+      transition:
+        background-color 0.25s ease,
+        opacity 0.25s ease;
+    }
   }
 
-  .team-social {
-    display: block;
-    width: 16px;
-    height: 16px;
-    color: #ffffff;
-  }
-
-  .team-social svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-
-  .team-more {
-    position: relative;
-    overflow: hidden;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    height: 43px;
-    padding: 4px 16px;
-    box-sizing: border-box;
-    border: 0;
-    border-radius: 200px;
-    /* Figma 1248:15694 (GLASS): fill #1A1A1A + rgba(217,217,217,.1) sheen; inset ring + bottom-right specular. */
-    background: #1a1a1a;
-    box-shadow:
-      inset -2px -2px 3px -1px rgba(255, 255, 255, 1),
-      inset 2px 2px 3px -1px rgba(255, 255, 255, 0.28),
-      inset 0 0 0 1px rgba(153, 153, 153, 0.55);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    color: #ffffff;
-    font: 600 18px/1.895 var(--font-body);
-    cursor: pointer;
-  }
-
-  .team-more::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: radial-gradient(
-      130% 200% at 18% 125%,
-      rgba(255, 255, 255, 0.16),
-      rgba(217, 217, 217, 0.1) 58%
-    );
-  }
-
-  .team-more span,
-  .team-more svg {
-    position: relative;
-    z-index: 1;
-  }
-
-  .team-more svg {
-    width: 24px;
-    height: 24px;
+  @media (max-width: 1367px) {
+    .team-groups {
+      width: 100%;
+      margin-inline: 0;
+    }
   }
 
   @media (max-width: 1100px) {
     .team-canvas {
       padding: 64px 24px;
-      gap: 56px;
+      gap: 40px;
     }
-    .team-title {
+    .team-title,
+    .team-group-title {
       font-size: clamp(32px, 5vw, 48px);
       line-height: 1.2;
     }
     .team-groups {
       gap: 56px;
     }
+    .team-group {
+      gap: 40px;
+    }
     .team-cards {
-      width: 100%;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
     }
-    .team-card {
+    .team-card,
+    .team-card--join {
       scroll-snap-align: start;
+    }
+  }
+
+  @media (max-width: 1050px) {
+    .hods-chips-viewport {
+      width: 100%;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .hods-chips-viewport::-webkit-scrollbar {
+      display: none;
+    }
+    .hods-chips {
+      transform: none;
+    }
+    .hods-arrow,
+    .hods-dots {
+      display: none;
     }
   }
 
   @media (max-width: 600px) {
     .team-canvas {
       padding: 48px 16px;
-      gap: 40px;
-    }
-    .team-label {
-      font-size: 24px;
-      line-height: 34px;
-    }
-    .team-group {
       gap: 32px;
     }
     .team-groups {
       gap: 40px;
+    }
+    .team-group {
+      gap: 32px;
+    }
+    .hods-carousel {
+      gap: 48px;
+    }
+    .hods-chip {
+      width: 236px;
+      height: 43px;
+      font-size: 16px;
+      line-height: 24px;
     }
   }
 </style>
