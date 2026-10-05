@@ -12,25 +12,23 @@ Status: **#3 SELESAI (5 Oct 2026).**
 
 ## ~~#1 — CTA homepage~~
 
-## ~~#3 — Typo~~  **DONE** — `src/components/OurTeam.astro` "Hause" → "House" (x2).
-   Reference `assets/about-us/team/OurTeam-New-1x.png` regenerated dari node
-   `1688:2933`. Deviasi sengaja dari ejaan Figma dicatat di `docs/assets.md`.
-   7 gate + seo ALL PASS.
+## ~~#3 — Typo~~ **DONE** — `src/components/OurTeam.astro` "Hause" → "House" (x2).
+
+Reference `assets/about-us/team/OurTeam-New-1x.png` regenerated dari node
+`1688:2933`. Deviasi sengaja dari ejaan Figma dicatat di `docs/assets.md`.
+7 gate + seo ALL PASS.
 
 ---
 
-## #1 — CTA homepage "Join the Community" arahkan ke `/recruitment`
+## ~~#1 — CTA homepage~~ **DONE (5 Oct 2026)** — `src/components/Recruitment.astro`
 
-- **File:** `src/components/Recruitment.astro` (section CTA homepage
-  `1430:2162`, judul "Ready to Become a Sorcery?").
-- **Sekarang:** `<Button variant="community" href="#available-roles">` → di
-  homepage tak ada elemen `#available-roles`, jadi klik tidak kemana-mana.
-- **Target:** `href="/recruitment"` (prototype Figma: tombol → halaman
-  Recruitment). Catat di `docs/figma-prototype-flow.md`.
-- **Cek jangan rusak:** halaman `/recruitment` memakai `Cta.astro` (section 8)
-  yang memang `#available-roles` — JANGAN ikut diubah.
-- **Verifikasi:** `verify.mjs` — tombol CTA homepage `href === '/recruitment'`;
-  `verify-vt` (navigasi klien ke `/recruitment`).
+line 22 `href="/recruitment"` (sebelumnya `#available-roles`).
+`Cta.astro` (halaman Recruitment) **tidak berubah** (tetap `/recruitment`).
+`docs/figma-prototype-flow.md` diperbarui. 7 gate + seo ALL PASS.
+
+---
+
+## #2 — Navbar: link aktif WAJIB punya underline (bukan hanya hover)
 
 ## #2 — Navbar: link aktif WAJIB punya underline (bukan hanya hover)
 
@@ -59,7 +57,7 @@ Status: **#3 SELESAI (5 Oct 2026).**
   line 31 + title line 33). Reference `assets/about-us/team/OurTeam-New-1x.png`
   diregenerasi dari node `1688:2933`. Deviasi sengaja dicatat di `docs/assets.md`.
   7 gate + seo ALL PASS.
-of Data Sorcerers</h3>`.
+  of Data Sorcerers</h3>`.
 - **Target:** `House of Data Sorcerers`.
 - **Konsekuensi:** reference `assets/about-us/team/OurTeam-New-1x.png`
   (yang menampilkan "Hause") jadi **stale** → **regenerate reference** dari node

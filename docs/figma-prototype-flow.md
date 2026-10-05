@@ -94,16 +94,16 @@ Pemetaan 6 role card → Detail Roles (prototype):
 Keenam elemen berikut sudah diperbaiki (`href` diberikan sesuai prototype, `aria-disabled`
 dihapus). Semua 7 gate + seo PASS, geometry/MAE tidak berubah:
 
-| #   | Komponen                   | Elemen                                                        | Sekarang                  | Tujuan                                                               |
-| --- | -------------------------- | ------------------------------------------------------------- | ------------------------- | -------------------------------------------------------------------- |
-| 1   | `Hero.astro:42`            | Join the Community                                            | `href="/recruitment"`     | `/recruitment`                                                       |
-| 2   | `Hero.astro:43`            | Explore Our Project                                           | `href="#projects"`        | `#projects` (smooth scroll)                                          |
-| 3   | `RecruitmentHero.astro:33` | Apply Now                                                     | `href="#available-roles"` | `#available-roles` (smooth scroll)                                   |
-| 4   | `Recruitment.astro:22`     | Join the Community                                            | `href="#available-roles"` | `#available-roles` (smooth scroll)                                   |
-| 5   | `Footer.astro:70`          | Nav: About Us, Recruitment, Hall of Frames, Partners, Contact | `href="/about"` dll.      | `/about`, `/recruitment`, `/hall-of-frames`, `/partners`, `/contact` |
-| 6   | `Cta.astro:15`             | Join the Community (home CTA)                                 | `href="/recruitment"`     | `/recruitment`                                                       |
-| 7   | `Navbar.astro:66,100`      | Join Us (desktop + mobile)                                    | `href="/recruitment"`     | `/recruitment` (Figma: ON_CLICK → Recruitment `1436:3505`)           |
-| 8   | `Footer.astro`             | Scroll-up arrow (`1564:3289`)                                 | `href="#"` → scroll top   | `SCROLL_TO` Navbar (scroll ke atas)                                  |
+| #   | Komponen                   | Elemen                                                        | Sekarang                  | Tujuan                                                                                   |
+| --- | -------------------------- | ------------------------------------------------------------- | ------------------------- | ---------------------------------------------------------------------------------------- |
+| 1   | `Hero.astro:42`            | Join the Community                                            | `href="/recruitment"`     | `/recruitment`                                                                           |
+| 2   | `Hero.astro:43`            | Explore Our Project                                           | `href="#projects"`        | `#projects` (smooth scroll)                                                              |
+| 3   | `RecruitmentHero.astro:33` | Apply Now                                                     | `href="#available-roles"` | `#available-roles` (smooth scroll)                                                       |
+| 4   | `Recruitment.astro:22`     | Join the Community                                            | `href="/recruitment"`     | `/recruitment` — homepage CTA → halaman Recruitment (Figma prototype; fix #1 5 Oct 2026) |
+| 5   | `Footer.astro:70`          | Nav: About Us, Recruitment, Hall of Frames, Partners, Contact | `href="/about"` dll.      | `/about`, `/recruitment`, `/hall-of-frames`, `/partners`, `/contact`                     |
+| 6   | `Cta.astro:15`             | Join the Community (home CTA)                                 | `href="/recruitment"`     | `/recruitment`                                                                           |
+| 7   | `Navbar.astro:66,100`      | Join Us (desktop + mobile)                                    | `href="/recruitment"`     | `/recruitment` (Figma: ON_CLICK → Recruitment `1436:3505`)                               |
+| 8   | `Footer.astro`             | Scroll-up arrow (`1564:3289`)                                 | `href="#"` → scroll top   | `SCROLL_TO` Navbar (scroll ke atas)                                                      |
 
 Penyesuaian `verify.mjs`: selector `relative('button')` → `relative('.button')`
 karena Button dengan `href` render `<a>` (class `.button`), bukan `<button>`.
