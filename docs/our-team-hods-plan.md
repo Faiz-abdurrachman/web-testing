@@ -95,8 +95,8 @@ Chip window = 3 per halaman; **2 halaman**. Arrow menggeser **key HoDS aktif**
 ## 8. Keputusan / catatan
 
 1. Teks Figma adalah **"Hause of Data Sorcerers"** (ejaan Figma; bukan "House").
-   Demi pixel-exact vs reference, dipakai apa adanya. **Konfirmasi user** jika
-   ingin dibetulkan ke "House".
+   **SUPERSEDED 5 Oct 2026:** Kode membetulkan ke "House" (typo fix #3 user
+   request). Deviasi sengaja dicatat di `docs/assets.md`.
 2. Kartu "Join Now!" (placeholder `?`) diimplementasikan sesuai Figma dan
    di-link ke `/recruitment`.
 3. Groups container **1287** dipertahankan agar offset 4px kartu (x=76) persis.

@@ -911,8 +911,8 @@ fitting the rendered pixels gives an effective CSS gradient of
   `1688:2940` = **1287 wide centered** (→ x 76.5).
 - Group 1 `1688:2941` (**"Leader Team"**, title Bluu Next 700 56 gradient):
   2 cards `302 × 400` gap 24, centered → x 406 / 732.
-- Group 2 `1688:2978` (**"Hause of Data Sorcerers"** — Figma spelling; title same
-  style): instance `1594:5144`. Top frame `gap 16`: chips row (arrow 37 + 3×
+- Group 2 `1688:2978` (**"House of Data Sorcerers"** — kode betulkan ejaan Figma
+  "Hause" → "House" 5 Oct 2026; reference regenerated): instance `1594:5144`. Top frame `gap 16`: chips row (arrow 37 + 3×
   chip 300×49 gap 16 + arrow 37 = 1038, centered) + 2 dots `6×6` gap 8; then
   `gap 72` to a 4-card row `302 × 400` gap 24, **left-aligned** → x 76.5 /
   402.5 / 728.5 / 1054.5.

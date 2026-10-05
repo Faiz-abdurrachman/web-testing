@@ -20,14 +20,15 @@ ALL PASS. **DILARANG pakai `zoom`/`transform: scale`** (user menolak, render
 berantakan) — pakai `min-height: 100svh` + centering.
 
 **★ NEXT = 9-ITEM FIX LIST dari user (5 Oct 2026)** — work order lengkap +
-urutan + definisi selesai: **`docs/fix-9-plan.md`**. Ringkas: (1) CTA homepage
-→ `/recruitment`; (2) navbar aktif wajib underline (audit semua rute); (3) typo
-"Hause"→"House"; (4) glow kartu Our Team sesuai Figma (`1594:5145` REST effects);
-(5) animasi section Our Team + transisi tombol; (6) scroll & transisi
-same-page/cross-page smooth; (7) garis "View Details" Available Roles sesuai
-Figma (`1218:1347`); (8) tombol scroll-up footer jadi **melayang** muncul saat
-footer; (9) lanjutkan full-screen (hero gambar + 100svh) Recruitment → Partners →
-HoF → Contact. **Satu item per pass + 7 gate. Konfirmasi user sebelum push.**
+urutan + definisi selesai: **`docs/fix-9-plan.md`**. Ringkas: **(#3 DONE — typo
+"Hause"→"House")**; masih sisa: (1) CTA homepage → `/recruitment`; (2) navbar
+aktif wajib underline (audit semua rute); (4) glow kartu Our Team sesuai Figma
+(`1594:5145` REST effects); (5) animasi section Our Team + transisi tombol;
+(6) scroll & transisi same-page/cross-page smooth; (7) garis "View Details"
+Available Roles sesuai Figma (`1218:1347`); (8) tombol scroll-up footer jadi
+**melayang** muncul saat footer; (9) lanjutkan full-screen (hero gambar + 100svh)
+Recruitment → Partners → HoF → Contact. **Satu item per pass + 7 gate.**
+**Konfirmasi user sebelum push.**
 
 **Setelah itu** = Recruitment (`1436:3505`) full-screen, lalu Partners
 (`1439:4787`), Hall of Frames (`1439:4506`), Contact (`1445:5065`). Work order

@@ -6,7 +6,16 @@ Sumber: instruksi user 5 Oct 2026 (9 item). Semua item **satu per pass + 7 gate*
 `docs/page-fullscreen-migration-plan.md` sebelum menyentuh UI. Update docs di
 commit yang sama. Commit per item. **Konfirmasi user sebelum push.**
 
-Status: **PLAN — belum dieksekusi.**
+Status: **#3 SELESAI (5 Oct 2026).**
+
+---
+
+## ~~#1 — CTA homepage~~
+
+## ~~#3 — Typo~~  **DONE** — `src/components/OurTeam.astro` "Hause" → "House" (x2).
+   Reference `assets/about-us/team/OurTeam-New-1x.png` regenerated dari node
+   `1688:2933`. Deviasi sengaja dari ejaan Figma dicatat di `docs/assets.md`.
+   7 gate + seo ALL PASS.
 
 ---
 
@@ -46,7 +55,10 @@ Status: **PLAN — belum dieksekusi.**
 
 ## #3 — Typo "HAUSE" → "HOUSE"
 
-- **File:** `src/components/OurTeam.astro` — `<h3 class="team-group-title">Hause
+- **✅ SELESAI (5 Oct 2026):** `src/components/OurTeam.astro` "Hause" → "House" (comment
+  line 31 + title line 33). Reference `assets/about-us/team/OurTeam-New-1x.png`
+  diregenerasi dari node `1688:2933`. Deviasi sengaja dicatat di `docs/assets.md`.
+  7 gate + seo ALL PASS.
 of Data Sorcerers</h3>`.
 - **Target:** `House of Data Sorcerers`.
 - **Konsekuensi:** reference `assets/about-us/team/OurTeam-New-1x.png`
