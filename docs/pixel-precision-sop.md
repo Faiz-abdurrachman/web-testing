@@ -245,9 +245,16 @@ User minta semua perpindahan **halus & elegan**. Aturan keras:
   `transform`/`opacity` saja (hindari reflow/jank).
 - **Deep-link/reload tetap mendarat di section** (hash di-reapply setelah
   `ds:splash-done`/`load`/`fonts.ready` — jangan regresi).
-- **Elemen mengapung (mis. tombol scroll-up footer):** `position: fixed`, muncul
-  via `IntersectionObserver` saat target (footer) terlihat; reduce = tampil
-  instan tanpa animasi; jangan tabrakan dengan `.sound-toggle`; `aria-label` jelas.
+- **Elemen mengapung (mis. tombol scroll-up footer):** **default = bukan
+  `position: fixed`** — permintaan user 5 Oct 2026: tombol scroll-up footer
+  diletakkan **di dalam alur footer, di atas divider/legal** (`.scroll-up` di
+  dalam `.bottom`, `position: absolute; right:0; bottom: calc(100% + 8px)`;
+  `.bottom { position: relative }`). Jangan pakai `fixed` + `IntersectionObserver`
+  untuk footer (pernah dibuat, dibatalkan user). `aria-label` jelas; klik → scroll
+  ke atas (smooth via `html { scroll-behavior: smooth }` #6, reduce = instan).
+  Kalau di masa depan butuh benar-benar mengapung, ikuti aturan lama (`fixed` +
+  observer, reduce instan, jangan tabrakan `.sound-toggle`) — tapi konfirmasi user
+  dulu.
 - **Verifikasi:** `verify-vt` (navigasi klien + hash), `perf:audit` (jank),
   dan render `reduce` headless vs reference (MAE tak berubah).
 

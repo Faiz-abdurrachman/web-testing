@@ -1,12 +1,14 @@
 # Fix list 9 — Master Work Order (untuk AI berikutnya)
 
-Sumber: instruksi user 5 Oct 2026 (9 item). Semua item **satu per pass + 7 gate**
-(`build · verify.mjs · navbar-audit · verify-vt · responsive-audit · audit:spacing
-· format:check` + `seo:audit`). Baca `docs/pixel-precision-sop.md` +
+Sumber: instruksi user 5 Oct 2026 (9 item) + 3 item kelupaan (dokumentasi/dikerjakan
+5 Oct 2026). Semua item **satu per pass + 7 gate** (`build · verify.mjs ·
+navbar-audit · verify-vt · responsive-audit · audit:spacing · format:check` +
+`seo:audit`). Baca `docs/pixel-precision-sop.md` +
 `docs/page-fullscreen-migration-plan.md` sebelum menyentuh UI. Update docs di
 commit yang sama. Commit per item. **Konfirmasi user sebelum push.**
 
-Status: **#1 #2 #3 #4 #7 #8 SELESAI (5 Oct 2026).** Sisa: **#5 → #6 → #9.**
+Status: **#1 #2 #3 #4 #5 #6 #7 #8 + #10 #11 #12 SELESAI (5 Oct 2026).**
+**SISA = #9** (full-screen Recruitment → Partners → HoF → Contact).
 
 ---
 
@@ -35,44 +37,19 @@ diregenerasi dari node `1688:2933`. Deviasi sengaja dari ejaan Figma dicatat di
 tint tanpa alpha membuat ungu/merah hilang) + rim `180deg 0.25→0.02`. Data dark
 `#0f0001 → #170002`. **Section MAE 3.503 → 2.774 (−20.8%).**
 
-## #5 — Animasi section Our Team + transisi tombol/pindah halaman smooth
+## ~~#5 — Animasi section Our Team~~ **DONE** — `motion.ts` `reveal()` scoped
 
-- **File:** `src/components/OurTeam.astro` (JS carousel), `src/scripts/motion.ts`,
-  `src/components/Motion.astro`.
-- **Target:**
-  1. Entrance scroll-reveal: header, dua group title, kartu leader, carousel
-     (chips + kartu stagger) — pakai pola `reveal()` yang sudah ada di
-     `motion.ts`; scope ke `.our-team`; `astro:page-load` re-init (jangan
-     re-run di swap).
-  2. Transisi carousel halus (chip/panel cross-fade + chip translate) —
-     **sudah ada** (gated `no-preference`); perhalus timing + `will-change`
-     seperlunya.
-  3. Semua animasi **inert** pada `prefers-reduced-motion: reduce` (render =
-     reference). `verify.mjs` jalan di reduce → tak boleh berubah.
-- **Verifikasi:** `npm run perf:audit` (scroll-jank); `verify-vt` (re-init saat
-  navigasi klien); screenshot reduce MAE 0 vs sebelumnya.
+`.our-team` (header, 2 group title, leader cards, `.hods-top`, active panel
+cards). `OurTeam.astro`: carousel `render()` restart class `is-entering` +
+`@keyframes hods-card-in` (stagger `--i * 60ms`), gated
+`prefers-reduced-motion: no-preference` + `:global()` (child-component scoping);
+`will-change: transform` di `.hods-chips`. Reduce = inert.
 
-## #6 — Scroll & pindah halaman/CTA smooth
+## ~~#6 — Scroll & pindah halaman smooth~~ **DONE** — `src/styles/global.css`:
 
-- **Kondisi:** `<ClientRouter />` (View Transitions) sudah aktif; same-page hash
-  (mis. recruitment hero "Apply Now" → `#available-roles`) **melompat**.
-- **Target:**
-  1. **Same-page:** `html { scroll-behavior: smooth }` di-gate
-     `prefers-reduced-motion: no-preference` (reduce = instan). Pastikan
-     `scroll-margin-top` section sudah ada (110px — sudah). Uji klik tombol
-     `#available-roles` di `/recruitment` hero.
-  2. **Cross-page:** pastikan `ClientRouter` transition default halus; tombol
-     dengan `href` cross-page (mis. CTA homepage → `/recruitment`) memakai
-     navigasi klien (Astro `<a>` + View Transitions) — jangan `preventDefault`
-     tanpa alasan. Tambah `@view-transition { navigation: auto }` bila perlu;
-     hormati reduce.
-  3. Tombol `data-sfx` + transition tetap; jangan blokir navigasi.
-- **Jebakan:** deep-link/reload harus tetap mendarat di section (lihat gotcha
-  AGENTS: `BaseLayout` re-apply hash setelah `ds:splash-done`/`load`). Jangan
-  regresi.
-- **Verifikasi:** `verify-vt` (klik tombol klien, hash landing); tambah cek
-  smooth-scroll (posisi setelah klik mengarah ke section, bukan instan jump
-  dihitung dari `getComputedStyle(html).scrollBehavior`).
+`html { scroll-behavior: smooth }` di-gate `@media
+(prefers-reduced-motion: no-preference)`. Same-page hash (`#available-roles`)
+smooth; reduce = instan. Cross-page sudah halus via `<ClientRouter />` default.
 
 ## ~~#7 — Available Roles divider~~ **DONE** — divider pindah ke bawah
 
@@ -80,12 +57,35 @@ tint tanpa alpha membuat ungu/merah hilang) + rim `180deg 0.25→0.02`. Data dar
 `90deg #fff→transparent`). Kode: `.role-divider` setelah `.role-link`; gradient
 `#9b7bff→#fff` → `#fff→transparent`.
 
-## ~~#8 — Panah scroll footer~~ **DONE** — tombol scroll-up jadi
+## ~~#8 — Panah scroll footer~~ **DONE lalu digantikan #10.** Awalnya dibuat
 
-`position:fixed` (right:40px, bottom:40px, z-index:49), muncul (fade) hanya saat
-footer terlihat via IntersectionObserver. Inert di reduce (transition: none).
+`position:fixed` melayang (IntersectionObserver). **User minta dipindah** (lihat
+#10).
 
-## #9 — Lanjutkan standar full-screen (hero gambar + 100svh) halaman tersisa
+## ~~#10 — Panah scroll footer di atas divider/legal~~ **DONE** — tombol
+
+`.scroll-up` dipindah **ke dalam `.bottom`** sebagai child pertama, `position:
+absolute; right:0; bottom: calc(100% + 8px)` (`.bottom { position:relative }`).
+Klik → scroll ke atas (smooth via #6). IntersectionObserver + `position:fixed` +
+`.is-visible` **dihapus**. Geometri footer tidak berubah (absolute).
+
+## ~~#11 — HoF Featured: frame di belakang portrait~~ **DONE** —
+
+`HallOfFramesFeatured.astro`: `.card-photo z-index:1`, `.card-frame z-index:0`,
+`.card-fade z-index:2`, `.card-meta z-index:3`. Sebelumnya tanpa z-index →
+frame (DOM setelah photo) melukis di depan → garis melintang di wajah.
+
+## ~~#12 — OurTeam HoDS portrait tidak dipotong (ala HoF)~~ **DONE** —
+
+`OurTeam.astro`: `.hods-panel :global(.team-card) { overflow:visible }` +
+`.team-cards--hods { padding-top:48px; margin-top:-48px }` (memberi ruang bleed
+di dalam padding-box karena `overflow-x:auto` meng-clip cross-axis).
+**Leader cards tetap ter-clip** (bleed 132px akan menabrak judul). Portrait HoDS
+bleed 42px, clearance 30px dari dots. **Deviasi sengaja dari Figma** (Figma
+meng-clip kartu; user minta ala Hall of Frames). Geometri kartu tetap y=1082.
+Section MAE ~2.64 (membaik dari 3.305).
+
+## #9 — Lanjutkan standar full-screen (hero gambar + 100svh) halaman tersisa ★ NEXT
 
 - **Work order:** `docs/page-fullscreen-migration-plan.md` — **Recruitment
   (`1436:3505`) → Partners (`1439:4787`) → Hall of Frames (`1439:4506`) →
@@ -101,9 +101,10 @@ footer terlihat via IntersectionObserver. Inert di reduce (transition: none).
 
 ---
 
-## Urutan eksekusi yang disarankan
+## Urutan eksekusi
 
-1. ~~#3~~ · 2. ~~#1~~ · 3. ~~#2~~ · 4. ~~#7~~ · 5. ~~#8~~ · 6. ~~#4~~ · 7. **#5** · 8. **#6** · 9. **#9** (per halaman, satu section per pass).
+1. ~~#3~~ · 2. ~~#1~~ · 3. ~~#2~~ · 4. ~~#7~~ · 5. ~~#8~~ · 6. ~~#4~~ · 7. ~~#5~~ · 8. ~~#6~~ · 9. ~~#10 #11 #12~~ · 10. **#9** (per halaman, satu
+   section per pass).
 
 ## Definisi selesai (tiap item)
 
@@ -111,5 +112,5 @@ footer terlihat via IntersectionObserver. Inert di reduce (transition: none).
 - **7 gate + seo PASS.**
 - Docs terupdate: `docs/assets.md`, `docs/ai-handoff.md`, `AGENTS.md`,
   `docs/figma-prototype-flow.md` (#1), `docs/page-fullscreen-migration-plan.md`
-  (#9), `docs/pixel-precision-sop.md` (§ animasi #5/#6 bila ada aturan baru).
+  (#9), `docs/pixel-precision-sop.md` (§ animasi #5/#6, elemen mengapung #10).
 - Commit per item; **konfirmasi user sebelum `git push origin main`**.

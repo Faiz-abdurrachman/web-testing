@@ -523,6 +523,11 @@ assets:contact` regenerates it and the icons.
   336/80/768, grid 80/295/1280, card 302 × 400 at 80/406, frame 295 × 277 at
   83/308, 8 cards, overflow 0) and diffs vs `HoF-Featured-1x.png`
   (MAE **2.01**). Responsive: 4 columns > 1100px, 2 at 561–1100, 1 ≤ 560px.
+- **Frame z-order fix (#11, 5 Oct 2026):** `.card-photo` `z-index:1`,
+  `.card-frame` `z-index:0`, `.card-fade` `z-index:2`, `.card-meta` `z-index:3`.
+  Before the explicit z-index the frame (later DOM sibling) painted **over** the
+  portrait, so its line crossed the faces; now it sits behind (visible only
+  through the cutout's transparent areas). MAE 2.008 → **1.973**.
 
 ## Hall of Frames — Featured Sorcerers detail modal (3 October 2026)
 
@@ -940,6 +945,14 @@ fitting the rendered pixels gives an effective CSS gradient of
   `180deg rgba(255,255,255,.35)→.06` → `180deg .25→.02`. Fitted per visible
   variant (Core leader + Data HoDS) by in-browser A/B. Section MAE
   **3.503 → 2.774/255 (−20.8%)**.
+- **HoDS portrait bleed (#12, 5 Oct 2026).** User: kartu "House of Data
+  Sorcerers" jangan terpotong, "dibikin kayak Hall of Frames". Figma reference
+  **meng-clip** kartu (leader & HoDS) — jadi ini **deviasi sengaja**. Hanya
+  **HoDS** yang di-unclip (`.hods-panel :global(.team-card){overflow:visible}`),
+  leader tetap clip (bleed 132px akan menabrak judul). `.team-cards--hods` dapat
+  `padding-top:48px; margin-top:-48px` supaya `overflow-x:auto` (yang meng-clip
+  cross-axis) tetap memberi ruang bleed 42px. Geometri kartu tetap y=1082;
+  clearance 30px dari dots. Section MAE ~2.64.
 
 ## About Us — Our Team (2 October 2026, superseded 5 Oct 2026)
 
@@ -1770,6 +1783,13 @@ score were unchanged when this section was added.
   older PNG's left-grouped links at x≈640); the 30px gap between them is retained
   from that approved revision (the PNG's left-grouped gaps measure ≈33–37px, so it
   is not directly comparable).
+- **Scroll-up arrow revision (#10, 5 Oct 2026).** The Figma arrow `1564:3289`
+  (37 × 37, `rgba(255,255,255,.15)`, hover violet, `href="#"` → scroll top) is
+  now rendered **inside `.bottom`** as `position: absolute; right: 0; bottom:
+calc(100% + 8px)` (`.bottom { position: relative }`) so it sits **above the
+  divider/landed legal row** — per user request. The earlier `position: fixed` +
+  `IntersectionObserver` floating version (#8) was reverted. Doesn't affect the
+  footer geometry (absolute, out of flow).
 - **Background update (29 Sep 2026, user-supplied):** the footer now uses
   `assets/assets home page/footer/Gambar Footer(2).png` (7200 × 2780, exactly
   5× the 1440 × 556 footer frame). This supersedes the 2017 × 780

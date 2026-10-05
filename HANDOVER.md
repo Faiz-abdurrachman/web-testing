@@ -527,6 +527,17 @@ projects 5.104 recruitment 2.174 footer 2.666
 ## 14. Commit history / checkpoint
 
 - Histori homepage awal + carousel 3D + detail HoDS: lihat `git log`.
+- **★ CHECKPOINT TERBARU (5 Oct 2026, HEAD `b4b5e62`, commit lokal — konfirmasi
+  user sebelum push).** (a) **Standar full-screen** (hero gambar + section
+  `100svh`): Homepage (`b228f3c`) & About Us (5 Oct) SELESAI. (b) **FIX-9
+  SELESAI #1–#8 + #10–#12** (`81ffb25`..`b4b5e62`): navbar active underline,
+  CTA homepage, typo Hause→House, glow kartu Our Team (MAE 3.503→2.774), animasi
+  Our Team, scroll smooth, divider View Details, panah scroll-up, HoF frame di
+  belakang portrait, OurTeam HoDS bleed. **3 deviasi sengaja dari Figma:** "House"
+  (bukan "Hause"), panah scroll-up di atas divider/legal, OurTeam HoDS portrait
+  bleed (leader tetap clip). **(c) NEXT = #9** full-screen Recruitment → Partners
+  → HoF → Contact (`docs/page-fullscreen-migration-plan.md`). Work order:
+  `docs/fix-9-plan.md`. Semua 7 gate + seo PASS.
 - `69acaac` = checkpoint sebelum eksperimen motion; `5feea0d` (GSAP + Three.js)
   → di-revert `f925e1d`.
 - `5315b72`…`901d78f` = docs (AGENTS.md, HANDOVER.md, kickoff-prompt,
@@ -597,12 +608,10 @@ projects 5.104 recruitment 2.174 footer 2.666
 - [ ] **Data project asli** — `src/data/projects.ts` masih 4 placeholder, gambar sama semua.
 - [ ] **Tanggal recruitment** — kolom "Date" di Selection Timeline masih
       placeholder (sesuai PNG/Figma). Ganti kalau tanggal asli sudah ada.
-- [ ] **Link yang belum tersedia** (sengaja `aria-disabled`, bukan link mati): lihat
-      peta + gap di **`docs/figma-prototype-flow.md` §9**. **★ NEXT = terapkan
-      semua tombol/link sesuai prototype Figma** (peta via REST `interactions`;
-      SOP §"Hukum Navigasi & Prototype"). Satu elemen per pass + 7 gate; setiap
-      tujuan 100% benar; `aria-disabled` hanya untuk yang benar-benar tak punya
-      destinasi (legal/social, Apply Now detail role); **catat tiap perubahan**.
+- [x] ~~**Link yang belum tersedia**~~ — semua tombol/link sesuai prototype Figma
+      **SELESAI 4 Oct 2026** (peta + detail: **`docs/figma-prototype-flow.md`**;
+      SOP §"Hukum Navigasi & Prototype"). `aria-disabled` hanya untuk yang
+      benar-benar tak punya destinasi (legal/social, Apply Now detail role).
 - [x] ~~Halaman Recruitment~~ — **LENGKAP** (§8b).
 - [x] ~~Redesign kartu Available Roles (proporsional + border emas + sparkle)~~ dan
       ~~hero mobile fluid (home & recruitment)~~ — selesai 23 Sep 2026 (§21).
@@ -612,18 +621,27 @@ projects 5.104 recruitment 2.174 footer 2.666
 - [x] ~~Halaman lain: **Partners, Contact, Hall of Frames**~~ — **SELESAI**:
       Partners `1439:4787` 4 section (3 Oct 2026), Contact `1445:5065`, Hall of
       Frames `1439:4507` (1 Oct 2026) sudah presisi (`--font-display` + 8pt).
-- [ ] **Target berikutnya: TERAPKAN SEMUA TOMBOL/LINK SESUAI PROTOTYPE FIGMA.**
-      Peta lengkap + gap: **`docs/figma-prototype-flow.md`** (+ SOP §"Hukum Navigasi
-      & Prototype"). Satu elemen per pass + 7 gate; Home (`1430:2040`) &
-      Recruitment (`1436:3505`) = benchmark presisi, jangan rusak; catat tiap
-      perubahan. **Status video hero:** Home, Recruitment, About, Hall of Frames,
-      Partners **SUDAH video**; **Contact (`1445:5066`) PENDING** (tunggu aset,
+- [x] ~~**FIX-9 (5 Oct 2026, #1–#8 + #10–#12)**~~ — work order + detail:
+      **`docs/fix-9-plan.md`**. Termasuk navbar active underline, CTA homepage,
+      typo Hause→House, glow kartu Our Team, animasi Our Team, scroll smooth,
+      divider View Details, panah scroll-up (di atas divider/legal), HoF frame di
+      belakang portrait, OurTeam HoDS portrait bleed. **Semua 7 gate + seo PASS.**
+      **3 deviasi sengaja dari Figma:** "House" (bukan "Hause"), panah scroll-up
+      posisi, OurTeam HoDS bleed (leader tetap clip).
+- [ ] **★ NEXT = #9 — STANDAR FULL-SCREEN halaman tersisa:** hero gambar +
+      section `100svh` untuk **Recruitment (`1436:3505`) → Partners (`1439:4787`)
+      → Hall of Frames (`1439:4506`) → Contact (`1445:5065`)**. Homepage & About
+      Us SELESAI. Work order lengkap (resep + checklist per-section + peta
+      hero→gambar + jebakan): **`docs/page-fullscreen-migration-plan.md`**.
+      **Satu section per pass + 7 gate.** Jangan rusak benchmark (Home / About /
+      Recruitment / Partners).
+      **Status video hero:** Home, Recruitment, About, Hall of Frames, Partners
+      **SUDAH video**; **Contact (`1445:5066`) PENDING** (tunggu aset,
       `docs/hero-video-plan.md`). **About Us glow responsif + karakter menempel
-      tepi SELESAI 4 Oct 2026** (`docs/about-us-glow-plan.md`). Setelah tombol:
-      audit sisa 6 detail HoDS (`/hods/[id]`) + konten asli. Homepage,
-      Recruitment (9/9), About, Partners, Contact, detail HoDS sudah diaudit.
-      Hall of Frames card Project Highlight (`1439:4655`) selesai 3 Oct 2026
-      (disamakan dengan card homepage `Projects.astro`).
+      tepi SELESAI 4 Oct 2026** (`docs/about-us-glow-plan.md`). Setelah #9:
+      audit sisa 6 detail HoDS (`/hods/[id]`) + konten asli. Hall of Frames card
+      Project Highlight (`1439:4655`) selesai 3 Oct 2026 (disamakan dengan card
+      homepage `Projects.astro`).
 - [ ] Audit tiap halaman detail HoDS / detail role kalau ada pembaruan Figma.
 - [~] **Optimasi berat web (P0–P2)** — detail di `docs/ai-handoff.md` §"Perf
       audit & rencana". **P0(a)+(d) selesai 28 Sep 2026:** `sizes` Snippets +

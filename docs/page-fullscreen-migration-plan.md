@@ -2,7 +2,8 @@
 
 Status: **HOMEPAGE SELESAI** (commit `b228f3c`, 4 Oct 2026) + **ABOUT US SELESAI**
 (5 Oct 2026). **NEXT = Recruitment (`1436:3505`) → Partners → Hall of Frames →
-Contact.**
+Contact.** (Sisa satu-satunya dari `docs/fix-9-plan.md` = **#9**, dokumen ini
+adalah work order-nya. Fix #1–#8 + #10–#12 SELESAI 5 Oct 2026.)
 
 Dokumen ini adalah **work order resmi** untuk migrasi semua halaman ke pola
 full-screen (satu section = satu layar) + hero berbasis gambar. Ikuti

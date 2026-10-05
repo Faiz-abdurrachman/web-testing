@@ -19,16 +19,29 @@ center, `motion.ts` dibersihkan, `verify.mjs` geometry + reference PNG di-pad,
 ALL PASS. **DILARANG pakai `zoom`/`transform: scale`** (user menolak, render
 berantakan) — pakai `min-height: 100svh` + centering.
 
-**★ NEXT = 9-ITEM FIX LIST dari user (5 Oct 2026)** — work order lengkap +
-urutan + definisi selesai: **`docs/fix-9-plan.md`**. Ringkas:
-**(#1 #2 #3 #4 #7 #8 DONE)**; masih sisa: (5) animasi section Our Team +
-transisi tombol; (6) scroll & transisi same-page/cross-page smooth;
-(9) lanjutkan full-screen (hero gambar + 100svh) Recruitment → Partners → HoF →
-Contact. **Satu item per pass + 7 gate.** **Konfirmasi user sebelum push.**
+**★ NEXT = #9 — lanjutkan standar full-screen** (hero gambar + section 100svh)
+untuk halaman tersisa: **Recruitment (`1436:3505`) → Partners (`1439:4787`) →
+Hall of Frames (`1439:4506`) → Contact (`1445:5065`)**. Homepage & About Us
+SELESAI. Work order: `docs/page-fullscreen-migration-plan.md`. Satu section per
+pass + 7 gate.
 
-**Setelah itu** = Recruitment (`1436:3505`) full-screen, lalu Partners
-(`1439:4787`), Hall of Frames (`1439:4506`), Contact (`1445:5065`). Work order
-full-screen: **`docs/page-fullscreen-migration-plan.md`**.
+**★ FIX-9 SELESAI (5 Oct 2026, #1–#8 + #10–#12).** Work order + detail:
+`docs/fix-9-plan.md`. Ringkasan: #1 CTA homepage → `/recruitment`; #2 navbar
+active underline (+ mobile menu); #3 typo Hause→House; #4 glow kartu Our Team
+(fade tint stop + rim, MAE 3.503→2.774); #5 animasi Our Team (entrance reveal +
+carousel panel, gated reduce); #6 `scroll-behavior: smooth` gated reduce;
+#7 divider "View Details" pindah bawah; #8→#10 panah scroll-up dipindah **ke atas
+divider/legal** (bukan fixed melayang); #11 HoF featured frame **di belakang**
+portrait (z-index); #12 OurTeam **HoDS** portrait bleed ala HoF (leader tetap
+clip). Setiap item: **7 gate + seo PASS**. Commit `81ffb25` → `b4b5e62`.
+**Konfirmasi user sebelum push.**
+
+**3 deviasi sengaja dari Figma (jangan "perbaiki" balik tanpa cek user/docs):**
+
+1. Typo "Hause of Data Sorcerers" → **"House of Data Sorcerers"** (#3).
+2. Footer scroll-up **di atas divider/legal** (bukan `fixed` melayang) (#10).
+3. OurTeam **HoDS** portrait **bleed 42px** di atas kartu (ala Hall of Frames);
+   **leader cards tetap ter-clip**. Figma reference meng-clip keduanya (#12).
 
 **SELESAI (5 Oct 2026) — About Us full-screen (hero gambar + section 100svh).**
 `AboutHero.astro` → gambar background (`hero-bg.webp`/`-2x`, sumber
@@ -46,16 +59,20 @@ masuk `scripts/generate-about-assets.mjs`. **7 gate + seo ALL PASS.**
 
 **SELESAI (5 Oct 2026) — About Us Our Team revision (HoDS carousel, `1688:2933`).**
 Section diperbarui tim di Figma: dari 2 grup statis + "See More" menjadi **"Leader
-Team" (2 kartu) + "Hause of Data Sorcerers" (carousel 6 HoDS)**. Header→grup gap
+Team" (2 kartu) + "House of Data Sorcerers" (carousel 6 HoDS)**. Header→grup gap
 48; grup container **1287** centered (kartu HoDS mulai x 76.5); group title kini
 **Bluu Next 700 56 gradient 181°** (bukan Nasalization). Carousel: chips 3-per-page
 (2 halaman) + arrows (cycle HoDS wrap) + 2 dots; chip aktif + fade kartu = tint
 domain; **Growth #4 = "Join Now!"** (→ `/recruitment`). Komponen baru:
 `TeamCard.astro`; `OurTeam.astro` ditulis ulang; data `src/data/team.ts`
 (`leaderTeam` + `hodsTeams`). Section 1440×**1562** (konten > viewport, tanpa pad).
-Reference `assets/about-us/team/OurTeam-New-1x.png`; MAE **3.305/255** (chip string
-MCP lossy → fit `90deg` dari PNG). `responsive-audit` exclude `.hods-chips-viewport`.
-**7 gate + seo ALL PASS.** Rencana: `docs/our-team-hods-plan.md`.
+Reference `assets/about-us/team/OurTeam-New-1x.png`; chip string MCP lossy → fit
+`90deg` dari PNG. `responsive-audit` exclude `.hods-chips-viewport`.
+**Revisi lanjutan (fix #3/#4/#5/#12):** judul group jadi **"House"** (deviasi Figma
+typo), fade+rim kartu di-fit ulang (MAE 3.503→**2.774**), entrance reveal +
+carousel panel animation (gated reduce), **HoDS portrait bleed 42px** ala HoF
+(leader tetap clip). Detail: `docs/assets.md` §Our Team revision +
+`docs/fix-9-plan.md`. Rencana: `docs/our-team-hods-plan.md`.
 
 **★ NEXT (untuk AI baru) — terapkan SEMUA tombol/link sesuai prototype Figma.**
 Peta lengkap (dari REST API `interactions`, MCP tidak expose): **`docs/figma-prototype-flow.md`**

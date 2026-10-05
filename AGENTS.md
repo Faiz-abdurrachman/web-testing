@@ -186,7 +186,7 @@ docs/assets.md           provenance per section (keep updated)
 docs/pixel-precision-sop.md  strict pixel-accuracy protocol (read before any UI)
 docs/sound-sop.md        sound system SOP (procedural Web Audio SFX + ambient)
 docs/page-fullscreen-migration-plan.md  ★ work order: hero gambar + section 100svh per-halaman/per-section
-docs/fix-9-plan.md       ★ work order: 9-item fix list user (5 Oct 2026) — NEXT
+docs/fix-9-plan.md       ★ work order: 9-item + 3 kelupaan (#1–#8,#10–#12 SELESAI; sisa #9)
 docs/our-team-hods-plan.md  Our Team HoDS carousel Master Work Plan (SELESAI 5 Oct 2026)
 docs/hero-video-plan.md  (SUPERSEDED 4 Oct 2026) hero video digantikan hero gambar full-screen
 docs/about-us-glow-plan.md  About Us glow responsif + karakter tepi (SELESAI 4 Oct 2026)
@@ -382,21 +382,31 @@ canvas baru bungkus konten+tarot), Philosophy `is-about`(scope`:not(.is-about)`k
 (Team konten 1536 > viewport tetap 1536); reference di-pad 31/32, 33/33, 14/15;
 seam Philosophy↔Ecosystem ≤16. 7 gate + seo ALL PASS.
 **About Us Our Team revision SELESAI (5 Oct 2026):** section`1688:2933`kini
-"Leader Team" (2 kartu) + "Hause of Data Sorcerers" **carousel 6 HoDS** (chips
+"Leader Team" (2 kartu) + "House of Data Sorcerers" **carousel 6 HoDS** (chips
 3-per-page + arrows + 2 dots; chip aktif & fade = tint domain; Growth #4 "Join
 Now!" →`/recruitment`); group title Bluu Next 700 56 gradient; grup container
 1287 -> kartu x76.5; section 1440×**1562**. Komponen `TeamCard.astro`+`src/data/team.ts` (`leaderTeam`/`hodsTeams`); reference
-`assets/about-us/team/OurTeam-New-1x.png`; MAE 3.305. Rencana:
-`docs/our-team-hods-plan.md`. 7 gate + seo ALL PASS.
-**★ NEXT = 9-item fix list user (5 Oct 2026)** — work order:
-**`docs/fix-9-plan.md`** (CTA→/recruitment, navbar active underline, typo
-Hause→House, glow kartu per Figma, animasi Our Team, scroll/transisi smooth,
-garis View Details, scroll-up footer melayang, lanjut full-screen). **Satu item
-per pass + 7 gate.**
-Lalu **full-screen Recruitment (`1436:3505`)**, Partners (`1439:4787`), Hall of
-Frames (`1439:4506`), Contact (`1445:5065`). Work order lengkap (resep teknik +
-checklist per-section + peta hero→gambar + jebakan):
-**`docs/page-fullscreen-migration-plan.md`**. **Satu section per pass + 7 gate.**
+`assets/about-us/team/OurTeam-New-1x.png`. Rencana:
+`docs/our-team-hods-plan.md`.
+**★ FIX-9 SELESAI (5 Oct 2026, #1–#8 + #10–#12)** — work order + detail:
+**`docs/fix-9-plan.md`**. Ringkas: #1 CTA homepage→`/recruitment`; #2 navbar
+active underline (+ mobile menu); #3 typo Hause→House; #4 glow kartu Our Team
+(fade tint stop 35%@35% + rim 0.25→0.02, MAE 3.503→**2.774**); #5 animasi Our
+Team (entrance `reveal()`+ carousel`is-entering` `@keyframes hods-card-in`,
+gated reduce); #6 `html { scroll-behavior: smooth }`gated reduce; #7 divider
+"View Details" pindah bawah; #8→#10 panah scroll-up dipindah ke **atas
+divider/legal** (bukan fixed); #11 HoF featured frame **di belakang** portrait
+(z-index 0/1/2/3); #12 OurTeam **HoDS** portrait bleed 42px ala HoF (leader tetap
+clip). **Tiap item 7 gate + seo PASS.** Commit`81ffb25`..`b4b5e62`.
+- **★ NEXT = #9 — full-screen halaman tersisa:** Recruitment (`1436:3505`),
+  Partners (`1439:4787`), Hall of Frames (`1439:4506`), Contact (`1445:5065`).
+  Work order lengkap (resep teknik + checklist per-section + peta hero→gambar +
+  jebakan): **`docs/page-fullscreen-migration-plan.md`**. **Satu section per
+  pass + 7 gate.** Jangan rusak Homepage/About/Recruitment/Partners (benchmark).
+- **3 deviasi sengaja dari Figma (jangan "perbaiki" balik tanpa cek):**
+  (1) "Hause"→**"House"** (#3); (2) footer scroll-up **di atas divider/legal**
+  (#10); (3) OurTeam **HoDS** portrait **bleed** ala HoF, leader tetap clip
+  (#12). Figma reference meng-clip kartu OurTeam.
 - **SELESAI (4 Oct 2026) — About Us: glow responsif + karakter menempel tepi.**
   Canvas `zoom: calc(100vw / 1440px)` **dihapus** dari Our Philosophy (`1439:4219`)
   dan Our Ecosystem (`1439:4258`). Gradient tetap **section-level** (full-bleed)
