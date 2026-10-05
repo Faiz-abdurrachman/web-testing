@@ -186,6 +186,8 @@ docs/assets.md           provenance per section (keep updated)
 docs/pixel-precision-sop.md  strict pixel-accuracy protocol (read before any UI)
 docs/sound-sop.md        sound system SOP (procedural Web Audio SFX + ambient)
 docs/page-fullscreen-migration-plan.md  ★ work order: hero gambar + section 100svh per-halaman/per-section
+docs/fix-9-plan.md       ★ work order: 9-item fix list user (5 Oct 2026) — NEXT
+docs/our-team-hods-plan.md  Our Team HoDS carousel Master Work Plan (SELESAI 5 Oct 2026)
 docs/hero-video-plan.md  (SUPERSEDED 4 Oct 2026) hero video digantikan hero gambar full-screen
 docs/about-us-glow-plan.md  About Us glow responsif + karakter tepi (SELESAI 4 Oct 2026)
 docs/figma-prototype-flow.md  peta prototype Figma (REST `interactions`) → tombol/link tujuan + gap vs kode (NEXT)
@@ -386,7 +388,12 @@ Now!" →`/recruitment`); group title Bluu Next 700 56 gradient; grup container
 1287 -> kartu x76.5; section 1440×**1562**. Komponen `TeamCard.astro`+`src/data/team.ts` (`leaderTeam`/`hodsTeams`); reference
 `assets/about-us/team/OurTeam-New-1x.png`; MAE 3.305. Rencana:
 `docs/our-team-hods-plan.md`. 7 gate + seo ALL PASS.
-**NEXT = Recruitment (`1436:3505`)**, lalu Partners (`1439:4787`), Hall of
+**★ NEXT = 9-item fix list user (5 Oct 2026)** — work order:
+**`docs/fix-9-plan.md`** (CTA→/recruitment, navbar active underline, typo
+Hause→House, glow kartu per Figma, animasi Our Team, scroll/transisi smooth,
+garis View Details, scroll-up footer melayang, lanjut full-screen). **Satu item
+per pass + 7 gate.**
+Lalu **full-screen Recruitment (`1436:3505`)**, Partners (`1439:4787`), Hall of
 Frames (`1439:4506`), Contact (`1445:5065`). Work order lengkap (resep teknik +
 checklist per-section + peta hero→gambar + jebakan):
 **`docs/page-fullscreen-migration-plan.md`**. **Satu section per pass + 7 gate.**

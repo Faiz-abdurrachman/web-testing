@@ -223,6 +223,34 @@ flex-direction:column; justify-content:center;` + pembungkus `width:100%`.
   `docs/ai-handoff.md`, `AGENTS.md`, dan `page-fullscreen-migration-plan.md` di
   commit yang sama. Jangan lompat/gabung section.
 
+### Hukum Animasi, Transisi & Smooth Scroll (sejak 5 Oct 2026)
+
+User minta semua perpindahan **halus & elegan**. Aturan keras:
+
+- **Reduce = pixel-exact & inert.** Setiap animasi/transition WAJIB di-gate
+  `@media (prefers-reduced-motion: no-preference)`; di `reduce` render harus
+  sama dengan reference (audit & `verify.mjs` jalan di reduce).
+- **Scroll same-page smooth, bukan lompat.** `html { scroll-behavior: smooth }`
+  **hanya** di dalam `@media (prefers-reduced-motion: no-preference)` (reduce =
+  instan). Hash target wajib punya `scroll-margin-top` (sudah 110px). Contoh:
+  tombol "Apply Now" di hero `/recruitment` → `#available-roles` harus mengalir,
+  bukan jump.
+- **Pindah halaman = View Transitions.** Pakai `<ClientRouter />` (sudah aktif);
+  tombol/link cross-page jangan `preventDefault` tanpa alasan. Semua script yang
+  menyentuh DOM WAJIB `astro:page-load` re-init + `astro:before-swap` teardown
+  (lihat gotcha §2). Navigasi klien tak boleh menyisakan listener/ScrollTrigger.
+- **Animasi masuk (reveal):** pakai `motion.ts` (`reveal()`, `gsap.matchMedia`);
+  entrance Our Team (header, title grup, kartu leader, carousel) + stagger kartu.
+  Jangan animasi properti layout (width/height/top/left) — pakai
+  `transform`/`opacity` saja (hindari reflow/jank).
+- **Deep-link/reload tetap mendarat di section** (hash di-reapply setelah
+  `ds:splash-done`/`load`/`fonts.ready` — jangan regresi).
+- **Elemen mengapung (mis. tombol scroll-up footer):** `position: fixed`, muncul
+  via `IntersectionObserver` saat target (footer) terlihat; reduce = tampil
+  instan tanpa animasi; jangan tabrakan dengan `.sound-toggle`; `aria-label` jelas.
+- **Verifikasi:** `verify-vt` (navigasi klien + hash), `perf:audit` (jank),
+  dan render `reduce` headless vs reference (MAE tak berubah).
+
 ## 2. Gotcha yang sudah terbukti (jangan diulang)
 
 - **String `linear-gradient(...)` dari Figma MCP menormalkan handle → lossy**

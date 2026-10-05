@@ -5,26 +5,19 @@ Prompt ini memuat seluruh konteks, aturan hukum presisi piksel, strict 8-point g
 **hukum warna (fills & gradient harus persis Figma)**, protokol per-section, dan
 checklist.
 
-**★ STATUS & MISI SEKARANG (4 Oct 2026) — STANDAR FULL-SCREEN: hero gambar +
-section 100svh.** User minta **semua halaman** memakai pola baru: **hero = gambar
-background** dari `assets/hero gambar/` (gambar TIDAK memuat teks; heading/subtitle/
-tombol tetap HTML) + tinggi **`100svh`**; **setiap section konten = satu layar**
-(`min-height: 100svh` + konten ter-center, full width). **CTA & footer tidak
-diubah.** **Homepage SELESAI** (commit `b228f3c`). **NEXT = About Us
-(`1439:4184`)** → Recruitment → Partners → Hall of Frames → Contact.
-**Work order resmi + resep teknik + checklist per-section + peta hero→gambar +
-jebakan: `docs/page-fullscreen-migration-plan.md` (WAJIB dibaca dulu).**
-DILARANG pakai `zoom`/`transform: scale` untuk full-screen (user menolak — render
-berantakan); pakai `min-height: 100svh` + centering.
-
-**ARSIP — yang sudah selesai (jangan rusak tanpa alasan):** Homepage (`1430:2040`),
-About Us (`1439:4184`), Recruitment (`1436:3505`, 9/9), Partners (`1439:4787`, 4/4),
-semua tombol/link prototype Figma, About Us glow responsif, navbar hover underline,
-Hall of Frames (card project + modal), Detail HoDS. Semua heading dikoreksi ke
-gradient global Figma `181deg #fff 15% / #999 42% / #fff 79%`. Temuan kunci: MCP
-gradient angle & `textAlign` sering LOSSY → fit dari PNG; rim gradient Figma bisa
-`90deg`/`110deg` bukan `135deg`; section origin fraksional bikin artefak screenshot
-1px. **Video hero sudah digantikan gambar** — lihat `docs/page-fullscreen-migration-plan.md`.
+**★ STATUS & MISI SEKARANG (5 Oct 2026).** **NEXT = 9-item fix list user** —
+work order lengkap: **`docs/fix-9-plan.md`**: (1) CTA homepage → `/recruitment`;
+(2) navbar aktif wajib underline; (3) typo "Hause"→"House"; (4) glow kartu Our
+Team sesuai Figma (`1594:5145`); (5) animasi Our Team + transisi tombol;
+(6) scroll/transisi smooth same-page & cross-page; (7) garis "View Details"
+Available Roles (`1218:1347`); (8) tombol scroll-up footer **melayang**;
+(9) lanjut full-screen Recruitment → Partners → HoF → Contact. **Satu item per
+pass + 7 gate; konfirmasi user sebelum push.** Hukum animasi/transisi ada di
+`docs/pixel-precision-sop.md` §"Hukum Animasi, Transisi & Smooth Scroll".
+**Standar full-screen (hero gambar + section 100svh):** Homepage & About Us
+SELESAI; work order `docs/page-fullscreen-migration-plan.md`. DILARANG
+`zoom`/`transform: scale`. **ARSIP — jangan rusak:** Homepage, About Us (incl.
+Our Team HoDS carousel `1688:2933`), Recruitment 9/9, Partners 4/4.
 
 **ATURAN STRICT (jangan dilanggar):** spacing/padding/margin = **kelipatan 8**
 (gate `npm run audit:spacing`, per-komponen `node scripts/spacing-audit.mjs

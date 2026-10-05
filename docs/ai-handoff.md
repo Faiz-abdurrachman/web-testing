@@ -19,12 +19,19 @@ center, `motion.ts` dibersihkan, `verify.mjs` geometry + reference PNG di-pad,
 ALL PASS. **DILARANG pakai `zoom`/`transform: scale`** (user menolak, render
 berantakan) — pakai `min-height: 100svh` + centering.
 
-**★ NEXT = Recruitment (`1436:3505`)** — [Figma](https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3505).
-Work order lengkap (resep teknik + checklist per-section + peta hero→gambar +
-jebakan + 7 gate): **`docs/page-fullscreen-migration-plan.md`**. Lalu Partners
-(`1439:4787`), Hall of Frames (`1439:4506`), Contact (`1445:5065`). **Satu section
-per pass (atau satu halaman per commit seperti `b228f3c`).** Home & Recruitment =
-benchmark presisi, jangan rusak.
+**★ NEXT = 9-ITEM FIX LIST dari user (5 Oct 2026)** — work order lengkap +
+urutan + definisi selesai: **`docs/fix-9-plan.md`**. Ringkas: (1) CTA homepage
+→ `/recruitment`; (2) navbar aktif wajib underline (audit semua rute); (3) typo
+"Hause"→"House"; (4) glow kartu Our Team sesuai Figma (`1594:5145` REST effects);
+(5) animasi section Our Team + transisi tombol; (6) scroll & transisi
+same-page/cross-page smooth; (7) garis "View Details" Available Roles sesuai
+Figma (`1218:1347`); (8) tombol scroll-up footer jadi **melayang** muncul saat
+footer; (9) lanjutkan full-screen (hero gambar + 100svh) Recruitment → Partners →
+HoF → Contact. **Satu item per pass + 7 gate. Konfirmasi user sebelum push.**
+
+**Setelah itu** = Recruitment (`1436:3505`) full-screen, lalu Partners
+(`1439:4787`), Hall of Frames (`1439:4506`), Contact (`1445:5065`). Work order
+full-screen: **`docs/page-fullscreen-migration-plan.md`**.
 
 **SELESAI (5 Oct 2026) — About Us full-screen (hero gambar + section 100svh).**
 `AboutHero.astro` → gambar background (`hero-bg.webp`/`-2x`, sumber
