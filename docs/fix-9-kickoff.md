@@ -1,45 +1,48 @@
-# Kickoff prompt — eksekusi 9-item fix list (copy-paste ke AI baru)
+# Kickoff prompt — lanjutkan misi #9 (copy-paste ke AI baru)
 
 Tempel seluruh blok di bawah ini ke AI baru. (Prompt umum onboarding ada di
-`docs/kickoff-prompt.md`; yang ini khusus misi 9 fix.)
+`docs/kickoff-prompt.md`.)
 
 ```text
 Kamu lanjut kerja di repo "Data Sorcerers" — static Astro + Vercel,
 target pixel-accurate ke Figma. Orientasi dulu, jangan sentuh kode sebelum baca.
 
 WAJIB baca dulu (urut, jangan skip):
-1. AGENTS.md                         → operating manual (commands, 7 gate, gotchas)
+1. AGENTS.md                         → operating manual (commands, 7 gate, gotchas, file map)
 2. docs/pixel-precision-sop.md       → SOP presisi (WAJIB; terutama "Hukum
                                        Animasi, Transisi & Smooth Scroll",
                                        "Hukum Section Full-Screen & Hero Gambar",
                                        strict 8-point grid, hukum warna)
-3. docs/fix-9-plan.md                → ★ WORK ORDER 9 item (MISI SEKARANG)
-4. docs/ai-handoff.md                → state terkini
-5. docs/page-fullscreen-migration-plan.md → resep full-screen (untuk item #9)
+3. docs/ai-handoff.md                → state terkini (bagian "TUGAS BERIKUTNYA")
+4. docs/page-fullscreen-migration-plan.md → ★ WORK ORDER #9 (MISI SEKARANG)
+5. docs/fix-9-plan.md                → riwayat #1–#8 + #10–#12 (SELESAI; jangan ulang)
 
-MISI SEKARANG: kerjakan 9-item fix list di docs/fix-9-plan.md.
-- Kerjakan SATU ITEM PER PASS sampai lolos 7 GATE, baru lanjut item berikutnya.
-  DILARANG lompat / gabung item.
-- Urutan yang disarankan: #3 (typo Hause→House) → #1 (CTA homepage →
-  /recruitment) → #2 (navbar active underline di semua rute) → #7 (garis "View
-  Details" Available Roles sesuai Figma 1218:1347) → #8 (tombol scroll-up footer
-  melayang) → #4 (glow kartu Our Team sesuai Figma 1594:5145) → #5 (animasi
-  section Our Team + transisi tombol) → #6 (scroll & navigasi smooth) →
-  #9 (lanjut full-screen Recruitment → Partners → HoF → Contact).
-- Detail tiap item (kondisi kode sekarang, target Figma, file, jebakan,
-  verifikasi) ada di docs/fix-9-plan.md — ikuti.
+STATE SEKARANG: fix-9 #1–#8 + #10–#12 SELESAI, ter-commit & ter-push
+(main = origin/main = production/main = 77110d3). Jangan rusak benchmark presisi:
+Homepage, About Us, Recruitment (9/9), Partners (4/4), Contact, detail HoDS.
+
+MISI SEKARANG = #9: STANDAR FULL-SCREEN (hero gambar + section 100svh) untuk
+halaman tersisa, URUT: Recruitment (`1436:3505`) → Partners (`1439:4787`) →
+Hall of Frames (`1439:4506`) → Contact (`1445:5065`).
+Resep lengkap + peta hero→gambar + checklist per-section + jebakan ada di
+docs/page-fullscreen-migration-plan.md — IKUTI.
+- Resep: hero = gambar `assets/hero gambar/*` → `hero-bg.webp`+`-2x` (object-fit
+  cover, full-bleed) + `min-height:100svh`; section konten = `min-height:100svh`
+  + center; CTA & footer TIDAK diubah.
+- DILARANG `zoom` / `transform: scale` (user menolak, render pecah).
+- Satu section per pass + 7 gate. Update geometry di verify.mjs + pad reference
+  PNG dengan sharp.extend() warna #050507 (jangan stretch).
 
 ATURAN STRICT (HUKUM):
-- spacing/padding/margin = KELIPATAN 8 (gate `npm run audit:spacing`).
+- spacing/padding/margin = KELIPATAN 8 (gate `npm run audit:spacing`); nilai
+  non-8 hanya jika terukur dari Figma/PNG (tabel pengecualian di SOP).
 - heading = Bluu Next Bold 700 (`--font-display`); body Manrope (400/500/700).
 - warna solid = fills Figma persis; gradient = FIT dari PNG node (string MCP lossy).
 - geometri ±1px; render `prefers-reduced-motion: reduce` tetap pixel-exact
   (semua animasi baru WAJIB inert di reduce).
-- DILARANG `zoom`/`transform: scale` untuk full-screen.
-- Jangan rusak benchmark presisi: Homepage, Recruitment (9/9), Partners (4/4),
-  About Us.
+- Animasi aksesibel: gate `@media (prefers-reduced-motion: no-preference)`.
 
-7 GATE per item (preview: `npm run build && npx astro preview --port 4331`):
+7 GATE per section (preview: `npm run build && npx astro preview --port 4331`):
 1. npm run build (0 error, 19 halaman)
 2. PREVIEW_URL=http://localhost:4331 node scripts/verify.mjs
 3. PREVIEW_URL=http://localhost:4331 node scripts/navbar-audit.mjs
@@ -49,35 +52,34 @@ ATURAN STRICT (HUKUM):
 7. npm run format:check
 (+ npm run seo:audit)
 
-CARA KERJA:
-- Baca docs/fix-9-plan.md dulu. Untuk item yang butuh Figma (1218:1347, 1594:5145),
-  export node PNG + cek REST `effects` bila perlu, lalu UKUR dengan sharp
-  (jangan kira-kira).
-- Update docs di commit yang sama (docs/assets.md, docs/ai-handoff.md, AGENTS.md,
-  docs/figma-prototype-flow.md untuk #1, docs/page-fullscreen-migration-plan.md
-  untuk #9). Perbarui docs/fix-9-plan.md (tandai item selesai).
-- Commit per item (style: feat:/fix:/docs:/chore:).
-- KONFIRMASI user sebelum push. `git push origin main` = deploy testing +
-  production sekaligus.
-- 3 commit lokal terbaru (belum di-push): bc8502f (About full-screen),
-  9e4ba41 (Our Team HoDS carousel), 2e5cca8 (docs fix-9 plan).
+3 DEVIASI SENGAJA DARI FIGMA (jangan "perbaiki" balik tanpa cek user/docs):
+1. Judul grup Our Team: "Hause of Data Sorcerers" → "House of Data Sorcerers".
+2. Footer scroll-up: di atas divider/legal (absolute dalam .bottom), BUKAN
+   fixed melayang.
+3. OurTeam HoDS portrait bleed 42px ala Hall of Frames; leader cards tetap clip.
+   (Figma reference meng-clip keduanya.)
 
-MULAI dari item #3 (typo "Hause" → "House" di src/components/OurTeam.astro).
-Ingat: mengubah teks membuat reference assets/about-us/team/OurTeam-New-1x.png
-stale → regenerate dari node 1688:2933 via figma_download_figma_images + update
-verify.mjs bila nama file berubah.
+CARA KERJA:
+- Update docs di commit yang sama (docs/assets.md, docs/ai-handoff.md, AGENTS.md,
+  docs/page-fullscreen-migration-plan.md). Perbarui docs/fix-9-plan.md (§#9).
+- Commit per section/halaman (style: feat:/fix:/docs:/chore:).
+- KONFIRMASI user sebelum push. `git push origin main` = deploy testing +
+  production sekaligus (origin punya DUA push URL — jangan tambah remote).
+- Gotcha penting: baca §"Gotcha" di AGENTS.md & SOP §2 (Astro ClientRouter:
+  script re-init `astro:page-load` + cleanup `astro:before-swap`; multi-line CSS
+  comment bikin prettier loop; production build minifier bisa buang properti).
+
+MULAI dari: inventaris `depth 1` node halaman Recruitment (`1436:3505`), tulis
+Master Work Plan per section, lalu kerjakan section 1 (Hero `1436:3506`) dulu.
 ```
 
-## Ringkasan 9 item (untuk cepat)
+## Peta cepat halaman #9
 
-| #   | Item                               | File utama                   | Figma                                              |
-| --- | ---------------------------------- | ---------------------------- | -------------------------------------------------- |
-| 1   | CTA homepage → `/recruitment`      | `Recruitment.astro`          | `1430:2162`                                        |
-| 2   | Navbar active underline semua rute | `Navbar.astro` + pages       | `755:15178`                                        |
-| 3   | Typo "Hause"→"House"               | `OurTeam.astro`              | `1688:2933`                                        |
-| 4   | Glow kartu sesuai Figma            | `TeamCard.astro`, `team.ts`  | `1594:5145`                                        |
-| 5   | Animasi section Our Team           | `OurTeam.astro`, `motion.ts` | —                                                  |
-| 6   | Scroll & navigasi smooth           | global / `BaseLayout`        | —                                                  |
-| 7   | Garis "View Details" hover         | `AvailableRoles.astro`       | `1218:1347`                                        |
-| 8   | Tombol scroll-up footer melayang   | `Footer.astro`               | `765:17071`                                        |
-| 9   | Full-screen halaman sisa           | per halaman                  | `1436:3505`, `1439:4787`, `1439:4506`, `1445:5065` |
+| Urutan | Halaman     | Node page   | Section (depth 1)                                                                                                                                                                                    |
+| ------ | ----------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1      | Recruitment | `1436:3505` | Hero `1436:3506`, WhoShouldJoin `1436:3512`, WhatYouWillDo `1436:3517`, AvailableRoles `1436:3564`, Timeline `1436:3637`, FAQ `1436:3675`, Snippets `1436:3684`, CTA `1436:3687`, Footer `1436:3699` |
+| 2      | Partners    | `1439:4787` | Hero `1439:4788`, OurPartners `1439:4793`, WhyDS `1439:4937`, Footer `1439:4983`                                                                                                                     |
+| 3      | Hall of Fr. | `1439:4506` | Hero `1439:4507`, Featured `1439:4512`, Projects `1439:4655`, Milestone `1439:4699`, Footer `1439:4724`                                                                                              |
+| 4      | Contact     | `1445:5065` | Hero `1445:5066` (2 kolom!), Footer `1445:5118`                                                                                                                                                      |
+
+Hero→gambar: lihat tabel `docs/page-fullscreen-migration-plan.md` §2.
