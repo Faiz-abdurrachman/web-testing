@@ -4,27 +4,18 @@ import Button from './Button.astro';
 
 <section class="hero" aria-labelledby="hero-title">
   <div class="artwork" aria-hidden="true">
-    <div class="artwork-entrance">
-      <div class="artwork-stack">
-        <img
-          class="art-bg"
-          src="/images/hero/background.webp"
-          width="1583"
-          height="993"
-          alt=""
-          fetchpriority="high"
-          decoding="async"
-        />
-        <video class="art-video" muted loop playsinline preload="none">
-          <source src="/images/hero/hero-bg.webm" type="video/webm" />
-          <source src="/images/hero/hero-bg.mp4" type="video/mp4" />
-        </video>
-      </div>
-    </div>
+    <img
+      class="art-bg"
+      src="/images/hero/background.webp"
+      srcset="/images/hero/background.webp 1440w, /images/hero/background-2x.webp 2880w"
+      sizes="100vw"
+      width="1440"
+      height="903"
+      alt=""
+      fetchpriority="high"
+      decoding="async"
+    />
   </div>
-  <canvas class="hero-canvas" aria-hidden="true"></canvas>
-  <div class="hero-veil" aria-hidden="true"></div>
-  <div class="hero-sweep" aria-hidden="true"></div>
   <div class="hero-content">
     <div class="copy">
       <div class="title-wrap">
@@ -48,132 +39,17 @@ import Button from './Button.astro';
     </div>
   </div>
 </section>
-<script>
-  import { mountHeroParticles } from '../scripts/hero-particles';
 
-  // Animated hero plate + particle field. Both are dynamically imported /
-  // gated so they stay out of the initial bundle and are skipped under reduced
-  // motion. The scroll sequence in `motion.ts` drives
-  // `window.__heroParticles.burst` so the field rushes toward the viewer as the
-  // hero zooms in.
-  let disposeParticles: (() => void) | void;
-  let currentHero: HTMLElement | null = null;
-
-  const initHeroVideo = (hero: HTMLElement) => {
-    const reduce = window.matchMedia(
-      '(prefers-reduced-motion: reduce)',
-    ).matches;
-    // Assets the splash should await before lifting (see Splash.astro).
-    const preload = (window as unknown as { __dsPreload?: Promise<unknown>[] })
-      .__dsPreload;
-
-    // Animated background. Only fetched on larger, motion-OK viewports; under
-    // reduced motion (or ≤600px) the static art stays and the clip is never
-    // downloaded, so the fallback is always the reference art. It plays on a
-    // continuous loop (the clip is a seamless ping-pong boomerang), and is never
-    // scrubbed by scroll, so it keeps moving whether or not the visitor scrolls.
-    const video = hero.querySelector<HTMLVideoElement>('.art-video');
-    if (!video) return;
-    const wide = window.matchMedia('(min-width: 601px)').matches;
-    const conn = (
-      navigator as unknown as {
-        connection?: { saveData?: boolean; effectiveType?: string };
-      }
-    ).connection;
-    const constrained =
-      conn?.saveData === true ||
-      conn?.effectiveType === 'slow-2g' ||
-      conn?.effectiveType === '2g';
-    if (reduce || !wide || constrained) return;
-    const stack = video.closest('.artwork-stack');
-    const start = () => {
-      // The clip is a full scene with its own (larger) sorcerer baked in, so
-      // drop the static cutout in the same frame instead of crossfading two
-      // characters — that overlap read as a "double". The plate then fades in
-      // over the static background only.
-      stack?.classList.add('is-video');
-      video.classList.add('is-ready');
-      void video.play().catch(() => {});
-    };
-    if (video.readyState >= 2) start();
-    else video.addEventListener('loadeddata', start, { once: true });
-    const load = () => {
-      // Attach the poster only when the clip is actually about to load, so
-      // phones and reduced-motion never fetch the extra frame. The static
-      // background.webp plate already covers the fallback.
-      if (!video.poster) video.poster = '/images/hero/hero-poster.webp';
-      video.preload = 'auto';
-      video.load();
-    };
-    const armed = document.documentElement.classList.contains('splash-armed');
-    const warm = document.documentElement.classList.contains('nav-warm');
-    if (armed) {
-      // Fetch during the splash and let it wait for the first frame, so the
-      // clip is ready instead of competing with the reveal.
-      preload?.push(
-        new Promise<void>((resolve) => {
-          if (video.readyState >= 2) resolve();
-          else
-            video.addEventListener('loadeddata', () => resolve(), {
-              once: true,
-            });
-        }),
-      );
-      load();
-    } else if (warm) {
-      // Warm, in-session navigation: the clip is normally still in the HTTP
-      // cache, so fetch it now and swap as soon as it can paint. The old idle
-      // wait pushed the image->video swap seconds down the line, which is what
-      // made a Home visit look like it "becomes" the video.
-      load();
-    } else if (typeof window.requestIdleCallback === 'function') {
-      window.requestIdleCallback(load, { timeout: 2000 });
-    } else {
-      window.setTimeout(load, 300);
-    }
-  };
-
-  const initHeroParticles = (hero: HTMLElement) => {
-    const preload = (window as unknown as { __dsPreload?: Promise<unknown>[] })
-      .__dsPreload;
-    const canvas =
-      hero.querySelector<HTMLCanvasElement>('.hero-canvas') ?? undefined;
-    const host = canvas?.parentElement;
-    if (!canvas || !host) return;
-    void mountHeroParticles(canvas, host, preload)
-      .then((dispose) => {
-        disposeParticles = dispose;
-      })
-      .catch(() => {});
-  };
-
-  // Init per page: the first parse still runs this before `load` (so the splash
-  // awaits the video/three promises as before), and `astro:page-load` re-inits
-  // after client-side navigation. The element identity guard stops the initial
-  // `astro:page-load` from double-binding the same hero.
-  const initHero = () => {
-    const hero = document.querySelector<HTMLElement>('.hero');
-    if (!hero || hero === currentHero) return;
-    currentHero = hero;
-    initHeroVideo(hero);
-    initHeroParticles(hero);
-  };
-
-  initHero();
-  document.addEventListener('astro:page-load', initHero);
-  document.addEventListener('astro:before-swap', () => {
-    if (typeof disposeParticles === 'function') disposeParticles();
-    disposeParticles = undefined;
-  });
-</script>
 <style>
   .hero {
     position: relative;
     isolation: isolate;
     display: flex;
     align-items: center;
-    min-height: min(903px, 100svh);
-    /* Figma node 1430:2041: 1440x903, padding 80, content centred. */
+    justify-content: center;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
     padding: 80px var(--page-gutter);
     overflow: clip;
   }
@@ -182,35 +58,29 @@ import Button from './Button.astro';
     inset: 0;
     z-index: -1;
   }
-  .artwork-entrance,
-  .artwork-stack {
-    position: absolute;
-    inset: 0;
-  }
-  .artwork :is(img, video) {
-    position: absolute;
-    inset: 0;
+  .artwork img {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
   }
-  /* The clip is the uncropped 1280x720 plate, so `cover` only trims the sides.
-     Centring keeps the sorcerer (source centre ~53%) inside the frame down to
-     the 601px gate; an off-centre position pushed the staff past the right edge
-     on narrow portrait widths. */
-  .art-video {
-    opacity: 0;
-    object-position: 50% center;
-  }
-  /* At ≥601px with motion allowed the plate owns the hero from the first paint:
-     its poster (the clip's own frame 0) stands in until playback starts, so the
-     static art never swaps to a different composition mid-view. Under reduced
-     motion, or ≤600px, the video stays hidden and the `background.webp` plate
-     remains the reference render. */
-  @media (prefers-reduced-motion: no-preference) and (min-width: 601px) {
-    .art-video {
-      opacity: 1;
+  @media (min-width: 1921px) {
+    .artwork {
+      left: 50%;
+      right: auto;
+      width: 1920px;
+      transform: translateX(-50%);
+      mask-image: linear-gradient(
+        90deg,
+        transparent,
+        #000 12%,
+        #000 88%,
+        transparent
+      );
+    }
+    .artwork img {
+      object-position: center bottom;
     }
   }
 
@@ -237,7 +107,6 @@ import Button from './Button.astro';
     font-weight: 700;
     line-height: 86px;
   }
-  /* Figma paints the gradient per text node, so each line gets its own box. */
   h1 span {
     display: block;
     background: linear-gradient(181deg, #fff 15%, #999 42%, #fff 79%);
@@ -266,153 +135,11 @@ import Button from './Button.astro';
     gap: 24px;
     align-items: center;
   }
-  .hero-veil,
-  .hero-sweep {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-  .hero-veil {
-    z-index: 2;
-    background: var(--color-background);
-    opacity: 0;
-  }
-  .hero-sweep {
-    z-index: 2;
-    overflow: hidden;
-  }
-  .hero-sweep::before {
-    content: '';
-    position: absolute;
-    top: -30%;
-    bottom: -30%;
-    left: 0;
-    width: 38%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgb(216 209 240 / 12%),
-      transparent
-    );
-    opacity: 0;
-    transform: translate3d(-120%, 0, 0) skewX(-16deg);
-  }
-  .hero-canvas {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-  }
-  .hero-content {
-    position: relative;
-    z-index: 1;
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    :global(html.hero-ready) .artwork-entrance {
-      animation: hero-art 1.6s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-    }
-    :global(html.hero-ready) .hero-veil {
-      animation: hero-veil 1.1s ease-out both;
-    }
-    :global(html.hero-ready) .hero-sweep::before {
-      animation: hero-sweep 2.4s cubic-bezier(0.22, 0.61, 0.36, 1) 0.4s both;
-    }
-    :global(html.hero-ready) h1 span {
-      animation: hero-line 0.95s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-    }
-    :global(html.hero-ready) h1 span:nth-child(1) {
-      animation-delay: 0.45s;
-    }
-    :global(html.hero-ready) h1 span:nth-child(2) {
-      animation-delay: 0.6s;
-    }
-    :global(html.hero-ready) .copy p {
-      animation: hero-up 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) 0.78s both;
-    }
-    :global(html.hero-ready) .actions {
-      animation: hero-up 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) 0.95s both;
-    }
-  }
-  @keyframes hero-art {
-    from {
-      filter: blur(10px) brightness(0.72);
-      transform: scale(1.1);
-    }
-    to {
-      filter: blur(0) brightness(1);
-      transform: scale(1);
-    }
-  }
-  @keyframes hero-veil {
-    from {
-      opacity: 0.92;
-    }
-    to {
-      opacity: 0;
-    }
-  }
-  @keyframes hero-sweep {
-    0% {
-      opacity: 0;
-      transform: translate3d(-120%, 0, 0) skewX(-16deg);
-    }
-    15% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
-      transform: translate3d(280%, 0, 0) skewX(-16deg);
-    }
-  }
-  @keyframes hero-line {
-    from {
-      opacity: 0;
-      transform: translateY(38px);
-      filter: blur(10px);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-      filter: blur(0);
-    }
-  }
-  @keyframes hero-up {
-    from {
-      opacity: 0;
-      transform: translateY(22px);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
-  @media (min-width: 1921px) {
-    .artwork {
-      left: 50%;
-      right: auto;
-      width: 1920px;
-      transform: translateX(-50%);
-      mask-image: linear-gradient(
-        90deg,
-        transparent,
-        #000 12%,
-        #000 88%,
-        transparent
-      );
-    }
-    .artwork :is(img, video) {
-      object-position: center bottom;
-    }
-  }
+
   @media (max-width: 1100px) {
     h1 {
       font-size: clamp(42px, 6.5vw, 72px);
       line-height: 1.225;
-    }
-    .hero {
-      min-height: min(820px, 100svh);
     }
   }
   @media (max-width: 900px) {
@@ -423,91 +150,25 @@ import Button from './Button.astro';
   }
   @media (max-width: 600px) {
     .hero {
-      /* svh, not dvh: dvh reflows with the mobile address bar and made the next section jump. */
-      min-height: 100vh;
-      min-height: 100svh;
       padding-top: clamp(96px, 12svh, 120px);
       padding-bottom: clamp(64px, 9svh, 96px);
       align-items: center;
     }
-    .artwork :is(img, video) {
+    .artwork img {
       object-position: 61% center;
     }
-    /* Scrims keep the copy legible over the sorcerer on phones, then fade out. */
     .artwork::after {
       content: '';
       position: absolute;
       inset: 0;
-      background:
-        linear-gradient(
-          180deg,
-          rgb(5 5 7 / 52%) 0%,
-          rgb(5 5 7 / 22%) 40%,
-          rgb(5 5 7 / 6%) 62%,
-          transparent 80%
-        ),
-        linear-gradient(
-          90deg,
-          rgb(5 5 7 / 60%) 0%,
-          rgb(5 5 7 / 22%) 48%,
-          transparent 72%
-        );
-    }
-    .hero-content {
-      gap: clamp(28px, 7vw, 48px);
-    }
-    .copy {
-      gap: clamp(16px, 4.5vw, 24px);
-    }
-    h1 {
-      font-size: clamp(28px, 7vw, 42px);
-      line-height: 1.2;
-    }
-    p {
-      max-width: 380px;
-      font-size: clamp(15px, 3.9vw, 16px);
-      line-height: 1.5;
-      /* Keeps the copy legible where it crosses the sorcerer on small screens. */
-      text-shadow: 0 1px 16px rgb(5 5 7 / 85%);
-    }
-    .actions {
-      gap: clamp(12px, 3.5vw, 20px);
-    }
-  }
-  @media (max-width: 600px) and (min-height: 561px) {
-    /* Fill the LARGE viewport (lvh, a constant unit) so retracting the address bar never leaves a gap under the hero — the "too small / tidak nge-pas" report. Scoped to portrait phones so short landscape stays on 100svh. */
-    .hero {
-      min-height: 100svh;
-      min-height: 100lvh;
-    }
-  }
-  @media (max-width: 480px) {
-    .actions {
-      flex-direction: column;
-      align-items: stretch;
-    }
-  }
-  @media (max-height: 560px) {
-    .hero {
-      padding-top: clamp(56px, 13svh, 96px);
-      padding-bottom: clamp(28px, 7svh, 64px);
-    }
-    .hero-content {
-      gap: clamp(14px, 4.5svh, 32px);
-    }
-    .copy {
-      gap: 12px;
-    }
-    h1 {
-      font-size: clamp(22px, 8.5svh, 52px);
-      line-height: 1.15;
-    }
-    p {
-      font-size: clamp(13px, 3.6svh, 16px);
-      line-height: 1.4;
-    }
-    .artwork :is(img, video) {
-      object-position: 61% bottom;
+      background: linear-gradient(
+        180deg,
+        #050507 0%,
+        transparent 30%,
+        transparent 70%,
+        #050507 100%
+      );
+      opacity: 0.5;
     }
   }
 </style>

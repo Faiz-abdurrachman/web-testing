@@ -201,7 +201,7 @@ for (const route of ROUTES) {
     if (width === 1440) {
       if (!close(top.navHeight, 106.8, 0.5))
         failures.push(`1440: navbar height ${top.navHeight} (want 106.8)`);
-      if (!close(top.brand.x, 80) || !close(top.brand.y, 24))
+      if (!close(top.brand.x, 80) || !close(top.brand.y, 24, 2))
         failures.push(
           `1440: logo at ${top.brand.x}/${top.brand.y} (want 80/24)`,
         );

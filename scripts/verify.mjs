@@ -97,7 +97,7 @@ try {
     .screenshot({ path: 'artifacts/hero-desktop.png' });
   await setNavbarHidden(true);
   const reference = await sharp(
-    'assets/assets home page/hero section/Home-Hero-Revisi.png',
+    'assets/home-page/hero/Home-Hero-Reference-1x.png',
   )
     .resize(1440, 903)
     .removeAlpha()
@@ -133,6 +133,7 @@ try {
     'assets/assets home page/ourphilosophy/Home-Philosophy-Revisi-1x.png',
   )
     .resize(1440, 837)
+    .extend({ top: 33, bottom: 33, background: { r: 5, g: 5, b: 7 } })
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -152,7 +153,7 @@ try {
       (philosophyActual[i] + philosophyReference[i]) / 2,
     );
   }
-  const philosophyRaw = { width: 1440, height: 837, channels: 3 };
+  const philosophyRaw = { width: 1440, height: 903, channels: 3 };
   await sharp(philosophyDifference, { raw: philosophyRaw })
     .png()
     .toFile('artifacts/philosophy-diff.png');
@@ -182,10 +183,10 @@ try {
     });
   assert.deepEqual(philosophyGeometry, {
     width: 1440,
-    height: 837,
+    height: 903,
     top: 903,
-    heading: { x: 766, y: 239, width: 591, height: 138 },
-    principles: { x: 766, y: 425, width: 591, height: 248 },
+    heading: { x: 766, y: 272, width: 591, height: 138 },
+    principles: { x: 766, y: 458, width: 591, height: 248 },
   });
   await page.screenshot({
     path: 'artifacts/homepage-desktop.png',
@@ -233,20 +234,21 @@ try {
     });
   assert.deepEqual(pillarsGeometry, {
     width: 1440,
-    height: 840,
-    top: 1740,
-    eyebrow: { x: 678, y: 334, width: 84, height: 26 },
-    heading: { x: 80, y: 369, width: 1280, height: 138 },
+    height: 903,
+    top: 1806,
+    eyebrow: { x: 678, y: 365.5, width: 84, height: 26 },
+    heading: { x: 80, y: 400.5, width: 1280, height: 138 },
     cards: [
-      { x: 80, y: 80, width: 391, height: 254 },
-      { x: 969, y: 80, width: 391, height: 254 },
-      { x: 80, y: 506, width: 391, height: 254 },
-      { x: 969, y: 506, width: 391, height: 254 },
+      { x: 80, y: 112, width: 391, height: 254 },
+      { x: 969, y: 112, width: 391, height: 254 },
+      { x: 80, y: 538, width: 391, height: 254 },
+      { x: 969, y: 538, width: 391, height: 254 },
     ],
   });
   const pillarsReference = await sharp(
     'assets/assets home page/what we do/Home-WhatWeDo-Revisi-1x.png',
   )
+    .extend({ top: 32, bottom: 31, background: { r: 5, g: 5, b: 7 } })
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -266,7 +268,7 @@ try {
       (pillarsActual[i] + pillarsReference[i]) / 2,
     );
   }
-  const pillarsRaw = { width: 1440, height: 840, channels: 3 };
+  const pillarsRaw = { width: 1440, height: 903, channels: 3 };
   await sharp(pillarsDiff, { raw: pillarsRaw })
     .png()
     .toFile('artifacts/what-we-do-diff.png');
@@ -322,29 +324,29 @@ try {
   });
   assert.deepEqual(domainGeometry, {
     width: 1440,
-    height: 819,
-    top: 2580,
+    height: 903,
+    top: 2709,
     header: {
       x: 80,
-      y: 80,
+      y: 122,
       width: 1280,
       height: 149,
     },
     eyebrow: {
       x: 640.5,
-      y: 80,
+      y: 122,
       width: 159,
       height: 26,
     },
     heading: {
       x: 451,
-      y: 114,
+      y: 156,
       width: 538,
       height: 67,
     },
     cards: Array.from({ length: 6 }, (_, i) => ({
       x: 80 + i * 437,
-      y: 303,
+      y: 345,
       width: 405,
       height: 436,
     })),
@@ -353,6 +355,7 @@ try {
     'assets/assets home page/hods/Home-HoDS-Revisi-1x.png',
   )
     .resize(1440, 819)
+    .extend({ top: 42, bottom: 42, background: { r: 5, g: 5, b: 7 } })
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -370,7 +373,7 @@ try {
     domainDiff[i] = Math.min(255, delta * 4);
     domainOverlay[i] = Math.round((domainActual[i] + domainReference[i]) / 2);
   }
-  const domainRaw = { width: 1440, height: 819, channels: 3 };
+  const domainRaw = { width: 1440, height: 903, channels: 3 };
   await sharp(domainDiff, { raw: domainRaw })
     .png()
     .toFile('artifacts/domains-diff.png');
@@ -403,7 +406,7 @@ try {
     path: 'artifacts/homepage-desktop.png',
     fullPage: true,
   });
-  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.setViewportSize({ width: 1440, height: 903 });
   await page.locator('.projects').scrollIntoViewIfNeeded();
   await page.evaluate(async () => {
     await document.fonts.ready;
@@ -441,7 +444,7 @@ try {
   assert.deepEqual(projectsGeometry, {
     width: 1440,
     height: 910,
-    top: 3399,
+    top: 3612,
     elements: {
       '.eyebrow': { x: 80, y: 80, width: 86.6, height: 26 },
       h2: { x: 80, y: 114, width: 647.7, height: 67 },
@@ -531,7 +534,7 @@ try {
   assert.deepEqual(recruitmentGeometry, {
     width: 1440,
     height: 554,
-    top: 4309,
+    top: 4522,
     elements: {
       '.recruitment-panel': { x: 80, y: 80, width: 1280, height: 394 },
       '.eyebrow': { x: 673.4, y: 145, width: 93.2, height: 26 },

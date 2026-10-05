@@ -131,10 +131,21 @@ const principles = [
     overflow: clip;
     background: var(--color-background);
   }
+  /* Home variant fills one viewport; the About variant keeps its Figma height and is migrated in a later pass. */
+  .philosophy:not(.is-about) {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+  }
+  .philosophy:not(.is-about) > .canvas {
+    width: 100%;
+  }
   .philosophy.is-about {
     /* Gradient fill (Figma handles p0(0.553,0.545) -> p1(0.798,1.681), stops #050507 -> #6c3bff) fitted from the node PNG; painted on the section (not the canvas) so it blends continuously into the Our Ecosystem gradient below at every viewport width. The canvas is NOT zoomed — artwork anchors to the section edge via cqw, content stays at Figma 1440 proportions. */
     background: linear-gradient(159.7deg, #050507 54.82%, #6c3bff 133.76%);
   }
+
   /* The home node has a standalone bottom-right glow ellipse (1430:2053); the About node (1439:4219) does not, so hide the home glow on the About variant. */
   .philosophy.is-about .canvas::before {
     display: none;
