@@ -343,6 +343,13 @@ const STEP = 948;
     justify-content: flex-start;
     overflow-x: auto;
     scrollbar-width: none;
+    /* Room for the HoDS portraits to bleed above the card (Hall of Frames treatment). `overflow-x: auto` also clips the cross axis, so the bleed lives inside this padding box; the negative margin keeps the card row at its Figma position. Leader cards keep the clipped Figma framing. */
+    padding-top: 48px;
+    margin-top: -48px;
+  }
+
+  .hods-panel :global(.team-card) {
+    overflow: visible;
   }
 
   .team-cards--hods::-webkit-scrollbar {
