@@ -1,5 +1,10 @@
 # CMS kickoff — prompt siap-tempel untuk AI baru
 
+> **⚠️ DITUNDA (4 Oct 2026).** Tugas CMS belum dijalankan. Prioritas sekarang =
+> **migrasi full-screen (hero gambar + section 100svh)** — lihat
+> `docs/page-fullscreen-migration-plan.md`. Pakai dokumen ini **setelah** migrasi
+> selesai.
+
 Copy-paste seluruh blok di bawah ini ke AI baru (sesi baru) untuk memulai
 pekerjaan **CMS / Admin Dashboard**. Prompt ini melengkapi
 `docs/kickoff-prompt.md` (onboarding umum) dengan tugas CMS yang spesifik.

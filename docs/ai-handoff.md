@@ -8,6 +8,24 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
+**★ IN PROGRESS (4 Oct 2026) — STANDAR FULL-SCREEN: hero gambar + section 100svh.**
+User minta **semua** halaman mengikuti pola baru: **hero = gambar background**
+(dari `assets/hero gambar/`, teks tetap HTML) + **`100svh`**; **section konten =
+satu layar** (`min-height: 100svh` + center). **CTA & footer tidak diubah.**
+**Homepage SELESAI** (commit `b228f3c`): `Hero.astro` (gambar + 100svh, video/
+partikel/plate dibuang), `Philosophy/WhatWeDo/Domains/Projects` → `100svh` +
+center, `motion.ts` dibersihkan, `verify.mjs` geometry + reference PNG di-pad,
+`navbar-audit.mjs` tunggu animasi entrance (toleransi tetap ±1px). 7 gate + seo
+ALL PASS. **DILARANG pakai `zoom`/`transform: scale`** (user menolak, render
+berantakan) — pakai `min-height: 100svh` + centering.
+
+**★ NEXT = About Us (`1439:4184`)** — [Figma](https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4184).
+Work order lengkap (resep teknik + checklist per-section + peta hero→gambar +
+jebakan + 7 gate): **`docs/page-fullscreen-migration-plan.md`**. Lalu Recruitment
+(`1436:3505`), Partners (`1439:4787`), Hall of Frames (`1439:4506`), Contact
+(`1445:5065`). **Satu section per pass — jangan lompat/gabung.** Home & Recruitment
+= benchmark presisi, jangan rusak.
+
 **SELESAI (4 Oct 2026) — About Us: glow responsif + karakter menempel tepi.**
 **Our Philosophy (`1439:4219`) & Our Ecosystem (`1439:4258`).** Canvas zoom
 `calc(100vw / 1440px)` dihapus dari kedua section — gradient tetap section-level

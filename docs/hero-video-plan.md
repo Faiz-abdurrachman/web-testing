@@ -1,5 +1,11 @@
 # Hero Video Plan — semua halaman (3 Oct 2026)
 
+> **⚠️ SUPERSEDED (4 Oct 2026).** Standar hero **berubah**: hero kini memakai
+> **gambar statis** dari `assets/hero gambar/` + `100svh` (video/partikel/plate
+> dihapus) untuk SEMUA halaman. Pekerjaan video hero **dihentikan**. Work order
+> yang berlaku sekarang: **`docs/page-fullscreen-migration-plan.md`**. Dokumen ini
+> disimpan sebagai arsip/rujukan teknik encode saja.
+
 Dokumen ini adalah **Master Work Plan** untuk mengubah semua hero section jadi
 **background video looping** (dengan fallback gambar statis). Dibuat supaya AI
 baru bisa langsung mengerjakan **satu hero per pass** tanpa menebak.

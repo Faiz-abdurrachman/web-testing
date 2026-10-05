@@ -113,8 +113,17 @@ Full protocol: **`docs/pixel-precision-sop.md`**. The rules below are the law.
     (testing + production) — see "Git & deploy". Follow existing message style
     (`feat:`, `fix:`, `docs:`, `chore:`). Confirm with the user before pushing.
 12. **Update the docs with the code**: `docs/assets.md` (provenance + node ids),
-    `docs/ai-handoff.md` (state) and `AGENTS.md` (this file) whenever a section
-    or rule changes.
+    `docs/ai-handoff.md` (state), `docs/page-fullscreen-migration-plan.md`
+    (progress), and `AGENTS.md` (this file) whenever a section or rule changes.
+13. **Full-screen standard (since 4 Oct 2026).** Every content section is one
+    screen: `min-height: 100vh; min-height: 100svh` + centred content; every hero
+    is a background image from `assets/hero gambar/` + `100svh` (real HTML copy on
+    top). CTA & footer keep their Figma height. **Never use `zoom`/`transform:
+scale`** for this (user rejected — renders broken). `verify.mjs` section
+    reference PNGs are **padded** (not stretched) with `sharp.extend()` by
+    `(sectionH − FIGMA_H)/2` top/bottom. Full recipe + per-page/per-section
+    checklist: **`docs/page-fullscreen-migration-plan.md`**. Work one section at a
+    time, 7 gates each.
 
 ## SEO & sharing
 
@@ -175,7 +184,8 @@ assets/<page>/           raw PNGs read by verify/generate scripts (NOT served; u
 docs/assets.md           provenance per section (keep updated)
 docs/pixel-precision-sop.md  strict pixel-accuracy protocol (read before any UI)
 docs/sound-sop.md        sound system SOP (procedural Web Audio SFX + ambient)
-docs/hero-video-plan.md  Master Work Plan: semua hero → background video looping
+docs/page-fullscreen-migration-plan.md  ★ work order: hero gambar + section 100svh per-halaman/per-section
+docs/hero-video-plan.md  (SUPERSEDED 4 Oct 2026) hero video digantikan hero gambar full-screen
 docs/about-us-glow-plan.md  About Us glow responsif + karakter tepi (SELESAI 4 Oct 2026)
 docs/figma-prototype-flow.md  peta prototype Figma (REST `interactions`) → tombol/link tujuan + gap vs kode (NEXT)
 docs/ai-handoff.md       live "where we are now" handoff for the next AI agent
@@ -356,7 +366,18 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
 
 ## Current checkpoint
 
-- **★ SELESAI (4 Oct 2026) — About Us: glow responsif + karakter menempel tepi.**
+- **★ IN PROGRESS (4 Oct 2026) — STANDAR FULL-SCREEN: hero gambar + section 100svh.**
+  **Homepage SELESAI** (`b228f3c`): hero pakai `assets/hero gambar/Gambar Hero
+Section homepage.png` (background, bukan teks) + `100svh`; Philosophy / What We
+  Do / Domains / Projects jadi `min-height: 100svh` + center (satu section = satu
+  layar); CTA & footer tetap. Video + partikel hero home dihapus. `verify.mjs`
+  geometry diupdate + reference PNG di-pad. `navbar-audit.mjs` diperbaiki (tunggu
+  animasi entrance, toleransi tetap ±1px). 7 gate + seo ALL PASS.
+  **NEXT = About Us (`1439:4184`)**, lalu Recruitment (`1436:3505`), Partners
+  (`1439:4787`), Hall of Frames (`1439:4506`), Contact (`1445:5065`). Work order
+  lengkap (resep teknik + checklist per-section + peta hero→gambar + jebakan):
+  **`docs/page-fullscreen-migration-plan.md`**. **Satu section per pass + 7 gate.**
+- **SELESAI (4 Oct 2026) — About Us: glow responsif + karakter menempel tepi.**
   Canvas `zoom: calc(100vw / 1440px)` **dihapus** dari Our Philosophy (`1439:4219`)
   dan Our Ecosystem (`1439:4258`). Gradient tetap **section-level** (full-bleed)
   → pita ungu konsisten di semua lebar; artwork Philosophy anchor

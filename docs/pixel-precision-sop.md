@@ -195,6 +195,34 @@ mengarah ke destinasi yang **100% benar** — bukan dikarang, bukan `aria-disabl
   pastikan tidak ada `aria-disabled` yang tersisa untuk elemen yang punya tujuan.
 - Referensi: **`docs/figma-prototype-flow.md`** (peta + gap + bug prototype).
 
+### Hukum Section Full-Screen & Hero Gambar (berlaku sejak 4 Oct 2026)
+
+Standar baru (disetujui user): **tiap section konten = satu layar penuh** dan
+**tiap hero = gambar background + `100svh`**. Resep + checklist per-halaman:
+**`docs/page-fullscreen-migration-plan.md`** (work order resmi).
+
+- **Hero:** background = `<img>` dari `assets/hero gambar/` (`object-fit: cover`,
+  full-bleed), tinggi `min-height: 100vh; min-height: 100svh`. Gambar sumber
+  **tidak memuat teks** — heading/subtitle/tombol tetap HTML asli. Video,
+  partikel Three.js, veil/sweep, dan plate lama **dihapus**. Di `≥1921px` art
+  di-cap `1920px` + `mask-image` (jangan melar).
+- **Section konten:** `min-height: 100vh; min-height: 100svh; display:flex;
+flex-direction:column; justify-content:center;` + pembungkus `width:100%`.
+  **CTA & Footer tidak diubah.**
+- **Satuan viewport di luar scope audit 8-pt** (seperti `calc()/cqw/%`): tidak
+  ada magic number baru. Padding/gap/margin internal **tetap kelipatan 8**.
+- **Dilarang `zoom` / `transform: scale`** untuk full-screen (render pecah; user
+  menolak). Gunakan `min-height: 100svh` + centering.
+- **`prefers-reduced-motion: reduce` tetap pixel-exact** — animasi baru wajib
+  inert di reduce.
+- **`verify.mjs`:** section naik jadi 100svh → update `height`/`top` assertion;
+  **reference PNG di-pad** (bukan di-stretch) dengan `sharp.extend()` sebesar
+  `(sectionH − FIGMA_H)/2` top & bottom, warna dasar `#050507`, agar konten tetap
+  align karena ter-center. Section yang kontennya > viewport tidak di-pad.
+- **Satu section per pass + 7 gate per halaman**; update `docs/assets.md`,
+  `docs/ai-handoff.md`, `AGENTS.md`, dan `page-fullscreen-migration-plan.md` di
+  commit yang sama. Jangan lompat/gabung section.
+
 ## 2. Gotcha yang sudah terbukti (jangan diulang)
 
 - **String `linear-gradient(...)` dari Figma MCP menormalkan handle → lossy**

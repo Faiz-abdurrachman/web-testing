@@ -3,58 +3,37 @@
 Copy-paste seluruh blok di bawah ini ke AI baru sebelum memberikan instruksi kerja.
 Prompt ini memuat seluruh konteks, aturan hukum presisi piksel, strict 8-point grid,
 **hukum warna (fills & gradient harus persis Figma)**, protokol per-section, dan
-checklist. **Status (4 Oct 2026): semua halaman konten 100% selesai; audit
-per-section + video hero berjalan.** Audit **Homepage (`1430:2040`)** Section 1–7
-**SELESAI**, **About Us (`1439:4184`)** Section 1–6 **SELESAI**, **Recruitment
-(`1436:3505`) 9/9 SELESAI**, dan **Partners (`1439:4787`) 4/4 SELESAI** (semua
-heading dikoreksi ke gradient global Figma `181deg #fff 15% / #999 42% / #fff
-79%`; temuan kunci: MCP gradient angle & `textAlign` sering LOSSY → fit dari PNG;
-rim gradient Figma bisa `90deg`/`110deg` bukan `135deg`; section origin fraksional
-bikin artefak screenshot 1px).
-**VIDEO HERO (3 Oct 2026): Home (`1430:2041`), Recruitment (`1436:3506`), About Us
-(`1439:4185`), Hall of Frames (`1439:4507`, source di-refresh), dan Partners
-(`1439:4788`) sudah background video looping.** **Contact (`1445:5066`) menunggu
-aset — satu-satunya hero yang belum video.** Master Work Plan:
-`docs/hero-video-plan.md`.
-**SELESAI (3 Oct 2026): revisi About Us — Our Philosophy (`1439:4219`)** —
-background linear disatukan dengan Our Ecosystem (`1439:4258`): fill gradient
-Figma `159.7deg #050507 54.82% → #6c3bff 133.76%` (fit dari PNG, MAE 0.554),
-dipasang di section + glow home di-hide untuk varian About; seam max Δ 9.
-**SELESAI (3 Oct 2026): Hall of Frames — card Project Highlight (`1439:4655`)**
-disamakan dengan card "Our Project" homepage (`1430:2146`, `Projects.astro`) —
-kartu `549×567` + coverflow JS, 4 project/4 dot, glow bow-tie dihapus; section
-1440×1014; reference + assertion diregenerasi.
-**SELESAI (3 Oct 2026): Hall of Frames — Featured Sorcerers detail modal
-(`1554:2824`)** — klik kartu → `<dialog>` detail 997×576 (GLASS rim, backdrop
-`blur(7.7px)`, glow `1554:2898` verbatim, 3 achievement bar, Contribution);
-`verify.mjs` assert hidden default + open geometry + Esc.
-**SELESAI (4 Oct 2026): About Us — glow responsif + karakter menempel tepi**
-(Our Philosophy `1439:4219` & Our Ecosystem `1439:4258`). Canvas zoom dihapus;
-gradient section-level (full-bleed); artwork anchor `left: calc((1440px - 100cqw)/2)`
-(≥1441) → 861px, nempel tepi, identik Home; seam Δ 0; geometri 1440 tetap. 7 gate +
-seo + spacing PASS.
-**SELESAI (4 Oct 2026): semua tombol/link prototype Figma + polish navbar/tab.**
-Semua link prototype terpasang (`docs/figma-prototype-flow.md` §9, 8 elemen:
-Hero/RecruitmentHero/Recruitment/Cta/Navbar CTA/Footer nav/scroll-up). Navbar
-hover = underline (aktif permanen, hover preview + glow). Tab Detail HoDS punya
-transisi halus (pill cross-fade + konten stagger) yang reduce-safe. Detail HoDS
-(`864:18857` dkk) & video hero (Home/Recruitment/About/HoF/Partners) selesai.
-**PENDING kecil:** video hero Contact (`1445:5066`) tunggu aset.
-**★ NEXT (untuk AI baru): BANGUN CMS / ADMIN DASHBOARD** — rencana lengkap di
-**`docs/cms-plan.md`** (3 opsi arsitektur, content model, jebakan, roadmap fase,
-5 pertanyaan terbuka). Target: editor non-teknis bisa update project, team/orang,
-role, prestasi, HoDS, partners **tanpa nyentuh kode**. Rekomendasi: mulai Fase 0 =
-refactor `src/data/*.ts` → **Astro Content Collections** (`src/content/`) + skema
-Zod, **tanpa mengubah tampilan/geometri**, satu collection per pass + 7 gate;
-lalu pasang **Keystatic** di atasnya. Prioritaskan jangan rusak presisi Home &
-Recruitment.
+checklist.
+
+**★ STATUS & MISI SEKARANG (4 Oct 2026) — STANDAR FULL-SCREEN: hero gambar +
+section 100svh.** User minta **semua halaman** memakai pola baru: **hero = gambar
+background** dari `assets/hero gambar/` (gambar TIDAK memuat teks; heading/subtitle/
+tombol tetap HTML) + tinggi **`100svh`**; **setiap section konten = satu layar**
+(`min-height: 100svh` + konten ter-center, full width). **CTA & footer tidak
+diubah.** **Homepage SELESAI** (commit `b228f3c`). **NEXT = About Us
+(`1439:4184`)** → Recruitment → Partners → Hall of Frames → Contact.
+**Work order resmi + resep teknik + checklist per-section + peta hero→gambar +
+jebakan: `docs/page-fullscreen-migration-plan.md` (WAJIB dibaca dulu).**
+DILARANG pakai `zoom`/`transform: scale` untuk full-screen (user menolak — render
+berantakan); pakai `min-height: 100svh` + centering.
+
+**ARSIP — yang sudah selesai (jangan rusak tanpa alasan):** Homepage (`1430:2040`),
+About Us (`1439:4184`), Recruitment (`1436:3505`, 9/9), Partners (`1439:4787`, 4/4),
+semua tombol/link prototype Figma, About Us glow responsif, navbar hover underline,
+Hall of Frames (card project + modal), Detail HoDS. Semua heading dikoreksi ke
+gradient global Figma `181deg #fff 15% / #999 42% / #fff 79%`. Temuan kunci: MCP
+gradient angle & `textAlign` sering LOSSY → fit dari PNG; rim gradient Figma bisa
+`90deg`/`110deg` bukan `135deg`; section origin fraksional bikin artefak screenshot
+1px. **Video hero sudah digantikan gambar** — lihat `docs/page-fullscreen-migration-plan.md`.
+
 **ATURAN STRICT (jangan dilanggar):** spacing/padding/margin = **kelipatan 8**
 (gate `npm run audit:spacing`, per-komponen `node scripts/spacing-audit.mjs
 <file>`); heading = **Bluu Next Bold 700 (`--font-display`)**, body Manrope;
 warna solid = `fills` Figma persis, gradient = fit dari PNG; geometri ±1px + MAE
 dilaporkan; render reduce pixel-exact. Cara kerja: **Plan per halaman →
-inventaris semua section (`depth 1`) → 1 section per pass + 7 gate per section.
-JANGAN skip satu section pun.**
+inventaris SEMUA section (`depth 1`) → 1 section per pass + 7 gate per section.
+JANGAN skip satu section pun.** Update `verify.mjs` (geometry + reference PNG
+di-pad) tiap section.
 
 ---
 
@@ -62,6 +41,25 @@ JANGAN skip satu section pun.**
 Kamu lanjut kerja di repo "Data Sorcerers" — static Astro site: homepage +
 About Us + Partners + Recruitment (+ 6 detail role) + 6 detail HoDS + Contact.
 Target: **pixel-accurate ke Figma/PNG**, HTML/CSS ringan (bukan flatten screenshot).
+
+================================================================================
+★ MISI SEKARANG (baca ini dulu): STANDAR FULL-SCREEN — HERO GAMBAR + SECTION 100svh
+================================================================================
+- **Semua halaman** migrasi ke pola: **hero = gambar background** dari
+  `assets/hero gambar/` (gambar TIDAK memuat teks; heading/subtitle/tombol tetap
+  HTML) + tinggi **`100svh`**, full-bleed. Video + partikel dihapus.
+- **Setiap section konten** = satu layar: `min-height: 100vh; min-height: 100svh;`
+  + konten ter-center, full width. **CTA & footer TIDAK diubah.**
+- **Homepage (`1430:2040`) SELESAI** (commit `b228f3c`). **NEXT = About Us
+  (`1439:4184`)** — lalu Recruitment → Partners → Hall of Frames → Contact.
+- **Work order lengkap (resep teknik + checklist per-section depth 1 + peta
+  hero→gambar + jebakan + cara update verify/reference PNG): WAJIB BACA
+  `docs/page-fullscreen-migration-plan.md`.**
+- **DILARANG `zoom` / `transform: scale`** untuk full-screen (user menolak: render
+  pecah). Pakai `min-height: 100svh` + centering.
+- Home & Recruitment = **benchmark presisi** — jangan rusak. Satu section per pass,
+  **7 gate per section**, update `verify.mjs` (geometry + reference PNG di-pad)
+  tiap section. JANGAN lompat/gabung section.
 
 Sebelum ngapa-ngapain, WAJIB baca dulu (urut, jangan skip):
 1. AGENTS.md                    → aturan operasional, commands, konvensi verifikasi, gotchas
@@ -219,20 +217,17 @@ jangan tambah remote/push URL lain. Cek sinkron (jalankan terpisah):
 Confirm user sebelum push (deploy ke production).
 
 ================================================================================
-STATUS MISI: SEMUA HALAMAN 100% SELESAI — AUDIT + VIDEO HERO
+STATUS MISI: STANDAR FULL-SCREEN (hero gambar + section 100svh) — SEDANG JALAN
 ================================================================================
-Semua halaman publik tuntas & tervalidasi presisi. **Homepage (`1430:2040`),
-Recruitment (`1436:3505`), About Us (`1439:4184`), dan Partners (`1439:4787`) =
-benchmark presisi — JANGAN rusak tanpa alasan.** **Video hero:** Home, Recruitment,
-About Us, Hall of Frames (`1439:4507`, source di-refresh 3 Oct 2026), dan Partners
-sudah background video looping; **Contact (`1445:5066`) menunggu aset** (satu-
-satunya hero belum video). Detail HoDS (`864:18857` dkk) revisi **SELESAI 3 Oct
-2026** (judul hero Bluu Next Bold 700 48/57.6 Title Case, `.bullets` gap 8,
-reference diregenerasi) — sisa audit per-section. Contact (`1445:5065`) Hero
-**AUDIT PASS** (MAE 2.757 / below-nav 1.338). Hall of Frames
-card Project Highlight (`1439:4655`) **SELESAI 3 Oct 2026** (disamakan dengan card
-"our project" homepage `549×567` + coverflow JS; section 1440×1014; reference +
-assertion diregenerasi).
+Migrasi semua halaman ke **hero gambar + section 100svh** (lihat §MISI SEKARANG di
+atas + `docs/page-fullscreen-migration-plan.md`). **Homepage SELESAI (`b228f3c`).**
+Semua halaman publik sebelumnya tuntas & tervalidasi presisi. **Homepage
+(`1430:2040`), Recruitment (`1436:3505`), About Us (`1439:4184`), dan Partners
+(`1439:4787`) = benchmark presisi — JANGAN rusak tanpa alasan.** Detail HoDS
+(`864:18857` dkk) revisi SELESAI 3 Oct 2026 (judul hero Bluu Next Bold 700 48/57.6
+Title Case, `.bullets` gap 8). Contact (`1445:5065`) Hero AUDIT PASS (MAE 2.757 /
+below-nav 1.338). Hall of Frames card Project Highlight (`1439:4655`) SELESAI 3 Oct
+2026 (`549×567` + coverflow JS; section 1440×1014).
 
 **ATURAN STRICT (HUKUM — berlaku di setiap section, termasuk hero):**
 - **Spacing/padding/margin = kelipatan 8** (atau ada di tabel pengecualian SOP).
@@ -283,15 +278,24 @@ Urutan target (prioritas sekarang):
    G. **SELESAI (4 Oct 2026) — semua tombol/link prototype Figma** (8 elemen,
       `docs/figma-prototype-flow.md` §9) + navbar hover underline + transisi tab
       Detail HoDS (reduce-safe).
-   H. **★ NEXT — BANGUN CMS / ADMIN DASHBOARD.** Rencana: **`docs/cms-plan.md`**
-      (opsi arsitektur, content model, jebakan, roadmap, 5 pertanyaan terbuka).
-      Fase 0 = `src/data/*.ts` → **Astro Content Collections** + Zod, **tanpa
-      ubah tampilan**, satu collection per pass + 7 gate; lalu pasang **Keystatic**.
-   I. PENDING kecil — video hero Contact (`1445:5066`) tunggu aset.
+   H. **★ NEXT SEKARANG — STANDAR FULL-SCREEN: hero gambar + section 100svh
+      untuk SEMUA halaman.** Homepage SELESAI (`b228f3c`); **About Us
+      (`1439:4184`) berikutnya.** Work order: **`docs/page-fullscreen-migration-plan.md`**
+      (WAJIB dibaca dulu). Satu section per pass + 7 gate.
+   I. DITUNDA — BANGUN CMS / ADMIN DASHBOARD (`docs/cms-plan.md`). Kerjakan
+      setelah migrasi full-screen selesai.
 
 --------------------------------------------------------------------------------
-TARGET NEXT: BANGUN CMS / ADMIN DASHBOARD
-Rencana lengkap: **`docs/cms-plan.md`** (WAJIB dibaca dulu). Ringkas:
+TARGET SEKARANG: MIGRASI FULL-SCREEN (hero gambar + section 100svh)
+Work order lengkap: **`docs/page-fullscreen-migration-plan.md`** (WAJIB dibaca).
+Ringkas: hero = gambar `assets/hero gambar/` + `100svh`; section konten =
+`min-height:100svh` + center; CTA/footer tetap; dilarang `zoom`/`scale`;
+`verify.mjs` geometry + reference PNG di-pad. Urutan: Home ✅ → About → Recruitment
+→ Partners → HoF → Contact. **Satu section per pass + 7 gate.**
+
+--------------------------------------------------------------------------------
+[DITUNDA] BANGUN CMS / ADMIN DASHBOARD
+Rencana lengkap: **`docs/cms-plan.md`** (dibaca setelah migrasi full-screen). Ringkas:
 - Tujuan: editor non-teknis bisa CRUD project, team/orang, role, prestasi,
   HoDS, partners, site settings — **tanpa menyentuh kode**.
 - Rekomendasi: **Fase 0** pindahkan `src/data/*.ts` → **Astro Content
@@ -650,11 +654,11 @@ INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
    - Update dokumen (`docs/assets.md`, `docs/ai-handoff.md`, `AGENTS.md`).
    - Commit per fitur; confirm user sebelum push ke origin main.
 3. **Mulai dari mana?**
-   **★ NEXT — BANGUN CMS / ADMIN DASHBOARD. Rencana: `docs/cms-plan.md`**
-   (WAJIB dibaca). Fase 0 = `src/data/*.ts` → **Astro Content Collections**
-   (`src/content/`) + skema Zod, **tanpa mengubah tampilan/geometri**, satu
-   collection per pass + 7 gate; lalu Fase 1 pasang **Keystatic**. Jawab dulu 5
-   pertanyaan terbuka `docs/cms-plan.md` §9.
+   **★ NEXT — MIGRASI FULL-SCREEN: hero gambar + section 100svh (SEMUA halaman).**
+   Homepage SELESAI (`b228f3c`); **About Us (`1439:4184`) berikutnya.**
+   Work order: **`docs/page-fullscreen-migration-plan.md`** (WAJIB dibaca).
+   Satu section per pass + 7 gate; dilarang `zoom`/`scale`.
+   **DITUNDA:** CMS / Admin Dashboard (`docs/cms-plan.md`) — setelah migrasi.
    **SUDAH SELESAI** (arsip): semua tombol/link prototype Figma (8 elemen,
    `docs/figma-prototype-flow.md` §9) + navbar hover underline + transisi tab
    Detail HoDS. Halaman Homepage (`1430:2040`), About Us (`1439:4184`),

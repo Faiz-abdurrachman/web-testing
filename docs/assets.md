@@ -1,5 +1,27 @@
 # Asset provenance
 
+## Homepage — full-screen sections + image hero (4 October 2026, `b228f3c`)
+
+- **Standar baru**: tiap hero = **gambar background** + `100svh`; tiap section
+  konten = `min-height: 100svh` + center. Work order: `docs/page-fullscreen-migration-plan.md`.
+- **Hero homepage** (`1430:2041`, frame 1440×903): sumber user
+  `assets/hero gambar/Gambar Hero Section homepage.png` (5736×3600, RGBA) → di-crop
+  center ke 1440×903 → `public/images/hero/background.webp` (q85, ~102 KB) +
+  `background-2x.webp` (2880×1806, q82, ~208 KB). Gambar **tidak memuat teks**;
+  heading/subtitle/tombol tetap HTML. Video (`hero-bg.{webm,mp4}`, `hero-poster.webp`),
+  partikel Three.js (`hero-canvas`), `.hero-veil`, `.hero-sweep`, dan plate lama
+  **tidak lagi dipakai** oleh homepage (script `generate-hero-video.mjs` /
+  `hero-particles.ts` tetap ada; `Hero.astro` tidak mengimpornya lagi).
+- Reference verify baru (node export 1×): `assets/home-page/hero/Home-Hero-Reference-1x.png`
+  (1440×903). `verify.mjs` memakai reference ini.
+- **Section homepage**: `Philosophy.astro` (`:not(.is-about)`), `WhatWeDo.astro`,
+  `Domains.astro`, `Projects.astro` → `min-height: 100svh` + `justify-content:center`
+  (tinggi render = 903 di viewport 1440×903). `Recruitment.astro` (CTA) **tidak**
+  diubah (tetap 554). Reference PNG section **di-pad** `sharp.extend()` oleh
+  `(sectionH − FIGMA_H)/2` (Philosophy 33/33, WhatWeDo 32/31, Domains 42/42) warna
+  `#050507`; Projects 910 (tidak di-pad). Assertion geometry `verify.mjs` diupdate
+  (top Philosophy 903, WhatWeDo 1806, Domains 2709, Projects 3612, CTA 4522).
+
 ## Recruitment page — Available Roles (2 October 2026)
 
 - Section node **`1436:3564`** ("Available Roles Section Revisi Card", 1440 × 843, `padding: 80px`, gap: 58px), frame page Recruitment `1436:3505`, file `JYUzJK1hFqaEwL6DpdDvjp`.
