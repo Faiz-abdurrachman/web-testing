@@ -30,12 +30,13 @@ line 22 `href="/recruitment"` (sebelumnya `#available-roles`).
 
 ## #2 — Navbar: link aktif WAJIB punya underline (bukan hanya hover)
 
-## ~~#2 — Navbar: link aktif~~  **DONE (5 Oct 2026)** — semua rute utama
-   (`/`, `/about`, `/recruitment`, `/partners`, `/hall-of-frames`, `/contact`)
-   kirim prop `active` benar. Detail pages (`/hods/[id]`, `/recruitment/roles/[id]`)
-   sengaja tidak render Navbar (pakai back-nav sendiri). **Mobile menu** kini
-   menampilkan `.nav-underline` (sebelumnya `display:none`) — gradient
-   `#9b7bff→#ede8ff` 1px full-width. 7 gate + seo ALL PASS.
+## ~~#2 — Navbar: link aktif~~ **DONE (5 Oct 2026)** — semua rute utama
+
+(`/`, `/about`, `/recruitment`, `/partners`, `/hall-of-frames`, `/contact`)
+kirim prop `active` benar. Detail pages (`/hods/[id]`, `/recruitment/roles/[id]`)
+sengaja tidak render Navbar (pakai back-nav sendiri). **Mobile menu** kini
+menampilkan `.nav-underline` (sebelumnya `display:none`) — gradient
+`#9b7bff→#ede8ff` 1px full-width. 7 gate + seo ALL PASS.
 
 ## #3 — Typo "HAUSE" → "HOUSE"
 
@@ -113,20 +114,14 @@ line 22 `href="/recruitment"` (sebelumnya `#available-roles`).
   smooth-scroll (posisi setelah klik mengarah ke section, bukan instan jump
   dihitung dari `getComputedStyle(html).scrollBehavior`).
 
-## #7 — Available Roles: garis hanya saat hover, posisi sesuai Figma (`1218:1347`)
+## ~~#7 — Available Roles:~~  **DONE (5 Oct 2026)** — divider pindah ke bawah
+   "View Details" (Figma `1218:1347` active variant: bottom stroke 0.5px gradient
+   `90deg #fff→transparent`). Kode: `.role-divider` jadi setelah `.role-link`;
+   gradient `#9b7bff→#fff` → `#fff→transparent`. 7 gate + seo ALL PASS.
 
-- **File:** `src/components/AvailableRoles.astro` (`.role-divider` +
-  `.role-divider::after`).
-- **Sekarang:** `.role-divider` **di atas** "View Details", garis gradient
-  muncul saat hover (`::after scaleX 0→1`), lebar penuh kartu (533/cqw).
-- **Target Figma `1218:1347`:** cek posisi & lebar garis persis (di bawah
-  "View Details"? atau pemisah summary↔link?). Ekspor node, ukur `sharp`,
-  samakan posisi/lebar/animation origin. Gate hover + `focus-visible`; reduce =
-  garis **tampil statis? atau** sesuaikan ke render reference `AvailableRoles`
-  (verify jalan reduce — pastikan screenshot reference tetap match: bila Figma
-  reduce menampilkan garis, sesuaikan; bila hover-only, reduce = tanpa garis).
-- **Verifikasi:** MAE kartu; assert `.role-divider::after` transform awal
-  (scaleX 0) + setelah hover (scaleX 1) via `verify.mjs`/`verify-vt`.
+---
+
+## #8 — Panah scroll footer → tombol melayang saat sampai footer
 
 ## #8 — Panah scroll footer → tombol melayang saat sampai footer
 

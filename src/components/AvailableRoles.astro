@@ -29,7 +29,6 @@ const domainTitle = Object.fromEntries(domains.map((d) => [d.id, d.title]));
             <p class="role-summary">{role.tagline}</p>
           </div>
           <div class="role-foot">
-            <span class="role-divider" aria-hidden="true" />
             <span class="role-link">
               View Details
               <svg
@@ -44,6 +43,7 @@ const domainTitle = Object.fromEntries(domains.map((d) => [d.id, d.title]));
                 />
               </svg>
             </span>
+            <span class="role-divider" aria-hidden="true" />
           </div>
         </div>
       </a>
@@ -174,7 +174,7 @@ const domainTitle = Object.fromEntries(domains.map((d) => [d.id, d.title]));
     z-index: 1;
     display: flex;
     flex-direction: column;
-    gap: 3.39cqw;
+    gap: 1.21cqw;
     margin-top: auto;
   }
   .role-divider {
@@ -187,7 +187,7 @@ const domainTitle = Object.fromEntries(domains.map((d) => [d.id, d.title]));
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, #9b7bff 0%, #fff 100%);
+    background: linear-gradient(90deg, #fff 0%, transparent 100%);
     transform: scaleX(0);
     transform-origin: left center;
     pointer-events: none;
