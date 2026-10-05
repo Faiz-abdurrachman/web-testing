@@ -4,8 +4,9 @@
 // supplied. Do not invent URLs.
 //
 // `chip` is the selected-chip gradient (Figma -12°) and `fade` the card bottom
-// fade (Figma 180°), both keyed to the HoDS domain tint. The card fade adds a
-// mid-stop at 50% @ 30% alpha, fitted from the node PNG.
+// fade (Figma 180°), both keyed to the HoDS domain tint. The fade adds a real
+// tint stop at 35% @ 35% (a plain `tint 0% -> dark` collapses to a flat dark
+// veil because CSS interpolates gradients premultiplied), fitted from node PNG.
 export interface TeamMember {
   name: string;
   role: string;
@@ -31,24 +32,22 @@ const member = (
   role = 'Community Lead',
 ): TeamMember => ({ name, role, photo: 'zidan-rose' });
 
-const fade = (r: number, g: number, b: number, dark: string, mid = 0) =>
-  mid > 0
-    ? `linear-gradient(180deg, rgb(${r} ${g} ${b} / 0%) 0%, rgb(${r} ${g} ${b} / ${mid}%) 50%, ${dark} 100%)`
-    : `linear-gradient(180deg, rgb(${r} ${g} ${b} / 0%) 0%, ${dark} 100%)`;
+const fade = (r: number, g: number, b: number, dark: string, mid = 35) =>
+  `linear-gradient(180deg, rgb(${r} ${g} ${b} / 0%) 0%, rgb(${r} ${g} ${b} / ${mid}%) 35%, ${dark} 100%)`;
 
 export const hodsTeams: HodsTeam[] = [
   {
     id: 'data',
     title: 'Data Intelligence',
     chip: 'linear-gradient(90deg, #7c060d 0%, #c0696e 100%)',
-    fade: fade(140, 0, 7, '#0f0001'),
+    fade: fade(140, 0, 7, '#170002'),
     members: [member(), member(), member(), member()],
   },
   {
     id: 'core',
     title: 'Core AI & Engineering',
     chip: 'linear-gradient(90deg, #6c3bff 0%, #ede8ff 100%)',
-    fade: fade(108, 59, 255, '#0e0626', 30),
+    fade: fade(108, 59, 255, '#0e0626'),
     members: [member(), member(), member(), member()],
   },
   {

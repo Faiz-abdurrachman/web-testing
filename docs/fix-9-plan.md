@@ -6,74 +6,34 @@ Sumber: instruksi user 5 Oct 2026 (9 item). Semua item **satu per pass + 7 gate*
 `docs/page-fullscreen-migration-plan.md` sebelum menyentuh UI. Update docs di
 commit yang sama. Commit per item. **Konfirmasi user sebelum push.**
 
-Status: **#3 SELESAI (5 Oct 2026).**
+Status: **#1 #2 #3 #4 #7 #8 SELESAI (5 Oct 2026).** Sisa: **#5 → #6 → #9.**
 
 ---
 
-## ~~#1 — CTA homepage~~
+## ~~#1 — CTA homepage~~ **DONE** — `src/components/Recruitment.astro` line 22
 
-## ~~#3 — Typo~~ **DONE** — `src/components/OurTeam.astro` "Hause" → "House" (x2).
+`href="/recruitment"` (sebelumnya `#available-roles`). `Cta.astro` (halaman
+Recruitment) tidak berubah. `docs/figma-prototype-flow.md` diperbarui.
 
-Reference `assets/about-us/team/OurTeam-New-1x.png` regenerated dari node
-`1688:2933`. Deviasi sengaja dari ejaan Figma dicatat di `docs/assets.md`.
-7 gate + seo ALL PASS.
+## ~~#2 — Navbar link aktif~~ **DONE** — semua rute utama kirim prop `active`
 
----
+benar; halaman detail sengaja tidak render Navbar (back-nav sendiri). **Mobile
+menu** kini menampilkan `.nav-underline` (sebelumnya `display:none`) — gradient
+`#9b7bff→#ede8ff` 1px full-width.
 
-## ~~#1 — CTA homepage~~ **DONE (5 Oct 2026)** — `src/components/Recruitment.astro`
+## ~~#3 — Typo "HAUSE" → "HOUSE"~~ **DONE** — `src/components/OurTeam.astro`
 
-line 22 `href="/recruitment"` (sebelumnya `#available-roles`).
-`Cta.astro` (halaman Recruitment) **tidak berubah** (tetap `/recruitment`).
-`docs/figma-prototype-flow.md` diperbarui. 7 gate + seo ALL PASS.
+(comment + title). Reference `assets/about-us/team/OurTeam-New-1x.png`
+diregenerasi dari node `1688:2933`. Deviasi sengaja dari ejaan Figma dicatat di
+`docs/assets.md`.
 
----
+## ~~#4 — Efek glow tiap kartu~~ **DONE** — REST node `1594:4370`:
 
-## #2 — Navbar: link aktif WAJIB punya underline (bukan hanya hover)
-
-## ~~#2 — Navbar: link aktif~~ **DONE (5 Oct 2026)** — semua rute utama
-
-(`/`, `/about`, `/recruitment`, `/partners`, `/hall-of-frames`, `/contact`)
-kirim prop `active` benar. Detail pages (`/hods/[id]`, `/recruitment/roles/[id]`)
-sengaja tidak render Navbar (pakai back-nav sendiri). **Mobile menu** kini
-menampilkan `.nav-underline` (sebelumnya `display:none`) — gradient
-`#9b7bff→#ede8ff` 1px full-width. 7 gate + seo ALL PASS.
-
-## #3 — Typo "HAUSE" → "HOUSE"
-
-- **✅ SELESAI (5 Oct 2026):** `src/components/OurTeam.astro` "Hause" → "House" (comment
-  line 31 + title line 33). Reference `assets/about-us/team/OurTeam-New-1x.png`
-  diregenerasi dari node `1688:2933`. Deviasi sengaja dicatat di `docs/assets.md`.
-  7 gate + seo ALL PASS.
-  of Data Sorcerers</h3>`.
-- **Target:** `House of Data Sorcerers`.
-- **Konsekuensi:** reference `assets/about-us/team/OurTeam-New-1x.png`
-  (yang menampilkan "Hause") jadi **stale** → **regenerate reference** dari node
-  `1688:2933` (`figma_download_figma_images`) ATAU re-export; update
-  `verify.mjs` reference path bila nama berubah. MAE region hodsTitle akan naik
-  sampai reference baru dipakai. **Keputusan user: dibetulkan.**
-- **Docs:** catat deviasi sengaja dari Figma (Figma typo) di `docs/assets.md`.
-
-## #4 — Efek glow tiap kartu harus sesuai Figma (`1594:5145`)
-
-- **File:** `src/components/TeamCard.astro` + `src/data/team.ts`
-  (`hodsTeams[].fade`) + panel Growth join card di `OurTeam.astro`.
-- **Sekarang:** kartu hanya punya **linear fade** bawah (tint domain,
-  di-fit dari PNG). Render kita (Image 4/5) vs Figma (Image 6): glow Figma
-  tampak **radial/bloom ungu** di bawah kartu, bukan sekadar linear.
-- **Target/aksi:**
-  1. **Cek REST `effects`** node kartu `1594:5145` (variant `1594:5144` card
-     `1594:4370`) — MCP `figma_get_figma_data` menyembunyikan GLASS/glow.
-     `GET /v1/files/JYUzJK1hFqaEwL6DpdDvjp/nodes?ids=1594:4370` header
-     `X-Figma-Token`. Cari `effects` (DROP_SHADOW/GLASS) + fill radial.
-  2. Export PNG kartu 1× dari node, **fit glow** dari piksel (`sharp`) seperti
-     pola role-card `AvailableRoles` (glow = layer sendiri, radial violet,
-     `transform-origin: 50% 100%`, di-gate reduce).
-  3. Warna glow = tint domain (Data merah dst). Jangan menyamakan Figma yang
-     tampak ungu di Image 6 — **verifikasi per-varian** (Data = merah).
-  4. Glow di **layer terpisah** yang tidak ter-clip (ingat jebakan SOP: glow di
-     dalam `overflow:hidden`/`border-radius` akan kotak).
-- **Verifikasi:** MAE region kartu turun; assert geometri glow (pseudo box) di
-  `verify.mjs` bila perlu; render reduce tetap pixel-exact.
+`effects:[{type:"GLASS"}]` (tidak ada DROP_SHADOW/radial). "Glow" yang terlihat =
+**fade bawah** + GLASS rim. Fix terukur (A/B in-browser, bukan kira-kira): fade
+`tint 0% → tint 35% @35% → dark` (CSS interpolasi gradient premultiplied: stop
+tint tanpa alpha membuat ungu/merah hilang) + rim `180deg 0.25→0.02`. Data dark
+`#0f0001 → #170002`. **Section MAE 3.503 → 2.774 (−20.8%).**
 
 ## #5 — Animasi section Our Team + transisi tombol/pindah halaman smooth
 
@@ -114,24 +74,16 @@ menampilkan `.nav-underline` (sebelumnya `display:none`) — gradient
   smooth-scroll (posisi setelah klik mengarah ke section, bukan instan jump
   dihitung dari `getComputedStyle(html).scrollBehavior`).
 
-## ~~#7 — Available Roles:~~ **DONE (5 Oct 2026)** — divider pindah ke bawah
+## ~~#7 — Available Roles divider~~ **DONE** — divider pindah ke bawah
 
 "View Details" (Figma `1218:1347` active variant: bottom stroke 0.5px gradient
-`90deg #fff→transparent`). Kode: `.role-divider` jadi setelah `.role-link`;
-gradient `#9b7bff→#fff` → `#fff→transparent`. 7 gate + seo ALL PASS.
+`90deg #fff→transparent`). Kode: `.role-divider` setelah `.role-link`; gradient
+`#9b7bff→#fff` → `#fff→transparent`.
 
----
+## ~~#8 — Panah scroll footer~~ **DONE** — tombol scroll-up jadi
 
-## #8 — Panah scroll footer → tombol melayang saat sampai footer
-
-## ~~#8 — Panah scroll footer~~  **DONE (5 Oct 2026)** — tombol scroll-up jadi
-   `position:fixed` (right:40px, bottom:40px, z-index:49), muncul (fade) hanya saat
-   footer terlihat via IntersectionObserver. Inert di reduce (transition: none).
-   Jangan tabrakan sound orb (tidak ada visual component). 7 gate + seo ALL PASS.
-
----
-
-## #4 — Efek glow tiap kartu harus sesuai Figma (`1594:5145`)
+`position:fixed` (right:40px, bottom:40px, z-index:49), muncul (fade) hanya saat
+footer terlihat via IntersectionObserver. Inert di reduce (transition: none).
 
 ## #9 — Lanjutkan standar full-screen (hero gambar + 100svh) halaman tersisa
 
@@ -151,13 +103,7 @@ gradient `#9b7bff→#fff` → `#fff→transparent`. 7 gate + seo ALL PASS.
 
 ## Urutan eksekusi yang disarankan
 
-1. **#3** (trivial) · 2. **#1** (trivial) · 3. **#2** (audit rute) ·
-2. **#7** · 5. **#8** · 6. **#4** · 7. **#5** · 8. **#6** · 9. **#9** (per
-   halaman, satu section per pass).
-
-Item #1–#3 = perubahan kecil, risiko rendah. #4, #5, #7 butuh pengukuran Figma
-(`1218:1347`, `1594:5145` REST effects). #6 menyentuh global (hati-hati reduce).
-#9 = migrasi berulang mengikuti resep yang sudah terbukti (`b228f3c`).
+1. ~~#3~~ · 2. ~~#1~~ · 3. ~~#2~~ · 4. ~~#7~~ · 5. ~~#8~~ · 6. ~~#4~~ · 7. **#5** · 8. **#6** · 9. **#9** (per halaman, satu section per pass).
 
 ## Definisi selesai (tiap item)
 

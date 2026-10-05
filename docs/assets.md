@@ -931,6 +931,15 @@ fitting the rendered pixels gives an effective CSS gradient of
   `.hods-chips-viewport` pager. Section MAE **3.305/255** (header 3.49, leader
   cards 2.94, chips 6.82, hods cards 5.93 — residual = cross-renderer glyph AA +
   the 0.5px container offset). 7 gate + seo ALL PASS.
+- **Card glow / rim revision (fix #4, 5 Oct 2026).** REST node `1594:4370`:
+  `effects:[{type:"GLASS"}]` (no DROP_SHADOW/radial); the visible "glow" is the
+  bottom fade + GLASS rim. `fade()` now emits a **real tint stop at 35% @ 35%**
+  (`rgb(tint/0%) → rgb(tint/35%) 35% → dark`), because CSS interpolates
+  gradients premultiplied and a plain `tint 0% → dark` collapses to a flat dark
+  veil. Data dark `#0f0001 → #170002`. `TeamCard.astro` rim `::after`
+  `180deg rgba(255,255,255,.35)→.06` → `180deg .25→.02`. Fitted per visible
+  variant (Core leader + Data HoDS) by in-browser A/B. Section MAE
+  **3.503 → 2.774/255 (−20.8%)**.
 
 ## About Us — Our Team (2 October 2026, superseded 5 Oct 2026)
 
