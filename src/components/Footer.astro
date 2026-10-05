@@ -109,30 +109,30 @@ const destinations: Record<string, string> = {
         </li>
       </ul>
     </div>
-    <a
-      class="scroll-up"
-      href="#"
-      aria-label="Scroll to top"
-      data-sfx="select"
-      data-sfx-hover="hover"
-    >
-      <svg
-        width="12"
-        height="12"
-        viewBox="0 0 12 12"
-        fill="none"
-        aria-hidden="true"
-      >
-        <path
-          d="M1 11L11 1M11 1H1M11 1V11"
-          stroke="white"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-    </a>
   </div>
+  <a
+    class="scroll-up"
+    href="#"
+    aria-label="Scroll to top"
+    data-sfx="select"
+    data-sfx-hover="hover"
+  >
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 12 12"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M1 11L11 1M11 1H1M11 1V11"
+        stroke="white"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </a>
   <div class="bottom">
     <hr class="divider" />
     <div class="legal">
@@ -279,9 +279,10 @@ const destinations: Record<string, string> = {
     align-items: flex-start;
   }
   .scroll-up {
-    position: absolute;
-    right: 0;
-    top: 0;
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
+    z-index: 49;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -291,7 +292,15 @@ const destinations: Record<string, string> = {
     padding: 12px;
     border-radius: 20px;
     background: rgb(255 255 255 / 15%);
-    transition: background 0.25s ease;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 0.3s ease,
+      background 0.25s ease;
+  }
+  .scroll-up.is-visible {
+    opacity: 1;
+    pointer-events: auto;
   }
   .scroll-up:hover {
     background: rgb(108 59 255 / 60%);
@@ -386,4 +395,37 @@ const destinations: Record<string, string> = {
       white-space: normal;
     }
   }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-up {
+      transition: none;
+    }
+  }
 </style>
+
+<script>
+  let scrollUpObserver = null as IntersectionObserver | null;
+
+  const initScrollUp = () => {
+    if (scrollUpObserver) scrollUpObserver.disconnect();
+    const btn = document.querySelector('.scroll-up');
+    const footer = document.querySelector('.footer');
+    if (!btn || !footer) return;
+
+    scrollUpObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const visible = 'is-visible';
+          btn.classList.toggle(visible, entry.isIntersecting);
+        }
+      },
+      { threshold: 0 },
+    );
+    scrollUpObserver.observe(footer);
+  };
+
+  initScrollUp();
+  document.addEventListener('astro:page-load', initScrollUp);
+  document.addEventListener('astro:before-swap', () => {
+    if (scrollUpObserver) scrollUpObserver.disconnect();
+  });
+</script>

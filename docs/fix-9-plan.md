@@ -114,31 +114,24 @@ menampilkan `.nav-underline` (sebelumnya `display:none`) — gradient
   smooth-scroll (posisi setelah klik mengarah ke section, bukan instan jump
   dihitung dari `getComputedStyle(html).scrollBehavior`).
 
-## ~~#7 — Available Roles:~~  **DONE (5 Oct 2026)** — divider pindah ke bawah
-   "View Details" (Figma `1218:1347` active variant: bottom stroke 0.5px gradient
-   `90deg #fff→transparent`). Kode: `.role-divider` jadi setelah `.role-link`;
-   gradient `#9b7bff→#fff` → `#fff→transparent`. 7 gate + seo ALL PASS.
+## ~~#7 — Available Roles:~~ **DONE (5 Oct 2026)** — divider pindah ke bawah
+
+"View Details" (Figma `1218:1347` active variant: bottom stroke 0.5px gradient
+`90deg #fff→transparent`). Kode: `.role-divider` jadi setelah `.role-link`;
+gradient `#9b7bff→#fff` → `#fff→transparent`. 7 gate + seo ALL PASS.
 
 ---
 
 ## #8 — Panah scroll footer → tombol melayang saat sampai footer
 
-## #8 — Panah scroll footer → tombol melayang saat sampai footer
+## ~~#8 — Panah scroll footer~~  **DONE (5 Oct 2026)** — tombol scroll-up jadi
+   `position:fixed` (right:40px, bottom:40px, z-index:49), muncul (fade) hanya saat
+   footer terlihat via IntersectionObserver. Inert di reduce (transition: none).
+   Jangan tabrakan sound orb (tidak ada visual component). 7 gate + seo ALL PASS.
 
-- **File:** `src/components/Footer.astro` (`.scroll-up`, sekarang
-  `position:absolute; top:0` di `.top`) + JS.
-- **Target (Image 11 + `765:17071`):** tombol bulat **melayang** (fixed, kanan
-  bawah, mis. `bottom: 40px; right: 40px`), **muncul (fade+rise) hanya saat
-  footer terlihat** — `IntersectionObserver` pada `.footer` (atau
-  `ScrollTrigger`), `aria-label="Scroll to top"`, klik → scroll halus ke atas
-  (`window.scrollTo({top:0, behavior: smooth})`, reduce = instan). Ganti anchor
-  `href="#"` (hindari nambah history) atau `preventDefault`.
-- **Gate:** `prefers-reduced-motion` (muncul instan/tanpa animasi);
-  `astro:page-load` re-init + `astro:before-swap` cleanup observer; jangan
-  tabrakan dengan sound orb `.sound-toggle` (atur posisi/z-index).
-- **Verifikasi:** `verify.mjs` assert tombol `position:fixed` + opacity 0
-  sebelum footer, opacity 1 setelah footer `scrollIntoView`; `verify-vt`
-  no errors.
+---
+
+## #4 — Efek glow tiap kartu harus sesuai Figma (`1594:5145`)
 
 ## #9 — Lanjutkan standar full-screen (hero gambar + 100svh) halaman tersisa
 

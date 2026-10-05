@@ -607,7 +607,12 @@ try {
     return {
       width: rect.width,
       height: rect.height,
-      columns: [...section.querySelectorAll('.top > *')].map(relative),
+      columns: [
+        ...section.querySelectorAll('.top > *'),
+        section.querySelector('.scroll-up'),
+      ]
+        .filter(Boolean)
+        .map(relative),
       divider: relative(section.querySelector('.divider')),
       legal: relative(section.querySelector('.legal')),
     };

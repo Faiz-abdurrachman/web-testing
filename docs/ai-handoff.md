@@ -20,7 +20,7 @@ ALL PASS. **DILARANG pakai `zoom`/`transform: scale`** (user menolak, render
 berantakan) — pakai `min-height: 100svh` + centering.
 
 **★ NEXT = 9-ITEM FIX LIST dari user (5 Oct 2026)** — work order lengkap +
-urutan + definisi selesai: **`docs/fix-9-plan.md`**. Ringkas: **(#3 #1 #2 #7 DONE)**; masih sisa:
+urutan + definisi selesai: **`docs/fix-9-plan.md`**. Ringkas: **(#3 #1 #2 #7 #8 DONE)**; masih sisa:
 (4) glow kartu Our Team sesuai Figma (`1594:5145` REST effects); (5) animasi section Our Team + transisi tombol;
 (6) scroll & transisi same-page/cross-page smooth; (7) garis "View Details"
 Available Roles sesuai Figma (`1218:1347`); (8) tombol scroll-up footer jadi
