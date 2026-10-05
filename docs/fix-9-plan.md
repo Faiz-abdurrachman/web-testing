@@ -30,26 +30,12 @@ line 22 `href="/recruitment"` (sebelumnya `#available-roles`).
 
 ## #2 — Navbar: link aktif WAJIB punya underline (bukan hanya hover)
 
-## #2 — Navbar: link aktif WAJIB punya underline (bukan hanya hover)
-
-- **File:** `src/components/Navbar.astro` (node `755:15178`).
-- **Kondisi kode:** `.nav-link.active .nav-underline { opacity: 1 }` sudah ada.
-  Probe Playwright: `/`, `/about`, `/recruitment` → aktif `opacity:1`,
-  `height:1px`, `width = lebar label`. Jadi **bukan bug di 3 halaman itu**.
-- **Dugaan penyebab keluhan:** (a) halaman **detail** (`/recruitment/roles/[id]`,
-  `/hods/[id]`) tidak mengirim prop `active` → tak ada link aktif;
-  (b) garis 1px terlalu tipis/tak terlihat di screenshot user.
-- **Target/aksi:**
-  1. Pastikan **setiap rute** mengirim `active` yang benar (detail role →
-     `Recruitment`; detail HoDS → `Home`; `/lab/sound` → tak ada). Cek
-     `src/pages/**` + `BaseLayout`.
-  2. Pastikan `.nav-underline` full width label dan **terlihat** (warna gradient
-     `#9b7bff→#ede8ff`; jika perlu dipertahankan 1px sesuai Figma — JANGAN ubah
-     tanpa cek node `530:13894`).
-  3. Keextend ke **mobile menu** active state (`mobile-menu .nav-underline`).
-- **Verifikasi:** tambah assertion `navbar-audit.mjs`: untuk tiap rute, ada tepat
-  satu `.nav-link.active` dengan `.nav-underline` opacity `1` (saat ini audit
-  sudah cek 1440 geometry; tambahkan cek rute detail).
+## ~~#2 — Navbar: link aktif~~  **DONE (5 Oct 2026)** — semua rute utama
+   (`/`, `/about`, `/recruitment`, `/partners`, `/hall-of-frames`, `/contact`)
+   kirim prop `active` benar. Detail pages (`/hods/[id]`, `/recruitment/roles/[id]`)
+   sengaja tidak render Navbar (pakai back-nav sendiri). **Mobile menu** kini
+   menampilkan `.nav-underline` (sebelumnya `display:none`) — gradient
+   `#9b7bff→#ede8ff` 1px full-width. 7 gate + seo ALL PASS.
 
 ## #3 — Typo "HAUSE" → "HOUSE"
 

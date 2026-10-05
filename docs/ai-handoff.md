@@ -20,10 +20,8 @@ ALL PASS. **DILARANG pakai `zoom`/`transform: scale`** (user menolak, render
 berantakan) — pakai `min-height: 100svh` + centering.
 
 **★ NEXT = 9-ITEM FIX LIST dari user (5 Oct 2026)** — work order lengkap +
-urutan + definisi selesai: **`docs/fix-9-plan.md`**. Ringkas: **(#3 DONE — typo
-"Hause"→"House")**; masih sisa: (1) CTA homepage → `/recruitment`; (2) navbar
-aktif wajib underline (audit semua rute); (4) glow kartu Our Team sesuai Figma
-(`1594:5145` REST effects); (5) animasi section Our Team + transisi tombol;
+urutan + definisi selesai: **`docs/fix-9-plan.md`**. Ringkas: **(#3 #1 #2 DONE — typo, CTA homepage, navbar underline mobile)**; masih sisa:
+(4) glow kartu Our Team sesuai Figma (`1594:5145` REST effects); (5) animasi section Our Team + transisi tombol;
 (6) scroll & transisi same-page/cross-page smooth; (7) garis "View Details"
 Available Roles sesuai Figma (`1218:1347`); (8) tombol scroll-up footer jadi
 **melayang** muncul saat footer; (9) lanjutkan full-screen (hero gambar + 100svh)

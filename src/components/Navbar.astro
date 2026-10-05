@@ -419,7 +419,11 @@ const destinations: Record<string, string> = {
       border-radius: 14px;
     }
     .mobile-menu .nav-underline {
-      display: none;
+      position: relative;
+      inset: auto;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, #9b7bff 0%, #ede8ff 100%);
     }
     .mobile-menu .nav-link:not(.active):hover,
     .mobile-menu .nav-link:not(.active):focus-visible {
