@@ -2337,9 +2337,6 @@ try {
       titleSize: titleStyle.fontSize,
       titleLineHeight: titleStyle.lineHeight,
       staticFallback: !!section.querySelector('.art-bg'),
-      videoOpacity: getComputedStyle(section.querySelector('.art-video'))
-        .opacity,
-      videoPreload: section.querySelector('.art-video').preload,
       overflow: document.documentElement.scrollWidth - innerWidth,
     };
   });
@@ -2352,8 +2349,6 @@ try {
     titleSize: '80px',
     titleLineHeight: '95.2px',
     staticFallback: true,
-    videoOpacity: '0',
-    videoPreload: 'none',
     overflow: 0,
   });
   await page
@@ -2399,13 +2394,13 @@ try {
     };
   });
   assert.deepEqual(visiMisiGeometry, {
-    section: { width: 1440, height: 840.40625 },
-    vision: { x: 80, y: 80, width: 1280, height: 145.2 },
-    mission: { x: 80, y: 325.2, width: 1280, height: 435.2 },
-    heading: { x: 80, y: 80, width: 586, height: 67.2 },
-    body: { x: 80, y: 171.2, width: 906, height: 54 },
-    list: { x: 80, y: 494.4, width: 797, height: 266 },
-    tarot: { x: 1028, y: 261, width: 356, height: 430 },
+    section: { width: 1440, height: 903 },
+    vision: { x: 80, y: 111.3, width: 1280, height: 145.2 },
+    mission: { x: 80, y: 356.5, width: 1280, height: 435.2 },
+    heading: { x: 80, y: 111.3, width: 586, height: 67.2 },
+    body: { x: 80, y: 202.5, width: 906, height: 54 },
+    list: { x: 80, y: 525.7, width: 797, height: 266 },
+    tarot: { x: 1028, y: 292.3, width: 356, height: 430 },
     rows: [713, 733, 746, 775, 786, 797],
     overflow: 0,
   });
@@ -2415,11 +2410,13 @@ try {
   const visiMisiReference = await sharp(
     'assets/about-us/visi-misi/VisiMisi-Revisi-1x.png',
   )
+    .resize(1440, 840)
+    .extend({ top: 31, bottom: 32, background: { r: 5, g: 5, b: 7 } })
     .removeAlpha()
     .raw()
     .toBuffer();
   const visiMisiActual = await sharp('artifacts/about-visi-misi-desktop.png')
-    .extract({ left: 0, top: 0, width: 1440, height: 840 })
+    .extract({ left: 0, top: 0, width: 1440, height: 903 })
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -2450,12 +2447,12 @@ try {
     };
   });
   assert.deepEqual(aboutPhilosophyGeometry, {
-    section: { width: 1440, height: 837 },
-    canvas: { x: 0, y: 0, width: 1440, height: 837 },
-    content: { x: 766, y: 205, width: 591, height: 468 },
-    heading: { x: 766, y: 205, width: 591, height: 172 },
-    principles: { x: 766, y: 425, width: 591, height: 248 },
-    eyebrow: { x: 766, y: 205, width: 92.4, height: 26 },
+    section: { width: 1440, height: 903 },
+    canvas: { x: 0, y: 33, width: 1440, height: 837 },
+    content: { x: 766, y: 238, width: 591, height: 468 },
+    heading: { x: 766, y: 238, width: 591, height: 172 },
+    principles: { x: 766, y: 458, width: 591, height: 248 },
+    eyebrow: { x: 766, y: 238, width: 92.4, height: 26 },
     overflow: 0,
   });
   // Align the section to the viewport top before capturing so the full 837px is
@@ -2474,13 +2471,15 @@ try {
   const aboutPhilosophyReference = await sharp(
     'assets/about-us/philosophy/Philosophy-Revisi-1x.png',
   )
+    .resize(1440, 837)
+    .extend({ top: 33, bottom: 33, background: { r: 5, g: 5, b: 7 } })
     .removeAlpha()
     .raw()
     .toBuffer();
   const aboutPhilosophyActual = await sharp(
     'artifacts/about-philosophy-desktop.png',
   )
-    .extract({ left: 0, top: 0, width: 1440, height: 837 })
+    .extract({ left: 0, top: 0, width: 1440, height: 903 })
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -2509,11 +2508,11 @@ try {
     };
   });
   assert.deepEqual(ecosystemGeometry, {
-    section: { width: 1440, height: 874 },
-    header: { x: 254.5, y: 80, width: 931, height: 172 },
-    pipeline: { x: 80, y: 368, width: 1280, height: 426 },
-    baseline: { x: 80, y: 793, width: 1280, height: 2 },
-    lineBottoms: [776, 776, 776, 776, 776],
+    section: { width: 1440, height: 903 },
+    header: { x: 254.5, y: 94.5, width: 931, height: 172 },
+    pipeline: { x: 80, y: 382.5, width: 1280, height: 426 },
+    baseline: { x: 80, y: 807.5, width: 1280, height: 2 },
+    lineBottoms: [791, 791, 791, 791, 791],
   });
   await page.locator('.ecosystem').screenshot({
     path: 'artifacts/about-ecosystem-desktop.png',
@@ -2521,11 +2520,13 @@ try {
   const ecosystemReference = await sharp(
     'assets/about-us/ecosystem/Ecosystem-Revisi-1x.png',
   )
+    .resize(1440, 874)
+    .extend({ top: 14, bottom: 15, background: { r: 5, g: 5, b: 7 } })
     .removeAlpha()
     .raw()
     .toBuffer();
   const ecosystemActual = await sharp('artifacts/about-ecosystem-desktop.png')
-    .extract({ left: 0, top: 0, width: 1440, height: 874 })
+    .extract({ left: 0, top: 0, width: 1440, height: 903 })
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -2537,7 +2538,7 @@ try {
   const seamMaxDelta = (bottom, top) => {
     let max = 0;
     for (let x = 0; x < 1440; x++) {
-      const b = (836 * 1440 + x) * 3;
+      const b = (902 * 1440 + x) * 3;
       const t = x * 3;
       for (let c = 0; c < 3; c++)
         max = Math.max(max, Math.abs(bottom[b + c] - top[t + c]));
@@ -2730,8 +2731,8 @@ try {
     assert.equal(pipelineFit.display, expectedDisplay);
     assert.equal(pipelineFit.contained, true);
     if (expectedDisplay === 'flex') {
-      assert.deepEqual(pipelineFit.lineEnds, [776, 776, 776, 776, 776]);
-      assert.equal(pipelineFit.baselineY, 793);
+      assert.deepEqual(pipelineFit.lineEnds, [789, 789, 789, 789, 789]);
+      assert.equal(pipelineFit.baselineY, 806);
     }
     assert.ok(pipelineFit.overflow <= 1);
   }

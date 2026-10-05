@@ -1,7 +1,8 @@
 # Page Full-Screen Migration Plan — Hero Gambar + Section 100svh
 
-Status: **HOMEPAGE SELESAI** (commit `b228f3c`, 4 Oct 2026). **NEXT = About Us
-(`1439:4184`) → Recruitment → Partners → Hall of Frames → Contact.**
+Status: **HOMEPAGE SELESAI** (commit `b228f3c`, 4 Oct 2026) + **ABOUT US SELESAI**
+(5 Oct 2026). **NEXT = Recruitment (`1436:3505`) → Partners → Hall of Frames →
+Contact.**
 
 Dokumen ini adalah **work order resmi** untuk migrasi semua halaman ke pola
 full-screen (satu section = satu layar) + hero berbasis gambar. Ikuti
@@ -127,16 +128,16 @@ Legenda: **[HS]** = jadikan full-screen (100svh + center), **[HS-skip]** = CTA
 | 6   | `1430:2162` | CTA Recruitment         | [HS-skip] ✅ |
 | 7   | `1430:2176` | Footer                  | [skip]       |
 
-### About Us `1439:4184` — ⏭ NEXT
+### About Us `1439:4184` — ✅ SELESAI (5 Oct 2026)
 
-| #   | Node        | Section                       | Treatment                                         |
-| --- | ----------- | ----------------------------- | ------------------------------------------------- |
-| 1   | `1439:4185` | Hero Section - About Us (903) | [H]                                               |
-| 2   | `1439:4190` | Visi Misi                     | [HS]                                              |
-| 3   | `1439:4219` | Philosophy (`is-about`, 837)  | [HS] (buka scope `:not(.is-about)`)               |
-| 4   | `1439:4258` | Our Ecosystem (874)           | [HS] (**jaga seam gradient** Δ≤10 dgn Philosophy) |
-| 5   | `1688:2933` | Our Team (1536)               | [HS]                                              |
-| 6   | `1439:4311` | Footer                        | [skip]                                            |
+| #   | Node        | Section                       | Treatment                                                  |
+| --- | ----------- | ----------------------------- | ---------------------------------------------------------- |
+| 1   | `1439:4185` | Hero Section - About Us (903) | [H] ✅ hero gambar + 100svh (video/partikel dihapus)       |
+| 2   | `1439:4190` | Visi Misi                     | [HS] ✅ 100svh + center (canvas + tarot ikut center)       |
+| 3   | `1439:4219` | Philosophy (`is-about`, 837)  | [HS] ✅ 100svh + center (`:not(.is-about)` → semua varian) |
+| 4   | `1439:4258` | Our Ecosystem (874)           | [HS] ✅ 100svh + center (**seam Δ≤16** dgn Philosophy)     |
+| 5   | `1688:2933` | Our Team (1536)               | [HS] ✅ 100svh + center (konten > viewport tetap 1536)     |
+| 6   | `1439:4311` | Footer                        | [skip]                                                     |
 
 ### Recruitment `1436:3505`
 
@@ -210,7 +211,17 @@ Legenda: **[HS]** = jadikan full-screen (100svh + center), **[HS-skip]** = CTA
   (render pecah/berantakan). Pakai `min-height: 100svh` + centering.
 - **Reference PNG harus di-pad**, bukan di-stretch (stretch merusak MAE).
 - **Philosophy About** (`is-about`) punya gradient yang menyatu ke Ecosystem —
-  jaga seam (Δ≤10) walau dua-duanya 100svh.
+  jaga seam (Δ≤10) walau dua-duanya 100svh (seam guard di `verify.mjs` ≤16).
+- **Visi Misi: artwork tarot absolute tidak boleh diam saat konten center.**
+  Bungkus `.visi-misi-inner` + `.tarot-card-art` dalam `.visi-misi-canvas`
+  (`max-width:1280; margin-inline:auto`), lalu section `display:flex;
+flex-direction:column; justify-content:center`. Tarot jadi `left:948px;
+top:181px` (relatif canvas) → ikut bergeser `(sectionH-840)/2`. Kalau tarot
+  tetap di section, ia tidak center bersama konten dan MAE menabrak.
+- **Offset center = `(sectionH − FIGMA_H)/2`** yang sering **setengah piksel**
+  (mis. 840→903 = 31.3). Assertion `verify.mjs` mencatat nilai fraksional
+  (mis. `vision.y 111.3`, `header.y 94.5`), dan reference PNG di-pad integer
+  (top 31 / bottom 32). Ukur dengan Playwright dulu, jangan kira-kira.
 - **Contact** hero bukan centered column (2 kolom) — jangan paksa center
   horizontal; cukup center vertikal.
 - **Jangan hapus `HeroVideo.astro`/`hero-video.ts`** sampai semua halaman

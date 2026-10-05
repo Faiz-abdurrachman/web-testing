@@ -1,37 +1,18 @@
 ---
-import HeroVideo from './HeroVideo.astro';
 ---
 
 <section class="about-hero" aria-labelledby="about-hero-title">
   <div class="artwork" aria-hidden="true">
-    <picture>
-      <source
-        type="image/webp"
-        media="(max-width: 600px)"
-        srcset="/images/about/hero-bg-mobile.webp"
-        width="960"
-        height="602"
-      />
-      <source
-        type="image/webp"
-        srcset="/images/about/hero-bg.webp 1x, /images/about/hero-bg-2x.webp 2x"
-        width="1440"
-        height="903"
-      />
-      <img
-        class="art-bg"
-        src="/images/about/hero-bg.webp"
-        width="1440"
-        height="903"
-        alt=""
-        fetchpriority="high"
-        decoding="async"
-      />
-    </picture>
-    <HeroVideo
-      webm="/images/about/hero-bg.webm"
-      mp4="/images/about/hero-bg.mp4"
-      poster="/images/about/hero-poster.webp"
+    <img
+      class="art-bg"
+      src="/images/about/hero-bg.webp"
+      srcset="/images/about/hero-bg.webp 1440w, /images/about/hero-bg-2x.webp 2880w"
+      sizes="100vw"
+      width="1440"
+      height="903"
+      alt=""
+      fetchpriority="high"
+      decoding="async"
     />
   </div>
   <div class="hero-content">
@@ -47,29 +28,6 @@ import HeroVideo from './HeroVideo.astro';
   </div>
 </section>
 
-<script>
-  import { mountHeroVideo } from '../scripts/hero-video';
-
-  let currentVideo: HTMLVideoElement | null = null;
-  let disposeVideo: (() => void) | undefined;
-  const initVideo = () => {
-    const video = document.querySelector<HTMLVideoElement>(
-      '.about-hero .art-video',
-    );
-    if (!video || video === currentVideo) return;
-    disposeVideo?.();
-    currentVideo = video;
-    disposeVideo = mountHeroVideo(video);
-  };
-  initVideo();
-  document.addEventListener('astro:page-load', initVideo);
-  document.addEventListener('astro:before-swap', () => {
-    disposeVideo?.();
-    disposeVideo = undefined;
-    currentVideo = null;
-  });
-</script>
-
 <style>
   /* Matches Figma node 1439:4185 (1440 x 903), page 1439:4184.
      Section: column, padding 80px, justify center, gap 16px, IMAGE fill.
@@ -83,7 +41,9 @@ import HeroVideo from './HeroVideo.astro';
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 903px;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
     padding: 80px;
     overflow: clip;
     text-align: center;
@@ -95,9 +55,7 @@ import HeroVideo from './HeroVideo.astro';
     z-index: -1;
   }
 
-  .artwork picture,
-  .artwork .art-bg,
-  .artwork :global(.art-video) {
+  .artwork img {
     position: absolute;
     inset: 0;
     display: block;
@@ -105,16 +63,6 @@ import HeroVideo from './HeroVideo.astro';
     height: 100%;
     object-fit: cover;
     object-position: center;
-  }
-
-  .artwork :global(.art-video) {
-    opacity: 0;
-  }
-
-  @media (prefers-reduced-motion: no-preference) and (min-width: 601px) {
-    .artwork :global(.art-video.is-ready) {
-      opacity: 1;
-    }
   }
 
   .hero-content {
@@ -169,7 +117,6 @@ import HeroVideo from './HeroVideo.astro';
 
   @media (max-width: 1100px) {
     .about-hero {
-      min-height: min(780px, 100svh);
       padding-top: calc(94px + 32px);
     }
     h1 {
@@ -189,11 +136,24 @@ import HeroVideo from './HeroVideo.astro';
     }
   }
 
+  @media (min-width: 1921px) {
+    .artwork {
+      left: 50%;
+      right: auto;
+      width: 1920px;
+      transform: translateX(-50%);
+      mask-image: linear-gradient(
+        90deg,
+        transparent,
+        #000 12%,
+        #000 88%,
+        transparent
+      );
+    }
+  }
+
   @media (max-width: 600px) {
     .about-hero {
-      /* svh, not dvh — dvh reflows with the address bar */
-      min-height: 100vh;
-      min-height: 100svh;
       justify-content: center;
       padding-top: clamp(100px, 15svh, 130px);
       padding-bottom: clamp(40px, 8svh, 60px);

@@ -366,17 +366,22 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
 
 ## Current checkpoint
 
-- **★ IN PROGRESS (4 Oct 2026) — STANDAR FULL-SCREEN: hero gambar + section 100svh.**
+- **★ STANDAR FULL-SCREEN: hero gambar + section 100svh.**
   **Homepage SELESAI** (`b228f3c`): hero pakai `assets/hero gambar/Gambar Hero
 Section homepage.png` (background, bukan teks) + `100svh`; Philosophy / What We
   Do / Domains / Projects jadi `min-height: 100svh` + center (satu section = satu
   layar); CTA & footer tetap. Video + partikel hero home dihapus. `verify.mjs`
   geometry diupdate + reference PNG di-pad. `navbar-audit.mjs` diperbaiki (tunggu
   animasi entrance, toleransi tetap ±1px). 7 gate + seo ALL PASS.
-  **NEXT = About Us (`1439:4184`)**, lalu Recruitment (`1436:3505`), Partners
-  (`1439:4787`), Hall of Frames (`1439:4506`), Contact (`1445:5065`). Work order
-  lengkap (resep teknik + checklist per-section + peta hero→gambar + jebakan):
-  **`docs/page-fullscreen-migration-plan.md`**. **Satu section per pass + 7 gate.**
+  **About Us SELESAI (5 Oct 2026):** hero gambar (`assets/hero gambar/Hero Section
+  - About Us.png`) + `100svh`, video/partikel dihapus; VisiMisi (`<Starfield />`,
+canvas baru bungkus konten+tarot), Philosophy `is-about`(scope`:not(.is-about)`kini semua varian), Our Ecosystem, Our Team →`min-height: 100svh` + center
+(Team konten 1536 > viewport tetap 1536); reference di-pad 31/32, 33/33, 14/15;
+seam Philosophy↔Ecosystem ≤16. 7 gate + seo ALL PASS.
+**NEXT = Recruitment (`1436:3505`)**, lalu Partners (`1439:4787`), Hall of
+Frames (`1439:4506`), Contact (`1445:5065`). Work order lengkap (resep teknik +
+checklist per-section + peta hero→gambar + jebakan):
+**`docs/page-fullscreen-migration-plan.md`**. **Satu section per pass + 7 gate.**
 - **SELESAI (4 Oct 2026) — About Us: glow responsif + karakter menempel tepi.**
   Canvas `zoom: calc(100vw / 1440px)` **dihapus** dari Our Philosophy (`1439:4219`)
   dan Our Ecosystem (`1439:4258`). Gradient tetap **section-level** (full-bleed)

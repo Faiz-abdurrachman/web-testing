@@ -22,6 +22,34 @@
   `#050507`; Projects 910 (tidak di-pad). Assertion geometry `verify.mjs` diupdate
   (top Philosophy 903, WhatWeDo 1806, Domains 2709, Projects 3612, CTA 4522).
 
+## About Us — full-screen sections + image hero (5 October 2026)
+
+- **Standar baru** diterapkan ke `/about` (`1439:4184`): hero = **gambar background**
+  - `100svh`; section konten = `min-height: 100svh` + center. Work order:
+    `docs/page-fullscreen-migration-plan.md`.
+- **Hero About** (`1439:4185`, 1440×903): sumber user
+  `assets/hero gambar/Hero Section - About Us.png` (5760×3612) → di-crop center ke
+  1440×903 → `public/images/about/hero-bg.webp` (q85) + `hero-bg-2x.webp`
+  (2880×1806, q82), digenerate `scripts/generate-about-assets.mjs`
+  (`npm run assets:about`). Gambar **tidak memuat teks**; heading/subtitle tetap
+  HTML. Video (`hero-bg.{webm,mp4}`, `hero-poster.webp`) + `hero-bg-mobile.webp`
+  **dihapus** (tak lagi dipakai); `HeroVideo.astro`/`hero-video.ts` tetap ada untuk
+  Partners/HoF. Reference lama `assets/about-us/hero/About-Hero-Revisi-1x.png`
+  masih valid (art non-teks MAE ~1.5–1.9); section 1440×903 tak berubah, tanpa pad.
+- **Section About**: `VisiMisi.astro` (canvas baru `.visi-misi-canvas` membungkus
+  konten + tarot; tarot `left:948px; top:181px` relatif canvas), `Philosophy.astro`
+  (`is-about` kini `100svh` + center, scope `:not(.is-about)` → semua varian, seam
+  gradient ke Ecosystem dijaga), `OurEcosystem.astro` (`min-height:100svh` +
+  `justify-content:center`), `OurTeam.astro` (`100svh` + center; konten 1536 > 903
+  jadi tetap 1536). Referensi PNG di-pad `sharp.extend()`: VisiMisi 31/32
+  (840→903), Philosophy 33/33 (837→903), Ecosystem 14/15 (874→903) warna `#050507`.
+- **Assertion geometry `verify.mjs`** (viewport About 1440×903): Hero tetap 903;
+  VisiMisi 903 (vision y 111.3, mission 356.5, tarot 292.3); Philosophy 903
+  (canvas y 33, content y 238); Ecosystem 903 (header 94.5, pipeline 382.5,
+  baseline 807.5, lineBottoms 791); Team 1536. Seam guard Philosophy↔Ecosystem
+  `≤16` (baris 902). Loop pipeline (h 900): lineEnds 789, baselineY 806.
+  Semua 7 gate + seo PASS.
+
 ## Recruitment page — Available Roles (2 October 2026)
 
 - Section node **`1436:3564`** ("Available Roles Section Revisi Card", 1440 × 843, `padding: 80px`, gap: 58px), frame page Recruitment `1436:3505`, file `JYUzJK1hFqaEwL6DpdDvjp`.

@@ -5,98 +5,104 @@ import Starfield from './Starfield.astro';
 <section id="visi-misi" class="visi-misi" aria-labelledby="vision-title">
   <Starfield />
 
-  <div class="visi-misi-inner">
-    <!-- Vision block (Figma 1439:4191: 1280 x 145 at y=80, gap 24). -->
-    <div class="vm-block vision-block">
-      <h2 id="vision-title" class="vm-heading">
-        OUR VISION
-      </h2>
-      <p class="vm-desc vision-desc">
-        Data Sorcerers is an AI &amp; Data Innovation Community dedicated to
-        developing people, knowledge, research, and technology through
-        collaborative learning and real-world experimentation.
-      </p>
+  <div class="visi-misi-canvas">
+    <div class="visi-misi-inner">
+      <!-- Vision block (Figma 1439:4191: 1280 x 145 at y=80, gap 24). -->
+      <div class="vm-block vision-block">
+        <h2 id="vision-title" class="vm-heading">
+          OUR VISION
+        </h2>
+        <p class="vm-desc vision-desc">
+          Data Sorcerers is an AI &amp; Data Innovation Community dedicated to
+          developing people, knowledge, research, and technology through
+          collaborative learning and real-world experimentation.
+        </p>
+      </div>
+
+      <!-- Mission block (Figma 1439:4195: 1280 x 435, gap 24). -->
+      <div class="vm-block mission-block">
+        <h2 id="mission-title" class="vm-heading">
+          OUR MISION
+        </h2>
+        <p class="vm-desc mission-desc">
+          Data Sorcerers builds an environment where people can learn deeply,
+          experiment boldly, conduct meaningful research, and build real-world
+          solutions through collaboration
+        </p>
+
+        <ol class="mission-list" aria-label="Our mission objectives">
+          <li class="mission-item">
+            <span class="item-num" aria-hidden="true">
+              1.
+            </span>
+            <span class="item-text">
+              Develop practical AI &amp; Data capabilities.
+            </span>
+          </li>
+          <li class="mission-item">
+            <span class="item-num" aria-hidden="true">
+              2.
+            </span>
+            <span class="item-text">
+              Encourage experimentation and research.
+            </span>
+          </li>
+          <li class="mission-item">
+            <span class="item-num" aria-hidden="true">
+              3.
+            </span>
+            <span class="item-text">
+              Create meaningful technology projects.
+            </span>
+          </li>
+          <li class="mission-item">
+            <span class="item-num" aria-hidden="true">
+              4.
+            </span>
+            <span class="item-text">
+              Connect academia, industry, and community.
+            </span>
+          </li>
+          <li class="mission-item">
+            <span class="item-num" aria-hidden="true">
+              5.
+            </span>
+            <span class="item-text">Turn knowledge into tangible outputs.</span>
+          </li>
+          <li class="mission-item">
+            <span class="item-num" aria-hidden="true">
+              6.
+            </span>
+            <span class="item-text">
+              Develop talent that can contribute to real-world problems.
+            </span>
+          </li>
+        </ol>
+      </div>
     </div>
 
-    <!-- Mission block (Figma 1439:4195: 1280 x 435, gap 24). -->
-    <div class="vm-block mission-block">
-      <h2 id="mission-title" class="vm-heading">
-        OUR MISION
-      </h2>
-      <p class="vm-desc mission-desc">
-        Data Sorcerers builds an environment where people can learn deeply,
-        experiment boldly, conduct meaningful research, and build real-world
-        solutions through collaboration
-      </p>
-
-      <ol class="mission-list" aria-label="Our mission objectives">
-        <li class="mission-item">
-          <span class="item-num" aria-hidden="true">
-            1.
-          </span>
-          <span class="item-text">
-            Develop practical AI &amp; Data capabilities.
-          </span>
-        </li>
-        <li class="mission-item">
-          <span class="item-num" aria-hidden="true">
-            2.
-          </span>
-          <span class="item-text">Encourage experimentation and research.</span>
-        </li>
-        <li class="mission-item">
-          <span class="item-num" aria-hidden="true">
-            3.
-          </span>
-          <span class="item-text">Create meaningful technology projects.</span>
-        </li>
-        <li class="mission-item">
-          <span class="item-num" aria-hidden="true">
-            4.
-          </span>
-          <span class="item-text">
-            Connect academia, industry, and community.
-          </span>
-        </li>
-        <li class="mission-item">
-          <span class="item-num" aria-hidden="true">
-            5.
-          </span>
-          <span class="item-text">Turn knowledge into tangible outputs.</span>
-        </li>
-        <li class="mission-item">
-          <span class="item-num" aria-hidden="true">
-            6.
-          </span>
-          <span class="item-text">
-            Develop talent that can contribute to real-world problems.
-          </span>
-        </li>
-      </ol>
+    <!-- Tarot card artwork (Figma 1439:4218: 356 x 430 at (1028, 261)). -->
+    <div class="tarot-card-art" aria-hidden="true">
+      <picture>
+        <source
+          srcset="
+            /images/about/tarot-cards.webp    1x,
+            /images/about/tarot-cards-2x.webp 2x,
+            /images/about/tarot-cards-3x.webp 3x
+          "
+          sizes="356px"
+          type="image/webp"
+        />
+        <img
+          src="/images/about/tarot-cards.webp"
+          width="356"
+          height="430"
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
+      </picture>
     </div>
-  </div>
-
-  <!-- Tarot card artwork (Figma 1439:4218: 356 x 430 at (1028, 261)). -->
-  <div class="tarot-card-art" aria-hidden="true">
-    <picture>
-      <source
-        srcset="
-          /images/about/tarot-cards.webp    1x,
-          /images/about/tarot-cards-2x.webp 2x,
-          /images/about/tarot-cards-3x.webp 3x
-        "
-        sizes="356px"
-        type="image/webp"
-      />
-      <img
-        src="/images/about/tarot-cards.webp"
-        width="356"
-        height="430"
-        alt=""
-        loading="lazy"
-        decoding="async"
-      />
-    </picture>
   </div>
 </section>
 
@@ -109,10 +115,22 @@ import Starfield from './Starfield.astro';
   .visi-misi {
     position: relative;
     isolation: isolate;
-    min-height: 840px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    min-height: 100svh;
     padding: 80px;
     overflow: clip;
     background-color: #050507;
+  }
+
+  .visi-misi-canvas {
+    position: relative;
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
   }
 
   /* Match the section fill (Figma 1439:4190) under the shared living starfield. */
@@ -126,9 +144,6 @@ import Starfield from './Starfield.astro';
     display: flex;
     flex-direction: column;
     gap: 100px;
-    width: 100%;
-    max-width: 1280px;
-    margin-inline: auto;
   }
 
   .vm-block {
@@ -242,8 +257,8 @@ import Starfield from './Starfield.astro';
 
   .tarot-card-art {
     position: absolute;
-    left: calc(50% - 720px + 1028px);
-    top: 261px;
+    left: 948px;
+    top: 181px;
     z-index: 2;
     width: 356px;
     height: 430px;

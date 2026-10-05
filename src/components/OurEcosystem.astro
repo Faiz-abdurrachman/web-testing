@@ -106,12 +106,14 @@ const steps: Step[] = [
   .canvas {
     position: relative;
     max-width: 1440px;
-    height: 874px;
+    min-height: 100vh;
+    min-height: 100svh;
     margin-inline: auto;
     padding: 80px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     box-sizing: border-box;
   }
   /* The gradient stays section-level (full-bleed) so the glow stretches continuously across the viewport; the canvas stays at 1440px max-width without zoom, matching the Philosophy About variant behaviour. */
@@ -285,8 +287,6 @@ const steps: Step[] = [
 
   @media (max-width: 1050px) {
     .canvas {
-      height: auto;
-      min-height: auto;
       padding: 60px 24px 60px;
     }
 

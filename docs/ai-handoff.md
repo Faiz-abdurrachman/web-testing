@@ -19,21 +19,26 @@ center, `motion.ts` dibersihkan, `verify.mjs` geometry + reference PNG di-pad,
 ALL PASS. **DILARANG pakai `zoom`/`transform: scale`** (user menolak, render
 berantakan) — pakai `min-height: 100svh` + centering.
 
-**★ NEXT = About Us (`1439:4184`)** — [Figma](https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4184).
+**★ NEXT = Recruitment (`1436:3505`)** — [Figma](https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1436-3505).
 Work order lengkap (resep teknik + checklist per-section + peta hero→gambar +
-jebakan + 7 gate): **`docs/page-fullscreen-migration-plan.md`**. Lalu Recruitment
-(`1436:3505`), Partners (`1439:4787`), Hall of Frames (`1439:4506`), Contact
-(`1445:5065`). **Satu section per pass — jangan lompat/gabung.** Home & Recruitment
-= benchmark presisi, jangan rusak.
+jebakan + 7 gate): **`docs/page-fullscreen-migration-plan.md`**. Lalu Partners
+(`1439:4787`), Hall of Frames (`1439:4506`), Contact (`1445:5065`). **Satu section
+per pass (atau satu halaman per commit seperti `b228f3c`).** Home & Recruitment =
+benchmark presisi, jangan rusak.
 
-**SELESAI (4 Oct 2026) — About Us: glow responsif + karakter menempel tepi.**
-**Our Philosophy (`1439:4219`) & Our Ecosystem (`1439:4258`).** Canvas zoom
-`calc(100vw / 1440px)` dihapus dari kedua section — gradient tetap section-level
-(full-bleed) sehingga pita ungu konsisten di semua lebar; artwork Philosophy About
-kini anchor `left: calc((1440px - 100cqw) / 2)` (≥1441px) → tetap 861px, nempel tepi
-section tanpa ikut membesar, identik dengan Home. Geometry 1440 tetap, seam delta 0.
-verify.mjs assertions diperbarui (canvasZoom:1, canvasWidth:1440, artL:0, artR:861
-at 1920; canvas 880/2320 at 3200). 7 gate + seo + spacing ALL PASS.
+**SELESAI (5 Oct 2026) — About Us full-screen (hero gambar + section 100svh).**
+`AboutHero.astro` → gambar background (`hero-bg.webp`/`-2x`, sumber
+`assets/hero gambar/Hero Section - About Us.png`) + `100svh`, video/partikel
+dihapus. `VisiMisi.astro` → `100svh` + center; ditambah `.visi-misi-canvas`
+(membungkus konten + tarot, tarot `left:948px; top:181px` relatif canvas) supaya
+artwork ikut center. `Philosophy.astro` (`is-about`) → `100svh` + center (scope
+`:not(.is-about)` kini berlaku semua varian; seam gradient ke Ecosystem dijaga
+≤16). `OurEcosystem.astro` → canvas `min-height:100svh` + `justify-content:center`.
+`OurTeam.astro` → `100svh` + center (konten 1536 > viewport, tetap 1536). Reference
+PNG VisiMisi/Philosophy/Ecosystem di-pad `sharp.extend()` (31/32, 33/33, 14/15)
+warna `#050507`; assertion geometry `verify.mjs` diupdate (semua section About
+kini 903 kecuali Team 1536). Aset video About lama dihapus; generator hero About
+masuk `scripts/generate-about-assets.mjs`. **7 gate + seo ALL PASS.**
 
 **★ NEXT (untuk AI baru) — terapkan SEMUA tombol/link sesuai prototype Figma.**
 Peta lengkap (dari REST API `interactions`, MCP tidak expose): **`docs/figma-prototype-flow.md`**
