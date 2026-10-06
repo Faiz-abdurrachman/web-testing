@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <base target="_top" />
+    <title>Data Sorcerers — Editor</title>
+    <style>
+      @font-face {
+        font-family: Manrope;
+        src: url('https://data-sorcerers-community-sigma.vercel.app/fonts/manrope-400.woff2')
+          format('woff2');
+        font-weight: 400;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: Manrope;
+        src: url('https://data-sorcerers-community-sigma.vercel.app/fonts/manrope-700.woff2')
+          format('woff2');
+        font-weight: 700;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Bluu Next';
+        src: url('https://data-sorcerers-community-sigma.vercel.app/fonts/bluu-next-700.woff2')
+          format('woff2');
+        font-weight: 700;
+        font-display: swap;
+      }
+      :root {
+        color-scheme: dark;
+        --font-display: 'Bluu Next', serif;
+        --font-body: Manrope, sans-serif;
+        --bg: #050507;
+        --surface: #16141f;
+        --text: #fff;
+        --muted: #bcb7cb;
+        --accent: #9b7bff;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 400 16px/1.5 var(--font-body);
+      }
+      main {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 32px;
+      }
+      header {
+        border-bottom: 1px solid #393344;
+        padding-bottom: 24px;
+        margin-bottom: 32px;
+      }
+      h1 {
+        margin: 0 0 16px;
+        font: 700 40px/1.2 var(--font-display);
+      }
+      h2 {
+        margin: 0 0 16px;
+        font: 700 24px/1.25 var(--font-display);
+      }
+      p {
+        margin: 0;
+        color: var(--muted);
+      }
+      .brand {
+        margin-bottom: 16px;
+        color: var(--accent);
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(200px, 1fr) minmax(0, 2fr);
+        gap: 32px;
+      }
+      .editor {
+        padding: 24px;
+        background: var(--surface);
+        border-radius: 16px;
+      }
+      #project-list {
+        display: grid;
+        gap: 8px;
+      }
+      button,
+      input,
+      textarea,
+      select {
+        font: inherit;
+      }
+      button {
+        border: 1px solid #4a4358;
+        border-radius: 8px;
+        padding: 8px 16px;
+        color: var(--text);
+        background: transparent;
+        cursor: pointer;
+      }
+      button:disabled {
+        cursor: wait;
+        opacity: 0.55;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible,
+      select:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .project-choice {
+        text-align: left;
+        overflow-wrap: anywhere;
+      }
+      .project-choice[aria-current='true'] {
+        border-color: var(--accent);
+        background: #261c40;
+      }
+      .primary {
+        background: var(--accent);
+        color: #050507;
+        border-color: var(--accent);
+        font-weight: 700;
+      }
+      form {
+        display: grid;
+        gap: 16px;
+      }
+      label {
+        display: grid;
+        gap: 8px;
+      }
+      input,
+      textarea,
+      select {
+        width: 100%;
+        min-width: 0;
+        border: 1px solid #4a4358;
+        border-radius: 8px;
+        padding: 16px;
+        color: var(--text);
+        background: #0c0a11;
+      }
+      textarea {
+        resize: vertical;
+        min-height: 160px;
+      }
+      .tags {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      #status {
+        margin-bottom: 24px;
+        overflow-wrap: anywhere;
+      }
+      #status[data-error='true'] {
+        color: #ffb6b6;
+      }
+      #retry {
+        margin-top: 16px;
+      }
+      .hint {
+        font-size: 14px;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      @media (max-width: 760px) {
+        main {
+          padding: 16px;
+        }
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        h1 {
+          font-size: 32px;
+        }
+        .editor {
+          padding: 16px;
+        }
+        .tags {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="brand">Data Sorcerers · Editor</p>
+        <h1>Kelola projects</h1>
+        <p>
+          Pilih project, ubah isinya, lalu simpan. Situs diperbarui setelah
+          proses penerbitan selesai.
+        </p>
+      </header>
+      <p id="status" role="status" aria-live="polite">Memuat projects…</p>
+      <button id="retry" type="button" hidden>Coba terbitkan lagi</button>
+      <button id="reload" type="button" hidden>Muat ulang projects</button>
+      <div class="layout" id="workspace" hidden>
+        <nav aria-label="Daftar project">
+          <h2>Projects</h2>
+          <div id="project-list"></div>
+        </nav>
+        <section class="editor" aria-labelledby="editor-title">
+          <h2 id="editor-title">Isi project</h2>
+          <form id="project-form">
+            <fieldset
+              id="fields"
+              style="
+                border: 0;
+                padding: 0;
+                margin: 0;
+                min-width: 0;
+                display: grid;
+                gap: 16px;
+              "
+            >
+              <label
+                >Judul project<input id="title" required maxlength="20000"
+              /></label>
+              <label
+                >Deskripsi<textarea
+                  id="description"
+                  required
+                  maxlength="20000"
+                ></textarea>
+              </label>
+              <p class="hint">
+                Gunakan judul dan deskripsi singkat agar nyaman dibaca di kartu
+                situs.
+              </p>
+              <div class="tags">
+                <label
+                  >Kategori pertama<input
+                    id="tag-one"
+                    required
+                    maxlength="20000"
+                /></label>
+                <label
+                  >Kategori kedua<input id="tag-two" required maxlength="20000"
+                /></label>
+              </div>
+              <label>Gambar project<select id="image" required></select></label>
+              <div class="actions">
+                <button class="primary" id="save" type="submit">
+                  Simpan dan terbitkan
+                </button>
+              </div>
+            </fieldset>
+          </form>
+        </section>
+      </div>
+    </main>
+    <script>
+      (() => {
+        const byId = (id) => document.getElementById(id);
+        const form = byId('project-form');
+        let state;
+        let selected;
+        let busy = false;
+        let dirty = false;
+        const errors = {
+          UNAUTHORIZED:
+            'Akses ditolak. Buka editor dengan akun Google owner CMS.',
+          CONFIGURATION:
+            'Konfigurasi penerbitan belum lengkap. Hubungi pengelola situs.',
+          INVALID_INPUT:
+            'Isi project belum valid. Periksa judul, deskripsi, kategori dan gambar.',
+          INVALID_DATA:
+            'Data projects belum bisa dibaca. Hubungi pengelola situs.',
+          CONFLICT:
+            'Project sudah berubah sejak halaman dibuka. Muat ulang sebelum menyimpan lagi.',
+          NOT_FOUND: 'Project tidak ditemukan. Muat ulang daftar projects.',
+          SERVER_ERROR:
+            'Operasi belum berhasil. Muat ulang projects untuk memeriksa isi yang tersimpan.',
+        };
+        const message = (text, error = false) => {
+          byId('status').textContent = text;
+          byId('status').dataset.error = String(error);
+        };
+        const setBusy = (value) => {
+          busy = value;
+          byId('fields').disabled = value;
+          document.querySelectorAll('button').forEach((button) => {
+            button.disabled = value;
+          });
+          byId('workspace').setAttribute('aria-busy', String(value));
+        };
+        const rpc = (name, payload) =>
+          new Promise((resolve, reject) => {
+            const runner = google.script.run
+              .withSuccessHandler(resolve)
+              .withFailureHandler(() => reject(new Error('RPC_FAILED')));
+            if (payload === undefined) runner[name]();
+            else runner[name](payload);
+          });
+        const choose = (id) => {
+          if (
+            busy ||
+            (dirty &&
+              !window.confirm(
+                'Perubahan belum disimpan. Pindah project dan abaikan perubahan?',
+              ))
+          )
+            return;
+          selected = id;
+          dirty = false;
+          const record = state.projects.find((project) => project.id === id);
+          byId('title').value = record.title;
+          byId('description').value = record.description;
+          byId('tag-one').value = record.tags[0];
+          byId('tag-two').value = record.tags[1];
+          byId('image').value = record.image;
+          document
+            .querySelectorAll('.project-choice')
+            .forEach((button) =>
+              button.setAttribute(
+                'aria-current',
+                String(button.dataset.id === id),
+              ),
+            );
+        };
+        const render = () => {
+          byId('project-list').replaceChildren();
+          state.projects.forEach((project) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'project-choice';
+            button.dataset.id = project.id;
+            button.textContent = project.title;
+            button.addEventListener('click', () => choose(project.id));
+            byId('project-list').append(button);
+          });
+          byId('image').replaceChildren();
+          state.imagePresets.forEach((image, index) => {
+            const option = document.createElement('option');
+            option.value = image;
+            option.textContent = 'Gambar ' + (index + 1);
+            byId('image').append(option);
+          });
+          byId('workspace').hidden = false;
+          choose(
+            state.projects.some((project) => project.id === selected)
+              ? selected
+              : state.projects[0].id,
+          );
+        };
+        const publicationMessage = (publication, saved) => {
+          const accepted = publication.every((item) => item.accepted);
+          byId('retry').hidden = accepted;
+          message(
+            accepted
+              ? (saved ? 'Perubahan tersimpan. ' : '') +
+                  'Penerbitan dimulai untuk testing dan production. Tunggu beberapa menit sebelum memeriksa situs.'
+              : 'Perubahan tersimpan, tetapi penerbitan belum berhasil untuk semua situs. Klik Coba terbitkan lagi.',
+            !accepted,
+          );
+        };
+        const load = async () => {
+          if (
+            busy ||
+            (dirty &&
+              !window.confirm(
+                'Muat ulang dan abaikan perubahan yang belum disimpan?',
+              ))
+          )
+            return;
+          setBusy(true);
+          message('Memuat projects…');
+          try {
+            const result = await rpc('adminLoadProjects');
+            if (!result.ok) {
+              message(errors[result.error.code] || errors.SERVER_ERROR, true);
+              byId('reload').hidden = false;
+              return;
+            }
+            state = result.data;
+            dirty = false;
+            setBusy(false);
+            render();
+            byId('reload').hidden = true;
+            byId('retry').hidden = !state.publicationPending;
+            message(
+              state.publicationPending
+                ? 'Ada perubahan tersimpan yang belum berhasil diterbitkan. Klik Coba terbitkan lagi.'
+                : 'Pilih project yang ingin diubah.',
+            );
+          } catch (_error) {
+            message(
+              'Koneksi terputus. Muat ulang projects untuk mencoba lagi.',
+              true,
+            );
+            byId('reload').hidden = false;
+          } finally {
+            setBusy(false);
+          }
+        };
+        form.addEventListener('input', () => {
+          dirty = true;
+        });
+        form.addEventListener('change', () => {
+          dirty = true;
+        });
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          if (busy || !form.reportValidity()) return;
+          const project = {
+            id: selected,
+            title: byId('title').value,
+            description: byId('description').value,
+            tags: [byId('tag-one').value, byId('tag-two').value],
+            image: byId('image').value,
+          };
+          setBusy(true);
+          message('Menyimpan dan meminta penerbitan…');
+          try {
+            const result = await rpc('adminSaveProject', {
+              project,
+              revision: state.revision,
+            });
+            if (!result.ok) {
+              message(errors[result.error.code] || errors.SERVER_ERROR, true);
+              byId('reload').hidden = false;
+              return;
+            }
+            state = result.data;
+            dirty = false;
+            setBusy(false);
+            render();
+            byId('reload').hidden = true;
+            publicationMessage(result.data.publication, true);
+          } catch (_error) {
+            message(
+              'Koneksi terputus. Muat ulang projects sebelum menyimpan lagi untuk memeriksa perubahan terakhir.',
+              true,
+            );
+            byId('reload').hidden = false;
+          } finally {
+            setBusy(false);
+          }
+        });
+        byId('retry').addEventListener('click', async () => {
+          if (busy) return;
+          setBusy(true);
+          message('Meminta penerbitan ulang…');
+          try {
+            const result = await rpc('adminRetryPublication');
+            if (!result.ok)
+              message(errors[result.error.code] || errors.SERVER_ERROR, true);
+            else publicationMessage(result.data.publication, false);
+          } catch (_error) {
+            message('Koneksi terputus. Coba terbitkan lagi.', true);
+          } finally {
+            setBusy(false);
+          }
+        });
+        byId('reload').addEventListener('click', load);
+        window.addEventListener('beforeunload', (event) => {
+          if (dirty) {
+            event.preventDefault();
+            event.returnValue = '';
+          }
+        });
+        load();
+      })();
+    </script>
+  </body>
+</html>

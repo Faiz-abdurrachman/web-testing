@@ -2750,3 +2750,14 @@ redirected errors and prevent disclosure.
 Native Node 22 real fetch succeeds with IPv4 preferred after default-order
 network failure. Prebuild CLI sets IPv4-first DNS; this is backend-only and
 does not alter served assets or geometry. Vercel 404 root cause still pending.
+
+## CMS B2 — Projects editor foundation (6 Oct 2026)
+
+Custom HtmlService editor in `cms/gas/admin/Index.html` uses existing OFL
+Bluu Next 700 and Manrope 400/700 fonts served from production, dark palette
+and 8pt spacing. No Figma reference exists for this new private dashboard.
+Projects site node `1430:2146`, artwork, card geometry and all public components
+remain untouched. Generated installer/admin files are ignored, contain no
+secrets, and require a separate owner-only GAS project. Boundary tests cover
+auth, revision conflicts, single batch writes and partial hook/retry behavior;
+mock browser QA covers 320/390/768/1440, font loading and keyboard/escaping.

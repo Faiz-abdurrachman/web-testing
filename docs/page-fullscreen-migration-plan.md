@@ -270,3 +270,10 @@ top:181px` (relatif canvas) → ikut bergeser `(sectionH-840)/2`. Kalau tarot
   menimbulkan fail — tidak ada threshold MAE).
 - Sesudah migrasi sebuah halaman, **cek `dist/` (production build)**, jangan cuma
   dev — Astro minifier bisa menjatuhkan properti.
+
+## CMS B2 checkpoint (6 Oct 2026)
+
+The private HtmlService Projects editor is outside the public fullscreen page
+work order. No public section, artwork, font, source/data or geometry changes
+in its foundation pass. All seven site gates + SEO PASS (responsive 468/468).
+Private admin work order: `docs/cms-b2-plan.md`; owner installation pending.

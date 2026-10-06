@@ -1,14 +1,19 @@
 # AGENTS.md — instructions for AI agents
 
-**CMS B1 production LIVE (6 Oct 2026); testing log confirmation pending.**
-Read API authenticated export matches baseline. Vercel production at `fb99c39`
-confirmed remote mode, 0 errors, 19 pages and completed deploy in owner logs.
-Both GitHub Vercel statuses success. Native Node 22 real fetch/prebuild passed
-with IPv4-first DNS; prior 404 root cause not proven. Timeout 60s + one timeout
-retry, safe HTTP diagnostics, atomic validation remain. 9 CMS tests + 7 site
-gates + SEO PASS; 19 HTML identical. NEXT: confirm testing remote-mode log,
-create two Deploy Hooks and implement private admin Projects pass.
-B2 Master Work Plan: `docs/cms-b2-plan.md`; no B2 admin deployed yet.
+**CMS B2 Projects foundation CODE VERIFIED (6 Oct 2026); owner install pending.**
+Private project source `cms/gas/admin/` + `npm run cms:admin` generates Code.gs,
+Index.html and manifest under ignored `artifacts/cms-admin/`. Owner-only server
+checks on each RPC; edit existing Projects, stale revision guard, single-batch
+Sheet write, two rebuild hooks and retry publication. Growth/upload/Team still
+follow as separate passes; current counts/schema/site remain unchanged.
+Both hooks locally validated and real POST accepted HTTP 201 (different projects).
+13 CMS tests, admin browser 4 widths, admin 8pt spacing and 7 site gates +
+SEO PASS (responsive 468/468). Public source/data/assets unchanged.
+B1 production remote-mode deploy at `fb99c39` verified; both Vercel statuses
+success, testing remote-mode log confirmation still pending.
+NEXT: owner installs separate private Admin GAS,
+verify real login/save/rebuild, then Projects growth/media and Team.
+Plans: `docs/cms-b2-plan.md`; install guide: `docs/cms-admin-setup.md`.
 Panduan: `docs/cms-gas-setup.md`.
 User mengizinkan commit/push kelanjutan CMS; B0 sudah push `1b38088` ke dua repo.
 User meminta bisa menambah anggota/role/HoDS dengan template desain konsisten;

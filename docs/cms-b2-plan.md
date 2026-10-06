@@ -1,18 +1,21 @@
 # CMS B2 — private admin dashboard
 
-Status: PLANNING. Production B1 remote-mode build at `fb99c39` confirmed by
+Status: PROJECTS FOUNDATION CODE VERIFIED; OWNER INSTALL PENDING. Production B1 remote-mode build at `fb99c39` confirmed by
 owner logs; both GitHub Vercel statuses success. Testing remote-mode log
 confirmation pending. No B2 UI or mutations deployed yet.
 
 ## Pass order
 
-1. Private GAS admin foundation and Projects collection: authorize every RPC,
-   edit/add/delete Projects using the existing site template, validate input,
-   concurrency protection, two rebuild hooks, generator and owner installation.
-2. Projects media upload/cache: upload photos to the private media folder,
+1. Private GAS admin foundation and Projects editing: authorize every RPC,
+   edit existing project content, validate input, concurrency protection,
+   two rebuild hooks, generator and owner installation. Fixed counts stay
+   guarded; add/delete controls are not enabled in this foundation pass.
+2. Projects growth: dynamic schema/renderer, add/delete controls and separate
+   fixtures before enabling additions. Keep baseline geometry assertions.
+3. Projects media upload/cache: upload photos to the private media folder,
    validate types/size and bake/cache validated Drive bytes at build time rather
    than relying on Drive hotlinks. Artwork presets remain manual.
-3. Team collection: member CRUD and photo support with local group/card design.
+4. Team collection: member CRUD and photo support with local group/card design.
 
 Lock each pass with seven site gates + SEO before the next collection/step.
 B3 covers roles, partners, domains/HoDS and achievements/settings separately.
@@ -75,3 +78,36 @@ Confirm testing remote-mode build log. Create a Deploy Hook for branch main in
 each Vercel project. Temporary owner-provided values may be held in ignored
 local env for setup; deployment secrets live in GAS Script Properties. Never
 commit admin identity, Sheet/folder IDs, tokens or hook URLs.
+
+## Foundation pass execution checkpoint
+
+User configured both Deploy Hooks in ignored local env. Format/host valid,
+different project IDs, POST accepted HTTP 201 with pending jobs for each.
+No hook values entered the repo/logs. Initial dashboard pass edits the current
+Projects collection only; growth/media follow as separate tested steps.
+Baseline site imports/CSS/renderers/schema remain unchanged in foundation.
+Public export GAS contains no admin mutation functions. Admin uses a new
+project, same Sheet/Drive, owner-only deployment, server allowlist checks and
+revision-guarded single-batch project writes. Each save requests both rebuilds
+and reports saved-versus-rebuild status accurately. The owner must install
+and verify actual private login before opening this editor for live use.
+
+Public Projects design remains node `1430:2146` (Homepage `1430:2040`),
+https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp?node-id=1430-2146
+frame 1440 × 910, desktop padding 80, header gap 8, measured header/stage gap
+82 (existing documented exception). Bluu Next Bold 700 56/67, Manrope card
+copy; artwork and reference `Home-Project-Revisi-1x.png` remain untouched.
+This foundation adds only GAS admin source and QA/scripts, not public markup.
+
+## Foundation pass results
+
+13 CMS server/fetch tests PASS. Admin browser mock PASS at 320, 390, 768 and
+1440: fonts loaded, no overflow, keyboard, safe text rendering, partial-hook
+retry, conflict preservation/reload. Admin spacing PASS. Site build 0 errors;
+visual, navbar, View Transitions, responsive 468/468, spacing, format and SEO
+PASS. Public source/data/assets unchanged. Evidence in ignored
+`artifacts/cms-admin/`: site-build/gate logs, browser-report and screenshots.
+Both real Vercel hooks accepted HTTP 201. Generated private admin files contain
+no deployment secrets. Real owner login/save/rebuild has not yet been tested;
+installation guide: `docs/cms-admin-setup.md`. No B2 completion claim until
+growth, media and Team passes and real installation checks are complete.

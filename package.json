@@ -31,7 +31,9 @@
     "prebuild": "node scripts/fetch-cms.mjs",
     "cms:validate": "node scripts/fetch-cms.mjs",
     "cms:gas": "node scripts/generate-gas-bootstrap.mjs",
-    "test:cms": "node --test tests/cms.test.mjs"
+    "test:cms": "node --test tests/cms*.test.mjs",
+    "cms:admin": "node scripts/generate-gas-admin.mjs",
+    "verify:cms-admin": "node scripts/verify-cms-admin.mjs"
   },
   "dependencies": {
     "astro": "7.3.3",

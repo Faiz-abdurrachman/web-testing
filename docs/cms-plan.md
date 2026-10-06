@@ -210,3 +210,9 @@ Script Properties dan env Vercel: `docs/cms-gas-setup.md`.
 Production Vercel `fb99c39` remote-mode build and deployment are confirmed.
 Testing deployment also success; remote-mode log confirmation pending. Next
 private dashboard work order: `docs/cms-b2-plan.md`.
+
+B2 Projects foundation source is verified (`cms/gas/admin/`, `npm run cms:admin`):
+private owner auth, existing Projects editing, revision check and two rebuild
+hooks with retry. Site geometry/source remain unchanged. Owner installation
+pending; additions/uploads/Team follow separate passes. Work order:
+`docs/cms-b2-plan.md`; installation: `docs/cms-admin-setup.md`.
