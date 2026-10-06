@@ -8,14 +8,15 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
-**★ RENCANA BARU (6 Oct 2026) — Hall of Frames "Featured Sorcerers" card & modal
-(mobile + portrait).** Work order lengkap: **`docs/hof-featured-modal-plan.md`**.
-Dua akar masalah terukur: (A) JS modal meng-clone hanya `childNodes` sehingga
-class `is-lead` hilang → portrait leader "memadat" di modal (grid 302×532 top
-−132 vs modal 302×442 top −42); (B) di mobile `.fd-panel { overflow:auto }`
-meng-clip bleed (kepala terpotong). Fix usulan: pertahankan `is-lead` di slot
-`.fd-card` + mobile pakai dialog-scroll dengan panel `overflow:visible`. **Belum
-dieksekusi — tunggu keputusan user (§2/§6 plan).**
+**★ SELESAI (6 Oct 2026) — Hall of Frames "Featured Sorcerers" card & modal
+(mobile + portrait).** Work order: `docs/hof-featured-modal-plan.md`.
+Bug A (class `is-lead` hilang saat clone → leader portrait "memadat" di modal)
+dan Bug B (mobile `.fd-panel { overflow:auto }` meng-clip bleed) diperbaiki:
+(1) `cardSlot.classList.toggle('is-lead', …)` setelah `replaceChildren`;
+(2) mobile `.fd-panel` jadi `overflow:visible` + dialog scroll
+(`place-items:start center; overflow-y:auto`). Baseline keputusan §2b:
+leader bleed (A) menonjol keluar panel; mobile centered scroll; non-lead
+seragam. Grid MAE hofFeatured tidak berubah (2.14). **7 gate + seo ALL PASS.**
 
 **★ FIX (6 Oct 2026) — hamburger mobile + Partners hero mobile.**
 (1) Menu hamburger: underline aktif desktop ter-stretch `width:100%` di baris

@@ -1,6 +1,6 @@
 # Master Work Plan — Hall of Frames "Featured Sorcerers" card & detail modal
 
-Status: **RENCANA (belum dieksekusi)** · dibuat 6 Oct 2026 ·
+Status: **SELESAI (6 Oct 2026)** · Step 1–4 + 7 gate ALL PASS ·
 Patuhi `docs/pixel-precision-sop.md` + `AGENTS.md`. **Satu langkah per pass + 7
 gate.** Jangan rusak benchmark (grid `hofFeatured` MAE, responsive 468, geometri
 modal di `verify.mjs`).

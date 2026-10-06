@@ -692,13 +692,20 @@ const members: Member[] = [...row, ...row];
   }
 
   @media (max-width: 1080px) {
+    .featured-detail[open] {
+      place-items: start center;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 24px 0 max(24px, env(safe-area-inset-bottom));
+    }
     .fd-panel {
       flex-direction: column;
       width: min(calc(100% - 48px), 560px);
-      max-height: calc(100dvh - 48px);
+      max-height: none;
       gap: 32px;
       padding: 48px 40px;
-      overflow: auto;
+      overflow: visible;
+      margin-block: 24px;
     }
     .fd-body {
       flex: 0 1 auto;
@@ -762,6 +769,10 @@ const members: Member[] = [...row, ...row];
         const clone = article.cloneNode(true) as HTMLElement;
         clone.querySelectorAll('.card-open').forEach((el) => el.remove());
         cardSlot.replaceChildren(...clone.childNodes);
+        cardSlot.classList.toggle(
+          'is-lead',
+          article.classList.contains('is-lead'),
+        );
       }
       achList.replaceChildren(
         ...(member?.achievements ?? []).map((text, i) => {

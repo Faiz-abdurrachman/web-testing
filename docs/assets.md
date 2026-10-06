@@ -557,8 +557,23 @@ assets:contact` regenerates it and the icons.
 - Body `1554:2919` = 471 wide, gap 32; sections gap 16 ("Achievement" +
   "Contribution", Manrope 700 18/27). Three achievement bars (full width, 24
   tall, gap 12) with `linear-gradient(134deg,#fff 0%,#6c3bff 4–26%,transparent)`
-  - 6px gradient dot; contribution Manrope 400 16/24. The card slot clones the
-    clicked 302 × 400 card, so the art matches the section.
+   - 6px gradient dot; contribution Manrope 400 16/24. The card slot clones the
+     clicked 302 × 400 card, so the art matches the section.
+- **Bug A fix (6 Oct 2026):** JS `open()` cloned only `childNodes`, so class
+  `is-lead` on the `<article>` was lost — the leader portrait appeared "memadat"
+  (302×442 top −42 in modal vs 302×532 top −132 in grid). Fixed by toggling
+  `is-lead` on `.fd-card` after `replaceChildren`:
+  `cardSlot.classList.toggle('is-lead', article.classList.contains('is-lead'))`.
+  Now `.fd-card` preserves the `is-lead` class and the leader photo matches the
+  grid (302×532 top −132). Non-lead cards remain 302×442 top −42.
+- **Bug B fix (6 Oct 2026):** Mobile `.fd-panel { overflow:auto; max-height:
+  calc(100dvh-48px) }` clipped the leader bleed (~115px above card vs panel
+  padding-top 40px). Fixed by making `.fd-panel { overflow:visible;
+  max-height:none; margin-block:24px }` and moving scroll to the `<dialog>`:
+  `.featured-detail[open] { place-items:start center; overflow-y:auto;
+  -webkit-overflow-scrolling:touch; padding:24px 0 max(24px,env(safe-area-inset-bottom)) }`.
+  Portrait is fully visible, content scrolls, and the close button stays
+  accessible.
 - Content is placeholder (inline in `HallOfFramesFeatured.astro`; no data file).
   The dynamic list items use `:global(...)` because Astro scoped CSS does not
   reach JS-created nodes — without it the achievement bars do not paint.
