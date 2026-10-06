@@ -19,10 +19,18 @@ center, `motion.ts` dibersihkan, `verify.mjs` geometry + reference PNG di-pad,
 ALL PASS. **DILARANG pakai `zoom`/`transform: scale`** (user menolak, render
 berantakan) — pakai `min-height: 100svh` + centering.
 
-**★ NEXT = #9 — lanjutkan standar full-screen** (hero gambar + section 100svh)
-untuk halaman tersisa: **Contact (`1445:5065`)**. Homepage, About Us, Recruitment,
-Partners, dan **Hall of Frames (6 Oct 2026)** SELESAI. Work order:
-`docs/page-fullscreen-migration-plan.md`. Satu section per pass + 7 gate.
+**★ #9 SELESAI (6 Oct 2026) — SEMUA halaman full-screen.** Homepage, About Us,
+Recruitment, Partners, Hall of Frames, dan **Contact** kini memakai pola hero
+gambar + section `100svh`. Tidak ada halaman tersisa untuk #9. Work order +
+checklist: `docs/page-fullscreen-migration-plan.md`.
+
+**SELESAI (6 Oct 2026) — Contact full-screen (hero gambar + 100svh).**
+`ContactHero.astro` → background `assets/hero gambar/contact page.png` →
+`/images/contact/hero-bg.webp` + `-2x` (`npm run assets:heroes`), full-bleed;
+swirl `.hero-art` diganti. Section `min-height:100svh` + `justify-content:center`
+(2 kolom dipertahankan; konten 954 > viewport → tinggi tetap 954). Verify assert
+`art` kini `.art-bg` `{0,0,1440×954}`. **7 gate + seo ALL PASS.** MAE hero
+2.76 → 14.73 (background art baru; tidak di-assert).
 
 **SELESAI (6 Oct 2026) — Hall of Frames full-screen (hero gambar + section
 100svh).** `HallOfFramesHero.astro` → gambar background

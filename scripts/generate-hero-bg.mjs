@@ -27,6 +27,12 @@ const heroes = {
     903,
     'public/images/hof',
   ],
+  contact: [
+    'assets/hero gambar/contact page.png',
+    1440,
+    954,
+    'public/images/contact',
+  ],
 };
 
 for (const [page, [source, width, height, dir]] of Object.entries(heroes)) {

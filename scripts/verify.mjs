@@ -3370,7 +3370,7 @@ try {
     };
     return {
       section: { width: Math.round(sb.width), height: Math.round(sb.height) },
-      art: rel('.hero-art'),
+      art: rel('.art-bg'),
       row: rel('.hero-row'),
       left: rel('.hero-left'),
       form: rel('.contact-form'),
@@ -3386,7 +3386,7 @@ try {
   });
   assert.deepEqual(contactHeroGeometry, {
     section: { width: 1440, height: 954 },
-    art: { x: -131, y: -92, width: 801, height: 600 },
+    art: { x: 0, y: 0, width: 1440, height: 954 },
     row: { x: 80, y: 240, width: 1280, height: 594 },
     left: { x: 80, y: 240, width: 587, height: 594 },
     form: { x: 699, y: 240, width: 661, height: 594 },

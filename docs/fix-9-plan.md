@@ -8,7 +8,8 @@ navbar-audit · verify-vt · responsive-audit · audit:spacing · format:check` 
 commit yang sama. Commit per item. **Konfirmasi user sebelum push.**
 
 Status: **#1 #2 #3 #4 #5 #6 #7 #8 + #10 #11 #12 SELESAI (5 Oct 2026).**
-**SISA = #9** (full-screen Recruitment → Partners → HoF → Contact).
+**#9 SELESAI (6 Oct 2026)** — Recruitment, Partners, Hall of Frames, Contact
+full-screen. **SEMUA ITEM SELESAI.**
 
 ---
 
@@ -85,11 +86,12 @@ bleed 42px, clearance 30px dari dots. **Deviasi sengaja dari Figma** (Figma
 meng-clip kartu; user minta ala Hall of Frames). Geometri kartu tetap y=1082.
 Section MAE ~2.64 (membaik dari 3.305).
 
-## #9 — Lanjutkan standar full-screen (hero gambar + 100svh) halaman tersisa ★ NEXT
+## #9 — Standar full-screen (hero gambar + 100svh) halaman tersisa ✅ DONE (6 Oct 2026)
 
 - **Work order:** `docs/page-fullscreen-migration-plan.md` — **Recruitment
-  (`1436:3505`) ✅ SELESAI (6 Oct 2026)** → **Partners (`1439:4787`) → Hall of
-  Frames (`1439:4506`) → Contact (`1445:5065`)**. Homepage & About Us SELESAI.
+  (`1436:3505`) ✅ · Partners (`1439:4787`) ✅ · Hall of Frames (`1439:4506`) ✅ ·
+  Contact (`1445:5065`) ✅**. Homepage & About Us SELESAI lebih awal. **Semua
+  halaman selesai.**
 - **Resep:** hero = gambar `assets/hero gambar/*` → `hero-bg.webp`+`-2x`
   `100svh`; section konten `min-height:100svh` + center; CTA/footer tetap.
   **DILARANG `zoom`/`transform:scale`.**

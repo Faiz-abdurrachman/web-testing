@@ -1,10 +1,9 @@
 # Page Full-Screen Migration Plan — Hero Gambar + Section 100svh
 
-Status: **HOMEPAGE SELESAI** (commit `b228f3c`, 4 Oct 2026) + **ABOUT US SELESAI**
-(5 Oct 2026) + **RECRUITMENT SELESAI** (6 Oct 2026) + **PARTNERS SELESAI**
-(6 Oct 2026) + **HALL OF FRAMES SELESAI** (6 Oct 2026). **NEXT = Contact
-(`1445:5065`).** (Sisa satu-satunya dari `docs/fix-9-plan.md` = **#9**, dokumen
-ini adalah work order-nya. Fix #1–#8 + #10–#12 SELESAI 5 Oct 2026.)
+Status: **SELESAI SEMUA** (6 Oct 2026): Homepage (`b228f3c`, 4 Oct) + About Us
+(5 Oct) + Recruitment + Partners + Hall of Frames + **Contact** (6 Oct). Semua
+halaman konten kini memakai pola hero gambar + `100svh`. Sisa satu-satunya dari
+`docs/fix-9-plan.md` = **#9** — **SELESAI**. Fix #1–#8 + #10–#12 SELESAI 5 Oct 2026.
 
 Dokumen ini adalah **work order resmi** untuk migrasi semua halaman ke pola
 full-screen (satu section = satu layar) + hero berbasis gambar. Ikuti
@@ -195,12 +194,20 @@ recruitment.png` oleh `npm run assets:heroes` (skrip baru). MAE: Who 2.85, WYD
 > diubah 1400 → 903. Reference hero `HoF-Hero-1x.png` (903) tanpa pad. MAE hero
 > 4.34 → 4.11, Featured 2.14, Projects 0.20, Milestone 1.49.
 
-### Contact `1445:5065`
+### Contact `1445:5065` — ✅ SELESAI (6 Oct 2026)
 
-| #   | Node        | Section             | Treatment                                                      |
-| --- | ----------- | ------------------- | -------------------------------------------------------------- |
-| 1   | `1445:5066` | Hero (2 kolom, hug) | [H] + 100svh (**pertahankan layout 2 kolom**, center vertikal) |
-| 2   | `1445:5118` | Footer              | [skip]                                                         |
+| #   | Node        | Section             | Treatment                                                        |
+| --- | ----------- | ------------------- | ---------------------------------------------------------------- |
+| 1   | `1445:5066` | Hero (2 kolom, hug) | [H] ✅ hero-bg.webp + 100svh (**2 kolom dipertahankan**, center) |
+| 2   | `1445:5118` | Footer              | [skip]                                                           |
+
+> Catatan Contact: hero background = `assets/hero gambar/contact page.png`
+> (opaque, 2680×2032) → `public/images/contact/hero-bg.webp` (1440×954) + `-2x`
+> (`npm run assets:heroes`); swirl lama `.hero-art` (node 1445:5067) diganti
+> background full-bleed. Konten 2 kolom (row 594) + padding 240/120 = 954 >
+> viewport → section tetap **954** (center tak menggeser). Reference
+> `Contact-Hero-1x.png` (954) tanpa pad. MAE hero 2.76 → 14.73 (background art
+> baru = scene berbeda; tidak di-assert).
 
 ---
 

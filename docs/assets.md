@@ -422,6 +422,16 @@ assets:contact` regenerates it and the icons.
   excluded_ content MAE is **~1.28** (the reference PNG includes the navbar, which
   `verify.mjs` hides). `responsive-audit` covers `/contact` (18 routes × 26 widths
   = 468) and the sitemap has 18 URLs.
+- **Full-screen migration (#9, 6 Oct 2026).** The swirl `hero-art` (node
+  `1445:5067`) was replaced by a full-bleed hero background:
+  `assets/hero gambar/contact page.png` (opaque, 2680 × 2032) baked by
+  `npm run assets:heroes` to `/images/contact/hero-bg.webp` (1440 × 954) +
+  `hero-bg-2x.webp`, `.art-bg` `inset: 0` / `object-fit: cover`. Section gained
+  `min-height: 100vh/100svh` + `justify-content: center` (2-column row preserved);
+  content + `240/120` padding = 954 > viewport, so the section stays **954** and
+  the row stays at y240. `verify.mjs` now asserts `art` = `.art-bg`
+  `{0,0,1440×954}`. MAE vs `Contact-Hero-1x.png` rises to **14.73** (the new
+  background is a different scene; no threshold).
 
 ## Hall of Frames — Community Milestone (1 October 2026)
 
