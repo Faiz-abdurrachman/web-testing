@@ -12,10 +12,12 @@ and settings. Create a private Drive media folder automatically. Store owner,
 admin allowlist, spreadsheet/folder IDs and export token only in Script
 Properties. Setup must be repeatable without overwriting existing content.
 
-GAS installation requires the selected owner's Google session. The browser in
-this session is currently signed out; login has been requested while repository
-work continues. Do not mark live installation complete until real export and
-Vercel builds have been verified.
+User has installed Code.gs and the manifest, and confirmed successful
+`setupCms` execution under the newly selected owner account. Account identifiers
+remain outside the repo. The automation browser has a separate Google session;
+Google deployment/configuration is being guided in the user's browser. The read
+API deployment, authenticated real export and both Vercel builds remain pending.
+Do not mark B1 live until those checks pass.
 
 Use separate GAS projects for the public read API and the future private admin
 dashboard. The public project contains no admin mutation functions. B2 admin
@@ -64,5 +66,6 @@ roundtrip PASS. Build 0 errors; verify exit 0; navbar and View Transitions PASS;
 responsive 468/468; spacing, format and SEO PASS. All six module exports and all
 19 HTML files remain identical to the pre-B0 baseline. No UI/assets changed.
 
-Real GAS execution, export URL/token, Vercel env and real remote builds remain
-pending owner login/setup. B1 is not live yet. Setup guide: `cms-gas-setup.md`.
+Real setup execution is confirmed by the user. Export deployment URL/token,
+Vercel env and real remote builds remain pending. B1 is not live yet. Setup
+guide: `cms-gas-setup.md`.
