@@ -1,10 +1,10 @@
 # Page Full-Screen Migration Plan — Hero Gambar + Section 100svh
 
 Status: **HOMEPAGE SELESAI** (commit `b228f3c`, 4 Oct 2026) + **ABOUT US SELESAI**
-(5 Oct 2026) + **RECRUITMENT SELESAI** (6 Oct 2026). **NEXT = Partners
-(`1439:4787`) → Hall of Frames (`1439:4506`) → Contact (`1445:5065`).** (Sisa
-satu-satunya dari `docs/fix-9-plan.md` = **#9**, dokumen ini adalah work order-nya.
-Fix #1–#8 + #10–#12 SELESAI 5 Oct 2026.)
+(5 Oct 2026) + **RECRUITMENT SELESAI** (6 Oct 2026) + **PARTNERS SELESAI**
+(6 Oct 2026). **NEXT = Hall of Frames (`1439:4506`) → Contact (`1445:5065`).**
+(Sisa satu-satunya dari `docs/fix-9-plan.md` = **#9**, dokumen ini adalah work
+order-nya. Fix #1–#8 + #10–#12 SELESAI 5 Oct 2026.)
 
 Dokumen ini adalah **work order resmi** untuk migrasi semua halaman ke pola
 full-screen (satu section = satu layar) + hero berbasis gambar. Ikuti
@@ -165,14 +165,20 @@ recruitment.png` oleh `npm run assets:heroes` (skrip baru). MAE: Who 2.85, WYD
 > 8.63), CTA 1.11, Footer 6.03, Hero 10.27 (artikel hero baru = render Figma
 > lebih baru, sama seperti About; reference lama tidak di-assert).
 
-### Partners `1439:4787`
+### Partners `1439:4787` — ✅ SELESAI (6 Oct 2026)
 
-| #   | Node        | Section             | Treatment |
-| --- | ----------- | ------------------- | --------- |
-| 1   | `1439:4788` | Hero (659)          | [H]       |
-| 2   | `1439:4793` | Our Partners (1071) | [HS]      |
-| 3   | `1439:4937` | Why DS (656)        | [HS]      |
-| 4   | `1439:4983` | Footer              | [skip]    |
+| #   | Node        | Section             | Treatment                                              |
+| --- | ----------- | ------------------- | ------------------------------------------------------ |
+| 1   | `1439:4788` | Hero (659)          | [H] ✅ hero-bg.webp + 100svh (video dihapus)           |
+| 2   | `1439:4793` | Our Partners (1071) | [HS] ✅ 100svh + center (konten 1071 > viewport tetap) |
+| 3   | `1439:4937` | Why DS (656)        | [HS] ✅ 100svh + center                                |
+| 4   | `1439:4983` | Footer              | [skip]                                                 |
+
+> Catatan Partners: verify diukur di viewport 1440×903. Karena konten hero Figma
+> TIDAK ter-center dalam frame 659 (padding 242 atas / 160 bawah), reference
+> di-pad **asimetris** 81/163 agar konten (kini center di 323) tetap align;
+> Why DS di-pad 123/124. MAE: hero 12.67 (artikel hero baru = render lebih
+> baru), Our 3.05, Why 2.88, Footer 5.93.
 
 ### Hall of Frames `1439:4506`
 

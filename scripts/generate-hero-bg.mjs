@@ -15,6 +15,12 @@ const heroes = {
     866,
     'public/images/recruitment',
   ],
+  partners: [
+    'assets/hero gambar/Hero Section - Partners.png',
+    1440,
+    659,
+    'public/images/partners',
+  ],
 };
 
 for (const [page, [source, width, height, dir]] of Object.entries(heroes)) {

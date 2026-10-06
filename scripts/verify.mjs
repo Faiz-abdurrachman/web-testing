@@ -2800,7 +2800,7 @@ try {
   }
 
   // Partners page — section heights and card geometry vs the reference PNGs.
-  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.setViewportSize({ width: 1440, height: 903 });
   await page.goto(`${baseUrl}/partners`, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
   await page.evaluate(() => document.fonts.load('700 80px "Bluu Next"'));
@@ -2862,11 +2862,7 @@ try {
       heroTitleSize: titleStyle.fontSize,
       heroTitleLineHeight: titleStyle.lineHeight,
       heroStaticFallback: !!document.querySelector('.partners-hero .art-bg'),
-      heroVideoOpacity: getComputedStyle(
-        document.querySelector('.partners-hero .art-video'),
-      ).opacity,
-      heroVideoPreload: document.querySelector('.partners-hero .art-video')
-        .preload,
+      heroHasVideo: !!document.querySelector('.partners-hero .art-video'),
       whyHead: whyRelative('.why-head'),
       whyPill: whyRelative('.why-partners .pill'),
       whyTitle: whyRelative('#why-partners-title'),
@@ -2877,27 +2873,26 @@ try {
     };
   });
   assert.deepEqual(partnersGeometry, {
-    hero: { width: 1440, height: 659 },
+    hero: { width: 1440, height: 903 },
     our: { width: 1440, height: 1071 },
-    why: { width: 1440, height: 656 },
+    why: { width: 1440, height: 903 },
     whyCard: { width: 309.5, height: 185 },
     partnerCard: { width: 243.2, height: 116 },
     groupPills: 3,
     partnerCards: 20,
     overflow: 0,
-    heroContent: { x: 80, y: 242, width: 1280, height: 257 },
-    heroPill: { x: 606.1, y: 242, width: 227.9, height: 26 },
-    heroTitle: { x: 80, y: 276, width: 1280, height: 223 },
+    heroContent: { x: 80, y: 323, width: 1280, height: 257 },
+    heroPill: { x: 606.1, y: 323, width: 227.9, height: 26 },
+    heroTitle: { x: 80, y: 357, width: 1280, height: 223 },
     heroTitleFont: '"Bluu Next", Nasalization, sans-serif, sans-serif',
     heroTitleSize: '80px',
     heroTitleLineHeight: '102px',
     heroStaticFallback: true,
-    heroVideoOpacity: '0',
-    heroVideoPreload: 'none',
-    whyHead: { x: 80, y: 80, width: 1280, height: 263 },
-    whyPill: { x: 650.1, y: 80, width: 139.8, height: 26 },
-    whyTitle: { x: 80, y: 114, width: 1280, height: 229 },
-    whyGrid: { x: 77, y: 391, width: 1286, height: 185 },
+    heroHasVideo: false,
+    whyHead: { x: 80, y: 203.5, width: 1280, height: 263 },
+    whyPill: { x: 650.1, y: 203.5, width: 139.8, height: 26 },
+    whyTitle: { x: 80, y: 237.5, width: 1280, height: 229 },
+    whyGrid: { x: 77, y: 514.5, width: 1286, height: 185 },
     whyTitleFont: '"Bluu Next", Nasalization, sans-serif, sans-serif',
     whyTitleSize: '80px',
     whyTitleLineHeight: '102px',
@@ -2911,11 +2906,13 @@ try {
   const partnersHeroReference = await sharp(
     'assets/partners/hero/Partners-Hero-1x.png',
   )
+    .resize(1440, 659)
+    .extend({ top: 81, bottom: 163, background: { r: 5, g: 5, b: 7 } })
     .removeAlpha()
     .raw()
     .toBuffer();
   const partnersHeroActual = await sharp('artifacts/partners-hero-desktop.png')
-    .extract({ left: 0, top: 0, width: 1440, height: 659 })
+    .extract({ left: 0, top: 0, width: 1440, height: 903 })
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -2957,11 +2954,13 @@ try {
   const partnersWhyReference = await sharp(
     'assets/partners/why-ds/WhyDS-1x.png',
   )
+    .resize(1440, 656)
+    .extend({ top: 123, bottom: 124, background: { r: 5, g: 5, b: 7 } })
     .removeAlpha()
     .raw()
     .toBuffer();
   const partnersWhyActual = await sharp('artifacts/partners-why-desktop.png')
-    .extract({ left: 0, top: 0, width: 1440, height: 656 })
+    .extract({ left: 0, top: 0, width: 1440, height: 903 })
     .removeAlpha()
     .raw()
     .toBuffer();

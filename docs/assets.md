@@ -707,6 +707,16 @@ center`, `padding: 242px 80px 160px`, `gap: 8px`, IMAGE fill `e79b1f65…`).
   7.561 (AA edges over the bright nebula), pill 16.5 (12px cross-renderer
   rasterisation). All 6 gates + `seo:audit` PASS. Reference
   `assets/partners/hero/Partners-Hero-1x.png`.
+- **Full-screen migration (#9, 6 Oct 2026).** Video removed; hero art is now
+  `assets/hero gambar/Hero Section - Partners.png` (5760 × 2636, text-free) baked
+  by `npm run assets:heroes` to `/images/partners/hero-bg.webp` (1440 × 659) +
+  `hero-bg-2x.webp`, section `min-height: 100svh` centred (`padding: 80px`).
+  Figma content is **not** vertically centred (242 top / 160 bottom), so the
+  reference is padded **asymmetrically** 81/163 to keep the (now centred at 323)
+  content aligned; `verify.mjs` asserts hero height 903, content `80/323/1280×257`,
+  title `80/357/1280×223`, static `.art-bg` and no `.art-video`. MAE rises to
+  **12.67** (newer art than the stored reference; no threshold). Our Partners 3.05,
+  Why DS 2.88 (padded 123/124), Footer 5.93.
 
 ## Partners — Our Partners revision (3 October 2026)
 

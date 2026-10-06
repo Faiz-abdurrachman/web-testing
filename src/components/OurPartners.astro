@@ -48,9 +48,13 @@ import { partnerCategories, partnerLogo } from '../data/partners';
   .our-partners {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 100px;
     padding: 80px;
     box-sizing: border-box;
+    /* Full-screen standard (#9): one section = one screen (content 1071 > viewport stays). */
+    min-height: 100vh;
+    min-height: 100svh;
     background: #050507;
   }
   .sr-only {

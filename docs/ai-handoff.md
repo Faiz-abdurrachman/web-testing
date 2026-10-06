@@ -20,10 +20,19 @@ ALL PASS. **DILARANG pakai `zoom`/`transform: scale`** (user menolak, render
 berantakan) — pakai `min-height: 100svh` + centering.
 
 **★ NEXT = #9 — lanjutkan standar full-screen** (hero gambar + section 100svh)
-untuk halaman tersisa: **Partners (`1439:4787`) → Hall of Frames (`1439:4506`) →
-Contact (`1445:5065`)**. Homepage, About Us, dan **Recruitment (6 Oct 2026)**
-SELESAI. Work order: `docs/page-fullscreen-migration-plan.md`. Satu section per
-pass + 7 gate.
+untuk halaman tersisa: **Hall of Frames (`1439:4506`) → Contact (`1445:5065`)**.
+Homepage, About Us, Recruitment, dan **Partners (6 Oct 2026)** SELESAI. Work
+order: `docs/page-fullscreen-migration-plan.md`. Satu section per pass + 7 gate.
+
+**SELESAI (6 Oct 2026) — Partners full-screen (hero gambar + section 100svh).**
+`PartnersHero.astro` → gambar background (`/images/partners/hero-bg.webp` + `-2x`,
+sumber `assets/hero gambar/Hero Section - Partners.png`, `npm run assets:heroes`)
+
+- `100svh`; video dihapus. `OurPartners`, `WhyPartners` → `min-height:100svh` +
+  `justify-content:center`; footer tetap. Verify di viewport 1440×903; reference
+  hero di-pad **asimetris 81/163** (konten Figma tidak center: 242/160) dan Why
+  123/124. **7 gate + seo ALL PASS.** MAE hero 12.67 (artikel baru), Our 3.05,
+  Why 2.88, Footer 5.93.
 
 **SELESAI (6 Oct 2026) — Recruitment full-screen (hero gambar + section 100svh).**
 `RecruitmentHero.astro` → gambar background (`/images/recruitment/hero-bg.webp`

@@ -398,17 +398,18 @@ gated reduce); #6 `html { scroll-behavior: smooth }`gated reduce; #7 divider
 divider/legal** (bukan fixed); #11 HoF featured frame **di belakang** portrait
 (z-index 0/1/2/3); #12 OurTeam **HoDS** portrait bleed 42px ala HoF (leader tetap
 clip). **Tiap item 7 gate + seo PASS.** Commit`81ffb25`..`b4b5e62`.
-- **★ SELESAI (6 Oct 2026) = #9 Recruitment full-screen** (hero gambar
+- **★ SELESAI (6 Oct 2026) = #9 Recruitment + Partners full-screen** (hero gambar
   `hero-bg.webp` + semua section konten `100svh` + center; CTA/footer tetap).
   Skrip baru `npm run assets:heroes` (`scripts/generate-hero-bg.mjs`). Verify
   diukur di viewport seragam **1440×903**, reference di-pad `sharp.extend()`
-  (Who 57/57, WYD 0/20, Timeline 45/46, Snippets 3/3). 7 gate + seo ALL PASS.
-- **★ NEXT = #9 — full-screen halaman tersisa:** Partners (`1439:4787`),
-  Hall of Frames (`1439:4506`), Contact (`1445:5065`). Homepage, About Us,
-  Recruitment SELESAI. Work order lengkap (resep teknik + checklist per-section
-  - peta hero→gambar + jebakan): **`docs/page-fullscreen-migration-plan.md`**.
-    **Satu section per pass + 7 gate.** Jangan rusak Homepage/About/Recruitment/
-    Partners (benchmark).
+  (Recruitment: Who 57/57, WYD 0/20, Timeline 45/46, Snippets 3/3; Partners hero
+  asimetris 81/163 karena konten Figma tidak center, Why 123/124). 7 gate + seo
+  ALL PASS.
+- **★ NEXT = #9 — full-screen halaman tersisa:** Hall of Frames (`1439:4506`),
+  Contact (`1445:5065`). Homepage, About Us, Recruitment, Partners SELESAI. Work
+  order lengkap (resep teknik + checklist per-section + peta hero→gambar +
+  jebakan): **`docs/page-fullscreen-migration-plan.md`**. **Satu section per pass
+  - 7 gate.** Jangan rusak Homepage/About/Recruitment/Partners (benchmark).
 - **3 deviasi sengaja dari Figma (jangan "perbaiki" balik tanpa cek):**
   (1) "Hause"→**"House"** (#3); (2) footer scroll-up **di atas divider/legal**
   (#10); (3) OurTeam **HoDS** portrait **bleed** ala HoF, leader tetap clip

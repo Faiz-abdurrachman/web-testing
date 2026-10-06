@@ -1,30 +1,21 @@
 ---
-import HeroVideo from './HeroVideo.astro';
 ---
 
 <section class="partners-hero" aria-labelledby="partners-hero-title">
   <div class="artwork" aria-hidden="true">
-    <picture>
-      <source
-        type="image/webp"
-        srcset="/images/partners/hero-bg.webp 1x, /images/partners/hero-bg-2x.webp 2x"
-        width="1440"
-        height="665"
-      />
-      <img
-        class="art-bg"
-        src="/images/partners/hero-bg.webp"
-        width="1440"
-        height="665"
-        alt=""
-        fetchpriority="high"
-        decoding="async"
-      />
-    </picture>
-    <HeroVideo
-      webm="/images/partners/hero-bg.webm"
-      mp4="/images/partners/hero-bg.mp4"
-      poster="/images/partners/hero-poster.webp"
+    <img
+      class="art-bg"
+      src="/images/partners/hero-bg.webp"
+      srcset="
+        /images/partners/hero-bg.webp     1440w,
+        /images/partners/hero-bg-2x.webp 2880w
+      "
+      sizes="100vw"
+      width="1440"
+      height="659"
+      alt=""
+      fetchpriority="high"
+      decoding="async"
     />
   </div>
   <div class="hero-content">
@@ -36,44 +27,24 @@ import HeroVideo from './HeroVideo.astro';
   </div>
 </section>
 
-<script>
-  import { mountHeroVideo } from '../scripts/hero-video';
-
-  let currentVideo: HTMLVideoElement | null = null;
-  let disposeVideo: (() => void) | undefined;
-  const initVideo = () => {
-    const video = document.querySelector<HTMLVideoElement>(
-      '.partners-hero .art-video',
-    );
-    if (!video || video === currentVideo) return;
-    disposeVideo?.();
-    currentVideo = video;
-    disposeVideo = mountHeroVideo(video);
-  };
-  initVideo();
-  document.addEventListener('astro:page-load', initVideo);
-  document.addEventListener('astro:before-swap', () => {
-    disposeVideo?.();
-    disposeVideo = undefined;
-    currentVideo = null;
-  });
-</script>
-
 <style>
   /* Matches Figma node 1439:4788 (1440 x 659, page 1439:4787): column,
-     padding 242px 80px 160px, align centre, gap 8px, IMAGE fill. CTA pill
-     1439:4789 228x26 on rgba(255,255,255,.15); heading 1439:4791 is a single
-     Bluu Next Bold 700 80/102 text node (789x180 ink @ 326,295) whose gradient
-     181deg #fff 15% / #999 42% / #fff 79% spans the whole 223px box. */
+     IMAGE fill, CTA pill 1439:4789 228x26 on rgba(255,255,255,.15), heading
+     1439:4791 single Bluu Next Bold 700 80/102 text node (one 181deg gradient
+     spanning the 223px box). Full-screen migration (#9): the hero art is the
+     supplied `assets/hero gambar/Hero Section - Partners.png` → hero-bg.webp
+     (npm run assets:heroes); the video was removed and the section is one
+     screen tall (100svh) with the content centred. */
   .partners-hero {
     position: relative;
     isolation: isolate;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    min-height: 659px;
-    padding: 242px 80px 160px;
+    justify-content: center;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 80px;
     box-sizing: border-box;
     overflow: clip;
     background: var(--color-background);
@@ -84,9 +55,7 @@ import HeroVideo from './HeroVideo.astro';
     inset: 0;
     z-index: -1;
   }
-  .artwork picture,
-  .artwork .art-bg,
-  .artwork :global(.art-video) {
+  .artwork .art-bg {
     position: absolute;
     inset: 0;
     display: block;
@@ -94,14 +63,6 @@ import HeroVideo from './HeroVideo.astro';
     height: 100%;
     object-fit: cover;
     object-position: center;
-  }
-  .artwork :global(.art-video) {
-    opacity: 0;
-  }
-  @media (prefers-reduced-motion: no-preference) and (min-width: 601px) {
-    .artwork :global(.art-video.is-ready) {
-      opacity: 1;
-    }
   }
   .hero-content {
     position: relative;
@@ -146,10 +107,24 @@ import HeroVideo from './HeroVideo.astro';
   h1 span {
     display: block;
   }
+  @media (min-width: 1921px) {
+    .artwork {
+      left: 50%;
+      right: auto;
+      width: 1920px;
+      transform: translateX(-50%);
+      mask-image: linear-gradient(
+        90deg,
+        transparent,
+        #000 12%,
+        #000 88%,
+        transparent
+      );
+    }
+  }
 
   @media (max-width: 1100px) {
     .partners-hero {
-      min-height: min(760px, 100svh);
       padding: calc(94px + 64px) 48px 96px;
     }
     h1 {
@@ -165,8 +140,6 @@ import HeroVideo from './HeroVideo.astro';
   }
   @media (max-width: 600px) {
     .partners-hero {
-      min-height: 100vh;
-      min-height: 100svh;
       justify-content: center;
       padding: clamp(110px, 18svh, 150px) 24px clamp(48px, 10svh, 72px);
     }
