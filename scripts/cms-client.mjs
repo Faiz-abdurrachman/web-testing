@@ -5,6 +5,7 @@ import { pathToFileURL } from 'node:url';
 import { cmsSnapshotSchema } from '../src/data/cms-schema.mjs';
 
 export const CMS_MAX_BYTES = 1024 * 1024;
+export const CMS_TIMEOUT_MS = 60000;
 
 export function validateCmsSnapshot(value) {
   const result = cmsSnapshotSchema.safeParse(value);
@@ -78,11 +79,11 @@ async function responseText(response) {
   return Buffer.concat(chunks).toString('utf8');
 }
 
-export async function fetchCmsSnapshot({
+async function fetchCmsSnapshotOnce({
   apiUrl,
   apiToken,
   fetchImpl = fetch,
-  timeoutMs = 15000,
+  timeoutMs = CMS_TIMEOUT_MS,
 }) {
   let url = googleUrl(apiUrl, true);
   url.searchParams.set('action', 'export');
@@ -116,7 +117,10 @@ export async function fetchCmsSnapshot({
       );
     return parseSnapshot(await responseText(response));
   } catch (error) {
-    if (controller.signal.aborted) throw new Error('CMS export timed out.');
+    if (controller.signal.aborted)
+      throw Object.assign(new Error('CMS export timed out.'), {
+        code: 'CMS_TIMEOUT',
+      });
     // Fetch errors can contain the full URL and token: report a fixed message.
     if (error instanceof TypeError)
       throw new Error('CMS export network request failed.');
@@ -126,11 +130,21 @@ export async function fetchCmsSnapshot({
   }
 }
 
+export async function fetchCmsSnapshot(options) {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      return await fetchCmsSnapshotOnce(options);
+    } catch (error) {
+      if (error.code !== 'CMS_TIMEOUT' || attempt === 1) throw error;
+    }
+  }
+}
+
 export async function syncCmsSnapshot({
   snapshotPath,
   env = process.env,
   fetchImpl = fetch,
-  timeoutMs = 15000,
+  timeoutMs = CMS_TIMEOUT_MS,
 }) {
   const apiUrl = env.CMS_API_URL;
   const apiToken = env.CMS_API_TOKEN;

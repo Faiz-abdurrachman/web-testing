@@ -211,6 +211,76 @@ test('invalid endpoints never send a token; redirects and timeouts are bounded',
   );
 });
 
+test('timeouts retry once from the export endpoint; exhausted retries preserve the snapshot', async () => {
+  for (const stage of ['headers', 'body']) {
+    for (const recover of [true, false]) {
+      await withSnapshot(async ({ path, directory, original }) => {
+        let calls = 0;
+        const fetchImpl = async (url, { signal }) => {
+          calls++;
+          assert.equal(new URL(url).pathname, '/macros/s/test-deployment/exec');
+          if (recover && calls === 2) return jsonResponse();
+          if (stage === 'headers')
+            return new Promise((_resolve, reject) => {
+              signal.addEventListener(
+                'abort',
+                () => reject(new DOMException('Aborted', 'AbortError')),
+                { once: true },
+              );
+            });
+          return new Response(
+            new ReadableStream({
+              start(controller) {
+                signal.addEventListener(
+                  'abort',
+                  () =>
+                    controller.error(new DOMException('Aborted', 'AbortError')),
+                  { once: true },
+                );
+              },
+            }),
+            { headers: { 'content-type': 'application/json' } },
+          );
+        };
+        const sync = syncCmsSnapshot({
+          snapshotPath: path,
+          env: { CMS_API_URL: endpoint, CMS_API_TOKEN: token },
+          timeoutMs: 10,
+          fetchImpl,
+        });
+        if (recover) {
+          assert.equal(await sync, 'remote');
+          assert.deepEqual(JSON.parse(await readFile(path, 'utf8')), baseline);
+        } else {
+          await assert.rejects(sync, /timed out/);
+          assert.equal(await readFile(path, 'utf8'), original);
+        }
+        assert.equal(calls, 2);
+        assert.deepEqual(await readdir(directory), [
+          'snapshot with spaces.json',
+        ]);
+      });
+    }
+  }
+  for (const response of [
+    () => jsonResponse({ error: { code: 'UNAUTHORIZED' } }),
+    () => new Response('Forbidden', { status: 403 }),
+  ]) {
+    let calls = 0;
+    await assert.rejects(
+      fetchCmsSnapshot({
+        apiUrl: endpoint,
+        apiToken: token,
+        fetchImpl: async () => {
+          calls++;
+          return response();
+        },
+      }),
+    );
+    assert.equal(calls, 1);
+  }
+});
+
 function gasHarness(source) {
   let active = 'owner@example.test';
   const properties = new Map();

@@ -47,7 +47,9 @@ terbatas plus otorisasi server. Jangan mengubah project export menjadi admin.
 GAS ContentService melakukan redirect ke `script.googleusercontent.com`; build
 client hanya mengikuti redirect Google yang diizinkan. Login HTML, token salah,
 payload invalid, timeout atau response >1 MiB menggagalkan build dan menjaga
-snapshot sebelumnya. Acuan:
+snapshot sebelumnya. Fetch menunggu hingga 60 detik per attempt; timeout
+diulang sekali (maksimal dua attempt), sementara payload invalid tetap gagal
+langsung. Acuan:
 [deployment GAS](https://developers.google.com/apps-script/guides/web),
 [Script Properties](https://developers.google.com/apps-script/guides/properties).
 

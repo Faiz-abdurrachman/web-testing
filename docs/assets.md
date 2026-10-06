@@ -2731,3 +2731,10 @@ Remote export is validated before an atomic snapshot replacement. Seven CMS
 tests + seven site gates + SEO passed; 19 HTML files still equal the baseline.
 Live Google/Vercel configuration remains pending. Content growth templates are
 planned per collection in B2/B3: `docs/cms-b1-plan.md`.
+
+### CMS B1 timeout repair (6 Oct 2026)
+
+Vercel testing timed out at the 15-second fetch deadline. Client now allows
+60 seconds per attempt and one retry only for timeouts. Invalid exports still
+fail without replacing the snapshot. No asset, UI, Figma geometry, spacing or
+font changes. Recovery/exhaustion at headers and body are covered by CMS tests.

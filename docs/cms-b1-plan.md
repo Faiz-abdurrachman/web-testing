@@ -75,3 +75,25 @@ PASS. Evidence: ignored `artifacts/cms-b1/live-export-report.json` and
 `live-build.log`; credentials only in ignored local env and GAS Properties.
 Both Vercel env configurations and deployed remote builds remain pending. B1 is
 not live yet. Setup guide: `cms-gas-setup.md`.
+
+## Vercel timeout repair — execution plan (6 Oct 2026)
+
+User configured both Vercel projects. Deployment testing at `38d1589` failed
+in prebuild with `CMS export timed out` at the existing 15-second deadline.
+Local authenticated export/build passed; no UI or collection changes needed.
+
+This pass raises each export attempt to 60 seconds and allows one retry only
+for a timeout, for a maximum of two attempts. Each attempt retains redirect,
+body-size and schema guards. Invalid data/auth/URLs remain immediate failures;
+exhausted timeouts preserve the previous snapshot and fail the build. Test
+recovery and exhaustion at headers/body, non-retryable errors and preservation.
+Run remote build, all seven site gates plus SEO, and compare the 19 HTML files
+and all data exports with baseline. Commit the repair and deploy both repos
+under existing CMS push authorization. Verify Vercel status and remote-mode logs
+before declaring B1 live.
+
+Repair results: 8 CMS tests PASS; real GAS remote-mode build 0 errors;
+all six data exports and all 19 HTML files identical baseline. Seven site
+gates + SEO PASS, responsive 468/468. Logs: ignored
+`artifacts/cms-b1/timeout-repair-build.log` and
+`/tmp/ds-cms-b0/b1-timeout-*.log`. Vercel repair deployment pending.
