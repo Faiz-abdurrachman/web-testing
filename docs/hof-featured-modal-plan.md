@@ -64,6 +64,23 @@ height:auto; aspect-ratio: 302/400 }` (`:711-727`), padding panel `40px 24px`.
 3. **Mobile** = panel `overflow: visible` + **dialog yang scroll** (bukan panel
    scroll), supaya bleed tidak terpotong dan konten tetap bisa di-scroll.
 
+### 2b. Keputusan baseline (default) — AI baru boleh LANGSUNG eksekusi
+
+Disetujui 6 Oct 2026; pakai ini kalau user tidak menimpa:
+
+- **Bug A**: pertahankan varian kartu di modal → leader tetap **bleed** seperti
+  grid (`is-lead` dipindah ke `.fd-card`). (default #1)
+- **Desktop bleed**: **(A) biarkan menonjol keluar panel** — panel tetap
+  `overflow: visible`. Jangan ubah geometri 997×576 / card 302×400 / body 471
+  (assertion `verify.mjs` `:3148-3184` tetap valid). (default #2A)
+- **Mobile**: **panel centered yang scroll** — `overflow: visible` pada panel +
+  `.featured-detail[open] { place-items:start center; overflow-y:auto; padding }`.
+  Bukan bottom-sheet. (default #3)
+- **Non-lead**: **tetap framing seragam** seperti Figma `HoD-DetailCard-1x.png`.
+
+> Kalau salah satu default di atas tidak cocok, user akan bilang; kalau tidak,
+> eksekusi ketiganya.
+
 ## 3. Master Work Plan (satu langkah per pass + 7 gate)
 
 **Step 1 — Pertahankan varian kartu di modal.**
