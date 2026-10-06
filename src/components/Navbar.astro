@@ -243,6 +243,7 @@ const destinations: Record<string, string> = {
   }
   .nav-link.active .nav-underline {
     opacity: 1;
+    box-shadow: 0 0 10px rgb(155 123 255 / 70%);
   }
   .nav-link[aria-disabled='true'] {
     cursor: default;
@@ -260,7 +261,7 @@ const destinations: Record<string, string> = {
   }
   a.nav-link.active:hover .nav-underline,
   a.nav-link.active:focus-visible .nav-underline {
-    box-shadow: 0 0 10px rgb(155 123 255 / 85%);
+    box-shadow: 0 0 12px rgb(155 123 255 / 95%);
   }
   @media (prefers-reduced-motion: reduce) {
     .nav-underline {

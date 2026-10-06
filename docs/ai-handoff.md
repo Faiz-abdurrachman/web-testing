@@ -8,6 +8,24 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
+**★ SELESAI (6 Oct 2026) — 2 fix lanjutan user.**
+
+1. **Leader Team (About Us) portrait kepotong.** Reference menunjukkan potret
+   leader **bleed ~19px di atas kartu** (head start y325 vs kartu y344); implementasi
+   lama meng-clip-nya (`overflow: hidden`). Fix: `.team-cards--leader
+:global(.team-card) { overflow: visible }` + clip rim atas kartu
+   (`clip-path: inset(1px 0 0 0)`) sama seperti HoDS. Region MAE 5.15 → **4.75**;
+   konten kini mulai y327 (ref y325). Geometri kartu (302×400 @ y344) tak berubah.
+2. **Navbar active underline.** Underline sebenarnya sudah ada & bekerja di semua
+   halaman (opacity 1, 1px, lebar = label, terang 209 vs bg 120; juga ikut update
+   saat client-nav) + di mobile menu. Ditambah **soft glow** pada state aktif
+   (`box-shadow 0 0 10px rgb(155 123 255 / 70%)`) agar lebih jelas; hover aktif
+   glow lebih kuat (95%). Geometri 1px/lebar label tetap (navbar-audit PASS).
+
+**7 gate + seo ALL PASS.** Kalau user masih tidak melihat underline → minta
+hard-refresh (cache) / cek viewport (di ≤1050px navbar = hamburger, indikator
+baru terlihat setelah menu dibuka).
+
 **★ SELESAI (6 Oct 2026) — polish UI (3 permintaan user).**
 
 1. **OurTeam "House of Data Sorcerers"**: (a) garis atas kartu (`::after` rim)

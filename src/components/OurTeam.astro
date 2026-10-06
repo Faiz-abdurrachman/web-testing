@@ -348,12 +348,19 @@ const STEP = 948;
     margin-top: -48px;
   }
 
+  /* Leader portraits bleed above the card too (the reference shows the head
+     ~19px above the card top); the row has no overflow so the bleed is free. */
+  .team-cards--leader :global(.team-card) {
+    overflow: visible;
+  }
+
   .hods-panel :global(.team-card) {
     overflow: visible;
   }
 
-  /* The HoDS portrait bleeds above the card (Hall of Frames treatment); the card's 1px top rim would otherwise draw a line across the portrait at the card's top edge, so hide just that top edge on the bleeding cards. */
-  .hods-panel :global(.team-card::after) {
+  /* Bleeding portraits (leader + HoDS) would be cut by the card's 1px top rim at the card's top edge, so hide just that top edge on the bleeding cards. */
+  .hods-panel :global(.team-card::after),
+  .team-cards--leader :global(.team-card::after) {
     clip-path: inset(1px 0 0 0);
   }
 

@@ -426,6 +426,12 @@ clip). **Tiap item 7 gate + seo PASS.** Commit`81ffb25`..`b4b5e62`.
   di-intercept ClientRouter). (3) `.detail-wave` (RoleDetail + HoDSDetail) jadi
   **dua lapis glow** drift berlawanan + breathe (19s/14s ease-in-out), reduce
   tetap `opacity:0`. 7 gate + seo ALL PASS.
+- **★ FIX lanjutan (6 Oct 2026):** (1) **Leader Team** (About Us) portrait kini
+  **bleed** juga (`.team-cards--leader :global(.team-card){overflow:visible}` +
+  clip rim atas) — reference menunjukkan bleed ~19px, sebelumnya kepotong
+  (region MAE 5.15 → 4.75). (2) Navbar active underline **glow** ditambah
+  (`box-shadow 0 0 10px rgb(155 123 255 / 70%)`); underline sendiri sudah ada &
+  bekerja di semua halaman + mobile menu. 7 gate + seo PASS.
 - **SELESAI (4 Oct 2026) — About Us: glow responsif + karakter menempel tepi.**
   Canvas `zoom: calc(100vw / 1440px)` **dihapus** dari Our Philosophy (`1439:4219`)
   dan Our Ecosystem (`1439:4258`). Gradient tetap **section-level** (full-bleed)
