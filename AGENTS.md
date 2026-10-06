@@ -191,6 +191,8 @@ docs/our-team-hods-plan.md  Our Team HoDS carousel Master Work Plan (SELESAI 5 O
 docs/hero-video-plan.md  (SUPERSEDED 4 Oct 2026) hero video digantikan hero gambar full-screen
 docs/about-us-glow-plan.md  About Us glow responsif + karakter tepi (SELESAI 4 Oct 2026)
 docs/figma-prototype-flow.md  peta prototype Figma (REST `interactions`) → tombol/link tujuan + gap vs kode (NEXT)
+docs/hover-interactions-plan.md  ★ RENCANA: hover interaction untuk semua elemen interaktif
+docs/hero-motion-plan.md  ★ RENCANA/BRAINSTORM: hero "hidup" (parallax/GSAP)
 docs/ai-handoff.md       live "where we are now" handoff for the next AI agent
 artifacts/               verify output (git-ignored)
 ```
