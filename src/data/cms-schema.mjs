@@ -91,6 +91,66 @@ const role = z
     }
   });
 
+const domainLabelSlots = [
+  [
+    [false, true, false, false],
+    [true, true],
+    [false, true, false],
+  ],
+  [
+    [false, true, false, false],
+    [true, true],
+    [false, true, false],
+  ],
+  [
+    [false, true, false, false],
+    [true, true, false],
+    [false, true, true],
+  ],
+  [
+    [false, true, false, false],
+    [true, true, false],
+    [false, true, false],
+  ],
+  [
+    [false, true, false, false],
+    [false, true, true, false],
+    [false, true, true, false],
+  ],
+  [
+    [false, true, false, false],
+    [false, true, false],
+    [false, true, false],
+  ],
+];
+const domain = z
+  .strictObject({
+    id,
+    title: text,
+    description: text,
+    labels: z.array(z.array(z.string().max(256))).length(3),
+  })
+  .superRefine((record, ctx) => {
+    const slots = domainLabelSlots[domainIds.indexOf(record.id)];
+    record.labels.forEach((labels, index) => {
+      labels.forEach((label, labelIndex) => {
+        const hasContent = slots?.[index]?.[labelIndex];
+        if (hasContent !== undefined && Boolean(label) !== hasContent)
+          ctx.addIssue({
+            code: 'custom',
+            path: ['labels', index, labelIndex],
+            message: 'Blank decorative chips must stay blank',
+          });
+      });
+      if (labels.length !== slots?.[index]?.length)
+        ctx.addIssue({
+          code: 'custom',
+          path: ['labels', index],
+          message: 'Chip slots and blank placeholders are fixed by design',
+        });
+    });
+  });
+
 export const cmsSnapshotSchema = z.strictObject({
   schemaVersion: z.literal(1),
   projects: z.array(project).length(4).superRefine(uniqueIds),
@@ -106,4 +166,5 @@ export const cmsSnapshotSchema = z.strictObject({
       .array(z.strictObject({ title: text, description: text }))
       .length(4),
   }),
+  domains: orderedDomains(domain),
 });

@@ -12,7 +12,7 @@ The existing module exports and rendered data must remain identical.
 | 2    | team       | About `1688:2933`                         | PASS    |
 | 3    | roles      | Recruitment `1436:3564`, six role details | PASS    |
 | 4    | partners   | Partners `1439:4793`, `1439:4937`         | PASS    |
-| 5    | domains    | Home `1430:2138`, Recruitment `1436:3512` | PENDING |
+| 5    | domains    | Home `1430:2138`, Recruitment `1436:3512` | PASS    |
 | 6    | hods       | Six HoDS details, beginning `864:18857`   | PENDING |
 
 ## Plan for each pass
@@ -71,4 +71,7 @@ roles: 7 gates + SEO PASS; responsive 468/468; all six exports and all 19
 HTML files equal the pre-B0 baseline.
 
 partners: 7 gates + SEO PASS; responsive 468/468; all six exports and all 19
+HTML files equal the pre-B0 baseline.
+
+domains: 7 gates + SEO PASS; responsive 468/468; all six exports and all 19
 HTML files equal the pre-B0 baseline.

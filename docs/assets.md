@@ -2714,3 +2714,6 @@ Role content now reads the snapshot. Clean baked card artwork and the existing
 Partners content now reads the snapshot. Category slot counts 10/5/5 and baked
 Why DS icon paths stay local. The existing shared placeholder logo API remains;
 per-organisation logo rendering will be introduced in B3.
+
+Domain titles, descriptions and label matrices now read the snapshot. Measured
+row x/y/gap and tints stay local; blank chip placeholders and NBSP are preserved.

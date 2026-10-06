@@ -328,5 +328,67 @@
         "description": "Reach a growing technology community."
       }
     ]
-  }
+  },
+  "domains": [
+    {
+      "id": "data",
+      "title": "Data Intelligence",
+      "description": "Transform raw data into actionable insights through robust pipelines.",
+      "labels": [
+        ["", "Data Infrastructure", "", ""],
+        [" Data Science", "Data Analytics"],
+        ["", "Data Engineering", ""]
+      ]
+    },
+    {
+      "id": "core",
+      "title": "Core AI & Engineering",
+      "description": "Develop foundational models and scalable engineering for robust AI.",
+      "labels": [
+        ["", "Machine Learning", "", ""],
+        ["Deep Learning", "AI Engineering"],
+        ["", "MLOps", ""]
+      ]
+    },
+    {
+      "id": "language",
+      "title": "Language & Reasoning",
+      "description": "Enable systems to understand, generate, and reason with language.",
+      "labels": [
+        ["", "NLP", "", ""],
+        ["Generative AI", "AI Agents", ""],
+        ["", "LLM & RAG", "Reasoning"]
+      ]
+    },
+    {
+      "id": "vision",
+      "title": "Vision & Multimodal",
+      "description": "Empower machines to perceive and interpret multimodal visual data.",
+      "labels": [
+        ["", "Computer Vision", "", ""],
+        ["ORC", "Video Understanding", ""],
+        ["", "Multimodal AI", ""]
+      ]
+    },
+    {
+      "id": "product",
+      "title": "Product & Software",
+      "description": "Turn ideas into impactful digital products through research, design, and development.",
+      "labels": [
+        ["", "UX Research", "", ""],
+        ["", "UI Design", "Front-end", ""],
+        ["", "Backend", "DevOps", ""]
+      ]
+    },
+    {
+      "id": "growth",
+      "title": "Growth & Community",
+      "description": "Grow together through creativity, meaningful connections, and community collaboration.",
+      "labels": [
+        ["", "Public relations", "", ""],
+        ["", "Creative", ""],
+        ["", "Community & Partnership", ""]
+      ]
+    }
+  ]
 }
