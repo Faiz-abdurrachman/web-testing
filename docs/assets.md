@@ -2721,3 +2721,13 @@ row x/y/gap and tints stay local; blank chip placeholders and NBSP are preserved
 HoDS detail titles, descriptions and panel text/bullets now read the snapshot.
 Tab labels/order, text-vs-bullets kinds, colors and baked card images remain local.
 All existing `hodById` and static route exports are retained.
+
+## CMS B1 — GAS installer / remote fetch (6 Oct 2026)
+
+`cms/gas/export.js` and `cms/gas/appsscript.json` are backend source. Generator
+`npm run cms:gas` combines them with the validated committed snapshot into
+ignored `artifacts/cms-gas/Code.gs`. No UI artwork or reference PNG changed.
+Remote export is validated before an atomic snapshot replacement. Seven CMS
+tests + seven site gates + SEO passed; 19 HTML files still equal the baseline.
+Live Google/Vercel configuration remains pending. Content growth templates are
+planned per collection in B2/B3: `docs/cms-b1-plan.md`.

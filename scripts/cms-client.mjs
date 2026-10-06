@@ -1,0 +1,168 @@
+import { readFile, rename, unlink, writeFile } from 'node:fs/promises';
+import { randomUUID } from 'node:crypto';
+import { resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
+import { cmsSnapshotSchema } from '../src/data/cms-schema.mjs';
+
+export const CMS_MAX_BYTES = 1024 * 1024;
+
+export function validateCmsSnapshot(value) {
+  const result = cmsSnapshotSchema.safeParse(value);
+  if (!result.success) {
+    const paths = result.error.issues.map(
+      (issue) => issue.path.join('.') || '<root>',
+    );
+    throw new Error(`Invalid CMS snapshot fields: ${paths.join(', ')}`);
+  }
+  return result.data;
+}
+
+function parseSnapshot(text) {
+  let value;
+  try {
+    value = JSON.parse(text);
+  } catch {
+    throw new Error('CMS snapshot JSON is malformed.');
+  }
+  return validateCmsSnapshot(value);
+}
+
+function googleUrl(value, exportEndpoint = false) {
+  let url;
+  try {
+    url = new URL(value);
+  } catch {
+    throw new Error('Invalid CMS endpoint URL.');
+  }
+  if (
+    url.protocol !== 'https:' ||
+    url.username ||
+    url.password ||
+    url.port ||
+    url.hash ||
+    !['script.google.com', 'script.googleusercontent.com'].includes(
+      url.hostname,
+    ) ||
+    (exportEndpoint &&
+      (url.hostname !== 'script.google.com' ||
+        url.search ||
+        !/^\/macros\/s\/[a-zA-Z0-9_-]+\/exec$/.test(url.pathname)))
+  )
+    throw new Error(
+      'CMS endpoint must be a Google Apps Script HTTPS /exec URL.',
+    );
+  return url;
+}
+
+async function responseText(response) {
+  const advertised = Number(response.headers.get('content-length'));
+  if (advertised > CMS_MAX_BYTES)
+    throw new Error('CMS export exceeds the size limit.');
+  if (!response.body) throw new Error('CMS export response is empty.');
+  const reader = response.body.getReader();
+  const chunks = [];
+  let bytes = 0;
+  try {
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      bytes += value.byteLength;
+      if (bytes > CMS_MAX_BYTES)
+        throw new Error('CMS export exceeds the size limit.');
+      chunks.push(value);
+    }
+  } finally {
+    await reader.cancel().catch(() => {});
+    reader.releaseLock();
+  }
+  return Buffer.concat(chunks).toString('utf8');
+}
+
+export async function fetchCmsSnapshot({
+  apiUrl,
+  apiToken,
+  fetchImpl = fetch,
+  timeoutMs = 15000,
+}) {
+  let url = googleUrl(apiUrl, true);
+  url.searchParams.set('action', 'export');
+  url.searchParams.set('token', apiToken);
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    let response;
+    for (let redirects = 0; redirects <= 3; redirects++) {
+      response = await fetchImpl(url, {
+        redirect: 'manual',
+        signal: controller.signal,
+        headers: { Accept: 'application/json' },
+      });
+      if (![301, 302, 303, 307, 308].includes(response.status)) break;
+      const location = response.headers.get('location');
+      await response.body?.cancel();
+      if (!location || redirects === 3)
+        throw new Error('Invalid CMS export redirect.');
+      url = googleUrl(new URL(location, url));
+    }
+    if (!response.ok)
+      throw new Error(`CMS export HTTP status ${response.status}.`);
+    if (
+      !/^application\/json(?:\s*;|$)/i.test(
+        response.headers.get('content-type') || '',
+      )
+    )
+      throw new Error(
+        'CMS export must return JSON; check the read API deployment access.',
+      );
+    return parseSnapshot(await responseText(response));
+  } catch (error) {
+    if (controller.signal.aborted) throw new Error('CMS export timed out.');
+    // Fetch errors can contain the full URL and token: report a fixed message.
+    if (error instanceof TypeError)
+      throw new Error('CMS export network request failed.');
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+export async function syncCmsSnapshot({
+  snapshotPath,
+  env = process.env,
+  fetchImpl = fetch,
+  timeoutMs = 15000,
+}) {
+  const apiUrl = env.CMS_API_URL;
+  const apiToken = env.CMS_API_TOKEN;
+  if (!apiUrl && !apiToken) {
+    parseSnapshot(await readFile(snapshotPath, 'utf8'));
+    return 'local';
+  }
+  if (!apiUrl || !apiToken)
+    throw new Error(
+      'Configure both CMS_API_URL and CMS_API_TOKEN, or neither for local mode.',
+    );
+  const snapshot = await fetchCmsSnapshot({
+    apiUrl,
+    apiToken,
+    fetchImpl,
+    timeoutMs,
+  });
+  const target =
+    snapshotPath instanceof URL
+      ? snapshotPath
+      : pathToFileURL(resolve(snapshotPath));
+  const temp = new URL(`.cms-${randomUUID()}.tmp`, target);
+  try {
+    await writeFile(temp, `${JSON.stringify(snapshot, null, 2)}\n`, {
+      flag: 'wx',
+      mode: 0o600,
+    });
+    await rename(temp, target);
+  } finally {
+    await unlink(temp).catch((error) => {
+      if (error.code !== 'ENOENT') throw error;
+    });
+  }
+  return 'remote';
+}

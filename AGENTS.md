@@ -1,5 +1,16 @@
 # AGENTS.md — instructions for AI agents
 
+**CMS B1 KODE SIAP (6 Oct 2026); pemasangan LIVE belum selesai.** Installer GAS
+`cms/gas/export.js` + `npm run cms:gas` menghasilkan `artifacts/cms-gas/Code.gs`;
+setup membuat 8 tab, seed baseline, folder Drive privat dan Script Properties.
+Remote fetch bertoken + timeout/size/redirect guards + replacement atomik siap.
+7 tes CMS + 7 gate situs + SEO PASS; 19 HTML tetap identik. NEXT: owner login dan
+ikuti `docs/cms-gas-setup.md`, verifikasi real export + env/build kedua Vercel.
+User mengizinkan commit/push kelanjutan CMS; B0 sudah push `1b38088` ke dua repo.
+User meminta bisa menambah anggota/role/HoDS dengan template desain konsisten;
+guard jumlah B0/B1 sementara, dukungan growth wajib dikerjakan per collection
+B2/B3 tanpa melonggarkan assertion geometri baseline. `docs/cms-b1-plan.md`.
+
 **CMS B0 SELESAI (6 Oct 2026):** enam snapshot loader, Zod, prebuild fallback.
 7 gate + SEO tiap collection PASS; 19 HTML identik baseline. NEXT: B1 GAS.
 Rencana dan gate: `docs/cms-b0-plan.md`. Admin pertama sudah dipilih, folder

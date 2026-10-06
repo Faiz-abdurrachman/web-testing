@@ -29,7 +29,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prebuild": "node scripts/fetch-cms.mjs",
-    "cms:validate": "node scripts/fetch-cms.mjs"
+    "cms:validate": "node scripts/fetch-cms.mjs",
+    "cms:gas": "node scripts/generate-gas-bootstrap.mjs",
+    "test:cms": "node --test tests/cms.test.mjs"
   },
   "dependencies": {
     "astro": "7.3.3",

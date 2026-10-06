@@ -1,6 +1,6 @@
 # CMS / Admin Dashboard — Rencana (backend Google Apps Script)
 
-Status: **B0 SELESAI · B1 NEXT** · diputuskan 6 Oct 2026 ·
+Status: **B0 SELESAI · B1 KODE SIAP, LIVE SETUP PENDING** · diputuskan 6 Oct 2026 ·
 Patuhi `docs/pixel-precision-sop.md` + `AGENTS.md`. **Satu langkah per pass + 7
 gate.** Jangan rusak benchmark (geometri/MAE) atau assertion `verify.mjs`.
 
@@ -15,8 +15,11 @@ gate.** Jangan rusak benchmark (geometri/MAE) atau assertion `verify.mjs`.
 | Draft/preview          | **Tidak — save = live** (via rebuild otomatis)              |
 
 Prinsip: **konten boleh berubah; geometri/desain tidak.** CMS hanya mengedit
-**isi** (teks/gambar/link), bukan struktur layout, jumlah slot, atau nilai
-geometri yang di-assert.
+**isi** (teks/gambar/link) dan penambahan record melalui template desain
+terdaftar. Ukuran kartu, font, spacing, rim/glow dan koordinat desain tetap lokal.
+Jumlah slot B0/B1 adalah guard migrasi sementara; dukungan penambahan record
+menjadi work order B2/B3 per collection. Pertahankan assertion geometri existing
+serta fixture baseline; uji jumlah baru dalam fixture tambahan.
 
 ## 1. Arsitektur
 
@@ -48,7 +51,7 @@ geometri yang di-assert.
 - **GAS Web App** (`doGet`/`doPost`): satu endpoint JSON. `action=export`
   (read semua collection, butuh token) untuk build; `action=list` (per
   collection); `action=save`/`delete` (butuh admin).
-- **Deployment terpisah**: endpoint export untuk Vercel menjalankan GAS sebagai
+- **Project/deployment terpisah**: endpoint export untuk Vercel menjalankan GAS sebagai
   owner dan menerima request tanpa login Google, tetapi setiap export/list wajib
   memakai token. Endpoint ini hanya membaca data; token export tidak memberi
   akses save/delete/upload.
@@ -70,16 +73,21 @@ geometri yang di-assert.
 Baris 1 = header; tiap baris berikutnya = 1 record; array/objek disimpan
 sebagai **string JSON** (divalidasi Zod di build).
 
-| Tab          | Kolom                                                                                         |
+| Tab          | Kolom B1                                                                                      |
 | ------------ | --------------------------------------------------------------------------------------------- |
-| `projects`   | id, title, tags (JSON[]), description, image, year?, link?                                    |
-| `team`       | id, group (`leader`\|`data`\|`core`\|…), name, role, photo, socials (JSON[]), order           |
+| `projects`   | id, title, tags (JSON[]), description, image                                                  |
+| `team`       | id, group, groupTitle, name, role, photo, order                                               |
 | `roles`      | id, title, tagline, chips (JSON[]), deadline, about, requirements (JSON[]), contact, whatsapp |
-| `hods`       | id, title, description, cardImage, tabs (JSON[])                                              |
-| `domains`    | id, title, description, tint, rows (JSON[])                                                   |
-| `partners`   | category, label, count, logo                                                                  |
-| `milestones` | id, year, title, description, image                                                           |
-| `settings`   | key, value (meta/OG, kontak, social)                                                          |
+| `hods`       | id, title, description, tabs (JSON[])                                                         |
+| `domains`    | id, title, description, labels (JSON[][])                                                     |
+| `partners`   | id, type (`category`/`logo`/`why`), order, label, image, title, description                   |
+| `milestones` | id, year, title, description, image — reserved, empty                                         |
+| `settings`   | key, value — reserved, empty                                                                  |
+
+Semua sel data B1 plain text; nested fields JSON. Team members punya stable ID
+untuk admin, tetapi loader tetap mengekspor bentuk existing. Partners B1 masih
+kategori/logo bersama/Why copy; per-organisasi disiapkan pada B3. Installer
+hanya mengisi tab kosong dan tidak menimpa record editor saat dijalankan ulang.
 
 > **Jangan diekspos ke editor (geometri/desain):** `domains.rows`
 > (x/y/gap/labels = posisi tag dihitung manual), `roles.centered`/`tight`,
@@ -112,9 +120,13 @@ Tujuan: **komponen/halaman tidak berubah API-nya** (import tetap
   `fetch-cms.mjs` (fallback lokal) + skema Zod via `astro/zod`. **19 HTML dan
   semua ekspor data identik baseline.** Enam pass, 7 gate + SEO tiap pass.
   Rencana/hasil: `docs/cms-b0-plan.md`.
-- **Fase B1 — GAS read + export.** Buat project GAS, Sheet + 8 tab, `doGet`
-  export/list, token. Vercel env `CMS_API_URL`/`CMS_API_TOKEN` + build fetch.
-  Verify build Vercel masih identik.
+- **Fase B1 — GAS read + export.** Installer `cms/gas/export.js` membuat Sheet
+  dengan 8 collection tabs, folder Drive privat, seed snapshot, token dan
+  konfigurasi Script Properties; `doGet` export/list read-only. Generator
+  `npm run cms:gas` menulis `artifacts/cms-gas/Code.gs`. Remote build fetch
+  memvalidasi payload lalu mengganti snapshot atomik. Pemasangan Google dan
+  env Vercel membutuhkan sesi owner; verifikasi real export + build kedua
+  project sebelum menyatakan B1 live. Rencana: `docs/cms-b1-plan.md`.
 - **Fase B2 — Admin page (HtmlService).** Login Google (1–2 akun), form CRUD
   untuk `projects` & `team` dulu, upload gambar ke Drive, tombol save →
   panggil Deploy Hook.
@@ -167,8 +179,8 @@ Tujuan: **komponen/halaman tidak berubah API-nya** (import tetap
 
 User menyetujui B0, memilih satu owner/admin Google, dan meminta folder media
 dibuat otomatis. Identitas akun tetap di luar repo. Deploy Hook berbeda dari URL
-situs publik; kedua hook perlu dibuat saat B1/B2. B0 menolak env remote karena
-integrasi endpoint baru ditambahkan di B1. Rencana per-pass: `docs/cms-b0-plan.md`.
+situs publik; kedua hook perlu dibuat saat B1/B2. B1 menambahkan fetch remote; lokal tanpa env tetap memakai snapshot.
+Kode read API dan admin akan berada di project GAS terpisah. Rencana per-pass: `docs/cms-b0-plan.md`.
 
 ## Kontrak payload B0
 
@@ -182,3 +194,15 @@ API Partners masih memakai kategori dan satu logo bersama; logo per organisasi,
 Featured achievements, milestones dan settings diekstrak di B3. Foto team B0
 masih memakai dua selector artwork existing; path foto upload diperluas bersama
 renderer di B2 agar referensi lama tetap persis.
+
+## Penambahan record (keputusan user setelah B0)
+
+Editor perlu bisa menambah anggota, kartu, Available Roles dan HoDS dengan
+komponen desain konsisten. B2/B3 harus mengubah guard jumlah hanya setelah
+renderer collection terkait mendukung jumlah dinamis. Gunakan preset desain
+terdaftar untuk record baru; penambahan HoDS dengan artwork baru membutuhkan
+aset baked. CSS, koordinat, gradient, font dan spacing tidak menjadi field CMS.
+Rencana dan kriteria fixture tambahan: `docs/cms-b1-plan.md`.
+
+B1 code dan tes selesai; live setup masih pending. Panduan login, installer,
+Script Properties dan env Vercel: `docs/cms-gas-setup.md`.

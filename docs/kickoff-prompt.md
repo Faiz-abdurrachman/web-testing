@@ -1,5 +1,10 @@
 # Kickoff prompt — buat AI agent baru
 
+**CMS UPDATE:** B0 complete and pushed; B1 installer/remote-fetch code verified
+(7 CMS tests + 7 site gates + SEO). Live GAS/Vercel setup still needs owner login:
+`docs/cms-gas-setup.md`. Dynamic member/role/HoDS additions with consistent
+registered templates are required in B2/B3; B0/B1 slot guards are temporary.
+
 Copy-paste seluruh blok di bawah ini ke AI baru sebelum memberikan instruksi kerja.
 Prompt ini memuat seluruh konteks, aturan hukum presisi piksel, strict 8-point grid,
 **hukum warna (fills & gradient harus persis Figma)**, protokol per-section, dan
