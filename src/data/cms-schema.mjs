@@ -27,7 +27,12 @@ const project = z.strictObject({
   title: text,
   tags: z.array(text).length(2),
   description: text,
-  image,
+  image: image.refine(
+    (value) =>
+      !value.startsWith('/images/cms/') ||
+      /^\/images\/cms\/projects\/[a-f0-9]{64}\.webp$/.test(value),
+    'Invalid project media reference',
+  ),
 });
 
 const domainIds = ['data', 'core', 'language', 'vision', 'product', 'growth'];

@@ -104,6 +104,6 @@ packaging/routing Functions; actual OAuth/API executable/owner CRUD belum diuji.
 Owner login native dan pemuatan Projects terbukti melalui screenshot editor.
 Add project sementara dan delete nyata berhasil; perubahan terbit di kedua
 situs, lalu kedua deployment SUCCESS dan empat judul baseline tetap tampil.
-Login route kedua domain HTTP 303 ke Google. Non-owner nyata masih pending;
+Login route kedua domain HTTP 303 ke Google. Owner melaporkan akun non-owner Incognito ditolak;
 login owner terpisah kedua domain belum dibuktikan. Lihat setup guide untuk
 batas bukti. Catatan konfigurasi pending di bagian sebelumnya adalah historis.

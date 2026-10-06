@@ -339,6 +339,25 @@ const image = new URL('/og/og-default.jpg', Astro.site).href;
               <label>
                 Gambar project<select id="image" required></select>
               </label>
+              <label>
+                Upload gambar
+                <input
+                  id="image-upload"
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  aria-describedby="image-hint"
+                />
+              </label>
+              <p class="hint" id="image-hint">
+                Pilih JPG, PNG atau WebP, maksimal 2 MB. Gambar terbit setelah
+                project disimpan.
+              </p>
+              <img
+                id="image-preview"
+                alt="Preview gambar project"
+                hidden
+                style="width: 100%; max-height: 240px; object-fit: contain;"
+              />
               <div class="actions">
                 <button class="primary" id="save" type="submit">
                   Simpan dan terbitkan

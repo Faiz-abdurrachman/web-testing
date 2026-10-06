@@ -7,3 +7,5 @@ dist/
 artifacts/
 .DS_Store
 assets/image-src/
+
+public/images/cms/

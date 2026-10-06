@@ -1,8 +1,9 @@
-import { readFile, rename, unlink, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rename, unlink, writeFile } from 'node:fs/promises';
 import { createHash, randomUUID } from 'node:crypto';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { cmsSnapshotSchema } from '../src/data/cms-schema.mjs';
+import { MEDIA_PATH, verifyProjectMedia } from '../server/cms-media.mjs';
 
 export const CMS_MAX_BYTES = 1024 * 1024;
 export const CMS_TIMEOUT_MS = 60000;
@@ -84,6 +85,8 @@ async function fetchCmsSnapshotOnce({
   apiToken,
   fetchImpl = fetch,
   timeoutMs = CMS_TIMEOUT_MS,
+  action = 'export',
+  image,
 }) {
   let url = googleUrl(apiUrl, true);
   const endpointFingerprint = createHash('sha256')
@@ -91,7 +94,8 @@ async function fetchCmsSnapshotOnce({
     .digest('hex')
     .slice(0, 12);
   const started = Date.now();
-  url.searchParams.set('action', 'export');
+  url.searchParams.set('action', action);
+  if (image) url.searchParams.set('image', image);
   url.searchParams.set('token', apiToken);
   // Request a fresh ContentService redirect on every attempt.
   url.searchParams.set('cms_request', randomUUID());
@@ -135,7 +139,15 @@ async function fetchCmsSnapshotOnce({
       throw new Error(
         'CMS export must return JSON; check the read API deployment access.',
       );
-    return parseSnapshot(await responseText(response));
+    const text = await responseText(response);
+    if (action === 'media') {
+      try {
+        return JSON.parse(text);
+      } catch {
+        throw new Error('CMS media JSON is malformed.');
+      }
+    }
+    return parseSnapshot(text);
   } catch (error) {
     if (controller.signal.aborted)
       throw Object.assign(new Error('CMS export timed out.'), {
@@ -169,11 +181,13 @@ export async function syncCmsSnapshot({
   env = process.env,
   fetchImpl = fetch,
   timeoutMs = CMS_TIMEOUT_MS,
+  mediaRoot = new URL('../public/', import.meta.url),
 }) {
   const apiUrl = env.CMS_API_URL;
   const apiToken = env.CMS_API_TOKEN;
   if (!apiUrl && !apiToken) {
-    parseSnapshot(await readFile(snapshotPath, 'utf8'));
+    const snapshot = parseSnapshot(await readFile(snapshotPath, 'utf8'));
+    await cacheProjectMedia({ snapshot, mediaRoot });
     return 'local';
   }
   if (!apiUrl || !apiToken)
@@ -181,6 +195,14 @@ export async function syncCmsSnapshot({
       'Configure both CMS_API_URL and CMS_API_TOKEN, or neither for local mode.',
     );
   const snapshot = await fetchCmsSnapshot({
+    apiUrl,
+    apiToken,
+    fetchImpl,
+    timeoutMs,
+  });
+  await cacheProjectMedia({
+    snapshot,
+    mediaRoot,
     apiUrl,
     apiToken,
     fetchImpl,
@@ -203,4 +225,67 @@ export async function syncCmsSnapshot({
     });
   }
   return 'remote';
+}
+
+export async function cacheProjectMedia({
+  snapshot,
+  mediaRoot,
+  apiUrl,
+  apiToken,
+  fetchImpl = fetch,
+  timeoutMs = CMS_TIMEOUT_MS,
+}) {
+  const images = [
+    ...new Set(
+      snapshot.projects
+        .map((project) => project.image)
+        .filter((image) => MEDIA_PATH.test(image)),
+    ),
+  ];
+  for (const image of images) {
+    const target = new URL(
+      image.slice(1),
+      mediaRoot instanceof URL
+        ? mediaRoot
+        : pathToFileURL(resolve(mediaRoot) + '/'),
+    );
+    try {
+      const bytes = await readFile(target);
+      await verifyProjectMedia(
+        { image, mimeType: 'image/webp', data: bytes.toString('base64') },
+        image,
+      );
+      continue;
+    } catch {
+      /* Refetch a missing or corrupt cache entry; never silently use stale bytes. */
+    }
+    if (!apiUrl || !apiToken)
+      throw new Error(
+        'CMS project media cache is missing or invalid. Configure remote CMS access.',
+      );
+    let bytes;
+    try {
+      const media = await fetchCmsSnapshot({
+        apiUrl,
+        apiToken,
+        fetchImpl,
+        timeoutMs,
+        action: 'media',
+        image,
+      });
+      bytes = await verifyProjectMedia(media, image);
+    } catch {
+      throw new Error('CMS project media fetch or validation failed.');
+    }
+    await mkdir(new URL('./', target), { recursive: true });
+    const temp = new URL(`.media-${randomUUID()}.tmp`, target);
+    try {
+      await writeFile(temp, bytes, { flag: 'wx', mode: 0o644 });
+      await rename(temp, target);
+    } finally {
+      await unlink(temp).catch((error) => {
+        if (error.code !== 'ENOENT') throw error;
+      });
+    }
+  }
 }

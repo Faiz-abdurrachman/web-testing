@@ -18,6 +18,8 @@ const RPC = {
   add: 'adminAddProject',
   delete: 'adminDeleteProject',
   retry: 'adminRetryPublication',
+  upload: 'adminUploadProjectImage',
+  media: 'adminReadProjectImage',
 };
 const ERRORS = new Set([
   'UNAUTHORIZED',
@@ -173,7 +175,7 @@ function sanitize(result) {
       data.minProjects !== 1 ||
       data.maxProjects !== 8 ||
       !Array.isArray(data.imagePresets) ||
-      data.imagePresets.length > 8
+      data.imagePresets.length > 16
     )
       fail('SERVER_ERROR');
     const str = (value) => {
@@ -212,7 +214,27 @@ function sanitize(result) {
       accepted: p.accepted === true,
     }));
   }
-  if (!out.projects && !out.publication) fail('SERVER_ERROR');
+  const mediaPath = /^\/images\/cms\/projects\/[a-f0-9]{64}\.webp$/;
+  if ('image' in data) {
+    if (!mediaPath.test(data.image)) fail('SERVER_ERROR');
+    out.image = data.image;
+  }
+  if ('media' in data) {
+    if (
+      !mediaPath.test(data.media?.image) ||
+      data.media.mimeType !== 'image/webp' ||
+      typeof data.media.data !== 'string' ||
+      data.media.data.length > 349528
+    )
+      fail('SERVER_ERROR');
+    out.media = {
+      image: data.media.image,
+      mimeType: 'image/webp',
+      data: data.media.data,
+    };
+  }
+  if (!out.projects && !out.publication && !out.image && !out.media)
+    fail('SERVER_ERROR');
   return { ok: true, data: out };
 }
 
@@ -339,7 +361,7 @@ export function createAdminHandler({
         }
       }
       if (
-        !['projects', 'logout'].includes(route) ||
+        !['projects', 'logout', 'media'].includes(route) ||
         !['GET', 'POST'].includes(request.method) ||
         (route === 'logout' && request.method !== 'POST')
       )
@@ -357,6 +379,64 @@ export function createAdminHandler({
         const response = json({ ok: true });
         response.headers.set('Set-Cookie', cookie(cfg, 'session', '', 0));
         return response;
+      }
+      if (route === 'media') {
+        const {
+          normalizeProjectImage,
+          verifyProjectMedia,
+          MEDIA_INPUT_LIMIT,
+          MEDIA_PATH,
+        } = await import('./cms-media.mjs');
+        if (request.method === 'GET') {
+          const image = url.searchParams.get('image');
+          if (!MEDIA_PATH.test(image || '')) return error('INVALID_INPUT', 400);
+          const result = await gas(cfg, session.token, 'media', { image });
+          if (!result.ok)
+            return json(
+              result,
+              result.error.code === 'UNAUTHORIZED' ? 403 : 400,
+            );
+          const bytes = await verifyProjectMedia(result.data.media, image);
+          return new Response(bytes, {
+            headers: { ...headers, 'Content-Type': 'image/webp' },
+          });
+        }
+        let media;
+        try {
+          if (Number(request.headers.get('content-length')) > MEDIA_INPUT_LIMIT)
+            return error('INVALID_INPUT', 413);
+          const reader = request.body?.getReader();
+          if (!reader) return error('INVALID_INPUT', 400);
+          const chunks = [];
+          let size = 0;
+          try {
+            for (;;) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              size += value.byteLength;
+              if (size > MEDIA_INPUT_LIMIT) {
+                await reader.cancel();
+                return error('INVALID_INPUT', 413);
+              }
+              chunks.push(Buffer.from(value));
+            }
+          } finally {
+            reader.releaseLock();
+          }
+          media = await normalizeProjectImage(
+            Buffer.concat(chunks),
+            request.headers.get('content-type')?.split(';')[0],
+          );
+        } catch {
+          return error('INVALID_INPUT', 400);
+        }
+        const result = await gas(cfg, session.token, 'upload', media);
+        if (result.ok && result.data.image !== media.image)
+          fail('SERVER_ERROR');
+        return json(
+          result.ok ? { ...result, csrf: session.csrf } : result,
+          result.error?.code === 'UNAUTHORIZED' ? 403 : 200,
+        );
       }
       let operation = 'load',
         payload;
@@ -379,7 +459,7 @@ export function createAdminHandler({
             (k) => !['operation', 'payload'].includes(k),
           ) ||
           !Object.hasOwn(RPC, body.operation) ||
-          body.operation === 'load'
+          ['load', 'upload', 'media'].includes(body.operation)
         )
           return error('INVALID_INPUT', 400);
         operation = body.operation;

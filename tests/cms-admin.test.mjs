@@ -4,10 +4,13 @@ import vm from 'node:vm';
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 
-const source = await readFile(
-  new URL('../cms/gas/admin/server.js', import.meta.url),
-  'utf8',
-);
+const source =
+  (await readFile(
+    new URL('../cms/gas/admin/server.js', import.meta.url),
+    'utf8',
+  )) +
+  '\n' +
+  (await readFile(new URL('../cms/gas/media.js', import.meta.url), 'utf8'));
 const baseline = JSON.parse(
   await readFile(
     new URL('../src/data/cms-snapshot.json', import.meta.url),

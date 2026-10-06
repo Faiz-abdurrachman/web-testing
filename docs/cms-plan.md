@@ -10,7 +10,7 @@ owner terpisah di kedua domain belum dibuktikan. Ikuti
 GAS/Sheet/Drive existing tetap; tanpa perubahan geometri atau collection lain.
 
 Status: implementasi + QA PASS; owner add/delete + kedua rebuild PASS.
-NEXT: Projects media upload/cache (cms-projects-media-plan.md). Seluruh CMS belum selesai; konfirmasi sebelum push baru.
+NEXT: push/update GAS media dan owner upload acceptance (cms-projects-media-setup.md). Seluruh CMS belum selesai; konfirmasi sebelum push baru.
 SOP operasional: [cms-sop.md](cms-sop.md).
 
 ## 0. Keputusan yang sudah disetujui
@@ -203,3 +203,11 @@ Owner load empat Projects dan save tanpa perubahan isi dikonfirmasi. Anonymous
 admin request diarahkan Google login. Masih perlu uji akun non-owner yang sudah
 login dan perubahan isi nyata; testing literal remote-mode log belum disalin.
 Penyebab Google/cache 404 lama tidak terbukti. Detail bukti: `ai-handoff.md`.
+
+## Projects media checkpoint — 6 Oct 2026
+
+Implementasi lokal + QA media PASS: owner-only upload/preview, Drive privat,
+normalisasi/hash WebP dan cache saat build sebelum snapshot atomik. 29 CMS tests
+Node22, browser native/legacy dan media fixture, tujuh gate+SEO PASS; template
+publik tetap. Belum push/update GAS/live upload. Panduan: cms-projects-media-setup.md.
+Team dan collection lain menunggu acceptance media. Username/password ditunda.

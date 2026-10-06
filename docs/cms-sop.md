@@ -147,9 +147,28 @@ ID baru UUID dari server, bukan judul atau input client. Delete konfirmasi judul
 konflik tidak mengubah Sheet atau meminta hook. Add/delete/save membangun dan
 memvalidasi candidate final, kemudian satu setValues mencakup records dan blank
 trailing rows. Export existing mengabaikan blank rows; tidak memerlukan update.
-Gambar masih preset existing; upload/cache adalah pass terpisah.
+Gambar deployed sebelumnya preset existing. Pass media lokal menerima preset
+atau reference hash WebP terverifikasi di Drive folder existing; native upload
+owner-only dan build cache lokal. Belum update GAS/push media atau live upload
+acceptance; lihat cms-projects-media-plan.md dan cms-projects-media-setup.md.
 
 `npm run verify:cms-growth` membangun snapshot fixture sementara 1/2/5/8,
 menggunakan static server sendiri lalu memulihkan snapshot dan build baseline
 pada finally. Jangan menjalankan build/fetch/site gates lain bersamaan dengan
 runner ini karena dist/snapshot dipakai sementara. Bukti di artifacts/cms-growth/.
+
+## 8. Projects media policy — implementasi lokal
+
+Native `/api/admin/media` memerlukan owner session; POST juga Origin + CSRF.
+Input <=2 MB JPEG/PNG/WebP, decode max16 MP, animasi/SVG/HTML ditolak. Server
+normalisasi sharp existing ke WebP <=256 KiB, hash sebagai reference lokal.
+GAS memeriksa owner, hash, signature, batas byte dan folder existing; upload
+terpisah dari Sheet save/hooks. Export action media bertoken hanya membaca
+referensi Projects aktif. Browser tidak mendapat token export atau ID Drive.
+Cache diperiksa hash/decode; missing/corrupt refetch bounded. Kegagalan media
+menggagalkan build sebelum snapshot baru. Tidak memakai stale media fallback.
+
+`npm run verify:cms-media` memakai fixture HTTP di static dist, tidak mengubah
+snapshot atau reference geometry. Sharp berjalan server/build, tidak di browser.
+Generated CMS source sekarang menyertakan cms/gas/media.js pada kedua project.
+Update existing deployment diperlukan; jangan menjalankan setupCms/setupAdmin.

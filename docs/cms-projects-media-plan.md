@@ -1,6 +1,6 @@
 # Projects media — Master Work Plan
 
-Status 6 Oct 2026: rencana persiapan; upload belum diimplementasikan atau live.
+Status 6 Oct 2026: implementasi lokal + QA PASS; belum push/update GAS/live upload.
 User memilih menyelesaikan CMS dahulu; login username/password ditunda.
 Owner login native + add/delete Projects + kedua rebuild terbukti. Owner melaporkan
 akun Google non-owner Incognito ditolak. Pass berikutnya Projects media.
@@ -76,3 +76,29 @@ Rujukan primer:
 [Drive File](https://developers.google.com/apps-script/reference/drive/file),
 [Utilities](https://developers.google.com/apps-script/reference/utilities/utilities),
 [sharp input limits](https://sharp.pixelplumbing.com/api-input/).
+
+## Hasil implementasi lokal
+
+Kontrak gambar `/images/cms/projects/<sha256>.webp`, tanpa ID/URL Drive di
+snapshot. Input JPG/PNG/WebP <=2 MB, max16 MP, tanpa animasi. sharp existing
+versi yang sama dipindah ke runtime server (bukan library UI/browser baru):
+orientasi, strip metadata, WebP <=256 KiB, max1600×1200 dengan fallback resize
+1280×960/960×720. Media tersimpan deterministik di folder existing; upload
+tidak memicu hook atau mengubah Sheet. Save menggunakan reference tervalidasi.
+
+Export action media read-only bertoken hanya untuk referensi Projects aktif.
+Prebuild memeriksa hash/decode cache dan mengambil media privat bila missing/
+corrupt, kemudian menulis snapshot atomik setelah seluruh file siap. Fetch gagal
+fail closed. Preview native owner-only melalui API; legacy selector menerima
+referensi upload existing. File orphan tidak otomatis dihapus.
+
+29 CMS tests PASS dengan Node22; native+legacy browser empat widths PASS, fixture
+media Home/HoF empat widths geometri identik/no overflow. Tujuh gate + SEO PASS,
+responsive468/468, 19 HTML publik identik. Bukti artifacts/cms-media/.
+Panduan update deployment existing: [setup](cms-projects-media-setup.md).
+Belum push; actual upload/save/rebuild owner setelah update GAS masih pending.
+
+Runtime check: build/tests Node22 PASS. Trace fungsi menyertakan sharp native
+Linux dan libvips; 92 runtime files ~19.6 MB. Normalisasi berhasil dari salinan
+trace yang diisolasi di luar repo, tanpa fallback ke node_modules workspace.
+Ini bukan bukti deploy Vercel nyata; kedua deployment harus dicek setelah push.

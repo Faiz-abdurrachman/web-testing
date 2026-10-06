@@ -44,11 +44,20 @@ try {
           retries: 0,
           failSave: false,
           partial: true,
+          setMedia: () => {
+            records[0].image =
+              '/images/cms/projects/' + 'a'.repeat(64) + '.webp';
+            revision = 'media';
+          },
         };
         const state = () => ({
           projects: structuredClone(records),
           revision,
-          imagePresets: [...new Set(projects.map((project) => project.image))],
+          imagePresets: [
+            ...new Set(
+              [...projects, ...records].map((project) => project.image),
+            ),
+          ],
           publicationPending: false,
           minProjects: 1,
           maxProjects: 8,
@@ -265,12 +274,31 @@ try {
       ),
       false,
     );
+    await page.evaluate(() => {
+      window.adminMock.failSave = false;
+      window.adminMock.setMedia();
+    });
+    await page.locator('#reload').click();
+    await page.waitForFunction(() =>
+      document.getElementById('status').textContent.includes('Pilih project'),
+    );
+    await page.locator('.project-choice').first().click();
+    const mediaImage = '/images/cms/projects/' + 'a'.repeat(64) + '.webp';
+    assert.equal(await page.locator('#image').inputValue(), mediaImage);
+    await page.locator('#save').click();
+    await page.waitForFunction(() =>
+      document
+        .getElementById('status')
+        .textContent.includes('Penerbitan dimulai'),
+    );
+    assert.equal(await page.locator('#image').inputValue(), mediaImage);
     assert.deepEqual(errors, []);
     report.push({
       width,
       overflow: false,
       fontsLoaded: true,
       savePartialRetryConflictKeyboard: 'PASS',
+      uploadedMediaReadSaveCompatibility: 'PASS',
     });
     await page.close();
   }

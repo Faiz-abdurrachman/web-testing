@@ -8,11 +8,12 @@ const snapshot = cmsSnapshotSchema.parse(
   ),
 );
 const source = await readFile(new URL('cms/gas/export.js', root), 'utf8');
+const media = await readFile(new URL('cms/gas/media.js', root), 'utf8');
 const output = new URL('artifacts/cms-gas/', root);
 await mkdir(output, { recursive: true });
 await writeFile(
   new URL('Code.gs', output),
-  `${source}\n\nconst CMS_SEED = ${JSON.stringify(snapshot, null, 2)};\n`,
+  `${source}\n${media}\n\nconst CMS_SEED = ${JSON.stringify(snapshot, null, 2)};\n`,
 );
 await writeFile(
   new URL('appsscript.json', output),

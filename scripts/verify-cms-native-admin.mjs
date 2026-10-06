@@ -1,6 +1,8 @@
 // Native static admin browser with mocked HTTP transport; real Google identity tested separately.
 import { chromium } from '@playwright/test';
 import assert from 'node:assert/strict';
+import sharp from 'sharp';
+import { normalizeProjectImage } from '../server/cms-media.mjs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 
 const html = await readFile(
@@ -20,6 +22,12 @@ const browser = await chromium.launch({
   headless: true,
 });
 const report = [];
+const uploadPng = await sharp({
+  create: { width: 64, height: 48, channels: 3, background: '#9b7bff' },
+})
+  .png()
+  .toBuffer();
+const uploadedMedia = await normalizeProjectImage(uploadPng, 'image/png');
 try {
   for (const width of [320, 390, 768, 1440]) {
     const page = await browser.newPage({
@@ -34,6 +42,11 @@ try {
     );
     await page.route('http://cms-admin.test/**', async (route) => {
       const pathname = new URL(route.request().url()).pathname;
+      if (pathname === '/api/admin/media')
+        return route.fulfill({
+          body: Buffer.from(uploadedMedia.data, 'base64'),
+          contentType: 'image/webp',
+        });
       if (pathname === '/')
         return route.fulfill({ body: html, contentType: 'text/html' });
       const types = {
@@ -56,11 +69,12 @@ try {
       }
     });
     await page.addInitScript(
-      ({ projects }) => {
+      ({ projects, uploadedImage }) => {
         let revision = 'initial';
         let records = structuredClone(projects);
         window.adminMock = {
           saves: 0,
+          uploads: 0,
           retries: 0,
           failSave: false,
           partial: true,
@@ -68,7 +82,11 @@ try {
         const state = () => ({
           projects: structuredClone(records),
           revision,
-          imagePresets: [...new Set(projects.map((project) => project.image))],
+          imagePresets: [
+            ...new Set(
+              [...projects, ...records].map((project) => project.image),
+            ),
+          ],
           publicationPending: false,
           minProjects: 1,
           maxProjects: 8,
@@ -158,6 +176,16 @@ try {
               { ok: false, error: { code: 'UNAUTHORIZED' } },
               { status: 401 },
             );
+          if (url.includes('/media')) {
+            if (options.headers['X-CSRF-Token'] !== 'mock-csrf')
+              throw new Error('Missing media CSRF');
+            window.adminMock.uploads++;
+            return Response.json({
+              ok: true,
+              data: { image: uploadedImage },
+              csrf: 'mock-csrf',
+            });
+          }
           if (url.includes('logout')) return Response.json({ ok: true });
           const body = options.body
             ? JSON.parse(options.body)
@@ -183,7 +211,7 @@ try {
           return Response.json({ ...result, csrf: 'mock-csrf' });
         };
       },
-      { projects },
+      { projects, uploadedImage: uploadedMedia.image },
     );
     await page.goto('http://cms-admin.test/');
     await page.locator('#workspace').waitFor({ state: 'visible' });
@@ -206,6 +234,38 @@ try {
     );
     await page.screenshot({
       path: new URL(`editor-${width}.png`, output).pathname,
+      fullPage: true,
+    });
+    await page.locator('#image-upload').setInputFiles({
+      name: 'invalid.svg',
+      mimeType: 'image/svg+xml',
+      buffer: Buffer.from('<svg/>'),
+    });
+    await page.waitForFunction(() =>
+      document.getElementById('status').textContent.includes('maksimal 2 MB'),
+    );
+    assert.equal(await page.evaluate(() => window.adminMock.uploads), 0);
+    await page.locator('#image-upload').setInputFiles({
+      name: 'valid.png',
+      mimeType: 'image/png',
+      buffer: uploadPng,
+    });
+    await page.waitForFunction(() =>
+      document.getElementById('status').textContent.includes('Gambar siap'),
+    );
+    assert.equal(
+      await page.locator('#image').inputValue(),
+      uploadedMedia.image,
+    );
+    assert.equal(await page.evaluate(() => window.adminMock.uploads), 1);
+    assert.equal(await page.evaluate(() => window.adminMock.saves), 0);
+    await page.waitForFunction(
+      () =>
+        document.getElementById('image-preview').complete &&
+        document.getElementById('image-preview').naturalWidth > 0,
+    );
+    await page.screenshot({
+      path: new URL(`upload-${width}.png`, output).pathname,
       fullPage: true,
     });
     await page.locator('#title').fill('<img src=x onerror=alert(1)>');
@@ -347,6 +407,7 @@ try {
       fontsLoaded: true,
       savePartialRetryConflictKeyboard: 'PASS',
       addDeleteMinMaxLogoutExpiry: 'PASS',
+      uploadValidationPreviewSave: 'PASS',
     });
     await page.close();
   }
@@ -358,5 +419,5 @@ await writeFile(
   JSON.stringify(report, null, 2),
 );
 console.log(
-  'Native admin browser PASS: 4 widths, fonts, save/retry, conflicts, escaping and keyboard. Mock HTTP only; Google live pending.',
+  'Native admin browser PASS: 4 widths, fonts, save/retry, conflicts, escaping and keyboard. Mock HTTP only; real upload acceptance remains separate.',
 );

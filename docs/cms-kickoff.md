@@ -18,10 +18,20 @@ Google/backend tidak dirinci; tidak mengklaim allowlist GAS nyata telah terisola
 
 QA kode sebelumnya: 24 CMS tests, native + legacy admin browser empat widths,
 7 gate + SEO PASS; responsive 468/468, 19 HTML publik identik baseline sebelum
-mutation live. Tidak ada perubahan kode/UI/geometri dalam pass konfigurasi ini.
+mutation live. Pass konfigurasi auth tidak mengubah kode/UI/geometri publik.
 Bukti read-only publik penghapusan: artifacts/cms-native/owner-delete-live.json.
 
-NEXT: Projects media upload/cache sesuai docs/cms-projects-media-plan.md.
+Projects media upload/cache sekarang tersedia lokal: raster <=2 MB,
+normalisasi WebP server (sharp existing), folder Drive privat, hash content,
+preview owner-only dan cache/build lokal sebelum snapshot atomik. Tidak hotlink
+Drive; preset dan template publik tetap. QA media: 29 CMS tests Node 22, browser
+native/legacy empat widths, media renderer Home/HoF empat widths, tujuh gate + SEO
+PASS; responsive 468/468 dan 19 HTML publik baseline identik. Belum push atau
+update GAS media; upload nyata belum diuji.
+
+NEXT: review/konfirmasi push media, update Code.gs dan versi deployment Export
+serta Admin EXISTING sesuai docs/cms-projects-media-setup.md; owner upload/save,
+kedua rebuild dan gambar publik harus diuji sebelum klaim media live.
 Owner/non-owner + CRUD/rebuild telah diuji, dengan batas bukti di setup guide.
 Team → B3/B4 tetap menunggu. Tidak reseed atau ulang
 Sheet/folder/onboarding. Public Astro tetap static; browser shell/login, records

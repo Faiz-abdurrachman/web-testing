@@ -95,9 +95,21 @@ function doGet(event) {
       PropertiesService.getScriptProperties().getProperty('EXPORT_TOKEN');
     if (!expected || !cmsTokenEquals_(params.token, expected))
       return cmsJson_({ error: { code: 'UNAUTHORIZED' } });
-    if (params.action !== 'export' && params.action !== 'list')
+    if (
+      params.action !== 'export' &&
+      params.action !== 'list' &&
+      params.action !== 'media'
+    )
       return cmsJson_({ error: { code: 'UNKNOWN_ACTION' } });
     const snapshot = cmsReadSnapshot_();
+    if (params.action === 'media') {
+      if (
+        !CMS_MEDIA_PATH.test(params.image) ||
+        !snapshot.projects.some((project) => project.image === params.image)
+      )
+        return cmsJson_({ error: { code: 'UNKNOWN_MEDIA' } });
+      return cmsJson_(cmsMediaRead_(params.image));
+    }
     if (params.action === 'export') return cmsJson_(snapshot);
     const readable = [
       'projects',

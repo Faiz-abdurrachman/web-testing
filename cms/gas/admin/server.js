@@ -56,6 +56,68 @@ function adminLoadProjects() {
   });
 }
 
+function adminUploadProjectImage(request) {
+  return adminResult_(() => {
+    adminAuthorize_();
+    if (
+      !request ||
+      Object.keys(request).sort().join(',') !== 'data,image,mimeType' ||
+      request.mimeType !== 'image/webp' ||
+      !CMS_MEDIA_PATH.test(request.image) ||
+      typeof request.data !== 'string' ||
+      request.data.length > Math.ceil(CMS_MEDIA_MAX_BYTES / 3) * 4 ||
+      !/^[A-Za-z0-9+/]+={0,2}$/.test(request.data)
+    )
+      adminFail_('INVALID_INPUT');
+    const bytes = Utilities.base64Decode(request.data);
+    if (
+      !bytes.length ||
+      bytes.length > CMS_MEDIA_MAX_BYTES ||
+      Utilities.base64Encode(bytes) !== request.data ||
+      cmsMediaHash_(bytes) !== CMS_MEDIA_PATH.exec(request.image)[1]
+    )
+      adminFail_('INVALID_INPUT');
+    const ascii = (from, to) =>
+      bytes
+        .slice(from, to)
+        .map((b) => String.fromCharCode((b + 256) % 256))
+        .join('');
+    if (
+      ascii(0, 4) !== 'RIFF' ||
+      ascii(8, 12) !== 'WEBP' ||
+      !['VP8 ', 'VP8L', 'VP8X'].includes(ascii(12, 16))
+    )
+      adminFail_('INVALID_INPUT');
+    const lock = LockService.getScriptLock();
+    lock.waitLock(30000);
+    try {
+      const folder = cmsMediaFolder_();
+      const name =
+        'ds-project-' + CMS_MEDIA_PATH.exec(request.image)[1] + '.webp';
+      const files = folder.getFilesByName(name);
+      if (!files.hasNext())
+        folder.createFile(Utilities.newBlob(bytes, 'image/webp', name));
+      cmsMediaRead_(request.image);
+      return { image: request.image };
+    } finally {
+      lock.releaseLock();
+    }
+  });
+}
+
+function adminReadProjectImage(request) {
+  return adminResult_(() => {
+    adminAuthorize_();
+    if (
+      !request ||
+      Object.keys(request).join(',') !== 'image' ||
+      !CMS_MEDIA_PATH.test(request.image)
+    )
+      adminFail_('INVALID_INPUT');
+    return { media: cmsMediaRead_(request.image) };
+  });
+}
+
 function adminSaveProject(request) {
   return adminMutateProjects_('save', request);
 }
@@ -302,9 +364,11 @@ function adminValidateProject_(project) {
     !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(project.id) ||
     !Array.isArray(project.tags) ||
     project.tags.length !== 2 ||
-    ADMIN_IMAGE_PRESETS.indexOf(project.image) < 0
+    (ADMIN_IMAGE_PRESETS.indexOf(project.image) < 0 &&
+      !CMS_MEDIA_PATH.test(project.image))
   )
     adminFail_('INVALID_INPUT');
+  if (CMS_MEDIA_PATH.test(project.image)) cmsMediaFile_(project.image);
   const validText = (value) =>
     typeof value === 'string' &&
     value.trim().length > 0 &&
@@ -343,7 +407,11 @@ function adminState_(projects) {
   return {
     projects: records,
     revision: adminRevision_(records),
-    imagePresets: ADMIN_IMAGE_PRESETS,
+    imagePresets: Array.from(
+      new Set(
+        ADMIN_IMAGE_PRESETS.concat(records.map((record) => record.image)),
+      ),
+    ),
     minProjects: ADMIN_PROJECT_MIN,
     maxProjects: ADMIN_PROJECT_MAX,
     publicationPending:

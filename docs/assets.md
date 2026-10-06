@@ -2817,3 +2817,14 @@ Projects teramati; add/delete project sementara terbit melalui rebuild kedua
 situs. Setelah delete kedua deployment SUCCESS; empat judul baseline tetap
 tampil. Login route kedua domain mengarah ke Google. Uji non-owner nyata masih
 pending; catatan pending konfigurasi/live di atas merupakan keadaan historis.
+
+## Projects media upload/cache — lokal, 6 Oct 2026
+
+Home node1430:2146 dan HoF1439:4655/artwork/rim/glow/fonts/geometri tetap;
+19 HTML publik baseline identik. Foto owner disimpan Drive privat dan dinormalisasi
+server ke WebP lokal `/images/cms/projects/<sha256>.webp` saat build. Tidak ada
+foto owner baru atau ID Drive ditambahkan ke repo. Editor custom menambah input
+file + preview, Bluu Next700/Manrope dan spacing8/16 existing; tanpa node Figma.
+29 CMS tests Node22, native/legacy browser4widths, fixture media Home/HoF4widths
+dan 7gate+SEO PASS (responsive468/468). Plan/setup: cms-projects-media-plan.md,
+cms-projects-media-setup.md. Upload live belum diuji; push/update GAS pending.

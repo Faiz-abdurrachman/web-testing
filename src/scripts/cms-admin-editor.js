@@ -42,6 +42,22 @@
       state.projects.length <= state.minProjects;
   };
   let csrf;
+  const preview = () => {
+    const image = byId('image').value;
+    const element = byId('image-preview');
+    element.hidden = !image;
+    if (/^\/images\/cms\/projects\/[a-f0-9]{64}\.webp$/.test(image)) {
+      element.src = '/api/admin/media?image=' + encodeURIComponent(image);
+    } else if (
+      /^\/images\/[a-zA-Z0-9_./-]+$/.test(image) &&
+      !image.includes('..')
+    )
+      element.src = image;
+    else {
+      element.removeAttribute('src');
+      element.hidden = true;
+    }
+  };
   const expire = () => {
     byId('workspace').hidden = true;
     byId('logout').hidden = true;
@@ -115,6 +131,8 @@
     byId('tag-one').value = record.tags[0];
     byId('tag-two').value = record.tags[1];
     byId('image').value = record.image;
+    byId('image-upload').value = '';
+    preview();
     document
       .querySelectorAll('.project-choice')
       .forEach((button) =>
@@ -136,7 +154,9 @@
     state.imagePresets.forEach((image, index) => {
       const option = document.createElement('option');
       option.value = image;
-      option.textContent = 'Gambar ' + (index + 1);
+      option.textContent = image.startsWith('/images/cms/projects/')
+        ? 'Gambar upload ' + (index + 1)
+        : 'Gambar ' + (index + 1);
       byId('image').append(option);
     });
     byId('workspace').hidden = false;
@@ -196,6 +216,66 @@
       setBusy(false);
     }
   };
+  byId('image').addEventListener('change', preview);
+  byId('image-upload').addEventListener('change', async () => {
+    const file = byId('image-upload').files[0];
+    if (!file || busy) return;
+    if (
+      file.size > 2 * 1024 * 1024 ||
+      !['image/jpeg', 'image/png', 'image/webp'].includes(file.type)
+    ) {
+      message('Pilih JPG, PNG atau WebP maksimal 2 MB.', true);
+      byId('image-upload').value = '';
+      return;
+    }
+    setBusy(true);
+    message('Mengupload gambar…');
+    try {
+      const response = await fetch('/api/admin/media', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': file.type, 'X-CSRF-Token': csrf },
+        body: file,
+      });
+      const result = await response.json();
+      if (result.error?.code === 'UNAUTHORIZED') {
+        expire();
+        return;
+      }
+      if (!result.ok) {
+        message(
+          'Gambar belum berhasil diupload. Periksa format dan ukuran, lalu coba lagi.',
+          true,
+        );
+        return;
+      }
+      const image = result.data?.image;
+      if (!/^\/images\/cms\/projects\/[a-f0-9]{64}\.webp$/.test(image || ''))
+        throw new Error('Invalid media response');
+      if (
+        ![...byId('image').options].some((option) => option.value === image)
+      ) {
+        const option = document.createElement('option');
+        option.value = image;
+        option.textContent = 'Gambar yang baru diupload';
+        byId('image').append(option);
+      }
+      byId('image').value = image;
+      dirty = true;
+      preview();
+      message(
+        'Gambar siap. Klik Simpan dan terbitkan untuk memakai gambar ini di situs.',
+      );
+    } catch {
+      message(
+        'Koneksi upload terputus. Project belum disimpan. Pilih gambar lagi untuk mencoba ulang.',
+        true,
+      );
+    } finally {
+      byId('image-upload').value = '';
+      setBusy(false);
+    }
+  });
   form.addEventListener('input', () => {
     dirty = true;
   });
@@ -333,6 +413,8 @@
       dirty = false;
       state = undefined;
       form.reset();
+      byId('image-preview').hidden = true;
+      byId('image-preview').removeAttribute('src');
       byId('project-list').replaceChildren();
       expire();
       byId('reload').hidden = true;
