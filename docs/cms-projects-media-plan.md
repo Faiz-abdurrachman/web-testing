@@ -1,10 +1,11 @@
 # Projects media — Master Work Plan
 
 Status 6 Oct 2026: implementasi + QA PASS; cd37446 push, kedua Vercel SUCCESS.
-Update GAS existing dan upload nyata masih pending.
+Update GAS existing dan upload/preview/save nyata kedua situs PASS; cleanup
+project sementara “uji cms” masih pending.
 User memilih menyelesaikan CMS dahulu; login username/password ditunda.
 Owner login native + add/delete Projects + kedua rebuild terbukti. Owner melaporkan
-akun Google non-owner Incognito ditolak. Pass berikutnya Projects media.
+akun Google non-owner Incognito ditolak. Pass aktif Projects media.
 
 ## Batas pass
 
@@ -98,7 +99,7 @@ media Home/HoF empat widths geometri identik/no overflow. Tujuh gate + SEO PASS,
 responsive468/468, 19 HTML publik identik. Bukti artifacts/cms-media/.
 Panduan update deployment existing: [setup](cms-projects-media-setup.md).
 cd37446 sudah push dengan izin user; kedua Vercel SUCCESS. Actual upload/save/rebuild
-owner setelah update GAS masih pending.
+owner setelah update GAS PASS; lihat acceptance live di bawah.
 
 Runtime check: build/tests Node22 PASS. Trace fungsi menyertakan sharp native
 Linux dan libvips; 92 runtime files ~19.6 MB. Normalisasi berhasil dari salinan
@@ -121,5 +122,24 @@ Owner mengonfirmasi Code.gs dan versi deployment Export serta Admin existing
 diperbarui. Read-only export masih empat Projects identik baseline; action media
 baru menolak hash tidak terdaftar dengan UNKNOWN_MEDIA, membuktikan source Export
 baru tersedia. Shell upload kedua situs HTTP200 dan API media anonymous401.
-Actual RPC upload Admin/preview/save serta kedua rebuild foto masih pending.
-NEXT: project sementara dengan foto owner, kemudian hapus sesudah publikasi diuji.
+Upload Admin/preview/save nyata dan kedua rebuild foto telah diuji di bawah.
+
+## Acceptance upload live — 6 Oct 2026
+
+Owner mengunggah diagram dan menyimpan project sementara “uji cms”. Export
+read-only lima Projects, satu referensi hashed WebP 39152 bytes; media cocok
+hash dan lolos decode. Full remote prebuild ke ignored artifacts PASS, snapshot
+repo tetap baseline. Production SUCCESS 21:25 WIB; testing awal gagal setelah
+144 detik dengan “CMS project media fetch or validation failed.” Retrigger hanya
+hook testing existing SUCCESS 21:27 WIB. Penyebab awal belum terisolasi; tidak
+mengubah source, redirect guard, retry, validasi atau stale policy.
+
+Home dan Hall of Frames kedua domain HTTP200 menampilkan project serta gambar;
+file publik cocok hash/decode. Browser nyata 390/1440 kedua domain: kartu upload
+aktif, gambar decode, tanpa overflow atau browser errors. Bukti ignored
+artifacts/cms-media/owner-upload-{export,live}.json, live-media-prebuild-proof.json,
+owner-upload-browser-{testing,production}.json dan screenshot.
+
+NEXT: owner hapus hanya “uji cms”; verifikasi export empat baseline dan kedua
+rebuild. File Drive tidak otomatis dihapus. Team menunggu cleanup pass ini;
+login username/password tetap ditunda sesuai pilihan user.

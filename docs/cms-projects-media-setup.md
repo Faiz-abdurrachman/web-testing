@@ -1,13 +1,14 @@
 # Projects upload — update existing deployments
 
-Status: cd37446 sudah push dengan izin user; kedua Vercel SUCCESS. Kontrol upload
-tersedia di kedua situs. Owner mengonfirmasi update versi GAS Export dan Admin
-existing selesai; Export action media baru terverifikasi dan baseline tetap empat
-Projects. Actual RPC upload Admin dan owner upload belum diuji. NEXT: acceptance
-manual di bawah; langkah update disimpan sebagai rujukan, bukan setup ulang.
+Status: cd37446 sudah push; GAS Export/Admin existing diperbarui owner.
+Upload, preview dan save nyata project sementara “uji cms” berhasil. Production
+SUCCESS 21:25 WIB; testing retry SUCCESS 21:27 WIB setelah kegagalan fetch/validasi
+media awal yang penyebabnya belum terisolasi. Home/HoF kedua domain menampilkan
+gambar; hash/decode valid dan browser 390/1440 tanpa overflow/errors.
+NEXT: acceptance langkah 3, hapus hanya “uji cms” dan verifikasi kedua rebuild
+serta empat baseline. Cleanup masih pending. Langkah update di bawah adalah
+rujukan historis; tidak perlu setup/deployment/env baru.
 
-Kode media lokal belum berarti upload live. Backend, kedua situs dan owner
-upload/save/rebuild nyata harus diverifikasi. Tidak perlu Sheet/folder/env baru.
 Login Google tetap digunakan; login username/password ditunda sesuai pilihan user.
 
 ## File siap ditempel
@@ -51,4 +52,5 @@ atau [admin testing](https://web-testing-azure.vercel.app/admin/), login owner.
 4. File SVG/HTML/animasi, oversized/corrupt atau sesi habis harus ditolak dengan
    pesan yang jelas. Save dengan reference media palsu tidak boleh mengubah Sheet.
 
-Jangan mengklaim upload live sebelum acceptance ini. Bukti mock hanya QA lokal.
+Upload live terbukti; cleanup project sementara masih pending. Bukti mock untuk
+penolakan file/kontrak tetap QA lokal, bukan uji owner semua skenario negatif.

@@ -32,12 +32,18 @@ Invalid CMS export redirect; read-only export sesudahnya identik baseline dan
 retrigger testing lewat hook existing SUCCESS. Root cause Google belum terbukti.
 Kontrol upload/noindex kedua domain HTTP200, API media anonymous401, login303
 ke Google. Owner melaporkan update versi GAS Export dan Admin media selesai.
-Export action media baru terverifikasi (UNKNOWN_MEDIA untuk hash tidak terdaftar),
-export tetap empat Projects identik baseline. RPC upload Admin dan upload nyata
-belum diuji.
+Export action media baru terverifikasi (UNKNOWN_MEDIA untuk hash tidak terdaftar).
+Owner upload gambar, preview dan save project sementara “uji cms” berhasil;
+export sekarang lima Projects dengan satu media WebP 39152 bytes, hash/decode valid.
+Production SUCCESS 21:25 WIB; testing awal gagal pada fetch/validasi media, lalu
+retrigger hook testing existing SUCCESS 21:27 WIB. Penyebab awal belum terisolasi;
+fetch guard/retry tetap. Gambar dan project tampil pada Home/HoF kedua domain,
+browser 390/1440 PASS: decode, kartu aktif, tanpa overflow/browser errors.
+Bukti artifacts/cms-media/owner-upload-{export,live}.json dan browser kedua situs.
 
-NEXT: owner upload/save nyata sesuai docs/cms-projects-media-setup.md;
-kedua rebuild dan gambar publik harus diuji sebelum klaim media live.
+NEXT: owner hapus hanya project sementara “uji cms” melalui admin, lalu verifikasi
+export kembali empat baseline dan kedua rebuild selesai. Cleanup masih pending;
+Team → B3/B4 setelah pass Projects selesai.
 Owner/non-owner + CRUD/rebuild telah diuji, dengan batas bukti di setup guide.
 Team → B3/B4 tetap menunggu. Tidak reseed atau ulang
 Sheet/folder/onboarding. Public Astro tetap static; browser shell/login, records

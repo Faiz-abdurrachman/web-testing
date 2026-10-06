@@ -10,7 +10,10 @@ owner terpisah di kedua domain belum dibuktikan. Ikuti
 GAS/Sheet/Drive existing tetap; tanpa perubahan geometri atau collection lain.
 
 Status: implementasi + QA PASS; owner add/delete + kedua rebuild PASS.
-NEXT: update GAS media dan owner upload acceptance (cms-projects-media-setup.md). Seluruh CMS belum selesai; konfirmasi sebelum push baru.
+Projects media upload/preview/save nyata dan publikasi Home/HoF kedua domain PASS;
+mobile/desktop decode tanpa overflow. NEXT: hapus project sementara “uji cms”,
+verifikasi empat baseline dan kedua rebuild (cms-projects-media-setup.md).
+Seluruh CMS belum selesai; konfirmasi sebelum push baru.
 SOP operasional: [cms-sop.md](cms-sop.md).
 
 ## 0. Fakta awal dan batas pass

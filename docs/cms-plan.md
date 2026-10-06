@@ -10,7 +10,10 @@ owner terpisah di kedua domain belum dibuktikan. Ikuti
 GAS/Sheet/Drive existing tetap; tanpa perubahan geometri atau collection lain.
 
 Status: implementasi + QA PASS; owner add/delete + kedua rebuild PASS.
-NEXT: update GAS media dan owner upload acceptance (cms-projects-media-setup.md). Seluruh CMS belum selesai; konfirmasi sebelum push baru.
+Projects media upload/preview/save nyata dan publikasi Home/HoF kedua domain PASS;
+mobile/desktop decode tanpa overflow. NEXT: hapus project sementara “uji cms”,
+verifikasi empat baseline dan kedua rebuild (cms-projects-media-setup.md).
+Seluruh CMS belum selesai; konfirmasi sebelum push baru.
 SOP operasional: [cms-sop.md](cms-sop.md).
 
 ## 0. Keputusan yang sudah disetujui
@@ -209,5 +212,5 @@ Penyebab Google/cache 404 lama tidak terbukti. Detail bukti: `ai-handoff.md`.
 Implementasi lokal + QA media PASS: owner-only upload/preview, Drive privat,
 normalisasi/hash WebP dan cache saat build sebelum snapshot atomik. 29 CMS tests
 Node22, browser native/legacy dan media fixture, tujuh gate+SEO PASS; template
-publik tetap. cd37446 sudah push, kedua Vercel SUCCESS; update GAS/live upload pending. Panduan: cms-projects-media-setup.md.
+publik tetap. cd37446 sudah push, kedua Vercel SUCCESS; upload nyata kedua situs PASS; cleanup “uji cms” pending. Panduan: cms-projects-media-setup.md.
 Team dan collection lain menunggu acceptance media. Username/password ditunda.
