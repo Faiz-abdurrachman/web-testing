@@ -1,6 +1,37 @@
 # AGENTS.md — instructions for AI agents
 
-## Recruitment integration — 6 Oct 2026
+## Recruitment pass 1 → Supabase LIVE — 7 Oct 2026
+
+User memilih **target akhir: seluruh backend ke Supabase** (Postgres + Storage +
+Supabase Auth); Astro/UI/geometri **dan CMS existing tidak berubah**. Rencana
+induk: [cms-supabase-migration-plan.md](docs/cms-supabase-migration-plan.md);
+tahap pertama: [recruitment-supabase-migration-plan.md](docs/recruitment-supabase-migration-plan.md).
+
+Pass 1 intake recruitment **SELESAI LIVE** (tanpa memasang GAS intake): migrasi
+`supabase/migrations/20261006120000_recruitment_intake_pass1.sql` di project
+Supabase `web-community` (`yejrdckcmlxrkklgtrwy`, ap-southeast-1) — tabel &
+fungsi di schema `private`, wrapper exposed
+`public.submit_recruitment_application` dengan `EXECUTE` hanya `service_role`.
+`server/recruitment.mjs` memakai Supabase RPC (hash kanonik receipt+hash),
+kontrak API/UI/geometri tidak berubah. Env server `SUPABASE_URL`,
+`SUPABASE_SERVICE_ROLE_KEY`, `RECRUITMENT_OPEN=false` terpasang di **kedua**
+Vercel project (production `data-sorcerers-community` + testing `web-testing`).
+
+Kode `f01a89b` + docs `4c98925` sudah push; main/origin/main/production/main
+sinkron; kedua deployment READY. Acceptance live kedua situs **PASS** (tepat 1
+baris, retry idempotent, `ID_CONFLICT`, baris uji dihapus); recruitment kembali
+**tertutup** `accepting:false`; tabel `private.recruitment_applications` kosong.
+QA lokal: 9 recruitment + 36 CMS tests, `verify:recruitment-db` 13/13 Postgres
+nyata, form + native/Team admin, 7 gate + SEO.
+
+CMS (GAS/Sheets/Drive export+admin) **TIDAK diubah**. NEXT kandidat (belum
+disetujui): pass 2 recruitment (kolom turunan + baca admin owner-only lewat
+Supabase Auth + audit), rate limit, CAPTCHA, retensi/pembukaan publik; atau
+mulai migrasi collection CMS per pass. Jangan pasang GAS intake; jangan ubah
+CMS/auth/UI/geometri existing tanpa izin; secret dari `.env.local` jangan
+dicetak; push = origin (dua situs) dengan konfirmasi.
+
+## Arsip — Recruitment integration GAS (6 Oct 2026)
 
 User authorized integration of teammate branch recruitment-page. Main baseline
 caacaa9 protected by backup/pre-recruitment-caacaa9; integration uses a separate
