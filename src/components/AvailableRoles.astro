@@ -53,6 +53,12 @@ const domainTitle = Object.fromEntries(domains.map((d) => [d.id, d.title]));
 <style>
   .available-roles {
     scroll-margin-top: 110px;
+    /* Full-screen standard (#9): one section = one screen, content centred. */
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     padding: 80px var(--page-gutter);
     background: #050507;
   }

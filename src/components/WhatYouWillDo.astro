@@ -89,8 +89,11 @@ const gradient = (stop: number | null) =>
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 20px;
-    height: 903px;
+    /* Full-screen standard (#9): one section = one screen, content centred. */
+    min-height: 100vh;
+    min-height: 100svh;
     padding: 80px;
     /* Living star sky, same as the home "Four Pillars of Innovation" section. */
     position: relative;

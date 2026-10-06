@@ -20,10 +20,25 @@ ALL PASS. **DILARANG pakai `zoom`/`transform: scale`** (user menolak, render
 berantakan) — pakai `min-height: 100svh` + centering.
 
 **★ NEXT = #9 — lanjutkan standar full-screen** (hero gambar + section 100svh)
-untuk halaman tersisa: **Recruitment (`1436:3505`) → Partners (`1439:4787`) →
-Hall of Frames (`1439:4506`) → Contact (`1445:5065`)**. Homepage & About Us
+untuk halaman tersisa: **Partners (`1439:4787`) → Hall of Frames (`1439:4506`) →
+Contact (`1445:5065`)**. Homepage, About Us, dan **Recruitment (6 Oct 2026)**
 SELESAI. Work order: `docs/page-fullscreen-migration-plan.md`. Satu section per
 pass + 7 gate.
+
+**SELESAI (6 Oct 2026) — Recruitment full-screen (hero gambar + section 100svh).**
+`RecruitmentHero.astro` → gambar background (`/images/recruitment/hero-bg.webp`
+
+- `-2x`, sumber `assets/hero gambar/Gambar Hero recruitment.png`, dibake oleh
+  skrip baru `npm run assets:heroes`) + `100svh`; video/partikel/canvas + pin
+  timeline dibuang (motion.ts tinggal copy entrance + pointer drift ala About).
+  `WhoShouldJoin`, `WhatYouWillDo`, `AvailableRoles`, `SelectionTimeline`, `Faq`,
+  `Snippets` → `min-height:100svh` + `justify-content:center`; CTA & footer tetap.
+  Semua section verify diukur di viewport **1440×903** (diseragamkan dari campur
+  903/910/983/900) dan reference PNG di-pad `sharp.extend()` warna `#050507`
+  (Who 57/57, WYD 0/20 → 923, Timeline 45/46, Snippets 3/3). **7 gate + seo ALL
+  PASS** (build 19, verify exit 0, navbar, verify-vt, responsive 468/468,
+  audit:spacing, format:check). MAE FAQ 7.80→4.90, Snippets 8.63→3.90; hero 10.27
+  (artikel hero baru = render lebih baru, seperti About).
 
 **★ FIX-9 SELESAI (5 Oct 2026, #1–#8 + #10–#12).** Work order + detail:
 `docs/fix-9-plan.md`. Ringkasan: #1 CTA homepage → `/recruitment`; #2 navbar

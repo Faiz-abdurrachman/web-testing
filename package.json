@@ -23,6 +23,7 @@
     "assets:hof": "node scripts/generate-hof-assets.mjs",
     "assets:contact": "node scripts/generate-contact-assets.mjs",
     "assets:about": "node scripts/generate-about-assets.mjs",
+    "assets:heroes": "node scripts/generate-hero-bg.mjs",
     "seo:audit": "node scripts/seo-audit.mjs",
     "perf:audit": "node scripts/perf-audit.mjs",
     "format": "prettier --write .",

@@ -1977,6 +1977,18 @@ generate-recruitment-hero-video.mjs` → `public/images/recruitment/`
   - The animated `recruitment-hero1.mp4` layer is a different scene (small
     planet + starfield) and is unchanged; it only plays at
     `(prefers-reduced-motion: no-preference) and (min-width: 601px)`.
+  - **Full-screen migration (#9, 6 Oct 2026).** The video, particle canvas and
+    plate tweens were removed. The hero is now the supplied art
+    `assets/hero gambar/Gambar Hero recruitment.png` (5756 × 3600, text-free)
+    baked by `npm run assets:heroes` (`scripts/generate-hero-bg.mjs`) to
+    `/images/recruitment/hero-bg.webp` (1440 × 866, q85) + `hero-bg-2x.webp`
+    (2880 × 1732, q82), `object-fit: cover`, section `min-height: 100svh`
+    (`padding: 80px var(--page-gutter)`, centred). Copy is unchanged. The stored
+    reference `Recruitment-Hero-Revisi-1x.png` is an older render, so the MAE vs
+    it rises (~10, no threshold) — same situation as About Us. `verify.mjs`
+    asserts height 903 (viewport 1440×903), h1 `270/296.5/900×176`, copy
+    `270/488.5/900×27`, button `660/563.5/120×43`, static `.art-bg` present and
+    no `<video>`/`<canvas>`; the reference is padded `sharp.extend()` 18/19.
 
 ## Recruitment page — Who Should Join
 

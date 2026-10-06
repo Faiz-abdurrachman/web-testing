@@ -903,11 +903,11 @@ try {
     });
   assert.deepEqual(recruitHeroGeometry, {
     width: 1440,
-    height: 866,
+    height: 903,
     top: 0,
-    h1: { x: 270, y: 278, width: 900, height: 176 },
-    copy: { x: 270, y: 470, width: 900, height: 27 },
-    button: { x: 660, y: 545, width: 120, height: 43 },
+    h1: { x: 270, y: 296.5, width: 900, height: 176 },
+    copy: { x: 270, y: 488.5, width: 900, height: 27 },
+    button: { x: 660, y: 563.5, width: 120, height: 43 },
   });
   const recruitHeroStyles = await page
     .locator('.recruitment-hero')
@@ -948,7 +948,7 @@ try {
       };
     });
   assert.deepEqual(recruitHeroStyles, {
-    sectionPadding: '0px 80px',
+    sectionPadding: '80px 80px',
     contentGap: '48px',
     headerGap: '16px',
     headingGap: '4px',
@@ -968,25 +968,22 @@ try {
     buttonFont: true,
     buttonWeight: '500',
   });
-  const recruitVideoFallback = await page
+  const recruitHeroArt = await page
     .locator('.recruitment-hero')
     .evaluate((section) => {
-      const video = section.querySelector('.art-video');
-      const image = section.querySelector('.art-fallback');
+      const image = section.querySelector('.art-bg');
       return {
-        videoOpacity: getComputedStyle(video).opacity,
-        imageOpacity: getComputedStyle(image).opacity,
-        videoPreload: video.preload,
-        videoPoster: video.poster,
-        videoPaused: video.paused,
+        hasImage: !!image,
+        imageComplete: !!image && image.complete && image.naturalWidth > 0,
+        hasVideo: !!section.querySelector('video'),
+        hasCanvas: !!section.querySelector('canvas'),
       };
     });
-  assert.deepEqual(recruitVideoFallback, {
-    videoOpacity: '0',
-    imageOpacity: '1',
-    videoPreload: 'none',
-    videoPoster: '',
-    videoPaused: true,
+  assert.deepEqual(recruitHeroArt, {
+    hasImage: true,
+    imageComplete: true,
+    hasVideo: false,
+    hasCanvas: false,
   });
   assert.equal(
     await page.locator('.desktop-nav .nav-link.active').textContent(),
@@ -997,6 +994,7 @@ try {
     'assets/assets recruitment page/hero section/Recruitment-Hero-Revisi-1x.png',
   )
     .resize(1440, 866)
+    .extend({ top: 18, bottom: 19, background: { r: 5, g: 5, b: 7 } })
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -1018,7 +1016,7 @@ try {
       (recruitHeroActual[i] + recruitHeroReference[i]) / 2,
     );
   }
-  const recruitHeroRaw = { width: 1440, height: 866, channels: 3 };
+  const recruitHeroRaw = { width: 1440, height: 903, channels: 3 };
   await sharp(recruitHeroDiff, { raw: recruitHeroRaw })
     .png()
     .toFile('artifacts/recruitment-hero-diff.png');
@@ -1101,13 +1099,13 @@ try {
     });
   assert.deepEqual(whoShouldJoinGeometry, {
     width: 1440,
-    height: 789,
-    top: 866,
-    heading: { x: 80, y: 80, width: 1280, height: 68 },
-    copy: { x: 80, y: 172, width: 1280, height: 27 },
+    height: 903,
+    top: 903,
+    heading: { x: 80, y: 137, width: 1280, height: 68 },
+    copy: { x: 80, y: 229, width: 1280, height: 27 },
     cards: [80, 517, 954, 1391].map((x) => ({
       x,
-      y: 273,
+      y: 330,
       width: 405,
       height: 436,
     })),
@@ -1129,6 +1127,7 @@ try {
     'assets/assets recruitment page/who sould join section/Recruitment-WhoShouldJoin-Revisi-1x.png',
   )
     .resize(1440, 789)
+    .extend({ top: 57, bottom: 57, background: { r: 5, g: 5, b: 7 } })
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -1150,7 +1149,7 @@ try {
       (whoShouldJoinActual[i] + whoShouldJoinReference[i]) / 2,
     );
   }
-  const whoShouldJoinRaw = { width: 1440, height: 789, channels: 3 };
+  const whoShouldJoinRaw = { width: 1440, height: 903, channels: 3 };
   await sharp(whoShouldJoinDiff, { raw: whoShouldJoinRaw })
     .png()
     .toFile('artifacts/who-should-join-diff.png');
@@ -1531,8 +1530,8 @@ try {
     });
   assert.deepEqual(whatYouWillDoGeometry, {
     width: 1440,
-    height: 903,
-    top: 1655,
+    height: 923,
+    top: 1806,
     heading: { x: 80, y: 80, width: 1280, height: 67 },
     body: { x: 64, y: 218, width: 1312, height: 625 },
     content: { x: 158, y: 348, width: 1125, height: 409 },
@@ -1558,6 +1557,7 @@ try {
     'assets/assets recruitment page/what you will do/Recruitment-WhatYouWillDo-Revisi-1x.png',
   )
     .resize(1440, 903)
+    .extend({ top: 0, bottom: 20, background: { r: 5, g: 5, b: 7 } })
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -1579,7 +1579,7 @@ try {
       (whatYouWillDoActual[i] + whatYouWillDoReference[i]) / 2,
     );
   }
-  const whatYouWillDoRaw = { width: 1440, height: 903, channels: 3 };
+  const whatYouWillDoRaw = { width: 1440, height: 923, channels: 3 };
   await sharp(whatYouWillDoDiff, { raw: whatYouWillDoRaw })
     .png()
     .toFile('artifacts/what-you-will-do-diff.png');
@@ -1621,7 +1621,7 @@ try {
     );
   }
   // Recruitment page — Available Roles (six rows linking to the role pages).
-  await page.setViewportSize({ width: 1440, height: 910 });
+  await page.setViewportSize({ width: 1440, height: 903 });
   await page.goto(`${baseUrl}/recruitment`, { waitUntil: 'networkidle' });
   await page.evaluate(async () => {
     await document.fonts.ready;
@@ -1667,12 +1667,12 @@ try {
     });
   assert.deepEqual(availableRolesGeometry, {
     width: 1440,
-    height: 843.375,
-    top: 2558,
-    heading: { x: 80, y: 80, width: 1280, height: 67 },
-    copy: { x: 80, y: 168, width: 1280, height: 27 },
-    list: { x: 80, y: 253, width: 1280, height: 510.375 },
-    rows: [253, 528.1875].flatMap((y) =>
+    height: 903,
+    top: 2729,
+    heading: { x: 80, y: 109.8125, width: 1280, height: 67 },
+    copy: { x: 80, y: 197.8125, width: 1280, height: 27 },
+    list: { x: 80, y: 282.8125, width: 1280, height: 510.375 },
+    rows: [282.8125, 558].flatMap((y) =>
       [80, 513.328125, 946.65625].map((x, col) => ({
         x,
         y,
@@ -1813,13 +1813,13 @@ try {
     });
   assert.deepEqual(selectionTimelineGeometry, {
     width: 1440,
-    height: 812.203125,
-    top: 3401.375,
-    heading: { x: 80, y: 80, width: 1280, height: 67.203125 },
-    head: { x: 80, y: 203.203125, width: 1280, height: 78 },
-    body: { x: 80, y: 281.203125, width: 1280, height: 451 },
+    height: 903,
+    top: 3632,
+    heading: { x: 80, y: 125.390625, width: 1280, height: 67.203125 },
+    head: { x: 80, y: 248.59375, width: 1280, height: 78 },
+    body: { x: 80, y: 326.59375, width: 1280, height: 451 },
     rows: [
-      299.203125, 374.203125, 449.203125, 524.203125, 599.203125, 674.203125,
+      344.59375, 419.59375, 494.59375, 569.59375, 644.59375, 719.59375,
     ].map((y) => ({
       x: 112,
       y,
@@ -1834,6 +1834,7 @@ try {
     'assets/assets recruitment page/selection timeline/Recruitment-SelectionTimeline-Revisi-1x.png',
   )
     .resize(1440, 812)
+    .extend({ top: 45, bottom: 46, background: { r: 5, g: 5, b: 7 } })
     .flatten({ background: '#050507' })
     .removeAlpha()
     .raw()
@@ -1841,8 +1842,7 @@ try {
   const selectionTimelineActual = await sharp(
     'artifacts/selection-timeline-desktop.png',
   )
-    // Fractional section origins round screenshot bounds outward by one pixel.
-    .extract({ left: 0, top: 0, width: 1440, height: 812 })
+    .extract({ left: 0, top: 0, width: 1440, height: 903 })
     .flatten({ background: '#050507' })
     .removeAlpha()
     .raw()
@@ -1864,7 +1864,7 @@ try {
       (selectionTimelineActual[i] + selectionTimelineReference[i]) / 2,
     );
   }
-  const selectionTimelineRaw = { width: 1440, height: 812, channels: 3 };
+  const selectionTimelineRaw = { width: 1440, height: 903, channels: 3 };
   await sharp(selectionTimelineDiff, { raw: selectionTimelineRaw })
     .png()
     .toFile('artifacts/selection-timeline-diff.png');
@@ -1906,7 +1906,7 @@ try {
     );
   }
   // Recruitment page — FAQ (heading + six closed accordion items).
-  await page.setViewportSize({ width: 1440, height: 983 });
+  await page.setViewportSize({ width: 1440, height: 903 });
   await page.goto(`${baseUrl}/recruitment`, { waitUntil: 'networkidle' });
   await page.evaluate(async () => {
     await document.fonts.ready;
@@ -1946,7 +1946,7 @@ try {
   assert.deepEqual(faqGeometry, {
     width: 1440,
     height: 983.203125,
-    top: 4213.578125,
+    top: 4535,
     heading: { x: 80, y: 80, width: 1280, height: 67.203125 },
     list: { x: 80, y: 203.203125, width: 1280, height: 700 },
     items: [
@@ -2017,7 +2017,7 @@ try {
     assert.deepEqual(faqIssues, [], `FAQ text clipped at ${width}px`);
   }
   // Recruitment page — Snippets (heading + hero photo + five thumbnails).
-  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.setViewportSize({ width: 1440, height: 903 });
   await page.goto(`${baseUrl}/recruitment`, { waitUntil: 'networkidle' });
   await page.evaluate(async () => {
     await document.fonts.ready;
@@ -2063,14 +2063,14 @@ try {
     });
   assert.deepEqual(snippetsGeometry, {
     width: 1440,
-    height: 897,
-    top: 5196.78125,
-    heading: { x: 80, y: 40, width: 1280, height: 67 },
-    gallery: { x: 80, y: 163, width: 1280, height: 694 },
-    hero: { x: 80, y: 163, width: 1280, height: 556 },
+    height: 903,
+    top: 5518.203125,
+    heading: { x: 80, y: 43, width: 1280, height: 67 },
+    gallery: { x: 80, y: 166, width: 1280, height: 694 },
+    hero: { x: 80, y: 166, width: 1280, height: 556 },
     thumbs: [80, 338.5, 597, 855.5, 1114].map((x) => ({
       x,
-      y: 754,
+      y: 757,
       width: 246,
       height: 103,
     })),
@@ -2083,12 +2083,12 @@ try {
     'assets/assets recruitment page/snippets section/Recruitment-Snippets-Revisi-1x.png',
   )
     .resize(1440, 897)
+    .extend({ top: 3, bottom: 3, background: { r: 5, g: 5, b: 7 } })
     .removeAlpha()
     .raw()
     .toBuffer();
   const snippetsActual = await sharp('artifacts/snippets-desktop.png')
-    // Fractional section origins round screenshot bounds outward by one pixel.
-    .extract({ left: 0, top: 0, width: 1440, height: 897 })
+    .extract({ left: 0, top: 0, width: 1440, height: 903 })
     .removeAlpha()
     .raw()
     .toBuffer();
@@ -2104,7 +2104,7 @@ try {
       (snippetsActual[i] + snippetsReference[i]) / 2,
     );
   }
-  const snippetsRaw = { width: 1440, height: 897, channels: 3 };
+  const snippetsRaw = { width: 1440, height: 903, channels: 3 };
   await sharp(snippetsDiff, { raw: snippetsRaw })
     .png()
     .toFile('artifacts/snippets-diff.png');
@@ -2187,7 +2187,7 @@ try {
     {
       width: 1440,
       height: 520,
-      top: 6093.78125,
+      top: 6421.203125,
       panel: { x: 80, y: 80, width: 1280, height: 360 },
       actions: { x: 619.546875, y: 332.09375, width: 200.890625, height: 43 },
       glow: { x: 349.828125, y: 351, width: 1000.328125, height: 271.5 },
@@ -2283,7 +2283,7 @@ try {
   assert.deepEqual(recruitFooterGeometry, {
     width: 1440,
     height: 556,
-    top: 6613.78125,
+    top: 6941.203125,
   });
   await page.locator('.footer').scrollIntoViewIfNeeded();
   await page

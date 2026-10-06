@@ -5,20 +5,20 @@ import Button from './Button.astro';
 <section class="recruitment-hero" aria-labelledby="recruitment-hero-title">
   <div class="artwork" aria-hidden="true">
     <img
-      class="art-fallback"
-      src="/images/backgrounds/recruitment.webp"
+      class="art-bg"
+      src="/images/recruitment/hero-bg.webp"
+      srcset="
+        /images/recruitment/hero-bg.webp     1440w,
+        /images/recruitment/hero-bg-2x.webp 2880w
+      "
+      sizes="100vw"
       width="1440"
       height="866"
       alt=""
       fetchpriority="high"
       decoding="async"
     />
-    <video class="art-video" muted loop playsinline preload="none">
-      <source src="/images/recruitment/hero-bg.webm" type="video/webm" />
-      <source src="/images/recruitment/hero-bg.mp4" type="video/mp4" />
-    </video>
   </div>
-  <canvas class="hero-canvas" aria-hidden="true"></canvas>
   <div class="hero-content">
     <div class="hero-header-group">
       <h1 id="recruitment-hero-title">
@@ -35,142 +35,13 @@ import Button from './Button.astro';
     </Button>
   </div>
 </section>
-<script>
-  import { mountHeroParticles } from '../scripts/hero-particles';
 
-  let disposeParticles: (() => void) | void;
-  let videoCleanups: (() => void)[] = [];
-  let currentHero: HTMLElement | null = null;
-
-  // Animated hero plate. Same contract as `Hero.astro`: only fetched on larger,
-  // motion-OK viewports, and the clip keeps its own frame 0 as the poster so the
-  // static `recruitment.webp` never swaps to a different composition mid-view.
-  // Under reduced motion (or <=600px) playback never starts and the static art
-  // stays the reference render.
-  const initHeroVideo = (hero: HTMLElement) => {
-    const preload = (window as unknown as { __dsPreload?: Promise<unknown>[] })
-      .__dsPreload;
-    const reduce = window.matchMedia(
-      '(prefers-reduced-motion: reduce)',
-    ).matches;
-    const video = hero.querySelector<HTMLVideoElement>('.art-video');
-    if (!video) return;
-    const wide = window.matchMedia('(min-width: 601px)').matches;
-    const conn = (
-      navigator as unknown as {
-        connection?: { saveData?: boolean; effectiveType?: string };
-      }
-    ).connection;
-    const constrained =
-      conn?.saveData === true ||
-      conn?.effectiveType === 'slow-2g' ||
-      conn?.effectiveType === '2g';
-    if (reduce || !wide || constrained) return;
-    const artwork = video.closest('.artwork');
-    const start = () => {
-      artwork?.classList.add('is-video');
-      video.classList.add('is-ready');
-      void video.play().catch(() => {});
-    };
-    if (video.readyState >= 2) start();
-    else video.addEventListener('loadeddata', start, { once: true });
-
-    // The clip loops forever, so stop decoding once the hero scrolls away
-    // (this page is long) and restart it when it comes back.
-    const section = video.closest('.recruitment-hero');
-    if (section) {
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (!artwork?.classList.contains('is-video')) return;
-          if (entry.isIntersecting) void video.play().catch(() => {});
-          else video.pause();
-        },
-        { rootMargin: '160px' },
-      );
-      observer.observe(section);
-      const onVisibility = () => {
-        if (!artwork?.classList.contains('is-video')) return;
-        if (document.hidden) video.pause();
-        else if (section.getBoundingClientRect().bottom > 0)
-          void video.play().catch(() => {});
-      };
-      document.addEventListener('visibilitychange', onVisibility);
-      videoCleanups.push(() => {
-        observer.disconnect();
-        document.removeEventListener('visibilitychange', onVisibility);
-      });
-    }
-
-    const load = () => {
-      // Attach the poster only when the clip is actually about to load, so
-      // phones and reduced-motion never fetch the extra frame.
-      if (!video.poster) video.poster = '/images/recruitment/hero-poster.webp';
-      video.preload = 'auto';
-      video.load();
-    };
-    const armed = document.documentElement.classList.contains('splash-armed');
-    const warm = document.documentElement.classList.contains('nav-warm');
-    if (armed) {
-      // Fetch during the splash (Vite HMR: see Hero.astro) so the clip is
-      // ready instead of competing with the reveal.
-      preload?.push(
-        new Promise<void>((resolve) => {
-          if (video.readyState >= 2) resolve();
-          else
-            video.addEventListener('loadeddata', () => resolve(), {
-              once: true,
-            });
-        }),
-      );
-      load();
-    } else if (warm) {
-      load();
-    } else if (typeof window.requestIdleCallback === 'function') {
-      window.requestIdleCallback(load, { timeout: 2000 });
-    } else {
-      window.setTimeout(load, 300);
-    }
-  };
-
-  // Ember field over the plate — the shared particle module on its `embers`
-  // preset (rising, warmer, no camera rush) so this hero reads differently from
-  // the home one. Mounts only at >=768px with motion allowed; below that, and
-  // under reduced motion, the static/video plate stays.
-  const initHeroParticles = (hero: HTMLElement) => {
-    const preload = (window as unknown as { __dsPreload?: Promise<unknown>[] })
-      .__dsPreload;
-    const canvas =
-      hero.querySelector<HTMLCanvasElement>('.hero-canvas') ?? undefined;
-    const host = canvas?.parentElement;
-    if (!canvas || !host) return;
-    void mountHeroParticles(canvas, host, preload, { preset: 'embers' })
-      .then((dispose) => {
-        disposeParticles = dispose;
-      })
-      .catch(() => {});
-  };
-
-  const initRecruitmentHero = () => {
-    const hero = document.querySelector<HTMLElement>('.recruitment-hero');
-    if (!hero || hero === currentHero) return;
-    currentHero = hero;
-    videoCleanups.forEach((fn) => fn());
-    videoCleanups = [];
-    initHeroVideo(hero);
-    initHeroParticles(hero);
-  };
-
-  initRecruitmentHero();
-  document.addEventListener('astro:page-load', initRecruitmentHero);
-  document.addEventListener('astro:before-swap', () => {
-    videoCleanups.forEach((fn) => fn());
-    videoCleanups = [];
-    if (typeof disposeParticles === 'function') disposeParticles();
-    disposeParticles = undefined;
-    currentHero = null;
-  });
-</script>
 <style>
+  /* Matches Figma node 1436:3506 (1440 × 866), page 1436:3505. Full-screen
+     migration (#9): the hero background is now the supplied art
+     (`assets/hero gambar/Gambar Hero recruitment.png` → hero-bg.webp) and the
+     section is one screen tall (100svh) with the content centred; the video,
+     particle canvas and plate tweens were removed. Copy geometry is unchanged. */
   .recruitment-hero {
     position: relative;
     isolation: isolate;
@@ -178,8 +49,10 @@ import Button from './Button.astro';
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 866px;
-    padding: 0 var(--page-gutter);
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 80px var(--page-gutter);
     overflow: clip;
     text-align: center;
   }
@@ -188,7 +61,7 @@ import Button from './Button.astro';
     inset: 0;
     z-index: -1;
   }
-  .artwork :is(img, video) {
+  .artwork img {
     position: absolute;
     inset: 0;
     display: block;
@@ -196,30 +69,6 @@ import Button from './Button.astro';
     height: 100%;
     object-fit: cover;
     object-position: center;
-  }
-  .art-video {
-    opacity: 0;
-  }
-  /* At >=601px with motion allowed the clip's own frame 0 (poster) owns the hero
-     from the first paint, so the static art never swaps mid-view. Under reduced
-     motion, or <=600px, the video stays hidden and `recruitment.webp` remains
-     the reference render. */
-  @media (prefers-reduced-motion: no-preference) and (min-width: 601px) {
-    .art-video {
-      opacity: 1;
-    }
-  }
-  /* Once the clip is live, drop the static layer underneath it. */
-  .artwork.is-video .art-fallback {
-    opacity: 0;
-  }
-  .hero-canvas {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
   }
   .hero-content {
     position: relative;
@@ -238,7 +87,7 @@ import Button from './Button.astro';
     gap: 16px;
     width: 100%;
   }
-  /* Keep the CTA above the particle canvas and match Figma 120px hug width. */
+  /* Keep the CTA above the artwork and match Figma 120px hug width. */
   .hero-content :global(.button) {
     position: relative;
     z-index: 1;
@@ -291,14 +140,14 @@ import Button from './Button.astro';
         transparent
       );
     }
-    .artwork :is(img, video) {
+    .artwork img {
       object-position: center bottom;
     }
   }
   @media (max-width: 1100px) {
     .recruitment-hero {
-      height: auto;
-      min-height: min(760px, 100svh);
+      min-height: 100vh;
+      min-height: 100svh;
       padding: 120px var(--page-gutter) 60px;
     }
     .hero-content {
@@ -318,9 +167,6 @@ import Button from './Button.astro';
   @media (max-width: 600px) {
     .recruitment-hero {
       /* svh, not dvh — see Hero.astro: dvh reflows with the address bar. */
-      height: auto;
-      min-height: 100vh;
-      min-height: 100svh;
       justify-content: center;
       padding-top: clamp(96px, 12svh, 120px);
       padding-bottom: clamp(64px, 9svh, 96px);

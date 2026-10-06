@@ -11,10 +11,6 @@ ScrollTrigger.config({ ignoreMobileResize: true });
 const finePointer = () => window.matchMedia('(pointer: fine)').matches;
 
 type Cleanup = () => void;
-type Particles = { burst: number };
-
-const particles = () =>
-  (window as unknown as { __heroParticles?: Particles }).__heroParticles;
 
 let inited = false;
 // Kept so client-side navigation can tear the whole system down before the old
@@ -218,29 +214,22 @@ export function initMotion() {
 
       const cleanups: Cleanup[] = [];
 
-      const hero = document.querySelector<HTMLElement>('.hero');
-      if (hero) {
-      }
-
-      // Recruitment hero: a quieter echo of the home hero. The copy settles in
-      // once the splash hands over, the plate drifts with the pointer, then a
-      // pinned scroll scrubs a zoom while the next section rises over it.
-      // Phones/tablets (<768px) keep only the video plate — no pin, no zoom.
+      // Recruitment hero: subtle copy entrance + pointer plate drift (same
+      // contract as the About hero — the pinned zoom and particle burst were
+      // dropped in the full-screen migration #9).
       const recruitHero =
         document.querySelector<HTMLElement>('.recruitment-hero');
       if (recruitHero) {
         const artwork = recruitHero.querySelector<HTMLElement>('.artwork');
         const content = recruitHero.querySelector<HTMLElement>('.hero-content');
-        const button = recruitHero.querySelector<HTMLElement>('.button');
 
         // Entrance, skipped on warm navigation so a Home <-> Recruitment switch
         // does not replay it. Held hidden until the splash lifts so the reveal
         // is actually seen instead of finishing behind the overlay.
         if (!warm && content) {
-          const bits = [
-            ...content.querySelectorAll<HTMLElement>('h1 span, p'),
-            ...(button ? [button] : []),
-          ];
+          const bits = content.querySelectorAll<HTMLElement>(
+            'h1 span, p, .button',
+          );
           gsap.set(bits, { autoAlpha: 0, y: 34 });
           const play = () =>
             gsap.to(bits, {
@@ -257,8 +246,7 @@ export function initMotion() {
         }
 
         if (artwork && finePointer()) {
-          // Overscan so the pointer travel never exposes a hard edge; the pinned
-          // scrub tween below starts from this scale.
+          // Overscan so the pointer travel never exposes a hard edge.
           gsap.set(artwork, { scale: 1.04 });
           const xTo = gsap.quickTo(artwork, 'xPercent', {
             duration: 0.6,
@@ -277,54 +265,6 @@ export function initMotion() {
           cleanups.push(() =>
             recruitHero.removeEventListener('mousemove', onMove),
           );
-        }
-
-        if (desktop && artwork) {
-          const lift = [content, button].filter((el): el is HTMLElement =>
-            Boolean(el),
-          );
-          const burst = { value: 0 };
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: recruitHero,
-              start: 'top top',
-              end: '+=110%',
-              scrub: 1,
-              pin: true,
-              anticipatePin: 1,
-            },
-          });
-          tl.to(artwork, { scale: 1.35, ease: 'none', duration: 1 }, 0);
-          if (lift.length)
-            tl.to(
-              lift,
-              { y: -200, autoAlpha: 0, scale: 0.94, ease: 'none', duration: 1 },
-              0,
-            );
-          // Nudge the ember field so the sparks rise a touch faster as the
-          // plate zooms (the preset maps burst to speed only — no camera rush).
-          tl.to(
-            burst,
-            {
-              value: 1,
-              ease: 'none',
-              duration: 1,
-              onUpdate: () => {
-                const particlesApi = particles();
-                if (particlesApi) particlesApi.burst = burst.value;
-              },
-            },
-            0,
-          );
-          ScrollTrigger.create({
-            trigger: recruitHero,
-            start: 'top top',
-            end: '+=110%',
-            onLeaveBack: () => {
-              const particlesApi = particles();
-              if (particlesApi) particlesApi.burst = 0;
-            },
-          });
         }
       }
 

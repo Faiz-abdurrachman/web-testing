@@ -22,6 +22,12 @@ import Starfield from './Starfield.astro';
   .who-should-join {
     scroll-margin-top: 110px;
     padding-block: 80px;
+    /* Full-screen standard (#9): one section = one screen, content centred. */
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     /* Living star sky, same as the home "Four Pillars of Innovation" section. */
     position: relative;
     isolation: isolate;

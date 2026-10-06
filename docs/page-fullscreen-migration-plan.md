@@ -1,9 +1,10 @@
 # Page Full-Screen Migration Plan — Hero Gambar + Section 100svh
 
 Status: **HOMEPAGE SELESAI** (commit `b228f3c`, 4 Oct 2026) + **ABOUT US SELESAI**
-(5 Oct 2026). **NEXT = Recruitment (`1436:3505`) → Partners → Hall of Frames →
-Contact.** (Sisa satu-satunya dari `docs/fix-9-plan.md` = **#9**, dokumen ini
-adalah work order-nya. Fix #1–#8 + #10–#12 SELESAI 5 Oct 2026.)
+(5 Oct 2026) + **RECRUITMENT SELESAI** (6 Oct 2026). **NEXT = Partners
+(`1439:4787`) → Hall of Frames (`1439:4506`) → Contact (`1445:5065`).** (Sisa
+satu-satunya dari `docs/fix-9-plan.md` = **#9**, dokumen ini adalah work order-nya.
+Fix #1–#8 + #10–#12 SELESAI 5 Oct 2026.)
 
 Dokumen ini adalah **work order resmi** untuk migrasi semua halaman ke pola
 full-screen (satu section = satu layar) + hero berbasis gambar. Ikuti
@@ -140,19 +141,29 @@ Legenda: **[HS]** = jadikan full-screen (100svh + center), **[HS-skip]** = CTA
 | 5   | `1688:2933` | Our Team (1562)               | [HS] ✅ 100svh + center (revisi HoDS carousel 5 Oct; konten > viewport tetap 1562) |
 | 6   | `1439:4311` | Footer                        | [skip]                                                                             |
 
-### Recruitment `1436:3505`
+### Recruitment `1436:3505` — ✅ SELESAI (6 Oct 2026)
 
-| #   | Node        | Section                | Treatment |
-| --- | ----------- | ---------------------- | --------- |
-| 1   | `1436:3506` | Hero (866)             | [H]       |
-| 2   | `1436:3512` | Who Should Join        | [HS]      |
-| 3   | `1436:3517` | What You Will Do (903) | [HS]      |
-| 4   | `1436:3564` | Available Roles        | [HS]      |
-| 5   | `1436:3637` | Selection Timeline     | [HS]      |
-| 6   | `1436:3675` | FAQ (983)              | [HS]      |
-| 7   | `1436:3684` | Snippets (897)         | [HS]      |
-| 8   | `1436:3687` | CTA Recruitment        | [HS-skip] |
-| 9   | `1436:3699` | Footer                 | [skip]    |
+| #   | Node        | Section                | Treatment                                                   |
+| --- | ----------- | ---------------------- | ----------------------------------------------------------- |
+| 1   | `1436:3506` | Hero (866)             | [H] ✅ hero-bg.webp + 100svh (video/partikel dihapus)       |
+| 2   | `1436:3512` | Who Should Join        | [HS] ✅ 100svh + center                                     |
+| 3   | `1436:3517` | What You Will Do (903) | [HS] ✅ 100svh + center (konten 923 > viewport → tetap 923) |
+| 4   | `1436:3564` | Available Roles        | [HS] ✅ 100svh + center                                     |
+| 5   | `1436:3637` | Selection Timeline     | [HS] ✅ 100svh + center                                     |
+| 6   | `1436:3675` | FAQ (983)              | [HS] ✅ 100svh + center (konten > viewport tetap 983)       |
+| 7   | `1436:3684` | Snippets (897)         | [HS] ✅ 100svh + center                                     |
+| 8   | `1436:3687` | CTA Recruitment        | [HS-skip] tetap 520                                         |
+| 9   | `1436:3699` | Footer                 | [skip]                                                      |
+
+> Catatan Recruitment: semua section diukur ulang di viewport **1440×903**
+> (sebelumnya verify memakai 903/910/983/900 campur — dengan `100svh` tinggi
+> section bergantung viewport, jadi diseragamkan). Reference PNG di-pad
+> `sharp.extend()` (Who 57/57, WYD 0/20, Timeline 45/46, Snippets 3/3) warna
+> `#050507`. `hero-bg.webp` dibake dari `assets/hero gambar/Gambar Hero
+recruitment.png` oleh `npm run assets:heroes` (skrip baru). MAE: Who 2.85, WYD
+> 1.92, Timeline 3.48, FAQ 4.90 (turun dari 7.80), Snippets 3.90 (turun dari
+> 8.63), CTA 1.11, Footer 6.03, Hero 10.27 (artikel hero baru = render Figma
+> lebih baru, sama seperti About; reference lama tidak di-assert).
 
 ### Partners `1439:4787`
 
