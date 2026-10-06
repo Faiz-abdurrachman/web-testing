@@ -1,6 +1,6 @@
 # CMS / Admin Dashboard — Rencana (backend Google Apps Script)
 
-Status: **RENCANA (belum dieksekusi)** · diputuskan 6 Oct 2026 ·
+Status: **B0 SEDANG DIKERJAKAN** · diputuskan 6 Oct 2026 ·
 Patuhi `docs/pixel-precision-sop.md` + `AGENTS.md`. **Satu langkah per pass + 7
 gate.** Jangan rusak benchmark (geometri/MAE) atau assertion `verify.mjs`.
 
@@ -91,8 +91,9 @@ Tujuan: **komponen/halaman tidak berubah API-nya** (import tetap
   `partners.ts` menjadi **thin loader**: impor `cms-snapshot.json`, ekspor
   konstanta bertipe sama seperti sekarang. Semua komponen & `getStaticPaths`
   tetap bekerja tanpa perubahan.
-- Hooks build: `"prebuild": "node scripts/fetch-cms.mjs"` (aman: gagal fetch →
-  fallback snapshot, build tidak pernah pecah).
+- Hooks build: `"prebuild": "node scripts/fetch-cms.mjs"`. Lokal tanpa env memakai
+  snapshot yang di-commit. Saat remote dikonfigurasi (B1), gagal fetch/validasi
+  harus menggagalkan build agar data lama tidak diterbitkan sebagai update baru.
 - (Opsional nanti) pindah ke **Astro Content Collections + Zod** bila mau
   `getCollection`; bukan syarat.
 
@@ -150,3 +151,10 @@ Tujuan: **komponen/halaman tidak berubah API-nya** (import tetap
 4. Kerjakan **Fase B0** (snapshot + thin loader + Zod + `fetch-cms.mjs` mode
    fallback) — **satu pass + 7 gate, tampilan tidak berubah**. Update
    `docs/assets.md`/`docs/ai-handoff.md`/`AGENTS.md` di commit yang sama.
+
+## Keputusan sesi B0
+
+User menyetujui B0, memilih satu owner/admin Google, dan meminta folder media
+dibuat otomatis. Identitas akun tetap di luar repo. Deploy Hook berbeda dari URL
+situs publik; kedua hook perlu dibuat saat B1/B2. B0 menolak env remote karena
+integrasi endpoint baru ditambahkan di B1. Rencana per-pass: `docs/cms-b0-plan.md`.

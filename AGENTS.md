@@ -1,5 +1,10 @@
 # AGENTS.md — instructions for AI agents
 
+**CMS B0 sedang dikerjakan:** snapshot + thin loader, satu collection per pass.
+Rencana dan gate: `docs/cms-b0-plan.md`. Admin pertama sudah dipilih, folder
+Drive dibuat saat setup GAS, dua Deploy Hook masih perlu dibuat. Secret tetap
+di Script Properties/Vercel env; tidak disimpan di repo.
+
 Project: **Data Sorcerers** — a static Astro landing site, a Recruitment page
 (+ 6 role-detail pages) and 6 domain-detail pages. Goal: **pixel-accurate to
 Figma/PNG** with lightweight HTML/CSS.

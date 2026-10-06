@@ -108,7 +108,7 @@ async function glide(page, target) {
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const close = (a, b, tol = 1) => Math.abs(a - b) <= tol;
 // The scroll listener is rAF-throttled and the backing fades over 0.3s, so wait
-// for both the class and the transitioned opacity instead of a fixed sleep.
+// for the class and both transitioned layers instead of a fixed sleep.
 const settle = (page, scrolled) =>
   page
     .waitForFunction(
@@ -116,7 +116,10 @@ const settle = (page, scrolled) =>
         const nav = document.querySelector('.navbar');
         if (!nav) return false;
         if (nav.classList.contains('is-scrolled') !== want) return false;
-        return getComputedStyle(nav, '::after').opacity === (want ? '1' : '0');
+        return (
+          getComputedStyle(nav, '::after').opacity === (want ? '1' : '0') &&
+          getComputedStyle(nav, '::before').opacity === (want ? '0' : '1')
+        );
       },
       scrolled,
       { timeout: 2500 },

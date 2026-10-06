@@ -27,7 +27,9 @@
     "seo:audit": "node scripts/seo-audit.mjs",
     "perf:audit": "node scripts/perf-audit.mjs",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "prebuild": "node scripts/fetch-cms.mjs",
+    "cms:validate": "node scripts/fetch-cms.mjs"
   },
   "dependencies": {
     "astro": "7.3.3",

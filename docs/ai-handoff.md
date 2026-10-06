@@ -1,5 +1,10 @@
 # AI handoff — current context
 
+**CMS B0 sedang dikerjakan:** snapshot + thin loader, satu collection per pass.
+Rencana dan gate: `docs/cms-b0-plan.md`. Admin pertama sudah dipilih, folder
+Drive dibuat saat setup GAS, dua Deploy Hook masih perlu dibuat. Secret tetap
+di Script Properties/Vercel env; tidak disimpan di repo.
+
 Tujuan: supaya AI agent berikutnya langsung paham kondisi repo **saat ini** tanpa
 harus menebak dari git log. Ini dokumen hidup — update kalau ada perubahan besar.
 

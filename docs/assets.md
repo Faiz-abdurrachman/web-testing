@@ -2697,3 +2697,10 @@ Catatan: nama file sumber punya karakter unicode `…` (quote path-nya).
 Sumber 1920×1080, 24fps, H.264; audio dibuang pada output. Budget encode webm ≤0.9MB /
 mp4 ≤1.1MB per hero (lihat plan §3). Reference screenshot `verify.mjs` di-capture
 dalam `reduce` → video tersembunyi → MAE statis **tidak berubah**.
+
+## CMS B0 — content snapshot (6 Oct 2026)
+
+Data-only migration; artwork provenance and reference PNGs remain unchanged.
+Projects now read `src/data/cms-snapshot.json`; exports retain the original four
+records byte-for-byte in their content. Validation uses `astro/zod` with fixed
+slots and unique IDs. Plan/results: `docs/cms-b0-plan.md`.
