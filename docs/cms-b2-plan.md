@@ -121,3 +121,15 @@ confirming real authorized server reads. Deployment identifiers/URL/account
 remain outside repo. Unchanged-content save, both rebuild results with remote
 mode, and non-owner denial remain pending. Do not mark this foundation live
 verified or the whole CMS complete until the remaining checks/passes finish.
+
+## Owner save checkpoint / rebuild issue
+
+Owner confirmed the saved + both publication requests accepted message on an
+unchanged-content save. Real authenticated export remains identical baseline
+with four Projects. An anonymous request to the admin redirects to Google
+login and does not expose the editor. A different signed-in account has not
+yet been tested. Latest Vercel commit statuses for `a656374` failed: testing
+at 09:26:29 UTC, production at 09:27:29 UTC. Older production deployment was
+successful; a successful historic deployment does not prove the new hook build
+succeeded. Request latest logs before diagnosing or marking the foundation
+fully live verified. Growth/media/Team remain next after fixing rebuilds.

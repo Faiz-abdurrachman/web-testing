@@ -1,6 +1,6 @@
 # AGENTS.md — instructions for AI agents
 
-**CMS B2 Projects foundation CODE VERIFIED (6 Oct 2026); owner dashboard loaded; save checks pending.**
+**CMS B2 Projects foundation CODE VERIFIED (6 Oct 2026); owner save confirmed; latest rebuilds failed.**
 Private project source `cms/gas/admin/` + `npm run cms:admin` generates Code.gs,
 Index.html and manifest under ignored `artifacts/cms-admin/`. Owner-only server
 checks on each RPC; edit existing Projects, stale revision guard, single-batch
@@ -13,8 +13,12 @@ B1 production remote-mode deploy at `fb99c39` verified; both Vercel statuses
 success, testing remote-mode log confirmation still pending.
 Owner confirmed successful setupAdmin and supplied deployed dashboard
 screenshot showing all four Projects. Admin URL/identity remain outside repo.
-NEXT: save unchanged content and verify both rebuilds/remote-mode logs; test
-non-owner denial, then Projects growth/media and Team.
+Owner confirmed unchanged-content save message and both rebuild requests.
+Authenticated export remains identical baseline (4 Projects). Anonymous admin
+request redirects to Google login, editor not exposed. Latest a656374 Vercel
+commit statuses failed for both projects; older production deployment remains
+successful. NEXT: obtain latest build logs and repair rebuild failure before
+Projects growth/media/Team; non-owner-account test also pending.
 Plans: `docs/cms-b2-plan.md`; install guide: `docs/cms-admin-setup.md`.
 Panduan: `docs/cms-gas-setup.md`.
 User mengizinkan commit/push kelanjutan CMS; B0 sudah push `1b38088` ke dua repo.
