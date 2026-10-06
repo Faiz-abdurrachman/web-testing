@@ -1,9 +1,9 @@
 # Plan — Hero sections "hidup" (parallax / GSAP)
 
-Status: **BERJALAN — Home SELESAI (6 Oct 2026)**, hero lain menyusul ·
-dibuat 6 Oct 2026 · Patuhi `docs/pixel-precision-sop.md` + `AGENTS.md`.
-Keputusan user: efek **A + B + C** (entrance + scroll parallax bg + pointer
-parallax desktop).
+Status: **SELESAI SEMUA (6 Oct 2026)** — efek **A + B + C** (entrance copy +
+scroll parallax bg + pointer parallax desktop) terpasang di keenam hero; Contact
+tanpa scroll parallax (bukan full-bleed). ·
+Patuhi `docs/pixel-precision-sop.md` + `AGENTS.md`.
 
 ## 1. Tujuan
 
@@ -115,31 +115,35 @@ Per hero:
 
 ## 9. Progress
 
-| Hero        | A entrance     | B scroll parallax      | C pointer      | Status             |
-| ----------- | -------------- | ---------------------- | -------------- | ------------------ |
-| Home        | ✅             | ✅                     | ✅             | **SELESAI 6 Oct**  |
-| About       | ✅ (sudah ada) | ⬜                     | ✅ (sudah ada) | pending B          |
-| Recruitment | ✅ (sudah ada) | ⬜                     | ✅ (sudah ada) | pending B          |
-| Partners    | ⬜             | ⬜                     | ⬜             | pending            |
-| HoF         | ⬜             | ⬜                     | ⬜             | pending            |
-| Contact     | ⬜             | n/a (bukan full-bleed) | ⬜             | pending (dibatasi) |
+| Hero        | A entrance | B scroll parallax      | C pointer | Status            |
+| ----------- | ---------- | ---------------------- | --------- | ----------------- |
+| Home        | ✅         | ✅                     | ✅        | **SELESAI 6 Oct** |
+| About       | ✅         | ✅                     | ✅        | **SELESAI 6 Oct** |
+| Recruitment | ✅         | ✅                     | ✅        | **SELESAI 6 Oct** |
+| Partners    | ✅         | ✅                     | ✅        | **SELESAI 6 Oct** |
+| HoF         | ✅         | ✅                     | ✅        | **SELESAI 6 Oct** |
+| Contact     | ✅         | n/a (bukan full-bleed) | ✅        | **SELESAI 6 Oct** |
 
-### Catatan implementasi (Home, 6 Oct 2026)
+### Catatan implementasi (6 Oct 2026)
 
-Helper baru di `src/scripts/motion.ts`:
+Helper generik di `src/scripts/motion.ts`:
 
-- `heroEntrance(content, warm, selector)` — A: `h1 span, p, .button`
-  fade+rise saat `splash-done`; di-skip saat `nav-warm` (client nav).
-- `heroArtworkParallax(hero, art, pointer, cleanups)` — B + C:
-  - Transform dipasang di **`img.art-bg`** (bukan `.artwork`) supaya
+- `heroEntrance(content, warm, selector)` — A: fade+rise saat `splash-done`;
+  di-skip saat `nav-warm` (client nav). Selector per hero: Home
+  `h1 span, p, .button`, About/HoF `h1 span, p`, Recruitment (default), Partners
+  `.pill, h1 span`, Contact `.hero-intro, .hero-cards, .contact-form`.
+- `heroArtworkParallax(hero, art, pointer, cleanups, opts)` — B + C:
+  - Transform dipasang di **`img` artwork** (bukan `.artwork`) supaya
     `transform: translateX(-50%)` milik `.artwork` di `@media (min-width:1921px)`
     tidak tertimpa.
   - B memakai **`y` (px, −18 → +18, scrub)**; C memakai **`xPercent`/`yPercent`**
     — komponen transform berbeda, jadi GSAP mengomposisi tanpa saling berebut.
-  - `gsap.set(art, { scale: 1.08 })` = overscan agar travel tidak membuka tepi
-    (margin ±3% > total travel ±2%). Terverifikasi: transform top
-    `matrix(1.08,0,0,1.08,0,-18)`, di scroll berubah mulus.
-  - Sedang `if (reduce) return;` → render reduce tidak punya transform → semua
-    assertion geometri + MAE `verify.mjs` **tidak berubah** (7 gate + seo PASS).
-- Home hero `motion` pernah dihapus di #9; kini hidup kembali lewat kedua helper
-  generik ini (About/Recruitment akan memakai helper yang sama, hanya menambah B).
+  - `scale: 1.08` (Contact `1.05`) = overscan agar travel tidak membuka tepi.
+  - Opsi `{ scroll, scale, travel, pointerX, pointerY }`; Contact pakai
+    `{ scroll: false, scale: 1.05, pointerX: 1.6, pointerY: 1 }` (artwork memang
+    pojok di Figma, jadi tidak boleh parallax scroll).
+  - Gated `if (reduce) return;` → render reduce tanpa transform → semua
+    assertion geometri + MAE `verify.mjs` **tidak berubah**.
+- Verifikasi cakupan: keenam hero diuji di 1440 (top + mid-scroll) — `.art-bg`
+  full-bleed selalu menutupi hero (mis. hero 0..903 vs art −58..1498 / −54..921);
+  Contact tidak full-bleed (memang desainnya). **7 gate + seo ALL PASS.**

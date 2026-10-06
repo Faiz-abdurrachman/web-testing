@@ -81,30 +81,45 @@ function heroArtworkParallax(
   art: HTMLElement | null,
   pointer: boolean,
   cleanups: Cleanup[],
+  {
+    scroll = true,
+    scale = 1.08,
+    travel = 18,
+    pointerX = 2.6,
+    pointerY = 1.2,
+  }: {
+    scroll?: boolean;
+    scale?: number;
+    travel?: number;
+    pointerX?: number;
+    pointerY?: number;
+  } = {},
 ) {
   if (!art) return;
-  gsap.set(art, { scale: 1.08 });
-  gsap.fromTo(
-    art,
-    { y: -18 },
-    {
-      y: 18,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: hero,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: true,
+  gsap.set(art, { scale });
+  if (scroll) {
+    gsap.fromTo(
+      art,
+      { y: -travel },
+      {
+        y: travel,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: hero,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        },
       },
-    },
-  );
+    );
+  }
   if (!pointer) return;
   const xTo = gsap.quickTo(art, 'xPercent', { duration: 0.6, ease: 'power3' });
   const yTo = gsap.quickTo(art, 'yPercent', { duration: 0.6, ease: 'power3' });
   const onMove = (event: MouseEvent) => {
     const rect = hero.getBoundingClientRect();
-    xTo(((event.clientX - rect.left) / rect.width - 0.5) * -2.6);
-    yTo(((event.clientY - rect.top) / rect.height - 0.5) * -1.2);
+    xTo(((event.clientX - rect.left) / rect.width - 0.5) * -pointerX);
+    yTo(((event.clientY - rect.top) / rect.height - 0.5) * -pointerY);
   };
   hero.addEventListener('mousemove', onMove);
   cleanups.push(() => hero.removeEventListener('mousemove', onMove));
@@ -294,103 +309,91 @@ export function initMotion() {
         );
       }
 
-      // Recruitment hero: subtle copy entrance + pointer plate drift (same
-      // contract as the About hero — the pinned zoom and particle burst were
-      // dropped in the full-screen migration #9).
+      // Recruitment hero: copy entrance + scroll parallax + pointer drift (same
+      // contract as the About/Home heroes; the pinned zoom and particle burst
+      // were dropped in the full-screen migration #9).
       const recruitHero =
         document.querySelector<HTMLElement>('.recruitment-hero');
       if (recruitHero) {
-        const artwork = recruitHero.querySelector<HTMLElement>('.artwork');
-        const content = recruitHero.querySelector<HTMLElement>('.hero-content');
-
-        // Entrance, skipped on warm navigation so a Home <-> Recruitment switch
-        // does not replay it. Held hidden until the splash lifts so the reveal
-        // is actually seen instead of finishing behind the overlay.
-        if (!warm && content) {
-          const bits = content.querySelectorAll<HTMLElement>(
-            'h1 span, p, .button',
-          );
-          gsap.set(bits, { autoAlpha: 0, y: 34 });
-          const play = () =>
-            gsap.to(bits, {
-              autoAlpha: 1,
-              y: 0,
-              duration: 0.8,
-              ease: 'power3.out',
-              stagger: 0.09,
-              clearProps: 'transform,opacity,visibility',
-            });
-          if (document.documentElement.classList.contains('splash-done'))
-            play();
-          else window.addEventListener('ds:splash-done', play, { once: true });
-        }
-
-        if (artwork && finePointer()) {
-          // Overscan so the pointer travel never exposes a hard edge.
-          gsap.set(artwork, { scale: 1.04 });
-          const xTo = gsap.quickTo(artwork, 'xPercent', {
-            duration: 0.6,
-            ease: 'power3',
-          });
-          const yTo = gsap.quickTo(artwork, 'yPercent', {
-            duration: 0.6,
-            ease: 'power3',
-          });
-          const onMove = (event: MouseEvent) => {
-            const rect = recruitHero.getBoundingClientRect();
-            xTo(((event.clientX - rect.left) / rect.width - 0.5) * -3);
-            yTo(((event.clientY - rect.top) / rect.height - 0.5) * -3);
-          };
-          recruitHero.addEventListener('mousemove', onMove);
-          cleanups.push(() =>
-            recruitHero.removeEventListener('mousemove', onMove),
-          );
-        }
+        heroEntrance(
+          recruitHero.querySelector<HTMLElement>('.hero-content'),
+          warm,
+        );
+        heroArtworkParallax(
+          recruitHero,
+          recruitHero.querySelector<HTMLElement>('.art-bg'),
+          finePointer(),
+          cleanups,
+        );
       }
 
-      // About Us hero: subtle copy entrance + pointer plate drift.
+      // About Us hero: copy entrance + scroll parallax + pointer drift (via the
+      // shared helpers; scroll parallax added in the "living hero" pass).
       const aboutHero = document.querySelector<HTMLElement>('.about-hero');
       if (aboutHero) {
-        const artwork = aboutHero.querySelector<HTMLElement>('.artwork');
-        const content = aboutHero.querySelector<HTMLElement>('.hero-content');
+        heroEntrance(
+          aboutHero.querySelector<HTMLElement>('.hero-content'),
+          warm,
+          'h1 span, p',
+        );
+        heroArtworkParallax(
+          aboutHero,
+          aboutHero.querySelector<HTMLElement>('.art-bg'),
+          finePointer(),
+          cleanups,
+        );
+      }
 
-        if (!warm && content) {
-          const bits = content.querySelectorAll<HTMLElement>('h1 span, p');
-          gsap.set(bits, { autoAlpha: 0, y: 34 });
-          const play = () =>
-            gsap.to(bits, {
-              autoAlpha: 1,
-              y: 0,
-              duration: 0.8,
-              ease: 'power3.out',
-              stagger: 0.09,
-              clearProps: 'transform,opacity,visibility',
-            });
-          if (document.documentElement.classList.contains('splash-done'))
-            play();
-          else window.addEventListener('ds:splash-done', play, { once: true });
-        }
+      // Partners hero: copy entrance + scroll parallax + pointer drift.
+      const partnersHero =
+        document.querySelector<HTMLElement>('.partners-hero');
+      if (partnersHero) {
+        heroEntrance(
+          partnersHero.querySelector<HTMLElement>('.hero-content'),
+          warm,
+          '.pill, h1 span',
+        );
+        heroArtworkParallax(
+          partnersHero,
+          partnersHero.querySelector<HTMLElement>('.art-bg'),
+          finePointer(),
+          cleanups,
+        );
+      }
 
-        if (artwork && finePointer()) {
-          gsap.set(artwork, { scale: 1.04 });
-          const xTo = gsap.quickTo(artwork, 'xPercent', {
-            duration: 0.6,
-            ease: 'power3',
-          });
-          const yTo = gsap.quickTo(artwork, 'yPercent', {
-            duration: 0.6,
-            ease: 'power3',
-          });
-          const onMove = (event: MouseEvent) => {
-            const rect = aboutHero.getBoundingClientRect();
-            xTo(((event.clientX - rect.left) / rect.width - 0.5) * -3);
-            yTo(((event.clientY - rect.top) / rect.height - 0.5) * -3);
-          };
-          aboutHero.addEventListener('mousemove', onMove);
-          cleanups.push(() =>
-            aboutHero.removeEventListener('mousemove', onMove),
-          );
-        }
+      // Hall of Frames hero: copy entrance + scroll parallax + pointer drift.
+      const hofHero = document.querySelector<HTMLElement>('.hof-hero');
+      if (hofHero) {
+        heroEntrance(
+          hofHero.querySelector<HTMLElement>('.hero-content'),
+          warm,
+          'h1 span, p',
+        );
+        heroArtworkParallax(
+          hofHero,
+          hofHero.querySelector<HTMLElement>('.art-bg'),
+          finePointer(),
+          cleanups,
+        );
+      }
+
+      // Contact hero: copy entrance + a small pointer drift only. This hero is
+      // NOT full-bleed (fixed 954, artwork 801×600 at −131/−92), so no scroll
+      // parallax — just a gentle pointer move with minimal overscan.
+      const contactHero = document.querySelector<HTMLElement>('.contact-hero');
+      if (contactHero) {
+        heroEntrance(
+          contactHero,
+          warm,
+          '.hero-intro, .hero-cards, .contact-form',
+        );
+        heroArtworkParallax(
+          contactHero,
+          contactHero.querySelector<HTMLElement>('.hero-art'),
+          finePointer(),
+          cleanups,
+          { scroll: false, scale: 1.05, pointerX: 1.6, pointerY: 1 },
+        );
       }
 
       // Scroll reveals per section.
