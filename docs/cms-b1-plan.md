@@ -132,3 +132,25 @@ with expected title and Projects content. Testing remote-mode log confirmation
 is still requested; successful deploy alone does not prove env is active.
 Do not claim the specific prior 404 root cause was established. B2 plan:
 `docs/cms-b2-plan.md`.
+
+## Confirmed redirect 404 — repair pass plan
+
+Owner log at `a656374` identifies HTTP 404 from script.googleusercontent.com
+after one redirect, 30s, endpoint fingerprint 6594c78b8247 (matches local).
+This establishes the failed hop, not the underlying Google/Vercel cause.
+Allow one bounded retry specifically for that redirected 404 as well as
+timeout. Restart at the original export endpoint with a fresh request nonce
+and no-cache request to avoid reusing a failed one-time redirect. Maximum
+remains two attempts, 60s each. Initial endpoint 404, auth/schema/HTML/size
+errors must still fail immediately. No stale snapshot fallback. Test fresh
+redirect recovery, exhaustion/preservation and no retry on initial 404. Run
+all seven gates + SEO, real local export and deploy both repos under existing
+authorization. Do not claim Vercel fixed before real build evidence.
+
+Redirect repair results: 14 CMS tests PASS, including new redirect recovery
+and exhaustion/preservation. Real authenticated GAS export PASS and deep-equal
+baseline. Build 0 errors; all seven site gates + SEO PASS, responsive 468/468.
+Initial visual gate could not connect to an expired local static server;
+restarted it and the full gate run passed. No public UI/data/assets changed.
+Live Vercel verification remains pending. Logs in ignored
+`artifacts/cms-admin/redirect-repair-build.log` and the current gate logs.

@@ -93,6 +93,8 @@ async function fetchCmsSnapshotOnce({
   const started = Date.now();
   url.searchParams.set('action', 'export');
   url.searchParams.set('token', apiToken);
+  // Request a fresh ContentService redirect on every attempt.
+  url.searchParams.set('cms_request', randomUUID());
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
   try {
@@ -102,7 +104,8 @@ async function fetchCmsSnapshotOnce({
       response = await fetchImpl(url, {
         redirect: 'manual',
         signal: controller.signal,
-        headers: { Accept: 'application/json' },
+        cache: 'no-store',
+        headers: { Accept: 'application/json', 'Cache-Control': 'no-cache' },
       });
       if (![301, 302, 303, 307, 308].includes(response.status)) break;
       const location = response.headers.get('location');
@@ -113,9 +116,16 @@ async function fetchCmsSnapshotOnce({
     }
     if (!response.ok) {
       await response.body?.cancel();
-      throw new Error(
+      const error = new Error(
         `CMS export HTTP status ${response.status} at ${url.hostname} (redirects=${redirects}, elapsed=${Math.round((Date.now() - started) / 1000)}s, endpoint=${endpointFingerprint}).`,
       );
+      if (
+        response.status === 404 &&
+        redirects > 0 &&
+        url.hostname === 'script.googleusercontent.com'
+      )
+        error.code = 'CMS_REDIRECT_NOT_FOUND';
+      throw error;
     }
     if (
       !/^application\/json(?:\s*;|$)/i.test(
@@ -145,7 +155,11 @@ export async function fetchCmsSnapshot(options) {
     try {
       return await fetchCmsSnapshotOnce(options);
     } catch (error) {
-      if (error.code !== 'CMS_TIMEOUT' || attempt === 1) throw error;
+      if (
+        !['CMS_TIMEOUT', 'CMS_REDIRECT_NOT_FOUND'].includes(error.code) ||
+        attempt === 1
+      )
+        throw error;
     }
   }
 }

@@ -290,7 +290,7 @@ test('HTTP diagnostics identify the failed hop without exposing URLs or credenti
         apiToken: token,
         fetchImpl: async () => {
           calls++;
-          if (redirected && calls === 1)
+          if (redirected && calls % 2 === 1)
             return new Response(null, {
               status: 302,
               headers: {
@@ -319,7 +319,52 @@ test('HTTP diagnostics identify the failed hop without exposing URLs or credenti
         return true;
       },
     );
-    assert.equal(calls, redirected ? 2 : 1);
+    assert.equal(calls, redirected ? 4 : 1);
+  }
+});
+
+test('redirect 404 retries with a fresh export request; exhaustion leaves snapshot intact', async () => {
+  for (const recover of [true, false]) {
+    await withSnapshot(async ({ path, original, directory }) => {
+      const calls = [];
+      const fetchImpl = async (value, options) => {
+        const url = new URL(value);
+        calls.push(url);
+        assert.equal(options.cache, 'no-store');
+        assert.equal(options.headers['Cache-Control'], 'no-cache');
+        if (url.hostname === 'script.google.com')
+          return new Response(null, {
+            status: 302,
+            headers: {
+              location: `https://script.googleusercontent.com/macros/echo?user_content_key=attempt-${calls.length}`,
+            },
+          });
+        if (recover && calls.length === 4) return jsonResponse();
+        return new Response('expired redirect', { status: 404 });
+      };
+      const sync = syncCmsSnapshot({
+        snapshotPath: path,
+        env: { CMS_API_URL: endpoint, CMS_API_TOKEN: token },
+        fetchImpl,
+      });
+      if (recover) {
+        assert.equal(await sync, 'remote');
+        assert.deepEqual(JSON.parse(await readFile(path, 'utf8')), baseline);
+      } else {
+        await assert.rejects(sync, /404 at script.googleusercontent.com/);
+        assert.equal(await readFile(path, 'utf8'), original);
+      }
+      assert.equal(calls.length, 4);
+      assert.equal(calls[0].hostname, 'script.google.com');
+      assert.equal(calls[2].hostname, 'script.google.com');
+      assert(calls[0].searchParams.get('cms_request'));
+      assert.notEqual(
+        calls[0].searchParams.get('cms_request'),
+        calls[2].searchParams.get('cms_request'),
+      );
+      assert.notEqual(calls[1].href, calls[3].href);
+      assert.deepEqual(await readdir(directory), ['snapshot with spaces.json']);
+    });
   }
 });
 

@@ -48,7 +48,8 @@ GAS ContentService melakukan redirect ke `script.googleusercontent.com`; build
 client hanya mengikuti redirect Google yang diizinkan. Login HTML, token salah,
 payload invalid, timeout atau response >1 MiB menggagalkan build dan menjaga
 snapshot sebelumnya. Fetch menunggu hingga 60 detik per attempt; timeout
-diulang sekali (maksimal dua attempt), sementara payload invalid tetap gagal
+atau 404 pada redirect Google ContentService diulang sekali dengan request
+export baru (maksimal dua attempt total). 404 endpoint awal dan payload invalid tetap gagal
 langsung. Prebuild mendahulukan IPv4 untuk koneksi Google. Error HTTP menyebut
 host Google, hop redirect, durasi dan fingerprint endpoint tanpa URL/token,
 untuk membedakan kesalahan endpoint dari redirect. Acuan:

@@ -17,7 +17,12 @@ Owner confirmed unchanged-content save message and both rebuild requests.
 Authenticated export remains identical baseline (4 Projects). Anonymous admin
 request redirects to Google login, editor not exposed. Latest a656374 Vercel
 commit statuses failed for both projects; older production deployment remains
-successful. NEXT: obtain latest build logs and repair rebuild failure before
+successful. Latest production log confirms 404 on script.googleusercontent.com after one
+redirect, endpoint fingerprint matches local. Repair requests a fresh export
+nonce/no-cache and retries that redirected 404 once (two attempts total);
+initial endpoint 404 still fails immediately. 14 CMS tests, real GAS export
+(baseline identical) and 7 gates + SEO PASS (responsive 468/468).
+NEXT: deploy/verify Vercel redirect repair before
 Projects growth/media/Team; non-owner-account test also pending.
 Plans: `docs/cms-b2-plan.md`; install guide: `docs/cms-admin-setup.md`.
 Panduan: `docs/cms-gas-setup.md`.

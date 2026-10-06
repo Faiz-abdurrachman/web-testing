@@ -2761,3 +2761,11 @@ remain untouched. Generated installer/admin files are ignored, contain no
 secrets, and require a separate owner-only GAS project. Boundary tests cover
 auth, revision conflicts, single batch writes and partial hook/retry behavior;
 mock browser QA covers 320/390/768/1440, font loading and keyboard/escaping.
+
+### CMS redirect 404 recovery (6 Oct 2026)
+
+Vercel log establishes 404 at script.googleusercontent.com after one redirect;
+endpoint fingerprint matches local. Client starts a fresh export with nonce
+and no-cache and retries that specific redirect failure once, sharing the
+two-attempt budget with timeouts. No initial-404 retry or stale data fallback.
+No public UI/data/assets changed. Recovery/exhaustion and secrecy tests PASS.
