@@ -5,12 +5,13 @@ Prompt ini memuat seluruh konteks, aturan hukum presisi piksel, strict 8-point g
 **hukum warna (fills & gradient harus persis Figma)**, protokol per-section, dan
 checklist.
 
-**★ STATUS & MISI SEKARANG (6 Oct 2026).** **#9 full-screen SELESAI SEMUA**
-(Homepage, About Us, Recruitment, Partners, Hall of Frames, Contact = hero gambar
-`assets/hero gambar/` 1×/2×/3× + section `100svh`), **fix-9 #1–#8 + #10–#12
-SELESAI**, plus polish UI (carousel crossfade, footer scroll-up, detail glow,
-Leader Team bleed, navbar underline glow) dan **HD hero pass**. HEAD = `8885684`
-(`main = origin/main = production/main`).
+**★ STATUS & MISI SEKARANG (6 Oct 2026).** **#9 full-screen SELESAI** untuk
+Homepage, About Us, Recruitment, Partners, Hall of Frames (hero gambar
+`assets/hero gambar/` + section `100svh`). **Contact DIKECUALIKAN:** hero-nya
+dikembalikan ke Figma-exact (artwork node 801×600 di −131/−92, tinggi tetap 954,
+bukan full-screen) — MAE 2.757. **fix-9 #1–#8 + #10–#12 SELESAI**, plus polish UI
+(carousel crossfade, footer scroll-up, detail glow, Leader Team bleed, navbar
+underline glow) dan **HD hero pass**. **7 gate + seo ALL PASS.**
 **NEXT (pilih sesuai instruksi user):**
 
 1. **Audit per-section halaman tersisa / Detail HoDS** (`864:18857` dkk) —
@@ -50,14 +51,17 @@ Target: **pixel-accurate ke Figma/PNG**, HTML/CSS ringan (bukan flatten screensh
 ================================================================================
 ★ STATUS SEKARANG (6 Oct 2026): SEMUA HALAMAN SELESAI — jangan rusak
 ================================================================================
-- **#9 full-screen SELESAI**: semua halaman pakai pola **hero = gambar background**
-  dari `assets/hero gambar/` (gambar TIDAK memuat teks; heading/subtitle/tombol
-  tetap HTML) + **`100svh`**, full-bleed; **section konten** = `min-height:
-  100svh` + center. Video/partikel dihapus. **CTA & footer TIDAK diubah.**
+- **#9 full-screen SELESAI** untuk Homepage, About Us, Recruitment, Partners,
+  Hall of Frames: **hero = gambar background** dari `assets/hero gambar/`
+  (gambar TIDAK memuat teks; heading/subtitle/tombol tetap HTML) + **`100svh`**,
+  full-bleed; **section konten** = `min-height: 100svh` + center.
+  Video/partikel dihapus. **CTA & footer TIDAK diubah.** **Contact DIKECUALIKAN
+  (6 Oct 2026):** hero-nya Figma-exact (artwork node 801×600 di −131/−92, tinggi
+  954) — bukan full-screen.
 - Hero art dibake `npm run assets:heroes` (`scripts/generate-hero-bg.mjs`) ke
   `public/images/<page>/<base>.webp` + `-2x` + `-3x` (q88/86/84, `fit: cover`) +
-  `srcset` w-descriptor + `sizes="100vw"`. Varian 3× di-skip bila sumber < 3×
-  (Contact `contact page.png` 2680px → 1×/2×).
+  `srcset` w-descriptor + `sizes="100vw"`. Varian 3× di-skip bila sumber < 3×.
+  Contact tidak dibake di sini (dipakai artwork node via `assets:contact`).
 - **DILARANG `zoom` / `transform: scale`** untuk full-screen (user menolak: render
   pecah). Pakai `min-height: 100svh` + centering.
 - **Work order full-screen (resep + checklist + jebakan):** WAJIB BACA

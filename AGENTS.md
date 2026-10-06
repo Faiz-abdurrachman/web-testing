@@ -398,14 +398,20 @@ gated reduce); #6 `html { scroll-behavior: smooth }`gated reduce; #7 divider
 divider/legal** (bukan fixed); #11 HoF featured frame **di belakang** portrait
 (z-index 0/1/2/3); #12 OurTeam **HoDS** portrait bleed 42px ala HoF (leader tetap
 clip). **Tiap item 7 gate + seo PASS.** Commit`81ffb25`..`b4b5e62`.
-- **★ SELESAI (6 Oct 2026) = #9 SEMUA halaman full-screen** (hero gambar
+- **★ SELESAI (6 Oct 2026) = #9 halaman full-screen** (hero gambar
   `hero-bg.webp` + semua section konten `100svh` + center; CTA/footer tetap):
-  Homepage, About Us, Recruitment, Partners, Hall of Frames, Contact. Skrip baru
+  Homepage, About Us, Recruitment, Partners, Hall of Frames. Skrip baru
   `npm run assets:heroes` (`scripts/generate-hero-bg.mjs`). Verify diukur di
   viewport seragam **1440×903**, reference di-pad `sharp.extend()` (Recruitment:
   Who 57/57, WYD 0/20, Timeline 45/46, Snippets 3/3; Partners hero asimetris
-  81/163 karena konten Figma tidak center, Why 123/124; HoF hero 903 tanpa pad;
-  Contact 954 tanpa pad). 7 gate + seo ALL PASS.
+  81/163 karena konten Figma tidak center, Why 123/124; HoF hero 903 tanpa pad).
+  7 gate + seo ALL PASS.
+- **★ RALAT (6 Oct 2026) — Contact hero BUKAN full-screen.** User minta hero
+  Contact `1445:5066` sama persis Figma: artwork node `1445:5067` (801×600) di
+  `−131/−92` atas `#050507`, section **fixed 954** (tanpa `100svh`). `contact
+page.png` tidak dipakai (gambar beda framing, MAE ~16). `hero-bg.*` Contact
+  dihapus; Contact dikeluarkan dari `generate-hero-bg.mjs`. MAE 14.73 → **2.757**.
+  **Jangan "perbaiki" balik ke full-bleed.** Hero lain tetap full-screen.
 - **★ NEXT = #9 selesai; berikutnya audit sisa Detail HoDS + konten asli** (foto
   member, logo partner, `projects.ts`, tanggal recruitment, milestone HoF).
   Work order full-screen: **`docs/page-fullscreen-migration-plan.md`** (semua

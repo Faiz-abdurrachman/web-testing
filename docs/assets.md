@@ -415,6 +415,21 @@ assets:contact` regenerates it and the icons.
   the content box) and alpha calibrated from pixels (`37% → 11% @52% → 28%` over
   the fill). The input fields `1445:5102` and arrow discs `1445:5082` are **not**
   glass (plain `.20`/`.15` fill) — do not add a rim to them.
+- **Contact hero reverted to Figma-exact (6 Oct 2026).** The #9 full-screen
+  migration had replaced the artwork with a full-bleed background baked from
+  `assets/hero gambar/contact page.png` → `/images/contact/hero-bg.webp`. User
+  asked to match Figma exactly and **not** be full-screen, so the hero is back to
+  the node `1445:5066` composition: the artwork `1445:5067`
+  (`Contact-Hero-Art-2x.png`, re-verified **byte-identical** to a fresh Figma node
+  export, MAE 0.000) is placed at `−131/−92`, **801 × 600**, over `#050507`; the
+  section is a fixed **954** (`min-height: 954px`, no `100svh`), row at y240.
+  `assets/hero gambar/contact page.png` is **not** used (it is a similar but
+  differently-framed image — MAE ~16 vs the node — so it cannot be "exactly like
+  Figma"). `hero-bg.webp` removed; `generate-hero-bg.mjs` no longer bakes Contact
+  (the other five heroes keep their `hero-bg.*`). `generate-contact-assets.mjs`
+  re-emits `hero-art.webp` (801, q88) + `hero-art-2x.webp` (1602, q86). `verify.mjs`
+  asserts `art` = `.hero-art` `{−131,−92,801×600}`. **MAE 14.73 → 2.757** (the
+  glass-pass level). 7 gate + seo ALL PASS.
 - `verify.mjs` asserts the `contactHero` geometry (section 1440 × 954, row
   80/240/1280 × 594, left 587, form 661, art −131/−92/801 × 600, cards
   564/662/760 × 74, overflow 0) and diffs vs `Contact-Hero-1x.png`. MAE after the
@@ -422,19 +437,6 @@ assets:contact` regenerates it and the icons.
   excluded_ content MAE is **~1.28** (the reference PNG includes the navbar, which
   `verify.mjs` hides). `responsive-audit` covers `/contact` (18 routes × 26 widths
   = 468) and the sitemap has 18 URLs.
-- **Full-screen migration (#9, 6 Oct 2026).** The swirl `hero-art` (node
-  `1445:5067`) was replaced by a full-bleed hero background:
-  `assets/hero gambar/contact page.png` (opaque, 2680 × 2032) baked by
-  `npm run assets:heroes` to `/images/contact/hero-bg.webp` (1440 × 954, q88) +
-  `hero-bg-2x.webp` (2880 × 1908, q86; no 3× — the 2680px source would upscale),
-  `<img srcset>` now uses **w-descriptors + `sizes="100vw"`** (was `x`-descriptors,
-  which served the 1× art on desktop = blurry), `.art-bg` `inset: 0` /
-  `object-fit: cover`. The other five heroes add a `-3x` variant (q84). Section gained
-  `min-height: 100vh/100svh` + `justify-content: center` (2-column row preserved);
-  content + `240/120` padding = 954 > viewport, so the section stays **954** and
-  the row stays at y240. `verify.mjs` now asserts `art` = `.art-bg`
-  `{0,0,1440×954}`. MAE vs `Contact-Hero-1x.png` rises to **14.73** (the new
-  background is a different scene; no threshold).
 
 ## Hall of Frames — Community Milestone (1 October 2026)
 

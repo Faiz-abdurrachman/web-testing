@@ -90,8 +90,9 @@ Section MAE ~2.64 (membaik dari 3.305).
 
 - **Work order:** `docs/page-fullscreen-migration-plan.md` — **Recruitment
   (`1436:3505`) ✅ · Partners (`1439:4787`) ✅ · Hall of Frames (`1439:4506`) ✅ ·
-  Contact (`1445:5065`) ✅**. Homepage & About Us SELESAI lebih awal. **Semua
-  halaman selesai.**
+  Contact (`1445:5065`) ⚠️ DIKEMBALIKAN ke Figma-exact (6 Oct 2026, user minta
+  tidak full-screen; lihat §Contact di work order)**. Homepage & About Us SELESAI
+  lebih awal. Hero full-bleed kini 5 halaman (Contact dikecualikan).
 - **Resep:** hero = gambar `assets/hero gambar/*` → `hero-bg.webp`+`-2x`
   `100svh`; section konten `min-height:100svh` + center; CTA/footer tetap.
   **DILARANG `zoom`/`transform:scale`.**

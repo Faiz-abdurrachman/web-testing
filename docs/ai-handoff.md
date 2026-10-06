@@ -10,8 +10,9 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 **★ SELESAI (6 Oct 2026) — Hero HD pass: semua hero pakai `assets/hero gambar/`
 di 1×/2×/3×.** User minta hero tidak burik + selalu 100vw/vh. `npm run
-assets:heroes` (`scripts/generate-hero-bg.mjs`) kini membake **semua 6 hero**
-(Home/About/Recruitment/Partners/HoF/Contact) dari `assets/hero gambar/` ke
+assets:heroes` (`scripts/generate-hero-bg.mjs`) kini membake **5 hero full-bleed**
+(Home/About/Recruitment/Partners/HoF; Contact dibuang dari daftar 6 Oct sore
+setelah hero-nya dikembalikan ke artwork node Figma) dari `assets/hero gambar/` ke
 `public/images/<page>/<base>.webp` + `-2x` + `-3x` (q88/86/84, `fit: cover`);
 varian 3× dilewati bila sumber < 3× frame (Contact `contact page.png` 2680px →
 hanya 1×/2×). Semua `<img>` hero pakai `srcset` **w-descriptor + `sizes="100vw"`**
@@ -69,13 +70,18 @@ Recruitment, Partners, Hall of Frames, dan **Contact** kini memakai pola hero
 gambar + section `100svh`. Tidak ada halaman tersisa untuk #9. Work order +
 checklist: `docs/page-fullscreen-migration-plan.md`.
 
-**SELESAI (6 Oct 2026) — Contact full-screen (hero gambar + 100svh).**
-`ContactHero.astro` → background `assets/hero gambar/contact page.png` →
-`/images/contact/hero-bg.webp` + `-2x` (`npm run assets:heroes`), full-bleed;
-swirl `.hero-art` diganti. Section `min-height:100svh` + `justify-content:center`
-(2 kolom dipertahankan; konten 954 > viewport → tinggi tetap 954). Verify assert
-`art` kini `.art-bg` `{0,0,1440×954}`. **7 gate + seo ALL PASS.** MAE hero
-2.76 → 14.73 (background art baru; tidak di-assert).
+**★ SELESAI (6 Oct 2026) — Contact hero DIKEMBALIKAN ke Figma-exact (bukan
+full-screen).** User minta hero Contact `1445:5066` sama persis Figma & **tidak**
+full-screen. Temuan: node Figma menaruh artwork `1445:5067` (801×600) di
+`−131/−92` atas `#050507`, tinggi frame **954** — bukan full-bleed. `contact
+page.png` (2680×2032) ternyata **gambar berbeda** (framing beda, MAE ~16) jadi
+tidak dipakai; artwork node (`Contact-Hero-Art-2x.png`, re-verified byte-identik
+MAE 0.000) dipakai. Perubahan: `ContactHero.astro` → `.hero-art` absolute
+`−131/−92` 801×600, section `min-height:954px` (tanpa `100svh`);
+`hero-bg.webp`/`-2x` dihapus; `generate-hero-bg.mjs` tak lagi bake Contact;
+`generate-contact-assets.mjs` kembalikan `hero-art.webp`/`-2x`; `verify.mjs`
+assert `art` `.hero-art` `{−131,−92,801×600}`. **MAE 14.73 → 2.757**, geometri
+exact. **7 gate + seo ALL PASS.** Hero lain tetap full-screen.
 
 **SELESAI (6 Oct 2026) — Hall of Frames full-screen (hero gambar + section
 100svh).** `HallOfFramesHero.astro` → gambar background

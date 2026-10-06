@@ -20,12 +20,11 @@ const info = [
 
 <section class="contact-hero" aria-labelledby="contact-hero-title">
   <img
-    class="art-bg"
-    src="/images/contact/hero-bg.webp"
-    srcset="/images/contact/hero-bg.webp 1440w, /images/contact/hero-bg-2x.webp 2880w"
-    sizes="100vw"
-    width="1440"
-    height="954"
+    class="hero-art"
+    src="/images/contact/hero-art.webp"
+    srcset="/images/contact/hero-art.webp 1x, /images/contact/hero-art-2x.webp 2x"
+    width="801"
+    height="600"
     alt=""
     aria-hidden="true"
     fetchpriority="high"
@@ -104,49 +103,25 @@ const info = [
 <style>
   /* Matches Figma node 1445:5066 (1440 × 954): padding 240px 80px 120px, a
      centered row (gap 32) of a 587px left column (pill/title/copy + three info
-     cards, `space-between`) and a 661px form panel. Full-screen migration (#9):
-     the hero background is the supplied `assets/hero gambar/contact page.png`
-     → hero-bg.webp (npm run assets:heroes), full-bleed; the section is one
-     screen tall (100svh) and the 2-column row stays centred. Info cards are
-     non-links (no destinations were supplied). */
+     cards, `space-between`) and a 661px form panel. The purple artwork is the
+     node 1445:5067 render placed at −131/−92 (801 × 600) over #050507 — NOT a
+     full-bleed background (user: match Figma exactly, not full-screen). Info
+     cards are non-links (no destinations were supplied). */
   .contact-hero {
     position: relative;
-    isolation: isolate;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: 100vh;
-    min-height: 100svh;
+    min-height: 954px;
     padding: 240px 80px 120px;
     background: #050507;
     overflow: clip;
   }
 
-  .art-bg {
+  .hero-art {
     position: absolute;
-    inset: 0;
-    z-index: -1;
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
-
-  @media (min-width: 1921px) {
-    .art-bg {
-      left: 50%;
-      right: auto;
-      width: 1920px;
-      transform: translateX(-50%);
-      mask-image: linear-gradient(
-        90deg,
-        transparent,
-        #000 12%,
-        #000 88%,
-        transparent
-      );
-    }
+    left: -131px;
+    top: -92px;
+    width: 801px;
+    height: 600px;
+    pointer-events: none;
   }
 
   .hero-row {
@@ -398,6 +373,10 @@ const info = [
     .hero-intro h1 {
       font-size: clamp(36px, 7vw, 56px);
       line-height: 1.2;
+    }
+    .hero-art {
+      width: 600px;
+      height: 450px;
     }
   }
 </style>

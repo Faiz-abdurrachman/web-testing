@@ -5,7 +5,10 @@
 // docs/page-fullscreen-migration-plan.md).
 //
 // A variant is skipped when it would upscale the source by more than ~15%, so
-// we never serve a blurry upscale (e.g. the 2680px Contact source stops at 2×).
+// we never serve a blurry upscale (e.g. a 1600px source stops at 1×).
+//
+// Contact is NOT a full-bleed hero: its artwork is the fixed 801×600 Figma node
+// 1445:5067 placed at −131/−92 (see generate-contact-assets.mjs).
 //
 // Run: `npm run assets:heroes`.
 import sharp from 'sharp';
@@ -46,13 +49,6 @@ const heroes = {
     1440,
     903,
     'public/images/hof',
-    'hero-bg',
-  ],
-  contact: [
-    'assets/hero gambar/contact page.png',
-    1440,
-    954,
-    'public/images/contact',
     'hero-bg',
   ],
 };

@@ -2,10 +2,10 @@
 // `assets/contact/`. Run with `npm run assets:contact`.
 //
 // Source of truth (see docs/assets.md §Contact):
+// - Contact-Hero-Art-2x.png → the node 1445:5067 render (the purple artwork
+//   that sits at −131/−92 behind "Get in touch"). Re-verified 6 Oct 2026: the
+//   stored 2× asset is byte-identical to a fresh Figma node export (MAE 0.000).
 // - Contact-Icon-{Email,Whatsapp,Office}-2x.png → the three info-card icons.
-//   (The old swirl `Contact-Hero-Art-2x.png` is no longer served: fix-9 #9
-//   replaced the hero with the full-bleed `assets/hero gambar/contact page.png`
-//   baked by `npm run assets:heroes`.)
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
@@ -22,6 +22,8 @@ const webp = (input, output, width, quality) =>
     .toFile(path.join(out, output));
 
 await Promise.all([
+  webp(path.join(src, 'Contact-Hero-Art-2x.png'), 'hero-art.webp', 801, 88),
+  webp(path.join(src, 'Contact-Hero-Art-2x.png'), 'hero-art-2x.webp', 1602, 86),
   webp(path.join(src, 'Contact-Icon-Email-2x.png'), 'icon-email.webp', 61, 90),
   webp(
     path.join(src, 'Contact-Icon-Email-2x.png'),
