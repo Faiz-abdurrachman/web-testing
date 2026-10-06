@@ -61,31 +61,30 @@ ID_CONFLICT | UNCONFIRMED | METHOD_NOT_ALLOWED`.
 
 ## 2. Keputusan: disetujui vs usulan (belum disetujui)
 
-| #   | Keputusan                                                                 | Status                                    |
-| --- | ------------------------------------------------------------------------- | ----------------------------------------- |
-| 1   | Tujuan = Supabase Postgres, pipeline langsung (tanpa GAS intake)          | **disetujui user**                        |
-| 2   | Kontrak API, UI, validasi, geometri tidak berubah                         | **disetujui user**                        |
-| 3   | Insert lewat Vercel Function server (`service_role`), bukan klien         | **disetujui user**                        |
-| 4   | Pass 1 **hanya** intake; auth/admin, CAPTCHA, fitur tambahan = pass pisah | **disetujui user** (pemisahan scope)      |
-| 5   | Skema pass 1 = `fields jsonb` kanonik + metadata                          | rekomendasi user (belum disetujui formal) |
-| 6   | `RECRUITMENT_OPEN` tetap di env (kill-switch)                             | rekomendasi user (belum disetujui formal) |
-| 7   | Akses data pendaftar server owner-only (bukan RLS klien)                  | rekomendasi user (belum disetujui formal) |
-| 8   | Idempotency unique `receipt` + `ON CONFLICT` + fungsi DB atomik           | **usulan** (inti pass 1)                  |
-| 9   | Kolom turunan/queryable (email, primary_hods, array, boolean)             | **pass lanjutan, belum disetujui**        |
-| 10  | Baca admin (route server + audit)                                         | **pass lanjutan, belum disetujui**        |
-| 11  | Rate limit server-side                                                    | **pass lanjutan, belum disetujui**        |
-| 12  | CAPTCHA (Turnstile) — butuh perubahan klien                               | **pass terpisah, belum disetujui**        |
-| 13  | Retensi PII (mis. 12 bulan)                                               | **belum diputuskan**                      |
-| 14  | Enkripsi tambahan `email`/`whatsapp` (pgcrypto)                           | **belum diputuskan**                      |
-| 15  | Pembukaan recruitment untuk publik                                        | **belum diputuskan**                      |
+| #   | Keputusan                                                                 | Status                               |
+| --- | ------------------------------------------------------------------------- | ------------------------------------ |
+| 1   | Tujuan = Supabase Postgres, pipeline langsung (tanpa GAS intake)          | **disetujui user**                   |
+| 2   | Kontrak API, UI, validasi, geometri tidak berubah                         | **disetujui user**                   |
+| 3   | Insert lewat Vercel Function server (`service_role`), bukan klien         | **disetujui user**                   |
+| 4   | Pass 1 **hanya** intake; auth/admin, CAPTCHA, fitur tambahan = pass pisah | **disetujui user** (pemisahan scope) |
+| 5   | Skema pass 1 = `fields jsonb` kanonik + metadata                          | **disetujui user** (7 Oct 2026)      |
+| 6   | `RECRUITMENT_OPEN` tetap di env (kill-switch)                             | **disetujui user** (7 Oct 2026)      |
+| 7   | Akses data pendaftar server owner-only; route admin = pass terpisah       | **disetujui user** (7 Oct 2026)      |
+| 8   | Idempotency unique `receipt` + `ON CONFLICT` + fungsi DB atomik           | **disetujui user** (7 Oct 2026)      |
+| 9   | Kolom turunan/queryable (email, primary_hods, array, boolean)             | **pass lanjutan, belum disetujui**   |
+| 10  | Baca admin (route server + audit)                                         | **pass lanjutan, belum disetujui**   |
+| 11  | Rate limit server-side                                                    | **pass lanjutan, belum disetujui**   |
+| 12  | CAPTCHA (Turnstile) — butuh perubahan klien                               | **pass terpisah, belum disetujui**   |
+| 13  | Retensi PII (mis. 12 bulan)                                               | **belum diputuskan**                 |
+| 14  | Enkripsi tambahan `email`/`whatsapp` (pgcrypto)                           | **belum diputuskan**                 |
+| 15  | Pembukaan recruitment untuk publik                                        | **belum diputuskan**                 |
 
 Catatan status:
 
-- **disetujui user** = dari arahan eksplisit; boleh jadi dasar implementasi.
-- **rekomendasi user** = usulan pemilik proyek untuk arah pass 1; **tetap butuh
-  approval formal sebelum implementasi** — jangan anggap final.
-- **usulan / pass lanjutan / pass terpisah / belum diputuskan** = jangan
-  diimplementasikan di pass 1.
+- **disetujui user** = dari arahan eksplisit; dasar implementasi. Pass 1 (#1–#8)
+  sudah disetujui 7 Oct 2026.
+- **pass lanjutan / pass terpisah / belum diputuskan** = jangan diimplementasikan
+  di pass 1; menunggu keputusan terpisah.
 
 ## 3. Arsitektur target
 
@@ -228,30 +227,37 @@ submit_recruitment_application(p_receipt uuid, p_hash text, p_fields jsonb)
   receipt sama tanpa baris kedua.
 - Tidak ada tulisan parsial: validasi kontrak **sebelum** insert.
 
-### 6.1 Fungsi intake harus server-only
+### 6.1 Jalur RPC: objek internal privat + wrapper exposed (dikoreksi)
 
-RLS di tabel **tidak cukup** untuk fungsi `SECURITY DEFINER`: fungsi dieksekusi
-dengan hak pemilik (definer) dan bisa dipanggil via PostgREST `/rest/v1/rpc`
-oleh siapa pun yang punya `EXECUTE`, kecuali dibatasi. Wajib:
+RLS di tabel **tidak cukup** untuk fungsi `SECURITY DEFINER`: fungsi berjalan
+dengan hak pemilik dan bisa dipanggil via PostgREST `/rest/v1/rpc` oleh siapa
+pun yang punya `EXECUTE`. Model yang dipakai:
 
-1. **Taruh di schema privat yang tidak diekspos PostgREST** (mis. `private`),
-   bukan `public` — PostgREST hanya membuka schema yang didaftarkan.
-2. **`REVOKE EXECUTE FROM PUBLIC, anon, authenticated`** pada fungsi, lalu
-   **`GRANT EXECUTE ... TO service_role`** saja. Default `EXECUTE` ke `PUBLIC`
-   harus dicabut eksplisit.
-3. **`SECURITY DEFINER SET search_path = pg_catalog, private`** (schema tetap
-   yang aman) untuk mencegah pembajakan objek lewat `search_path`.
-4. **Jangan** memberi `GRANT USAGE` pada schema privat ke `anon`/`authenticated`.
-5. Panggilan dari Vercel Function memakai `service_role`; klien publik tidak
-   pernah memanggil RPC.
+- **Tabel + fungsi inti di schema `private`** (`private.recruitment_applications`,
+  `private.recruitment_submit_intake`) — schema ini **tidak** diekspos
+  PostgREST.
+- **Wrapper RPC di schema exposed `public`** (`public.submit_recruitment_application`)
+  — tipis, hanya memanggil fungsi privat.
+- **`EXECUTE` wrapper hanya untuk `service_role`**:
+  `REVOKE ALL ... FROM PUBLIC, anon, authenticated;`
+  `GRANT EXECUTE ... TO service_role;`
+- **`EXECUTE` fungsi privat dicabut** dari `PUBLIC, anon, authenticated`.
+- **`SECURITY DEFINER SET search_path`** tetap/aman di kedua fungsi
+  (`private, pg_catalog` untuk inti; `pg_catalog` di wrapper dengan panggilan
+  yang di-schema-qualify).
+- **Tanpa `USAGE` schema `private`** untuk `anon`/`authenticated`.
+- Panggilan dari Vercel Function memakai `service_role`; klien publik tidak
+  pernah memanggil RPC.
 
-**Test wajib (pass 1):**
+**Test wajib (pass 1), sudah dijalankan di Postgres nyata:**
 
-- `anon` memanggil `rpc('submit_recruitment_application', …)` → **ditolak**
-  (404/403/permission denied), bukan insert.
-- `authenticated` (non-service) memanggil fungsi → **ditolak**.
-- `anon`/`authenticated` `SELECT` tabel → **0 baris/denied**.
-- `service_role` → insert/idempotent/`ID_CONFLICT` sesuai §6.
+- `anon`/`authenticated` memanggil wrapper → **permission denied**, bukan insert.
+- `anon`/`authenticated` `SELECT` tabel privat → **permission denied**.
+- `anon` memanggil fungsi privat langsung → **permission denied**.
+- `service_role` → insert/idempotent/`ID_CONFLICT` + race satu baris (§6).
+
+Bukti: `scripts/verify-recruitment-db.mjs` (`npm run verify:recruitment-db`),
+13/13 PASS di Postgres 18.6; evidence `artifacts/recruitment-db/proof.json`.
 
 ## 7. Anti-spam
 
@@ -362,21 +368,23 @@ tanpa migrasi balik data:
 - **Window:** recruitment tetap **tertutup** selama deploy/rollback supaya tidak
   ada pendaftar yang hilang (RPO = 0).
 
-## 13. Work order (semua **belum dieksekusi**)
+## 13. Work order
 
-**Pass 1 — intake minimal (hanya ini yang dikerjakan dulu):**
+**Pass 1 — intake minimal (implementasi lokal SELESAI; setup/live pending):**
 
-1. Review/approve dokumen ini + approve §2 #5–#8 (rekomendasi user still
-   perlu approval formal).
-2. Owner: buat Supabase project; terapkan migrasi SQL tabel minimal (§4.1) +
-   RLS + fungsi privat (§6.1). Tanpa media, tanpa auth, tanpa kolom turunan.
-3. Kode: swap transport `server/recruitment.mjs` GAS → Supabase; env
-   (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`); test baru.
-4. Lokal: suite + `verify:recruitment` + regresi CMS/admin + 7 gate + SEO.
-5. Owner: isi env kedua Vercel; deploy dengan `RECRUITMENT_OPEN=false`.
-6. Acceptance live §11; bukti sanitized.
-7. Update docs; commit. **Push hanya dengan konfirmasi user** (`origin`
-   men-deploy dua situs).
+1. ✅ Approve §2 #4–#8 (7 Oct 2026).
+2. ⏳ **Owner**: buat Supabase project dan terapkan migrasi SQL
+   (`supabase/migrations/20261006120000_recruitment_intake_pass1.sql`) — tabel
+   minimal + RLS + fungsi privat + wrapper exposed (§6.1). **Belum diterapkan
+   ke Supabase.**
+3. ✅ Kode: transport `server/recruitment.mjs` GAS → Supabase RPC; env
+   (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`); test diadaptasi.
+4. ✅ Lokal: `test:recruitment` 9/9; `verify:recruitment-db` 13/13 di Postgres
+   nyata; 7 gate + SEO PASS.
+5. ⏳ **Owner**: isi env kedua Vercel; deploy dengan `RECRUITMENT_OPEN=false`.
+6. ⏳ Acceptance live §11; bukti sanitized.
+7. ⏳ Docs diperbarui + commit lokal; **push hanya dengan konfirmasi user**
+   (`origin` men-deploy dua situs).
 
 **Pass lanjutan (terpisah, hanya setelah pass 1 hijau + approval):**
 
@@ -397,10 +405,6 @@ Jangan menggabungkan pass lanjutan ke pass 1.
 
 ## 15. Keputusan user yang belum dipilih (belum disetujui)
 
-- **Approval formal** untuk arah pass 1 (§2 #5–#8): `fields jsonb` kanonik +
-  metadata; `RECRUITMENT_OPEN` di env; akses pendaftar server owner-only;
-  idempotency `ON CONFLICT` + fungsi atomik. Ini rekomendasi user, **belum**
-  disetujui formal.
 - Kolom turunan/queryable (§4.2) dan jalur baca admin (§4.3/§9) — pass lanjutan.
 - Rate limit: kapan & provider (Upstash/Vercel KV).
 - CAPTCHA (Turnstile): ya/tidak + kapan; ini pass terpisah dengan perubahan
@@ -408,7 +412,28 @@ Jangan menggabungkan pass lanjutan ke pass 1.
 - Retensi PII + apakah pakai enkripsi `email`/`whatsapp`.
 - Kapan recruitment dibuka untuk publik.
 
-## 16. Referensi
+## 16. Kebutuhan setup Supabase (belum dilakukan)
+
+Semua langkah di bawah **manual oleh owner**; belum dieksekusi:
+
+1. Buat project Supabase (organisasi + region terdekat, mis. Singapore).
+2. Terapkan migrasi `supabase/migrations/20261006120000_recruitment_intake_pass1.sql`
+   (SQL Editor atau `supabase db push`). Roles `anon`/`authenticated`/
+   `service_role` standar Supabase sudah ada.
+3. Verifikasi grant: `anon`/`authenticated` **tidak** bisa `EXECUTE` wrapper
+   maupun menyentuh schema `private`. Bisa dijalankan dengan menunjuk
+   `RECRUITMENT_DB_URL` (koneksi migration/owner, **bukan** service key) ke
+   `npm run verify:recruitment-db`.
+4. Pada **kedua** Vercel, set server-only: `SUPABASE_URL`,
+   `SUPABASE_SERVICE_ROLE_KEY` (tanpa prefix `PUBLIC_`), dan
+   `RECRUITMENT_OPEN=false` (tetap tertutup). Buang `RECRUITMENT_GAS_URL` dan
+   `RECRUITMENT_GAS_TOKEN` saat cutover env.
+5. Redeploy kedua situs agar env berlaku; GET harus `{ ok, accepting:false }`.
+6. Acceptance live §11 (dengan membuka sementara), lalu tutup kembali.
+7. **Tidak** membuat Storage, Auth, tabel turunan, atau route admin pada pass
+   ini. Jangan memasang GAS intake.
+
+## 17. Referensi
 
 - [`docs/cms-supabase-migration-plan.md`](cms-supabase-migration-plan.md) — plan
   induk (target, RLS, auth, hybrid snapshot, rollback, penghapusan GAS).

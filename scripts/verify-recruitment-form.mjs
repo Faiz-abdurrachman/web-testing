@@ -71,20 +71,24 @@ try {
     const handle = createRecruitmentHandler({
       env: {
         RECRUITMENT_OPEN: 'true',
+        SUPABASE_URL: 'https://fixtureproject.supabase.co',
+        SUPABASE_SERVICE_ROLE_KEY:
+          'fixture-service-role-key-not-real-credential-000000',
         CMS_ADMIN_ORIGIN: new URL(base).origin,
-        RECRUITMENT_GAS_URL: 'https://script.google.com/macros/s/fixture/exec',
-        RECRUITMENT_GAS_TOKEN: 'fixture-token-not-real-credential-123',
       },
       fetchImpl: async (_, init) => {
         calls++;
         const body = JSON.parse(init.body);
-        receipts.push(body.id);
-        saved.set(body.id, body.fields);
+        receipts.push(body.p_receipt);
+        saved.set(body.p_receipt, body.p_fields);
         if (failFirst) {
           failFirst = false;
           throw Error('ambiguous upstream timeout after save');
         }
-        return Response.json({ ok: true, receipt: body.id });
+        return Response.json({
+          receipt: body.p_receipt,
+          status: 'inserted',
+        });
       },
     });
     await page.route('**/api/recruitment/application', async (route) => {

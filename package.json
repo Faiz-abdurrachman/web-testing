@@ -41,7 +41,8 @@
     "verify:cms-media": "node scripts/verify-cms-media.mjs",
     "recruitment:gas": "node scripts/generate-recruitment-gas.mjs",
     "test:recruitment": "node --test tests/recruitment*.test.mjs",
-    "verify:recruitment": "node scripts/verify-recruitment-form.mjs"
+    "verify:recruitment": "node scripts/verify-recruitment-form.mjs",
+    "verify:recruitment-db": "node scripts/verify-recruitment-db.mjs"
   },
   "dependencies": {
     "astro": "7.3.3",

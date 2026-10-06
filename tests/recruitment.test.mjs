@@ -4,7 +4,10 @@ import vm from 'node:vm';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import * as contract from '../server/recruitment-contract.mjs';
-import { createRecruitmentHandler } from '../server/recruitment.mjs';
+import {
+  canonicalContentHash,
+  createRecruitmentHandler,
+} from '../server/recruitment.mjs';
 
 const id = '12345678-1234-4123-8123-123456789abc';
 const fields = () => ({
@@ -30,13 +33,15 @@ const fields = () => ({
   foundation_skills: ['Python', 'SQL'],
   learning_methods: ['Self-learning', 'Books / Articles'],
 });
-const env = {
+const serviceKey = 'test-only-service-role-key-not-a-real-credential-0000';
+const supabaseEnv = {
   RECRUITMENT_OPEN: 'true',
-  RECRUITMENT_GAS_URL:
-    'https://script.google.com/macros/s/test-deployment/exec',
-  RECRUITMENT_GAS_TOKEN: 'test-only-token-never-real-credential',
+  SUPABASE_URL: 'https://testproject.supabase.co',
+  SUPABASE_SERVICE_ROLE_KEY: serviceKey,
   CMS_ADMIN_ORIGIN: 'https://recruitment.test',
 };
+const rpcUrl =
+  'https://testproject.supabase.co/rest/v1/rpc/submit_recruitment_application';
 const request = (body = { id, fields: fields(), website: '' }, headers = {}) =>
   new Request('https://recruitment.test/api/recruitment/application', {
     method: 'POST',
@@ -46,6 +51,11 @@ const request = (body = { id, fields: fields(), website: '' }, headers = {}) =>
       ...headers,
     },
     body: JSON.stringify(body),
+  });
+const rpcJson = (status, body) =>
+  new Response(JSON.stringify(body), {
+    status,
+    headers: { 'content-type': 'application/json' },
   });
 
 test('contract validates every domain and rejects incomplete/foreign answers', () => {
@@ -80,8 +90,10 @@ test('contract validates every domain and rejects incomplete/foreign answers', (
 test('missing configuration and closed intake fail closed', async () => {
   for (const settings of [
     {},
-    { ...env, RECRUITMENT_OPEN: 'false' },
-    { ...env, RECRUITMENT_GAS_URL: 'https://attacker.test/exec' },
+    { ...supabaseEnv, RECRUITMENT_OPEN: 'false' },
+    { ...supabaseEnv, SUPABASE_URL: 'https://attacker.test' },
+    { ...supabaseEnv, SUPABASE_URL: 'http://testproject.supabase.co' },
+    { ...supabaseEnv, SUPABASE_SERVICE_ROLE_KEY: 'short' },
   ]) {
     const handle = createRecruitmentHandler({
       env: settings,
@@ -102,7 +114,7 @@ test('missing configuration and closed intake fail closed', async () => {
 });
 test('intake rejects foreign origin, malformed payload, honeypot and oversized body before upstream', async () => {
   const handle = createRecruitmentHandler({
-    env,
+    env: supabaseEnv,
     fetchImpl: () => {
       throw Error('must not fetch');
     },
@@ -134,51 +146,71 @@ test('intake rejects foreign origin, malformed payload, honeypot and oversized b
     413,
   );
 });
-test('Google redirect is GET without token/body; success requires matching confirmed receipt', async () => {
+test('server calls the exposed RPC with a canonical payload and only the service key', async () => {
   const calls = [];
   const handle = createRecruitmentHandler({
-    env,
+    env: supabaseEnv,
     fetchImpl: async (url, init) => {
       calls.push({ url, init });
-      return calls.length === 1
-        ? new Response(null, {
-            status: 302,
-            headers: {
-              location:
-                'https://script.googleusercontent.com/macros/echo?fixture=test',
-            },
-          })
-        : Response.json({ ok: true, receipt: id, private: 'must not leak' });
+      return rpcJson(200, { receipt: id, status: 'inserted' });
     },
   });
-  const result = await handle(request());
-  assert.deepEqual(await result.json(), { ok: true, receipt: id });
+  const payload = await (await handle(request())).json();
+  assert.deepEqual(payload, { ok: true, receipt: id });
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].url, rpcUrl);
   assert.equal(calls[0].init.method, 'POST');
-  assert.equal(calls[1].init.method, 'GET');
-  assert.equal(calls[1].init.body, undefined);
-  assert.equal(calls[1].init.headers, undefined);
+  assert.equal(calls[0].init.headers.apikey, serviceKey);
+  assert.equal(calls[0].init.headers.Authorization, `Bearer ${serviceKey}`);
+  const sent = JSON.parse(calls[0].init.body);
+  const validated = contract.validateApplication(fields());
+  assert.deepEqual(Object.keys(sent).sort(), [
+    'p_fields',
+    'p_hash',
+    'p_receipt',
+  ]);
+  assert.equal(sent.p_receipt, id);
+  assert.equal(sent.p_hash, canonicalContentHash(validated));
+  assert.deepEqual(sent.p_fields, validated);
+  assert.equal(JSON.stringify(payload).includes(serviceKey), false);
 });
-test('unconfirmed response has no automatic mutation retry or false success', async () => {
+test('duplicate retry returns the same receipt without a false second insert', async () => {
+  const handle = createRecruitmentHandler({
+    env: supabaseEnv,
+    fetchImpl: async () => rpcJson(200, { receipt: id, status: 'duplicate' }),
+  });
+  assert.deepEqual(await (await handle(request())).json(), {
+    ok: true,
+    receipt: id,
+  });
+});
+test('same receipt with changed answers is an ID_CONFLICT, not a false success', async () => {
+  const handle = createRecruitmentHandler({
+    env: supabaseEnv,
+    fetchImpl: async () =>
+      rpcJson(400, { code: 'P0001', message: 'ID_CONFLICT' }),
+  });
+  const response = await handle(request());
+  assert.equal(response.status, 409);
+  assert.deepEqual(await response.json(), {
+    ok: false,
+    error: { code: 'ID_CONFLICT' },
+  });
+});
+test('unconfirmed upstream never reports success or retries the mutation', async () => {
   for (const response of [
-    () => Response.json({ ok: true, receipt: 'wrong' }),
-    () =>
-      Response.json({
-        ok: false,
-        error: { code: 'SERVER_ERROR' },
-        token: 'never leak',
-      }),
-    () =>
-      new Response(null, {
-        status: 302,
-        headers: { location: 'https://attacker.test/' },
-      }),
+    () => rpcJson(200, { receipt: 'wrong', status: 'inserted' }),
+    () => rpcJson(200, { receipt: id, status: 'unknown' }),
+    () => rpcJson(500, { message: 'boom' }),
+    () => rpcJson(403, { message: 'denied' }),
+    () => new Response('not json', { status: 200 }),
     () => {
       throw Error('private upstream details');
     },
   ]) {
     let count = 0;
     const handle = createRecruitmentHandler({
-      env,
+      env: supabaseEnv,
       fetchImpl: async () => {
         count++;
         return response();
@@ -194,6 +226,9 @@ test('unconfirmed response has no automatic mutation retry or false success', as
   }
 });
 
+// Legacy, uninstalled GAS source kept until the removal pass (see
+// docs/cms-supabase-migration-plan.md §9). It is not part of the live path.
+const gasToken = 'test-only-token-never-real-credential';
 async function gasFixture() {
   const rows = [
     ['receipt', 'content_hash', 'received_at', ...contract.APPLICATION_FIELDS],
@@ -226,7 +261,7 @@ async function gasFixture() {
       getScriptProperties: () => ({
         getProperty: (key) =>
           ({
-            RECRUITMENT_GAS_TOKEN: env.RECRUITMENT_GAS_TOKEN,
+            RECRUITMENT_GAS_TOKEN: gasToken,
             RECRUITMENT_SHEET_ID: 'fixture-private-sheet',
             RECRUITMENT_OPEN: 'true',
           })[key],
@@ -273,11 +308,11 @@ async function gasFixture() {
     context.doPost({ postData: { contents: JSON.stringify(body) } });
   return { post, rows, counts: () => ({ flushes, locks, releases }) };
 }
-test('GAS writes once, formula-safe, locked and flushed; retry is idempotent', async () => {
+test('legacy GAS source writes once, formula-safe, locked and flushed; retry is idempotent', async () => {
   const gas = await gasFixture(),
     body = {
       id,
-      token: env.RECRUITMENT_GAS_TOKEN,
+      token: gasToken,
       fields: { ...fields(), full_name: '=IMPORTXML("fixture")' },
     };
   assert.equal(gas.post(body).ok, true);
@@ -296,7 +331,7 @@ test('GAS writes once, formula-safe, locked and flushed; retry is idempotent', a
   );
   assert.equal(gas.rows.length, 2);
 });
-test('GAS rejects wrong token and invalid fields without writing', async () => {
+test('legacy GAS source rejects wrong token and invalid fields without writing', async () => {
   const gas = await gasFixture();
   assert.equal(
     gas.post({ id, token: 'wrong', fields: fields() }).error.code,
@@ -305,7 +340,7 @@ test('GAS rejects wrong token and invalid fields without writing', async () => {
   assert.equal(
     gas.post({
       id,
-      token: env.RECRUITMENT_GAS_TOKEN,
+      token: gasToken,
       fields: { ...fields(), agreement_1: '' },
     }).error.code,
     'INVALID_INPUT',
