@@ -1,6 +1,6 @@
 # CMS / Admin Dashboard — Rencana (backend Google Apps Script)
 
-Status: **B0 SELESAI · B1 KODE SIAP, LIVE SETUP PENDING** · diputuskan 6 Oct 2026 ·
+Status: **B0 SELESAI · B1 PRODUCTION LIVE, TESTING LOG PENDING** · diputuskan 6 Oct 2026 ·
 Patuhi `docs/pixel-precision-sop.md` + `AGENTS.md`. **Satu langkah per pass + 7
 gate.** Jangan rusak benchmark (geometri/MAE) atau assertion `verify.mjs`.
 
@@ -206,3 +206,7 @@ Rencana dan kriteria fixture tambahan: `docs/cms-b1-plan.md`.
 
 B1 code dan tes selesai; live setup masih pending. Panduan login, installer,
 Script Properties dan env Vercel: `docs/cms-gas-setup.md`.
+
+Production Vercel `fb99c39` remote-mode build and deployment are confirmed.
+Testing deployment also success; remote-mode log confirmation pending. Next
+private dashboard work order: `docs/cms-b2-plan.md`.

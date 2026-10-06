@@ -1,6 +1,6 @@
 # CMS B1 — GAS export and build fetch
 
-Status: CODE VERIFIED; LIVE SETUP PENDING. User authorized continuation, commits and deployment after
+Status: PRODUCTION LIVE; TESTING DEPLOY SUCCESS, REMOTE LOG PENDING. User authorized continuation, commits and deployment after
 B0. B0 was pushed to both remotes at `1b38088`.
 
 ## Execution plan — one backend step
@@ -122,3 +122,13 @@ six data exports and 19 HTML identical baseline. Seven site gates + SEO PASS
 (responsive 468/468). Native Node 22 prebuild against the real GAS API PASS
 with IPv4-first ordering. Logs: ignored `404-diagnostic-build.log` and
 `/tmp/ds-cms-b0/b1-http-diagnostic-*.log`. Live Vercel verification pending.
+
+## Vercel success checkpoint
+
+Owner supplied production logs for `fb99c39`: Snapshot validated (remote mode)
+at 14:44:43, Astro 0 errors, 19 pages, deployment completed at 14:45:01. Both
+GitHub Vercel statuses success. Public production homepage responds HTTP 200
+with expected title and Projects content. Testing remote-mode log confirmation
+is still requested; successful deploy alone does not prove env is active.
+Do not claim the specific prior 404 root cause was established. B2 plan:
+`docs/cms-b2-plan.md`.

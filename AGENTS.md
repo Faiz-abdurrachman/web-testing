@@ -1,20 +1,14 @@
 # AGENTS.md — instructions for AI agents
 
-**CMS B1 KODE SIAP (6 Oct 2026); pemasangan LIVE belum selesai.** Installer GAS
-`cms/gas/export.js` + `npm run cms:gas` menghasilkan `artifacts/cms-gas/Code.gs`;
-setup membuat 8 tab, seed baseline, folder Drive privat dan Script Properties.
-Remote fetch bertoken + timeout/size/redirect guards + replacement atomik siap.
-9 tes CMS + 7 gate situs + SEO diagnostic/IPv4 PASS; 19 HTML tetap identik. User mengonfirmasi
-`setupCms` berhasil di akun owner pilihan terbaru (identitas tidak disimpan di
-repo). Read API sudah deployed; authenticated export identik baseline dan
-build lokal remote mode PASS (0 errors, 19 HTML identik, SEO PASS). NEXT:
-User sudah memasang env kedua Vercel. Testing `38d1589` gagal pada timeout
-15 detik; repair memakai 60 detik per attempt + satu retry timeout. NEXT:
-timeout repair sudah push `615cce3`, tetapi Vercel tetap HTTP 404 setelah
-URL correction/redeploy. Root cause belum diketahui; diagnostic pass mencatat
-host/hop/durasi/fingerprint endpoint tanpa token. Prebuild prefer IPv4
-setelah native Node 22 lokal gagal default DNS tetapi berhasil IPv4. NEXT: deploy
-diagnostik, cocokkan dengan eksekusi GAS dan log kedua Vercel.
+**CMS B1 production LIVE (6 Oct 2026); testing log confirmation pending.**
+Read API authenticated export matches baseline. Vercel production at `fb99c39`
+confirmed remote mode, 0 errors, 19 pages and completed deploy in owner logs.
+Both GitHub Vercel statuses success. Native Node 22 real fetch/prebuild passed
+with IPv4-first DNS; prior 404 root cause not proven. Timeout 60s + one timeout
+retry, safe HTTP diagnostics, atomic validation remain. 9 CMS tests + 7 site
+gates + SEO PASS; 19 HTML identical. NEXT: confirm testing remote-mode log,
+create two Deploy Hooks and implement private admin Projects pass.
+B2 Master Work Plan: `docs/cms-b2-plan.md`; no B2 admin deployed yet.
 Panduan: `docs/cms-gas-setup.md`.
 User mengizinkan commit/push kelanjutan CMS; B0 sudah push `1b38088` ke dua repo.
 User meminta bisa menambah anggota/role/HoDS dengan template desain konsisten;
