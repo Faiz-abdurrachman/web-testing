@@ -1,6 +1,8 @@
 # Recruitment — GAS/Sheets publication guide
 
-Code integration is local until the user approves website push. A deployment
+Feature a151969 was pushed with user approval. Both Vercel deployments SUCCESS;
+form live200, intake accepting:false, admin anonymous401, live browser390/1440
+both sites PASS. No applicant POST was sent during live QA. A deployment
 of the website alone does not install the new GAS intake. Pendaftaran remains
 closed until both server and GAS configuration are ready. Do not change existing
 CMS Export/Admin, OAuth, Sheet/folder, Properties or rebuild hooks. Team GAS

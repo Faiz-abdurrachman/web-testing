@@ -111,8 +111,31 @@ tests-final.log, cms-tests.log, visual/responsive/navbar/vt/spacing/format/seo
 logs, html-comparison-final.json and snapshot-proof.json). GAS source generated
 in artifacts/recruitment-gas/, with no secrets/records. Install guide prepared.
 
-Release status: local integration only, no website push or Google deployment.
-User confirmation is required before origin push deploys both sites. Intake
+Release status below supersedes this local-only checkpoint. Google deployment
+and real Sheet acceptance are still pending. Intake
 remains closed until owner configures the dedicated GAS/Sheet and both Vercel
 server env/open flags, then verifies actual persisted rows. CMS Team GAS/owner
 acceptance remains pending separately; entire CMS is not complete.
+
+## Push and live verification — 6 Oct 2026
+
+User approved push. Main a151969 (with prior docs caacaa9) reached both repos;
+main/origin/main/production/main verified equal at the feature SHA. GitHub Vercel
+statuses SUCCESS: testing2026-10-06T15:46:15Z (22:46:15WIB),
+production2026-10-06T15:47:44Z (22:47:44WIB). No failed status/retrigger on this
+push. Earlier CMS Google redirect/media failure causes remain unproven.
+
+Both sites /recruitment/apply/ HTTP200 with all four panels, role Data Apply Now
+link verified. GET /api/recruitment/application returns only
+{ok:true,accepting:false}; owner configuration/open flags are still absent/closed.
+Projects and Team API anonymous401, /about/ baseline leaders present. Actual
+browser390/1440 each site PASS: role link client navigation and preselection,
+required-step blocking, all four panels, no horizontal overflow or page errors.
+Submit disabled and zero recruitment POST requests: no test applicant was sent
+or stored in Google. No real GAS persistence or broad live acceptance claim.
+
+Evidence ignored in artifacts/recruitment/deploy-a151969.json,
+live-routes.json, live-browser.json/log and live-{site}-{width}-header.png.
+NEXT owner installs the dedicated intake using docs/recruitment-setup.md, then
+verifies receipt/row match in both sites. CMS Team GAS/live acceptance remains
+pending independently. Post-deploy docs checkpoint committed locally, not pushed.

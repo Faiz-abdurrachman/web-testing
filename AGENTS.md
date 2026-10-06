@@ -13,7 +13,12 @@ no false success, payload logs or automatic POST retry. Lock+UUID/content hash
 prevent duplicate retry rows. Local QA PASS:7recruitment+36CMS tests, form416cases, responsive468/468,
 7gate+SEO and native/legacy/Team admin browsers. Actual deployment/Sheet
 acceptance remains pending. Plan: docs/recruitment-integration-plan.md; installation:
-docs/recruitment-setup.md. No push authorization for this feature yet.
+docs/recruitment-setup.md. User approved push: feature a151969 and docs caacaa9 sent to both repos.
+Vercel testing/production SUCCESS; form live200, intake accepting:false,
+admin anonymous401. Live browser390/1440 both sites PASS with no submission
+or overflow/page errors. Dedicated GAS/Sheet configuration and real persisted-row
+acceptance remain pending. Post-deploy checkpoint documentation is local until
+the next approved push.
 Team GAS/live acceptance remains pending; entire CMS is not complete.
 
 ## B2 Team — pass lokal 6 Oct 2026
