@@ -1,5 +1,26 @@
 # Handover — Data Sorcerers (community-web)
 
+## Checkpoint terbaru — native /admin, 6 Oct 2026
+
+User memilih **admin penuh di website**; pass aktif Projects/auth:
+[plan](docs/cms-native-admin-plan.md), [setup/acceptance](docs/cms-native-admin-setup.md).
+Kode native /admin + Vercel OAuth/API tersedia lokal, belum push/live.
+GAS Admin Growth sudah diperbarui menurut owner; export read-only setelahnya
+empat Projects tetap baseline. Deployment situs Growth 1fb25ae dan checkpoint
+198586b SUCCESS pada kedua repo (testing checkpoint diretrigger berhasil).
+Owner add/delete nyata, akun non-owner dan kedua rebuild perubahan isi belum diuji.
+
+NEXT: selesaikan QA/commit native, konfirmasi sebelum push; konfigurasi OAuth web
+
+- standard Cloud/API executable pada GAS Admin EXISTING dan env server kedua
+  Vercel, lalu acceptance owner/non-owner + CRUD/rebuild. Tidak reseed atau ulang
+  Sheet/folder/onboarding. Public Astro tetap static; browser hanya shell/login,
+  records melalui API owner, cookie HttpOnly terenkripsi + state/PKCE + CSRF.
+  Backend tetap Sheets/Drive/Properties/hook existing. Tidak memperluas collection.
+  Media/cache → Team → B3/B4 menunggu. Catatan historis di bawah tidak mengalahkan
+  checkpoint ini. Persetujuan push sebelumnya hanya untuk Growth; native perlu
+  konfirmasi baru. Jangan menyebut native Google auth sudah live atau seluruh CMS selesai.
+
 ## Checkpoint aktif — 6 Oct 2026, handoff sesi CMS
 
 **B2 Projects Growth: kode situs sudah push; kedua Vercel SUCCESS pada 1fb25ae.**

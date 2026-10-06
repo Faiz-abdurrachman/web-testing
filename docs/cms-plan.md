@@ -1,5 +1,12 @@
 # CMS / Admin Dashboard — Rencana (backend Google Apps Script)
 
+**Update aktif 6 Oct 2026:** owner melaporkan GAS Growth diperbarui; export masih
+empat Projects baseline. User memilih native `/admin` (Projects/auth), kode
+lokal belum push atau Google auth live. Ikuti [native plan](cms-native-admin-plan.md)
+dan [setup/acceptance](cms-native-admin-setup.md) sebelum media/Team. GAS/Sheet/Drive
+existing tetap; native memakai OAuth + API executable owner-only pada project
+Admin yang sama. Konfirmasi sebelum push feature baru.
+
 Status 6 Oct 2026: **B0/B1 selesai; B2 Projects editing terpasang;
 Projects Growth lokal tersedia, belum live terverifikasi.** Kedua Vercel SUCCESS pada `96a9756`.
 Checkpoint lengkap: [ai-handoff.md](ai-handoff.md). SOP operasional:

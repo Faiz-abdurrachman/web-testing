@@ -2799,3 +2799,13 @@ Growth QA: 17 CMS tests, admin mock 4 widths, 40 renderer fixtures, 7 gates + SE
 PASS (responsive 468/468). Baseline Home Projects MAE 4.433 / HoF 0.198;
 geometry exact, browserErrors []. File generated admin tersedia; 1fb25ae sudah push,
 kedua Vercel SUCCESS. Belum update GAS live dan belum owner add/delete verification.
+
+## Native /admin — Projects/auth (6 Oct 2026)
+
+Custom admin tanpa node Figma. `src/pages/admin/index.astro` memakai logo
+existing `/images/logo.png`, OFL Bluu Next 700 / Manrope 400/700 lokal; palette
+foundation GAS admin #050507/#16141f/#fff/#bcb7cb/#9b7bff, strict 8pt.
+Editor mempertahankan preset artwork/1–8 Projects, tanpa field layout/CSS.
+Public Home 1430:2146 dan HoF 1439:4655/artwork/geometry assertions tidak berubah;
+19 HTML publik sama dengan baseline. Browser screenshot native empat widths
+tersimpan ignored artifacts/cms-native/. Auth live/Google API masih pending.

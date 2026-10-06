@@ -1,6 +1,29 @@
 # AI handoff — current context
 
-## Checkpoint aktif — 6 Oct 2026, handoff sesi CMS
+## Checkpoint terbaru — native /admin, 6 Oct 2026
+
+User memilih **admin penuh di website**; pass aktif Projects/auth:
+[plan](cms-native-admin-plan.md), [setup/acceptance](cms-native-admin-setup.md).
+Kode native /admin + Vercel OAuth/API tersedia lokal, belum push/live.
+QA: 24 CMS tests, native + legacy admin browser empat widths, 7 gate + SEO PASS;
+responsive 468/468, 19 HTML publik identik baseline. Auth Google nyata masih pending.
+GAS Admin Growth sudah diperbarui menurut owner; export read-only setelahnya
+empat Projects tetap baseline. Deployment situs Growth 1fb25ae dan checkpoint
+198586b SUCCESS pada kedua repo (testing checkpoint diretrigger berhasil).
+Owner add/delete nyata, akun non-owner dan kedua rebuild perubahan isi belum diuji.
+
+NEXT: selesaikan QA/commit native, konfirmasi sebelum push; konfigurasi OAuth web
+
+- standard Cloud/API executable pada GAS Admin EXISTING dan env server kedua
+  Vercel, lalu acceptance owner/non-owner + CRUD/rebuild. Tidak reseed atau ulang
+  Sheet/folder/onboarding. Public Astro tetap static; browser hanya shell/login,
+  records melalui API owner, cookie HttpOnly terenkripsi + state/PKCE + CSRF.
+  Backend tetap Sheets/Drive/Properties/hook existing. Tidak memperluas collection.
+  Media/cache → Team → B3/B4 menunggu. Catatan historis di bawah tidak mengalahkan
+  checkpoint ini. Persetujuan push sebelumnya hanya untuk Growth; native perlu
+  konfirmasi baru. Jangan menyebut native Google auth sudah live atau seluruh CMS selesai.
+
+## Arsip checkpoint Growth sebelum native /admin
 
 **B2 Projects Growth: kode situs sudah push; kedua Vercel SUCCESS pada 1fb25ae.**
 Minimum satu / maksimum delapan Projects; add/delete, UUID server, revision guard

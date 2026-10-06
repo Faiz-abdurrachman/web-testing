@@ -46,6 +46,11 @@ for (const file of htmlFiles) {
   const route = '/' + relative(DIST, file).replace(/index\.html$/, '');
   const html = await readFile(file, 'utf8');
   const metas = metasOf(html);
+  if (
+    route === '/admin/' &&
+    !metas.some((m) => m.name === 'robots' && m.content.includes('noindex'))
+  )
+    issues.push('/admin/: missing noindex');
   const meta = (key, value) =>
     decode(metas.find((m) => m[key] === value)?.content ?? null);
   const title = decode(html.match(/<title>([\s\S]*?)<\/title>/)?.[1]?.trim());
@@ -141,6 +146,8 @@ if (!sitemap0) issues.push('no sitemap-N.xml');
 else {
   const xml = await readFile(sitemap0, 'utf8');
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+  if (locs.some((loc) => new URL(loc).pathname.startsWith('/admin')))
+    issues.push('admin included in sitemap');
   if (locs.length !== 18)
     issues.push(`sitemap has ${locs.length} urls, expected 18`);
   for (const loc of locs) {

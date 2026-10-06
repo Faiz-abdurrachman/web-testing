@@ -1,5 +1,12 @@
 # CMS B2 — private admin dashboard
 
+**Update aktif 6 Oct 2026:** owner melaporkan GAS Growth diperbarui; export masih
+empat Projects baseline. User memilih native `/admin` (Projects/auth), kode
+lokal belum push atau Google auth live. Ikuti [native plan](cms-native-admin-plan.md)
+dan [setup/acceptance](cms-native-admin-setup.md) sebelum media/Team. GAS/Sheet/Drive
+existing tetap; native memakai OAuth + API executable owner-only pada project
+Admin yang sama. Konfirmasi sebelum push feature baru.
+
 ## Checkpoint aktif 6 Oct 2026
 
 B0/B1 selesai. B2 Projects foundation sudah terpasang; owner load/save existing

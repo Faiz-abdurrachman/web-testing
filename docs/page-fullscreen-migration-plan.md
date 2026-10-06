@@ -291,3 +291,11 @@ Private admin work order: `docs/cms-b2-plan.md`; owner installation pending.
 Projects Growth tidak mengubah fullscreen heights/centering/padding Home atau
 HoF. Mobile viewport wrapper hanya meng-clip track; panah tetap di koordinat
 existing. Baseline section geometry tetap dikunci verify.mjs.
+
+## CMS native admin — 6 Oct 2026
+
+Pass Projects/auth menambah standalone /admin; bukan perubahan section publik.
+Baseline 19 HTML tetap identik, seluruh geometry/reference/full-screen rules
+existing tetap, Contact hero 954. Admin custom memakai layout scrolling; tidak
+mengubah work order migrasi full-screen yang sudah selesai. Google auth live
+pending; lihat cms-native-admin-plan.md dan cms-native-admin-setup.md.

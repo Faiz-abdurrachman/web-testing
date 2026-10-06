@@ -1,0 +1,362 @@
+---
+const title = 'Projects Editor | Data Sorcerers';
+const description =
+  'Halaman privat owner Data Sorcerers untuk mengelola Projects dan meminta penerbitan perubahan ke situs.';
+const canonical = new URL('/admin/', Astro.site).href;
+const image = new URL('/og/og-default.jpg', Astro.site).href;
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="referrer" content="no-referrer" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.ico" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Data Sorcerers" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: title,
+        url: canonical,
+      })}
+    ></script>
+    <style is:global>
+      @font-face {
+        font-family: Manrope;
+        src: url('/fonts/manrope-400.woff2') format('woff2');
+        font-weight: 400;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: Manrope;
+        src: url('/fonts/manrope-700.woff2') format('woff2');
+        font-weight: 700;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Bluu Next';
+        src: url('/fonts/bluu-next-700.woff2') format('woff2');
+        font-weight: 700;
+        font-display: swap;
+      }
+      :root {
+        color-scheme: dark;
+        --font-display: 'Bluu Next', serif;
+        --font-body: Manrope, sans-serif;
+        --bg: #050507;
+        --surface: #16141f;
+        --text: #fff;
+        --muted: #bcb7cb;
+        --accent: #9b7bff;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 400 16px/1.5 var(--font-body);
+      }
+      main {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 32px;
+      }
+      header {
+        border-bottom: 1px solid #393344;
+        padding-bottom: 24px;
+        margin-bottom: 32px;
+      }
+      h1 {
+        margin: 0 0 16px;
+        font: 700 40px/1.2 var(--font-display);
+      }
+      h2 {
+        margin: 0 0 16px;
+        font: 700 24px/1.25 var(--font-display);
+      }
+      p {
+        margin: 0;
+        color: var(--muted);
+      }
+      .brand {
+        margin-bottom: 16px;
+        color: var(--accent);
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(200px, 1fr) minmax(0, 2fr);
+        gap: 32px;
+      }
+      .editor {
+        padding: 24px;
+        background: var(--surface);
+        border-radius: 16px;
+      }
+      #add {
+        margin-bottom: 16px;
+      }
+      #project-list {
+        display: grid;
+        gap: 8px;
+      }
+      button,
+      input,
+      textarea,
+      select {
+        font: inherit;
+      }
+      button {
+        border: 1px solid #4a4358;
+        border-radius: 8px;
+        padding: 8px 16px;
+        color: var(--text);
+        background: transparent;
+        cursor: pointer;
+      }
+      button:disabled {
+        cursor: wait;
+        opacity: 0.55;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible,
+      select:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .project-choice {
+        text-align: left;
+        overflow-wrap: anywhere;
+      }
+      .project-choice[aria-current='true'] {
+        border-color: var(--accent);
+        background: #261c40;
+      }
+      .primary {
+        background: var(--accent);
+        color: #050507;
+        border-color: var(--accent);
+        font-weight: 700;
+      }
+      form {
+        display: grid;
+        gap: 16px;
+      }
+      label {
+        display: grid;
+        gap: 8px;
+      }
+      input,
+      textarea,
+      select {
+        width: 100%;
+        min-width: 0;
+        border: 1px solid #4a4358;
+        border-radius: 8px;
+        padding: 16px;
+        color: var(--text);
+        background: #0c0a11;
+      }
+      textarea {
+        resize: vertical;
+        min-height: 160px;
+      }
+      .tags {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      #status {
+        margin-bottom: 24px;
+        overflow-wrap: anywhere;
+      }
+      #status[data-error='true'] {
+        color: #ffb6b6;
+      }
+      #retry {
+        margin-top: 16px;
+      }
+      .hint {
+        font-size: 14px;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      @media (max-width: 760px) {
+        main {
+          padding: 16px;
+        }
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        h1 {
+          font-size: 32px;
+        }
+        .editor {
+          padding: 16px;
+        }
+        .tags {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .auth-actions {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 24px;
+      }
+      .login-link {
+        display: inline-block;
+        padding: 8px 16px;
+        background: var(--accent);
+        color: #050507;
+        border-radius: 8px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+      a:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .brand-logo {
+        width: 48px;
+        height: auto;
+        margin-bottom: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <img
+          class="brand-logo"
+          src="/images/logo.png"
+          alt="Data Sorcerers"
+          width="48"
+          height="52"
+        />
+        <p class="brand">Data Sorcerers · Editor</p>
+        <h1>Kelola projects</h1>
+        <p>
+          Pilih project, ubah isinya, lalu simpan. Situs diperbarui setelah
+          proses penerbitan selesai.
+        </p>
+        <div class="auth-actions">
+          <a id="login" class="login-link" href="/api/admin/auth/login">
+            Masuk dengan Google
+          </a>
+          <button id="logout" type="button" hidden>
+            Keluar
+          </button>
+          <a href="/">Kembali ke situs</a>
+        </div>
+      </header>
+      <p id="status" role="status" aria-live="polite">
+        Memeriksa akses…
+      </p>
+      <button id="retry" type="button" hidden>
+        Coba terbitkan lagi
+      </button>
+      <button id="reload" type="button" hidden>
+        Muat ulang projects
+      </button>
+      <div class="layout" id="workspace" hidden>
+        <nav aria-label="Daftar project">
+          <h2>Projects</h2>
+          <button id="add" type="button">
+            Tambah project
+          </button>
+          <div id="project-list"></div>
+        </nav>
+        <section class="editor" aria-labelledby="editor-title">
+          <h2 id="editor-title">Isi project</h2>
+          <form id="project-form">
+            <fieldset
+              id="fields"
+              style="
+                border: 0;
+                padding: 0;
+                margin: 0;
+                min-width: 0;
+                display: grid;
+                gap: 16px;
+              "
+            >
+              <label>
+                Judul project
+                <input id="title" required maxlength="20000" />
+              </label>
+              <label>
+                Deskripsi
+                <textarea
+                  id="description"
+                  required
+                  maxlength="20000"
+                ></textarea>
+              </label>
+              <p class="hint">
+                Gunakan judul dan deskripsi singkat agar nyaman dibaca di kartu
+                situs.
+              </p>
+              <div class="tags">
+                <label>
+                  Kategori pertama
+                  <input id="tag-one" required maxlength="20000" />
+                </label>
+                <label>
+                  Kategori kedua
+                  <input id="tag-two" required maxlength="20000" />
+                </label>
+              </div>
+              <label>
+                Gambar project<select id="image" required></select>
+              </label>
+              <div class="actions">
+                <button class="primary" id="save" type="submit">
+                  Simpan dan terbitkan
+                </button>
+                <button id="delete" type="button">
+                  Hapus project
+                </button>
+              </div>
+            </fieldset>
+          </form>
+        </section>
+      </div>
+      <noscript>
+        <p>Aktifkan JavaScript untuk masuk dan mengelola Projects.</p>
+      </noscript>
+    </main>
+    <script>
+      import '../../scripts/cms-admin-editor.js';
+    </script>
+  </body>
+</html>

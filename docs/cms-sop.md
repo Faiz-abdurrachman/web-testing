@@ -1,5 +1,12 @@
 # SOP CMS — Data Sorcerers
 
+**Update aktif 6 Oct 2026:** owner melaporkan GAS Growth diperbarui; export masih
+empat Projects baseline. User memilih native `/admin` (Projects/auth), kode
+lokal belum push atau Google auth live. Ikuti [native plan](cms-native-admin-plan.md)
+dan [setup/acceptance](cms-native-admin-setup.md) sebelum media/Team. GAS/Sheet/Drive
+existing tetap; native memakai OAuth + API executable owner-only pada project
+Admin yang sama. Konfirmasi sebelum push feature baru.
+
 Status operasional 6 Oct 2026: lihat `docs/ai-handoff.md`. Work order berikutnya:
 `docs/cms-projects-growth-plan.md`. SOP ini melengkapi SOP piksel, bukan mengganti
 aturan presisi situs. B0/B1 dan editor Projects awal sudah dipasang; jangan
