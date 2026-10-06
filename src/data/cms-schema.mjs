@@ -30,7 +30,42 @@ const project = z.strictObject({
   image,
 });
 
+const domainIds = ['data', 'core', 'language', 'vision', 'product', 'growth'];
+const orderedDomains = (schema) =>
+  z
+    .array(schema)
+    .length(6)
+    .superRefine((records, ctx) => {
+      records.forEach((record, index) => {
+        if (record.id !== domainIds[index])
+          ctx.addIssue({
+            code: 'custom',
+            path: [index, 'id'],
+            message: 'Domain routes and order are fixed by design',
+          });
+      });
+    });
+const member = z.strictObject({
+  name: text,
+  role: text,
+  photo: z.enum(['marchel', 'zidan-rose']),
+});
+const teamGroup = z
+  .strictObject({ id, title: text, members: z.array(member) })
+  .superRefine((group, ctx) => {
+    if (group.members.length !== (group.id === 'growth' ? 3 : 4))
+      ctx.addIssue({
+        code: 'custom',
+        path: ['members'],
+        message: 'Member slots are fixed by design',
+      });
+  });
+
 export const cmsSnapshotSchema = z.strictObject({
   schemaVersion: z.literal(1),
   projects: z.array(project).length(4).superRefine(uniqueIds),
+  team: z.strictObject({
+    leaderTeam: z.array(member).length(2),
+    hodsTeams: orderedDomains(teamGroup),
+  }),
 });

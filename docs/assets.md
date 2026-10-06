@@ -2704,3 +2704,6 @@ Data-only migration; artwork provenance and reference PNGs remain unchanged.
 Projects now read `src/data/cms-snapshot.json`; exports retain the original four
 records byte-for-byte in their content. Validation uses `astro/zod` with fixed
 slots and unique IDs. Plan/results: `docs/cms-b0-plan.md`.
+
+Team content now reads the snapshot. Domain chip/fade, group order, Join Now
+slot and portrait artwork selectors remain local design configuration.

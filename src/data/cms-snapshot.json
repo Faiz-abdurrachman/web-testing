@@ -29,5 +29,172 @@
       "description": "Lorem ipsum Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum",
       "image": "/images/projects/arutala-aksara.webp"
     }
-  ]
+  ],
+  "team": {
+    "leaderTeam": [
+      {
+        "name": "Marchel Shevchenko",
+        "role": "Founder",
+        "photo": "marchel"
+      },
+      {
+        "name": "Zidan Amikul",
+        "role": "Community Lead",
+        "photo": "zidan-rose"
+      }
+    ],
+    "hodsTeams": [
+      {
+        "id": "data",
+        "title": "Data Intelligence",
+        "members": [
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          },
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          },
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          },
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          }
+        ]
+      },
+      {
+        "id": "core",
+        "title": "Core AI & Engineering",
+        "members": [
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          },
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          },
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          },
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          }
+        ]
+      },
+      {
+        "id": "language",
+        "title": "Language & Reasoning",
+        "members": [
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          },
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          },
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          },
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          }
+        ]
+      },
+      {
+        "id": "vision",
+        "title": "Vision & Multimodal",
+        "members": [
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          },
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          },
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          },
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          }
+        ]
+      },
+      {
+        "id": "product",
+        "title": "Product & Software",
+        "members": [
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          },
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          },
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          },
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          }
+        ]
+      },
+      {
+        "id": "growth",
+        "title": "Growth & Community",
+        "members": [
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          },
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          },
+          {
+            "name": "Zidan Amikul",
+            "role": "Community Lead",
+            "photo": "zidan-rose"
+          }
+        ]
+      }
+    ]
+  }
 }
