@@ -1,7 +1,9 @@
 # Plan — Hero sections "hidup" (parallax / GSAP)
 
-Status: **RENCANA/BRAINSTORM (belum dieksekusi)** · dibuat 6 Oct 2026 ·
-Patuhi `docs/pixel-precision-sop.md` + `AGENTS.md`.
+Status: **BERJALAN — Home SELESAI (6 Oct 2026)**, hero lain menyusul ·
+dibuat 6 Oct 2026 · Patuhi `docs/pixel-precision-sop.md` + `AGENTS.md`.
+Keputusan user: efek **A + B + C** (entrance + scroll parallax bg + pointer
+parallax desktop).
 
 ## 1. Tujuan
 
@@ -103,10 +105,41 @@ Per hero:
 
 ## 8. Pertanyaan terbuka (brainstorm dengan user)
 
-1. Efek mana yang mau? Usul: **A + B (scroll parallax) + C (pointer)**, lalu
+1. Efek mana yang mau? Usulan: **A + B (scroll parallax) + C (pointer)**, lalu
    pilih **satu** dari D/E untuk sentuhan "sorcery".
-2. Intensitas: halus (sinematik) atau mencolok? Usul: halus (±8px, zoom ≤1.03).
+2. Intensitas: halus (sinematik) atau mencolok? Usulan: halus (±8px, zoom ≤1.03).
 3. Contact diikutkan? (bukan full-bleed → efek dibatasi).
 4. Ken Burns idle (D) perlu, atau cukup parallax scroll (B) saja?
 5. Apakah hero harus "hidup" walau tanpa scroll (idle), atau hanya bereaksi ke
    scroll/kursor?
+
+## 9. Progress
+
+| Hero        | A entrance     | B scroll parallax      | C pointer      | Status             |
+| ----------- | -------------- | ---------------------- | -------------- | ------------------ |
+| Home        | ✅             | ✅                     | ✅             | **SELESAI 6 Oct**  |
+| About       | ✅ (sudah ada) | ⬜                     | ✅ (sudah ada) | pending B          |
+| Recruitment | ✅ (sudah ada) | ⬜                     | ✅ (sudah ada) | pending B          |
+| Partners    | ⬜             | ⬜                     | ⬜             | pending            |
+| HoF         | ⬜             | ⬜                     | ⬜             | pending            |
+| Contact     | ⬜             | n/a (bukan full-bleed) | ⬜             | pending (dibatasi) |
+
+### Catatan implementasi (Home, 6 Oct 2026)
+
+Helper baru di `src/scripts/motion.ts`:
+
+- `heroEntrance(content, warm, selector)` — A: `h1 span, p, .button`
+  fade+rise saat `splash-done`; di-skip saat `nav-warm` (client nav).
+- `heroArtworkParallax(hero, art, pointer, cleanups)` — B + C:
+  - Transform dipasang di **`img.art-bg`** (bukan `.artwork`) supaya
+    `transform: translateX(-50%)` milik `.artwork` di `@media (min-width:1921px)`
+    tidak tertimpa.
+  - B memakai **`y` (px, −18 → +18, scrub)**; C memakai **`xPercent`/`yPercent`**
+    — komponen transform berbeda, jadi GSAP mengomposisi tanpa saling berebut.
+  - `gsap.set(art, { scale: 1.08 })` = overscan agar travel tidak membuka tepi
+    (margin ±3% > total travel ±2%). Terverifikasi: transform top
+    `matrix(1.08,0,0,1.08,0,-18)`, di scroll berubah mulus.
+  - Sedang `if (reduce) return;` → render reduce tidak punya transform → semua
+    assertion geometri + MAE `verify.mjs` **tidak berubah** (7 gate + seo PASS).
+- Home hero `motion` pernah dihapus di #9; kini hidup kembali lewat kedua helper
+  generik ini (About/Recruitment akan memakai helper yang sama, hanya menambah B).

@@ -8,6 +8,17 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
+**★ BERJALAN (6 Oct 2026) — Hero "hidup" (parallax/GSAP): Home SELESAI, hero
+lain menyusul.** Rencana: `docs/hero-motion-plan.md` (keputusan user: efek
+**A + B + C** = entrance copy + scroll parallax bg + pointer parallax desktop).
+Helper generik baru di `src/scripts/motion.ts`: `heroEntrance()` dan
+`heroArtworkParallax()`. **Home** (`Hero.astro`) kini punya entrance copy,
+parallax scroll (`y` −18→+18 scrub), dan pointer drift — transform dipasang di
+`img.art-bg` (bukan `.artwork`, agar centering ≥1921px aman), `scale: 1.08`
+overscan. Reduce path tak tersentuh → **7 gate + seo ALL PASS**, geometri/MAE
+tidak berubah. **Berikutnya: About & Recruitment** (sudah punya A+C, cukup tambah
+B via helper) → lalu Partners, HoF, Contact (dibatasi).
+
 **★ SELESAI (6 Oct 2026) — Hero HD pass: semua hero pakai `assets/hero gambar/`
 di 1×/2×/3×.** User minta hero tidak burik + selalu 100vw/vh. `npm run
 assets:heroes` (`scripts/generate-hero-bg.mjs`) kini membake **5 hero full-bleed**

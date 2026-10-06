@@ -414,6 +414,11 @@ clip). **Tiap item 7 gate + seo PASS.** Commit`81ffb25`..`b4b5e62`.
 page.png` tidak dipakai (gambar beda framing, MAE ~16). `hero-bg.*` Contact
   dihapus; Contact dikeluarkan dari `generate-hero-bg.mjs`. MAE 14.73 → **2.757**.
   **Jangan "perbaiki" balik ke full-bleed.** Hero lain tetap full-screen.
+- **★ BERJALAN (6 Oct 2026) — Hero "hidup" (parallax/GSAP), Home SELESAI.**
+  Rencana `docs/hero-motion-plan.md` (efek A+B+C). Helper baru di `motion.ts`:
+  `heroEntrance()` + `heroArtworkParallax()` (transform di `img.art-bg`,
+  `scale:1.08` overscan, B=`y` scrub, C=`xPercent/yPercent`; reduce inert).
+  Berikutnya About/Recruitment (cukup tambah B) → Partners → HoF → Contact.
 - **★ NEXT = #9 selesai; berikutnya audit sisa Detail HoDS + konten asli** (foto
   member, logo partner, `projects.ts`, tanggal recruitment, milestone HoF).
   Work order full-screen: **`docs/page-fullscreen-migration-plan.md`** (semua

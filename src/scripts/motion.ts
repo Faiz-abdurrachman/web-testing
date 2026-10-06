@@ -46,6 +46,70 @@ function reveal(
   });
 }
 
+// Hero entrance: fade/rise the copy once the splash is gone. Skipped on warm
+// client-side navigation so the reveal is not replayed on every page switch.
+function heroEntrance(
+  content: HTMLElement | null,
+  warm: boolean,
+  selector = 'h1 span, p, .button',
+) {
+  if (warm || !content) return;
+  const bits = content.querySelectorAll<HTMLElement>(selector);
+  if (!bits.length) return;
+  gsap.set(bits, { autoAlpha: 0, y: 34 });
+  const play = () =>
+    gsap.to(bits, {
+      autoAlpha: 1,
+      y: 0,
+      duration: 0.8,
+      ease: 'power3.out',
+      stagger: 0.09,
+      clearProps: 'transform,opacity,visibility',
+    });
+  if (document.documentElement.classList.contains('splash-done')) play();
+  else window.addEventListener('ds:splash-done', play, { once: true });
+}
+
+// Hero "alive": a small scroll parallax on the artwork (y is a different
+// transform component from the pointer's xPercent/yPercent, so GSAP composes
+// them without fighting) plus an optional desktop pointer drift. `scale` gives
+// the overscan margin so neither travel ever exposes a hard edge; transforms
+// target the inner image so the ≥1921px `.artwork` centering transform is left
+// intact. Reduce path never runs this, so the verification render stays exact.
+function heroArtworkParallax(
+  hero: HTMLElement,
+  art: HTMLElement | null,
+  pointer: boolean,
+  cleanups: Cleanup[],
+) {
+  if (!art) return;
+  gsap.set(art, { scale: 1.08 });
+  gsap.fromTo(
+    art,
+    { y: -18 },
+    {
+      y: 18,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: hero,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+      },
+    },
+  );
+  if (!pointer) return;
+  const xTo = gsap.quickTo(art, 'xPercent', { duration: 0.6, ease: 'power3' });
+  const yTo = gsap.quickTo(art, 'yPercent', { duration: 0.6, ease: 'power3' });
+  const onMove = (event: MouseEvent) => {
+    const rect = hero.getBoundingClientRect();
+    xTo(((event.clientX - rect.left) / rect.width - 0.5) * -2.6);
+    yTo(((event.clientY - rect.top) / rect.height - 0.5) * -1.2);
+  };
+  hero.addEventListener('mousemove', onMove);
+  cleanups.push(() => hero.removeEventListener('mousemove', onMove));
+}
+
 function pillarIntro(whatWeDo: HTMLElement) {
   const eyebrow = whatWeDo.querySelector<HTMLElement>(
     '.section-heading .eyebrow',
@@ -213,6 +277,22 @@ export function initMotion() {
       if (reduce) return;
 
       const cleanups: Cleanup[] = [];
+
+      // Home hero: copy entrance + scroll parallax + pointer drift. The generic
+      // helpers are reused by the other heroes in later passes.
+      const homeHero = document.querySelector<HTMLElement>('.hero');
+      if (homeHero) {
+        heroEntrance(
+          homeHero.querySelector<HTMLElement>('.hero-content'),
+          warm,
+        );
+        heroArtworkParallax(
+          homeHero,
+          homeHero.querySelector<HTMLElement>('.art-bg'),
+          finePointer(),
+          cleanups,
+        );
+      }
 
       // Recruitment hero: subtle copy entrance + pointer plate drift (same
       // contract as the About hero — the pinned zoom and particle burst were
