@@ -2738,3 +2738,15 @@ Vercel testing timed out at the 15-second fetch deadline. Client now allows
 60 seconds per attempt and one retry only for timeouts. Invalid exports still
 fail without replacing the snapshot. No asset, UI, Figma geometry, spacing or
 font changes. Recovery/exhaustion at headers and body are covered by CMS tests.
+
+### CMS B1 HTTP diagnostics (6 Oct 2026)
+
+Persistent Vercel HTTP 404 after endpoint correction is unresolved. Safe error
+context identifies the Google host and redirect hop, elapsed time and endpoint
+fingerprint without exposing URLs, query tokens, redirect keys or bodies.
+No UI/assets/geometry changes; diagnostic tests cover both initial and
+redirected errors and prevent disclosure.
+
+Native Node 22 real fetch succeeds with IPv4 preferred after default-order
+network failure. Prebuild CLI sets IPv4-first DNS; this is backend-only and
+does not alter served assets or geometry. Vercel 404 root cause still pending.

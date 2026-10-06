@@ -97,3 +97,28 @@ all six data exports and all 19 HTML files identical baseline. Seven site
 gates + SEO PASS, responsive 468/468. Logs: ignored
 `artifacts/cms-b1/timeout-repair-build.log` and
 `/tmp/ds-cms-b0/b1-timeout-*.log`. Vercel repair deployment pending.
+
+## Persistent Vercel 404 — diagnostic pass plan
+
+After URL correction and uncached redeploy at `615cce3`, production still
+returns HTTP 404 about 28 seconds into fetch. Root cause remains unconfirmed.
+Local authenticated API succeeds; do not assume configuration error or weaken
+validation/fallback. Add safe failure context: validated Google host, redirect
+hop, elapsed seconds and an endpoint fingerprint (URL only, never token or
+redirect query/body). Test both initial and redirected 404 and secret omission.
+Verify Node 22 real fetch, seven gates + SEO and baseline equality, then deploy
+diagnostics to both projects. Compare Vercel failure with local endpoint
+fingerprint and Google execution history before choosing a further repair.
+
+Native Node 22.23.3 real fetch initially failed with a network error using
+default DNS ordering. With `--dns-result-order=ipv4first`, the same endpoint
+returned 302 from script.google.com (6s) then 200 JSON from
+script.googleusercontent.com (1s). The prebuild CLI now prefers IPv4; this
+fixes the measured local Node 22 connection issue, while the Vercel 404 cause
+still requires the deployed diagnostics. No arbitrary proxy/CDN/fallback added.
+
+Diagnostic/IPv4 results: 9 CMS tests PASS; production build 0 errors; all
+six data exports and 19 HTML identical baseline. Seven site gates + SEO PASS
+(responsive 468/468). Native Node 22 prebuild against the real GAS API PASS
+with IPv4-first ordering. Logs: ignored `404-diagnostic-build.log` and
+`/tmp/ds-cms-b0/b1-http-diagnostic-*.log`. Live Vercel verification pending.

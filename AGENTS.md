@@ -4,13 +4,17 @@
 `cms/gas/export.js` + `npm run cms:gas` menghasilkan `artifacts/cms-gas/Code.gs`;
 setup membuat 8 tab, seed baseline, folder Drive privat dan Script Properties.
 Remote fetch bertoken + timeout/size/redirect guards + replacement atomik siap.
-8 tes CMS + 7 gate situs + SEO repair PASS; 19 HTML tetap identik. User mengonfirmasi
+9 tes CMS + 7 gate situs + SEO diagnostic/IPv4 PASS; 19 HTML tetap identik. User mengonfirmasi
 `setupCms` berhasil di akun owner pilihan terbaru (identitas tidak disimpan di
 repo). Read API sudah deployed; authenticated export identik baseline dan
 build lokal remote mode PASS (0 errors, 19 HTML identik, SEO PASS). NEXT:
 User sudah memasang env kedua Vercel. Testing `38d1589` gagal pada timeout
 15 detik; repair memakai 60 detik per attempt + satu retry timeout. NEXT:
-deploy repair lalu verifikasi build kedua Vercel dan log remote mode.
+timeout repair sudah push `615cce3`, tetapi Vercel tetap HTTP 404 setelah
+URL correction/redeploy. Root cause belum diketahui; diagnostic pass mencatat
+host/hop/durasi/fingerprint endpoint tanpa token. Prebuild prefer IPv4
+setelah native Node 22 lokal gagal default DNS tetapi berhasil IPv4. NEXT: deploy
+diagnostik, cocokkan dengan eksekusi GAS dan log kedua Vercel.
 Panduan: `docs/cms-gas-setup.md`.
 User mengizinkan commit/push kelanjutan CMS; B0 sudah push `1b38088` ke dua repo.
 User meminta bisa menambah anggota/role/HoDS dengan template desain konsisten;

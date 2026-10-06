@@ -281,6 +281,48 @@ test('timeouts retry once from the export endpoint; exhausted retries preserve t
   }
 });
 
+test('HTTP diagnostics identify the failed hop without exposing URLs or credentials', async () => {
+  for (const redirected of [false, true]) {
+    let calls = 0;
+    await assert.rejects(
+      fetchCmsSnapshot({
+        apiUrl: endpoint,
+        apiToken: token,
+        fetchImpl: async () => {
+          calls++;
+          if (redirected && calls === 1)
+            return new Response(null, {
+              status: 302,
+              headers: {
+                location: `https://script.googleusercontent.com/macros/echo?user_content_key=private-key&token=${token}`,
+              },
+            });
+          return new Response(`private-body ${token}`, { status: 404 });
+        },
+      }),
+      (error) => {
+        assert.match(error.message, /HTTP status 404/);
+        assert.match(
+          error.message,
+          redirected
+            ? /script.googleusercontent.com \(redirects=1/
+            : /script.google.com \(redirects=0/,
+        );
+        assert.match(error.message, /endpoint=[a-f0-9]{12}/);
+        for (const secret of [
+          token,
+          'private-key',
+          'private-body',
+          'test-deployment',
+        ])
+          assert(!error.message.includes(secret));
+        return true;
+      },
+    );
+    assert.equal(calls, redirected ? 2 : 1);
+  }
+});
+
 function gasHarness(source) {
   let active = 'owner@example.test';
   const properties = new Map();

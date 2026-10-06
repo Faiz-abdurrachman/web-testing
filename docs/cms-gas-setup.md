@@ -49,7 +49,9 @@ client hanya mengikuti redirect Google yang diizinkan. Login HTML, token salah,
 payload invalid, timeout atau response >1 MiB menggagalkan build dan menjaga
 snapshot sebelumnya. Fetch menunggu hingga 60 detik per attempt; timeout
 diulang sekali (maksimal dua attempt), sementara payload invalid tetap gagal
-langsung. Acuan:
+langsung. Prebuild mendahulukan IPv4 untuk koneksi Google. Error HTTP menyebut
+host Google, hop redirect, durasi dan fingerprint endpoint tanpa URL/token,
+untuk membedakan kesalahan endpoint dari redirect. Acuan:
 [deployment GAS](https://developers.google.com/apps-script/guides/web),
 [Script Properties](https://developers.google.com/apps-script/guides/properties).
 

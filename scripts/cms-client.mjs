@@ -1,5 +1,5 @@
 import { readFile, rename, unlink, writeFile } from 'node:fs/promises';
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { cmsSnapshotSchema } from '../src/data/cms-schema.mjs';
@@ -86,13 +86,19 @@ async function fetchCmsSnapshotOnce({
   timeoutMs = CMS_TIMEOUT_MS,
 }) {
   let url = googleUrl(apiUrl, true);
+  const endpointFingerprint = createHash('sha256')
+    .update(url.href)
+    .digest('hex')
+    .slice(0, 12);
+  const started = Date.now();
   url.searchParams.set('action', 'export');
   url.searchParams.set('token', apiToken);
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
   try {
     let response;
-    for (let redirects = 0; redirects <= 3; redirects++) {
+    let redirects = 0;
+    for (; redirects <= 3; redirects++) {
       response = await fetchImpl(url, {
         redirect: 'manual',
         signal: controller.signal,
@@ -105,8 +111,12 @@ async function fetchCmsSnapshotOnce({
         throw new Error('Invalid CMS export redirect.');
       url = googleUrl(new URL(location, url));
     }
-    if (!response.ok)
-      throw new Error(`CMS export HTTP status ${response.status}.`);
+    if (!response.ok) {
+      await response.body?.cancel();
+      throw new Error(
+        `CMS export HTTP status ${response.status} at ${url.hostname} (redirects=${redirects}, elapsed=${Math.round((Date.now() - started) / 1000)}s, endpoint=${endpointFingerprint}).`,
+      );
+    }
     if (
       !/^application\/json(?:\s*;|$)/i.test(
         response.headers.get('content-type') || '',
