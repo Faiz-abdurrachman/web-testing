@@ -7,7 +7,7 @@ Projects existing tersedia. Owner load dan save dicoba; fix fetch `96a9756`
 menyelesaikan build testing dan production (kedua status SUCCESS).
 Panduan instalasi awal di bawah adalah referensi pemulihan, bukan NEXT aktif.
 Jangan membuat ulang Sheet/folder, reseed atau mengganti secret tanpa kebutuhan.
-NEXT: [Projects Growth](cms-projects-growth-plan.md), lalu media/Team.
+Projects Growth lokal tersedia; update berikut hanya CMS Admin setelah gate/push disetujui. Export GAS tidak berubah. Lalu media/Team.
 
 ## Memperbarui GAS existing setelah pass hijau
 
@@ -25,6 +25,22 @@ NEXT: [Projects Growth](cms-projects-growth-plan.md), lalu media/Team.
 
 Tidak perlu update GAS hanya untuk fix fetch `96a9756`: perubahan tersebut ada
 pada scripts Node di repo. Browser tool bukan browser login user; pandu manual.
+
+## Update Projects Growth — setelah kode situs di-push dan kedua deploy sukses
+
+Generator `npm run cms:admin` menghasilkan Code.gs dan Index.html baru.
+Di project **CMS Admin privat existing**, ganti kedua file dari artifacts/cms-admin/;
+manifest dan Script Properties tetap. Buat New version pada deployment existing
+sesuai langkah di atas. Jangan menjalankan setupAdmin/setupCms/reseed ulang.
+CMS Export tidak perlu update karena source export tidak berubah.
+
+Owner test: buka editor, tambah satu project dengan isi uji yang disetujui owner
+melalui form kosong dan preset gambar existing. Simpan, catat jumlah + ID baru,
+tunggu kedua rebuild SUCCESS; periksa kartu/dots pada Home dan Hall of Frames.
+Hapus record uji melalui konfirmasi judul, tunggu kedua rebuild SUCCESS lagi;
+record lama/order tetap. Jangan hapus project asli hanya untuk uji minimum.
+Pastikan akun Google non-owner yang sudah login ditolak. Mock QA bukan bukti
+Google auth nyata. Growth belum live terverifikasi sebelum bukti ini tersedia.
 
 ## Referensi instalasi awal (sudah dilakukan)
 

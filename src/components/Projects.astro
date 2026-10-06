@@ -15,38 +15,40 @@ import { projects } from '../data/projects';
       aria-roledescription="carousel"
       aria-label="Projects — use the arrow keys to browse"
     >
-      <div class="project-track">
-        {projects.map((project, index) => (
-          <article
-            class:list={['project-card', { 'is-active': index === 0 }]}
-            data-index={index}
-            aria-hidden={index === 0 ? undefined : 'true'}
-            aria-labelledby={`project-${project.id}`}
-            data-sfx-hover="hover"
-          >
-            <div class="project-inner">
-              <div class="project-image">
-                <img
-                  src={project.image}
-                  width="1799"
-                  height="1102"
-                  alt=""
-                  loading={index === 0 ? 'eager' : 'lazy'}
-                  decoding="async"
-                />
+      <div class="project-viewport">
+        <div class="project-track">
+          {projects.map((project, index) => (
+            <article
+              class:list={['project-card', { 'is-active': index === 0 }]}
+              data-index={index}
+              aria-hidden={index === 0 ? undefined : 'true'}
+              aria-labelledby={`project-${project.id}`}
+              data-sfx-hover="hover"
+            >
+              <div class="project-inner">
+                <div class="project-image">
+                  <img
+                    src={project.image}
+                    width="1799"
+                    height="1102"
+                    alt=""
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
+                  />
+                </div>
+                <div class="project-tags" aria-label="Project categories">
+                  {project.tags.map((tag) => (
+                    <span>{tag}</span>
+                  ))}
+                </div>
+                <div class="project-copy">
+                  <h3 id={`project-${project.id}`}>{project.title}</h3>
+                  <p>{project.description}</p>
+                </div>
               </div>
-              <div class="project-tags" aria-label="Project categories">
-                {project.tags.map((tag) => (
-                  <span>{tag}</span>
-                ))}
-              </div>
-              <div class="project-copy">
-                <h3 id={`project-${project.id}`}>{project.title}</h3>
-                <p>{project.description}</p>
-              </div>
-            </div>
-          </article>
-        ))}
+            </article>
+          ))}
+        </div>
       </div>
       <button
         class="project-arrow prev"
@@ -118,6 +120,9 @@ import { projects } from '../data/projects';
         const track = stage.querySelector<HTMLElement>('.project-track');
         if (!cards.length) return;
         const count = cards.length;
+        arrows.forEach((arrow) => {
+          arrow.disabled = count === 1;
+        });
         let active = 0;
 
         const render = () => {
@@ -202,25 +207,35 @@ import { projects } from '../data/projects';
         };
 
         arrows.forEach((arrow) =>
-          arrow.addEventListener('click', () => go(Number(arrow.dataset.dir))),
-        );
-        dots.forEach((dot, index) =>
-          dot.addEventListener('click', () => {
-            active = index;
-            render();
+          arrow.addEventListener('click', () => go(Number(arrow.dataset.dir)), {
+            signal,
           }),
         );
-        stage.addEventListener('keydown', (event) => {
-          if (event.key === 'ArrowLeft') {
-            event.preventDefault();
-            keyCue();
-            go(-1);
-          } else if (event.key === 'ArrowRight') {
-            event.preventDefault();
-            keyCue();
-            go(1);
-          }
-        });
+        dots.forEach((dot, index) =>
+          dot.addEventListener(
+            'click',
+            () => {
+              active = index;
+              render();
+            },
+            { signal },
+          ),
+        );
+        stage.addEventListener(
+          'keydown',
+          (event) => {
+            if (event.key === 'ArrowLeft') {
+              event.preventDefault();
+              keyCue();
+              go(-1);
+            } else if (event.key === 'ArrowRight') {
+              event.preventDefault();
+              keyCue();
+              go(1);
+            }
+          },
+          { signal },
+        );
         // Arrow keys drive the carousel whenever its section is the one at the
         // viewport centre (no focus needed); the focused stage handler runs first
         // and sets defaultPrevented, so this one skips.
@@ -252,24 +267,35 @@ import { projects } from '../data/projects';
           { signal },
         );
         let startX: number | null = null;
-        stage.addEventListener('pointerdown', (event) => {
-          startX = event.clientX;
-        });
+        stage.addEventListener(
+          'pointerdown',
+          (event) => {
+            startX = event.clientX;
+          },
+          { signal },
+        );
         const end = (event: PointerEvent) => {
           if (startX === null) return;
           const delta = event.clientX - startX;
           startX = null;
           if (Math.abs(delta) > 40) go(delta < 0 ? 1 : -1);
         };
-        stage.addEventListener('pointerup', end);
-        stage.addEventListener('pointercancel', () => {
-          startX = null;
-        });
+        stage.addEventListener('pointerup', end, { signal });
+        stage.addEventListener(
+          'pointercancel',
+          () => {
+            startX = null;
+          },
+          { signal },
+        );
         addEventListener('resize', render, { passive: true, signal });
         render();
       });
   };
 
+  document.addEventListener('astro:before-swap', () =>
+    projectController?.abort(),
+  );
   document.addEventListener('astro:page-load', initProjects);
 </script>
 <style>
@@ -552,11 +578,21 @@ import { projects } from '../data/projects';
       right: 0;
     }
   }
+  .project-viewport {
+    display: contents;
+  }
   @media (max-width: 520px) {
+    .project-viewport {
+      display: block;
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
     .project-stage {
       height: 440px;
       margin-top: 40px;
-      overflow: hidden;
+      overflow: visible;
       perspective: none;
       transition: height 0.4s ease;
     }

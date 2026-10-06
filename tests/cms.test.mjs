@@ -573,3 +573,40 @@ test('GAS denies unexpected headers and duplicate records; literals are protecte
     assert.equal(gas.context.cmsSheetCell_(value), "'" + value);
   assert.equal(gas.counters.lock, 0);
 });
+
+test('Projects growth export roundtrip accepts 1/2/5/8 with blanks, rejects empty/9 and preserves other guards', async () => {
+  const { cmsSnapshotSchema } = await import('../src/data/cms-schema.mjs');
+  for (const count of [1, 2, 5, 8]) {
+    const gas = gasHarness(gasSource);
+    gas.context.setupCms();
+    const sheet = gas.sheets.get('projects');
+    sheet.cells.splice(1);
+    for (let i = 0; i < count; i++)
+      sheet.cells.push([
+        'fixture-' + i,
+        'Project ' + i,
+        '["one","two"]',
+        'Description',
+        baseline.projects[0].image,
+      ]);
+    sheet.cells.push(['', '', '', '', '']);
+    const exported = gas.request({
+      action: 'export',
+      token: gas.properties.get('EXPORT_TOKEN'),
+    });
+    assert.equal(cmsSnapshotSchema.parse(exported).projects.length, count);
+    assert.deepEqual(exported.team, baseline.team);
+  }
+  for (const count of [0, 9]) {
+    const candidate = structuredClone(baseline);
+    candidate.projects = Array.from({ length: count }, (_, i) => ({
+      ...baseline.projects[0],
+      id: 'fixture-' + i,
+    }));
+    assert.equal(cmsSnapshotSchema.safeParse(candidate).success, false);
+  }
+  const candidate = structuredClone(baseline);
+  candidate.projects.pop();
+  candidate.roles.pop();
+  assert.equal(cmsSnapshotSchema.safeParse(candidate).success, false);
+});

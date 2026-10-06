@@ -285,3 +285,9 @@ The private HtmlService Projects editor is outside the public fullscreen page
 work order. No public section, artwork, font, source/data or geometry changes
 in its foundation pass. All seven site gates + SEO PASS (responsive 468/468).
 Private admin work order: `docs/cms-b2-plan.md`; owner installation pending.
+
+## CMS Growth regression (6 Oct 2026)
+
+Projects Growth tidak mengubah fullscreen heights/centering/padding Home atau
+HoF. Mobile viewport wrapper hanya meng-clip track; panah tetap di koordinat
+existing. Baseline section geometry tetap dikunci verify.mjs.

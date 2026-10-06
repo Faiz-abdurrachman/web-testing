@@ -1,7 +1,6 @@
 # NEXT — Projects Growth (tambah/hapus)
 
-Status: BELUM DIMULAI. User meminta pekerjaan ini dikerjakan di sesi AI baru.
-Sesi penutup hanya menyinkronkan dokumen. Baca `docs/cms-sop.md` dahulu.
+Status: IMPLEMENTASI + QA LOKAL PASS (6 Oct 2026); belum push/update GAS/uji live. Baca `docs/cms-sop.md` dahulu.
 
 ## 0. Fakta awal dan batas pass
 
@@ -107,3 +106,61 @@ Verifikasi tertunda lintas sesi: deny akun Google non-owner yang benar-benar
 login (anonymous sudah redirect login), real edit konten berbeda dari baseline,
 dan capture log remote-mode testing jika diperlukan. Jangan mengulang login
 owner/setup awal untuk tugas growth yang sudah mempunyai konfigurasi.
+
+## 6. Execution plan — 6 Oct 2026
+
+Working tree bersih di 49c311a; dua commit docs lokal belum push. User mengizinkan
+pengerjaan/commit; konfirmasi sebelum push ke dua repo.
+
+Dependency inventory menemukan dua consumer: Home Projects dan HallOfFramesProjects.
+Plan satu collection: (1) schema + fixture renderer, (2) server CRUD/revision/batch,
+(3) admin controls + mock QA, (4) semua gates + docs + commit. File terkait:
+cms-schema.mjs, kedua carousel, server.js/Index.html, tests/cms*.test.mjs,
+verify-cms-admin.mjs dan runner fixture baru. Export source tetap read-only.
+Snapshot baseline dan verify.mjs tidak diubah.
+
+Policy: 1–8 Projects, dua tags, image preset existing. Delapan dots = 142px
+sebelum active scaling; muat di mobile 320 dengan arrow gutter. Batas delapan adalah batas UX; fetch tetap memvalidasi batas payload 1 MiB. Server membuat UUID prefixed project-, collision ditolak.
+Delete minimum ditolak; candidate final divalidasi sebelum satu setValues,
+termasuk blank trailing rows. Tidak ada clear/reseed terpisah.
+
+Home node/reference/dimensi/font/spacing mengikuti §2, tidak mengubah geometry.
+HoF consumer node 1439:4655: template kartu Home yang sudah disetujui,
+section 1440×1014, padding 80, gap/header/font/artwork tetap. Admin custom
+1440×900 / min 320, palette foundation, Bluu Next 700 dan Manrope,
+spacing 8/16/32; add mulai form kosong, delete konfirmasi judul, disable selama
+RPC dan pada minimum/batas. Pending conflict mempertahankan input.
+
+Renderer fixtures terpisah 1/2/5/8 pada 320/390/768/1050/1440, dua consumer:
+active card center/size, image decoding, clipping/overflow, dot selection,
+arrows, keyboard/wrap, swipe, single disabled arrows, repeated View Transition.
+Tidak ada fresh artwork atau perubahan reference PNG karena template tetap.
+
+## 7. Hasil verifikasi lokal — 6 Oct 2026
+
+17 CMS tests PASS (14 existing tetap + 3 Growth). Admin mock 320/390/768/1440
+PASS: form baru, UUID selection, delete confirmation/cancel, minimum satu,
+maksimum delapan, conflict preservation, escaping, keyboard dan retry hook.
+Renderer fixtures 1/2/5/8 PASS pada 320/390/768/1050/1440 di Home dan HoF
+(40 cases), termasuk panah mobile, dots, keyboard/wrap, swipe dan View Transition
+berulang. Snapshot original dipulihkan byte-identik setelah fixtures.
+
+QA menemukan panah mobile ter-clip stage overflow:hidden. Clipping kini hanya
+pada project-viewport yang membungkus track; posisi/ukuran kartu dan panah tetap.
+Single-record arrows disabled. Semua listener Home memakai AbortController;
+kedua consumer teardown astro:before-swap.
+
+Build baseline 0 errors, 19 pages; visual + navbar + VT + spacing + format + SEO
+PASS. Responsive 468/468 PASS. Home Projects geometry 1440×910, kartu
+549×567 di 445.5/263; MAE 4.433. HoF 1440×1014, kartu 549×567 di 445.5/339;
+MAE 0.198. Browser errors kosong. Assertion verify.mjs, snapshot baseline,
+fonts dan artwork tidak berubah. Bukti ignored: artifacts/cms-growth/ dan
+artifacts/cms-admin/. Preview standalone sempat berhenti (connection refused);
+gate yang terkena diulang dengan server statis di proses runner yang sama.
+
+`npm run cms:admin` sudah menghasilkan Code.gs/Index.html terbaru; Export GAS
+source tidak berubah, tidak memerlukan update. Belum push, belum update GAS
+live dan belum uji owner add/delete/both rebuild/non-owner login. Growth belum
+live terverifikasi. Owner update hanya setelah schema situs sudah di-push dan
+kedua deploy sukses; langkah ada di cms-admin-setup.md. Tidak ada setup/reseed
+ulang, perubahan Sheet/folder atau secret di repo.

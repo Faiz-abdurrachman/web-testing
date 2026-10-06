@@ -2,11 +2,14 @@
 
 ## Checkpoint aktif — 6 Oct 2026, handoff sesi CMS
 
-**NEXT: B2 Projects Growth (tambah/hapus), belum dimulai.** User meminta
-implementasi berikutnya dikerjakan AI baru; sesi handoff ini hanya memperbarui
-dokumentasi. Mulai dari [cms-kickoff.md](cms-kickoff.md),
-[cms-projects-growth-plan.md](cms-projects-growth-plan.md) dan
-[cms-sop.md](cms-sop.md).
+**B2 Projects Growth: implementasi + QA lokal PASS; belum push/live.**
+Minimum satu / maksimum delapan Projects; add/delete, UUID server, revision guard
+serta batch write/trailing blanks tersedia. Belum push atau update GAS live.
+17 CMS tests, 40 renderer fixtures, admin browser dan 7 gate + SEO PASS
+(responsive 468/468). NEXT: konfirmasi push, update admin deployment existing dan uji
+owner add/delete + kedua rebuild. Setelah Growth live terverifikasi: media/cache,
+lalu Team. Lihat [cms-projects-growth-plan.md](cms-projects-growth-plan.md)
+dan [cms-sop.md](cms-sop.md).
 
 | Bagian                   | Status nyata                                                                                                                        |
 | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
@@ -15,7 +18,7 @@ dokumentasi. Mulai dari [cms-kickoff.md](cms-kickoff.md),
 | B2 Projects foundation   | Admin privat terpasang; empat project dimuat; edit existing + revision guard + dua hook + retry publication tersedia.               |
 | Uji owner                | Save tanpa perubahan isi berhasil; kedua rebuild diminta; export tetap identik baseline.                                            |
 | Perbaikan fetch          | Kode terakhir deploy `96a9756`; status Vercel testing dan production SUCCESS. 14 CMS tests + 7 gate + SEO PASS; responsive 468/468. |
-| Growth/upload/Team/B3/B4 | Belum selesai. Jangan menyebut seluruh CMS selesai.                                                                                 |
+| Growth/upload/Team/B3/B4 | Growth lokal QA PASS; live belum diperbarui. Upload/Team/B3/B4 belum selesai. Jangan menyebut seluruh CMS selesai.                  |
 
 404 sebelumnya terjadi sesudah redirect ke `script.googleusercontent.com`.
 Penyebab Google/cache belum terbukti. Fetch memakai IPv4-first, nonce/no-cache,
@@ -34,7 +37,7 @@ awal atau mengulang pertanyaan onboarding. Admin menggunakan project GAS
 terpisah, execute as Me + Only myself; API export publik read-only bertoken.
 Menambah admin kedua memerlukan pass auth tersendiri.
 
-User telah mengizinkan kelanjutan CMS dan commit/push. Periksa konteks izin
+User mengizinkan pengerjaan dan commit; konfirmasi sebelum push. Periksa konteks izin
 sebelum push; `origin` memiliki dua push URL, sehingga sekali push men-deploy
 kedua situs. Bila working tree berisi perubahan asing, tanyakan sebelum mengubahnya.
 Growth memakai template konsisten, satu collection/pass; jangan membuka field
@@ -60,7 +63,7 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 ### Tugas berikutnya untuk AI baru
 
 B2 Projects Growth: baca `docs/cms-projects-growth-plan.md` dan
-`docs/cms-sop.md`. Foundation sudah terpasang; implementasi Growth belum dimulai.
+`docs/cms-sop.md`. Foundation sudah terpasang; Growth lokal tersedia, tunggu gate/push/update GAS dan uji nyata.
 
 ## Riwayat UI dan checkpoint terdahulu (bukan NEXT aktif)
 

@@ -28,7 +28,10 @@ try {
     });
     const errors = [];
     page.on('pageerror', (error) => errors.push(error.message));
-    page.on('dialog', (dialog) => dialog.accept());
+    let acceptDialog = true;
+    page.on('dialog', (dialog) =>
+      acceptDialog ? dialog.accept() : dialog.dismiss(),
+    );
     await page.route('http://cms-admin.test/', (route) =>
       route.fulfill({ body: html, contentType: 'text/html' }),
     );
@@ -47,6 +50,8 @@ try {
           revision,
           imagePresets: [...new Set(projects.map((project) => project.image))],
           publicationPending: false,
+          minProjects: 1,
+          maxProjects: 8,
         });
         window.google = {
           script: {
@@ -59,22 +64,36 @@ try {
                         let result;
                         if (name === 'load')
                           result = { ok: true, data: state() };
-                        else if (name === 'save') {
+                        else if (['save', 'add', 'delete'].includes(name)) {
                           window.adminMock.saves++;
                           if (window.adminMock.failSave)
                             result = { ok: false, error: { code: 'CONFLICT' } };
                           else {
-                            records = records.map((project) =>
-                              project.id === payload.project.id
-                                ? structuredClone(payload.project)
-                                : project,
-                            );
+                            if (name === 'add')
+                              records.push({
+                                ...structuredClone(payload.project),
+                                id: 'mock-' + window.adminMock.saves,
+                              });
+                            else if (name === 'delete')
+                              records = records.filter(
+                                (project) => project.id !== payload.id,
+                              );
+                            else
+                              records = records.map((project) =>
+                                project.id === payload.project.id
+                                  ? structuredClone(payload.project)
+                                  : project,
+                              );
                             revision = 'saved-' + window.adminMock.saves;
                             result = {
                               ok: true,
                               data: {
                                 ...state(),
                                 saved: true,
+                                affectedId:
+                                  name === 'add'
+                                    ? records.at(-1).id
+                                    : payload.project?.id,
                                 publication: [
                                   { target: 'testing', accepted: true },
                                   {
@@ -102,6 +121,8 @@ try {
                     return {
                       adminLoadProjects: () => call('load'),
                       adminSaveProject: (payload) => call('save', payload),
+                      adminAddProject: (payload) => call('add', payload),
+                      adminDeleteProject: (payload) => call('delete', payload),
                       adminRetryPublication: () => call('retry'),
                     };
                   },
@@ -181,6 +202,68 @@ try {
     assert.equal(
       await page.evaluate(() => document.activeElement.id),
       'description',
+    );
+    await page.evaluate(() => {
+      window.adminMock.failSave = false;
+      window.adminMock.partial = false;
+    });
+    await page.locator('#add').click();
+    assert.equal(await page.locator('#title').inputValue(), '');
+    assert.equal(await page.locator('#delete').isDisabled(), true);
+    await page.locator('#title').fill('New project');
+    await page.locator('#description').fill('New description');
+    await page.locator('#tag-one').fill('One');
+    await page.locator('#tag-two').fill('Two');
+    await page.locator('#save').click();
+    await page.waitForFunction(
+      () => document.querySelectorAll('.project-choice').length === 5,
+    );
+    assert.equal(await page.locator('#title').inputValue(), 'New project');
+    acceptDialog = false;
+    await page.locator('#delete').click();
+    assert.equal(await page.locator('.project-choice').count(), 5);
+    acceptDialog = true;
+    await page.locator('#delete').click();
+    await page.waitForFunction(
+      () => document.querySelectorAll('.project-choice').length === 4,
+    );
+    for (let i = 0; i < 3; i++) {
+      await page.locator('#delete').click();
+      await page.waitForFunction(
+        (count) =>
+          document.querySelectorAll('.project-choice').length === count,
+        3 - i,
+      );
+    }
+    assert.equal(await page.locator('#delete').isDisabled(), true);
+    for (let i = 0; i < 7; i++) {
+      await page.locator('#add').click();
+      await page.locator('#title').fill('Growth ' + i);
+      await page.locator('#description').fill('Description');
+      await page.locator('#tag-one').fill('One');
+      await page.locator('#tag-two').fill('Two');
+      await page.locator('#save').click();
+      await page.waitForFunction(
+        (count) =>
+          document.querySelectorAll('.project-choice').length === count,
+        i + 2,
+      );
+    }
+    assert.equal(await page.locator('#add').isDisabled(), true);
+    await page.evaluate(() => {
+      window.adminMock.failSave = true;
+    });
+    await page.locator('#delete').click();
+    await page.waitForFunction(() =>
+      document.getElementById('status').textContent.includes('sudah berubah'),
+    );
+    assert.equal(await page.locator('.project-choice').count(), 8);
+    assert.equal(await page.locator('#title').inputValue(), 'Growth 6');
+    assert.equal(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth > innerWidth,
+      ),
+      false,
     );
     assert.deepEqual(errors, []);
     report.push({

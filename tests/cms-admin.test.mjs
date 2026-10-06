@@ -64,6 +64,7 @@ function harness() {
           counts.writes++;
           values.forEach((record, y) =>
             record.forEach((value, x) => {
+              cells[row - 1 + y] ??= [];
               cells[row - 1 + y][column - 1 + x] = value.startsWith("'")
                 ? value.slice(1)
                 : value;
@@ -103,6 +104,7 @@ function harness() {
       }),
     },
     Utilities: {
+      getUuid: () => '12345678-abcd-abcd-abcd-123456789012',
       DigestAlgorithm: { SHA_256: 'sha256' },
       Charset: { UTF_8: 'utf8' },
       computeDigest: (_algorithm, value) =>
@@ -298,4 +300,132 @@ test('partial hook failure preserves saved content; retry publication does not r
   assert.equal(h.props.get('PUBLICATION_PENDING'), 'false');
   assert.equal(h.counts.writes, 1);
   assert.equal(h.calls.length, 4);
+});
+
+const content = ({ id, ...project }) => project;
+test('growth add/delete are revision guarded, atomic, ordered and stable; blank rows remain readable', () => {
+  const h = ready();
+  const initial = plain(h.context.adminLoadProjects().data);
+  h.failHook(prodHook);
+  const added = plain(
+    h.context.adminAddProject({
+      revision: initial.revision,
+      project: { ...content(initial.projects[0]), title: "'literal new title" },
+    }),
+  );
+  assert.equal(added.ok, true);
+  assert.equal(added.data.projects.length, 5);
+  assert.deepEqual(added.data.projects.slice(0, 4), initial.projects);
+  assert.match(added.data.affectedId, /^project-/);
+  assert.equal(added.data.publicationPending, true);
+  assert.equal(
+    h.context.adminAddProject({
+      revision: initial.revision,
+      project: content(initial.projects[0]),
+    }).error.code,
+    'CONFLICT',
+  );
+  assert.equal(
+    h.context.adminAddProject({
+      revision: added.data.revision,
+      project: content(initial.projects[0]),
+    }).error.code,
+    'COLLISION',
+  );
+  assert.equal(h.counts.writes, 1);
+  h.context.adminRetryPublication();
+  assert.equal(h.counts.writes, 1);
+  const deleted = plain(
+    h.context.adminDeleteProject({
+      revision: added.data.revision,
+      id: initial.projects[1].id,
+    }),
+  );
+  assert.equal(deleted.ok, true);
+  assert.deepEqual(
+    deleted.data.projects.map((p) => p.id),
+    [
+      initial.projects[0].id,
+      initial.projects[2].id,
+      initial.projects[3].id,
+      added.data.affectedId,
+    ],
+  );
+  assert.deepEqual(h.cells[5], ['', '', '', '', '']);
+  assert.deepEqual(
+    plain(h.context.adminLoadProjects().data.projects),
+    deleted.data.projects,
+  );
+  assert.equal(h.counts.writes, 2);
+  assert.equal(
+    h.context.adminDeleteProject({
+      revision: added.data.revision,
+      id: initial.projects[0].id,
+    }).error.code,
+    'CONFLICT',
+  );
+  assert.equal(h.counts.writes, 2);
+  assert.equal(h.counts.locks, 0);
+});
+
+test('growth rejects auth, unknown fields/IDs, minimum, maximum and invalid candidates without hooks/write', () => {
+  const h = ready();
+  for (const identity of ['', 'other@example.test']) {
+    h.setActive(identity);
+    assert.equal(h.context.adminAddProject({}).error.code, 'UNAUTHORIZED');
+    assert.equal(h.context.adminDeleteProject({}).error.code, 'UNAUTHORIZED');
+  }
+  h.setActive(owner);
+  const initial = plain(h.context.adminLoadProjects().data);
+  for (const project of [
+    { ...content(initial.projects[0]), id: 'client-id' },
+    { ...content(initial.projects[0]), tags: ['one'] },
+  ]) {
+    assert.equal(
+      h.context.adminAddProject({ revision: initial.revision, project }).ok,
+      false,
+    );
+  }
+  assert.equal(
+    h.context.adminDeleteProject({ revision: initial.revision, id: 'missing' })
+      .error.code,
+    'NOT_FOUND',
+  );
+  assert.equal(h.counts.writes, 0);
+  assert.equal(h.calls.length, 0);
+  h.cells.splice(2);
+  let state = h.context.adminLoadProjects().data;
+  assert.equal(
+    h.context.adminDeleteProject({
+      revision: state.revision,
+      id: state.projects[0].id,
+    }).error.code,
+    'MINIMUM',
+  );
+  for (let i = 1; i < 8; i++)
+    h.cells.push([
+      'fixture-' + i,
+      'Project',
+      '["one","two"]',
+      'Description',
+      baseline.projects[0].image,
+    ]);
+  state = h.context.adminLoadProjects().data;
+  assert.equal(
+    h.context.adminAddProject({
+      revision: state.revision,
+      project: content(state.projects[0]),
+    }).error.code,
+    'LIMIT',
+  );
+  h.cells[2][0] = h.cells[1][0];
+  assert.equal(
+    h.context.adminDeleteProject({
+      revision: state.revision,
+      id: state.projects[0].id,
+    }).error.code,
+    'INVALID_DATA',
+  );
+  assert.equal(h.counts.writes, 0);
+  assert.equal(h.calls.length, 0);
 });

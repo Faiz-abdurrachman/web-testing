@@ -227,7 +227,7 @@ const hod = z
 
 export const cmsSnapshotSchema = z.strictObject({
   schemaVersion: z.literal(1),
-  projects: z.array(project).length(4).superRefine(uniqueIds),
+  projects: z.array(project).min(1).max(8).superRefine(uniqueIds),
   team: z.strictObject({
     leaderTeam: z.array(member).length(2),
     hodsTeams: orderedDomains(teamGroup),

@@ -2,7 +2,7 @@
 
 **CMS UPDATE (6 Oct 2026):** B0/B1 selesai; B2 editor empat Projects existing
 sudah terpasang dan save dicoba. Fix fetch `96a9756`: kedua Vercel SUCCESS.
-NEXT **Projects Growth**, belum dimulai. Untuk tugas CMS gunakan prompt aktif
+Projects Growth lokal tersedia; NEXT verifikasi/push/update GAS dan uji owner live. Untuk tugas CMS gunakan prompt aktif
 [CMS kickoff](cms-kickoff.md), [SOP CMS](cms-sop.md) dan
 [Projects Growth plan](cms-projects-growth-plan.md). Blok panjang berikut adalah
 panduan UI umum/riwayat; instruksi NEXT lama tidak mengalahkan checkpoint aktif.

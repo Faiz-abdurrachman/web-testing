@@ -1,4 +1,6 @@
 // Separate private GAS project. Public export code must never include this file.
+const ADMIN_PROJECT_MIN = 1;
+const ADMIN_PROJECT_MAX = 8;
 const ADMIN_PROJECT_HEADERS = ['id', 'title', 'tags', 'description', 'image'];
 
 function doGet() {
@@ -55,49 +57,100 @@ function adminLoadProjects() {
 }
 
 function adminSaveProject(request) {
+  return adminMutateProjects_('save', request);
+}
+
+function adminAddProject(request) {
+  return adminMutateProjects_('add', request);
+}
+
+function adminDeleteProject(request) {
+  return adminMutateProjects_('delete', request);
+}
+
+function adminMutateProjects_(operation, request) {
   return adminResult_(() => {
     adminAuthorize_();
     adminHooks_();
+    const keys = operation === 'delete' ? 'id,revision' : 'project,revision';
     if (
       !request ||
       typeof request !== 'object' ||
       Array.isArray(request) ||
-      Object.keys(request).sort().join(',') !== 'project,revision' ||
+      Object.keys(request).sort().join(',') !== keys ||
       typeof request.revision !== 'string'
     )
       adminFail_('INVALID_INPUT');
-    const project = adminValidateProject_(request.project);
+    if (
+      operation === 'delete' &&
+      (typeof request.id !== 'string' ||
+        !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(request.id))
+    )
+      adminFail_('INVALID_INPUT');
     const lock = LockService.getScriptLock();
     lock.waitLock(30000);
     let state;
     try {
       const projects = adminReadProjects_();
       if (adminRevision_(projects) !== request.revision) adminFail_('CONFLICT');
-      const index = projects.findIndex((item) => item.id === project.id);
-      if (index < 0) adminFail_('NOT_FOUND');
-      projects[index] = project;
-      const values = projects.map((item) =>
+      let affectedId;
+      if (operation === 'delete') {
+        const index = projects.findIndex((item) => item.id === request.id);
+        if (index < 0) adminFail_('NOT_FOUND');
+        if (projects.length <= ADMIN_PROJECT_MIN) adminFail_('MINIMUM');
+        projects.splice(index, 1);
+        affectedId = request.id;
+      } else {
+        let input = request.project;
+        if (operation === 'add') {
+          if (projects.length >= ADMIN_PROJECT_MAX) adminFail_('LIMIT');
+          if (
+            !input ||
+            typeof input !== 'object' ||
+            Array.isArray(input) ||
+            Object.keys(input).sort().join(',') !==
+              'description,image,tags,title'
+          )
+            adminFail_('INVALID_INPUT');
+          input = {
+            ...input,
+            id: 'project-' + Utilities.getUuid().toLowerCase(),
+          };
+          if (projects.some((item) => item.id === input.id))
+            adminFail_('COLLISION');
+        }
+        const project = adminValidateProject_(input);
+        affectedId = project.id;
+        if (operation === 'add') projects.push(project);
+        else {
+          const index = projects.findIndex((item) => item.id === project.id);
+          if (index < 0) adminFail_('NOT_FOUND');
+          projects[index] = project;
+        }
+      }
+      adminValidateProjects_(projects);
+      const sheet = adminSheet_();
+      const height = Math.max(projects.length, sheet.getLastRow() - 1);
+      const values = Array.from({ length: height }, (_, index) =>
         ADMIN_PROJECT_HEADERS.map((field) =>
-          adminCell_(
-            field === 'tags' ? JSON.stringify(item.tags) : item[field],
-          ),
+          projects[index]
+            ? adminCell_(
+                field === 'tags'
+                  ? JSON.stringify(projects[index].tags)
+                  : projects[index][field],
+              )
+            : '',
         ),
       );
-      const sheet = adminSheet_();
-      const range = sheet.getRange(
-        2,
-        1,
-        values.length,
-        ADMIN_PROJECT_HEADERS.length,
-      );
+      const range = sheet.getRange(2, 1, height, ADMIN_PROJECT_HEADERS.length);
+      range.setNumberFormat('@');
+      range.setValues(values);
       PropertiesService.getScriptProperties().setProperty(
         'PUBLICATION_PENDING',
         'true',
       );
-      range.setNumberFormat('@');
-      range.setValues(values);
       SpreadsheetApp.flush();
-      state = adminState_(projects);
+      state = { ...adminState_(projects), affectedId };
     } finally {
       lock.releaseLock();
     }
@@ -137,6 +190,9 @@ function adminResult_(run) {
       'INVALID_DATA',
       'CONFLICT',
       'NOT_FOUND',
+      'MINIMUM',
+      'LIMIT',
+      'COLLISION',
     ];
     return {
       ok: false,
@@ -197,11 +253,12 @@ function adminSheet_() {
 
 function adminReadProjects_() {
   const sheet = adminSheet_();
-  if (sheet.getLastRow() !== 5) adminFail_('INVALID_DATA');
-  const seen = new Set();
-  return sheet
-    .getRange(2, 1, 4, ADMIN_PROJECT_HEADERS.length)
+  const height = sheet.getLastRow() - 1;
+  if (height < ADMIN_PROJECT_MIN || height > 1000) adminFail_('INVALID_DATA');
+  const records = sheet
+    .getRange(2, 1, height, ADMIN_PROJECT_HEADERS.length)
     .getValues()
+    .filter((row) => row.some((cell) => cell !== ''))
     .map((row) => {
       if (row.some((cell) => typeof cell !== 'string'))
         adminFail_('INVALID_DATA');
@@ -211,17 +268,27 @@ function adminReadProjects_() {
       } catch (_error) {
         adminFail_('INVALID_DATA');
       }
-      const project = adminValidateProject_({
+      return adminValidateProject_({
         id: row[0],
         title: row[1],
         tags,
         description: row[3],
         image: row[4],
       });
-      if (seen.has(project.id)) adminFail_('INVALID_DATA');
-      seen.add(project.id);
-      return project;
     });
+  return adminValidateProjects_(records);
+}
+
+function adminValidateProjects_(records) {
+  if (records.length < ADMIN_PROJECT_MIN || records.length > ADMIN_PROJECT_MAX)
+    adminFail_('INVALID_DATA');
+  const seen = new Set();
+  records.forEach((record) => {
+    adminValidateProject_(record);
+    if (seen.has(record.id)) adminFail_('INVALID_DATA');
+    seen.add(record.id);
+  });
+  return records;
 }
 
 function adminValidateProject_(project) {
@@ -277,6 +344,8 @@ function adminState_(projects) {
     projects: records,
     revision: adminRevision_(records),
     imagePresets: ADMIN_IMAGE_PRESETS,
+    minProjects: ADMIN_PROJECT_MIN,
+    maxProjects: ADMIN_PROJECT_MAX,
     publicationPending:
       PropertiesService.getScriptProperties().getProperty(
         'PUBLICATION_PENDING',

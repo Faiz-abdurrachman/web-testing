@@ -60,7 +60,7 @@ pandu langkah instalasi akun satu tahap per pesan, tanpa meminta password.
    ditolak, bukan menimpa perubahan lain.
 7. Jalankan tujuh gate situs + SEO tiap pass, CMS tests dan browser admin jika
    relevan; lock pass sebelum collection berikutnya. Simpan bukti ignored.
-8. Commit fitur + docs. Deploy dua repo sesuai izin. Perubahan source GAS di
+8. Commit fitur + docs. Sesi Growth 6 Oct: konfirmasi user sebelum push. Deploy dua repo sesuai izin. Perubahan source GAS di
    repo tidak otomatis memperbarui project/deployment GAS live milik user.
 9. Generate installer baru, pandu owner mengganti file dan membuat version
    deployment baru bila GAS berubah, lalu verifikasi real login/save/rebuild.
@@ -131,3 +131,17 @@ cocok lokal. Dua build terakhir berhasil setelah repair. Penyebab internal
 Google/cache tidak terbukti; jangan menyatakan root cause sudah pasti diketahui.
 Jangan mencabut safeguards/retry yang sudah diuji. Jika berulang, cari log build
 terbaru (host/hop/durasi/fingerprint), bukan menambah retry tanpa batas.
+
+## 7. Projects Growth policy
+
+Projects menerima 1–8 records; delete terakhir dan add kesembilan ditolak.
+ID baru UUID dari server, bukan judul atau input client. Delete konfirmasi judul;
+konflik tidak mengubah Sheet atau meminta hook. Add/delete/save membangun dan
+memvalidasi candidate final, kemudian satu setValues mencakup records dan blank
+trailing rows. Export existing mengabaikan blank rows; tidak memerlukan update.
+Gambar masih preset existing; upload/cache adalah pass terpisah.
+
+`npm run verify:cms-growth` membangun snapshot fixture sementara 1/2/5/8,
+menggunakan static server sendiri lalu memulihkan snapshot dan build baseline
+pada finally. Jangan menjalankan build/fetch/site gates lain bersamaan dengan
+runner ini karena dist/snapshot dipakai sementara. Bukti di artifacts/cms-growth/.

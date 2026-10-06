@@ -1,7 +1,8 @@
 # CMS kickoff — prompt siap tempel untuk AI baru
 
 Checkpoint 6 Oct 2026: B0/B1 selesai, B2 editor Projects existing sudah terpasang.
-NEXT hanya Projects Growth. Copy blok berikut ke sesi baru.
+Projects Growth implementasi + QA lokal PASS (17 tests, 40 fixtures, admin browser,
+7 gate + SEO, responsive 468/468). NEXT konfirmasi push/update GAS + uji owner live. Copy blok berikut ke sesi baru.
 
 ```text
 Lanjut di repo /home/faiz/ds/ds5opencode — Data Sorcerers, Astro static + Vercel.
@@ -37,8 +38,11 @@ Detail fetch: IPv4-first, nonce/no-cache, 60s per attempt, maksimal dua attempt
 bersama untuk timeout atau 404 pada redirect googleusercontent. Tidak fallback
 stale bila remote gagal. Secret ada di Properties/env privat; jangan dicetak.
 
-TUGAS: kerjakan B2 PROJECTS GROWTH (tambah/hapus), SATU collection/pass.
-Ikuti Master Work Plan docs/cms-projects-growth-plan.md. Belum ada kode Growth.
+TUGAS: tuntaskan verifikasi/publikasi B2 PROJECTS GROWTH, SATU collection/pass.
+Ikuti hasil terbaru docs/cms-projects-growth-plan.md. Kode lokal Growth tersedia:
+1–8 Projects, UUID server, revision guard, satu batch write + blank trailing rows.
+Jangan ulang implementasi yang sudah hijau; pandu update GAS Admin existing lalu
+uji owner add/delete dan kedua rebuild. Belum ada bukti Growth live.
 Pastikan stable ID, revision guard, validasi candidate sebelum batch Sheet write,
 minimum/empty policy yang jelas dan render 1/2/5+ project aman. Ubah hanya guard
 jumlah Projects setelah renderer diuji. Pertahankan fixture baseline dan semua
@@ -61,7 +65,7 @@ Save berarti tersimpan/rebuild diminta; pastikan kedua rebuild selesai sebelum
 mengklaim live. Uji owner add/delete serta akun Google non-owner sungguhan.
 
 Update AGENTS.md, ai-handoff, assets, CMS plan/Growth plan/setup guide sesuai hasil.
-Commit per fitur. User sudah mengizinkan commit/push kelanjutan CMS; baca izin
+Commit per fitur. User mengizinkan pengerjaan/commit; konfirmasi sebelum push. Baca izin
 sesi sebelum push; git push origin main mengirim ke testing + production.
 Jangan taruh token, email admin, folder/Sheet ID, admin URL atau hook di repo.
 Setelah Growth: Projects media upload/cache, lalu Team; B3 satu collection/pass;

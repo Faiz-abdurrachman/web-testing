@@ -2780,3 +2780,22 @@ endpoint fingerprint matches local. Client starts a fresh export with nonce
 and no-cache and retries that specific redirect failure once, sharing the
 two-attempt budget with timeouts. No initial-404 retry or stale data fallback.
 No public UI/data/assets changed. Recovery/exhaustion and secrecy tests PASS.
+
+## CMS B2 — Projects Growth (6 Oct 2026)
+
+Home Projects node 1430:2146 (1440×910) dan HoF node 1439:4655 (1440×1014)
+tetap memakai kartu 549×567, font/artwork/rim/glow/spacing existing. Snapshot
+empat Projects dan geometry assertions verify.mjs tetap. Schema hanya guard
+jumlah Projects menjadi 1–8; collection lain tetap guarded.
+
+Single-project arrows disabled; mobile clipping dipindah dari stage ke wrapper
+project-viewport sehingga panah bawah dapat diklik tanpa mengubah geometri.
+Home listener memakai AbortController di semua event; kedua consumer cleanup
+astro:before-swap. Fixtures build 1/2/5/8 terpisah dari baseline, tidak meregenerasi
+reference PNG. Admin custom tidak punya node Figma; add/delete menggunakan tokens
+foundation Bluu Next 700 / Manrope, palette existing, gap/padding 8/16/32.
+
+Growth QA: 17 CMS tests, admin mock 4 widths, 40 renderer fixtures, 7 gates + SEO
+PASS (responsive 468/468). Baseline Home Projects MAE 4.433 / HoF 0.198;
+geometry exact, browserErrors []. File generated admin tersedia; belum push,
+belum update GAS live dan belum owner add/delete verification.

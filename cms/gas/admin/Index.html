@@ -82,6 +82,9 @@
         background: var(--surface);
         border-radius: 16px;
       }
+      #add {
+        margin-bottom: 16px;
+      }
       #project-list {
         display: grid;
         gap: 8px;
@@ -210,6 +213,7 @@
       <div class="layout" id="workspace" hidden>
         <nav aria-label="Daftar project">
           <h2>Projects</h2>
+          <button id="add" type="button">Tambah project</button>
           <div id="project-list"></div>
         </nav>
         <section class="editor" aria-labelledby="editor-title">
@@ -256,6 +260,7 @@
                 <button class="primary" id="save" type="submit">
                   Simpan dan terbitkan
                 </button>
+                <button id="delete" type="button">Hapus project</button>
               </div>
             </fieldset>
           </form>
@@ -282,6 +287,9 @@
           CONFLICT:
             'Project sudah berubah sejak halaman dibuka. Muat ulang sebelum menyimpan lagi.',
           NOT_FOUND: 'Project tidak ditemukan. Muat ulang daftar projects.',
+          MINIMUM: 'Minimal satu project harus tetap tersedia.',
+          LIMIT: 'Maksimal delapan projects. Hapus satu sebelum menambah.',
+          COLLISION: 'ID baru belum bisa dibuat. Coba tambah lagi.',
           SERVER_ERROR:
             'Operasi belum berhasil. Muat ulang projects untuk memeriksa isi yang tersimpan.',
         };
@@ -296,6 +304,13 @@
             button.disabled = value;
           });
           byId('workspace').setAttribute('aria-busy', String(value));
+          byId('add').disabled =
+            value || !state || state.projects.length >= state.maxProjects;
+          byId('delete').disabled =
+            value ||
+            !selected ||
+            !state ||
+            state.projects.length <= state.minProjects;
         };
         const rpc = (name, payload) =>
           new Promise((resolve, reject) => {
@@ -316,7 +331,18 @@
             return;
           selected = id;
           dirty = false;
-          const record = state.projects.find((project) => project.id === id);
+          const record = state.projects.find(
+            (project) => project.id === id,
+          ) || {
+            title: '',
+            description: '',
+            tags: ['', ''],
+            image: state.imagePresets[0],
+          };
+          byId('editor-title').textContent = id
+            ? 'Isi project'
+            : 'Project baru';
+          setBusy(false);
           byId('title').value = record.title;
           byId('description').value = record.description;
           byId('tag-one').value = record.tags[0];
@@ -416,7 +442,7 @@
           event.preventDefault();
           if (busy || !form.reportValidity()) return;
           const project = {
-            id: selected,
+            ...(selected ? { id: selected } : {}),
             title: byId('title').value,
             description: byId('description').value,
             tags: [byId('tag-one').value, byId('tag-two').value],
@@ -425,8 +451,62 @@
           setBusy(true);
           message('Menyimpan dan meminta penerbitan…');
           try {
-            const result = await rpc('adminSaveProject', {
-              project,
+            const result = await rpc(
+              selected ? 'adminSaveProject' : 'adminAddProject',
+              {
+                project,
+                revision: state.revision,
+              },
+            );
+            if (!result.ok) {
+              message(errors[result.error.code] || errors.SERVER_ERROR, true);
+              byId('reload').hidden = false;
+              return;
+            }
+            state = result.data;
+            selected = result.data.affectedId;
+            dirty = false;
+            setBusy(false);
+            render();
+            byId('reload').hidden = true;
+            publicationMessage(result.data.publication, true);
+          } catch (_error) {
+            message(
+              'Koneksi terputus. Muat ulang projects sebelum menyimpan lagi untuk memeriksa perubahan terakhir.',
+              true,
+            );
+            byId('reload').hidden = false;
+          } finally {
+            setBusy(false);
+          }
+        });
+        byId('add').addEventListener('click', () => {
+          if (busy || state.projects.length >= state.maxProjects) return;
+          choose(null);
+          if (selected === null) {
+            dirty = true;
+            byId('title').focus();
+          }
+        });
+        byId('delete').addEventListener('click', async () => {
+          if (busy || !selected || state.projects.length <= state.minProjects)
+            return;
+          const record = state.projects.find(
+            (project) => project.id === selected,
+          );
+          if (
+            !window.confirm(
+              'Hapus project “' +
+                record.title +
+                '”? Situs akan dibangun ulang.',
+            )
+          )
+            return;
+          setBusy(true);
+          message('Menghapus dan meminta penerbitan…');
+          try {
+            const result = await rpc('adminDeleteProject', {
+              id: selected,
               revision: state.revision,
             });
             if (!result.ok) {
@@ -440,9 +520,10 @@
             render();
             byId('reload').hidden = true;
             publicationMessage(result.data.publication, true);
+            byId('title').focus();
           } catch (_error) {
             message(
-              'Koneksi terputus. Muat ulang projects sebelum menyimpan lagi untuk memeriksa perubahan terakhir.',
+              'Koneksi terputus. Muat ulang projects sebelum menghapus lagi untuk memeriksa perubahan terakhir.',
               true,
             );
             byId('reload').hidden = false;

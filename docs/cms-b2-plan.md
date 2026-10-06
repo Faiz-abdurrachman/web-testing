@@ -4,7 +4,7 @@
 
 B0/B1 selesai. B2 Projects foundation sudah terpasang; owner load/save existing
 berhasil, dua rebuild diminta. Fix fetch `96a9756`: kedua Vercel SUCCESS.
-14 CMS tests + 7 gate + SEO PASS. NEXT **Projects Growth**, belum dimulai:
+14 CMS tests + 7 gate + SEO PASS. Projects Growth lokal tersedia; NEXT verifikasi/push/update GAS dan uji owner live:
 [cms-projects-growth-plan.md](cms-projects-growth-plan.md).
 Setelah itu media upload/cache, Team dan B3/B4. Gunakan [cms-sop.md](cms-sop.md)
 dan [ai-handoff.md](ai-handoff.md). Jangan ulang setup dari checkpoint historis.
@@ -147,3 +147,12 @@ retries redirected Google 404 once. 14 CMS tests, real export baseline equality,
 Continue Projects growth next. Private admin Code.gs/Index do not need updating
 for this build-client repair; a different signed-in account denial and live
 content-change verification remain pending.
+
+## Projects Growth local results — 6 Oct 2026
+
+1–8 Projects; CRUD/revision/batch/trailing blanks, server UUID, preset images.
+17 CMS tests, admin browser at four widths, 40 real-build renderer fixture cases,
+7 site gates + SEO PASS (responsive 468/468). Baseline geometry retained.
+Code.gs/Index.html regenerated. Belum push/update GAS/live owner tests;
+owner deployment instructions: cms-admin-setup.md. Media/cache and Team remain
+separate passes after Growth live verification.
