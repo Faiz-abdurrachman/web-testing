@@ -23,7 +23,7 @@ seo ALL PASS.**
    milestone HoF.
 3. **Bangun CMS / admin dashboard** — rencana: `docs/cms-plan.md` (keputusan
    6 Oct 2026: backend **Google Apps Script + Sheets + Drive**, build-time fetch +
-   Vercel rebuild hook, admin page custom, 1–2 admin, save = live). Mulai Fase B0.
+   Vercel rebuild hook, admin page custom, 1–2 admin, save = live). B0 selesai; berikutnya B1 GAS export.
 4. Opsional: minta user kirim sumber HD **Contact** (`contact page.png` cuma
    2680px → maksimal 2×).
 

@@ -1,11 +1,12 @@
 # AI handoff — current context
 
-**CMS B0 sedang dikerjakan:** snapshot + thin loader, satu collection per pass.
+**CMS B0 SELESAI (6 Oct 2026):** enam snapshot loader, Zod, prebuild fallback.
+7 gate + SEO tiap collection PASS; 19 HTML identik baseline. NEXT: B1 GAS.
 Rencana dan gate: `docs/cms-b0-plan.md`. Admin pertama sudah dipilih, folder
 Drive dibuat saat setup GAS, dua Deploy Hook masih perlu dibuat. Secret tetap
 di Script Properties/Vercel env; tidak disimpan di repo.
 
-CMS B0 collections hijau: projects, team, roles, partners, domains.
+CMS B0 collections hijau: projects, team, roles, partners, domains, hods.
 Tujuan: supaya AI agent berikutnya langsung paham kondisi repo **saat ini** tanpa
 harus menebak dari git log. Ini dokumen hidup — update kalau ada perubahan besar.
 
@@ -14,14 +15,19 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
-**★ RENCANA CMS — backend Google Apps Script (6 Oct 2026, belum dieksekusi).**
+**★ CMS B0 SELESAI — backend Google Apps Script berikutnya (6 Oct 2026).**
 User memutuskan CMS pakai **Google Apps Script + Google Sheets + Drive**
 (bukan Keystatic), **build-time fetch + rebuild hook**, admin page custom
 HtmlService, 1–2 admin, **save = live** (rebuild Vercel otomatis). Master Plan
 lengkap: **`docs/cms-plan.md`** (arsitektur, skema Sheet, integrasi Astro
-"snapshot + thin loader" yang nol ubah tampilan, fase B0–B4, jebakan, §6 yang
-butuh keputusan user). **Langkah pertama = Fase B0** (snapshot + loader + Zod +
-`fetch-cms.mjs` fallback) tanpa menyentuh GAS. Tunggu jawaban §6 dulu.
+"snapshot + thin loader" yang nol ubah tampilan, fase B0–B4, jebakan).
+**B0 selesai:** projects, team, roles, partners, domains, hods; 7 gate + SEO
+setiap pass. Ekspor data dan 19 HTML identik dengan baseline. **NEXT = B1**:
+GAS read/export dan fetch remote. Admin pertama sudah dipilih dan folder media
+akan dibuat otomatis; Deploy Hook testing/production masih perlu dibuat.
+Sesi repo belum memiliki akses Google/Vercel terautentikasi. Jangan simpan email
+admin/token/folder ID/hook di repo. Foto upload disiapkan bersama renderer B2;
+logo per partner/Featured/milestone/settings diekstrak di B3.
 
 **★ SELESAI (6 Oct 2026) — Contact "Submit" button hover.** Tombol submit
 `/contact` tadinya diam; kini ikut konvensi pill violet (`.community`/`.apply`):

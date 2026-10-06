@@ -1,6 +1,6 @@
 # CMS / Admin Dashboard — Rencana (backend Google Apps Script)
 
-Status: **B0 SEDANG DIKERJAKAN** · diputuskan 6 Oct 2026 ·
+Status: **B0 SELESAI · B1 NEXT** · diputuskan 6 Oct 2026 ·
 Patuhi `docs/pixel-precision-sop.md` + `AGENTS.md`. **Satu langkah per pass + 7
 gate.** Jangan rusak benchmark (geometri/MAE) atau assertion `verify.mjs`.
 
@@ -48,8 +48,17 @@ geometri yang di-assert.
 - **GAS Web App** (`doGet`/`doPost`): satu endpoint JSON. `action=export`
   (read semua collection, butuh token) untuk build; `action=list` (per
   collection); `action=save`/`delete` (butuh admin).
-- **Auth admin**: GAS web app "Execute as: me" + "Who has access: only myself"
-  (atau akun Google admin) → hanya 1–2 akun bisa buka dashboard & POST.
+- **Deployment terpisah**: endpoint export untuk Vercel menjalankan GAS sebagai
+  owner dan menerima request tanpa login Google, tetapi setiap export/list wajib
+  memakai token. Endpoint ini hanya membaca data; token export tidak memberi
+  akses save/delete/upload.
+- **Auth admin**: deployment dashboard pertama menjalankan GAS sebagai owner
+  dengan akses "only myself". Setiap mutation tetap memeriksa admin pada server
+  dan menolak identitas kosong. Penambahan admin Gmail kedua perlu konfigurasi
+  identitas dan akses Sheet/Drive yang diuji; jangan menganggap "only myself"
+  mendukung dua akun. Acuan:
+  [GAS deployment](https://developers.google.com/apps-script/guides/web) dan
+  [Session identity](https://developers.google.com/apps-script/reference/base/session).
 - **Gambar**: admin upload → GAS simpan ke folder Drive → balas URL publik;
   sel menyimpan URL. (Artwork yang dibake `assets:*` **tetap manual**.)
 - **Save = live**: GAS memanggil 2 **Vercel Deploy Hook** (testing +
@@ -99,9 +108,10 @@ Tujuan: **komponen/halaman tidak berubah API-nya** (import tetap
 
 ## 4. Fase (satu langkah per pass + 7 gate)
 
-- **Fase B0 — Fondasi tanpa GAS.** Tambah `cms-snapshot.json` (dari data
-  sekarang) + thin loader + `fetch-cms.mjs` (mode fallback) + skema Zod.
-  **Nol perubahan tampilan/geometri** (snapshot = data existing). 7 gate.
+- **Fase B0 — SELESAI.** `cms-snapshot.json` (data existing), enam thin loader,
+  `fetch-cms.mjs` (fallback lokal) + skema Zod via `astro/zod`. **19 HTML dan
+  semua ekspor data identik baseline.** Enam pass, 7 gate + SEO tiap pass.
+  Rencana/hasil: `docs/cms-b0-plan.md`.
 - **Fase B1 — GAS read + export.** Buat project GAS, Sheet + 8 tab, `doGet`
   export/list, token. Vercel env `CMS_API_URL`/`CMS_API_TOKEN` + build fetch.
   Verify build Vercel masih identik.
@@ -126,8 +136,9 @@ Tujuan: **komponen/halaman tidak berubah API-nya** (import tetap
    pixel-exact tetap dibake manual.
 5. **Secret jangan di repo.** `EXPORT_TOKEN`, URL Deploy Hook, `DRIVE_FOLDER_ID`,
    email admin → **GAS Script Properties**; `CMS_API_URL/TOKEN` → Vercel env.
-6. **OAuth/Google**: admin page di GAS pakai Google login (tanpa OAuth proxy
-   terpisah). Pastikan akses web app = spesifik, bukan "anyone".
+6. **OAuth/Google**: deployment admin memakai Google login dan pemeriksaan admin
+   pada setiap mutation. Deployment export perlu akses tanpa login untuk Vercel,
+   dengan token read-only; jangan menerapkan akses anonymous ke mutation.
 7. **Deploy ganda** (testing + production): save memicu **dua** Deploy Hook.
 8. **`team.ts` `photo` masih union** → ubah ke path bebas saat migrasi.
 9. **Build deterministik**: `verify.mjs`/audit jalan lokal tanpa env → wajib
@@ -158,3 +169,16 @@ User menyetujui B0, memilih satu owner/admin Google, dan meminta folder media
 dibuat otomatis. Identitas akun tetap di luar repo. Deploy Hook berbeda dari URL
 situs publik; kedua hook perlu dibuat saat B1/B2. B0 menolak env remote karena
 integrasi endpoint baru ditambahkan di B1. Rencana per-pass: `docs/cms-b0-plan.md`.
+
+## Kontrak payload B0
+
+`src/data/cms-schema.mjs` adalah kontrak JSON build; bentuk Sheet perlu dipetakan
+ke kontrak ini pada B1. Snapshot hanya berisi enam collection yang sudah memiliki
+module data. `team` berisi leader dan grup HoDS; `domains.labels` adalah matriks
+teks chip; panel HoDS menyimpan title/text/bullets. Layout, tint, coordinates,
+jenis/urutan panel dan artwork baked tetap di module TypeScript.
+
+API Partners masih memakai kategori dan satu logo bersama; logo per organisasi,
+Featured achievements, milestones dan settings diekstrak di B3. Foto team B0
+masih memakai dua selector artwork existing; path foto upload diperluas bersama
+renderer di B2 agar referensi lama tetap persis.

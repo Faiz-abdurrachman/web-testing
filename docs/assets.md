@@ -2717,3 +2717,7 @@ per-organisation logo rendering will be introduced in B3.
 
 Domain titles, descriptions and label matrices now read the snapshot. Measured
 row x/y/gap and tints stay local; blank chip placeholders and NBSP are preserved.
+
+HoDS detail titles, descriptions and panel text/bullets now read the snapshot.
+Tab labels/order, text-vs-bullets kinds, colors and baked card images remain local.
+All existing `hodById` and static route exports are retained.

@@ -151,6 +151,80 @@ const domain = z
     });
   });
 
+const hodPanelSlots = [
+  [
+    [0, 4, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0],
+  ],
+  [
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0],
+    [0, 0, 0],
+  ],
+  [
+    [0, 0],
+    [0, 4, 0],
+  ],
+  [[0, 0, 0], [0], [0], [0, 0]],
+  [
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0],
+  ],
+  [
+    [0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0],
+  ],
+];
+const hodContent = z.union([
+  z.strictObject({ title: text, text }),
+  z.strictObject({ title: text, bullets: z.array(text) }),
+]);
+const hod = z
+  .strictObject({
+    id,
+    title: text,
+    description: text,
+    tabs: z.array(z.strictObject({ sections: z.array(hodContent) })),
+  })
+  .superRefine((record, ctx) => {
+    const tabs = hodPanelSlots[domainIds.indexOf(record.id)];
+    if (record.tabs.length !== tabs?.length)
+      ctx.addIssue({
+        code: 'custom',
+        path: ['tabs'],
+        message: 'Tab slots are fixed by design',
+      });
+    record.tabs.forEach((tab, tabIndex) => {
+      const panels = tabs?.[tabIndex];
+      if (tab.sections.length !== panels?.length)
+        ctx.addIssue({
+          code: 'custom',
+          path: ['tabs', tabIndex, 'sections'],
+          message: 'Panel slots are fixed by design',
+        });
+      tab.sections.forEach((section, sectionIndex) => {
+        const expected = panels?.[sectionIndex];
+        if (
+          expected === undefined ||
+          (expected === 0
+            ? !('text' in section)
+            : !('bullets' in section) || section.bullets.length !== expected)
+        )
+          ctx.addIssue({
+            code: 'custom',
+            path: ['tabs', tabIndex, 'sections', sectionIndex],
+            message: 'Panel type and bullet slots are fixed by design',
+          });
+      });
+    });
+  });
+
 export const cmsSnapshotSchema = z.strictObject({
   schemaVersion: z.literal(1),
   projects: z.array(project).length(4).superRefine(uniqueIds),
@@ -167,4 +241,5 @@ export const cmsSnapshotSchema = z.strictObject({
       .length(4),
   }),
   domains: orderedDomains(domain),
+  hods: orderedDomains(hod),
 });

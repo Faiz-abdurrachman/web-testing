@@ -1,19 +1,19 @@
 # CMS B0 — snapshot foundation
 
-Status: IN PROGRESS. One collection per pass, with seven gates and SEO before
+Status: COMPLETE. One collection per pass, with seven gates and SEO before
 starting the next collection. B0 uses the committed snapshot without networking.
 The existing module exports and rendered data must remain identical.
 
 ## Work order
 
-| Pass | Collection | Existing reference                        | Status  |
-| ---- | ---------- | ----------------------------------------- | ------- |
-| 1    | projects   | Home `1430:2146`, HoF `1439:4655`         | PASS    |
-| 2    | team       | About `1688:2933`                         | PASS    |
-| 3    | roles      | Recruitment `1436:3564`, six role details | PASS    |
-| 4    | partners   | Partners `1439:4793`, `1439:4937`         | PASS    |
-| 5    | domains    | Home `1430:2138`, Recruitment `1436:3512` | PASS    |
-| 6    | hods       | Six HoDS details, beginning `864:18857`   | PENDING |
+| Pass | Collection | Existing reference                        | Status |
+| ---- | ---------- | ----------------------------------------- | ------ |
+| 1    | projects   | Home `1430:2146`, HoF `1439:4655`         | PASS   |
+| 2    | team       | About `1688:2933`                         | PASS   |
+| 3    | roles      | Recruitment `1436:3564`, six role details | PASS   |
+| 4    | partners   | Partners `1439:4793`, `1439:4937`         | PASS   |
+| 5    | domains    | Home `1430:2138`, Recruitment `1436:3512` | PASS   |
+| 6    | hods       | Six HoDS details, beginning `864:18857`   | PASS   |
 
 ## Plan for each pass
 
@@ -75,3 +75,10 @@ HTML files equal the pre-B0 baseline.
 
 domains: 7 gates + SEO PASS; responsive 468/468; all six exports and all 19
 HTML files equal the pre-B0 baseline.
+
+hods: 7 gates + SEO PASS; responsive 468/468; all six exports and all 19
+HTML files equal the pre-B0 baseline.
+
+B0 completed: six collections, each with seven gates and SEO. No component,
+layout, CSS, artwork or reference PNG changed. Only the navbar audit settling
+condition changed. Next: B1 authenticated GAS export and remote build fetch.

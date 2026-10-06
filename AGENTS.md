@@ -1,11 +1,12 @@
 # AGENTS.md — instructions for AI agents
 
-**CMS B0 sedang dikerjakan:** snapshot + thin loader, satu collection per pass.
+**CMS B0 SELESAI (6 Oct 2026):** enam snapshot loader, Zod, prebuild fallback.
+7 gate + SEO tiap collection PASS; 19 HTML identik baseline. NEXT: B1 GAS.
 Rencana dan gate: `docs/cms-b0-plan.md`. Admin pertama sudah dipilih, folder
 Drive dibuat saat setup GAS, dua Deploy Hook masih perlu dibuat. Secret tetap
 di Script Properties/Vercel env; tidak disimpan di repo.
 
-CMS B0 collections hijau: projects, team, roles, partners, domains.
+CMS B0 collections hijau: projects, team, roles, partners, domains, hods.
 Project: **Data Sorcerers** — a static Astro landing site, a Recruitment page
 (+ 6 role-detail pages) and 6 domain-detail pages. Goal: **pixel-accurate to
 Figma/PNG** with lightweight HTML/CSS.
