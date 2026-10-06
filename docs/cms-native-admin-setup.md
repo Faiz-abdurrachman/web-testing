@@ -100,7 +100,12 @@ Owner menjalankan adminLoadProjects setelah pergantian Cloud; log hanya memuat
 execution started/completed. Ini bukti eksekusi selesai, bukan bukti result.ok
 atau owner login native berhasil. NEXT: API executable owner-only pada GAS Admin
 existing, lima env server pada kedua Vercel, redeploy dan acceptance Google asli.
-API executable dan env native belum dikonfirmasi selesai.
+Owner melaporkan API executable dengan akses Only myself selesai dibuat.
+Env native kedua Vercel belum dikonfirmasi selesai. File import privat
+artifacts/cms-native/vercel-testing.env dan vercel-production.env tersedia:
+origin dan kunci sesi acak berbeda sudah terisi, tiga nilai Google perlu diisi
+owner secara privat. File permissions 0600 dan git-ignored; nilainya tidak
+dicetak dalam chat/log atau disimpan dalam source.
 
 Rujukan untuk toggle user settings:
 [Google API access](https://developers.google.com/apps-script/api/how-tos/enable)
