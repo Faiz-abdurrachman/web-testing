@@ -1,0 +1,78 @@
+# Projects media — Master Work Plan
+
+Status 6 Oct 2026: rencana persiapan; upload belum diimplementasikan atau live.
+User memilih menyelesaikan CMS dahulu; login username/password ditunda.
+Owner login native + add/delete Projects + kedua rebuild terbukti. Owner melaporkan
+akun Google non-owner Incognito ditolak. Pass berikutnya Projects media.
+
+## Batas pass
+
+Projects saja, 1–8 records, backend Sheet/Drive/Admin/Export existing. Tidak
+reseed, membuat folder baru, membuka collection lain atau mengubah auth Google.
+Preset gambar existing tetap bisa dipilih. Upload bukan field URL bebas.
+Drive tetap privat; situs menerima file lokal hasil validasi/cache saat build.
+Jangan menghapus file Drive saat project dihapus: lifecycle media pass tersendiri.
+
+## Referensi dan geometri terkunci
+
+- Home Projects node `1430:2146`, frame 1440×910:
+  https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1430-2146
+  Kartu existing 549×567, bidang gambar 549×349; pertahankan crop/object-fit,
+  rim/glow, posisi arrows/dots dan layout full-screen existing.
+- Hall of Frames node `1439:4655`, frame 1440×1014:
+  https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS?node-id=1439-4655
+  Kartu pusat existing 933px, container-type dan slot coverflow tetap.
+- Public typography Bluu Next Bold 700 / Manrope, spacing/padding/gap existing
+  sesuai assertion baseline dan SOP piksel. Tidak menambah spacing publik.
+- Editor custom tidak punya node/frame Figma. Area input upload memakai tokens
+  existing, heading Bluu Next 700, body Manrope, gap 8/16, tombol padding 8/16;
+  preview di dalam editor, tanpa overlay yang mengubah geometri situs publik.
+
+## Urutan implementasi setelah acceptance auth
+
+1. Tetapkan kontrak referensi gambar dan limits sebelum kode: file raster
+   JPEG/PNG/WebP, tidak SVG/HTML/animasi; byte limit, pixel limit, MIME dan magic
+   bytes diverifikasi server. Ukuran upload harus muat Vercel/RPC/base64 bounds.
+   Filename/path dari server, tidak memakai filename atau URL bebas dari client.
+2. Siapkan normalisasi/cache dengan sharp existing: decode terbatas, orientasi
+   EXIF, buang metadata, output WebP, hash konten dan ukuran output terbatas.
+   Uji packaging Vercel sebelum menetapkan lokasi normalisasi; penggunaan sharp
+   pada Functions harus menghormati aturan dependency/budget repo. Jangan
+   menganggap validasi browser cukup atau langsung mengaktifkan upload.
+3. GAS Admin: RPC upload khusus dengan auth owner, validasi, batas ukuran dan
+   penyimpanan hanya di DRIVE_FOLDER_ID existing. Referensi media tervalidasi
+   boleh dipakai save; revision guard dan batch Sheet write tetap. Upload saja
+   tidak memicu publication; save project meminta kedua hooks. Error setelah
+   write tidak boleh dilaporkan sebagai rollback yang sebenarnya tidak terjadi.
+4. GAS Export: jalur read-only bertoken untuk bytes media yang direferensikan
+   Projects, folder-bound dan tanpa ID/URL Drive di snapshot publik. Tidak
+   menambahkan mutation ke project Export. Deployment existing perlu update
+   versi; bukan menjalankan setupCms lagi.
+5. Prebuild: fetch metadata/snapshot dan media dengan host/redirect allowlist,
+   timeout dan byte limits; normalisasi/verifikasi, cache berdasarkan hash di
+   public/images/cms/projects/. Snapshot ditulis atomik setelah semua media siap.
+   Gagal fetch/decode berarti build gagal; jangan publish gambar kosong/stale.
+6. Native editor: pilih file, preview, status upload dan hasil error, lalu save
+   dengan reference server. Session expiry/CSRF/busy/conflict/lost-connection
+   semantics tetap. Legacy editor harus tetap bisa membaca record media baru;
+   pastikan tidak mematahkan adminReadProjects/validation existing.
+
+## Bukti wajib sebelum publish
+
+- Unit/contract: non-owner/no-session ditolak, CSRF/origin, ukuran/magic/decode,
+  traversal/arbitrary folder/file, reference palsu, timeout, respons tersanitasi,
+  candidate gagal tidak mengubah Sheet, cache hash dan snapshot atomik.
+- Browser native empat widths: file valid/invalid, preview, upload/save,
+  pemulihan expiry/conflict, keyboard, pesan saved-vs-build. Legacy compatibility.
+- Fixture gambar raster baru di kedua consumer; gambar benar-benar decode,
+  crop dalam box existing dan tidak overflow. Baseline preset/reference tetap.
+- CMS tests + build + verify + navbar + VT + responsive + spacing + format + SEO.
+  Tujuh gate situs sebelum collection berikutnya; bukti ignored artifacts.
+- Generate admin/export source, pandu update versi GAS existing, commit lokal;
+  konfirmasi sebelum push kedua repo. Owner upload/save nyata, kedua rebuild
+  selesai dan gambar tampil pada kedua situs sebelum mengklaim upload live.
+
+Rujukan primer:
+[Drive File](https://developers.google.com/apps-script/reference/drive/file),
+[Utilities](https://developers.google.com/apps-script/reference/utilities/utilities),
+[sharp input limits](https://sharp.pixelplumbing.com/api-input/).

@@ -5,23 +5,29 @@
 User memilih **admin penuh di website**; pass aktif Projects/auth:
 [plan](cms-native-admin-plan.md), [setup/acceptance](cms-native-admin-setup.md).
 Kode native /admin + Vercel OAuth/API sudah push pada 824e333 dengan izin user;
-kedua Vercel SUCCESS. Shell /admin HTTP 200/noindex dan API HTTP 503 CONFIGURATION
-terverifikasi pada kedua domain situs; login Google belum dikonfigurasi.
-GAS Admin Growth sudah diperbarui menurut owner; export read-only setelahnya
-empat Projects tetap baseline. Deployment situs Growth 1fb25ae dan checkpoint
-198586b SUCCESS pada kedua repo (testing checkpoint diretrigger berhasil).
-Owner add/delete nyata, akun non-owner dan kedua rebuild perubahan isi belum diuji.
+dokumentasi deploy 47987c6. Standard Cloud/OAuth/API executable existing dan lima
+env server kedua Vercel sudah dikonfigurasi owner. Login native owner dan pemuatan
+Projects terbukti melalui screenshot editor dan mutation nyata.
 
-NEXT: konfigurasi OAuth web
+Owner menambah “Uji CMS”: kedua situs publik menampilkan project itu setelah
+rebuild. Owner lalu menghapusnya: kedua deployment SUCCESS, project uji hilang
+dan empat judul Projects baseline tetap tampil di kedua situs. Login route kedua
+domain HTTP 303 ke Google terverifikasi; login owner terpisah di kedua domain
+belum dibuktikan. Owner melaporkan akun Google non-owner di Incognito ditolak. Tahap penolakan
+Google/backend tidak dirinci; tidak mengklaim allowlist GAS nyata telah terisolasi.
 
-- standard Cloud/API executable pada GAS Admin EXISTING dan env server kedua
-  Vercel, lalu acceptance owner/non-owner + CRUD/rebuild. Tidak reseed atau ulang
-  Sheet/folder/onboarding. Public Astro tetap static; browser hanya shell/login,
-  records melalui API owner, cookie HttpOnly terenkripsi + state/PKCE + CSRF.
-  Backend tetap Sheets/Drive/Properties/hook existing. Tidak memperluas collection.
-  Media/cache → Team → B3/B4 menunggu. Catatan historis di bawah tidak mengalahkan
-  checkpoint ini. Persetujuan push sebelumnya hanya untuk Growth; native perlu
-  konfirmasi baru. Jangan menyebut native Google auth sudah live atau seluruh CMS selesai.
+QA kode sebelumnya: 24 CMS tests, native + legacy admin browser empat widths,
+7 gate + SEO PASS; responsive 468/468, 19 HTML publik identik baseline sebelum
+mutation live. Tidak ada perubahan kode/UI/geometri dalam pass konfigurasi ini.
+Bukti read-only publik penghapusan: artifacts/cms-native/owner-delete-live.json.
+
+NEXT: Projects media upload/cache sesuai docs/cms-projects-media-plan.md.
+Owner/non-owner + CRUD/rebuild telah diuji, dengan batas bukti di setup guide.
+Team → B3/B4 tetap menunggu. Tidak reseed atau ulang
+Sheet/folder/onboarding. Public Astro tetap static; browser shell/login, records
+melalui API owner, cookie HttpOnly terenkripsi + state/PKCE + CSRF. Backend tetap
+Sheets/Drive/Properties/hook existing. Satu collection/pass. Seluruh CMS belum
+selesai. User mengizinkan kerja/commit; konfirmasi sebelum push baru.
 
 **CMS UPDATE (6 Oct 2026):** B0/B1 selesai; B2 editor empat Projects existing
 sudah terpasang dan save dicoba. Fix fetch `96a9756`: kedua Vercel SUCCESS.

@@ -13,15 +13,17 @@ Owner menambah “Uji CMS”: kedua situs publik menampilkan project itu setelah
 rebuild. Owner lalu menghapusnya: kedua deployment SUCCESS, project uji hilang
 dan empat judul Projects baseline tetap tampil di kedua situs. Login route kedua
 domain HTTP 303 ke Google terverifikasi; login owner terpisah di kedua domain
-belum dibuktikan. Akun Google non-owner sungguhan belum diuji.
+belum dibuktikan. Owner melaporkan akun Google non-owner di Incognito ditolak. Tahap penolakan
+Google/backend tidak dirinci; tidak mengklaim allowlist GAS nyata telah terisolasi.
 
 QA kode sebelumnya: 24 CMS tests, native + legacy admin browser empat widths,
 7 gate + SEO PASS; responsive 468/468, 19 HTML publik identik baseline sebelum
 mutation live. Tidak ada perubahan kode/UI/geometri dalam pass konfigurasi ini.
 Bukti read-only publik penghapusan: artifacts/cms-native/owner-delete-live.json.
 
-NEXT: uji penolakan akun Google non-owner pada native /admin, lalu tutup acceptance
-Projects/auth. Media/cache → Team → B3/B4 tetap menunggu. Tidak reseed atau ulang
+NEXT: Projects media upload/cache sesuai docs/cms-projects-media-plan.md.
+Owner/non-owner + CRUD/rebuild telah diuji, dengan batas bukti di setup guide.
+Team → B3/B4 tetap menunggu. Tidak reseed atau ulang
 Sheet/folder/onboarding. Public Astro tetap static; browser shell/login, records
 melalui API owner, cookie HttpOnly terenkripsi + state/PKCE + CSRF. Backend tetap
 Sheets/Drive/Properties/hook existing. Satu collection/pass. Seluruh CMS belum

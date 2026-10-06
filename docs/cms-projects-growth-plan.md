@@ -3,14 +3,14 @@
 **Update aktif 6 Oct 2026:** native `/admin` owner login dan Projects Growth
 add/delete nyata terbukti. Project sementara tampil setelah rebuild kedua situs,
 lalu dihapus; kedua deployment SUCCESS, empat judul baseline tetap tampil.
-Login route kedua domain mengarah ke Google. Uji akun non-owner nyata dan login
+Login route kedua domain mengarah ke Google. Owner melaporkan akun non-owner Incognito ditolak; login
 owner terpisah di kedua domain belum dibuktikan. Ikuti
 [native plan](cms-native-admin-plan.md) dan
 [setup/acceptance](cms-native-admin-setup.md) sebelum media/Team.
 GAS/Sheet/Drive existing tetap; tanpa perubahan geometri atau collection lain.
 
 Status: implementasi + QA PASS; owner add/delete + kedua rebuild PASS.
-NEXT: acceptance non-owner. Seluruh CMS belum selesai; konfirmasi sebelum push baru.
+NEXT: Projects media upload/cache (cms-projects-media-plan.md). Seluruh CMS belum selesai; konfirmasi sebelum push baru.
 SOP operasional: [cms-sop.md](cms-sop.md).
 
 ## 0. Fakta awal dan batas pass

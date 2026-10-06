@@ -1,11 +1,12 @@
 # SOP CMS — Data Sorcerers
 
-**Update aktif 6 Oct 2026:** owner melaporkan GAS Growth diperbarui; export masih
-empat Projects baseline. User memilih native `/admin` (Projects/auth), kode
-824e333 sudah push, kedua Vercel SUCCESS; Google auth belum aktif. Ikuti [native plan](cms-native-admin-plan.md)
-dan [setup/acceptance](cms-native-admin-setup.md) sebelum media/Team. GAS/Sheet/Drive
-existing tetap; native memakai OAuth + API executable owner-only pada project
-Admin yang sama. Konfirmasi sebelum push feature baru.
+**Update aktif 6 Oct 2026:** native `/admin` owner login dan Projects Growth
+add/delete nyata terbukti. Kedua rebuild untuk add dan delete terverifikasi;
+setelah delete empat judul baseline tetap tampil. Login route kedua domain
+mengarah ke Google. Owner melaporkan akun non-owner Incognito ditolak. Ikuti
+[native plan](cms-native-admin-plan.md) dan
+[setup/acceptance](cms-native-admin-setup.md) sebelum media/Team.
+GAS/Sheet/Drive existing tetap; konfirmasi sebelum push baru.
 
 Status operasional 6 Oct 2026: lihat `docs/ai-handoff.md`. Work order berikutnya:
 `docs/cms-projects-growth-plan.md`. SOP ini melengkapi SOP piksel, bukan mengganti

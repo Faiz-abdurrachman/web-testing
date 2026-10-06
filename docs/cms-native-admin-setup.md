@@ -110,7 +110,10 @@ kedua deployment SUCCESS, judul uji hilang dan empat judul baseline tetap tampil
 di kedua situs. Bukti sanitized read-only:
 artifacts/cms-native/owner-delete-live.json.
 
-NEXT: akun Google non-owner sungguhan harus ditolak. Login owner secara terpisah
+Owner melaporkan akun non-owner ditolak pada uji Incognito di production.
+Tahap penolakan Google/platform atau GAS tidak dirinci; ini bukti akses editor
+terblokir, bukan pembuktian terisolasi tiap layer auth. NEXT: Projects media.
+Login owner secara terpisah
 pada kedua domain, logout/relogin nyata dan konflik dua sesi nyata belum dibuktikan;
 coverage mock lokal bukan bukti acceptance Google tersebut. Media/cache dan
 collection lain menunggu. Seluruh CMS belum selesai.
