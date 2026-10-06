@@ -296,5 +296,37 @@
       ],
       "contact": "Zidan Amikul"
     }
-  ]
+  ],
+  "partners": {
+    "partnerCategories": [
+      {
+        "label": "Industry"
+      },
+      {
+        "label": "Academia"
+      },
+      {
+        "label": "Community"
+      }
+    ],
+    "partnerLogo": "/images/partners/partner-logo.webp",
+    "whyPartners": [
+      {
+        "title": "Talent",
+        "description": "Access to emerging AI & Data talent."
+      },
+      {
+        "title": "Research",
+        "description": "Collaborate on meaningful research."
+      },
+      {
+        "title": "Innovation",
+        "description": "Explore new technologies and ideas."
+      },
+      {
+        "title": "Community",
+        "description": "Reach a growing technology community."
+      }
+    ]
+  }
 }

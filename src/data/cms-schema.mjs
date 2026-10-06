@@ -99,4 +99,11 @@ export const cmsSnapshotSchema = z.strictObject({
     hodsTeams: orderedDomains(teamGroup),
   }),
   roles: orderedDomains(role),
+  partners: z.strictObject({
+    partnerCategories: z.array(z.strictObject({ label: text })).length(3),
+    partnerLogo: image,
+    whyPartners: z
+      .array(z.strictObject({ title: text, description: text }))
+      .length(4),
+  }),
 });
