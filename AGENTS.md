@@ -497,14 +497,16 @@ center` menolak center item 18px di content-box 12px (padding 8/16) → SVG di
   hover pada link aktif pun terlihat (garisnya glow `0 0 10px rgb(155 123 255 /
 85%)`). Pill background dibatalkan (user minta garis). Garis tetap 1px/lebar
   label (navbar-audit assert h≈1, w=label) — geometri tak berubah, ALL PASS.
-- **★ NEXT: BANGUN CMS / ADMIN DASHBOARD.** Rencana lengkap: **`docs/cms-plan.md`**
-  (3 opsi arsitektur, content model, jebakan, roadmap fase, 5 pertanyaan terbuka).
-  Fase 0 = pindahkan `src/data/*.ts` → **Astro Content Collections** (`src/content/`)
-  - skema **Zod**, **tanpa ubah tampilan/geometri**, satu collection per pass + 7
-    gate; lalu Fase 1 pasang **Keystatic** (`@keystatic/astro`, git-based, admin
-    `/keystatic`). Jebakan: geometri kartu (`domains.ts` `rows`, `roles.ts`
-    `centered`/`tight`) = desain jangan diekspos; `verify.mjs` mengunci sebagian
-    jumlah konten. Upgrade path: Sanity / Payload.
+- **★ NEXT: BANGUN CMS / ADMIN DASHBOARD (backend Google Apps Script).** Rencana
+  lengkap: **`docs/cms-plan.md`** (keputusan 6 Oct 2026: **GAS + Google Sheets +
+  Drive**, **build-time fetch + Vercel rebuild hook**, admin page custom
+  HtmlService, 1–2 admin, **save = live**). Fase **B0** = snapshot
+  `src/data/cms-snapshot.json` + thin loader (import komponen tetap sama) + Zod,
+  **tanpa ubah tampilan/geometri**, satu collection per pass + 7 gate; lalu B1
+  pasang GAS export. Jebakan: geometri kartu (`domains.ts` `rows`, `roles.ts`
+  `centered`/`tight`) = desain jangan diekspos; `verify.mjs` mengunci sebagian
+  jumlah konten; Drive bukan CDN; secret di GAS Script Properties / Vercel env.
+  Kebutuhan user: `docs/cms-plan.md` §6.
 - **PENDING kecil: video hero Contact (`1445:5066`)** — satu-satunya hero belum
   video; tunggu aset dari user. Lihat `docs/hero-video-plan.md`.
 - **Recruitment Hero penajaman (3 Oct 2026):** sumber video planetary 1080p
@@ -631,8 +633,9 @@ center` menolak center item 18px di content-box 12px (padding 8/16) → SVG di
   `href` render `<a>` (bukan `<button>`), jadi `verify.mjs` selector
   `relative('button')` diganti `relative('.button')`. 7 gate + seo ALL PASS.
   Detail: `docs/figma-prototype-flow.md` §9.
-- **★ NEXT: BANGUN CMS / ADMIN DASHBOARD** — rencana `docs/cms-plan.md` (Fase 0 =
-  Content Collections + Zod, lalu Keystatic). Lihat entri NEXT di atas.
+- **★ NEXT: BANGUN CMS / ADMIN DASHBOARD** — rencana `docs/cms-plan.md`
+  (backend Google Apps Script + Sheets + Drive, build-time fetch + rebuild hook).
+  Lihat entri NEXT di atas.
 - **PENDING kecil: video hero Contact (`1445:5066`) — satu-satunya hero belum.**
   Tunggu aset dari user. Lalu audit sisa Detail HoDS + konten asli (foto member,
   logo partner, `projects.ts`, tanggal recruitment, milestone HoF). Lihat

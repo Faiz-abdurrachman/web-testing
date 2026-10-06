@@ -11,7 +11,9 @@ Homepage, About Us, Recruitment, Partners, Hall of Frames (hero gambar
 dikembalikan ke Figma-exact (artwork node 801×600 di −131/−92, tinggi tetap 954,
 bukan full-screen) — MAE 2.757. **fix-9 #1–#8 + #10–#12 SELESAI**, plus polish UI
 (carousel crossfade, footer scroll-up, detail glow, Leader Team bleed, navbar
-underline glow) dan **HD hero pass**. **7 gate + seo ALL PASS.**
+underline glow) dan **HD hero pass**. Terbaru: **HoF Featured modal fix**
+(lead bleed + mobile dialog scroll) dan **Contact Submit hover**. **7 gate +
+seo ALL PASS.**
 **NEXT (pilih sesuai instruksi user):**
 
 1. **Audit per-section halaman tersisa / Detail HoDS** (`864:18857` dkk) —
@@ -19,8 +21,9 @@ underline glow) dan **HD hero pass**. **7 gate + seo ALL PASS.**
 2. **Isi konten asli:** foto/nama member (`src/data/team.ts`), logo partner
    (`src/data/partners.ts`), `src/data/projects.ts`, tanggal recruitment,
    milestone HoF.
-3. **Bangun CMS / admin dashboard** — rencana: `docs/cms-plan.md` (Fase 0 =
-   Astro Content Collections + Zod, lalu Keystatic).
+3. **Bangun CMS / admin dashboard** — rencana: `docs/cms-plan.md` (keputusan
+   6 Oct 2026: backend **Google Apps Script + Sheets + Drive**, build-time fetch +
+   Vercel rebuild hook, admin page custom, 1–2 admin, save = live). Mulai Fase B0.
 4. Opsional: minta user kirim sumber HD **Contact** (`contact page.png` cuma
    2680px → maksimal 2×).
 
@@ -72,7 +75,9 @@ Target: **pixel-accurate ke Figma/PNG**, HTML/CSS ringan (bukan flatten screensh
 2. Isi **konten asli** (foto/nama member `src/data/team.ts`, logo partner
    `src/data/partners.ts`, `src/data/projects.ts`, tanggal recruitment, milestone
    HoF).
-3. Bangun **CMS / admin dashboard** — rencana `docs/cms-plan.md`.
+3. Bangun **CMS / admin dashboard** — rencana `docs/cms-plan.md` (backend
+   **Google Apps Script + Sheets + Drive**, build-time fetch + rebuild hook,
+   admin page custom HtmlService, 1–2 admin, save = live). Mulai Fase B0.
 4. Opsional: minta user kirim sumber HD **Contact** (2680px → maksimal 2×).
 
 **Benchmark presisi — JANGAN RUSAK:** Homepage, About Us (incl. Our Team HoDS
@@ -293,38 +298,36 @@ Urutan target (prioritas sekarang):
    G. **SELESAI (4 Oct 2026) — semua tombol/link prototype Figma** (8 elemen,
       `docs/figma-prototype-flow.md` §9) + navbar hover underline + transisi tab
       Detail HoDS (reduce-safe).
-   H. **★ NEXT SEKARANG — STANDAR FULL-SCREEN: hero gambar + section 100svh
-      untuk SEMUA halaman.** Homepage SELESAI (`b228f3c`); **About Us
-      (`1439:4184`) berikutnya.** Work order: **`docs/page-fullscreen-migration-plan.md`**
-      (WAJIB dibaca dulu). Satu section per pass + 7 gate.
-   I. DITUNDA — BANGUN CMS / ADMIN DASHBOARD (`docs/cms-plan.md`). Kerjakan
-      setelah migrasi full-screen selesai.
+   H. **SELESAI (4–6 Oct 2026) — STANDAR FULL-SCREEN: hero gambar + section
+      100svh untuk SEMUA halaman** (Homepage, About, Recruitment, Partners, HoF;
+      **Contact dikecualikan** — hero Figma-exact). Work order:
+      `docs/page-fullscreen-migration-plan.md` (semua ditandai SELESAI).
+   I. **★ NEXT — BANGUN CMS / ADMIN DASHBOARD** (backend Google Apps Script +
+      Sheets + Drive, build-time fetch + Vercel rebuild hook). Rencana:
+      `docs/cms-plan.md`. Mulai **Fase B0** (snapshot + thin loader, nol ubah
+      tampilan).
 
 --------------------------------------------------------------------------------
-TARGET SEKARANG: MIGRASI FULL-SCREEN (hero gambar + section 100svh)
-Work order lengkap: **`docs/page-fullscreen-migration-plan.md`** (WAJIB dibaca).
-Ringkas: hero = gambar `assets/hero gambar/` + `100svh`; section konten =
-`min-height:100svh` + center; CTA/footer tetap; dilarang `zoom`/`scale`;
-`verify.mjs` geometry + reference PNG di-pad. Urutan: Home ✅ → About → Recruitment
-→ Partners → HoF → Contact. **Satu section per pass + 7 gate.**
-
---------------------------------------------------------------------------------
-[DITUNDA] BANGUN CMS / ADMIN DASHBOARD
-Rencana lengkap: **`docs/cms-plan.md`** (dibaca setelah migrasi full-screen). Ringkas:
-- Tujuan: editor non-teknis bisa CRUD project, team/orang, role, prestasi,
-  HoDS, partners, site settings — **tanpa menyentuh kode**.
-- Rekomendasi: **Fase 0** pindahkan `src/data/*.ts` → **Astro Content
-  Collections** (`src/content/`) + skema **Zod**; **tampilan/geometri TIDAK boleh
-  berubah**. Lalu **Fase 1** pasang **Keystatic** (`@keystatic/astro`, admin di
-  `/keystatic`, git-based, tanpa DB). Alternatif/upgrade: Sanity / Payload.
-- Jebakan (detail di `docs/cms-plan.md` §7): geometri kartu (`domains.ts` `rows`,
-  `roles.ts` flag `centered`/`tight`) itu DESAIN, bukan konten → jangan
-  diekspos; gambar konten vs artwork-bake; `public/` bukan storage; `verify.mjs`
-  mengunci beberapa jumlah konten → jangan longgarkan assertion geometri; auth
-  OAuth proxy; deploy ganda testing+production.
-- Cara kerja: tulis **Master Plan Fase 0** dulu (daftar collection + skema Zod per
-  file), lalu **satu collection per pass + 7 gate**.
-- Jawab dulu **5 pertanyaan terbuka** di `docs/cms-plan.md` §9 bersama user.
+BANGUN CMS / ADMIN DASHBOARD (NEXT)
+Rencana lengkap: **`docs/cms-plan.md`** (+ starter siap-tempel `docs/cms-kickoff.md`).
+Keputusan user (6 Oct 2026): backend **Google Apps Script + Google Sheets + Google
+Drive** (bukan git-based/Keystatic), **build-time fetch + Vercel rebuild hook**,
+**admin page custom yang di-host GAS** (`HtmlService`), **1–2 admin full akses**,
+**save = live** (via rebuild ~1–2 mnt).
+- Tujuan: editor non-teknis bisa CRUD project, team/orang, role, prestasi, HoDS,
+  partners, site settings — **tanpa menyentuh kode**.
+- Integrasi Astro **rendah risiko**: `scripts/fetch-cms.mjs` ambil data saat build →
+  `src/data/cms-snapshot.json`; `src/data/*.ts` jadi *thin loader* (import komponen
+  tetap sama). Fallback snapshot di-commit → `verify.mjs` lokal deterministik.
+- Fase **B0** (fondasi, tanpa GAS) → B1 (GAS export) → B2 (admin page) → B3
+  (collection lain) → B4 (hardening). **Satu collection/langkah per pass + 7 gate.**
+- Jebakan (detail `docs/cms-plan.md` §5): geometri kartu (`domains.ts` `rows`,
+  `roles.ts` `centered`/`tight`, `team.chip`/`fade`) itu DESAIN → jangan diekspos;
+  gambar konten vs artwork-bake; Drive bukan CDN; `verify.mjs` mengunci beberapa
+  jumlah konten → jangan longgarkan assertion geometri; secret di GAS Script
+  Properties / Vercel env; deploy ganda testing+production.
+- Jawab dulu kebutuhan user di `docs/cms-plan.md` §6 (akun Google, folder Drive,
+  2 URL Vercel Deploy Hook, setuju mulai B0).
 
 SELESAI (arsip): semua tombol/link prototype Figma sudah terpasang — peta di
 **`docs/figma-prototype-flow.md`** (§9, 8 elemen) + SOP §"Hukum Navigasi &

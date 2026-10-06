@@ -1,13 +1,10 @@
 # CMS kickoff — prompt siap-tempel untuk AI baru
 
-> **⚠️ DITUNDA (4 Oct 2026).** Tugas CMS belum dijalankan. Prioritas sekarang =
-> **migrasi full-screen (hero gambar + section 100svh)** — lihat
-> `docs/page-fullscreen-migration-plan.md`. Pakai dokumen ini **setelah** migrasi
-> selesai.
-
 Copy-paste seluruh blok di bawah ini ke AI baru (sesi baru) untuk memulai
 pekerjaan **CMS / Admin Dashboard**. Prompt ini melengkapi
 `docs/kickoff-prompt.md` (onboarding umum) dengan tugas CMS yang spesifik.
+
+Rencana lengkap: `docs/cms-plan.md`. Status: **RENCANA (belum dieksekusi)**.
 
 ```text
 Sesi baru. Kamu lanjut kerja di repo "Data Sorcerers" — Astro static + Vercel,
@@ -23,28 +20,39 @@ WAJIB baca dulu (urut, jangan skip):
 KONTEKS TUGAS:
 User mau bikin CMS/admin dashboard supaya editor NON-TEKNIS bisa update project,
 team/orang, role, prestasi, HoDS, dan partners TANPA menyentuh kode.
-Rencana lengkap (3 opsi arsitektur, content model, jebakan, roadmap fase,
-5 pertanyaan terbuka) SUDAH ADA di docs/cms-plan.md.
+KEPUTUSAN USER (6 Oct 2026) — sudah final:
+- Backend: Google Apps Script (GAS) + Google Sheets (DB) + Google Drive (gambar)
+- Update ke situs: build-time fetch (scripts/fetch-cms.mjs) + Vercel rebuild hook
+- Admin: halaman custom yang di-host GAS (HtmlService), login Google, 1-2 admin
+- Save = live (rebuild otomatis ~1-2 menit), TANPA draft/preview
+Rencana lengkap: docs/cms-plan.md (arsitektur, skema Sheet, fase B0-B4, jebakan,
+kebutuhan user §6).
 
 TUGAS PERTAMA:
 1. `git status` dulu (harusnya bersih). Kalau ada yang belum di-commit, tanya user.
-2. Ringkas ke user: (a) status project, (b) NEXT-nya, (c) 5 pertanyaan terbuka
-   di docs/cms-plan.md §9. Tanyakan jawabannya dulu — JANGAN sentuh kode sebelum
-   dijawab.
-3. Setelah dijawab, tulis Master Plan Fase 0: pindahkan `src/data/*.ts` menjadi
-   Astro Content Collections (`src/content/`) + skema Zod. Kerjakan SATU
-   collection per pass. TAMPILAN & GEOMETRI TIDAK BOLEH BERUBAH. Lalu 7 gate + seo.
-4. Setelah Fase 0 hijau, baru pasang Keystatic (Fase 1, `@keystatic/astro`,
-   admin di `/keystatic`, git-based, tanpa DB).
+2. Ringkas ke user: (a) status project, (b) NEXT-nya, (c) kebutuhan user di
+   docs/cms-plan.md §6 (akun Google, folder Drive, 2 URL Vercel Deploy Hook,
+   setuju mulai Fase B0). Tanyakan dulu — JANGAN sentuh kode sebelum dijawab.
+3. Setelah dijawab, kerjakan Fase B0: snapshot `src/data/cms-snapshot.json` +
+   thin loader (src/data/*.ts baca snapshot; import komponen tetap sama) + skema
+   Zod + scripts/fetch-cms.mjs mode fallback. TAMPILAN & GEOMETRI TIDAK BOLEH
+   BERUBAH. Kerjakan SATU collection per pass, 7 gate + seo tiap pass.
+4. Setelah Fase B0 hijau, Fase B1 pasang GAS (Sheet + doGet export + token) lalu
+   Fase B2 admin page (HtmlService) + upload Drive + Deploy Hook.
 
 ATURAN TETAP (jangan dilanggar):
 - spacing/padding/margin = kelipatan 8 (gate `npm run audit:spacing`);
 - heading = Bluu Next Bold 700 (`--font-display`), body Manrope;
 - geometri ±1px, render `prefers-reduced-motion: reduce` tetap pixel-exact;
-- satu section/collection per pass + 7 gate + `seo:audit`;
+- satu collection/langkah per pass + 7 gate + `seo:audit`;
 - jangan rusak presisi Home (`1430:2040`) & Recruitment (`1436:3505`);
 - commit per fitur, KONFIRMASI user sebelum push; `git push origin main`
   = deploy ke testing + production sekaligus;
-- geometri kartu (`domains.ts` `rows`, `roles.ts` `centered`/`tight`) itu DESAIN,
-  jangan diekspos ke CMS; `verify.mjs` mengunci sebagian jumlah konten.
+- geometri kartu (`domains.ts` `rows`, `roles.ts` `centered`/`tight`, `team.chip`/
+  `fade`) itu DESAIN, jangan diekspos ke CMS; `verify.mjs` mengunci sebagian
+  jumlah konten (jangan longgarkan assertion geometri);
+- secret (token/Deploy Hook/folder id/email admin) di GAS Script Properties +
+  Vercel env, JANGAN di repo;
+- Drive bukan CDN: artwork pixel-exact tetap dibake manual; konten foto boleh
+  upload.
 ```
