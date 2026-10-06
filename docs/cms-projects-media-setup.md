@@ -1,8 +1,10 @@
 # Projects upload — update existing deployments
 
 Status: cd37446 sudah push dengan izin user; kedua Vercel SUCCESS. Kontrol upload
-tersedia di kedua situs, tetapi GAS media existing belum diperbarui dan actual
-owner upload belum diuji. Mulai langkah Export di bawah, kemudian Admin.
+tersedia di kedua situs. Owner mengonfirmasi update versi GAS Export dan Admin
+existing selesai; Export action media baru terverifikasi dan baseline tetap empat
+Projects. Actual RPC upload Admin dan owner upload belum diuji. NEXT: acceptance
+manual di bawah; langkah update disimpan sebagai rujukan, bukan setup ulang.
 
 Kode media lokal belum berarti upload live. Backend, kedua situs dan owner
 upload/save/rebuild nyata harus diverifikasi. Tidak perlu Sheet/folder/env baru.

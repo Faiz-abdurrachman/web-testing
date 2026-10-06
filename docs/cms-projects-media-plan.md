@@ -114,3 +114,12 @@ berhasil; tidak mengubah redirect guard/retry/schema atau memakai stale fallback
 Root cause Google belum terbukti. Route checks: shell/upload control HTTP200
 noindex, API media anonymous401, login303 ke Google pada kedua domain.
 Bukti artifacts/cms-media/deploy-cd37446.json dan live-routes.json.
+
+## Update GAS oleh owner
+
+Owner mengonfirmasi Code.gs dan versi deployment Export serta Admin existing
+diperbarui. Read-only export masih empat Projects identik baseline; action media
+baru menolak hash tidak terdaftar dengan UNKNOWN_MEDIA, membuktikan source Export
+baru tersedia. Shell upload kedua situs HTTP200 dan API media anonymous401.
+Actual RPC upload Admin/preview/save serta kedua rebuild foto masih pending.
+NEXT: project sementara dengan foto owner, kemudian hapus sesudah publikasi diuji.
