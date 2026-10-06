@@ -8,6 +8,15 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
+**★ RENCANA CMS — backend Google Apps Script (6 Oct 2026, belum dieksekusi).**
+User memutuskan CMS pakai **Google Apps Script + Google Sheets + Drive**
+(bukan Keystatic), **build-time fetch + rebuild hook**, admin page custom
+HtmlService, 1–2 admin, **save = live** (rebuild Vercel otomatis). Master Plan
+lengkap: **`docs/cms-plan.md`** (arsitektur, skema Sheet, integrasi Astro
+"snapshot + thin loader" yang nol ubah tampilan, fase B0–B4, jebakan, §6 yang
+butuh keputusan user). **Langkah pertama = Fase B0** (snapshot + loader + Zod +
+`fetch-cms.mjs` fallback) tanpa menyentuh GAS. Tunggu jawaban §6 dulu.
+
 **★ SELESAI (6 Oct 2026) — Contact "Submit" button hover.** Tombol submit
 `/contact` tadinya diam; kini ikut konvensi pill violet (`.community`/`.apply`):
 hover → fill solid **`#2F196F`** + glow violet `0 12px 28px -10px
