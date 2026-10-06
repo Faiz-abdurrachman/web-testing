@@ -10,7 +10,7 @@ The existing module exports and rendered data must remain identical.
 | ---- | ---------- | ----------------------------------------- | ------- |
 | 1    | projects   | Home `1430:2146`, HoF `1439:4655`         | PASS    |
 | 2    | team       | About `1688:2933`                         | PASS    |
-| 3    | roles      | Recruitment `1436:3564`, six role details | PENDING |
+| 3    | roles      | Recruitment `1436:3564`, six role details | PASS    |
 | 4    | partners   | Partners `1439:4793`, `1439:4937`         | PENDING |
 | 5    | domains    | Home `1430:2138`, Recruitment `1436:3512` | PENDING |
 | 6    | hods       | Six HoDS details, beginning `864:18857`   | PENDING |
@@ -65,4 +65,7 @@ negative cases and local/partial-env CLI behavior passed. Navbar audit now waits
 for both pseudo-element opacities, fixing a timing race without changing UI.
 
 team: 7 gates + SEO PASS; responsive 468/468; all six exports and all 19
+HTML files equal the pre-B0 baseline.
+
+roles: 7 gates + SEO PASS; responsive 468/468; all six exports and all 19
 HTML files equal the pre-B0 baseline.

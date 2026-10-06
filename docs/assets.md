@@ -2707,3 +2707,6 @@ slots and unique IDs. Plan/results: `docs/cms-b0-plan.md`.
 
 Team content now reads the snapshot. Domain chip/fade, group order, Join Now
 slot and portrait artwork selectors remain local design configuration.
+
+Role content now reads the snapshot. Clean baked card artwork and the existing
+`centered`/`tight` layout configuration stay local; role route order is locked.

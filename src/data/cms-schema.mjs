@@ -61,6 +61,36 @@ const teamGroup = z
       });
   });
 
+const role = z
+  .strictObject({
+    id,
+    title: text,
+    tagline: text,
+    chips: z.array(text),
+    deadline: text,
+    about: text,
+    requirements: z.array(text),
+    contact: text,
+    whatsapp: z
+      .string()
+      .regex(/^\d{8,15}$/)
+      .optional(),
+  })
+  .superRefine((record, ctx) => {
+    const index = domainIds.indexOf(record.id);
+    for (const [field, counts] of [
+      ['chips', [4, 4, 6, 4, 4, 3]],
+      ['requirements', [4, 3, 4, 4, 4, 3]],
+    ]) {
+      if (record[field].length !== counts[index])
+        ctx.addIssue({
+          code: 'custom',
+          path: [field],
+          message: 'Role content slots are fixed by design',
+        });
+    }
+  });
+
 export const cmsSnapshotSchema = z.strictObject({
   schemaVersion: z.literal(1),
   projects: z.array(project).length(4).superRefine(uniqueIds),
@@ -68,4 +98,5 @@ export const cmsSnapshotSchema = z.strictObject({
     leaderTeam: z.array(member).length(2),
     hodsTeams: orderedDomains(teamGroup),
   }),
+  roles: orderedDomains(role),
 });
