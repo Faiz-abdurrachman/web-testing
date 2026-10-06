@@ -417,6 +417,15 @@ clip). **Tiap item 7 gate + seo PASS.** Commit`81ffb25`..`b4b5e62`.
   (1) "Hause"→**"House"** (#3); (2) footer scroll-up **di atas divider/legal**
   (#10); (3) OurTeam **HoDS** portrait **bleed** ala HoF, leader tetap clip
   (#12). Figma reference meng-clip kartu OurTeam.
+- **★ POLISH UI SELESAI (6 Oct 2026):** (1) OurTeam HoDS — rim atas kartu di-clip
+  (`clip-path: inset(1px 0 0 0)`) supaya tidak memotong potret bleed; carousel
+  kini panel `display:grid` bertumpuk + **crossfade** (`opacity 0.5s`), entrance
+  kartu lebih lembut, chip/dot/arrow ada hover/press (semua gated reduce).
+  (2) Footer scroll-up: ikon **panah lurus ke atas**, klik `preventDefault()` +
+  `scrollTo(top)` → **scroll, bukan View Transition** (`href="#"` dulu
+  di-intercept ClientRouter). (3) `.detail-wave` (RoleDetail + HoDSDetail) jadi
+  **dua lapis glow** drift berlawanan + breathe (19s/14s ease-in-out), reduce
+  tetap `opacity:0`. 7 gate + seo ALL PASS.
 - **SELESAI (4 Oct 2026) — About Us: glow responsif + karakter menempel tepi.**
   Canvas `zoom: calc(100vw / 1440px)` **dihapus** dari Our Philosophy (`1439:4219`)
   dan Our Ecosystem (`1439:4258`). Gradient tetap **section-level** (full-bleed)

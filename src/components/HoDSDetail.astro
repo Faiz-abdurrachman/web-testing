@@ -139,43 +139,65 @@ const { hod } = Astro.props;
     background: linear-gradient(-9deg, rgb(108 59 255 / 50%) 0%, #050507 19%);
   }
   /* One-way glow wave along the bottom edge: the same oversized glow.svg sweep
-     as the CTA, so there is no tiling seam. Hidden under reduced motion so the
-     static page stays pixel-identical to the reference. */
+     as the CTA, so there is no tiling seam. Two layers drift in opposite
+     directions and breathe so the glow feels alive. Hidden under reduced motion
+     so the static page stays pixel-identical to the reference. */
   .detail-wave {
     position: absolute;
     inset: auto 0 0 0;
     z-index: 0;
-    height: 150px;
+    height: 190px;
     overflow: hidden;
     pointer-events: none;
   }
-  .detail-wave::before {
+  .detail-wave::before,
+  .detail-wave::after {
     content: '';
     position: absolute;
-    left: -6%;
-    bottom: -330px;
-    width: 112%;
-    height: 480px;
     background: url('/images/recruitment/glow.svg') center bottom / 100% 100%
       no-repeat;
     opacity: 0;
   }
+  .detail-wave::before {
+    left: -6%;
+    bottom: -330px;
+    width: 112%;
+    height: 480px;
+  }
+  .detail-wave::after {
+    left: -14%;
+    bottom: -360px;
+    width: 128%;
+    height: 540px;
+  }
   @media (prefers-reduced-motion: no-preference) {
     .detail-wave::before {
-      animation: detail-wave-drift 12s linear infinite;
+      animation: detail-wave-drift 19s ease-in-out infinite;
+    }
+    .detail-wave::after {
+      animation: detail-wave-breathe 14s ease-in-out infinite;
     }
   }
   @keyframes detail-wave-drift {
-    0% {
-      translate: -60px 0;
-      opacity: 0.35;
+    0%,
+    100% {
+      translate: -70px 6px;
+      opacity: 0.34;
     }
     50% {
-      opacity: 0.6;
+      translate: 70px -6px;
+      opacity: 0.62;
     }
+  }
+  @keyframes detail-wave-breathe {
+    0%,
     100% {
-      translate: 60px 0;
-      opacity: 0.35;
+      translate: 44px 0;
+      opacity: 0.16;
+    }
+    50% {
+      translate: -44px 0;
+      opacity: 0.4;
     }
   }
   .hods-detail-inner {

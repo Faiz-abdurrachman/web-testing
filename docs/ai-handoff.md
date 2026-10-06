@@ -8,16 +8,30 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
-**★ IN PROGRESS (4 Oct 2026) — STANDAR FULL-SCREEN: hero gambar + section 100svh.**
-User minta **semua** halaman mengikuti pola baru: **hero = gambar background**
-(dari `assets/hero gambar/`, teks tetap HTML) + **`100svh`**; **section konten =
-satu layar** (`min-height: 100svh` + center). **CTA & footer tidak diubah.**
-**Homepage SELESAI** (commit `b228f3c`): `Hero.astro` (gambar + 100svh, video/
-partikel/plate dibuang), `Philosophy/WhatWeDo/Domains/Projects` → `100svh` +
-center, `motion.ts` dibersihkan, `verify.mjs` geometry + reference PNG di-pad,
-`navbar-audit.mjs` tunggu animasi entrance (toleransi tetap ±1px). 7 gate + seo
-ALL PASS. **DILARANG pakai `zoom`/`transform: scale`** (user menolak, render
-berantakan) — pakai `min-height: 100svh` + centering.
+**★ SELESAI (6 Oct 2026) — polish UI (3 permintaan user).**
+
+1. **OurTeam "House of Data Sorcerers"**: (a) garis atas kartu (`::after` rim)
+   yang memotong potret bleed kini di-clip (`clip-path: inset(1px 0 0 0)` khusus
+   `.hods-panel`); (b) transisi carousel diperhalus — panel kini `display:grid`
+   bertumpuk + **crossfade** `opacity 0.5s` (bukan `display:none` keras),
+   entrance kartu `hods-card-in` lebih lembut (0.55s, translateY 20 + scale
+   0.97, stagger 70ms), chip/dot/arrow dapat hover/press feedback. Semua gated
+   `prefers-reduced-motion: no-preference` (reduce identik).
+2. **Footer scroll-up**: ikon diganti panah **lurus ke atas** (bukan diagonal);
+   klik kini `preventDefault()` + `scrollTo({top:0})` (smooth, reduce=instan)
+   sehingga **tidak** memicu View Transition ClientRouter (`href="#"` same-origin
+   dulu di-intercept). URL hash dibersihkan via `replaceState`.
+3. **Detail role + Detail HoDS glow**: `.detail-wave` dirombak jadi **dua lapis**
+   `glow.svg` yang bergerak berlawanan arah + bernafas (`detail-wave-drift` 19s,
+   `detail-wave-breathe` 14s, `ease-in-out`), tinggi 190px. Reduce tetap
+   `opacity:0` (pixel-exact). Di `RoleDetail.astro` + `HoDSDetail.astro`.
+
+**7 gate + seo ALL PASS** (build, verify exit 0, navbar, verify-vt, responsive
+468/468, audit:spacing, format:check, seo).
+
+**★ STANDAR FULL-SCREEN SELESAI (4–6 Oct 2026): hero gambar + section 100svh**
+untuk Homepage, About Us, Recruitment, Partners, Hall of Frames, Contact. Work
+order: `docs/page-fullscreen-migration-plan.md`.
 
 **★ #9 SELESAI (6 Oct 2026) — SEMUA halaman full-screen.** Homepage, About Us,
 Recruitment, Partners, Hall of Frames, dan **Contact** kini memakai pola hero
