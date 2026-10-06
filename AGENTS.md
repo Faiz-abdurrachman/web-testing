@@ -193,6 +193,7 @@ docs/about-us-glow-plan.md  About Us glow responsif + karakter tepi (SELESAI 4 O
 docs/figma-prototype-flow.md  peta prototype Figma (REST `interactions`) → tombol/link tujuan + gap vs kode (NEXT)
 docs/hover-interactions-plan.md  ★ RENCANA: hover interaction untuk semua elemen interaktif
 docs/hero-motion-plan.md  ★ RENCANA/BRAINSTORM: hero "hidup" (parallax/GSAP)
+docs/hof-featured-modal-plan.md  ★ RENCANA: Featured Sorcerers card + detail modal (mobile & portrait bleed)
 docs/ai-handoff.md       live "where we are now" handoff for the next AI agent
 artifacts/               verify output (git-ignored)
 ```
