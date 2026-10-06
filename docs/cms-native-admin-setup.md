@@ -11,9 +11,11 @@ membuat ulang CMS Export, Sheet/folder, atau project GAS Admin.
 1. Di Google Cloud, siapkan standard Cloud project untuk OAuth client web dan
    Apps Script API. Hubungkan project Cloud yang sama ke GAS Admin existing
    melalui Project Settings → GCP project number. Jika sudah standard, gunakan
-   project itu. Enable Google Apps Script API; owner aktifkan akses Apps Script
-   API di Apps Script user settings. Perubahan Cloud project dapat meminta
-   otorisasi ulang GAS; periksa editor lama sesudahnya.
+   project itu. Enable Google Apps Script API dan Google Drive API. Perubahan
+   Cloud project meminta otorisasi ulang GAS; periksa editor lama sesudahnya.
+   Toggle API pada Apps Script user settings tidak diperlukan untuk scripts.run;
+   toggle itu mengizinkan pengelolaan source/deployments melalui API, yang tidak
+   digunakan native admin.
 2. Konfigurasi OAuth consent untuk owner. Jika external + Testing, hanya owner
    menjadi test user. OAuth membutuhkan seluruh scopes manifest GAS Admin:
    spreadsheets, drive, userinfo.email, script.external_request. Ini scopes
@@ -84,3 +86,22 @@ Referensi: [GAS execution](https://developers.google.com/apps-script/api/how-tos
 [REST scripts.run](https://developers.google.com/apps-script/api/reference/rest/v1/scripts/run),
 [OAuth web server](https://developers.google.com/identity/protocols/oauth2/web-server),
 [Vercel Node functions](https://vercel.com/docs/functions/runtimes/node-js).
+
+## Progress konfigurasi owner — 6 Oct 2026
+
+Owner melaporkan standard Cloud project dibuat; Apps Script API dan Drive API
+aktif; consent External/Testing, satu owner test user, empat manifest scopes,
+OAuth web client dengan dua callback, lalu Cloud project terhubung ke GAS Admin.
+Secret yang sempat terlihat pada screenshot sudah diganti dan secret lama
+Disabled menurut owner; nilainya tidak disimpan di repo. Client/secret baru
+harus disimpan privat dan dipakai saat konfigurasi Vercel.
+
+Owner menjalankan adminLoadProjects setelah pergantian Cloud; log hanya memuat
+execution started/completed. Ini bukti eksekusi selesai, bukan bukti result.ok
+atau owner login native berhasil. NEXT: API executable owner-only pada GAS Admin
+existing, lima env server pada kedua Vercel, redeploy dan acceptance Google asli.
+API executable dan env native belum dikonfirmasi selesai.
+
+Rujukan untuk toggle user settings:
+[Google API access](https://developers.google.com/apps-script/api/how-tos/enable)
+menyatakan eksekusi fungsi tidak membutuhkan granting access to script projects.
