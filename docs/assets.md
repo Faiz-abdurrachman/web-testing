@@ -2827,4 +2827,4 @@ foto owner baru atau ID Drive ditambahkan ke repo. Editor custom menambah input
 file + preview, Bluu Next700/Manrope dan spacing8/16 existing; tanpa node Figma.
 29 CMS tests Node22, native/legacy browser4widths, fixture media Home/HoF4widths
 dan 7gate+SEO PASS (responsive468/468). Plan/setup: cms-projects-media-plan.md,
-cms-projects-media-setup.md. Upload live belum diuji; push/update GAS pending.
+cms-projects-media-setup.md. cd37446 sudah push, kedua Vercel SUCCESS. Upload live belum diuji; update GAS pending.

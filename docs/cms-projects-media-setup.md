@@ -1,5 +1,9 @@
 # Projects upload — update existing deployments
 
+Status: cd37446 sudah push dengan izin user; kedua Vercel SUCCESS. Kontrol upload
+tersedia di kedua situs, tetapi GAS media existing belum diperbarui dan actual
+owner upload belum diuji. Mulai langkah Export di bawah, kemudian Admin.
+
 Kode media lokal belum berarti upload live. Backend, kedua situs dan owner
 upload/save/rebuild nyata harus diverifikasi. Tidak perlu Sheet/folder/env baru.
 Login Google tetap digunakan; login username/password ditunda sesuai pilihan user.

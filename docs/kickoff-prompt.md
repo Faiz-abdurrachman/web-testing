@@ -26,10 +26,14 @@ normalisasi WebP server (sharp existing), folder Drive privat, hash content,
 preview owner-only dan cache/build lokal sebelum snapshot atomik. Tidak hotlink
 Drive; preset dan template publik tetap. QA media: 29 CMS tests Node 22, browser
 native/legacy empat widths, media renderer Home/HoF empat widths, tujuh gate + SEO
-PASS; responsive 468/468 dan 19 HTML publik baseline identik. Belum push atau
-update GAS media; upload nyata belum diuji.
+PASS; responsive 468/468 dan 19 HTML publik baseline identik. Media cd37446
+sudah push dengan izin user; kedua Vercel SUCCESS. Testing awal gagal dengan
+Invalid CMS export redirect; read-only export sesudahnya identik baseline dan
+retrigger testing lewat hook existing SUCCESS. Root cause Google belum terbukti.
+Kontrol upload/noindex kedua domain HTTP200, API media anonymous401, login303
+ke Google. GAS media belum diperbarui; upload nyata belum diuji.
 
-NEXT: review/konfirmasi push media, update Code.gs dan versi deployment Export
+NEXT: update Code.gs dan versi deployment Export
 serta Admin EXISTING sesuai docs/cms-projects-media-setup.md; owner upload/save,
 kedua rebuild dan gambar publik harus diuji sebelum klaim media live.
 Owner/non-owner + CRUD/rebuild telah diuji, dengan batas bukti di setup guide.

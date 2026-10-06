@@ -149,7 +149,7 @@ memvalidasi candidate final, kemudian satu setValues mencakup records dan blank
 trailing rows. Export existing mengabaikan blank rows; tidak memerlukan update.
 Gambar deployed sebelumnya preset existing. Pass media lokal menerima preset
 atau reference hash WebP terverifikasi di Drive folder existing; native upload
-owner-only dan build cache lokal. Belum update GAS/push media atau live upload
+owner-only dan build cache lokal. cd37446 sudah push, kedua Vercel SUCCESS. Belum update GAS media atau live upload
 acceptance; lihat cms-projects-media-plan.md dan cms-projects-media-setup.md.
 
 `npm run verify:cms-growth` membangun snapshot fixture sementara 1/2/5/8,
