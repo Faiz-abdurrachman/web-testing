@@ -420,6 +420,12 @@ page.png` tidak dipakai (gambar beda framing, MAE ~16). `hero-bg.*` Contact
   `scale:1.08` overscan, B=`y` scrub, C=`xPercent/yPercent`; Contact
   `{scroll:false, scale:1.05}`). Reduce inert → 7 gate + seo PASS, geometri/MAE
   tetap.
+- **★ FIX (6 Oct 2026).** (1) Hamburger mobile: underline aktif ter-stretch jadi
+  garis nyasar → `.mobile-menu .nav-underline { display:none }` (state = fill
+  violet). (2) Partners hero mobile: `<picture>` `<source media="max-width:600px">`
+  pakai crop portrait yang menampilkan dua jari menyatu
+  (`hero-bg-mobile*` dari `assets:heroes` config `mobile`); desktop tetap.
+  7 gate + seo PASS.
 - **★ NEXT = #9 selesai; berikutnya audit sisa Detail HoDS + konten asli** (foto
   member, logo partner, `projects.ts`, tanggal recruitment, milestone HoF).
   Work order full-screen: **`docs/page-fullscreen-migration-plan.md`** (semua

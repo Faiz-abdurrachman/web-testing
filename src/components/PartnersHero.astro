@@ -2,7 +2,19 @@
 ---
 
 <section class="partners-hero" aria-labelledby="partners-hero-title">
-  <div class="artwork" aria-hidden="true">
+  <picture class="artwork" aria-hidden="true">
+    <!-- Phones: portrait crop centred on the two hands' fingers so the joined
+         fingers stay visible instead of the wide 1440 art cropping to an empty
+         centre slice. Baked by `npm run assets:heroes`. -->
+    <source
+      media="(max-width: 600px)"
+      srcset="
+        /images/partners/hero-bg-mobile.webp     480w,
+        /images/partners/hero-bg-mobile-2x.webp  960w,
+        /images/partners/hero-bg-mobile-3x.webp 1440w
+      "
+      sizes="100vw"
+    />
     <img
       class="art-bg"
       src="/images/partners/hero-bg.webp"
@@ -18,7 +30,7 @@
       fetchpriority="high"
       decoding="async"
     />
-  </div>
+  </picture>
   <div class="hero-content">
     <span class="pill">Create · Collaborate · Make an impact</span>
     <h1 id="partners-hero-title">

@@ -14,7 +14,9 @@
 import sharp from 'sharp';
 import { mkdir } from 'node:fs/promises';
 
-// page → [source, frame width, frame height, output dir, file base]
+// page → [source, frame width, frame height, output dir, file base, mobile crop?]
+// `mobile` = a portrait crop (source px) that is served via <picture> at
+// ≤600px when the wide desktop art would be cropped to an empty slice.
 const heroes = {
   home: [
     'assets/hero gambar/Gambar Hero Section homepage.png',
@@ -43,6 +45,10 @@ const heroes = {
     659,
     'public/images/partners',
     'hero-bg',
+    // Centred on where the two hands' fingers meet, so the "joined fingers"
+    // composition stays visible on phones instead of the wide art cropping to
+    // an empty centre slice.
+    { left: 1866, top: 0, width: 1498, height: 2636 },
   ],
   hof: [
     'assets/hero gambar/Hero Section - HoF.png',
@@ -59,7 +65,11 @@ const variants = [
   { suffix: '-3x', scale: 3, quality: 84 },
 ];
 
-for (const [page, [src, width, height, dir, base]] of Object.entries(heroes)) {
+const mobileWidths = [480, 960, 1440];
+
+for (const [page, [src, width, height, dir, base, mobile]] of Object.entries(
+  heroes,
+)) {
   await mkdir(dir, { recursive: true });
   const meta = await sharp(src).metadata();
   for (const { suffix, scale, quality } of variants) {
@@ -73,5 +83,21 @@ for (const [page, [src, width, height, dir, base]] of Object.entries(heroes)) {
       .webp({ quality, effort: 6 })
       .toFile(out);
     console.log(`${page}: ${base}${suffix}.webp ${w}×${h} q${quality}`);
+  }
+
+  if (mobile) {
+    const { left, top, width: cw, height: ch } = mobile;
+    for (const w of mobileWidths) {
+      if (w > cw * 1.15) continue;
+      const suffix = w === mobileWidths[0] ? '' : `-${w / mobileWidths[0]}x`;
+      const h = Math.round((w / cw) * ch);
+      const out = `${dir}/${base}-mobile${suffix}.webp`;
+      await sharp(src)
+        .extract({ left, top, width: cw, height: ch })
+        .resize(w, h, { fit: 'cover' })
+        .webp({ quality: 86, effort: 6 })
+        .toFile(out);
+      console.log(`${page}: ${base}-mobile${suffix}.webp ${w}×${h} q86`);
+    }
   }
 }

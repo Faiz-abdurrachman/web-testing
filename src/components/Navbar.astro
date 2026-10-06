@@ -108,8 +108,8 @@ const destinations: Record<string, string> = {
 </header>
 <style>
   /* Matches Figma node 755:15178 (component set 530:13894): 1440-wide bar,
-     padding 24px 80px, space-between across Logo (54px), Menu (743px), CTA (172px).
-     Active tab = 1px gradient underline, inactive tabs #707070. Reference: assets/Navbar.png. */
+       padding 24px 80px, space-between across Logo (54px), Menu (743px), CTA (172px).
+       Active tab = 1px gradient underline, inactive tabs #707070. Reference: assets/Navbar.png. */
   .navbar {
     --nb-h: 106.8px;
     /* Lift the bar clear of the status bar / notch on installed PWAs. */
@@ -122,7 +122,7 @@ const destinations: Record<string, string> = {
     background: transparent;
   }
   /* Figma's own fill + progressive background blur (node 530:13894):
-     faint violet wash with 20px blur at top tapering smoothly to 0 at bottom. */
+       faint violet wash with 20px blur at top tapering smoothly to 0 at bottom. */
   .navbar::before {
     content: '';
     position: absolute;
@@ -230,7 +230,7 @@ const destinations: Record<string, string> = {
     display: block;
   }
   /* The underline is the state indicator: the active tab keeps it, and hover
-     previews it on any tab (fade in) so the active tab still reacts too. */
+       previews it on any tab (fade in) so the active tab still reacts too. */
   .nav-underline {
     display: block;
     align-self: stretch;
@@ -272,7 +272,7 @@ const destinations: Record<string, string> = {
     display: none;
   }
   /* Desktop >=1301px locks the exact Figma tab widths (component set 530:13894)
-     so the menu is 743px wide and nobody depends on font rasterisation. */
+       so the menu is 743px wide and nobody depends on font rasterisation. */
   @media (min-width: 1301px) {
     .desktop-nav {
       gap: 16px;
@@ -419,12 +419,9 @@ const destinations: Record<string, string> = {
       color: #707070;
       border-radius: 14px;
     }
+    /* Mobile state cue = violet fill; the desktop underline would be a stray line. */
     .mobile-menu .nav-underline {
-      position: relative;
-      inset: auto;
-      width: 100%;
-      height: 1px;
-      background: linear-gradient(90deg, #9b7bff 0%, #ede8ff 100%);
+      display: none;
     }
     .mobile-menu .nav-link:not(.active):hover,
     .mobile-menu .nav-link:not(.active):focus-visible {

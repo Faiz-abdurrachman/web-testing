@@ -8,6 +8,15 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
+**★ FIX (6 Oct 2026) — hamburger mobile + Partners hero mobile.**
+(1) Menu hamburger: underline aktif desktop ter-stretch `width:100%` di baris
+flex mobile → garis nyasar; kini `.mobile-menu .nav-underline { display:none }`
+(state aktif = fill violet + teks putih). (2) Partners hero mobile: art lebar
+1440 crop jadi nyaris kosong di HP → ditambah `<picture>` `<source
+media="(max-width:600px)">` dengan **crop portrait** yang menampilkan dua jari
+menyatu (`hero-bg-mobile{,-2x,-3x}.webp`, generator `assets:heroes` config
+`mobile`). Desktop tak berubah. **7 gate + seo ALL PASS.**
+
 **★ SELESAI (6 Oct 2026) — Hero "hidup" (parallax/GSAP) untuk SEMUA hero.**
 Rencana: `docs/hero-motion-plan.md` (keputusan user: efek **A + B + C** =
 entrance copy + scroll parallax bg + pointer parallax desktop). Helper generik di

@@ -741,6 +741,19 @@ center`, `padding: 242px 80px 160px`, `gap: 8px`, IMAGE fill `e79b1f65…`).
   title `80/357/1280×223`, static `.art-bg` and no `.art-video`. MAE rises to
   **12.67** (newer art than the stored reference; no threshold). Our Partners 3.05,
   Why DS 2.88 (padded 123/124), Footer 5.93.
+- **Mobile hero variant (6 Oct 2026).** The wide 1440 × 659 art crops to an
+  almost-empty centre slice on phones (only a sliver of one hand). Added a
+  `<picture>` `<source media="(max-width: 600px)">` that serves a **portrait crop
+  centred on where the two hands' fingers meet** (source px
+  `left 1866 / top 0 / 1498 × 2636` from the 5760 × 2636 PNG) as
+  `public/images/partners/hero-bg-mobile.webp` (480 × 845) + `-2x` (960) + `-3x`
+  (1440), baked by `npm run assets:heroes` (its config now takes a `mobile` crop).
+  Desktop (≥601px) keeps `hero-bg.webp`; verified unchanged at 1440. Result: the
+  joined fingers stay visible on mobile without being full desktop.
+- **Navbar mobile menu (6 Oct 2026).** The desktop active-underline was stretched
+  (`width:100%`) inside the row-flex mobile row and read as a stray line; the
+  mobile menu now hides `.mobile-menu .nav-underline` (the violet fill/hover is the
+  state cue). Desktop underline untouched (`navbar-audit` still exact at 1440).
 
 ## Partners — Our Partners revision (3 October 2026)
 
