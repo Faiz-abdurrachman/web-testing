@@ -96,16 +96,24 @@ Secret yang sempat terlihat pada screenshot sudah diganti dan secret lama
 Disabled menurut owner; nilainya tidak disimpan di repo. Client/secret baru
 harus disimpan privat dan dipakai saat konfigurasi Vercel.
 
-Owner menjalankan adminLoadProjects setelah pergantian Cloud; log hanya memuat
-execution started/completed. Ini bukti eksekusi selesai, bukan bukti result.ok
-atau owner login native berhasil. NEXT: API executable owner-only pada GAS Admin
-existing, lima env server pada kedua Vercel, redeploy dan acceptance Google asli.
-Owner melaporkan API executable dengan akses Only myself selesai dibuat.
-Env native kedua Vercel belum dikonfirmasi selesai. File import privat
-artifacts/cms-native/vercel-testing.env dan vercel-production.env tersedia:
-origin dan kunci sesi acak berbeda sudah terisi, tiga nilai Google perlu diisi
-owner secara privat. File permissions 0600 dan git-ignored; nilainya tidak
-dicetak dalam chat/log atau disimpan dalam source.
+Owner menjalankan adminLoadProjects setelah pergantian Cloud, membuat API
+executable Only myself pada GAS Admin existing, mengisi lima env server pada
+kedua Vercel dan redeploy. File env privat di artifacts/cms-native/ memiliki
+permissions 0600 dan git-ignored; nilai tidak dicetak atau disimpan dalam source.
+CMS_ADMIN_ORIGIN testing sempat tidak cocok (403); pemeriksaan terbaru kedua
+login route HTTP 303 ke Google, tanpa membocorkan URL OAuth/query/cookie.
+
+Acceptance owner nyata: screenshot menunjukkan editor native dan Projects dimuat.
+Owner menambah project sementara “Uji CMS”; save meminta kedua hook dan project
+muncul pada HTML publik testing/production setelah rebuild. Owner menghapusnya;
+kedua deployment SUCCESS, judul uji hilang dan empat judul baseline tetap tampil
+di kedua situs. Bukti sanitized read-only:
+artifacts/cms-native/owner-delete-live.json.
+
+NEXT: akun Google non-owner sungguhan harus ditolak. Login owner secara terpisah
+pada kedua domain, logout/relogin nyata dan konflik dua sesi nyata belum dibuktikan;
+coverage mock lokal bukan bukti acceptance Google tersebut. Media/cache dan
+collection lain menunggu. Seluruh CMS belum selesai.
 
 Rujukan untuk toggle user settings:
 [Google API access](https://developers.google.com/apps-script/api/how-tos/enable)

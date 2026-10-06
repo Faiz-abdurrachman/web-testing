@@ -2809,3 +2809,11 @@ Editor mempertahankan preset artwork/1–8 Projects, tanpa field layout/CSS.
 Public Home 1430:2146 dan HoF 1439:4655/artwork/geometry assertions tidak berubah;
 19 HTML publik sama dengan baseline. Browser screenshot native empat widths
 tersimpan ignored artifacts/cms-native/. Auth live/Google API masih pending.
+
+### Acceptance native owner / Projects Growth — 6 Oct 2026
+
+Tanpa perubahan artwork, font atau geometri. Owner login native dan pemuatan
+Projects teramati; add/delete project sementara terbit melalui rebuild kedua
+situs. Setelah delete kedua deployment SUCCESS; empat judul baseline tetap
+tampil. Login route kedua domain mengarah ke Google. Uji non-owner nyata masih
+pending; catatan pending konfigurasi/live di atas merupakan keadaan historis.

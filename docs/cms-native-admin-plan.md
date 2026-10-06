@@ -98,3 +98,12 @@ di cms-native-admin-setup.md. User menyetujui push; 824e333 terkirim ke kedua re
 Shell /admin HTTP 200/noindex; API HTTP 503 CONFIGURATION pada kedua domain
 situs. Login route kembali ke shell dengan pesan belum aktif. Ini membuktikan
 packaging/routing Functions; actual OAuth/API executable/owner CRUD belum diuji.
+
+## Acceptance live — 6 Oct 2026
+
+Owner login native dan pemuatan Projects terbukti melalui screenshot editor.
+Add project sementara dan delete nyata berhasil; perubahan terbit di kedua
+situs, lalu kedua deployment SUCCESS dan empat judul baseline tetap tampil.
+Login route kedua domain HTTP 303 ke Google. Non-owner nyata masih pending;
+login owner terpisah kedua domain belum dibuktikan. Lihat setup guide untuk
+batas bukti. Catatan konfigurasi pending di bagian sebelumnya adalah historis.

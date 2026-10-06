@@ -1,18 +1,17 @@
 # CMS / Admin Dashboard — Rencana (backend Google Apps Script)
 
-**Update aktif 6 Oct 2026:** owner melaporkan GAS Growth diperbarui; export masih
-empat Projects baseline. User memilih native `/admin` (Projects/auth), kode
-824e333 sudah push, kedua Vercel SUCCESS; Google auth belum aktif. Ikuti [native plan](cms-native-admin-plan.md)
-dan [setup/acceptance](cms-native-admin-setup.md) sebelum media/Team. GAS/Sheet/Drive
-existing tetap; native memakai OAuth + API executable owner-only pada project
-Admin yang sama. Konfirmasi sebelum push feature baru.
+**Update aktif 6 Oct 2026:** native `/admin` owner login dan Projects Growth
+add/delete nyata terbukti. Project sementara tampil setelah rebuild kedua situs,
+lalu dihapus; kedua deployment SUCCESS, empat judul baseline tetap tampil.
+Login route kedua domain mengarah ke Google. Uji akun non-owner nyata dan login
+owner terpisah di kedua domain belum dibuktikan. Ikuti
+[native plan](cms-native-admin-plan.md) dan
+[setup/acceptance](cms-native-admin-setup.md) sebelum media/Team.
+GAS/Sheet/Drive existing tetap; tanpa perubahan geometri atau collection lain.
 
-Status 6 Oct 2026: **B0/B1 selesai; B2 Projects editing terpasang;
-Projects Growth lokal tersedia, belum live terverifikasi.** Kedua Vercel SUCCESS pada `96a9756`.
-Checkpoint lengkap: [ai-handoff.md](ai-handoff.md). SOP operasional:
-[cms-sop.md](cms-sop.md). Work order berikutnya:
-[cms-projects-growth-plan.md](cms-projects-growth-plan.md).
-Satu collection/langkah per pass + 7 gate + SEO; geometri baseline tetap.
+Status: implementasi + QA PASS; owner add/delete + kedua rebuild PASS.
+NEXT: acceptance non-owner. Seluruh CMS belum selesai; konfirmasi sebelum push baru.
+SOP operasional: [cms-sop.md](cms-sop.md).
 
 ## 0. Keputusan yang sudah disetujui
 
