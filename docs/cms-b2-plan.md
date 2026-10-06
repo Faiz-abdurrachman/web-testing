@@ -1,6 +1,6 @@
 # CMS B2 — private admin dashboard
 
-Status: PROJECTS FOUNDATION CODE VERIFIED; OWNER INSTALL PENDING. Production B1 remote-mode build at `fb99c39` confirmed by
+Status: PROJECTS FOUNDATION CODE VERIFIED; OWNER DASHBOARD LOADED; LIVE SAVE CHECKS PENDING. Production B1 remote-mode build at `fb99c39` confirmed by
 owner logs; both GitHub Vercel statuses success. Testing remote-mode log
 confirmation pending. No B2 UI or mutations deployed yet.
 
@@ -111,3 +111,13 @@ Both real Vercel hooks accepted HTTP 201. Generated private admin files contain
 no deployment secrets. Real owner login/save/rebuild has not yet been tested;
 installation guide: `docs/cms-admin-setup.md`. No B2 completion claim until
 growth, media and Team passes and real installation checks are complete.
+
+## Owner installation checkpoint
+
+Owner confirmed successful setupAdmin after copying Code.gs, Index.html,
+manifest and Script Properties into the separate Admin GAS project. A screenshot
+of the deployed dashboard shows all four Projects and populated fields,
+confirming real authorized server reads. Deployment identifiers/URL/account
+remain outside repo. Unchanged-content save, both rebuild results with remote
+mode, and non-owner denial remain pending. Do not mark this foundation live
+verified or the whole CMS complete until the remaining checks/passes finish.
