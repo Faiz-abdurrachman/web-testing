@@ -590,6 +590,15 @@ assets:contact` regenerates it and the icons.
   against `HoF-Hero-1x.png` (MAE 4.34). Build 18 pages, `verify.mjs` exit 0
   (`browserErrors: []`), responsive 320–3840 all clean (hero heroH
   903/760/100svh by breakpoint).
+- **Full-screen migration (#9, 6 Oct 2026).** Video removed; hero art is now the
+  supplied `assets/hero gambar/Hero Section - HoF.png` (5760 × 3612, text-free)
+  baked by `npm run assets:heroes` to `/images/hof/hero-bg.webp` (1440 × 903) +
+  `hero-bg-2x.webp`, section `min-height: 100svh` centred (`padding: 80px
+var(--page-gutter)`). Content geometry unchanged (`320/310.5/800×282`); MAE
+  4.34 → **4.11**. `verify.mjs` viewport for the hero is now 1440×903 (was 1400)
+  and asserts no `.art-video`. Featured/Projects/Milestone gained
+  `min-height:100svh` + centre — their content already exceeds the viewport, so
+  heights stay 1241/1014/987 (MAE 2.14 / 0.20 / 1.49).
 
 ## Homepage hero — font & spacing revision (1 October 2026)
 

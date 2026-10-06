@@ -20,9 +20,18 @@ ALL PASS. **DILARANG pakai `zoom`/`transform: scale`** (user menolak, render
 berantakan) — pakai `min-height: 100svh` + centering.
 
 **★ NEXT = #9 — lanjutkan standar full-screen** (hero gambar + section 100svh)
-untuk halaman tersisa: **Hall of Frames (`1439:4506`) → Contact (`1445:5065`)**.
-Homepage, About Us, Recruitment, dan **Partners (6 Oct 2026)** SELESAI. Work
-order: `docs/page-fullscreen-migration-plan.md`. Satu section per pass + 7 gate.
+untuk halaman tersisa: **Contact (`1445:5065`)**. Homepage, About Us, Recruitment,
+Partners, dan **Hall of Frames (6 Oct 2026)** SELESAI. Work order:
+`docs/page-fullscreen-migration-plan.md`. Satu section per pass + 7 gate.
+
+**SELESAI (6 Oct 2026) — Hall of Frames full-screen (hero gambar + section
+100svh).** `HallOfFramesHero.astro` → gambar background
+(`/images/hof/hero-bg.webp` + `-2x`, sumber `assets/hero gambar/Hero Section -
+HoF.png`, `npm run assets:heroes`) + `100svh`; video dihapus. `HallOfFramesFeatured`,
+`HallOfFramesProjects`, `HallOfFramesMilestone` → `min-height:100svh` +
+`justify-content:center` (konten semua sudah center & > viewport → tinggi tetap
+1241/1014/987). Verify viewport hero 1400 → 903. **7 gate + seo ALL PASS.** MAE
+hero 4.34 → 4.11, Featured 2.14, Projects 0.20, Milestone 1.49.
 
 **SELESAI (6 Oct 2026) — Partners full-screen (hero gambar + section 100svh).**
 `PartnersHero.astro` → gambar background (`/images/partners/hero-bg.webp` + `-2x`,

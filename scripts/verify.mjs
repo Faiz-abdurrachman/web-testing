@@ -3000,7 +3000,7 @@ try {
   }
 
   // Hall of Frames hero — geometry + diff vs the Figma node 1439:4507 export.
-  await page.setViewportSize({ width: 1440, height: 1400 });
+  await page.setViewportSize({ width: 1440, height: 903 });
   await page.goto(`${baseUrl}/hall-of-frames`, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
   await page.evaluate(() => document.fonts.load('700 80px "Bluu Next"'));
@@ -3025,10 +3025,7 @@ try {
       title: box('#hof-hero-title'),
       subtitle: box('.hof-hero p'),
       staticFallback: !!document.querySelector('.hof-hero .art-bg'),
-      videoOpacity: getComputedStyle(
-        document.querySelector('.hof-hero .art-video'),
-      ).opacity,
-      videoPreload: document.querySelector('.hof-hero .art-video').preload,
+      hasVideo: !!document.querySelector('.hof-hero .art-video'),
       overflow: document.documentElement.scrollWidth - innerWidth,
     };
   });
@@ -3066,8 +3063,7 @@ try {
       lineHeight: '27px',
     },
     staticFallback: true,
-    videoOpacity: '0',
-    videoPreload: 'none',
+    hasVideo: false,
     overflow: 0,
   });
   await page

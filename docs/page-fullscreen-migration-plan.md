@@ -2,9 +2,9 @@
 
 Status: **HOMEPAGE SELESAI** (commit `b228f3c`, 4 Oct 2026) + **ABOUT US SELESAI**
 (5 Oct 2026) + **RECRUITMENT SELESAI** (6 Oct 2026) + **PARTNERS SELESAI**
-(6 Oct 2026). **NEXT = Hall of Frames (`1439:4506`) → Contact (`1445:5065`).**
-(Sisa satu-satunya dari `docs/fix-9-plan.md` = **#9**, dokumen ini adalah work
-order-nya. Fix #1–#8 + #10–#12 SELESAI 5 Oct 2026.)
+(6 Oct 2026) + **HALL OF FRAMES SELESAI** (6 Oct 2026). **NEXT = Contact
+(`1445:5065`).** (Sisa satu-satunya dari `docs/fix-9-plan.md` = **#9**, dokumen
+ini adalah work order-nya. Fix #1–#8 + #10–#12 SELESAI 5 Oct 2026.)
 
 Dokumen ini adalah **work order resmi** untuk migrasi semua halaman ke pola
 full-screen (satu section = satu layar) + hero berbasis gambar. Ikuti
@@ -180,15 +180,20 @@ recruitment.png` oleh `npm run assets:heroes` (skrip baru). MAE: Who 2.85, WYD
 > Why DS di-pad 123/124. MAE: hero 12.67 (artikel hero baru = render lebih
 > baru), Our 3.05, Why 2.88, Footer 5.93.
 
-### Hall of Frames `1439:4506`
+### Hall of Frames `1439:4506` — ✅ SELESAI (6 Oct 2026)
 
-| #   | Node        | Section                              | Treatment |
-| --- | ----------- | ------------------------------------ | --------- |
-| 1   | `1439:4507` | Hero (903)                           | [H]       |
-| 2   | `1439:4512` | Sorcerers Spotlight & Gallery (1241) | [HS]      |
-| 3   | `1439:4655` | Project Highlights (1014)            | [HS]      |
-| 4   | `1439:4699` | Milestone DS (987)                   | [HS]      |
-| 5   | `1439:4724` | Footer                               | [skip]    |
+| #   | Node        | Section                              | Treatment                                         |
+| --- | ----------- | ------------------------------------ | ------------------------------------------------- |
+| 1   | `1439:4507` | Hero (903)                           | [H] ✅ hero-bg.webp + 100svh (video dihapus)      |
+| 2   | `1439:4512` | Sorcerers Spotlight & Gallery (1241) | [HS] ✅ 100svh + center (konten > viewport, 1241) |
+| 3   | `1439:4655` | Project Highlights (1014)            | [HS] ✅ 100svh + center (konten > viewport, 1014) |
+| 4   | `1439:4699` | Milestone DS (987)                   | [HS] ✅ 100svh + center (konten > viewport, 987)  |
+| 5   | `1439:4724` | Footer                               | [skip]                                            |
+
+> Catatan HoF: konten Figma semua sudah ter-center dan lebih tinggi dari viewport
+> → tinggi section tidak berubah (1241/1014/987); hanya verify viewport hero
+> diubah 1400 → 903. Reference hero `HoF-Hero-1x.png` (903) tanpa pad. MAE hero
+> 4.34 → 4.11, Featured 2.14, Projects 0.20, Milestone 1.49.
 
 ### Contact `1445:5065`
 

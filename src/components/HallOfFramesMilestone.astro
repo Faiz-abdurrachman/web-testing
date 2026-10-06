@@ -45,8 +45,12 @@ const milestones = [
   .hof-milestone {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 80px;
     padding: 100px 80px;
+    /* Full-screen standard (#9): one screen (content 787 > viewport stays 987). */
+    min-height: 100vh;
+    min-height: 100svh;
     background: #050507;
   }
 

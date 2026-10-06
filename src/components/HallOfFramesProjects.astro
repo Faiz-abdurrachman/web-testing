@@ -314,8 +314,12 @@ import { projects } from '../data/projects';
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 19px;
     padding: 80px;
+    /* Full-screen standard (#9): one screen (content 854 > viewport stays 1014). */
+    min-height: 100vh;
+    min-height: 100svh;
     background: #050507;
     overflow: clip;
   }

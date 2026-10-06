@@ -204,8 +204,12 @@ const members: Member[] = [...row, ...row];
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 80px;
     padding: 80px;
+    /* Full-screen standard (#9): one screen (content 1081 > viewport stays 1241). */
+    min-height: 100vh;
+    min-height: 100svh;
     background: #050507;
   }
 

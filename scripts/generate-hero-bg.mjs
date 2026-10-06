@@ -21,6 +21,12 @@ const heroes = {
     659,
     'public/images/partners',
   ],
+  hof: [
+    'assets/hero gambar/Hero Section - HoF.png',
+    1440,
+    903,
+    'public/images/hof',
+  ],
 };
 
 for (const [page, [source, width, height, dir]] of Object.entries(heroes)) {
