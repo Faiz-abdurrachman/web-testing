@@ -1,8 +1,8 @@
 # Projects media — Master Work Plan
 
 Status 6 Oct 2026: implementasi + QA PASS; cd37446 push, kedua Vercel SUCCESS.
-Update GAS existing dan upload/preview/save nyata kedua situs PASS; cleanup
-project sementara “uji cms” masih pending.
+Update GAS existing, upload/preview/save nyata kedua situs dan cleanup project
+sementara “uji cms” PASS; Projects media acceptance selesai.
 User memilih menyelesaikan CMS dahulu; login username/password ditunda.
 Owner login native + add/delete Projects + kedua rebuild terbukti. Owner melaporkan
 akun Google non-owner Incognito ditolak. Pass aktif Projects media.
@@ -140,6 +140,9 @@ aktif, gambar decode, tanpa overflow atau browser errors. Bukti ignored
 artifacts/cms-media/owner-upload-{export,live}.json, live-media-prebuild-proof.json,
 owner-upload-browser-{testing,production}.json dan screenshot.
 
-NEXT: owner hapus hanya “uji cms”; verifikasi export empat baseline dan kedua
-rebuild. File Drive tidak otomatis dihapus. Team menunggu cleanup pass ini;
+Cleanup selesai: owner menghapus “uji cms”; export empat Projects persis baseline
+dan tanpa referensi upload. Testing SUCCESS 21:37 WIB; production SUCCESS 21:38 WIB.
+Home/HoF kedua domain HTTP200: judul/gambar uji hilang, empat judul awal tampil.
+Bukti artifacts/cms-media/owner-media-delete-{export,deployments,live}.json.
+File Drive tidak otomatis dihapus. NEXT: Team, satu collection/pass + 7 gate + SEO;
 login username/password tetap ditunda sesuai pilihan user.

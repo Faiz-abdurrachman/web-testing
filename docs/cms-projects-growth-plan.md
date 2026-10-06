@@ -11,8 +11,9 @@ GAS/Sheet/Drive existing tetap; tanpa perubahan geometri atau collection lain.
 
 Status: implementasi + QA PASS; owner add/delete + kedua rebuild PASS.
 Projects media upload/preview/save nyata dan publikasi Home/HoF kedua domain PASS;
-mobile/desktop decode tanpa overflow. NEXT: hapus project sementara “uji cms”,
-verifikasi empat baseline dan kedua rebuild (cms-projects-media-setup.md).
+mobile/desktop decode tanpa overflow. Cleanup “uji cms” selesai: export empat
+baseline persis; kedua rebuild SUCCESS, Home/HoF kedua domain kembali baseline.
+NEXT: Team, satu collection/pass + tujuh gate + SEO.
 Seluruh CMS belum selesai; konfirmasi sebelum push baru.
 SOP operasional: [cms-sop.md](cms-sop.md).
 

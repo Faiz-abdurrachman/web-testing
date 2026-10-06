@@ -5,9 +5,12 @@ Upload, preview dan save nyata project sementara “uji cms” berhasil. Product
 SUCCESS 21:25 WIB; testing retry SUCCESS 21:27 WIB setelah kegagalan fetch/validasi
 media awal yang penyebabnya belum terisolasi. Home/HoF kedua domain menampilkan
 gambar; hash/decode valid dan browser 390/1440 tanpa overflow/errors.
-NEXT: acceptance langkah 3, hapus hanya “uji cms” dan verifikasi kedua rebuild
-serta empat baseline. Cleanup masih pending. Langkah update di bawah adalah
-rujukan historis; tidak perlu setup/deployment/env baru.
+Cleanup langkah 3 selesai: owner menghapus “uji cms”; export kembali empat
+Projects persis baseline. Testing SUCCESS 21:37 WIB, production SUCCESS 21:38 WIB;
+Home/HoF kedua domain HTTP200 tanpa project/gambar uji, empat judul awal tetap.
+Bukti artifacts/cms-media/owner-media-delete-{export,deployments,live}.json.
+NEXT: Team, satu collection/pass. Langkah update di bawah adalah rujukan historis;
+tidak perlu setup/deployment/env baru.
 
 Login Google tetap digunakan; login username/password ditunda sesuai pilihan user.
 
@@ -52,5 +55,5 @@ atau [admin testing](https://web-testing-azure.vercel.app/admin/), login owner.
 4. File SVG/HTML/animasi, oversized/corrupt atau sesi habis harus ditolak dengan
    pesan yang jelas. Save dengan reference media palsu tidak boleh mengubah Sheet.
 
-Upload live terbukti; cleanup project sementara masih pending. Bukti mock untuk
+Upload live dan cleanup project sementara terbukti. Bukti mock untuk
 penolakan file/kontrak tetap QA lokal, bukan uji owner semua skenario negatif.

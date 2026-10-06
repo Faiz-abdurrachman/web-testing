@@ -115,7 +115,7 @@ Tahap penolakan Google/platform atau GAS tidak dirinci; ini bukti akses editor
 terblokir, bukan pembuktian terisolasi tiap layer auth. NEXT: Projects media.
 Login owner secara terpisah
 pada kedua domain, logout/relogin nyata dan konflik dua sesi nyata belum dibuktikan;
-coverage mock lokal bukan bukti acceptance Google tersebut. Media/cache cd37446 sudah push, kedua Vercel SUCCESS; GAS updated, owner upload/preview/save kedua situs PASS; cleanup “uji cms” pending;
+coverage mock lokal bukan bukti acceptance Google tersebut. Media/cache cd37446 sudah push, kedua Vercel SUCCESS; GAS updated, owner upload/preview/save kedua situs PASS; cleanup “uji cms” dan kedua rebuild PASS;
 collection lain menunggu. Seluruh CMS belum selesai.
 
 Rujukan untuk toggle user settings:

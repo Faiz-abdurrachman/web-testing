@@ -34,18 +34,21 @@ Kontrol upload/noindex kedua domain HTTP200, API media anonymous401, login303
 ke Google. Owner melaporkan update versi GAS Export dan Admin media selesai.
 Export action media baru terverifikasi (UNKNOWN_MEDIA untuk hash tidak terdaftar).
 Owner upload gambar, preview dan save project sementara “uji cms” berhasil;
-export sekarang lima Projects dengan satu media WebP 39152 bytes, hash/decode valid.
+export saat uji lima Projects dengan satu media WebP 39152 bytes, hash/decode valid.
 Production SUCCESS 21:25 WIB; testing awal gagal pada fetch/validasi media, lalu
 retrigger hook testing existing SUCCESS 21:27 WIB. Penyebab awal belum terisolasi;
 fetch guard/retry tetap. Gambar dan project tampil pada Home/HoF kedua domain,
 browser 390/1440 PASS: decode, kartu aktif, tanpa overflow/browser errors.
 Bukti artifacts/cms-media/owner-upload-{export,live}.json dan browser kedua situs.
 
-NEXT: owner hapus hanya project sementara “uji cms” melalui admin, lalu verifikasi
-export kembali empat baseline dan kedua rebuild selesai. Cleanup masih pending;
-Team → B3/B4 setelah pass Projects selesai.
+Cleanup owner selesai: “uji cms” dihapus, export empat Projects persis baseline,
+tanpa referensi upload. Testing SUCCESS 21:37 WIB; production SUCCESS 21:38 WIB.
+Home/HoF kedua domain HTTP200: project/gambar uji hilang, empat judul baseline ada.
+Bukti artifacts/cms-media/owner-media-delete-{export,deployments,live}.json.
+Projects Growth + media upload/cache acceptance selesai; file Drive tidak dihapus
+otomatis. NEXT: Team, satu collection/pass + tujuh gate + SEO; B3/B4 sesudahnya.
 Owner/non-owner + CRUD/rebuild telah diuji, dengan batas bukti di setup guide.
-Team → B3/B4 tetap menunggu. Tidak reseed atau ulang
+Team belum dimulai. Tidak reseed atau ulang
 Sheet/folder/onboarding. Public Astro tetap static; browser shell/login, records
 melalui API owner, cookie HttpOnly terenkripsi + state/PKCE + CSRF. Backend tetap
 Sheets/Drive/Properties/hook existing. Satu collection/pass. Seluruh CMS belum

@@ -9,8 +9,9 @@ mengarah ke Google. Owner melaporkan akun non-owner Incognito ditolak. Ikuti
 GAS/Sheet/Drive existing tetap; konfirmasi sebelum push baru.
 
 Status operasional 6 Oct 2026: lihat `docs/ai-handoff.md`. Work order berikutnya:
-`docs/cms-projects-media-setup.md`: cleanup project sementara “uji cms” setelah
-upload/preview/save dan kedua publikasi gambar PASS. SOP ini melengkapi SOP piksel, bukan mengganti
+Team, satu collection/pass + tujuh gate + SEO. Projects Growth/media dan cleanup
+“uji cms” selesai; export empat baseline, kedua rebuild SUCCESS. Bukti di
+`docs/cms-projects-media-setup.md`. SOP ini melengkapi SOP piksel, bukan mengganti
 aturan presisi situs. B0/B1 dan editor Projects awal sudah dipasang; jangan
 mengulang setup awal atau mengganti backend tanpa instruksi user.
 

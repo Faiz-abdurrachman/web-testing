@@ -2829,5 +2829,6 @@ file + preview, Bluu Next700/Manrope dan spacing8/16 existing; tanpa node Figma.
 dan 7gate+SEO PASS (responsive468/468). Plan/setup: cms-projects-media-plan.md,
 cms-projects-media-setup.md. cd37446 sudah push, kedua Vercel SUCCESS. GAS updated; owner upload/preview/save dan publikasi gambar Home/HoF kedua
 situs PASS, browser390/1440 decode tanpa overflow/errors. Project sementara
-“uji cms” masih live; cleanup pending. Foto owner hanya di Drive/cache ignored,
+“uji cms” sudah dihapus; export empat baseline persis, kedua rebuild SUCCESS dan
+Home/HoF kedua domain tanpa judul/gambar uji. Foto owner hanya di Drive/cache ignored,
 bukan artwork repo; template/geometri tetap.
