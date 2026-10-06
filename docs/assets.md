@@ -2855,3 +2855,19 @@ Team QA: 36 CMS tests Node22, native Team browser4widths + Projects native/legac
 regression,112 group fixtures,7 gate+SEO PASS (responsive468/468). OurTeam baseline
 1440×1562/card302×400 MAE2.6235, snapshot byte-identik dan assertion tidak diubah.
 Bukti artifacts/cms-team/. Live Team pending izin push + update GAS existing.
+
+## Recruitment application form — teammate integration (6 Oct 2026)
+
+Source: production/recruitment-page commit97dca2b, imported onto main baseline
+caacaa9 with isolated integration worktree and backup. Route /recruitment/apply;
+new RecruitmentForm markup/style and option data originate from that teammate
+commit. No supplied Figma node/export for this custom form; no Figma precision
+claim. Existing Navbar/Footer artwork/fonts are reused unchanged. Display Bluu
+Next Bold700 and body Manrope; form1040 max-width, desktop padding128/80/120,
+mobile112/16/64; new surface spacing8pt. Four input panels scroll naturally.
+RoleDetail changes only Apply Now href, preserving current glow/CSS/geometries.
+Dynamic domain options use text-safe DOM and correct scoped CSS; draft restoration,
+all-step validation, reduced-motion focus scroll and router teardown were added.
+Applicant storage is dedicated GAS/Sheets through server-only API; no applicant
+records are included in CMS export/build snapshot or logged to browser console.
+Acceptance/QA details: docs/recruitment-integration-plan.md.

@@ -306,3 +306,12 @@ Team content CRUD/photo adapter expands only Team. Existing OurTeam full-screen
 centering, frame1440×1562, baseline card302×400 and all public geometry assertions
 remain locked. New member counts use horizontal row scrolling; no full-screen
 migration or hero changes. Work order: cms-team-plan.md.
+
+## Recruitment form integration — 6 Oct 2026
+
+/recruitment/apply is a custom long form, imported from teammate commit97dca2b
+on latest main. Its single form surface has min-height100svh and natural document
+scrolling for four panels; no forced scaling or full-screen fieldsets. Existing
+Recruitment nine-section page, role CSS/geometries and shared Navbar/Footer are
+locked. Only six detail-role Apply Now destinations change. Plan/QA:
+docs/recruitment-integration-plan.md. This does not reopen full-screen migration.

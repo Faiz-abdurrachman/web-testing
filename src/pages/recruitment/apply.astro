@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import RecruitmentForm from '../../components/recruitment/RecruitmentForm.astro';
+---
+
+<BaseLayout
+  title="Apply — Data Sorcerers Open Recruitment"
+  description="Bring your foundation. Build what comes next. Join Data Sorcerers and turn your curiosity into capability, research, and real-world impact."
+>
+  <Navbar active="Recruitment" />
+  <main id="main">
+    <RecruitmentForm />
+  </main>
+  <Footer />
+</BaseLayout>

@@ -53,7 +53,9 @@ const waMessage = encodeURIComponent(
               <span>{role.deadline}</span>
             </div>
           </div>
-          <Button variant="apply">Apply Now</Button>
+          <Button variant="apply" href={`/recruitment/apply?role=${role.id}`}>
+            Apply Now
+          </Button>
         </div>
       </div>
     </div>

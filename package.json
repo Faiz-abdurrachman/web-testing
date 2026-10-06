@@ -38,7 +38,10 @@
     "verify:cms-native-admin": "node scripts/verify-cms-native-admin.mjs",
     "verify:cms-team-admin": "node scripts/verify-cms-team-admin.mjs",
     "verify:cms-team": "node scripts/verify-cms-team-renderer.mjs",
-    "verify:cms-media": "node scripts/verify-cms-media.mjs"
+    "verify:cms-media": "node scripts/verify-cms-media.mjs",
+    "recruitment:gas": "node scripts/generate-recruitment-gas.mjs",
+    "test:recruitment": "node --test tests/recruitment*.test.mjs",
+    "verify:recruitment": "node scripts/verify-recruitment-form.mjs"
   },
   "dependencies": {
     "astro": "7.3.3",

@@ -148,8 +148,23 @@ else {
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
   if (locs.some((loc) => new URL(loc).pathname.startsWith('/admin')))
     issues.push('admin included in sitemap');
-  if (locs.length !== 18)
-    issues.push(`sitemap has ${locs.length} urls, expected 18`);
+  const ids = ['data', 'core', 'language', 'vision', 'product', 'growth'];
+  const expectedRoutes = [
+    '/',
+    '/about/',
+    '/recruitment/',
+    '/partners/',
+    '/hall-of-frames/',
+    '/contact/',
+    '/recruitment/apply/',
+    ...ids.map((id) => `/hods/${id}/`),
+    ...ids.map((id) => `/recruitment/roles/${id}/`),
+  ];
+  const actualRoutes = locs.map((loc) => new URL(loc).pathname).sort();
+  if (JSON.stringify(actualRoutes) !== JSON.stringify(expectedRoutes.sort()))
+    issues.push(
+      'sitemap must contain exactly the 19 public routes, including recruitment/apply',
+    );
   for (const loc of locs) {
     if (!loc.startsWith(origin))
       issues.push(`sitemap url wrong origin: ${loc}`);

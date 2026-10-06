@@ -1,5 +1,21 @@
 # Handover — Data Sorcerers (community-web)
 
+## Recruitment integration — 6 Oct 2026
+
+User authorized integration of teammate branch recruitment-page. Main baseline
+caacaa9 protected by backup/pre-recruitment-caacaa9; integration uses a separate
+worktree/branch from latest main and only feature97dca2b (four source files).
+Existing CMS/auth/media/snapshot and public geometry remain locked. Apply Now
+on six detail roles links to /recruitment/apply?role=<id>. Form behavior reviewed
+and corrected; public Vercel intake proxies a dedicated GAS/Sheets destination,
+separate from CMS owner RPC. Closed until owner configures intake/open flags;
+no false success, payload logs or automatic POST retry. Lock+UUID/content hash
+prevent duplicate retry rows. Local QA PASS:7recruitment+36CMS tests, form416cases, responsive468/468,
+7gate+SEO and native/legacy/Team admin browsers. Actual deployment/Sheet
+acceptance remains pending. Plan: docs/recruitment-integration-plan.md; installation:
+docs/recruitment-setup.md. No push authorization for this feature yet.
+Team GAS/live acceptance remains pending; entire CMS is not complete.
+
 ## B2 Team — pass lokal 6 Oct 2026
 
 Master Work Plan: [Team plan](docs/cms-team-plan.md); update/acceptance:
