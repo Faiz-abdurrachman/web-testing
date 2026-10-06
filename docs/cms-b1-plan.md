@@ -16,7 +16,9 @@ User has installed Code.gs and the manifest, and confirmed successful
 `setupCms` execution under the newly selected owner account. Account identifiers
 remain outside the repo. The automation browser has a separate Google session;
 Google deployment/configuration is being guided in the user's browser. The read
-API deployment, authenticated real export and both Vercel builds remain pending.
+API is deployed. Authenticated real export matches the committed baseline; a
+local remote-mode build passes with 0 errors, all 19 HTML files identical and
+SEO passing. Both Vercel env configurations/builds remain pending.
 Do not mark B1 live until those checks pass.
 
 Use separate GAS projects for the public read API and the future private admin
@@ -66,6 +68,10 @@ roundtrip PASS. Build 0 errors; verify exit 0; navbar and View Transitions PASS;
 responsive 468/468; spacing, format and SEO PASS. All six module exports and all
 19 HTML files remain identical to the pre-B0 baseline. No UI/assets changed.
 
-Real setup execution is confirmed by the user. Export deployment URL/token,
-Vercel env and real remote builds remain pending. B1 is not live yet. Setup
-guide: `cms-gas-setup.md`.
+Real setup execution is confirmed by the user. Deployed read API authenticated
+export PASS and deep-equals the baseline. Local build using the real API PASS
+(remote mode, 0 errors); all 19 generated HTML files remain identical and SEO
+PASS. Evidence: ignored `artifacts/cms-b1/live-export-report.json` and
+`live-build.log`; credentials only in ignored local env and GAS Properties.
+Both Vercel env configurations and deployed remote builds remain pending. B1 is
+not live yet. Setup guide: `cms-gas-setup.md`.

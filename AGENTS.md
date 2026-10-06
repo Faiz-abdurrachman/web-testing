@@ -6,7 +6,9 @@ setup membuat 8 tab, seed baseline, folder Drive privat dan Script Properties.
 Remote fetch bertoken + timeout/size/redirect guards + replacement atomik siap.
 7 tes CMS + 7 gate situs + SEO PASS; 19 HTML tetap identik. User mengonfirmasi
 `setupCms` berhasil di akun owner pilihan terbaru (identitas tidak disimpan di
-repo). NEXT: deploy read API, verifikasi real export + env/build kedua Vercel.
+repo). Read API sudah deployed; authenticated export identik baseline dan
+build lokal remote mode PASS (0 errors, 19 HTML identik, SEO PASS). NEXT:
+konfigurasi env dan verifikasi build kedua Vercel.
 Panduan: `docs/cms-gas-setup.md`.
 User mengizinkan commit/push kelanjutan CMS; B0 sudah push `1b38088` ke dua repo.
 User meminta bisa menambah anggota/role/HoDS dengan template desain konsisten;
