@@ -4,13 +4,15 @@
 
 User memilih **admin penuh di website**; pass aktif Projects/auth:
 [plan](docs/cms-native-admin-plan.md), [setup/acceptance](docs/cms-native-admin-setup.md).
-Kode native /admin + Vercel OAuth/API tersedia lokal, belum push/live.
+Kode native /admin + Vercel OAuth/API sudah push pada 824e333 dengan izin user;
+kedua Vercel SUCCESS. Shell /admin HTTP 200/noindex dan API HTTP 503 CONFIGURATION
+terverifikasi pada kedua domain situs; login Google belum dikonfigurasi.
 GAS Admin Growth sudah diperbarui menurut owner; export read-only setelahnya
 empat Projects tetap baseline. Deployment situs Growth 1fb25ae dan checkpoint
 198586b SUCCESS pada kedua repo (testing checkpoint diretrigger berhasil).
 Owner add/delete nyata, akun non-owner dan kedua rebuild perubahan isi belum diuji.
 
-NEXT: selesaikan QA/commit native, konfirmasi sebelum push; konfigurasi OAuth web
+NEXT: konfigurasi OAuth web
 
 - standard Cloud/API executable pada GAS Admin EXISTING dan env server kedua
   Vercel, lalu acceptance owner/non-owner + CRUD/rebuild. Tidak reseed atau ulang

@@ -1,6 +1,7 @@
 # Native /admin — konfigurasi dan acceptance
 
-Kode native Projects tersedia lokal; belum push dan belum live Google login.
+Kode native Projects 824e333 sudah push dengan izin user; kedua Vercel SUCCESS.
+Shell /admin dan routing API terverifikasi; login Google belum aktif.
 User memilih admin penuh di situs. Semua perubahan konten tetap memakai GAS
 Admin EXISTING, Sheet/Drive/Properties/rebuild hooks existing. Jangan reseed atau
 membuat ulang CMS Export, Sheet/folder, atau project GAS Admin.
@@ -75,8 +76,9 @@ membuat ulang CMS Export, Sheet/folder, atau project GAS Admin.
 Vercel Functions. `npm run test:cms` menguji handler OAuth/API dengan upstream
 mock; `npm run verify:cms-native-admin` menguji dist editor + mock HTTP empat
 widths. Keduanya tidak membuktikan auth Google sebenarnya atau packaging Vercel.
-Deployment API executable, consent, identity dan packaging harus diverifikasi
-sesudah konfigurasi owner dan push. Tanpa env lengkap API fail closed.
+Packaging/routing Functions live sudah terbukti (shell 200, API 503 CONFIGURATION).
+Deployment API executable, consent dan identity harus diverifikasi sesudah
+konfigurasi owner dan redeploy. Tanpa env lengkap API fail closed.
 
 Referensi: [GAS execution](https://developers.google.com/apps-script/api/how-tos/execute),
 [REST scripts.run](https://developers.google.com/apps-script/api/reference/rest/v1/scripts/run),

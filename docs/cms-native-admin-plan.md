@@ -92,6 +92,9 @@ Admin spacing audit eksplisit PASS; 19 baseline public HTML hashes identik,
 Astro build 20 pages / 0 errors; SEO PASS, admin noindex/sitemap excluded.
 Public geometry assertions/reference assets tetap. Tujuh site gates + SEO PASS; responsive 468/468, browserErrors [].
 
-Live OAuth/Cloud/API executable dan Vercel function packaging belum diverifikasi;
+Live OAuth/Cloud/API executable belum diverifikasi;
 tidak ada env/auth bypass dummy untuk production. Panduan owner konkret tersedia
-di cms-native-admin-setup.md. Push belum diizinkan untuk feature native.
+di cms-native-admin-setup.md. User menyetujui push; 824e333 terkirim ke kedua repo. Kedua Vercel SUCCESS.
+Shell /admin HTTP 200/noindex; API HTTP 503 CONFIGURATION pada kedua domain
+situs. Login route kembali ke shell dengan pesan belum aktif. Ini membuktikan
+packaging/routing Functions; actual OAuth/API executable/owner CRUD belum diuji.
