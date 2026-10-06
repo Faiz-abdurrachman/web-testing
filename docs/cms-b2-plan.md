@@ -1,8 +1,13 @@
 # CMS B2 — private admin dashboard
 
-Status: PROJECTS FOUNDATION CODE VERIFIED; OWNER DASHBOARD LOADED; LIVE SAVE CHECKS PENDING. Production B1 remote-mode build at `fb99c39` confirmed by
-owner logs; both GitHub Vercel statuses success. Testing remote-mode log
-confirmation pending. No B2 UI or mutations deployed yet.
+## Checkpoint aktif 6 Oct 2026
+
+B0/B1 selesai. B2 Projects foundation sudah terpasang; owner load/save existing
+berhasil, dua rebuild diminta. Fix fetch `96a9756`: kedua Vercel SUCCESS.
+14 CMS tests + 7 gate + SEO PASS. NEXT **Projects Growth**, belum dimulai:
+[cms-projects-growth-plan.md](cms-projects-growth-plan.md).
+Setelah itu media upload/cache, Team dan B3/B4. Gunakan [cms-sop.md](cms-sop.md)
+dan [ai-handoff.md](ai-handoff.md). Jangan ulang setup dari checkpoint historis.
 
 ## Pass order
 
@@ -72,12 +77,14 @@ harness for browser review without pretending it validates real Google login.
 Then owner installs/deploys admin and verifies actual login/save/rebuild with
 both projects. Run all seven site gates + SEO and baseline equality each pass.
 
-## User setup remaining
+## Setup yang sudah tersedia
 
-Confirm testing remote-mode build log. Create a Deploy Hook for branch main in
-each Vercel project. Temporary owner-provided values may be held in ignored
-local env for setup; deployment secrets live in GAS Script Properties. Never
-commit admin identity, Sheet/folder IDs, tokens or hook URLs.
+Owner, Sheet, folder, kedua hooks, env Vercel dan admin privat sudah terpasang.
+Untuk pass berikutnya update deployment existing, bukan installer baru.
+Lihat `cms-admin-setup.md`. Uji akun Google non-owner login dan perubahan isi
+nyata masih perlu; literal log testing remote-mode belum disalin.
+
+## Riwayat foundation (checkpoint lama, bukan kebutuhan setup sekarang)
 
 ## Foundation pass execution checkpoint
 

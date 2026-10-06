@@ -1,5 +1,11 @@
 # Page build prompt — bikin halaman/section baru presisi Figma
 
+## Scope CMS
+
+Prompt ini untuk halaman/section UI. Untuk melanjutkan CMS existing gunakan
+[cms-kickoff.md](cms-kickoff.md), bukan memulai halaman atau setup CMS baru.
+NEXT Projects Growth; B0/B1 dan admin Projects existing sudah terpasang.
+
 Copy-paste template di bawah ke AI, ganti bagian `<...>`. Tujuannya: hasil
 **konsisten** dengan halaman yang sudah ada dan **presisi** ke Figma/PNG.
 Metode lengkap ada di **`docs/pixel-precision-sop.md`** (wajib dibaca).

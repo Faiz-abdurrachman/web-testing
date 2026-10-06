@@ -1,9 +1,11 @@
 # Kickoff prompt — buat AI agent baru
 
-**CMS UPDATE:** B0 complete and pushed; B1 installer/remote-fetch code verified
-(7 CMS tests + 7 site gates + SEO). Live GAS/Vercel setup still needs owner login:
-`docs/cms-gas-setup.md`. Dynamic member/role/HoDS additions with consistent
-registered templates are required in B2/B3; B0/B1 slot guards are temporary.
+**CMS UPDATE (6 Oct 2026):** B0/B1 selesai; B2 editor empat Projects existing
+sudah terpasang dan save dicoba. Fix fetch `96a9756`: kedua Vercel SUCCESS.
+NEXT **Projects Growth**, belum dimulai. Untuk tugas CMS gunakan prompt aktif
+[CMS kickoff](cms-kickoff.md), [SOP CMS](cms-sop.md) dan
+[Projects Growth plan](cms-projects-growth-plan.md). Blok panjang berikut adalah
+panduan UI umum/riwayat; instruksi NEXT lama tidak mengalahkan checkpoint aktif.
 
 Copy-paste seluruh blok di bawah ini ke AI baru sebelum memberikan instruksi kerja.
 Prompt ini memuat seluruh konteks, aturan hukum presisi piksel, strict 8-point grid,
@@ -28,7 +30,7 @@ seo ALL PASS.**
    milestone HoF.
 3. **Bangun CMS / admin dashboard** — rencana: `docs/cms-plan.md` (keputusan
    6 Oct 2026: backend **Google Apps Script + Sheets + Drive**, build-time fetch +
-   Vercel rebuild hook, admin page custom, 1–2 admin, save = live). B0 selesai; berikutnya B1 GAS export.
+   Vercel rebuild hook, admin page custom, 1–2 admin, save = live). B0/B1 selesai; berikutnya B2 Projects Growth (`docs/cms-projects-growth-plan.md`).
 4. Opsional: minta user kirim sumber HD **Contact** (`contact page.png` cuma
    2680px → maksimal 2×).
 
@@ -82,7 +84,7 @@ Target: **pixel-accurate ke Figma/PNG**, HTML/CSS ringan (bukan flatten screensh
    HoF).
 3. Bangun **CMS / admin dashboard** — rencana `docs/cms-plan.md` (backend
    **Google Apps Script + Sheets + Drive**, build-time fetch + rebuild hook,
-   admin page custom HtmlService, 1–2 admin, save = live). Mulai Fase B0.
+   admin page custom HtmlService, 1–2 admin, save = live). Lanjut Projects Growth; setup fondasi sudah selesai.
 4. Opsional: minta user kirim sumber HD **Contact** (2680px → maksimal 2×).
 
 **Benchmark presisi — JANGAN RUSAK:** Homepage, About Us (incl. Our Team HoDS
@@ -103,8 +105,7 @@ Sebelum ngapa-ngapain, WAJIB baca dulu (urut, jangan skip):
                                    terapkan semua tombol/link 100% benar
 7. docs/about-us-glow-plan.md   → About Us glow responsif + karakter menempel tepi
                                    (SELESAI 4 Oct 2026 — catatan keputusan)
-8. docs/hero-video-plan.md      → Master Work Plan VIDEO HERO (Home/Recruitment/About/
-                                   HoF/Partners sudah; Contact pending) — aturan encode
+8. docs/hero-video-plan.md      → Master Work Plan VIDEO HERO (ARSIP — sudah digantikan hero gambar; Contact bukan tugas video) — aturan encode
                                    anti-burik, loop, reduce/≤600px, budget
 9. docs/sound-sop.md            → SOP sound (Web Audio prosedural) + porting
                                    (skill `.agents/skills/data-sorcerers-sound/SKILL.md`)
@@ -309,38 +310,19 @@ Urutan target (prioritas sekarang):
       `docs/page-fullscreen-migration-plan.md` (semua ditandai SELESAI).
    I. **★ NEXT — BANGUN CMS / ADMIN DASHBOARD** (backend Google Apps Script +
       Sheets + Drive, build-time fetch + Vercel rebuild hook). Rencana:
-      `docs/cms-plan.md`. Mulai **Fase B0** (snapshot + thin loader, nol ubah
-      tampilan).
+      `docs/cms-plan.md`. Lanjut **Projects Growth** (`docs/cms-projects-growth-plan.md`).
 
 --------------------------------------------------------------------------------
-BANGUN CMS / ADMIN DASHBOARD (NEXT)
-Rencana lengkap: **`docs/cms-plan.md`** (+ starter siap-tempel `docs/cms-kickoff.md`).
-Keputusan user (6 Oct 2026): backend **Google Apps Script + Google Sheets + Google
-Drive** (bukan git-based/Keystatic), **build-time fetch + Vercel rebuild hook**,
-**admin page custom yang di-host GAS** (`HtmlService`), **1–2 admin full akses**,
-**save = live** (via rebuild ~1–2 mnt).
-- Tujuan: editor non-teknis bisa CRUD project, team/orang, role, prestasi, HoDS,
-  partners, site settings — **tanpa menyentuh kode**.
-- Integrasi Astro **rendah risiko**: `scripts/fetch-cms.mjs` ambil data saat build →
-  `src/data/cms-snapshot.json`; `src/data/*.ts` jadi *thin loader* (import komponen
-  tetap sama). Fallback snapshot di-commit → `verify.mjs` lokal deterministik.
-- Fase **B0** (fondasi, tanpa GAS) → B1 (GAS export) → B2 (admin page) → B3
-  (collection lain) → B4 (hardening). **Satu collection/langkah per pass + 7 gate.**
-- Jebakan (detail `docs/cms-plan.md` §5): geometri kartu (`domains.ts` `rows`,
-  `roles.ts` `centered`/`tight`, `team.chip`/`fade`) itu DESAIN → jangan diekspos;
-  gambar konten vs artwork-bake; Drive bukan CDN; `verify.mjs` mengunci beberapa
-  jumlah konten → jangan longgarkan assertion geometri; secret di GAS Script
-  Properties / Vercel env; deploy ganda testing+production.
-- Jawab dulu kebutuhan user di `docs/cms-plan.md` §6 (akun Google, folder Drive,
-  2 URL Vercel Deploy Hook, setuju mulai B0).
-
-SELESAI (arsip): semua tombol/link prototype Figma sudah terpasang — peta di
-**`docs/figma-prototype-flow.md`** (§9, 8 elemen) + SOP §"Hukum Navigasi &
-Prototype". Bug prototype Figma jangan ditiru: Vision & Multimodal card → Core AI;
-role card 2 dobel DATA INTELLIGENCE; link usang di Arsip.
+CMS / ADMIN DASHBOARD — NEXT AKTIF
+Gunakan `docs/cms-kickoff.md`, `docs/cms-sop.md` dan
+`docs/cms-projects-growth-plan.md`. B0/B1 selesai; admin Projects existing sudah
+terpasang; kedua hook dan build testing/production berhasil setelah fix 96a9756.
+NEXT tambah/hapus Projects, lalu media upload/cache dan Team. Jangan ulang setup
+Sheet/folder/hook atau onboarding §6. Satu collection/pass + 7 gate + SEO,
+template konsisten dan assertion geometri baseline tetap.
 
 --------------------------------------------------------------------------------
-ARSIP — ATURAN VIDEO HERO (relevan saat Contact / hero baru dikerjakan):
+ARSIP — ATURAN VIDEO HERO (superseded; Contact bukan tugas video):
 - Aturan kunci:
   - Video = lapisan `position:absolute; inset:0; object-fit:cover` di `.artwork`
     (`z-index:-1`, `aria-hidden`). **Geometri/padding/gap/font TIDAK berubah.**
@@ -677,20 +659,8 @@ INSTRUKSI EKSEKUSI UNTUK AI BARU (WAJIB DIIKUTI):
    - Update dokumen (`docs/assets.md`, `docs/ai-handoff.md`, `AGENTS.md`).
    - Commit per fitur; confirm user sebelum push ke origin main.
 3. **Mulai dari mana?**
-   **★ NEXT — MIGRASI FULL-SCREEN: hero gambar + section 100svh (SEMUA halaman).**
-   Homepage SELESAI (`b228f3c`); **About Us (`1439:4184`) berikutnya.**
-   Work order: **`docs/page-fullscreen-migration-plan.md`** (WAJIB dibaca).
-   Satu section per pass + 7 gate; dilarang `zoom`/`scale`.
-   **DITUNDA:** CMS / Admin Dashboard (`docs/cms-plan.md`) — setelah migrasi.
-   **SUDAH SELESAI** (arsip): semua tombol/link prototype Figma (8 elemen,
-   `docs/figma-prototype-flow.md` §9) + navbar hover underline + transisi tab
-   Detail HoDS. Halaman Homepage (`1430:2040`), About Us (`1439:4184`),
-   Recruitment (`1436:3505`, 9/9), Partners (`1439:4787`, 4/4) sudah audit —
-   benchmark presisi, JANGAN rusak. Detail HoDS + HoF project card/featured modal
-   + About glow + video hero (Home/Recruitment/About/HoF/Partners) selesai.
-   **PENDING kecil:** video hero Contact (`1445:5066`) tunggu aset.
-   Untuk kerja presisi apa pun: inventaris `depth 1` dulu, tulis Master Work Plan,
-   cek pixel-identik vs node lain, export PNG referensi, ukur, baru sentuh kode;
-   selesaikan + 7 gate sebelum pindah section. JANGAN skip/lewatkan section.
-   **Khusus About Us visi-misi: JANGAN sentuh `<Starfield />`.**
+   CMS: `docs/cms-kickoff.md` → Projects Growth plan. B0/B1 dan Projects editing
+   foundation selesai; Growth belum dimulai. Full-screen semua halaman sudah
+   selesai; Contact sengaja Figma-exact tinggi 954. Jangan mengulang video hero.
+   Untuk tugas UI lain, ikuti instruksi user dan SOP presisi per-section.
 ```

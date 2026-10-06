@@ -1,5 +1,15 @@
 # SOP — Presisi piksel (WAJIB untuk semua section/halaman)
 
+## Penggunaan untuk CMS — checkpoint 6 Oct 2026
+
+Untuk CMS baca juga [cms-sop.md](cms-sop.md). B0/B1 dan editor Projects existing
+sudah selesai; NEXT [Projects Growth](cms-projects-growth-plan.md).
+Admin custom tidak punya node Figma: tulis layout/spacing/font/test criteria,
+jangan mengarang node/PNG. Public UI tetap mengikuti SOP presisi penuh ini.
+Growth memakai baseline fixture asli + fixture jumlah baru terpisah, bukan
+melonggarkan assertion geometri existing. Satu collection/langkah per pass,
+7 gate + SEO. Baked artwork tidak menjadi field editor; media Drive perlu cache.
+
 Tujuan proyek ini: **pixel-accurate ke Figma/PNG**. Dokumen ini adalah protokol
 keras yang harus diikuti tiap mengubah/membuat UI. Ringkasnya: **export node PNG
 dari Figma → bundle font yang sama → pakai image-fill apa adanya → ukur dengan

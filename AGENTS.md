@@ -1,43 +1,54 @@
 # AGENTS.md — instructions for AI agents
 
-**CMS B2 Projects foundation CODE VERIFIED (6 Oct 2026); owner save confirmed; repaired builds both successful.**
-Private project source `cms/gas/admin/` + `npm run cms:admin` generates Code.gs,
-Index.html and manifest under ignored `artifacts/cms-admin/`. Owner-only server
-checks on each RPC; edit existing Projects, stale revision guard, single-batch
-Sheet write, two rebuild hooks and retry publication. Growth/upload/Team still
-follow as separate passes; current counts/schema/site remain unchanged.
-Both hooks locally validated and real POST accepted HTTP 201 (different projects).
-13 CMS tests, admin browser 4 widths, admin 8pt spacing and 7 site gates +
-SEO PASS (responsive 468/468). Public source/data/assets unchanged.
-B1 production remote-mode deploy at `fb99c39` verified; both Vercel statuses
-success, testing remote-mode log confirmation still pending.
-Owner confirmed successful setupAdmin and supplied deployed dashboard
-screenshot showing all four Projects. Admin URL/identity remain outside repo.
-Owner confirmed unchanged-content save message and both rebuild requests.
-Authenticated export remains identical baseline (4 Projects). Anonymous admin
-request redirects to Google login, editor not exposed. Latest a656374 Vercel
-commit statuses failed for both projects; older production deployment remains
-successful. Latest production log confirms 404 on script.googleusercontent.com after one
-redirect, endpoint fingerprint matches local. Repair requests a fresh export
-nonce/no-cache and retries that redirected 404 once (two attempts total);
-initial endpoint 404 still fails immediately. 14 CMS tests, real GAS export
-(baseline identical) and 7 gates + SEO PASS (responsive 468/468).
-Redirect repair pushed as `96a9756`; both Vercel commit statuses now success.
-Failure was observed at the Google redirect; underlying cache/Google cause is
-not proven. NEXT: Projects growth pass, then media/Team; a different signed-in
-non-owner account denial check remains pending (anonymous login gate verified).
-Plans: `docs/cms-b2-plan.md`; install guide: `docs/cms-admin-setup.md`.
-Panduan: `docs/cms-gas-setup.md`.
-User mengizinkan commit/push kelanjutan CMS; B0 sudah push `1b38088` ke dua repo.
-User meminta bisa menambah anggota/role/HoDS dengan template desain konsisten;
-guard jumlah B0/B1 sementara, dukungan growth wajib dikerjakan per collection
-B2/B3 tanpa melonggarkan assertion geometri baseline. `docs/cms-b1-plan.md`.
+## Checkpoint aktif — 6 Oct 2026, handoff sesi CMS
 
-**CMS B0 SELESAI (6 Oct 2026):** enam snapshot loader, Zod, prebuild fallback.
-7 gate + SEO tiap collection PASS; 19 HTML identik baseline. NEXT: B1 GAS.
-Rencana dan gate: `docs/cms-b0-plan.md`. Admin pertama sudah dipilih, folder
-Drive dibuat saat setup GAS, dua Deploy Hook masih perlu dibuat. Secret tetap
-di Script Properties/Vercel env; tidak disimpan di repo.
+**NEXT: B2 Projects Growth (tambah/hapus), belum dimulai.** User meminta
+implementasi berikutnya dikerjakan AI baru; sesi handoff ini hanya memperbarui
+dokumentasi. Mulai dari [cms-kickoff.md](docs/cms-kickoff.md),
+[cms-projects-growth-plan.md](docs/cms-projects-growth-plan.md) dan
+[cms-sop.md](docs/cms-sop.md).
+
+| Bagian                   | Status nyata                                                                                                                        |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| B0                       | Selesai: enam snapshot loader + Zod; 19 HTML identik baseline; 7 gate + SEO setiap collection.                                      |
+| B1                       | GAS export terpasang, Sheet + folder Drive tersedia, env kedua Vercel terkonfigurasi.                                               |
+| B2 Projects foundation   | Admin privat terpasang; empat project dimuat; edit existing + revision guard + dua hook + retry publication tersedia.               |
+| Uji owner                | Save tanpa perubahan isi berhasil; kedua rebuild diminta; export tetap identik baseline.                                            |
+| Perbaikan fetch          | Kode terakhir deploy `96a9756`; status Vercel testing dan production SUCCESS. 14 CMS tests + 7 gate + SEO PASS; responsive 468/468. |
+| Growth/upload/Team/B3/B4 | Belum selesai. Jangan menyebut seluruh CMS selesai.                                                                                 |
+
+404 sebelumnya terjadi sesudah redirect ke `script.googleusercontent.com`.
+Penyebab Google/cache belum terbukti. Fetch memakai IPv4-first, nonce/no-cache,
+timeout 60 detik per attempt dan maksimal dua attempt bersama untuk timeout
+atau redirected 404; tidak fallback stale saat remote gagal.
+
+Bukti production remote-mode lengkap tersedia pada log `fb99c39`. Literal log
+remote-mode testing terbaru belum disalin owner; **ini kekurangan bukti rinci,
+bukan setup testing belum selesai**. Anonymous admin diarahkan ke login Google.
+Uji akun Google lain yang sudah login dan uji perubahan isi nyata masih perlu.
+Save berhasil berarti data tersimpan dan build diminta, bukan situs sudah live.
+
+Satu owner/admin aktif; identitas/URL admin, token, hook, Sheet/folder ID tetap
+di Script Properties dan env privat. Jangan buat ulang Sheet/folder/deployment
+awal atau mengulang pertanyaan onboarding. Admin menggunakan project GAS
+terpisah, execute as Me + Only myself; API export publik read-only bertoken.
+Menambah admin kedua memerlukan pass auth tersendiri.
+
+User telah mengizinkan kelanjutan CMS dan commit/push. Periksa konteks izin
+sebelum push; `origin` memiliki dua push URL, sehingga sekali push men-deploy
+kedua situs. Bila working tree berisi perubahan asing, tanyakan sebelum mengubahnya.
+Growth memakai template konsisten, satu collection/pass; jangan membuka field
+geometri atau melonggarkan assertion geometri baseline. Setelah Growth hijau:
+Projects media upload/cache → Team → B3 per collection → B4 hardening.
+
+**Urutan baca:** `docs/kickoff-prompt.md` → `AGENTS.md` →
+`docs/pixel-precision-sop.md` → `docs/ai-handoff.md` → `docs/cms-plan.md` →
+`docs/cms-sop.md` → `docs/cms-b2-plan.md` → `docs/cms-projects-growth-plan.md`.
+
+**Prioritas dokumen:** checkpoint aktif ini dan plan Growth mengalahkan NEXT,
+PENDING atau instruksi setup di catatan historis di bawah. Riwayat disimpan
+sebagai bukti keputusan, bukan work order aktif. Full-screen sudah selesai;
+Contact tetap hero Figma-exact tinggi 954, bukan video/full-screen.
 
 CMS B0 collections hijau: projects, team, roles, partners, domains, hods.
 Project: **Data Sorcerers** — a static Astro landing site, a Recruitment page
@@ -51,6 +62,16 @@ Human-facing docs: `HANDOVER.md` (full context) and `docs/assets.md`
 Read those for "why"; this file is the operating manual. A copy-paste starter for
 new agents lives in `docs/kickoff-prompt.md`; for building a new page/section use
 `docs/page-build-prompt.md`.
+
+## CMS commands dan file operasional
+
+- `npm run test:cms` — fetch/export/admin contract tests (baseline terakhir 14).
+- `npm run verify:cms-admin` — browser admin mock RPC; bukan Google auth nyata.
+- `npm run cms:gas` — generate source export ke ignored `artifacts/cms-gas/`.
+- `npm run cms:admin` — generate source admin ke ignored `artifacts/cms-admin/`.
+- `docs/cms-sop.md` — auth, secrets, fetch, QA, update GAS existing.
+- `docs/cms-projects-growth-plan.md` — Master Work Plan NEXT add/delete Projects.
+- `docs/cms-kickoff.md` — prompt lengkap sesi baru; jangan ulang B0/onboarding.
 
 ## Commands
 
@@ -93,8 +114,7 @@ or the dev server makes `waitUntil: networkidle` hang (see Verification workflow
 - **`origin` has TWO push URLs** — a plain `git push origin main` deploys to
   **both** testing and production. Do not add another remote or push URL; just
   push `origin main` as usual.
-- Verify both are in sync: `git fetch production -q && git rev-parse --short main
-origin/main production/main` (all three should match).
+- Verify both are in sync: `git fetch production -q && git for-each-ref --format='%(refname:short) %(objectname:short)' refs/heads/main refs/remotes/origin/main refs/remotes/production/main` (all three should match).
 - Git creds live in the `store` helper (`~/.git-credentials`) — no token needed in
   commands. Never print the token.
 - Production was behind testing before this was set up; keep it in sync on every
@@ -410,7 +430,7 @@ exclude`), not `border` (the HoF Project shot sat at 929 vs the 933 frame and
   fall back to sans-serif off the dev machine. A licensed webfont must be added by
   the humans (see `HANDOVER.md` §11). Do not try to work around the license.
 
-## Current checkpoint
+## Riwayat UI (NEXT historis, lihat checkpoint aktif di atas)
 
 - **★ STANDAR FULL-SCREEN: hero gambar + section 100svh.**
   **Homepage SELESAI** (`b228f3c`): hero pakai `assets/hero gambar/Gambar Hero

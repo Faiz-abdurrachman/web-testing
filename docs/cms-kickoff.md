@@ -1,58 +1,69 @@
-# CMS kickoff — prompt siap-tempel untuk AI baru
+# CMS kickoff — prompt siap tempel untuk AI baru
 
-Copy-paste seluruh blok di bawah ini ke AI baru (sesi baru) untuk memulai
-pekerjaan **CMS / Admin Dashboard**. Prompt ini melengkapi
-`docs/kickoff-prompt.md` (onboarding umum) dengan tugas CMS yang spesifik.
-
-Rencana lengkap: `docs/cms-plan.md`. Status: **RENCANA (belum dieksekusi)**.
+Checkpoint 6 Oct 2026: B0/B1 selesai, B2 editor Projects existing sudah terpasang.
+NEXT hanya Projects Growth. Copy blok berikut ke sesi baru.
 
 ```text
-Sesi baru. Kamu lanjut kerja di repo "Data Sorcerers" — Astro static + Vercel,
-target pixel-accurate ke Figma. Ini sesi baru, jadi orientasi dulu.
+Lanjut di repo /home/faiz/ds/ds5opencode — Data Sorcerers, Astro static + Vercel.
+Orientasi dulu; baca URUT tanpa skip:
+1. docs/kickoff-prompt.md
+2. AGENTS.md
+3. docs/pixel-precision-sop.md
+4. docs/ai-handoff.md
+5. docs/cms-plan.md
+6. docs/cms-sop.md
+7. docs/cms-b2-plan.md
+8. docs/cms-projects-growth-plan.md
+Lalu HANDOVER.md, docs/assets.md dan source terkait.
 
-WAJIB baca dulu (urut, jangan skip):
-1. docs/kickoff-prompt.md        → onboarding umum (aturan presisi, 7 gate, status, NEXT)
-2. AGENTS.md                     → operating manual (commands, konvensi, gotchas)
-3. docs/pixel-precision-sop.md   → SOP presisi piksel (kalau nanti sentuh UI)
-4. docs/ai-handoff.md            → state terkini
-5. docs/cms-plan.md              → ★ RENCANA CMS / ADMIN DASHBOARD (tugas utama)
+git status dulu. Bila ada perubahan asing/belum commit, tanyakan user sebelum
+mengubahnya. Ringkas status nyata dan NEXT, kemudian lanjut pekerjaan yang sudah
+diizinkan. Jangan ulang minta pilihan backend, akun, folder, hook atau izin B0.
+User telah memilih GAS + Sheets + Drive, build-time fetch + dua Vercel hook,
+HtmlService admin, satu owner/admin dahulu, save = live tanpa draft/preview.
 
-KONTEKS TUGAS:
-User mau bikin CMS/admin dashboard supaya editor NON-TEKNIS bisa update project,
-team/orang, role, prestasi, HoDS, dan partners TANPA menyentuh kode.
-KEPUTUSAN USER (6 Oct 2026) — sudah final:
-- Backend: Google Apps Script (GAS) + Google Sheets (DB) + Google Drive (gambar)
-- Update ke situs: build-time fetch (scripts/fetch-cms.mjs) + Vercel rebuild hook
-- Admin: halaman custom yang di-host GAS (HtmlService), login Google, 1-2 admin
-- Save = live (rebuild otomatis ~1-2 menit), TANPA draft/preview
-Rencana lengkap: docs/cms-plan.md (arsitektur, skema Sheet, fase B0-B4, jebakan,
-kebutuhan user §6).
+B0: enam snapshot loader + Zod selesai, 19 HTML baseline identik.
+B1: export GAS read-only bertoken terpasang, Sheet/folder tersedia, Vercel env
+kedua project tersedia. B2: admin GAS TERPISAH privat sudah terpasang dengan
+execute as Me + Only myself; empat Projects dimuat; edit existing, revision
+check, dua hook dan retry publication tersedia. User melakukan save tanpa ubah
+isi. Anonymous access diarahkan login. Akun non-owner yang sudah login belum diuji.
 
-TUGAS PERTAMA:
-1. `git status` dulu (harusnya bersih). Kalau ada yang belum di-commit, tanya user.
-2. Ringkas ke user: (a) status project, (b) NEXT-nya, (c) kebutuhan user di
-   docs/cms-plan.md §6 (akun Google, folder Drive, 2 URL Vercel Deploy Hook,
-   setuju mulai Fase B0). Tanyakan dulu — JANGAN sentuh kode sebelum dijawab.
-3. Setelah dijawab, kerjakan Fase B0: snapshot `src/data/cms-snapshot.json` +
-   thin loader (src/data/*.ts baca snapshot; import komponen tetap sama) + skema
-   Zod + scripts/fetch-cms.mjs mode fallback. TAMPILAN & GEOMETRI TIDAK BOLEH
-   BERUBAH. Kerjakan SATU collection per pass, 7 gate + seo tiap pass.
-4. Setelah Fase B0 hijau, Fase B1 pasang GAS (Sheet + doGet export + token) lalu
-   Fase B2 admin page (HtmlService) + upload Drive + Deploy Hook.
+Build hooks sempat gagal 404 setelah redirect Google. Fix fetch 96a9756 sudah
+push; status Vercel TESTING dan PRODUCTION SUCCESS. 14 CMS tests + 7 gate + SEO
+PASS, responsive 468/468. Penyebab Google/cache belum terbukti; jangan klaim pasti.
+Testing remote-mode literal log belum disalin, jangan menganggap env/setup gagal.
+Detail fetch: IPv4-first, nonce/no-cache, 60s per attempt, maksimal dua attempt
+bersama untuk timeout atau 404 pada redirect googleusercontent. Tidak fallback
+stale bila remote gagal. Secret ada di Properties/env privat; jangan dicetak.
 
-ATURAN TETAP (jangan dilanggar):
-- spacing/padding/margin = kelipatan 8 (gate `npm run audit:spacing`);
-- heading = Bluu Next Bold 700 (`--font-display`), body Manrope;
-- geometri ±1px, render `prefers-reduced-motion: reduce` tetap pixel-exact;
-- satu collection/langkah per pass + 7 gate + `seo:audit`;
-- jangan rusak presisi Home (`1430:2040`) & Recruitment (`1436:3505`);
-- commit per fitur, KONFIRMASI user sebelum push; `git push origin main`
-  = deploy ke testing + production sekaligus;
-- geometri kartu (`domains.ts` `rows`, `roles.ts` `centered`/`tight`, `team.chip`/
-  `fade`) itu DESAIN, jangan diekspos ke CMS; `verify.mjs` mengunci sebagian
-  jumlah konten (jangan longgarkan assertion geometri);
-- secret (token/Deploy Hook/folder id/email admin) di GAS Script Properties +
-  Vercel env, JANGAN di repo;
-- Drive bukan CDN: artwork pixel-exact tetap dibake manual; konten foto boleh
-  upload.
+TUGAS: kerjakan B2 PROJECTS GROWTH (tambah/hapus), SATU collection/pass.
+Ikuti Master Work Plan docs/cms-projects-growth-plan.md. Belum ada kode Growth.
+Pastikan stable ID, revision guard, validasi candidate sebelum batch Sheet write,
+minimum/empty policy yang jelas dan render 1/2/5+ project aman. Ubah hanya guard
+jumlah Projects setelah renderer diuji. Pertahankan fixture baseline dan semua
+assertion geometri; tambahkan fixture jumlah baru terpisah. Image masih preset
+existing, upload/cache gambar adalah pass setelah Growth.
+
+Template kartu konsisten. Jangan ekspos rows/coordinates domains, centered/tight
+roles, team.chip/fade, CSS/font/gradient atau artwork geometry ke CMS. Untuk HoDS
+baru nanti gunakan desain/artwork preset terdaftar; bukan merakit artwork via form.
+Spacing 8pt, heading Bluu Next Bold 700, body Manrope, geometri ±1px, reduce exact.
+Jangan rusak Home 1430:2040 dan Recruitment 1436:3505. Contact hero tetap 954.
+Admin custom tidak punya Figma node; jangan mengarang referensi.
+
+Setiap pass: tests CMS + browser admin + 7 gate site + seo:audit. Gunakan static
+preview untuk verify; jangan bergantung runner /tmp sesi lama. Ikuti cms-sop.md.
+Setelah hijau, generate npm run cms:admin; pandu owner update kode/HTML DAN versi
+deployment di project admin EXISTING. Jangan buat ulang Sheet/folder/reseed.
+Login browser tool tidak sama dengan akun Google user. Pandu langkah manual.
+Save berarti tersimpan/rebuild diminta; pastikan kedua rebuild selesai sebelum
+mengklaim live. Uji owner add/delete serta akun Google non-owner sungguhan.
+
+Update AGENTS.md, ai-handoff, assets, CMS plan/Growth plan/setup guide sesuai hasil.
+Commit per fitur. User sudah mengizinkan commit/push kelanjutan CMS; baca izin
+sesi sebelum push; git push origin main mengirim ke testing + production.
+Jangan taruh token, email admin, folder/Sheet ID, admin URL atau hook di repo.
+Setelah Growth: Projects media upload/cache, lalu Team; B3 satu collection/pass;
+B4 hardening. Jangan menyebut seluruh CMS selesai hanya karena Projects selesai.
 ```

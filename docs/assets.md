@@ -1,5 +1,16 @@
 # Asset provenance
 
+## Checkpoint CMS / provenance — 6 Oct 2026
+
+B0/B1 dan B2 Projects editing existing sudah terpasang. Perbaikan fetch
+`96a9756` tidak mengubah artwork, font, public markup atau geometri; 14 CMS tests
+
+- 7 gate + SEO PASS. Handoff ini hanya dokumentasi, bukan perubahan aset/UI.
+  NEXT [Projects Growth](cms-projects-growth-plan.md); template/artwork existing
+  harus konsisten. Upload/cache Drive belum tersedia dan menjadi pass berikutnya.
+  Riwayat tes/setup pending di bawah adalah historis; state aktif di
+  [ai-handoff.md](ai-handoff.md), protokol [cms-sop.md](cms-sop.md).
+
 ## Homepage — full-screen sections + image hero (4 October 2026, `b228f3c`)
 
 - **Standar baru**: tiap hero = **gambar background** + `100svh`; tiap section

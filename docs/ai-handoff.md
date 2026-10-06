@@ -1,43 +1,54 @@
 # AI handoff — current context
 
-**CMS B2 Projects foundation CODE VERIFIED (6 Oct 2026); owner save confirmed; repaired builds both successful.**
-Private project source `cms/gas/admin/` + `npm run cms:admin` generates Code.gs,
-Index.html and manifest under ignored `artifacts/cms-admin/`. Owner-only server
-checks on each RPC; edit existing Projects, stale revision guard, single-batch
-Sheet write, two rebuild hooks and retry publication. Growth/upload/Team still
-follow as separate passes; current counts/schema/site remain unchanged.
-Both hooks locally validated and real POST accepted HTTP 201 (different projects).
-13 CMS tests, admin browser 4 widths, admin 8pt spacing and 7 site gates +
-SEO PASS (responsive 468/468). Public source/data/assets unchanged.
-B1 production remote-mode deploy at `fb99c39` verified; both Vercel statuses
-success, testing remote-mode log confirmation still pending.
-Owner confirmed successful setupAdmin and supplied deployed dashboard
-screenshot showing all four Projects. Admin URL/identity remain outside repo.
-Owner confirmed unchanged-content save message and both rebuild requests.
-Authenticated export remains identical baseline (4 Projects). Anonymous admin
-request redirects to Google login, editor not exposed. Latest a656374 Vercel
-commit statuses failed for both projects; older production deployment remains
-successful. Latest production log confirms 404 on script.googleusercontent.com after one
-redirect, endpoint fingerprint matches local. Repair requests a fresh export
-nonce/no-cache and retries that redirected 404 once (two attempts total);
-initial endpoint 404 still fails immediately. 14 CMS tests, real GAS export
-(baseline identical) and 7 gates + SEO PASS (responsive 468/468).
-Redirect repair pushed as `96a9756`; both Vercel commit statuses now success.
-Failure was observed at the Google redirect; underlying cache/Google cause is
-not proven. NEXT: Projects growth pass, then media/Team; a different signed-in
-non-owner account denial check remains pending (anonymous login gate verified).
-Plans: `docs/cms-b2-plan.md`; install guide: `docs/cms-admin-setup.md`.
-Panduan: `docs/cms-gas-setup.md`.
-User mengizinkan commit/push kelanjutan CMS; B0 sudah push `1b38088` ke dua repo.
-User meminta bisa menambah anggota/role/HoDS dengan template desain konsisten;
-guard jumlah B0/B1 sementara, dukungan growth wajib dikerjakan per collection
-B2/B3 tanpa melonggarkan assertion geometri baseline. `docs/cms-b1-plan.md`.
+## Checkpoint aktif — 6 Oct 2026, handoff sesi CMS
 
-**CMS B0 SELESAI (6 Oct 2026):** enam snapshot loader, Zod, prebuild fallback.
-7 gate + SEO tiap collection PASS; 19 HTML identik baseline. NEXT: B1 GAS.
-Rencana dan gate: `docs/cms-b0-plan.md`. Admin pertama sudah dipilih, folder
-Drive dibuat saat setup GAS, dua Deploy Hook masih perlu dibuat. Secret tetap
-di Script Properties/Vercel env; tidak disimpan di repo.
+**NEXT: B2 Projects Growth (tambah/hapus), belum dimulai.** User meminta
+implementasi berikutnya dikerjakan AI baru; sesi handoff ini hanya memperbarui
+dokumentasi. Mulai dari [cms-kickoff.md](cms-kickoff.md),
+[cms-projects-growth-plan.md](cms-projects-growth-plan.md) dan
+[cms-sop.md](cms-sop.md).
+
+| Bagian                   | Status nyata                                                                                                                        |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| B0                       | Selesai: enam snapshot loader + Zod; 19 HTML identik baseline; 7 gate + SEO setiap collection.                                      |
+| B1                       | GAS export terpasang, Sheet + folder Drive tersedia, env kedua Vercel terkonfigurasi.                                               |
+| B2 Projects foundation   | Admin privat terpasang; empat project dimuat; edit existing + revision guard + dua hook + retry publication tersedia.               |
+| Uji owner                | Save tanpa perubahan isi berhasil; kedua rebuild diminta; export tetap identik baseline.                                            |
+| Perbaikan fetch          | Kode terakhir deploy `96a9756`; status Vercel testing dan production SUCCESS. 14 CMS tests + 7 gate + SEO PASS; responsive 468/468. |
+| Growth/upload/Team/B3/B4 | Belum selesai. Jangan menyebut seluruh CMS selesai.                                                                                 |
+
+404 sebelumnya terjadi sesudah redirect ke `script.googleusercontent.com`.
+Penyebab Google/cache belum terbukti. Fetch memakai IPv4-first, nonce/no-cache,
+timeout 60 detik per attempt dan maksimal dua attempt bersama untuk timeout
+atau redirected 404; tidak fallback stale saat remote gagal.
+
+Bukti production remote-mode lengkap tersedia pada log `fb99c39`. Literal log
+remote-mode testing terbaru belum disalin owner; **ini kekurangan bukti rinci,
+bukan setup testing belum selesai**. Anonymous admin diarahkan ke login Google.
+Uji akun Google lain yang sudah login dan uji perubahan isi nyata masih perlu.
+Save berhasil berarti data tersimpan dan build diminta, bukan situs sudah live.
+
+Satu owner/admin aktif; identitas/URL admin, token, hook, Sheet/folder ID tetap
+di Script Properties dan env privat. Jangan buat ulang Sheet/folder/deployment
+awal atau mengulang pertanyaan onboarding. Admin menggunakan project GAS
+terpisah, execute as Me + Only myself; API export publik read-only bertoken.
+Menambah admin kedua memerlukan pass auth tersendiri.
+
+User telah mengizinkan kelanjutan CMS dan commit/push. Periksa konteks izin
+sebelum push; `origin` memiliki dua push URL, sehingga sekali push men-deploy
+kedua situs. Bila working tree berisi perubahan asing, tanyakan sebelum mengubahnya.
+Growth memakai template konsisten, satu collection/pass; jangan membuka field
+geometri atau melonggarkan assertion geometri baseline. Setelah Growth hijau:
+Projects media upload/cache → Team → B3 per collection → B4 hardening.
+
+**Urutan baca:** `docs/kickoff-prompt.md` → `AGENTS.md` →
+`docs/pixel-precision-sop.md` → `docs/ai-handoff.md` → `docs/cms-plan.md` →
+`docs/cms-sop.md` → `docs/cms-b2-plan.md` → `docs/cms-projects-growth-plan.md`.
+
+**Prioritas dokumen:** checkpoint aktif ini dan plan Growth mengalahkan NEXT,
+PENDING atau instruksi setup di catatan historis di bawah. Riwayat disimpan
+sebagai bukti keputusan, bukan work order aktif. Full-screen sudah selesai;
+Contact tetap hero Figma-exact tinggi 954, bukan video/full-screen.
 
 CMS B0 collections hijau: projects, team, roles, partners, domains, hods.
 Tujuan: supaya AI agent berikutnya langsung paham kondisi repo **saat ini** tanpa
@@ -46,21 +57,12 @@ harus menebak dari git log. Ini dokumen hidup — update kalau ada perubahan bes
 Baca dulu, urut: `AGENTS.md` (aturan operasional) → `HANDOVER.md` (konteks
 panjang) → `docs/assets.md` (provenance per section) → file ini.
 
-### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
+### Tugas berikutnya untuk AI baru
 
-**★ CMS B0 SELESAI — backend Google Apps Script berikutnya (6 Oct 2026).**
-User memutuskan CMS pakai **Google Apps Script + Google Sheets + Drive**
-(bukan Keystatic), **build-time fetch + rebuild hook**, admin page custom
-HtmlService, 1–2 admin, **save = live** (rebuild Vercel otomatis). Master Plan
-lengkap: **`docs/cms-plan.md`** (arsitektur, skema Sheet, integrasi Astro
-"snapshot + thin loader" yang nol ubah tampilan, fase B0–B4, jebakan).
-**B0 selesai:** projects, team, roles, partners, domains, hods; 7 gate + SEO
-setiap pass. Ekspor data dan 19 HTML identik dengan baseline. **NEXT = B1**:
-GAS read/export dan fetch remote. Admin pertama sudah dipilih dan folder media
-akan dibuat otomatis; Deploy Hook testing/production masih perlu dibuat.
-Sesi repo belum memiliki akses Google/Vercel terautentikasi. Jangan simpan email
-admin/token/folder ID/hook di repo. Foto upload disiapkan bersama renderer B2;
-logo per partner/Featured/milestone/settings diekstrak di B3.
+B2 Projects Growth: baca `docs/cms-projects-growth-plan.md` dan
+`docs/cms-sop.md`. Foundation sudah terpasang; implementasi Growth belum dimulai.
+
+## Riwayat UI dan checkpoint terdahulu (bukan NEXT aktif)
 
 **★ SELESAI (6 Oct 2026) — Contact "Submit" button hover.** Tombol submit
 `/contact` tadinya diam; kini ikut konvensi pill violet (`.community`/`.apply`):

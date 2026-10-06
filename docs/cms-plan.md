@@ -1,8 +1,11 @@
 # CMS / Admin Dashboard — Rencana (backend Google Apps Script)
 
-Status: **B0 SELESAI · B1 PRODUCTION LIVE, TESTING LOG PENDING** · diputuskan 6 Oct 2026 ·
-Patuhi `docs/pixel-precision-sop.md` + `AGENTS.md`. **Satu langkah per pass + 7
-gate.** Jangan rusak benchmark (geometri/MAE) atau assertion `verify.mjs`.
+Status 6 Oct 2026: **B0/B1 selesai; B2 Projects editing terpasang;
+NEXT Projects Growth, belum dimulai.** Kedua Vercel SUCCESS pada `96a9756`.
+Checkpoint lengkap: [ai-handoff.md](ai-handoff.md). SOP operasional:
+[cms-sop.md](cms-sop.md). Work order berikutnya:
+[cms-projects-growth-plan.md](cms-projects-growth-plan.md).
+Satu collection/langkah per pass + 7 gate + SEO; geometri baseline tetap.
 
 ## 0. Keputusan yang sudah disetujui
 
@@ -23,34 +26,18 @@ serta fixture baseline; uji jumlah baru dalam fixture tambahan.
 
 ## 1. Arsitektur
 
-```
-┌─────────────────────────┐        ┌──────────────────────────────┐
-│  Google Sheets (DB)     │        │  Admin (browser)             │
-│  tabs: projects, team,  │◀──────▶│  {GAS /exec} — Google login  │
-│  roles, hods, domains,  │  GAS   │  form CRUD + upload gambar    │
-│  partners, milestones,  │  API   └──────────────────────────────┘
-│  settings               │                     │ upload
-└─────────────────────────┘                     ▼
-            ▲                          ┌──────────────────┐
-            │ doGet/list               │ Google Drive     │
-            │ doPost (admin)           │ (folder gambar)  │
-            ▼                          └──────────────────┘
-┌─────────────────────────────────────────────────────────────┐
-│  Astro build (Vercel)                                        │
-│  1) scripts/fetch-cms.mjs  → GET GAS export (token)          │
-│  2) tulis src/data/cms-snapshot.json (validasi Zod)          │
-│  3) npm run build (pakai snapshot)                           │
-└─────────────────────────────────────────────────────────────┘
-            ▲ trigger rebuild
-            │ Vercel Deploy Hook (testing + production)
-┌─────────────────────────────────────────────────────────────┐
-│  GAS: setiap save admin → POST hook → Vercel build ulang     │
-└─────────────────────────────────────────────────────────────┘
+```text
+Editor browser → GAS Admin privat /exec (HtmlService, Google login)
+              → google.script.run RPC (auth owner pada setiap request)
+              → Sheets (write tervalidasi) → POST dua Vercel Deploy Hooks
+Vercel prebuild → GAS Export publik /exec (read-only, token)
+               → Sheets (enam collections) → Zod → snapshot atomik → Astro HTML
+Drive privat   → folder media tersedia; upload/cache belum diimplementasikan
 ```
 
-- **GAS Web App** (`doGet`/`doPost`): satu endpoint JSON. `action=export`
-  (read semua collection, butuh token) untuk build; `action=list` (per
-  collection); `action=save`/`delete` (butuh admin).
+- **Dua project GAS:** Export `doGet` untuk export/list bertoken, `doPost`
+  menolak mutation. Admin `doGet` menyajikan editor; write lewat RPC terautentikasi.
+  Tidak ada endpoint JSON anonymous untuk save/delete.
 - **Project/deployment terpisah**: endpoint export untuk Vercel menjalankan GAS sebagai
   owner dan menerima request tanpa login Google, tetapi setiap export/list wajib
   memakai token. Endpoint ini hanya membaca data; token export tidak memberi
@@ -62,8 +49,8 @@ serta fixture baseline; uji jumlah baru dalam fixture tambahan.
   mendukung dua akun. Acuan:
   [GAS deployment](https://developers.google.com/apps-script/guides/web) dan
   [Session identity](https://developers.google.com/apps-script/reference/base/session).
-- **Gambar**: admin upload → GAS simpan ke folder Drive → balas URL publik;
-  sel menyimpan URL. (Artwork yang dibake `assets:*` **tetap manual**.)
+- **Gambar (pass berikutnya):** upload ke Drive privat, lalu validasi dan cache/bake
+  bytes saat build. Jangan bergantung hotlink Drive. Artwork `assets:*` tetap manual.
 - **Save = live**: GAS memanggil 2 **Vercel Deploy Hook** (testing +
   production). Site rebuild ~1–2 menit, lalu konten live. Bukan runtime fetch,
   jadi HTML tetap berisi konten (SEO + pixel aman).
@@ -120,16 +107,17 @@ Tujuan: **komponen/halaman tidak berubah API-nya** (import tetap
   `fetch-cms.mjs` (fallback lokal) + skema Zod via `astro/zod`. **19 HTML dan
   semua ekspor data identik baseline.** Enam pass, 7 gate + SEO tiap pass.
   Rencana/hasil: `docs/cms-b0-plan.md`.
-- **Fase B1 — GAS read + export.** Installer `cms/gas/export.js` membuat Sheet
+- **Fase B1 — SELESAI, GAS read + export.** Installer `cms/gas/export.js` membuat Sheet
   dengan 8 collection tabs, folder Drive privat, seed snapshot, token dan
   konfigurasi Script Properties; `doGet` export/list read-only. Generator
   `npm run cms:gas` menulis `artifacts/cms-gas/Code.gs`. Remote build fetch
   memvalidasi payload lalu mengganti snapshot atomik. Pemasangan Google dan
   env Vercel membutuhkan sesi owner; verifikasi real export + build kedua
-  project sebelum menyatakan B1 live. Rencana: `docs/cms-b1-plan.md`.
-- **Fase B2 — Admin page (HtmlService).** Login Google (1–2 akun), form CRUD
+  project; langkah pemasangan tersebut sudah selesai. Rencana/riwayat: `docs/cms-b1-plan.md`.
+- **Fase B2 — SEBAGIAN SELESAI, Admin page (HtmlService).** Login Google (1–2 akun), form CRUD
   untuk `projects` & `team` dulu, upload gambar ke Drive, tombol save →
-  panggil Deploy Hook.
+  panggil Deploy Hook. Editor existing Projects sudah terpasang; Growth, media
+  dan Team masih work order terpisah. NEXT: `cms-projects-growth-plan.md`.
 - **Fase B3 — Collection lain.** `roles`, `partners`, lalu `hods`/`domains`
   (field aman saja), `milestones`, `settings`.
 - **Fase B4 — Hardening.** Validasi input, error handling, backup Sheet,
@@ -156,31 +144,28 @@ Tujuan: **komponen/halaman tidak berubah API-nya** (import tetap
 9. **Build deterministik**: `verify.mjs`/audit jalan lokal tanpa env → wajib
    fallback snapshot (bukan fetch).
 
-## 6. Yang dibutuhkan dari user sebelum eksekusi
+## 6. Kebutuhan user — sudah dipenuhi, jangan ulang onboarding
 
-1. **Akun Google** untuk backend (yang jadi owner Sheet/GAS) + email 1–2 admin.
-2. Konfirmasi **folder Drive** untuk media (atau biarkan dibuat otomatis).
-3. URL **Deploy Hook** Vercel untuk 2 project (testing & production) — dibuat di
-   dashboard Vercel.
-4. Setuju **Fase B0 dulu** (refactor data → snapshot + loader, tampilan nol
-   perubahan) sebelum menyentuh GAS.
+1. Satu akun owner/admin dipilih; identitas hanya di Properties/env privat.
+2. Folder Drive privat dan Sheet dibuat otomatis saat setup GAS, sudah tersedia.
+3. Dua Deploy Hook berbeda project sudah dibuat, dikonfigurasi di admin dan diuji
+   HTTP 201. Save owner sudah meminta rebuild testing dan production.
+4. B0 disetujui dan selesai; B1 terpasang; admin Projects existing terpasang.
 
-## 7. Langkah pertama untuk AI baru
+Browser tools tidak memiliki sesi login user. Untuk update GAS berikutnya,
+pandu user mengganti source dan membuat versi baru pada deployment existing.
+Jangan meminta password/token melalui dokumen, membuat Sheet/folder ulang atau
+menjalankan seed ulang. Referensi: `cms-admin-setup.md`, `cms-gas-setup.md`.
 
-1. Baca `AGENTS.md`, `docs/pixel-precision-sop.md`, `docs/ai-handoff.md`, file
-   ini.
-2. `git status` harus bersih; commit/push dulu kalau ada sisa.
-3. Tunggu jawaban §6.
-4. Kerjakan **Fase B0** (snapshot + thin loader + Zod + `fetch-cms.mjs` mode
-   fallback) — **satu pass + 7 gate, tampilan tidak berubah**. Update
-   `docs/assets.md`/`docs/ai-handoff.md`/`AGENTS.md` di commit yang sama.
+## 7. Langkah pertama AI baru
 
-## Keputusan sesi B0
-
-User menyetujui B0, memilih satu owner/admin Google, dan meminta folder media
-dibuat otomatis. Identitas akun tetap di luar repo. Deploy Hook berbeda dari URL
-situs publik; kedua hook perlu dibuat saat B1/B2. B1 menambahkan fetch remote; lokal tanpa env tetap memakai snapshot.
-Kode read API dan admin akan berada di project GAS terpisah. Rencana per-pass: `docs/cms-b0-plan.md`.
+1. Ikuti urutan baca di `cms-kickoff.md`; periksa `git status`.
+2. Bila ada perubahan asing, tanyakan sebelum mengubahnya; jangan auto commit/push.
+3. Ringkas checkpoint dan NEXT. Setup awal selesai, tidak perlu menunggu §6 lagi.
+4. Kerjakan **Projects Growth** sesuai `cms-projects-growth-plan.md`, satu
+   collection/pass. Preserve baseline, tambahkan fixture growth, 7 gate + SEO.
+5. Commit per fitur; pandu update GAS existing setelah hasil konkret hijau.
+   Ikuti konteks izin push; sekali push origin main deploy kedua situs.
 
 ## Kontrak payload B0
 
@@ -204,15 +189,11 @@ terdaftar untuk record baru; penambahan HoDS dengan artwork baru membutuhkan
 aset baked. CSS, koordinat, gradient, font dan spacing tidak menjadi field CMS.
 Rencana dan kriteria fixture tambahan: `docs/cms-b1-plan.md`.
 
-B1 code dan tes selesai; live setup masih pending. Panduan login, installer,
-Script Properties dan env Vercel: `docs/cms-gas-setup.md`.
+## Verifikasi saat handoff
 
-Production Vercel `fb99c39` remote-mode build and deployment are confirmed.
-Testing deployment also success; remote-mode log confirmation pending. Next
-private dashboard work order: `docs/cms-b2-plan.md`.
-
-B2 Projects foundation source is verified (`cms/gas/admin/`, `npm run cms:admin`):
-private owner auth, existing Projects editing, revision check and two rebuild
-hooks with retry. Site geometry/source remain unchanged. Owner installation
-pending; additions/uploads/Team follow separate passes. Work order:
-`docs/cms-b2-plan.md`; installation: `docs/cms-admin-setup.md`.
+Fix fetch `96a9756` memiliki status Vercel SUCCESS untuk testing dan production.
+14 CMS tests, admin browser, 7 gate + SEO PASS (responsive 468/468).
+Owner load empat Projects dan save tanpa perubahan isi dikonfirmasi. Anonymous
+admin request diarahkan Google login. Masih perlu uji akun non-owner yang sudah
+login dan perubahan isi nyata; testing literal remote-mode log belum disalin.
+Penyebab Google/cache 404 lama tidak terbukti. Detail bukti: `ai-handoff.md`.

@@ -1,5 +1,55 @@
 # Handover — Data Sorcerers (community-web)
 
+## Checkpoint aktif — 6 Oct 2026, handoff sesi CMS
+
+**NEXT: B2 Projects Growth (tambah/hapus), belum dimulai.** User meminta
+implementasi berikutnya dikerjakan AI baru; sesi handoff ini hanya memperbarui
+dokumentasi. Mulai dari [cms-kickoff.md](docs/cms-kickoff.md),
+[cms-projects-growth-plan.md](docs/cms-projects-growth-plan.md) dan
+[cms-sop.md](docs/cms-sop.md).
+
+| Bagian                   | Status nyata                                                                                                                        |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| B0                       | Selesai: enam snapshot loader + Zod; 19 HTML identik baseline; 7 gate + SEO setiap collection.                                      |
+| B1                       | GAS export terpasang, Sheet + folder Drive tersedia, env kedua Vercel terkonfigurasi.                                               |
+| B2 Projects foundation   | Admin privat terpasang; empat project dimuat; edit existing + revision guard + dua hook + retry publication tersedia.               |
+| Uji owner                | Save tanpa perubahan isi berhasil; kedua rebuild diminta; export tetap identik baseline.                                            |
+| Perbaikan fetch          | Kode terakhir deploy `96a9756`; status Vercel testing dan production SUCCESS. 14 CMS tests + 7 gate + SEO PASS; responsive 468/468. |
+| Growth/upload/Team/B3/B4 | Belum selesai. Jangan menyebut seluruh CMS selesai.                                                                                 |
+
+404 sebelumnya terjadi sesudah redirect ke `script.googleusercontent.com`.
+Penyebab Google/cache belum terbukti. Fetch memakai IPv4-first, nonce/no-cache,
+timeout 60 detik per attempt dan maksimal dua attempt bersama untuk timeout
+atau redirected 404; tidak fallback stale saat remote gagal.
+
+Bukti production remote-mode lengkap tersedia pada log `fb99c39`. Literal log
+remote-mode testing terbaru belum disalin owner; **ini kekurangan bukti rinci,
+bukan setup testing belum selesai**. Anonymous admin diarahkan ke login Google.
+Uji akun Google lain yang sudah login dan uji perubahan isi nyata masih perlu.
+Save berhasil berarti data tersimpan dan build diminta, bukan situs sudah live.
+
+Satu owner/admin aktif; identitas/URL admin, token, hook, Sheet/folder ID tetap
+di Script Properties dan env privat. Jangan buat ulang Sheet/folder/deployment
+awal atau mengulang pertanyaan onboarding. Admin menggunakan project GAS
+terpisah, execute as Me + Only myself; API export publik read-only bertoken.
+Menambah admin kedua memerlukan pass auth tersendiri.
+
+User telah mengizinkan kelanjutan CMS dan commit/push. Periksa konteks izin
+sebelum push; `origin` memiliki dua push URL, sehingga sekali push men-deploy
+kedua situs. Bila working tree berisi perubahan asing, tanyakan sebelum mengubahnya.
+Growth memakai template konsisten, satu collection/pass; jangan membuka field
+geometri atau melonggarkan assertion geometri baseline. Setelah Growth hijau:
+Projects media upload/cache → Team → B3 per collection → B4 hardening.
+
+**Urutan baca:** `docs/kickoff-prompt.md` → `AGENTS.md` →
+`docs/pixel-precision-sop.md` → `docs/ai-handoff.md` → `docs/cms-plan.md` →
+`docs/cms-sop.md` → `docs/cms-b2-plan.md` → `docs/cms-projects-growth-plan.md`.
+
+**Prioritas dokumen:** checkpoint aktif ini dan plan Growth mengalahkan NEXT,
+PENDING atau instruksi setup di catatan historis di bawah. Riwayat disimpan
+sebagai bukti keputusan, bukan work order aktif. Full-screen sudah selesai;
+Contact tetap hero Figma-exact tinggi 954, bukan video/full-screen.
+
 Dokumen ini rangkuman lengkap project buat serah-terima ke tim: stack, struktur,
 konvensi, status tiap section, cara verifikasi, checkpoint commit, jebakan, dan
 yang masih pending.
@@ -9,22 +59,26 @@ yang masih pending.
 - **Push GANDA (penting)**: remote `origin` = repo **testing** dan punya **dua
   push URL** (testing + production). Jadi `git push origin main` mengirim ke
   **dua-duanya** sekaligus. Remote `production` juga ada kalau perlu fetch/cek.
-  Cek sinkron: `git fetch production -q && git rev-parse --short main origin/main
-production/main`. Kredensial lewat helper `store` (`~/.git-credentials`).
+  Cek sinkron: `git fetch production -q && git for-each-ref --format='%(refname:short) %(objectname:short)' refs/heads/main refs/remotes/origin/main refs/remotes/production/main`. Kredensial lewat helper `store` (`~/.git-credentials`).
 - **Figma**: https://www.figma.com/design/JYUzJK1hFqaEwL6DpdDvjp/Web-Community-DS
   (file `Web Community DS`)
 - **Deploy**: Vercel (auto dari branch `main`, dua project: testing & production)
 - **Buat AI agent**: baca juga `AGENTS.md` (operating manual ringkas buat AI).
 - **STATE PALING TERKINI**: `docs/ai-handoff.md` — **baca ini lebih dulu** sebelum
-  dokumen ini. Di situ ada checkpoint terbaru (View Transitions + sound system),
+  dokumen ini. Di situ ada checkpoint CMS terbaru,
   gotcha, dan next plan.
 - **SOP presisi piksel (WAJIB sebelum sentuh UI)**: `docs/pixel-precision-sop.md`.
-- **Master Work Plan video hero (target berikutnya)**: `docs/hero-video-plan.md`.
+- **Master Work Plan video hero (ARSIP, superseded oleh hero gambar)**: `docs/hero-video-plan.md`.
 - **SOP sound (portable, bisa dipakai ulang)**: `docs/sound-sop.md`.
 - **Prompt buat AI baru**: `docs/kickoff-prompt.md` (copy-paste starter).
 - **Prompt bikin halaman baru presisi**: `docs/page-build-prompt.md`.
 
 ---
+
+## Riwayat project dan panduan umum
+
+NEXT/PENDING lama di bagian berikut adalah historis. Untuk pekerjaan aktif gunakan
+checkpoint CMS di atas; jangan mengulang migrasi full-screen atau video Contact.
 
 ## 1. Ringkasan
 

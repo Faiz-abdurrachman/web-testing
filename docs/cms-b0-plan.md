@@ -1,5 +1,16 @@
 # CMS B0 — snapshot foundation
 
+## Checkpoint aktif 6 Oct 2026
+
+B0/B1 selesai. B2 Projects foundation sudah terpasang; owner load/save existing
+berhasil, dua rebuild diminta. Fix fetch `96a9756`: kedua Vercel SUCCESS.
+14 CMS tests + 7 gate + SEO PASS. NEXT **Projects Growth**, belum dimulai:
+[cms-projects-growth-plan.md](cms-projects-growth-plan.md).
+Setelah itu media upload/cache, Team dan B3/B4. Gunakan [cms-sop.md](cms-sop.md)
+dan [ai-handoff.md](ai-handoff.md). Jangan ulang setup dari checkpoint historis.
+
+## Riwayat eksekusi fase (NEXT/PENDING di bawah historis)
+
 Status: COMPLETE. One collection per pass, with seven gates and SEO before
 starting the next collection. B0 uses the committed snapshot without networking.
 The existing module exports and rendered data must remain identical.

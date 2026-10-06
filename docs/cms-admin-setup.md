@@ -1,5 +1,33 @@
 # Install the private Projects editor (B2 foundation)
 
+## Status pemasangan — 6 Oct 2026
+
+**Sudah terpasang.** Sheet/folder, export, env kedua Vercel, dua hooks dan editor
+Projects existing tersedia. Owner load dan save dicoba; fix fetch `96a9756`
+menyelesaikan build testing dan production (kedua status SUCCESS).
+Panduan instalasi awal di bawah adalah referensi pemulihan, bukan NEXT aktif.
+Jangan membuat ulang Sheet/folder, reseed atau mengganti secret tanpa kebutuhan.
+NEXT: [Projects Growth](cms-projects-growth-plan.md), lalu media/Team.
+
+## Memperbarui GAS existing setelah pass hijau
+
+1. AI menyiapkan dan menguji source, menjalankan generator `npm run cms:admin`
+   untuk admin atau `npm run cms:gas` bila export memang berubah.
+2. Owner buka project yang benar: **CMS Admin privat** atau **CMS Export read-only**.
+3. Ganti hanya source yang berubah; admin punya Code.gs, Index.html dan manifest.
+   Save. Pertahankan Script Properties existing. Jangan menjalankan setup/reseed ulang.
+4. Terapkan/Deploy → Kelola deployment/Manage deployments → pilih deployment
+   existing → Edit (pensil) → Version: New version → Deploy. URL /exec tetap.
+5. Admin tetap execute as Me + Only myself; export tetap read-only bertoken
+   untuk build tanpa login. Jangan menjadikan admin akses Anyone.
+6. Uji owner flow pass tersebut lalu tunggu build kedua situs selesai. Record
+   status rebuild, bukan hanya pesan hook diterima. Uji non-owner login sungguhan.
+
+Tidak perlu update GAS hanya untuk fix fetch `96a9756`: perubahan tersebut ada
+pada scripts Node di repo. Browser tool bukan browser login user; pandu manual.
+
+## Referensi instalasi awal (sudah dilakukan)
+
 This is a separate Apps Script project. Keep the public CMS Export project
 unchanged. Its export token must never authorize admin edits.
 
