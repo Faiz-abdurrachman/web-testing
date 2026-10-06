@@ -36,6 +36,8 @@
     "verify:cms-admin": "node scripts/verify-cms-admin.mjs",
     "verify:cms-growth": "node scripts/verify-projects-growth.mjs",
     "verify:cms-native-admin": "node scripts/verify-cms-native-admin.mjs",
+    "verify:cms-team-admin": "node scripts/verify-cms-team-admin.mjs",
+    "verify:cms-team": "node scripts/verify-cms-team-renderer.mjs",
     "verify:cms-media": "node scripts/verify-cms-media.mjs"
   },
   "dependencies": {

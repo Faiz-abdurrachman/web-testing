@@ -30,7 +30,7 @@ const data = {
   secret: 'LEAK',
 };
 const request = (path, options = {}) => new Request(origin + path, options);
-function harness() {
+function harness(teamData) {
   let now = 100000;
   const calls = [];
   let owner = true,
@@ -53,7 +53,14 @@ function harness() {
         done: true,
         response: {
           result: owner
-            ? { ok: true, data }
+            ? {
+                ok: true,
+                data:
+                  teamData &&
+                  /Team|Member/.test(JSON.parse(options.body).function)
+                    ? teamData
+                    : data,
+              }
             : { ok: false, error: { code: 'UNAUTHORIZED', detail: 'LEAK' } },
         },
       });
@@ -375,4 +382,111 @@ test('Google failures and unexpected result fields are sanitized without retry',
     const body = await response.json();
     assert.deepEqual(body, { ok: false, error: { code: 'SERVER_ERROR' } });
   }
+});
+
+test('Team API uses existing session and CSRF, fixed Team RPC and sanitized content', async () => {
+  const groups = [
+    'leader',
+    'data',
+    'core',
+    'language',
+    'vision',
+    'product',
+    'growth',
+  ].map((id) => ({ id, title: id }));
+  const teamData = {
+    members: groups.map((g) => ({
+      id: g.id + '-1',
+      group: g.id,
+      order: 1,
+      name: 'Name',
+      role: 'Role',
+      photo: 'marchel',
+      secret: 'LEAK',
+    })),
+    revision: 'a'.repeat(64),
+    groups,
+    photoPresets: ['marchel', 'zidan-rose'],
+    minMembers: 1,
+    maxMembers: 8,
+    secret: 'LEAK',
+  };
+  const h = harness(teamData);
+  assert.equal(
+    (await h.handle(request('/api/admin/team'), 'team')).status,
+    401,
+  );
+  const { cookie } = await login(h);
+  const loaded = await h.handle(
+    request('/api/admin/team', { headers: { Cookie: cookie } }),
+    'team',
+  );
+  const result = await loaded.json();
+  assert.equal(result.ok, true);
+  assert.equal(result.data.members.length, 7);
+  assert(!JSON.stringify(result).includes('LEAK'));
+  assert.equal(
+    JSON.parse(h.calls.at(-1).options.body).function,
+    'adminLoadTeam',
+  );
+  const payload = {
+    revision: result.data.revision,
+    member: result.data.members[0],
+  };
+  assert.equal(
+    (
+      await h.handle(
+        request('/api/admin/team', {
+          method: 'POST',
+          headers: { Cookie: cookie, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ operation: 'save', payload }),
+        }),
+        'team',
+      )
+    ).status,
+    403,
+  );
+  const headers = {
+    Cookie: cookie,
+    Origin: origin,
+    'X-CSRF-Token': result.csrf,
+    'Content-Type': 'application/json',
+  };
+  await h.handle(
+    request('/api/admin/team', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ operation: 'save', payload }),
+    }),
+    'team',
+  );
+  assert.equal(
+    JSON.parse(h.calls.at(-1).options.body).function,
+    'adminSaveMember',
+  );
+  assert.equal(
+    (
+      await h.handle(
+        request(
+          '/api/admin/media?collection=team&image=' +
+            encodeURIComponent(
+              '/images/cms/projects/' + 'a'.repeat(64) + '.webp',
+            ),
+          { headers: { Cookie: cookie } },
+        ),
+        'media',
+      )
+    ).status,
+    400,
+  );
+  h.deny();
+  assert.equal(
+    (
+      await h.handle(
+        request('/api/admin/team', { headers: { Cookie: cookie } }),
+        'team',
+      )
+    ).status,
+    403,
+  );
 });

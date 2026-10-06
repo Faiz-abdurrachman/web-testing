@@ -47,7 +47,7 @@ for (const file of htmlFiles) {
   const html = await readFile(file, 'utf8');
   const metas = metasOf(html);
   if (
-    route === '/admin/' &&
+    route.startsWith('/admin/') &&
     !metas.some((m) => m.name === 'robots' && m.content.includes('noindex'))
   )
     issues.push('/admin/: missing noindex');

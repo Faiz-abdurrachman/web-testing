@@ -12,7 +12,7 @@ import snapshot from './cms-snapshot.json';
 export interface TeamMember {
   name: string;
   role: string;
-  photo: 'marchel' | 'zidan-rose';
+  photo: string;
 }
 
 export interface HodsTeam {

@@ -57,6 +57,10 @@ function adminLoadProjects() {
 }
 
 function adminUploadProjectImage(request) {
+  return adminUploadImage_(request, 'projects');
+}
+
+function adminUploadImage_(request, collection) {
   return adminResult_(() => {
     adminAuthorize_();
     if (
@@ -64,6 +68,7 @@ function adminUploadProjectImage(request) {
       Object.keys(request).sort().join(',') !== 'data,image,mimeType' ||
       request.mimeType !== 'image/webp' ||
       !CMS_MEDIA_PATH.test(request.image) ||
+      !request.image.startsWith('/images/cms/' + collection + '/') ||
       typeof request.data !== 'string' ||
       request.data.length > Math.ceil(CMS_MEDIA_MAX_BYTES / 3) * 4 ||
       !/^[A-Za-z0-9+/]+={0,2}$/.test(request.data)
@@ -92,8 +97,7 @@ function adminUploadProjectImage(request) {
     lock.waitLock(30000);
     try {
       const folder = cmsMediaFolder_();
-      const name =
-        'ds-project-' + CMS_MEDIA_PATH.exec(request.image)[1] + '.webp';
+      const name = cmsMediaName_(request.image);
       const files = folder.getFilesByName(name);
       if (!files.hasNext())
         folder.createFile(Utilities.newBlob(bytes, 'image/webp', name));
@@ -106,12 +110,17 @@ function adminUploadProjectImage(request) {
 }
 
 function adminReadProjectImage(request) {
+  return adminReadImage_(request, 'projects');
+}
+
+function adminReadImage_(request, collection) {
   return adminResult_(() => {
     adminAuthorize_();
     if (
       !request ||
       Object.keys(request).join(',') !== 'image' ||
-      !CMS_MEDIA_PATH.test(request.image)
+      !CMS_MEDIA_PATH.test(request.image) ||
+      !request.image.startsWith('/images/cms/' + collection + '/')
     )
       adminFail_('INVALID_INPUT');
     return { media: cmsMediaRead_(request.image) };
@@ -365,7 +374,7 @@ function adminValidateProject_(project) {
     !Array.isArray(project.tags) ||
     project.tags.length !== 2 ||
     (ADMIN_IMAGE_PRESETS.indexOf(project.image) < 0 &&
-      !CMS_MEDIA_PATH.test(project.image))
+      !/^\/images\/cms\/projects\/[a-f0-9]{64}\.webp$/.test(project.image))
   )
     adminFail_('INVALID_INPUT');
   if (CMS_MEDIA_PATH.test(project.image)) cmsMediaFile_(project.image);

@@ -2,10 +2,11 @@
 interface Props {
   name: string;
   role: string;
-  photo: 'marchel' | 'zidan-rose';
+  photo: string;
   fade: string;
 }
 const { name, role, photo, fade } = Astro.props;
+const uploaded = photo.startsWith('/images/cms/team/');
 ---
 
 <article class="team-card">
@@ -20,9 +21,13 @@ const { name, role, photo, fade } = Astro.props;
     decoding="async"
   />
   <img
-    class:list={['team-card-photo', `is-${photo}`]}
-    src={`/images/team/${photo}.webp`}
-    srcset={`/images/team/${photo}.webp 1x, /images/team/${photo}-2x.webp 2x`}
+    class:list={['team-card-photo', uploaded ? 'is-uploaded' : `is-${photo}`]}
+    src={uploaded ? photo : `/images/team/${photo}.webp`}
+    srcset={
+      uploaded
+        ? undefined
+        : `/images/team/${photo}.webp 1x, /images/team/${photo}-2x.webp 2x`
+    }
     width="302"
     height={photo === 'marchel' ? '532' : '442'}
     alt=""
@@ -35,9 +40,13 @@ const { name, role, photo, fade } = Astro.props;
     aria-hidden="true"
   ></div>
   <div class="team-info">
-    <h3 class="team-name">{name}</h3>
+    <h3 class="team-name" title={name}>
+      {name}
+    </h3>
     <span class="team-divider" aria-hidden="true"></span>
-    <p class="team-role">{role}</p>
+    <p class="team-role" title={role}>
+      {role}
+    </p>
     <div class="team-socials">
       <a class="team-social" href="#" aria-disabled="true" tabindex="-1">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -132,6 +141,12 @@ const { name, role, photo, fade } = Astro.props;
     height: 442px;
   }
 
+  .team-card-photo.is-uploaded {
+    top: -42px;
+    height: 442px;
+    object-fit: cover;
+  }
+
   .team-card-fade {
     position: absolute;
     left: 0;
@@ -162,6 +177,8 @@ const { name, role, photo, fade } = Astro.props;
     font: 700 22px/33px var(--font-body);
     color: #ffffff;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .team-divider {
@@ -176,6 +193,9 @@ const { name, role, photo, fade } = Astro.props;
     height: 24px;
     font: 400 16px/24px var(--font-body);
     color: #d8d1d1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .team-socials {

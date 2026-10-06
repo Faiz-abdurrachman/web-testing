@@ -1,6 +1,24 @@
 # AI handoff — current context
 
-## Checkpoint terbaru — native /admin, 6 Oct 2026
+## B2 Team — pass lokal 6 Oct 2026
+
+Master Work Plan: [Team plan](cms-team-plan.md); update/acceptance:
+[Team setup](cms-team-setup.md). Team native `/admin/team/` dan owner RPC
+CRUD/foto memakai GAS/Sheet/Drive/hooks EXISTING. Grup preset, chip/fade, frame,
+Growth Join Now dan geometri baseline tetap lokal. Policy1–8 anggota/grup,
+UUID server, revision guard seluruh Team, posisi sisip, batch+trailing blanks.
+Foto hash/cache namespace Team, tanpa hotlink atau stale fallback.
+
+Implementasi/QA lokal PASS: 36 CMS tests Node22, Team admin4widths, 112 group
+fixtures, regresi native/legacy Projects4widths, tujuh gate + SEO (responsive
+468/468). Team baseline1440×1562/card302×400, MAE2.624; snapshot byte-identik,
+assertion geometri tetap. Belum push, belum update GAS Team,
+belum real owner Team acceptance. Projects Growth/media live + cleanup selesai.
+Username/password ditunda, seluruh CMS belum selesai. Setelah QA: minta izin
+push ke dua repo, owner update versi Export/Admin existing tanpa setup/reseed,
+uji Team nyata dan dua rebuild/cleanup; B3/B4 sesudah acceptance Team.
+
+## Checkpoint Projects live — sebelum pass Team, 6 Oct 2026
 
 User memilih **admin penuh di website**; pass aktif Projects/auth:
 [plan](cms-native-admin-plan.md), [setup/acceptance](cms-native-admin-setup.md).
@@ -46,9 +64,9 @@ tanpa referensi upload. Testing SUCCESS 21:37 WIB; production SUCCESS 21:38 WIB.
 Home/HoF kedua domain HTTP200: project/gambar uji hilang, empat judul baseline ada.
 Bukti artifacts/cms-media/owner-media-delete-{export,deployments,live}.json.
 Projects Growth + media upload/cache acceptance selesai; file Drive tidak dihapus
-otomatis. NEXT: Team, satu collection/pass + tujuh gate + SEO; B3/B4 sesudahnya.
+otomatis. NEXT: push Team setelah izin, update GAS existing + owner acceptance Team; B3/B4 sesudahnya.
 Owner/non-owner + CRUD/rebuild telah diuji, dengan batas bukti di setup guide.
-Team belum dimulai. Tidak reseed atau ulang
+Team lokal PASS; acceptance live belum. Tidak reseed atau ulang
 Sheet/folder/onboarding. Public Astro tetap static; browser shell/login, records
 melalui API owner, cookie HttpOnly terenkripsi + state/PKCE + CSRF. Backend tetap
 Sheets/Drive/Properties/hook existing. Satu collection/pass. Seluruh CMS belum

@@ -192,7 +192,7 @@ function gasHarness() {
       newBlob: (bytes, _mime, name) => ({ bytes, name }),
     },
   });
-  vm.runInContext(source + '\n' + shared, context);
+  vm.runInContext(source + '\n' + shared + '\n' + teamSource, context);
   return {
     context,
     files,
@@ -413,6 +413,223 @@ test('native media route enforces session/CSRF, normalizes bytes before fixed ow
   );
   assert.equal(
     calls.filter((c) => c.function === 'adminUploadProjectImage').length,
+    1,
+  );
+});
+
+const teamSource = await readFile(
+  new URL('../cms/gas/admin/team.js', import.meta.url),
+  'utf8',
+);
+test('Team photos use separate namespace, private owner upload/read and active-reference export; cache before snapshot', async () => {
+  const media = await normalizeProjectImage(
+    await raster(),
+    'image/png',
+    'team',
+  );
+  assert.match(media.image, /^\/images\/cms\/team\/[a-f0-9]{64}\.webp$/);
+  const h = gasHarness();
+  assert.equal(h.context.adminUploadProjectImage(media).ok, false);
+  assert.equal(h.context.adminUploadTeamImage(media).ok, true);
+  assert.equal(h.context.adminUploadTeamImage(media).ok, true);
+  assert.equal(h.writes(), 1);
+  assert.equal(
+    h.context.adminReadProjectImage({ image: media.image }).ok,
+    false,
+  );
+  assert.equal(
+    h.context.adminReadTeamImage({ image: media.image }).data.media.data,
+    media.data,
+  );
+  vm.runInContext(
+    await readFile(new URL('../cms/gas/export.js', import.meta.url), 'utf8'),
+    h.context,
+  );
+  h.context.cmsJson_ = (v) => v;
+  h.context.cmsReadSnapshot_ = () => structuredClone(baseline);
+  const params = {
+    action: 'media',
+    token: h.props.get('EXPORT_TOKEN'),
+    image: media.image,
+  };
+  assert.equal(
+    h.context.doGet({ parameter: params }).error.code,
+    'UNKNOWN_MEDIA',
+  );
+  const snapshot = structuredClone(baseline);
+  snapshot.team.leaderTeam[0].photo = media.image;
+  h.context.cmsReadSnapshot_ = () => snapshot;
+  assert.equal(h.context.doGet({ parameter: params }).data, media.data);
+  const dir = await mkdtemp(join(tmpdir(), 'ds-team-cache-'));
+  try {
+    const path = join(dir, 'snapshot.json');
+    await writeFile(path, JSON.stringify(baseline));
+    const options = {
+      snapshotPath: path,
+      mediaRoot: join(dir, 'public'),
+      env: {
+        CMS_API_URL: 'https://script.google.com/macros/s/test/exec',
+        CMS_API_TOKEN: 'test-token',
+      },
+      fetchImpl: async (url) =>
+        Response.json(
+          new URL(url).searchParams.get('action') === 'media'
+            ? media
+            : snapshot,
+        ),
+    };
+    await syncCmsSnapshot(options);
+    assert.deepEqual(
+      await readFile(join(dir, 'public', media.image.slice(1))),
+      Buffer.from(media.data, 'base64'),
+    );
+    await writeFile(join(dir, 'public', media.image.slice(1)), 'corrupt');
+    options.fetchImpl = async (url) =>
+      Response.json(
+        new URL(url).searchParams.get('action') === 'media' ? {} : snapshot,
+      );
+    await assert.rejects(
+      syncCmsSnapshot(options),
+      /media fetch or validation failed/,
+    );
+    assert.deepEqual(JSON.parse(await readFile(path)), snapshot);
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+  h.deny();
+  assert.equal(
+    h.context.adminReadTeamImage({ image: media.image }).error.code,
+    'UNAUTHORIZED',
+  );
+});
+
+test('native Team media route enforces session/CSRF, normalizes bytes before fixed owner RPC and serves verified private preview', async () => {
+  const origin = 'https://admin.example.test';
+  const png = await raster();
+  const expected = await normalizeProjectImage(png, 'image/png', 'team');
+  const env = {
+    NODE_ENV: 'production',
+    CMS_ADMIN_ORIGIN: origin,
+    CMS_ADMIN_SESSION_SECRET: Buffer.alloc(32).toString('base64'),
+    CMS_ADMIN_GOOGLE_CLIENT_ID: 'private-client',
+    CMS_ADMIN_GOOGLE_CLIENT_SECRET: 'private-secret',
+    CMS_ADMIN_API_DEPLOYMENT_ID: 'private-deployment',
+  };
+  const calls = [];
+  const handle = createAdminHandler({
+    env,
+    fetchImpl: async (url, options) => {
+      if (url.endsWith('/token'))
+        return Response.json({
+          access_token: 'private-token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+          scope: SCOPES.join(' '),
+        });
+      const rpc = JSON.parse(options.body);
+      calls.push(rpc);
+      let data = {
+        projects: baseline.projects,
+        revision: 'a'.repeat(64),
+        imagePresets: [baseline.projects[0].image],
+        minProjects: 1,
+        maxProjects: 8,
+      };
+      if (rpc.function === 'adminUploadTeamImage') {
+        assert.deepEqual(rpc.parameters[0], expected);
+        data = { image: expected.image };
+      }
+      if (rpc.function === 'adminReadTeamImage') data = { media: expected };
+      return Response.json({
+        done: true,
+        response: { result: { ok: true, data } },
+      });
+    },
+  });
+  const req = (path, options) => new Request(origin + path, options);
+  assert.equal(
+    (
+      await handle(
+        req('/api/admin/media', { method: 'POST', body: png }),
+        'media',
+      )
+    ).status,
+    401,
+  );
+  const start = await handle(req('/login'), 'login');
+  const state = new URL(start.headers.get('location')).searchParams.get(
+    'state',
+  );
+  const callback = await handle(
+    req('/callback?state=' + state + '&code=test', {
+      headers: {
+        Cookie: start.headers
+          .getSetCookie()
+          .map((c) => c.split(';')[0])
+          .join('; '),
+      },
+    }),
+    'callback',
+  );
+  const cookie = callback.headers
+    .getSetCookie()
+    .map((c) => c.split(';')[0])
+    .join('; ');
+  const loaded = await (
+    await handle(req('/projects', { headers: { Cookie: cookie } }), 'projects')
+  ).json();
+  const headers = {
+    Cookie: cookie,
+    Origin: origin,
+    'X-CSRF-Token': loaded.csrf,
+    'Content-Type': 'image/png',
+  };
+  assert.equal(
+    (
+      await handle(
+        req('/media?collection=team', {
+          method: 'POST',
+          headers: { Cookie: cookie },
+          body: png,
+        }),
+        'media',
+      )
+    ).status,
+    403,
+  );
+  assert.equal(
+    (
+      await handle(
+        req('/media?collection=team', {
+          method: 'POST',
+          headers,
+          body: '<svg/>',
+        }),
+        'media',
+      )
+    ).status,
+    400,
+  );
+  const uploaded = await (
+    await handle(
+      req('/media?collection=team', { method: 'POST', headers, body: png }),
+      'media',
+    )
+  ).json();
+  assert.equal(uploaded.data.image, expected.image);
+  const preview = await handle(
+    req('/media?collection=team&image=' + encodeURIComponent(expected.image), {
+      headers: { Cookie: cookie },
+    }),
+    'media',
+  );
+  assert.equal(preview.headers.get('Content-Type'), 'image/webp');
+  assert.deepEqual(
+    Buffer.from(await preview.arrayBuffer()),
+    Buffer.from(expected.data, 'base64'),
+  );
+  assert.equal(
+    calls.filter((c) => c.function === 'adminUploadTeamImage').length,
     1,
   );
 });

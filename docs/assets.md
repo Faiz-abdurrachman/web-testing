@@ -2832,3 +2832,26 @@ situs PASS, browser390/1440 decode tanpa overflow/errors. Project sementara
 “uji cms” sudah dihapus; export empat baseline persis, kedua rebuild SUCCESS dan
 Home/HoF kedua domain tanpa judul/gambar uji. Foto owner hanya di Drive/cache ignored,
 bukan artwork repo; template/geometri tetap.
+
+## CMS B2 — Team content/portrait pass (6 Oct 2026)
+
+Master Work Plan: cms-team-plan.md. Consumer /about OurTeam node1688:2933,
+component1594:5145, baseline reference OurTeam-New-1x.png1440×1562.
+Heading Bluu Next70056/67, Manrope card name70022/33 + role40016/24;
+padding80, gaps8/16/24/48/72/80 et exceptions info7/frame3/13 unchanged.
+Preset portraits/frame, tint/chip/fade, fixed domain order and Growth Join Now
+remain local; no artwork regeneration, reference or geometry assertions changed.
+Team accepts1–8 members/group. Additional leader rows (>2) scroll horizontally
+with136px top padding/negative margin to preserve portrait clearance; baseline
+leader2 still centered. HoDS uses existing scroll row. Long name/role stays in
+fixed217px info slot with ellipsis/full title. Uploaded portrait is validated
+WebP in /images/cms/team/<sha256>.webp, cached before snapshot commit; fixed
+302×442 at0/−42 with cover/top-center. Transparent input keeps alpha. No raw
+Drive link, geometry/crop editor, or stale media fallback. Editor native
+/admin/team reuses existing admin typography, palette and8pt tokens; custom
+admin has no Figma node. Live acceptance pending push/update existing GAS.
+
+Team QA: 36 CMS tests Node22, native Team browser4widths + Projects native/legacy
+regression,112 group fixtures,7 gate+SEO PASS (responsive468/468). OurTeam baseline
+1440×1562/card302×400 MAE2.6235, snapshot byte-identik dan assertion tidak diubah.
+Bukti artifacts/cms-team/. Live Team pending izin push + update GAS existing.

@@ -1,6 +1,17 @@
 // Shared private-folder helpers; append to both existing GAS projects.
-const CMS_MEDIA_PATH = /^\/images\/cms\/projects\/([a-f0-9]{64})\.webp$/;
+const CMS_MEDIA_PATH =
+  /^\/images\/cms\/(?:projects|team)\/([a-f0-9]{64})\.webp$/;
 const CMS_MEDIA_MAX_BYTES = 256 * 1024;
+
+function cmsMediaName_(image) {
+  return (
+    'ds-' +
+    (image.startsWith('/images/cms/team/') ? 'team' : 'project') +
+    '-' +
+    CMS_MEDIA_PATH.exec(image)[1] +
+    '.webp'
+  );
+}
 
 function cmsMediaHash_(bytes) {
   return Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, bytes)
@@ -20,9 +31,7 @@ function cmsMediaFolder_() {
 function cmsMediaFile_(image) {
   const match = CMS_MEDIA_PATH.exec(image);
   if (!match) throw new Error('Invalid media reference.');
-  const files = cmsMediaFolder_().getFilesByName(
-    'ds-project-' + match[1] + '.webp',
-  );
+  const files = cmsMediaFolder_().getFilesByName(cmsMediaName_(image));
   if (!files.hasNext()) throw new Error('Media unavailable.');
   const file = files.next();
   if (

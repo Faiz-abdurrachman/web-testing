@@ -1,6 +1,24 @@
 # Handover — Data Sorcerers (community-web)
 
-## Checkpoint terbaru — native /admin, 6 Oct 2026
+## B2 Team — pass lokal 6 Oct 2026
+
+Master Work Plan: [Team plan](docs/cms-team-plan.md); update/acceptance:
+[Team setup](docs/cms-team-setup.md). Team native `/admin/team/` dan owner RPC
+CRUD/foto memakai GAS/Sheet/Drive/hooks EXISTING. Grup preset, chip/fade, frame,
+Growth Join Now dan geometri baseline tetap lokal. Policy1–8 anggota/grup,
+UUID server, revision guard seluruh Team, posisi sisip, batch+trailing blanks.
+Foto hash/cache namespace Team, tanpa hotlink atau stale fallback.
+
+Implementasi/QA lokal PASS: 36 CMS tests Node22, Team admin4widths, 112 group
+fixtures, regresi native/legacy Projects4widths, tujuh gate + SEO (responsive
+468/468). Team baseline1440×1562/card302×400, MAE2.624; snapshot byte-identik,
+assertion geometri tetap. Belum push, belum update GAS Team,
+belum real owner Team acceptance. Projects Growth/media live + cleanup selesai.
+Username/password ditunda, seluruh CMS belum selesai. Setelah QA: minta izin
+push ke dua repo, owner update versi Export/Admin existing tanpa setup/reseed,
+uji Team nyata dan dua rebuild/cleanup; B3/B4 sesudah acceptance Team.
+
+## Checkpoint Projects live — sebelum pass Team, 6 Oct 2026
 
 User memilih **admin penuh di website**; pass aktif Projects/auth:
 [plan](docs/cms-native-admin-plan.md), [setup/acceptance](docs/cms-native-admin-setup.md).

@@ -21,6 +21,15 @@ const RPC = {
   upload: 'adminUploadProjectImage',
   media: 'adminReadProjectImage',
 };
+const TEAM_RPC = {
+  load: 'adminLoadTeam',
+  save: 'adminSaveMember',
+  add: 'adminAddMember',
+  delete: 'adminDeleteMember',
+  retry: 'adminRetryPublication',
+  upload: 'adminUploadTeamImage',
+  media: 'adminReadTeamImage',
+};
 const ERRORS = new Set([
   'UNAUTHORIZED',
   'CONFIGURATION',
@@ -200,6 +209,90 @@ function sanitize(result) {
     out.publicationPending = data.publicationPending === true;
     if (data.affectedId !== undefined) out.affectedId = str(data.affectedId);
   }
+  if ('members' in data) {
+    const str = (v) => {
+      if (typeof v !== 'string' || v.length > 20000) fail('SERVER_ERROR');
+      return v;
+    };
+    if (
+      !Array.isArray(data.members) ||
+      data.members.length < 7 ||
+      data.members.length > 56 ||
+      !/^[a-f0-9]{64}$/.test(data.revision) ||
+      data.minMembers !== 1 ||
+      data.maxMembers !== 8 ||
+      !Array.isArray(data.groups) ||
+      data.groups.length !== 7 ||
+      !Array.isArray(data.photoPresets) ||
+      data.photoPresets.length > 58
+    )
+      fail('SERVER_ERROR');
+    const ids = [
+      'leader',
+      'data',
+      'core',
+      'language',
+      'vision',
+      'product',
+      'growth',
+    ];
+    out.groups = data.groups.map((g, i) => {
+      if (g.id !== ids[i]) fail('SERVER_ERROR');
+      return { id: g.id, title: str(g.title) };
+    });
+    const seen = new Set();
+    out.members = data.members.map((m) => {
+      if (
+        !ids.includes(m.group) ||
+        !Number.isInteger(m.order) ||
+        m.order < 1 ||
+        m.order > 8 ||
+        !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(m.id) ||
+        seen.has(m.id) ||
+        !['name', 'role'].every(
+          (k) =>
+            typeof m[k] === 'string' &&
+            m[k].trim() &&
+            m[k].length <= 80 &&
+            !/[\r\n]/.test(m[k]),
+        ) ||
+        (!['marchel', 'zidan-rose'].includes(m.photo) &&
+          !/^\/images\/cms\/team\/[a-f0-9]{64}\.webp$/.test(m.photo))
+      )
+        fail('SERVER_ERROR');
+      seen.add(m.id);
+      return {
+        id: m.id,
+        group: m.group,
+        name: m.name,
+        role: m.role,
+        photo: m.photo,
+        order: m.order,
+      };
+    });
+    ids.forEach((id) => {
+      const group = out.members.filter((m) => m.group === id);
+      if (
+        !group.length ||
+        group.length > 8 ||
+        new Set(group.map((m) => m.order)).size !== group.length
+      )
+        fail('SERVER_ERROR');
+    });
+    out.photoPresets = data.photoPresets.map((p) => {
+      if (
+        !['marchel', 'zidan-rose'].includes(p) &&
+        !/^\/images\/cms\/team\/[a-f0-9]{64}\.webp$/.test(p)
+      )
+        fail('SERVER_ERROR');
+      return p;
+    });
+    out.revision = data.revision;
+    out.minMembers = 1;
+    out.maxMembers = 8;
+    out.publicationPending = data.publicationPending === true;
+    if (data.affectedId !== undefined) out.affectedId = str(data.affectedId);
+  }
   if ('publication' in data) {
     if (
       !Array.isArray(data.publication) ||
@@ -214,7 +307,7 @@ function sanitize(result) {
       accepted: p.accepted === true,
     }));
   }
-  const mediaPath = /^\/images\/cms\/projects\/[a-f0-9]{64}\.webp$/;
+  const mediaPath = /^\/images\/cms\/(?:projects|team)\/[a-f0-9]{64}\.webp$/;
   if ('image' in data) {
     if (!mediaPath.test(data.image)) fail('SERVER_ERROR');
     out.image = data.image;
@@ -233,7 +326,13 @@ function sanitize(result) {
       data: data.media.data,
     };
   }
-  if (!out.projects && !out.publication && !out.image && !out.media)
+  if (
+    !out.members &&
+    !out.projects &&
+    !out.publication &&
+    !out.image &&
+    !out.media
+  )
     fail('SERVER_ERROR');
   return { ok: true, data: out };
 }
@@ -243,7 +342,7 @@ export function createAdminHandler({
   fetchImpl = fetch,
   clock = Date.now,
 } = {}) {
-  async function gas(cfg, token, operation, payload) {
+  async function gas(cfg, token, operation, payload, collection = 'projects') {
     const response = await fetchImpl(
       `https://script.googleapis.com/v1/scripts/${cfg.deployment}:run`,
       {
@@ -253,7 +352,7 @@ export function createAdminHandler({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          function: RPC[operation],
+          function: (collection === 'team' ? TEAM_RPC : RPC)[operation],
           parameters: payload === undefined ? [] : [payload],
           devMode: false,
         }),
@@ -267,7 +366,14 @@ export function createAdminHandler({
     const body = await boundedJson(response);
     if (body.done !== true || body.error || !body.response)
       fail('SERVER_ERROR');
-    return sanitize(body.response.result);
+    const result = sanitize(body.response.result);
+    if (
+      result.ok &&
+      ['load', 'save', 'add', 'delete'].includes(operation) &&
+      !(collection === 'team' ? result.data.members : result.data.projects)
+    )
+      fail('SERVER_ERROR');
+    return result;
   }
   return async function handle(request, route) {
     let cfg;
@@ -281,6 +387,17 @@ export function createAdminHandler({
     const url = new URL(request.url);
     if (url.origin !== cfg.origin) return error('UNAUTHORIZED', 403);
     const now = clock();
+    const collection =
+      route === 'team' ||
+      (route === 'media' && url.searchParams.get('collection') === 'team')
+        ? 'team'
+        : 'projects';
+    if (
+      route === 'media' &&
+      url.searchParams.has('collection') &&
+      !['projects', 'team'].includes(url.searchParams.get('collection'))
+    )
+      return error('INVALID_INPUT', 400);
     try {
       if (route === 'login' && request.method === 'GET') {
         const flow = { state: random(), verifier: random(), exp: now + 600000 };
@@ -361,7 +478,7 @@ export function createAdminHandler({
         }
       }
       if (
-        !['projects', 'logout', 'media'].includes(route) ||
+        !['projects', 'team', 'logout', 'media'].includes(route) ||
         !['GET', 'POST'].includes(request.method) ||
         (route === 'logout' && request.method !== 'POST')
       )
@@ -389,8 +506,18 @@ export function createAdminHandler({
         } = await import('./cms-media.mjs');
         if (request.method === 'GET') {
           const image = url.searchParams.get('image');
-          if (!MEDIA_PATH.test(image || '')) return error('INVALID_INPUT', 400);
-          const result = await gas(cfg, session.token, 'media', { image });
+          if (
+            !MEDIA_PATH.test(image || '') ||
+            !image.startsWith('/images/cms/' + collection + '/')
+          )
+            return error('INVALID_INPUT', 400);
+          const result = await gas(
+            cfg,
+            session.token,
+            'media',
+            { image },
+            collection,
+          );
           if (!result.ok)
             return json(
               result,
@@ -426,11 +553,18 @@ export function createAdminHandler({
           media = await normalizeProjectImage(
             Buffer.concat(chunks),
             request.headers.get('content-type')?.split(';')[0],
+            collection,
           );
         } catch {
           return error('INVALID_INPUT', 400);
         }
-        const result = await gas(cfg, session.token, 'upload', media);
+        const result = await gas(
+          cfg,
+          session.token,
+          'upload',
+          media,
+          collection,
+        );
         if (result.ok && result.data.image !== media.image)
           fail('SERVER_ERROR');
         return json(
@@ -472,7 +606,13 @@ export function createAdminHandler({
         )
           return error('INVALID_INPUT', 400);
       }
-      const result = await gas(cfg, session.token, operation, payload);
+      const result = await gas(
+        cfg,
+        session.token,
+        operation,
+        payload,
+        collection,
+      );
       const response = json(
         result.ok ? { ...result, csrf: session.csrf } : result,
         result.error?.code === 'UNAUTHORIZED' ? 403 : 200,

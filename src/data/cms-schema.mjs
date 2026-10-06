@@ -51,20 +51,26 @@ const orderedDomains = (schema) =>
       });
     });
 const member = z.strictObject({
-  name: text,
-  role: text,
-  photo: z.enum(['marchel', 'zidan-rose']),
+  name: z
+    .string()
+    .min(1)
+    .max(80)
+    .refine((v) => v.trim().length > 0 && !/[\r\n]/.test(v)),
+  role: z
+    .string()
+    .min(1)
+    .max(80)
+    .refine((v) => v.trim().length > 0 && !/[\r\n]/.test(v)),
+  photo: z.union([
+    z.enum(['marchel', 'zidan-rose']),
+    z.string().regex(/^\/images\/cms\/team\/[a-f0-9]{64}\.webp$/),
+  ]),
 });
-const teamGroup = z
-  .strictObject({ id, title: text, members: z.array(member) })
-  .superRefine((group, ctx) => {
-    if (group.members.length !== (group.id === 'growth' ? 3 : 4))
-      ctx.addIssue({
-        code: 'custom',
-        path: ['members'],
-        message: 'Member slots are fixed by design',
-      });
-  });
+const teamGroup = z.strictObject({
+  id,
+  title: text,
+  members: z.array(member).min(1).max(8),
+});
 
 const role = z
   .strictObject({
@@ -234,7 +240,7 @@ export const cmsSnapshotSchema = z.strictObject({
   schemaVersion: z.literal(1),
   projects: z.array(project).min(1).max(8).superRefine(uniqueIds),
   team: z.strictObject({
-    leaderTeam: z.array(member).length(2),
+    leaderTeam: z.array(member).min(1).max(8),
     hodsTeams: orderedDomains(teamGroup),
   }),
   roles: orderedDomains(role),

@@ -237,8 +237,14 @@ export async function cacheProjectMedia({
 }) {
   const images = [
     ...new Set(
-      snapshot.projects
-        .map((project) => project.image)
+      [
+        ...snapshot.projects.map((p) => p.image),
+        ...snapshot.team.leaderTeam.map((m) => m.photo),
+        ...snapshot.team.hodsTeams.flatMap((g) =>
+          g.members.map((m) => m.photo),
+        ),
+      ]
+        .map((image) => image)
         .filter((image) => MEDIA_PATH.test(image)),
     ),
   ];

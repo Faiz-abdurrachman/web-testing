@@ -299,3 +299,10 @@ Baseline 19 HTML tetap identik, seluruh geometry/reference/full-screen rules
 existing tetap, Contact hero 954. Admin custom memakai layout scrolling; tidak
 mengubah work order migrasi full-screen yang sudah selesai. Google auth live
 pending; lihat cms-native-admin-plan.md dan cms-native-admin-setup.md.
+
+### CMS Team pass — 6 Oct 2026
+
+Team content CRUD/photo adapter expands only Team. Existing OurTeam full-screen
+centering, frame1440×1562, baseline card302×400 and all public geometry assertions
+remain locked. New member counts use horizontal row scrolling; no full-screen
+migration or hero changes. Work order: cms-team-plan.md.

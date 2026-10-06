@@ -92,7 +92,7 @@ test('GAS redirects return a valid payload and atomically replace the snapshot',
 
 test('failed remote responses preserve the snapshot and hide credentials', async () => {
   const wrong = structuredClone(baseline);
-  wrong.team.leaderTeam.pop();
+  wrong.team.leaderTeam = [];
   const cases = [
     async () => new Response('Forbidden', { status: 403 }),
     async () =>
@@ -609,4 +609,51 @@ test('Projects growth export roundtrip accepts 1/2/5/8 with blanks, rejects empt
   candidate.projects.pop();
   candidate.roles.pop();
   assert.equal(cmsSnapshotSchema.safeParse(candidate).success, false);
+});
+
+test('Team export roundtrip accepts 1/2/5/8 per preset group, blanks and reordered stable rows; rejects empty/9', async () => {
+  const { cmsSnapshotSchema } = await import('../src/data/cms-schema.mjs');
+  for (const count of [1, 2, 5, 8]) {
+    const gas = gasHarness(gasSource);
+    gas.context.setupCms();
+    const sheet = gas.sheets.get('team');
+    sheet.cells.splice(1);
+    for (const group of [
+      { id: 'leader', title: '', members: baseline.team.leaderTeam },
+      ...baseline.team.hodsTeams,
+    ])
+      for (let i = count; i >= 1; i--) {
+        const m = group.members[(i - 1) % group.members.length];
+        sheet.cells.push([
+          group.id + '-' + i,
+          group.id,
+          group.title,
+          m.name,
+          m.role,
+          m.photo,
+          String(i),
+        ]);
+      }
+    sheet.cells.push(Array(7).fill(''));
+    const exported = gas.request({
+      action: 'export',
+      token: gas.properties.get('EXPORT_TOKEN'),
+    });
+    const parsed = cmsSnapshotSchema.parse(exported);
+    assert.equal(parsed.team.leaderTeam.length, count);
+    assert(parsed.team.hodsTeams.every((g) => g.members.length === count));
+    assert.deepEqual(parsed.projects, baseline.projects);
+  }
+  for (const count of [0, 9]) {
+    const candidate = structuredClone(baseline);
+    candidate.team.leaderTeam = Array.from(
+      { length: count },
+      () => baseline.team.leaderTeam[0],
+    );
+    assert.equal(cmsSnapshotSchema.safeParse(candidate).success, false);
+  }
+  const wrong = structuredClone(baseline);
+  wrong.team.hodsTeams[0].members[0].photo =
+    '/images/cms/projects/' + 'a'.repeat(64) + '.webp';
+  assert.equal(cmsSnapshotSchema.safeParse(wrong).success, false);
 });

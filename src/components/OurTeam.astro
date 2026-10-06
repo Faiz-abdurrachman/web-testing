@@ -21,7 +21,13 @@ const STEP = 948;
       <!-- Leader Team (Figma 1688:2941). -->
       <div class="team-group">
         <h3 class="team-group-title">Leader Team</h3>
-        <div class="team-cards team-cards--leader">
+        <div
+          class:list={[
+            'team-cards',
+            'team-cards--leader',
+            { 'is-growing': leaderTeam.length > 2 },
+          ]}
+        >
           {leaderTeam.map((member) => (
             <TeamCard {...member} fade={hodsTeams[1].fade} />
           ))}
@@ -337,6 +343,13 @@ const STEP = 948;
 
   .team-cards--leader {
     justify-content: center;
+  }
+
+  .team-cards--leader.is-growing {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-top: 136px;
+    margin-top: -136px;
   }
 
   .team-cards--hods {

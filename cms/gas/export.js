@@ -105,7 +105,13 @@ function doGet(event) {
     if (params.action === 'media') {
       if (
         !CMS_MEDIA_PATH.test(params.image) ||
-        !snapshot.projects.some((project) => project.image === params.image)
+        ![
+          ...snapshot.projects.map((p) => p.image),
+          ...snapshot.team.leaderTeam.map((m) => m.photo),
+          ...snapshot.team.hodsTeams.flatMap((g) =>
+            g.members.map((m) => m.photo),
+          ),
+        ].includes(params.image)
       )
         return cmsJson_({ error: { code: 'UNKNOWN_MEDIA' } });
       return cmsJson_(cmsMediaRead_(params.image));

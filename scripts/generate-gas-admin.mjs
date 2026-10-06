@@ -8,12 +8,13 @@ const snapshot = cmsSnapshotSchema.parse(
   ),
 );
 const source = await readFile(new URL('cms/gas/admin/server.js', root), 'utf8');
+const team = await readFile(new URL('cms/gas/admin/team.js', root), 'utf8');
 const media = await readFile(new URL('cms/gas/media.js', root), 'utf8');
 const output = new URL('artifacts/cms-admin/', root);
 await mkdir(output, { recursive: true });
 await writeFile(
   new URL('Code.gs', output),
-  `${source}\n${media}\nconst ADMIN_IMAGE_PRESETS = ${JSON.stringify([...new Set(snapshot.projects.map((project) => project.image))])};\n`,
+  `${source}\n${team}\n${media}\nconst ADMIN_IMAGE_PRESETS = ${JSON.stringify([...new Set(snapshot.projects.map((project) => project.image))])};\n`,
 );
 for (const name of ['Index.html', 'appsscript.json'])
   await writeFile(

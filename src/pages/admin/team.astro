@@ -1,8 +1,8 @@
 ---
-const title = 'Projects Editor | Data Sorcerers';
+const title = 'Team Editor | Data Sorcerers';
 const description =
-  'Halaman privat owner Data Sorcerers untuk mengelola Projects dan meminta penerbitan perubahan ke situs.';
-const canonical = new URL('/admin/', Astro.site).href;
+  'Halaman privat owner Data Sorcerers untuk mengelola Team dan meminta penerbitan perubahan ke situs.';
+const canonical = new URL('/admin/team/', Astro.site).href;
 const image = new URL('/og/og-default.jpg', Astro.site).href;
 ---
 
@@ -264,9 +264,9 @@ const image = new URL('/og/og-default.jpg', Astro.site).href;
           height="52"
         />
         <p class="brand">Data Sorcerers · Editor</p>
-        <h1>Kelola projects</h1>
+        <h1>Kelola Team</h1>
         <p>
-          Pilih project, ubah isinya, lalu simpan. Situs diperbarui setelah
+          Pilih anggota, ubah isinya, lalu simpan. Situs diperbarui setelah
           proses penerbitan selesai.
         </p>
         <div class="auth-actions">
@@ -276,7 +276,7 @@ const image = new URL('/og/og-default.jpg', Astro.site).href;
           <button id="logout" type="button" hidden>
             Keluar
           </button>
-          <a href="/admin/team/">Kelola Team</a>
+          <a href="/admin/">Kelola Projects</a>
           <a href="/">Kembali ke situs</a>
         </div>
       </header>
@@ -287,18 +287,18 @@ const image = new URL('/og/og-default.jpg', Astro.site).href;
         Coba terbitkan lagi
       </button>
       <button id="reload" type="button" hidden>
-        Muat ulang projects
+        Muat ulang Team
       </button>
       <div class="layout" id="workspace" hidden>
-        <nav aria-label="Daftar project">
-          <h2>Projects</h2>
+        <nav aria-label="Daftar anggota">
+          <h2>Team</h2>
           <button id="add" type="button">
-            Tambah project
+            Tambah anggota
           </button>
           <div id="project-list"></div>
         </nav>
         <section class="editor" aria-labelledby="editor-title">
-          <h2 id="editor-title">Isi project</h2>
+          <h2 id="editor-title">Isi anggota</h2>
           <form id="project-form">
             <fieldset
               id="fields"
@@ -312,36 +312,37 @@ const image = new URL('/og/og-default.jpg', Astro.site).href;
               "
             >
               <label>
-                Judul project
-                <input id="title" required maxlength="20000" />
+                Grup<select id="group" required></select>
               </label>
               <label>
-                Deskripsi
-                <textarea
-                  id="description"
+                Nama anggota
+                <input id="name" required maxlength="80" />
+              </label>
+              <label>
+                Peran
+                <input id="role" required maxlength="80" />
+              </label>
+              <label>
+                Posisi dalam grup
+                <input
+                  id="order"
+                  type="number"
+                  min="1"
+                  max="8"
+                  step="1"
                   required
-                  maxlength="20000"
-                ></textarea>
+                />
               </label>
               <p class="hint">
-                Gunakan judul dan deskripsi singkat agar nyaman dibaca di kartu
+                Posisi baru menggeser anggota lain dalam grup. Setiap grup
+                memuat 1–8 anggota. Nama dan peran panjang disingkat pada kartu
                 situs.
               </p>
-              <div class="tags">
-                <label>
-                  Kategori pertama
-                  <input id="tag-one" required maxlength="20000" />
-                </label>
-                <label>
-                  Kategori kedua
-                  <input id="tag-two" required maxlength="20000" />
-                </label>
-              </div>
               <label>
-                Gambar project<select id="image" required></select>
+                Foto anggota<select id="image" required></select>
               </label>
               <label>
-                Upload gambar
+                Upload foto
                 <input
                   id="image-upload"
                   type="file"
@@ -351,11 +352,11 @@ const image = new URL('/og/og-default.jpg', Astro.site).href;
               </label>
               <p class="hint" id="image-hint">
                 Pilih JPG, PNG atau WebP, maksimal 2 MB. Gambar terbit setelah
-                project disimpan.
+                anggota disimpan.
               </p>
               <img
                 id="image-preview"
-                alt="Preview gambar project"
+                alt="Preview foto anggota"
                 hidden
                 style="width: 100%; max-height: 240px; object-fit: contain;"
               />
@@ -364,7 +365,7 @@ const image = new URL('/og/og-default.jpg', Astro.site).href;
                   Simpan dan terbitkan
                 </button>
                 <button id="delete" type="button">
-                  Hapus project
+                  Hapus anggota
                 </button>
               </div>
             </fieldset>
@@ -372,11 +373,11 @@ const image = new URL('/og/og-default.jpg', Astro.site).href;
         </section>
       </div>
       <noscript>
-        <p>Aktifkan JavaScript untuk masuk dan mengelola Projects.</p>
+        <p>Aktifkan JavaScript untuk masuk dan mengelola Team.</p>
       </noscript>
     </main>
     <script>
-      import '../../scripts/cms-admin-editor.js';
+      import '../../scripts/cms-team-editor.js';
     </script>
   </body>
 </html>

@@ -3,13 +3,19 @@ import { createHash } from 'node:crypto';
 
 export const MEDIA_INPUT_LIMIT = 2 * 1024 * 1024;
 export const MEDIA_OUTPUT_LIMIT = 256 * 1024;
-export const MEDIA_PATH = /^\/images\/cms\/projects\/([a-f0-9]{64})\.webp$/;
+export const MEDIA_PATH =
+  /^\/images\/cms\/(?:projects|team)\/([a-f0-9]{64})\.webp$/;
 const invalid = () => {
   throw new Error('Invalid project image.');
 };
 
-export async function normalizeProjectImage(bytes, mime) {
+export async function normalizeProjectImage(
+  bytes,
+  mime,
+  collection = 'projects',
+) {
   if (
+    !['projects', 'team'].includes(collection) ||
     !bytes.length ||
     bytes.length > MEDIA_INPUT_LIMIT ||
     !['image/jpeg', 'image/png', 'image/webp'].includes(mime)
@@ -46,7 +52,7 @@ export async function normalizeProjectImage(bytes, mime) {
   if (!output || output.length > MEDIA_OUTPUT_LIMIT) invalid();
   const hash = createHash('sha256').update(output).digest('hex');
   return {
-    image: `/images/cms/projects/${hash}.webp`,
+    image: `/images/cms/${collection}/${hash}.webp`,
     mimeType: 'image/webp',
     data: output.toString('base64'),
   };
