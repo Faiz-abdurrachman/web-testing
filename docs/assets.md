@@ -425,8 +425,11 @@ assets:contact` regenerates it and the icons.
 - **Full-screen migration (#9, 6 Oct 2026).** The swirl `hero-art` (node
   `1445:5067`) was replaced by a full-bleed hero background:
   `assets/hero gambar/contact page.png` (opaque, 2680 × 2032) baked by
-  `npm run assets:heroes` to `/images/contact/hero-bg.webp` (1440 × 954) +
-  `hero-bg-2x.webp`, `.art-bg` `inset: 0` / `object-fit: cover`. Section gained
+  `npm run assets:heroes` to `/images/contact/hero-bg.webp` (1440 × 954, q88) +
+  `hero-bg-2x.webp` (2880 × 1908, q86; no 3× — the 2680px source would upscale),
+  `<img srcset>` now uses **w-descriptors + `sizes="100vw"`** (was `x`-descriptors,
+  which served the 1× art on desktop = blurry), `.art-bg` `inset: 0` /
+  `object-fit: cover`. The other five heroes add a `-3x` variant (q84). Section gained
   `min-height: 100vh/100svh` + `justify-content: center` (2-column row preserved);
   content + `240/120` padding = 954 > viewport, so the section stays **954** and
   the row stays at y240. `verify.mjs` now asserts `art` = `.art-bg`
@@ -2010,8 +2013,9 @@ generate-recruitment-hero-video.mjs` → `public/images/recruitment/`
     plate tweens were removed. The hero is now the supplied art
     `assets/hero gambar/Gambar Hero recruitment.png` (5756 × 3600, text-free)
     baked by `npm run assets:heroes` (`scripts/generate-hero-bg.mjs`) to
-    `/images/recruitment/hero-bg.webp` (1440 × 866, q85) + `hero-bg-2x.webp`
-    (2880 × 1732, q82), `object-fit: cover`, section `min-height: 100svh`
+    `/images/recruitment/hero-bg.webp` (1440 × 866, q88) + `hero-bg-2x.webp`
+    (2880 × 1732, q86) + `hero-bg-3x.webp` (4320 × 2598, q84), `object-fit: cover`,
+    section `min-height: 100svh`
     (`padding: 80px var(--page-gutter)`, centred). Copy is unchanged. The stored
     reference `Recruitment-Hero-Revisi-1x.png` is an older render, so the MAE vs
     it rises (~10, no threshold) — same situation as About Us. `verify.mjs`

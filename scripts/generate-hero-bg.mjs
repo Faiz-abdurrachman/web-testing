@@ -1,48 +1,81 @@
-// Full-screen hero backgrounds (fix-9 #9). Bakes the user-supplied art in
-// `assets/hero gambar/` to `public/images/<page>/hero-bg.webp` (1×) and
-// `hero-bg-2x.webp` (2×). The source images carry no text — heading/subtitle/
-// buttons stay real HTML on top (see docs/page-fullscreen-migration-plan.md).
+// Full-screen hero backgrounds (fix-9 #9 + HD pass). Bakes the user-supplied
+// art in `assets/hero gambar/` to `public/images/<page>/<base>.webp` at 1×, 2×
+// and 3× so the heroes stay sharp on retina and 4K displays. The source images
+// carry no text — heading/subtitle/buttons stay real HTML on top (see
+// docs/page-fullscreen-migration-plan.md).
 //
-// Run: `npm run assets:heroes` (add pages here as the migration progresses).
+// A variant is skipped when it would upscale the source by more than ~15%, so
+// we never serve a blurry upscale (e.g. the 2680px Contact source stops at 2×).
+//
+// Run: `npm run assets:heroes`.
 import sharp from 'sharp';
 import { mkdir } from 'node:fs/promises';
 
-// page → [source, frame width, frame height, output dir]
+// page → [source, frame width, frame height, output dir, file base]
 const heroes = {
+  home: [
+    'assets/hero gambar/Gambar Hero Section homepage.png',
+    1440,
+    903,
+    'public/images/hero',
+    'background',
+  ],
+  about: [
+    'assets/hero gambar/Hero Section - About Us.png',
+    1440,
+    903,
+    'public/images/about',
+    'hero-bg',
+  ],
   recruitment: [
     'assets/hero gambar/Gambar Hero recruitment.png',
     1440,
     866,
     'public/images/recruitment',
+    'hero-bg',
   ],
   partners: [
     'assets/hero gambar/Hero Section - Partners.png',
     1440,
     659,
     'public/images/partners',
+    'hero-bg',
   ],
   hof: [
     'assets/hero gambar/Hero Section - HoF.png',
     1440,
     903,
     'public/images/hof',
+    'hero-bg',
   ],
   contact: [
     'assets/hero gambar/contact page.png',
     1440,
     954,
     'public/images/contact',
+    'hero-bg',
   ],
 };
 
-for (const [page, [source, width, height, dir]] of Object.entries(heroes)) {
+const variants = [
+  { suffix: '', scale: 1, quality: 88 },
+  { suffix: '-2x', scale: 2, quality: 86 },
+  { suffix: '-3x', scale: 3, quality: 84 },
+];
+
+for (const [page, [src, width, height, dir, base]] of Object.entries(heroes)) {
   await mkdir(dir, { recursive: true });
-  const bake = (out, w, h, quality) =>
-    sharp(source)
+  const meta = await sharp(src).metadata();
+  for (const { suffix, scale, quality } of variants) {
+    const w = width * scale;
+    // Never upscale the source by more than ~15% (that would look soft).
+    if (w > meta.width * 1.15) continue;
+    const h = Math.round((w / width) * height);
+    const out = `${dir}/${base}${suffix}.webp`;
+    await sharp(src)
       .resize(w, h, { fit: 'cover', position: 'centre' })
       .webp({ quality, effort: 6 })
-      .toFile(`${dir}/${out}`);
-  await bake('hero-bg.webp', width, height, 85);
-  await bake('hero-bg-2x.webp', width * 2, height * 2, 82);
-  console.log(`${page}: hero-bg.webp ${width}×${height} + 2× written`);
+      .toFile(out);
+    console.log(`${page}: ${base}${suffix}.webp ${w}×${h} q${quality}`);
+  }
 }

@@ -8,6 +8,19 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
+**★ SELESAI (6 Oct 2026) — Hero HD pass: semua hero pakai `assets/hero gambar/`
+di 1×/2×/3×.** User minta hero tidak burik + selalu 100vw/vh. `npm run
+assets:heroes` (`scripts/generate-hero-bg.mjs`) kini membake **semua 6 hero**
+(Home/About/Recruitment/Partners/HoF/Contact) dari `assets/hero gambar/` ke
+`public/images/<page>/<base>.webp` + `-2x` + `-3x` (q88/86/84, `fit: cover`);
+varian 3× dilewati bila sumber < 3× frame (Contact `contact page.png` 2680px →
+hanya 1×/2×). Semua `<img>` hero pakai `srcset` **w-descriptor + `sizes="100vw"`**
+(Contact tadinya x-descriptor → di desktop diam-diam ambil 1× = burik; sudah
+diperbaiki). Generator lama tak lagi menulis hero: `generate-hero-layers.mjs`
+(home) **dihapus**, dan bagian hero-bg dibuang dari `generate-about-assets`,
+`generate-partners-assets`, `generate-hof-assets` (agar tidak menimpa dengan raw
+low-res). **7 gate + seo ALL PASS.**
+
 **★ SELESAI (6 Oct 2026) — 2 fix lanjutan user.**
 
 1. **Leader Team (About Us) portrait kepotong.** Reference menunjukkan potret

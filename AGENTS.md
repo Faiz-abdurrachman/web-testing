@@ -426,6 +426,14 @@ clip). **Tiap item 7 gate + seo PASS.** Commit`81ffb25`..`b4b5e62`.
   di-intercept ClientRouter). (3) `.detail-wave` (RoleDetail + HoDSDetail) jadi
   **dua lapis glow** drift berlawanan + breathe (19s/14s ease-in-out), reduce
   tetap `opacity:0`. 7 gate + seo ALL PASS.
+- **★ HERO HD PASS SELESAI (6 Oct 2026):** `npm run assets:heroes`
+  (`scripts/generate-hero-bg.mjs`) membake **semua 6 hero** dari
+  `assets/hero gambar/` ke `public/images/<page>/<base>.webp` + `-2x` + `-3x`
+  (q88/86/84, `fit: cover`); varian 3× dilewati bila sumber < 3× frame (Contact
+  2680px → 1×/2× saja, tidak di-upscale). Semua `<img>` hero pakai `srcset`
+  w-descriptor + `sizes="100vw"` (Contact tadinya x-descriptor → burik di
+  desktop). `generate-hero-layers.mjs` **dihapus**; hero-bg dibuang dari
+  `generate-about/partners/hof-assets`. 7 gate + seo ALL PASS.
 - **★ FIX lanjutan (6 Oct 2026):** (1) **Leader Team** (About Us) portrait kini
   **bleed** juga (`.team-cards--leader :global(.team-card){overflow:visible}` +
   clip rim atas) — reference menunjukkan bleed ~19px, sebelumnya kepotong

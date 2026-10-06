@@ -93,9 +93,14 @@ display:flex; align-items:center; justify-content:center; overflow:clip`.
 
 ### 1d. `assets/hero gambar/` → webp
 
-- Bake via sharp: background 1440-major (q85) + `-2x` (q82). Pola:
-  `public/images/<page>/hero-bg.webp` + `-2x`.
-- Sumber raw tetap di-commit di `assets/` (di-`.vercelignore`).
+- Bake via sharp `npm run assets:heroes` (`scripts/generate-hero-bg.mjs`):
+  **1× / 2× / 3×** (q88/86/84, `fit: cover`) → `public/images/<page>/<base>.webp`,
+  `<base>-2x.webp`, `<base>-3x.webp` (`<base>` = `background` untuk home, `hero-bg`
+  untuk halaman lain). Varian 3× dilewati kalau sumbernya terlalu kecil (Contact
+  `contact page.png` 2680px → hanya 1×/2×) supaya tidak pernah di-upscale (burik).
+- Hero `<img>` pakai `srcset` **w-descriptor + `sizes="100vw"`** supaya muat
+  resolusi sesuai lebar viewport (retina/4K tajam). Sumber raw tetap di-commit di
+  `assets/` (di-`.vercelignore`).
 
 ---
 
