@@ -12,10 +12,11 @@ Foto hash/cache namespace Team, tanpa hotlink atau stale fallback.
 Implementasi/QA lokal PASS: 36 CMS tests Node22, Team admin4widths, 112 group
 fixtures, regresi native/legacy Projects4widths, tujuh gate + SEO (responsive
 468/468). Team baseline1440×1562/card302×400, MAE2.624; snapshot byte-identik,
-assertion geometri tetap. Belum push, belum update GAS Team,
+assertion geometri tetap. Feature 2a22d8a sudah push dengan izin user ke kedua
+repo, main/origin/main/production/main sinkron. Vercel testing SUCCESS22:04:31 WIB
+dan production SUCCESS22:05:50 WIB. Belum update GAS Team,
 belum real owner Team acceptance. Projects Growth/media live + cleanup selesai.
-Username/password ditunda, seluruh CMS belum selesai. Setelah QA: minta izin
-push ke dua repo, owner update versi Export/Admin existing tanpa setup/reseed,
+Username/password ditunda, seluruh CMS belum selesai. NEXT: owner update versi Export/Admin existing tanpa setup/reseed,
 uji Team nyata dan dua rebuild/cleanup; B3/B4 sesudah acceptance Team.
 
 **Update aktif 6 Oct 2026:** native `/admin` owner login dan Projects Growth

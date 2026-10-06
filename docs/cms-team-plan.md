@@ -98,3 +98,16 @@ fetch/redirect Google sebelumnya.
 Kode belum push, GAS Team belum update, real owner Team CRUD/photo/reorder +
 dua rebuild/cleanup belum diuji. Ikuti cms-team-setup.md setelah izin push.
 B2 Team live acceptance belum selesai; seluruh CMS belum selesai.
+
+## Push / deploy checkpoint
+
+User mengizinkan push. Feature2a22d8a + empat commit docs lokal sesudahcd37446
+terkirim ke testing/production; main/origin/main/production/main sinkron.
+GitHub Vercel status SHA2a22d8a: testing SUCCESS2026-10-06T15:04:31Z
+(22:04:31 WIB), production SUCCESS15:05:50Z (22:05:50 WIB).
+Read-only kedua domain: /admin/team HTTP200 + noindex/kontrol Team,
+/api/admin/team dan media Team anonymous401, /about HTTP200 dengan dua nama
+leader baseline. Bukti artifacts/cms-team/deploy-2a22d8a.json dan live-routes.json.
+Ini bukti deploy situs; owner belum update source/versi GAS Team dan belum
+real CRUD/photo/reorder + both rebuild/cleanup. NEXT cms-team-setup.md.
+Dokumentasi checkpoint deploy berikutnya lokal, belum push.

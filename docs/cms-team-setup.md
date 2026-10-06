@@ -1,12 +1,11 @@
 # B2 Team — update existing dan acceptance
 
-Kode Team + QA lokal PASS (36 tests, admin/fixture, 7 gate+SEO); belum push/deploy/live acceptance. Projects existing
+Kode Team + QA lokal PASS (36 tests, admin/fixture, 7 gate+SEO). Feature2a22d8a sudah push; Vercel testing22:04:31 WIB/production22:05:50 WIB SUCCESS. GAS Team/live acceptance belum. Projects existing
 sudah diterima live. Tidak membuat Sheet/folder/akun/OAuth/deployment awal baru,
 tidak menjalankan setupCms/setupAdmin, tidak seed ulang.
 
-1. Setelah QA hijau dan user menyetujui push, `git push origin main` mengirim
-   feature serta commit docs lokal sebelumnya ke testing + production. Tunggu
-   kedua deployment SUCCESS sebelum membuka Team untuk mutation.
+1. Push situs sudah selesai dengan izin user dan kedua Vercel SUCCESS.
+   Berikutnya update source/versi GAS existing sebelum memakai Team untuk mutation.
 2. Generate `npm run cms:gas` dan `npm run cms:admin`. Owner mengganti Code.gs
    Export EXISTING dengan artifacts/cms-gas/Code.gs; buat versi baru pada
    deployment Export existing. Endpoint/properties/folder/token tetap.
