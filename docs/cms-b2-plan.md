@@ -133,3 +133,10 @@ at 09:26:29 UTC, production at 09:27:29 UTC. Older production deployment was
 successful; a successful historic deployment does not prove the new hook build
 succeeded. Request latest logs before diagnosing or marking the foundation
 fully live verified. Growth/media/Team remain next after fixing rebuilds.
+
+Rebuild failure repair checkpoint: `96a9756` requests fresh export nonces and
+retries redirected Google 404 once. 14 CMS tests, real export baseline equality,
+7 site gates + SEO PASS; latest Vercel statuses success for both projects.
+Continue Projects growth next. Private admin Code.gs/Index do not need updating
+for this build-client repair; a different signed-in account denial and live
+content-change verification remain pending.

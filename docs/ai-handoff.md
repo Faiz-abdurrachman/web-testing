@@ -1,6 +1,6 @@
 # AI handoff — current context
 
-**CMS B2 Projects foundation CODE VERIFIED (6 Oct 2026); owner save confirmed; latest rebuilds failed.**
+**CMS B2 Projects foundation CODE VERIFIED (6 Oct 2026); owner save confirmed; repaired builds both successful.**
 Private project source `cms/gas/admin/` + `npm run cms:admin` generates Code.gs,
 Index.html and manifest under ignored `artifacts/cms-admin/`. Owner-only server
 checks on each RPC; edit existing Projects, stale revision guard, single-batch
@@ -22,8 +22,10 @@ redirect, endpoint fingerprint matches local. Repair requests a fresh export
 nonce/no-cache and retries that redirected 404 once (two attempts total);
 initial endpoint 404 still fails immediately. 14 CMS tests, real GAS export
 (baseline identical) and 7 gates + SEO PASS (responsive 468/468).
-NEXT: deploy/verify Vercel redirect repair before
-Projects growth/media/Team; non-owner-account test also pending.
+Redirect repair pushed as `96a9756`; both Vercel commit statuses now success.
+Failure was observed at the Google redirect; underlying cache/Google cause is
+not proven. NEXT: Projects growth pass, then media/Team; a different signed-in
+non-owner account denial check remains pending (anonymous login gate verified).
 Plans: `docs/cms-b2-plan.md`; install guide: `docs/cms-admin-setup.md`.
 Panduan: `docs/cms-gas-setup.md`.
 User mengizinkan commit/push kelanjutan CMS; B0 sudah push `1b38088` ke dua repo.

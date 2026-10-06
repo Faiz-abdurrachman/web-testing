@@ -154,3 +154,9 @@ Initial visual gate could not connect to an expired local static server;
 restarted it and the full gate run passed. No public UI/data/assets changed.
 Live Vercel verification remains pending. Logs in ignored
 `artifacts/cms-admin/redirect-repair-build.log` and the current gate logs.
+
+Live verification: repair `96a9756` pushed to both repositories; latest GitHub
+Vercel statuses success for testing and production. This establishes both real
+builds passed after the redirect repair, not the underlying Google failure
+cause. Owner previously confirmed real save + both hook acceptance; anonymous
+admin access requires Google login; export content remains unchanged baseline.
