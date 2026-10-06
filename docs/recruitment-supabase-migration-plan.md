@@ -370,20 +370,20 @@ tanpa migrasi balik data:
 
 ## 13. Work order
 
-**Pass 1 — intake minimal (implementasi lokal SELESAI; setup/live pending):**
+**Pass 1 — intake minimal: SELESAI LIVE 7 Oct 2026.**
 
 1. ✅ Approve §2 #4–#8 (7 Oct 2026).
-2. ⏳ **Owner**: buat Supabase project dan terapkan migrasi SQL
-   (`supabase/migrations/20261006120000_recruitment_intake_pass1.sql`) — tabel
-   minimal + RLS + fungsi privat + wrapper exposed (§6.1). **Belum diterapkan
-   ke Supabase.**
+2. ✅ Supabase project `web-community` (`yejrdckcmlxrkklgtrwy`, ap-southeast-1);
+   migrasi diterapkan.
 3. ✅ Kode: transport `server/recruitment.mjs` GAS → Supabase RPC; env
    (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`); test diadaptasi.
 4. ✅ Lokal: `test:recruitment` 9/9; `verify:recruitment-db` 13/13 di Postgres
    nyata; 7 gate + SEO PASS.
-5. ⏳ **Owner**: isi env kedua Vercel; deploy dengan `RECRUITMENT_OPEN=false`.
-6. ⏳ Acceptance live §11; bukti sanitized.
-7. ⏳ Docs diperbarui + commit lokal; **push hanya dengan konfirmasi user**
+5. ✅ Env `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`/`RECRUITMENT_OPEN=false`
+   terpasang di kedua Vercel project; deploy `f01a89b` READY.
+6. ✅ Acceptance live kedua situs PASS; baris uji dihapus; recruitment kembali
+   `accepting:false`; tabel kosong.
+7. ✅ Docs diperbarui + commit; **push `f01a89b` dengan konfirmasi user**
    (`origin` men-deploy dua situs).
 
 **Pass lanjutan (terpisah, hanya setelah pass 1 hijau + approval):**
@@ -412,9 +412,9 @@ Jangan menggabungkan pass lanjutan ke pass 1.
 - Retensi PII + apakah pakai enkripsi `email`/`whatsapp`.
 - Kapan recruitment dibuka untuk publik.
 
-## 16. Kebutuhan setup Supabase (belum dilakukan)
+## 16. Kebutuhan setup Supabase (SELESAI 7 Oct 2026)
 
-Semua langkah di bawah **manual oleh owner**; belum dieksekusi:
+Langkah di bawah sudah dijalankan untuk project `web-community`:
 
 1. Buat project Supabase (organisasi + region terdekat, mis. Singapore).
 2. Terapkan migrasi `supabase/migrations/20261006120000_recruitment_intake_pass1.sql`

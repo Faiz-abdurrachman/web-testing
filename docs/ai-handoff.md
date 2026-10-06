@@ -1,9 +1,9 @@
 # AI handoff — current context
 
-## Recruitment pass 1 → Supabase — implementasi lokal 7 Oct 2026
+## Recruitment pass 1 → Supabase — LIVE 7 Oct 2026
 
 Rencana + status: [recruitment-supabase-migration-plan.md](recruitment-supabase-migration-plan.md).
-Pass 1 intake dibangun lokal **tanpa** memasang GAS intake: migrasi
+Pass 1 intake dibangun **tanpa** memasang GAS intake: migrasi
 `supabase/migrations/20261006120000_recruitment_intake_pass1.sql` (tabel
 `private.recruitment_applications` + fungsi privat + wrapper
 `public.submit_recruitment_application`, `EXECUTE` hanya `service_role`),
@@ -11,16 +11,31 @@ transport `server/recruitment.mjs` diganti ke Supabase RPC, env
 `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` (ganti `RECRUITMENT_GAS_*`),
 `RECRUITMENT_OPEN` tetap kill-switch. Kontrak API/UI/geometri tidak berubah.
 
+**Live**: migration sudah di-apply ke project Supabase `web-community`
+(`yejrdckcmlxrkklgtrwy`, ap-southeast-1). Env server `SUPABASE_URL`,
+`SUPABASE_SERVICE_ROLE_KEY`, `RECRUITMENT_OPEN=false` terpasang di **kedua**
+Vercel project (production `data-sorcerers-community` + testing `web-testing`).
+Kode `f01a89b` sudah push; main/origin/main/production/main sinkron; kedua
+deployment untuk `f01a89b` READY.
+
 QA lokal PASS: `test:recruitment` 9/9, `test:cms` 36/36,
 `verify:recruitment-db` **13/13 di Postgres 18.6 nyata** (idempotent retry,
 ID_CONFLICT, race 8 klien → satu baris, anon/authenticated denied),
 `verify:recruitment` form 4 flows, native/Team admin 4 width, 7 gate + SEO
 (build/verify/navbar/vt/responsive 468/468/spacing/format, 22 pages).
-Evidence: `artifacts/recruitment-db/proof.json`.
+Evidence: `artifacts/recruitment-db/proof.json`,
+`artifacts/recruitment-db/supabase-live-proof.json`.
 
-Belum: project Supabase + apply migration, env kedua Vercel, acceptance live.
-Recruitment tetap tertutup; tidak ada push. Setup owner: MWP §16. CMS/auth/UI
-existing tidak disentuh.
+Acceptance live PASS: dengan `RECRUITMENT_OPEN=true` sementara, satu submit
+nyata per situs → tepat 1 baris, retry receipt+hash sama → receipt sama (tetap
+1 baris), ubah jawaban → `ID_CONFLICT` (tetap 1 baris); baris uji dihapus.
+Recruitment **kembali tertutup** (`accepting:false` di kedua situs); tabel
+`private.recruitment_applications` kosong. Anon/authenticated tetap
+permission denied. CMS/auth/UI existing tidak disentuh.
+
+NEXT (pass lanjutan, belum disetujui): kolom turunan/queryable + baca admin
+owner-only (Supabase Auth) + audit; rate limit; CAPTCHA. Retensi PII &
+pembukaan publik belum diputuskan.
 
 ## Recruitment integration — 6 Oct 2026
 
