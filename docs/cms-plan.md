@@ -117,7 +117,7 @@ Tujuan: **komponen/halaman tidak berubah API-nya** (import tetap
 - **Fase B2 — SEBAGIAN SELESAI, Admin page (HtmlService).** Login Google (1–2 akun), form CRUD
   untuk `projects` & `team` dulu, upload gambar ke Drive, tombol save →
   panggil Deploy Hook. Editor existing Projects sudah terpasang; Growth, media
-  dan Team masih work order terpisah. NEXT: verifikasi/push/update GAS dan owner test Growth; `cms-projects-growth-plan.md`.
+  dan Team masih work order terpisah. 1fb25ae sudah push, kedua Vercel SUCCESS. NEXT: update GAS dan owner test Growth; `cms-projects-growth-plan.md`.
 - **Fase B3 — Collection lain.** `roles`, `partners`, lalu `hods`/`domains`
   (field aman saja), `milestones`, `settings`.
 - **Fase B4 — Hardening.** Validasi input, error handling, backup Sheet,

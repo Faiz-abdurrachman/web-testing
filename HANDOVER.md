@@ -2,11 +2,12 @@
 
 ## Checkpoint aktif — 6 Oct 2026, handoff sesi CMS
 
-**B2 Projects Growth: implementasi + QA lokal PASS; belum push/live.**
+**B2 Projects Growth: kode situs sudah push; kedua Vercel SUCCESS pada 1fb25ae.**
 Minimum satu / maksimum delapan Projects; add/delete, UUID server, revision guard
-serta batch write/trailing blanks tersedia. Belum push atau update GAS live.
+serta batch write/trailing blanks tersedia. User menyetujui push pada sesi ini;
+1fb25ae terkirim ke kedua repo. GAS Admin live belum diperbarui.
 17 CMS tests, 40 renderer fixtures, admin browser dan 7 gate + SEO PASS
-(responsive 468/468). NEXT: konfirmasi push, update admin deployment existing dan uji
+(responsive 468/468). NEXT: update admin deployment existing dan uji
 owner add/delete + kedua rebuild. Setelah Growth live terverifikasi: media/cache,
 lalu Team. Lihat [docs/cms-projects-growth-plan.md](docs/cms-projects-growth-plan.md)
 dan [docs/cms-sop.md](docs/cms-sop.md).
@@ -18,7 +19,7 @@ dan [docs/cms-sop.md](docs/cms-sop.md).
 | B2 Projects foundation   | Admin privat terpasang; empat project dimuat; edit existing + revision guard + dua hook + retry publication tersedia.               |
 | Uji owner                | Save tanpa perubahan isi berhasil; kedua rebuild diminta; export tetap identik baseline.                                            |
 | Perbaikan fetch          | Kode terakhir deploy `96a9756`; status Vercel testing dan production SUCCESS. 14 CMS tests + 7 gate + SEO PASS; responsive 468/468. |
-| Growth/upload/Team/B3/B4 | Growth lokal QA PASS; live belum diperbarui. Upload/Team/B3/B4 belum selesai. Jangan menyebut seluruh CMS selesai.                  |
+| Growth/upload/Team/B3/B4 | Growth situs deploy SUCCESS; GAS Admin belum diperbarui. Upload/Team/B3/B4 belum selesai. Jangan menyebut seluruh CMS selesai.      |
 
 404 sebelumnya terjadi sesudah redirect ke `script.googleusercontent.com`.
 Penyebab Google/cache belum terbukti. Fetch memakai IPv4-first, nonce/no-cache,

@@ -1,6 +1,6 @@
 # NEXT — Projects Growth (tambah/hapus)
 
-Status: IMPLEMENTASI + QA LOKAL PASS (6 Oct 2026); belum push/update GAS/uji live. Baca `docs/cms-sop.md` dahulu.
+Status: IMPLEMENTASI + QA PASS; push 1fb25ae, kedua Vercel SUCCESS (6 Oct 2026). GAS Admin dan owner live test masih perlu. Baca `docs/cms-sop.md` dahulu.
 
 ## 0. Fakta awal dan batas pass
 
@@ -159,8 +159,19 @@ artifacts/cms-admin/. Preview standalone sempat berhenti (connection refused);
 gate yang terkena diulang dengan server statis di proses runner yang sama.
 
 `npm run cms:admin` sudah menghasilkan Code.gs/Index.html terbaru; Export GAS
-source tidak berubah, tidak memerlukan update. Belum push, belum update GAS
+source tidak berubah, tidak memerlukan update. Kode situs sudah push; belum update GAS
 live dan belum uji owner add/delete/both rebuild/non-owner login. Growth belum
 live terverifikasi. Owner update hanya setelah schema situs sudah di-push dan
 kedua deploy sukses; langkah ada di cms-admin-setup.md. Tidak ada setup/reseed
 ulang, perubahan Sheet/folder atau secret di repo.
+
+## 8. Push/deployment checkpoint — 6 Oct 2026
+
+User menyetujui push. Feature 1fb25ae (bersama dua commit handoff sebelumnya)
+terkirim ke kedua repo; main/origin/main/production/main terverifikasi sinkron.
+GitHub Vercel status pada SHA 1fb25ae: testing SUCCESS 10:25:16 UTC,
+production SUCCESS 10:26:18 UTC. Bukti sanitized ignored:
+artifacts/cms-growth/deploy-1fb25ae.json. Status ini membuktikan build situs;
+bukan bahwa deployment GAS Admin milik owner sudah menerima source baru.
+NEXT owner update Code.gs + Index.html di project/deployment Admin EXISTING,
+lalu real add/delete dan dua rebuild, serta deny akun non-owner login.

@@ -7,7 +7,7 @@ Projects existing tersedia. Owner load dan save dicoba; fix fetch `96a9756`
 menyelesaikan build testing dan production (kedua status SUCCESS).
 Panduan instalasi awal di bawah adalah referensi pemulihan, bukan NEXT aktif.
 Jangan membuat ulang Sheet/folder, reseed atau mengganti secret tanpa kebutuhan.
-Projects Growth lokal tersedia; update berikut hanya CMS Admin setelah gate/push disetujui. Export GAS tidak berubah. Lalu media/Team.
+Projects Growth 1fb25ae sudah push dan kedua Vercel SUCCESS; update berikut hanya CMS Admin. Export GAS tidak berubah. Lalu media/Team.
 
 ## Memperbarui GAS existing setelah pass hijau
 

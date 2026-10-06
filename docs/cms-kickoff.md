@@ -2,7 +2,7 @@
 
 Checkpoint 6 Oct 2026: B0/B1 selesai, B2 editor Projects existing sudah terpasang.
 Projects Growth implementasi + QA lokal PASS (17 tests, 40 fixtures, admin browser,
-7 gate + SEO, responsive 468/468). NEXT konfirmasi push/update GAS + uji owner live. Copy blok berikut ke sesi baru.
+7 gate + SEO, responsive 468/468). Feature 1fb25ae sudah push, kedua Vercel SUCCESS. NEXT update GAS + uji owner live. Copy blok berikut ke sesi baru.
 
 ```text
 Lanjut di repo /home/faiz/ds/ds5opencode — Data Sorcerers, Astro static + Vercel.
