@@ -8,6 +8,15 @@ panjang) → `docs/assets.md` (provenance per section) → file ini.
 
 ### TUGAS BERIKUTNYA UNTUK AI BARU (Next Task)
 
+**★ SELESAI (6 Oct 2026) — Contact "Submit" button hover.** Tombol submit
+`/contact` tadinya diam; kini ikut konvensi pill violet (`.community`/`.apply`):
+hover → fill solid **`#2F196F`** + glow violet `0 12px 28px -10px
+rgb(108 59 255 / 60%)` + lift `translateY(-2px)` (press → 0); `:focus-visible`
+outline `#9B7BFF` 2px; cue `data-sfx="click"` + `data-sfx-hover="hover"`.
+Transisi di-gate `(hover: hover) and (prefers-reduced-motion: no-preference)`;
+reduce `transition:none`. Base fill/geometri tak berubah → contactHero MAE tetap
+**2.757**. **7 gate + seo ALL PASS.**
+
 **★ SELESAI (6 Oct 2026) — Hall of Frames "Featured Sorcerers" card & modal
 (mobile + portrait).** Work order: `docs/hof-featured-modal-plan.md`.
 Bug A (class `is-lead` hilang saat clone → leader portrait "memadat" di modal)

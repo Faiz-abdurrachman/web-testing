@@ -93,7 +93,12 @@ const info = [
           <textarea name="message" placeholder="Type here..."></textarea>
         </label>
       </div>
-      <button type="submit" class="form-submit">
+      <button
+        type="submit"
+        class="form-submit"
+        data-sfx="click"
+        data-sfx-hover="hover"
+      >
         Submit
       </button>
     </form>
@@ -351,6 +356,32 @@ const info = [
     font-weight: 500;
     line-height: 27px;
     cursor: pointer;
+    transition:
+      box-shadow 0.3s ease,
+      transform 0.3s ease;
+  }
+  .form-submit:focus-visible {
+    outline: 2px solid #9b7bff;
+    outline-offset: 2px;
+  }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .form-submit:hover {
+      background: #2f196f;
+      box-shadow:
+        inset -2px -2px 4px 0 rgb(188 166 255 / 90%),
+        inset -2px -2px 1.4px 0 rgb(188 166 255 / 100%),
+        inset 0 2px 1.2px 0 rgb(255 255 255 / 50%),
+        0 12px 28px -10px rgb(108 59 255 / 60%);
+      transform: translateY(-2px);
+    }
+    .form-submit:active {
+      transform: translateY(0);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .form-submit {
+      transition: none;
+    }
   }
 
   @media (max-width: 1100px) {
