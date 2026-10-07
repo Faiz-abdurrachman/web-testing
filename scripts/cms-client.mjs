@@ -289,6 +289,19 @@ export async function syncCmsSnapshot({
       throw new Error('Supabase RPC cms_load_domains failed.');
     }
 
+    // Hods upstream errors must not expose private response bodies or URLs.
+    try {
+      const sh = await supabaseFetch(
+        supabaseUrl,
+        supabaseKey,
+        'cms_load_hods',
+        fetchImpl,
+      );
+      snapshot.hods = sh.hods;
+    } catch {
+      throw new Error('Supabase RPC cms_load_hods failed.');
+    }
+
     validateCmsSnapshot(snapshot);
   }
 

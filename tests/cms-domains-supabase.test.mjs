@@ -78,6 +78,8 @@ for (const failure of [
           if (u.pathname.endsWith('cms_load_team')) return Response.json(team);
           if (u.pathname.endsWith('cms_load_roles'))
             return Response.json({ roles: baseline.roles });
+          if (u.pathname.endsWith('cms_load_hods'))
+            return Response.json({ hods: baseline.hods });
           assert(u.pathname.endsWith('cms_load_domains'));
           calls++;
           if (failure === 'http')

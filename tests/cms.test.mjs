@@ -24,6 +24,8 @@ const supabaseEnv = {
 };
 const supabaseMock = (url) => {
   const href = typeof url === 'string' ? url : url.href;
+  if (href.includes('/rest/v1/rpc/cms_load_hods'))
+    return jsonResponse({ hods: baseline.hods });
   if (href.includes('/rest/v1/rpc/cms_load_domains'))
     return jsonResponse({ domains: baseline.domains });
   if (href.includes('/rest/v1/rpc/cms_load_roles'))
@@ -146,7 +148,8 @@ test('GAS redirects return a valid payload and atomically replace the snapshot',
           if (
             href.includes('/rest/v1/rpc/cms_load_projects') ||
             href.includes('/rest/v1/rpc/cms_load_roles') ||
-            href.includes('/rest/v1/rpc/cms_load_domains')
+            href.includes('/rest/v1/rpc/cms_load_domains') ||
+            href.includes('/rest/v1/rpc/cms_load_hods')
           )
             return jsonResponse(changed);
           if (href.includes('/database/query')) return jsonResponse([]);
@@ -323,7 +326,8 @@ test('timeouts retry once from the export endpoint; exhausted retries preserve t
             if (
               href.includes('/rest/v1/rpc/cms_load_projects') ||
               href.includes('/rest/v1/rpc/cms_load_roles') ||
-              href.includes('/rest/v1/rpc/cms_load_domains')
+              href.includes('/rest/v1/rpc/cms_load_domains') ||
+              href.includes('/rest/v1/rpc/cms_load_hods')
             )
               return jsonResponse(baseline);
             if (href.includes('/database/query')) return jsonResponse([]);
@@ -432,7 +436,8 @@ test('redirect 404 retries with a fresh export request; exhaustion leaves snapsh
           if (
             href.includes('/rest/v1/rpc/cms_load_projects') ||
             href.includes('/rest/v1/rpc/cms_load_roles') ||
-            href.includes('/rest/v1/rpc/cms_load_domains')
+            href.includes('/rest/v1/rpc/cms_load_domains') ||
+            href.includes('/rest/v1/rpc/cms_load_hods')
           )
             return jsonResponse(baseline);
           if (href.includes('/database/query')) return jsonResponse([]);

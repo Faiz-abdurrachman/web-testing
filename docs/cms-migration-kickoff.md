@@ -1,12 +1,35 @@
 # CMS → Supabase — kickoff aktif untuk AI baru
 
 User **Faiz**, panggil **bro**, bahasa Indonesia. Repo
-`/home/faiz/ds/ds5opencode`. Work order berikut: **pass 5 Hods**, satu collection.
-[Master Work Plan Hods](cms-pass5-hods-plan.md) sudah disiapkan rinci, **PLAN ONLY**;
-belum SQL/kode/apply/deploy Hods. Implementasi dimulai saat user memberi prompt
-lanjut di AI baru. Sesi persiapan ini hanya dokumentasi, tidak izin push.
+`/home/faiz/ds/ds5opencode`. Work order aktif: **Hods review/push berizin + live acceptance**.
+[Master Work Plan Hods](cms-pass5-hods-plan.md) A–D sudah selesai; SQL applied
+12:37:27.829 UTC / 19:37:27.829 WIB pada 7 Oct 2026, actual anon/catalog/role/hybrid
+proof PASS. Kode lokal + QA siap review; deployment kedua situs masih `6b36519`.
+Checkpoint `df31ab0`/planning `dbc2b22` dan feature lokal belum push. Konfirmasi
+SHA baru sebelum push, termasuk checkpoint docs lokal.
 
-## 1. Baseline dan status actual
+CMS 74 PASS + 10 live Team SKIP, recruitment 24 PASS; 7 gate + SEO, tiga admin
+mock empat width, 19 HTML/snapshot exact fresh baseline. Dedicated runner
+`scripts/verify-cms-hods.mjs`: semua 21 tabs/55 blocks/8 bullets, six routes ×
+390/1440 × Home + Recruitment entry/back/VT PASS. SQL ceiling UTF-16 lebih ketat
+untuk astral strings daripada installed Zod codepoint limit; schema utuh,
+perbedaan diuji/didokumentasikan di plan §2. First post-apply RPC probe gagal;
+state inspect + following HTTP 200 exact, tidak reapply; cause belum diisolasi.
+
+Empat Supabase + dua GAS env Production kedua Vercel verified ulang. Local
+anon key tetap absent, proof memakai Management API in-memory. Pre/post dengan
+same captured inputs identik, Team drift preexisting utuh. Live Hods masih GAS;
+setelah fitur deploy Hods Supabase dan Partners GAS, full export tetap divalidasi.
+Semua batas scope/secrets berlaku; Partners/auth belum work order.
+
+Prompt §6 di bawah adalah **arsip prompt implementasi** yang sudah dieksekusi
+A–D. Jangan mengulang SQL apply/seed atau baseline/reconciliation untuk menutupi
+drift. NEXT E: approval SHA konkret → push origin once → dua latest feature
+READY/time → all tabs kedua situs/dua widths/dua contexts → anonymous admin 401
+
+- recruitment closed → LIVE checkpoint. Lihat plan §9 dan TODO untuk actual state.
+
+## 1. Baseline live sebelum push Hods (arsip checkpoint Domains)
 
 Kode live **`6b36519`**, Domains selesai A–E. Kedua Vercel READY untuk SHA ini:
 testing 7 Oct 2026 **12:02:26.550 UTC / 19:02:26.550 WIB**, production
@@ -25,7 +48,7 @@ Runtime kode `6b36519` tetap live meskipun HEAD docs lokal lebih baru.
 | Team        | Supabase Postgres + Storage, Management API write, live  |
 | Roles       | Supabase public read RPC, live                           |
 | Domains     | Supabase public read RPC, live                           |
-| Hods        | GAS full export build-time; NEXT pass 5 PLAN ONLY        |
+| Hods        | GAS live; SQL/kode/QA lokal selesai, push pending        |
 | Partners    | GAS; pass 6 setelah Hods accepted                        |
 | CMS auth    | OAuth custom existing, mekanisme final pending, terakhir |
 
@@ -102,7 +125,7 @@ push URLs: git push origin main sekali deploy testing + production. Jangan
 memicu hooks/rebuild/push sebelum approval. Checkpoint docs lokal juga perlu
 approval push; tidak perlu onboarding/re-konfirmasi pekerjaan lokal authorized.
 
-## 6. Prompt siap copy ke AI baru
+## 6. Arsip prompt implementasi yang memulai pass ini
 
 ```text
 Bro, lanjut implementasi CMS pass 5 Hods → Supabase di repo:

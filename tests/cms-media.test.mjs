@@ -139,6 +139,8 @@ test('prebuild caches verified private media before atomic snapshot write, refet
           return Response.json(changed);
         if (href.includes('/rest/v1/rpc/cms_load_team'))
           return Response.json(teamRpc());
+        if (href.includes('/rest/v1/rpc/cms_load_hods'))
+          return Response.json({ hods: baseline.hods });
         if (href.includes('/rest/v1/rpc/cms_load_domains'))
           return Response.json({ domains: baseline.domains });
         if (href.includes('/rest/v1/rpc/cms_load_roles'))
@@ -555,6 +557,8 @@ test('Team photos use separate namespace, private owner upload/read and active-r
           return Response.json(snapshot);
         if (href.includes('/rest/v1/rpc/cms_load_team'))
           return Response.json(teamRpc(snapshot));
+        if (href.includes('/rest/v1/rpc/cms_load_hods'))
+          return Response.json({ hods: baseline.hods });
         if (href.includes('/rest/v1/rpc/cms_load_domains'))
           return Response.json({ domains: baseline.domains });
         if (href.includes('/rest/v1/rpc/cms_load_roles'))
@@ -580,6 +584,8 @@ test('Team photos use separate namespace, private owner upload/read and active-r
         return Response.json(snapshot);
       if (href.includes('/rest/v1/rpc/cms_load_team'))
         return Response.json(teamRpc(snapshot));
+      if (href.includes('/rest/v1/rpc/cms_load_hods'))
+        return Response.json({ hods: baseline.hods });
       if (href.includes('/rest/v1/rpc/cms_load_domains'))
         return Response.json({ domains: baseline.domains });
       if (href.includes('/rest/v1/rpc/cms_load_roles'))

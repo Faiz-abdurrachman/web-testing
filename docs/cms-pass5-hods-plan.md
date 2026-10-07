@@ -1,10 +1,9 @@
 # Master Work Plan — CMS pass 5: Hods → Supabase
 
-Status: **PLAN ONLY. Belum SQL/kode/apply/deploy Hods.**
-Disiapkan atas permintaan Faiz untuk implementasi oleh AI baru. Sesi planning
-ini hanya mengubah dokumentasi. Baseline kode live `6b36519`; checkpoint live
-lokal `df31ab0`. Commit planning terbaru lihat `git log`, bukan menebak SHA.
-Izin push Domains sudah digunakan; konfirmasi sebelum push baru.
+Status: **A–D selesai; SQL applied + QA lokal PASS; E env presence PASS,
+push/deploy/live acceptance PENDING.** Kode live tetap `6b36519`; checkpoint
+`df31ab0` dan planning `dbc2b22` belum push. Implementasi dimulai atas instruksi
+Faiz pada 7 Oct 2026. Konfirmasi SHA fitur konkret sebelum push baru.
 
 ## 1. Scope, sumber dan aturan baca
 
@@ -38,7 +37,7 @@ Sumber: `src/data/cms-schema.mjs` (`hodContent`, `hodPanelSlots`, `hod`),
 `src/data/cms-snapshot.json`, `src/data/hods.ts` (`hodDesign`).
 Record strict `{id,title,description,tabs}`. Tab strict `{sections}`.
 Section union strict **salah satu** `{title,text}` atau `{title,bullets}`.
-Semua title/description/text/bullet adalah string 1–20000 UTF-16 units;
+SQL pass ini membatasi title/description/text/bullet ke string 1–20000 UTF-16 units;
 whitespace nonempty valid, jangan trim/normalisasi/copy-edit. `''` tidak valid.
 Tidak ada field `label`, `kind`, `color`, `cardImage` di snapshot Hods.
 
@@ -112,7 +111,7 @@ Mask `hodPanelSlots` persis baseline:
 ID desain juga dapat menutupi ID konten melalui spread. Salah array order
 memasangkan konten dengan label/art/color lain. Validasi seluruh ID/order dan
 nested value equality sebelum renderer; jangan mengubah loader untuk menutupi
-order salah. Tab title/section title CMS boleh berubah sesuai text contract;
+order salah. Tab/section title CMS boleh berubah sesuai text contract;
 CHECK hanya menjaga shape, count dan tipe. Pertukaran dua section teks yang
 shape-nya sama tidak bisa dibuktikan salah oleh CHECK semata: lindungi melalui
 seed/reconciliation/deep equality dan array order, bukan klaim constraint palsu.
@@ -126,6 +125,20 @@ Checksum orientasi, hitung ulang pada implementasi tanpa reset bila berbeda:
 
 Hash berbeda → cari paths/value drift dan perubahan user; tidak auto overwrite.
 JSONB key order bukan content drift; array order selalu signifikan.
+
+### Temuan implementasi — Unicode actual (7 Oct 2026)
+
+Node 22.23.0 dan Zod yang terpasang (`zod/v4/core/checks.js`, `$ZodCheckMaxLength`)
+memakai Unicode **codepoint** ketika panjang UTF-16 melewati batas. Probe actual:
+10001 emoji = 20002 UTF-16 units **diterima Zod**. Jadi asumsi awal plan bahwa
+SQL UTF-16 identik dengan Zod untuk emoji tidak benar. Schema/dependency tidak
+berubah. SQL Hods tetap mengikuti ceiling UTF-16 konservatif yang diminta plan:
+10000 emoji diterima, 10001 ditolak. Semua nilai yang SQL terima memenuhi Zod;
+sebagian string astral yang Zod terima ditolak SQL. Tests mencatat perbedaan
+ini secara eksplisit, bukan mengklaim parity total. Batas ASCII, tipe/union,
+keys, slot/count/order dan whitespace tetap dibandingkan dengan Zod actual.
+Postgres NUL/lone surrogate tetap tidak dapat disimpan. Helper Domains applied
+tidak diubah atau dinyatakan telah diaudit ulang oleh pass ini.
 
 ## 3. Visual terkunci dan routing acceptance
 
@@ -186,9 +199,9 @@ menjadi unordered aggregation. Tidak menyimpan label/kind/color/cardImage.
 
 Helper private immutable `cms_hods_utf16_length(text)` dan
 `cms_hods_tabs_valid(text,jsonb)`; Hods helper sendiri, jangan mengubah helper
-Domains yang sudah applied. Ikuti UTF-16 approach tested Domains: count satu
+Domains yang sudah applied. Ikuti UTF-16 approach Domains: count satu
 unit untuk BMP, dua untuk codepoint >65535, `''` panjang 0. Jangan memakai
-`length(text)` biasa untuk klaim parity emoji. Boundary seluruh field text
+`length(text)` biasa untuk klaim parity emoji. Boundary SQL seluruh field text
 10000 emoji accepted/10001 rejected; fixtures ASCII 20000/20001 dan quotes/newline.
 Postgres text/JSONB tidak merepresentasikan NUL/lone surrogate: jangan mengklaim
 semua JS string dapat disimpan; tetap fail closed, Zod tidak diubah untuk workaround.
@@ -244,63 +257,64 @@ scoped error protection tanpa refactor seluruh helper. Mock semua sync callers
 untuk RPC baru; Team response tetap members/groups, bukan full snapshot.
 Roles/Domains success-path mocks akan mencapai Hods; adapt tests relevan.
 
-## 6. Checklist eksekusi A–E (semuanya belum dijalankan)
+## 6. Checklist eksekusi A–E
 
 Lock tahap sebelum masuk tahap dependen; planning bukan bukti local/SQL/live.
 
 ### A. Orientasi dan reconciliation
 
-- [ ] Git status/SHA/branch/remotes, Node 22 verified; perubahan asing jangan reset.
-- [ ] Baca tujuh dokumen urut §1; pahami SOP/secrets/izin.
-- [ ] Snapshot bytes/hash + 19 public HTML baseline fresh, artifacts/cms-pass5/.
-- [ ] Env presence saja; local .env.local bukan bukti env Vercel actual.
-- [ ] GAS Hods vs snapshot seluruh 6/21/55/8 values/order/types; mismatch laporkan
+- [x] Git status/SHA/branch/remotes, Node 22 verified; perubahan asing jangan reset.
+- [x] Baca tujuh dokumen urut §1; pahami SOP/secrets/izin.
+- [x] Snapshot bytes/hash + 19 public HTML baseline fresh, artifacts/cms-pass5/.
+- [x] Env presence saja; local .env.local bukan bukti env Vercel actual.
+- [x] GAS Hods vs snapshot seluruh 6/21/55/8 values/order/types; mismatch laporkan
       paths/counts dan minta keputusan sumber sebelum seed, tanpa dump secrets.
-- [ ] Read-only destination table/helper/RPC/grants/policies/data existence.
-- [ ] Capture pre-pass hybrid inputs, catat Team drift preexisting; tidak reseed.
+- [x] Read-only destination table/helper/RPC/grants/policies/data existence.
+- [x] Capture pre-pass hybrid inputs, catat Team drift preexisting; tidak reseed.
 
 ### B. Kode + PostgreSQL ephemeral
 
-- [ ] SQL table/checks/helper/read/RLS/seed sesuai §4, scope Hods saja.
-- [ ] tests/cms-hods-supabase.test.mjs real ephemeral PG; tidak write live DB.
-- [ ] Seed exact + shuffled physical INSERT output fixed + wrong ID/position reject.
-- [ ] Every tab/section slot/type/cardinality, strict keys, null/scalar/Unicode
-      negatives + positives, quotes/newlines/whitespace; Zod parity pada fixtures.
-- [ ] Role anon/service wrapper allowed, authenticated denied, table SELECT/DML/
+- [x] SQL table/checks/helper/read/RLS/seed sesuai §4, scope Hods saja.
+- [x] tests/cms-hods-supabase.test.mjs real ephemeral PG; tidak write live DB.
+- [x] Seed exact + shuffled physical INSERT output fixed + wrong ID/position reject.
+- [x] Every tab/section slot/type/cardinality, strict keys, null/scalar/Unicode
+      negatives + positives, quotes/newlines/whitespace; Zod dibandingkan pada fixtures,
+      dengan perbedaan batas astral SQL lebih ketat tercatat di §2.
+- [x] Role anon/service wrapper allowed, authenticated denied, table SELECT/DML/
       private helpers/read denied; catalog owner/SECURITY DEFINER/search_path proof.
-- [ ] Local rollback-only temporary grants isolate RLS even if table grants absent;
+- [x] Local rollback-only temporary grants isolate RLS even if table grants absent;
       no live grant changes. Test helper/public defaults PUBLIC execute revoked.
-- [ ] Owner fixture edit + migration rerun preserved, no duplicates.
-- [ ] Hybrid Hods override + final Zod + atomic failure tests; update sync mocks.
-- [ ] CMS full suite **tanpa env server**, recruitment contracts PASS sebelum apply.
+- [x] Owner fixture edit + migration rerun preserved, no duplicates.
+- [x] Hybrid Hods override + final Zod + atomic failure tests; update sync mocks.
+- [x] CMS full suite **tanpa env server**, recruitment contracts PASS sebelum apply.
 
 ### C. Apply additive SQL + live DB proof
 
-- [ ] Existing web-community ref yejrdckcmlxrkklgtrwy verified in memory.
-- [ ] Anon key jika missing ambil Management API privat/in-memory; no print/env write.
-- [ ] Reconcile ulang segera sebelum seed; jangan anggap Sheet tak bisa edit manual.
-- [ ] Apply hanya setelah A/B PASS; no deploy hook/manual rebuild sebelum push berizin.
-- [ ] Applied-state inspect setelah HTTP failure; jangan otomatis apply/drop ulang.
-- [ ] Actual anon HTTP RPC six records exact + Zod; catalog RLS/policy/helper grants/
+- [x] Existing web-community ref yejrdckcmlxrkklgtrwy verified in memory.
+- [x] Anon key jika missing ambil Management API privat/in-memory; no print/env write.
+- [x] Reconcile ulang segera sebelum seed; jangan anggap Sheet tak bisa edit manual.
+- [x] Apply hanya setelah A/B PASS; no deploy hook/manual rebuild sebelum push berizin.
+- [x] Applied-state inspect setelah HTTP failure; jangan otomatis apply/drop ulang.
+- [x] Actual anon HTTP RPC six records exact + Zod; catalog RLS/policy/helper grants/
       function ownership/search_path; actual role execution read allowed/deny proof.
-- [ ] Same **captured remote inputs** pre/post client: only Hods source changes,
+- [x] Same **captured remote inputs** pre/post client: only Hods source changes,
       seluruh values dan non-Hods unchanged; Team remote drift tetap, repo snapshot utuh.
-- [ ] Proof sanitised timestamp UTC/WIB; local/mock/catalog/role/HTTP evidence dibedakan.
+- [x] Proof sanitised timestamp UTC/WIB; local/mock/catalog/role/HTTP evidence dibedakan.
 
 ### D. QA + reviewable commit
 
-- [ ] Build committed baseline, jangan overwrite snapshot dengan remote Team drift.
-- [ ] CMS/recruitment counts recorded pass/fail/skip; 10 Team live SKIP expected bila
+- [x] Build committed baseline, jangan overwrite snapshot dengan remote Team drift.
+- [x] CMS/recruitment counts recorded pass/fail/skip; 10 Team live SKIP expected bila
       env absent, jangan mengejar zero skips lewat production mutation.
-- [ ] Native/legacy/Team admin mock regression × empat width.
-- [ ] 7 gate + SEO PASS; snapshot bytes + 19 public HTML exact baseline input sama.
-- [ ] Local HoDS test all 21 tabs/55 blocks/8 bullets exact + click/ArrowLeft/Right
+- [x] Native/legacy/Team admin mock regression × empat width.
+- [x] 7 gate + SEO PASS; snapshot bytes + 19 public HTML exact baseline input sama.
+- [x] Local HoDS test all 21 tabs/55 blocks/8 bullets exact + click/ArrowLeft/Right
       wrap/focus/aria/panel hidden; six routes at 390/1440; both origin back flows.
-- [ ] Docs/checkpoints/TODO updated, single feature commit siap review, tree bersih.
+- [x] Docs/checkpoints/TODO updated, single feature commit siap review, tree bersih.
 
 ### E. Push berizin + dua-site acceptance
 
-- [ ] Fresh presence empat env Supabase + CMS_API_URL/CMS_API_TOKEN Production
+- [x] Fresh presence empat env Supabase + CMS_API_URL/CMS_API_TOKEN Production
       kedua Vercel; gunakan VERCEL_TOKEN lokal in-memory bila CLI beda scope.
       Missing env essential perbaiki dari konfigurasi existing, values tidak dicetak.
 - [ ] Konfirmasi push SHA baru yang konkret; izin Domains/dokumen sebelumnya consumed.
@@ -396,8 +410,8 @@ compare new edits. GAS backup is not automatically current/dual-written.
 DoD: all A–E checked with exact six Hods/21 tabs/55 sections/8 bullet items,
 SQL/RPC/security actual proofs, no stale fallback, 7 gate + SEO, same input snapshot/
 HTML parity, two approved feature deployments and all-tab live acceptance.
-Never call pass 5 LIVE just because SQL applied. No Hods runtime implementation
-or SQL application occurred in this planning session.
+Never call pass 5 LIVE just because SQL applied. Sesi planning sebelumnya
+belum mengimplementasikan Hods; status implementasi actual dicatat di atas.
 
 CREATE expected: migration 20261012010000_cms_hods_pass5.sql and
 tests/cms-hods-supabase.test.mjs; optional focused browser verification script.
@@ -406,3 +420,34 @@ cms-domains tests), active docs. UNCHANGED: src/data/cms-schema.mjs,
 src/data/cms-snapshot.json baseline, src/data/hods.ts/domains.ts, public UI,
 fonts/assets/references, scripts/verify.mjs assertions, server/admin/auth/media,
 API routes, other migrations/collections.
+
+## 9. Bukti eksekusi sebelum push — 7 Oct 2026
+
+- A: Node 22.23.0, main `dbc2b22`, tree awal bersih, dua remote `6b36519`.
+  Snapshot SHA dan Hods SHA §2 cocok; 19 fresh baseline HTML tersimpan.
+  GAS Hods exact; destination table/RPC/dua helper absent. Capture pre-pass:
+  satu-satunya drift terhadap repo adalah Team, tidak di-reseed.
+- B: Hods focused 18/18; full CMS 74 PASS/10 live Team SKIP/0 FAIL; recruitment
+  24/24. PostgreSQL nyata: setiap slot, union/keys/type/count/Unicode, exact seed,
+  reverse physical insert → fixed output, constraint/privilege/RLS deny,
+  default PUBLIC execute revoke, owner/search_path, rerun menjaga owner edit,
+  incomplete/empty RPC gagal final schema. Batas astral SQL/Zod berbeda (§2).
+- C: SQL applied 12:37:27.829 UTC / 19:37:27.829 WIB ke existing web-community.
+  Probe RPC pertama gagal, read-only inspect state lalu HTTP 200 exact; tidak
+  reapply/drop. Actual 15 permission denials + allowed anon/service reads,
+  RLS/deny policy, ACL/default PUBLIC revoke, owner postgres dan definer/search_path.
+  Proof selesai 12:38:12.869 UTC / 19:38:12.869 WIB. Same captured remote inputs
+  pre/post hybrid value-identik; seluruh non-Hods utuh, repo snapshot utuh.
+- D: 7 gate + SEO, build 0 error/browserErrors[], responsive 468/468, SEO 23,
+  spacing 39; tiga admin mock × 320/390/768/1440. Semua enam Hods routes/21 tabs/
+  55 blocks/8 bullets × 390/1440 × Home + Recruitment entry/back/VT PASS.
+  Snapshot bytes + 19 HTML exact fresh baseline. Runner tracked:
+  `PREVIEW_URL=http://localhost:4331 node scripts/verify-cms-hods.mjs`.
+- E: fresh empat Supabase + dua GAS keys Production kedua Vercel present.
+  Push belum dilakukan; konfirmasi user harus menunjuk SHA feature baru.
+  Setelah approval, ulang runner all-tab pada kedua origin, HTTP anonymous smoke,
+  verifikasi actual deployments SHA/time, lalu update LIVE checkpoint.
+
+Bukti ignored `artifacts/cms-pass5/`; ringkasan tracked di section ini dan
+AGENTS/ai-handoff/TODO/kickoff. Tidak ada hook/rebuild/push atau mutation
+Projects/Team/recruitment pada pass ini. Seluruh CMS belum selesai.

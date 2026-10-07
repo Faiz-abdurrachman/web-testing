@@ -63,6 +63,8 @@ for (const failure of [null, 'http', 'shape', 'slots', 'network']) {
           if (u.pathname.endsWith('cms_load_team')) return Response.json(team);
           if (u.pathname.endsWith('cms_load_domains'))
             return Response.json({ domains: baseline.domains });
+          if (u.pathname.endsWith('cms_load_hods'))
+            return Response.json({ hods: baseline.hods });
           assert(u.pathname.endsWith('cms_load_roles'));
           if (failure === 'http')
             return new Response('private upstream details', { status: 503 });

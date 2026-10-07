@@ -1,6 +1,62 @@
 # AGENTS.md — instructions for AI agents
 
-## Checkpoint aktif — Domains LIVE, NEXT pass 5 Hods
+## Checkpoint aktif — Hods SQL applied + QA lokal, push pending
+
+Pass 5 Hods A–D selesai lokal pada 7 Oct 2026; E baru env presence. Kode live
+kedua situs tetap **`6b36519`**. Checkpoint `df31ab0`, planning `dbc2b22`, dan
+fitur Hods lokal belum push. **Konfirmasi SHA baru sebelum push origin main**;
+satu push men-deploy testing + production. Deployment/live acceptance Hods
+belum dijalankan dan pass 5 belum LIVE.
+
+Migration `20261012010000_cms_hods_pass5.sql` applied ke existing
+`web-community` (`yejrdckcmlxrkklgtrwy`) pada **12:37:27.829 UTC /
+19:37:27.829 WIB**. GAS/snapshot/DB exact: **6 ID / 21 tabs / 55 sections /
+8 bullets**, order/nested union/keys utuh. Private table + RLS deny; public RPC
+anon/service_role only. Actual HTTP anon 200 exact, catalog owner `postgres`,
+PUBLIC execute revoked, definer/search_path verified; **15 actual role denials**
+
+- dua allowed reads dalam transaksi read-only, selesai 12:38:12.869 UTC.
+  Probe pertama setelah apply gagal; inspect state berikutnya menunjukkan tabel/
+  RPC/enam rows ada dan HTTP 200 exact. Tidak apply ulang; penyebab awal belum
+  terisolasi. Migration ledger tidak dipalsukan.
+
+Kode lokal `syncCmsSnapshot` menambah `cms_load_hods` setelah Domains;
+full GAS validation tetap sebelum overrides, final Zod/media/atomic write tetap.
+Setelah deploy, Projects/Team/Roles/Domains/Hods content dari Supabase; hanya
+Partners content dari GAS. Live saat ini Hods masih GAS. Tabs/env GAS tetap
+wajib. Same captured remote inputs pre/post value-identik, non-Hods unchanged;
+Team drift preexisting utuh, snapshot repo tidak ditimpa.
+
+QA **Node 22.23.0**: CMS **74 PASS + 10 Team live SKIP / 0 FAIL**, recruitment
+**24 PASS**, Hods focused **18 PASS** (PostgreSQL ephemeral, strict nested slots,
+Unicode, order/security/RLS dan seed rerun preserving edit). Suite penuh tanpa
+env server. Build 0 error, **7 gate + SEO PASS**, responsive **468/468**, SEO
+**23 pages**, spacing **39 components**, tiga admin mock × empat widths.
+Local browser enam routes/all **21 tabs/55 blocks/8 bullets × 390/1440 × Home +
+Recruitment contexts PASS**, content/local labels/art decode, click/arrow wrap/
+focus/aria/hidden, entry/back/VT dan no page errors/overflow. Snapshot bytes dan
+**19 public HTML identik** fresh baseline dengan input sama.
+
+**Temuan Unicode:** installed Zod 4 menghitung codepoints untuk overflow string,
+bukan selalu UTF-16. SQL mengikuti ceiling 20000 UTF-16 plan, sehingga lebih
+ketat untuk astral text: 10000 emoji diterima SQL, 10001 ditolak SQL tetapi
+masih diterima Zod actual. Schema/dependency/helpers Domains tidak berubah;
+tests mencatat perbedaan secara eksplisit. Detail ada di plan Hods §2.
+
+Empat Supabase + dua GAS env Production kedua Vercel diverifikasi ulang,
+values suppressed. Local anon key absent; diambil Management API in-memory,
+tidak ditulis ke env. Bukti ignored `artifacts/cms-pass5/`: reconciliation,
+captured inputs/pre/post hybrid, applied/live-db/live-hybrid, project/vercel-env,
+QA logs, browser report dan baseline/after HTML hashes. Ringkasan tracked ini
+menjadi handoff bila artifacts hilang. UI/geometri/font/artwork/Zod/assertions/
+admin/auth/media/collection lain utuh; seluruh CMS belum selesai.
+
+NEXT: persetujuan push SHA fitur Hods → dua latest feature deployments READY →
+acceptance all 21 tabs kedua situs + anonymous admin 401/recruitment closed →
+checkpoint LIVE. Sesudah Hods accepted: Partners, auth CMS terakhir. Lihat
+[Hods plan](docs/cms-pass5-hods-plan.md), [TODO](docs/cms-migration-todo.md), [kickoff](docs/cms-migration-kickoff.md).
+
+## Checkpoint sebelumnya — Domains LIVE, NEXT pass 5 Hods
 
 Baseline kode live **`6b36519`**, dipush ke testing + production dengan izin
 Faiz pada 7 Oct 2026. Local/origin/main/production/main sinkron pada SHA tersebut
