@@ -1,5 +1,10 @@
 # Master Work Plan — Pass 1: Projects → Supabase
 
+Checkpoint terbaru: [Roles pass 3](cms-pass3-roles-plan.md) LIVE `53f92f8`,
+dua deployment/acceptance selesai. NEXT [Domains pass 4](cms-pass4-domains-plan.md)
+(plan only), [TODO](cms-migration-todo.md). Dokumen ini pola/riwayat pass yang
+sudah selesai, bukan instruksi mengulang pass atau setup GAS.
+
 Status: **LIVE 7 Oct 2026** — migration applied, kode push, kedua Vercel deploy READY.
 AI baru: baca AGENTS.md + [cms-supabase-migration-plan.md](cms-supabase-migration-plan.md)
 sebelum mulai Pass 2.

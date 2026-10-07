@@ -1,6 +1,21 @@
 # Handover — Data Sorcerers (community-web)
 
-## ⭐ CHECKPOINT TERKINI — Recruitment pass 2 Supabase LIVE (7 Oct 2026)
+## Work order aktif — CMS pass 4 Domains (plan only)
+
+CMS Projects/Team/Roles sudah Supabase dan live pada baseline `53f92f8`.
+Kedua Vercel SUCCESS; Roles live acceptance selesai. Domains/Hods/Partners
+masih GAS. NEXT hanya Domains; auth CMS terakhir dan keputusan login pending.
+Baca [kickoff migrasi](docs/cms-migration-kickoff.md),
+[Domains Master Work Plan](docs/cms-pass4-domains-plan.md),
+[TODO](docs/cms-migration-todo.md), lalu AGENTS dan [ai-handoff](docs/ai-handoff.md).
+
+Plan Domains/TODO/handoff sudah disiapkan, implementasi belum dimulai.
+Jangan membuat ulang GAS/Sheets/Drive, reseed Team, mengubah UI/auth, atau
+mengikuti NEXT historis di bawah. Approval push pass 3 sudah digunakan;
+konfirmasi sebelum push baru. Bagian lama berikut adalah **arsip konteks**,
+bukan status/scope aktif. Prompt AI baru ada di kickoff migrasi §6.
+
+## ARSIP CHECKPOINT — Recruitment pass 2 Supabase LIVE (7 Oct 2026)
 
 Untuk state paling akurat, baca `docs/kickoff-prompt.md` → `AGENTS.md` →
 `docs/ai-handoff.md` (urut). Ringkas:

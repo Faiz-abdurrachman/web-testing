@@ -1,15 +1,19 @@
 # Asset provenance
 
-## Checkpoint CMS / provenance — 6 Oct 2026
+## Checkpoint CMS / provenance — Roles live, Domains plan only
 
-B0/B1 dan B2 Projects editing existing sudah terpasang. Perbaikan fetch
-`96a9756` tidak mengubah artwork, font, public markup atau geometri; 14 CMS tests
+CMS Projects/Team/Roles bersumber Supabase; Domains/Hods/Partners masih GAS.
+Kode live `53f92f8`, dua deployments/acceptance Roles selesai. Berikutnya
+[Domains Master Work Plan](cms-pass4-domains-plan.md) + [TODO](cms-migration-todo.md).
+Planning hanya mengubah docs; tidak ada asset/font/CSS/artwork/reference PNG
+atau geometry/assertion yang diubah. Domains metadata design tint/x/y/gap
+masih lokal src/data/domains.ts; DB hanya id/title/description/labels.
 
-- 7 gate + SEO PASS. Handoff ini hanya dokumentasi, bukan perubahan aset/UI.
-  NEXT [Projects Growth](cms-projects-growth-plan.md); template/artwork existing
-  harus konsisten. Upload/cache Drive belum tersedia dan menjadi pass berikutnya.
-  Riwayat tes/setup pending di bawah adalah historis; state aktif di
-  [ai-handoff.md](ai-handoff.md), protokol [cms-sop.md](cms-sop.md).
+Home node 1430:2138 dan Recruitment node 1436:3512 memakai kartu bersama;
+blank slots nested labels tidak boleh dibersihkan. Frame/reference dan
+spacing exception di bawah tetap sumber visual existing, bukan field CMS.
+GAS/upload/setup NEXT historis tidak menjadi work order aktif; lihat
+[kickoff migrasi](cms-migration-kickoff.md) dan [ai-handoff](ai-handoff.md).
 
 ## Homepage — full-screen sections + image hero (4 October 2026, `b228f3c`)
 

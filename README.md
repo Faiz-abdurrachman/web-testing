@@ -1,5 +1,17 @@
 # Data Sorcerers — Community Web
 
+## Checkpoint CMS / handoff AI baru
+
+Projects, Team, Roles sudah Supabase dan live pada `53f92f8`; kedua Vercel
+SUCCESS, Roles acceptance selesai. NEXT **pass 4 Domains** (plan only),
+kemudian Hods → Partners → auth CMS terakhir. UI/geometri/auth tetap.
+
+Mulai dari [kickoff migrasi + prompt siap copy](docs/cms-migration-kickoff.md),
+[Master Work Plan Domains](docs/cms-pass4-domains-plan.md) dan
+[TODO/status](docs/cms-migration-todo.md). Dokumen aktif sudah disiapkan;
+implementasi Domains belum dimulai. Baca checkpoint terbaru AGENTS/ai-handoff
+sebelum mengikuti NEXT historis. Push baru tetap perlu konfirmasi.
+
 Website komunitas **Data Sorcerers**: landing page + 6 halaman detail domain
 (HoDS) + halaman **Recruitment** lengkap beserta 6 halaman **detail role**.
 

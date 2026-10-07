@@ -1,6 +1,7 @@
 # Master Work Plan — Pass 3: Roles → Supabase
 
-Status: SQL live di web-community; kode lokal + QA selesai, belum push/deploy.
+Status: **LIVE — commit `53f92f8`, kedua Vercel SUCCESS dan acceptance selesai.**
+NEXT [pass 4 Domains](cms-pass4-domains-plan.md); [TODO](cms-migration-todo.md).
 
 ## Lingkup dan baseline
 
@@ -42,7 +43,7 @@ Enam Roles identik snapshot; tidak ada field position/null whatsapp bocor ke
 Zod. Remote tidak memakai fallback stale. SQL privileges diuji pada Postgres
 nyata, mock tidak diklaim sebagai bukti Supabase live. Ketujuh gate + SEO lulus,
 snapshot dan HTML publik identik baseline. Auth/UI dan tiga collection tersisa
-tidak berubah. Deploy tetap pending sampai push disetujui.
+tidak berubah. Push telah disetujui dan dilakukan; acceptance dua situs tercatat di bawah.
 
 ## Hasil eksekusi
 
@@ -59,5 +60,12 @@ tidak berubah. Deploy tetap pending sampai push disetujui.
   Team remote berbeda baseline repo sebelum pass, tidak diubah di pass ini.
 - Local anon key belum ada; verifikasi memakai key yang dibaca melalui
   Management API di memori tanpa output key atau perubahan .env.local.
-- Bukti ignored: artifacts/cms-pass3/; push/deploy dan dua-site acceptance
-  masih pending persetujuan push. Jangan klaim pass situs sudah live.
+- Push `53f92f8` disetujui Faiz; origin mengirim ke kedua repo, tiga refs sinkron.
+- Testing Vercel SUCCESS 2026-10-07 11:20:17 UTC; production SUCCESS
+  2026-10-07 11:21:28 UTC (18:20:17/18:21:28 WIB).
+- Enam Roles × 390/1440 × dua situs browser PASS: copy baseline, Apply link,
+  tidak overflow/pageerror. Admin Projects/Team/media anonymous 401;
+  recruitment accepting:false. Tidak melakukan mutation nyata collection lain.
+- Bukti ignored: artifacts/cms-pass3/{deploy-53f92f8,live-browser,live-db,
+  live-hybrid}.json. Pass situs live; approval ini tidak mencakup push baru.
+- Next work order Domains plan only; tidak menjalankan migration pass 4.

@@ -1,38 +1,45 @@
 # AGENTS.md — instructions for AI agents
 
-## CMS pass 3 — Roles → Supabase — SQL live, kode lokal siap
+## Checkpoint aktif — Roles LIVE, NEXT pass 4 Domains
 
-Migration `supabase/migrations/20261010010000_cms_roles_pass3.sql` sudah
-terpasang di `web-community`. Enam Roles direkonsiliasi dengan GAS dan snapshot;
-RPC anon `cms_load_roles` mengembalikan data identik. Tabel private.cms_roles
-memakai RLS + deny policy, revoke direct table/private function, public wrapper
-SECURITY DEFINER (anon/service_role saja). ID, order dan jumlah slot fixed;
-whatsapp NULL tidak muncul di snapshot. Seed idempotent tanpa overwrite.
+Baseline kode live **`53f92f8`**, terkirim ke testing + production dengan izin
+Faiz. Kedua Vercel SUCCESS; acceptance enam Roles pada 390/1440 kedua situs
+PASS, API admin anonymous 401, recruitment tetap accepting:false.
+Timestamp deploy actual: testing 2026-10-07 11:20:17 UTC dan production
+11:21:28 UTC (18:20:17 / 18:21:28 WIB). Tanggal pada nama migration bukan
+bukti tanggal execution; catatan tanggal historis tidak mengalahkan bukti ini.
 
-Kode lokal snapshot hybrid membaca Projects + Team + Roles dari Supabase,
-Domains/Hods/Partners dari GAS. Roles read-only, belum punya editor atau write
-API; handler admin/auth/media tidak diubah. Auth terakhir, keputusan mekanisme
-login tetap pending sesuai kickoff terbaru (mengalahkan keputusan historis).
+**Work order AI baru:** [kickoff](docs/cms-migration-kickoff.md) →
+[Domains Master Work Plan](docs/cms-pass4-domains-plan.md) →
+[TODO migrasi](docs/cms-migration-todo.md). Pass 4 masih **PLAN ONLY**;
+belum SQL/kode/apply/deploy. Sesi ini menyiapkan plan/TODO/docs, tidak
+mengimplementasikan Domains. Prompt lanjut siap copy di kickoff §6.
 
-QA Node 22: CMS 42 PASS + 10 live Team tests SKIP (tidak menjalankan mutation
-Team live); Recruitment 24 PASS; enam tes Roles mencakup PostgreSQL nyata.
-Build 0 error, visual verify browserErrors[], responsive 468/468, navbar, VT,
-spacing (39 komponen), format dan SEO (23 halaman) PASS. Browser mock admin
-native/legacy/Team masing-masing empat width PASS. 19 HTML publik dan snapshot
-repo identik baseline. Mock lama diperbaiki mengikuti transport pass 2, tanpa
-mengubah handler atau assertion geometri.
+Sumber aktif: Projects/Team/Roles = Supabase; Domains/Hods/Partners = GAS
+full export build-time. Roles/Domains belum punya editor/write API; handler
+`gas()` bukan jalur admin empat collection read-only. Full GAS export masih
+divalidasi sebelum overrides, jadi jangan hapus tab collection migrated.
+Write Projects/Team tetap Management API; auth CMS tetap OAuth custom.
+Auth terakhir, mekanisme final belum diputuskan. Tidak mengubah UI/geometri,
+font/artwork/schema Zod/assertion atau collection lain.
 
-**Batas bukti:** hybrid live memuat Team yang berbeda dari snapshot repo.
-Perbandingan client sebelum/sesudah pass membuktikan collection selain Roles
-tidak berubah; selisih Team sudah ada sebelum pass ini. Tidak mengubah/reseed
-Team untuk menyamakan baseline. Artefak: artifacts/cms-pass3/{reconciliation,
-live-db,live-hybrid}.json dan log gates. .env.local belum berisi anon key;
-verifikasi membaca key dari Management API di memori, tanpa mencetak secret.
+QA pass 3: CMS **42 PASS + 10 live Team SKIP**, Recruitment **24 PASS**,
+PostgreSQL Roles nyata, tiga browser admin mock empat width, **7 gate + SEO
+PASS**, responsive **468/468**, SEO 23 halaman, snapshot/19 HTML lokal identik.
+Bukti ignored: artifacts/cms-pass3/{live-db,live-hybrid,live-browser,
+deploy-53f92f8}.json; artifact availability tidak dijamin di workspace baru.
 
-**Belum push/deploy kode situs.** Wajib konfirmasi push origin (dua situs),
-lalu cek dua build dan penerimaan publik. Sebelum deploy pastikan empat env
-Supabase di kedua Vercel, termasuk SUPABASE_ACCESS_TOKEN. NEXT pass 4 Domains
-setelah pass 3 deploy diterima; jangan lanjut collection lain di pass ini.
+**Batas bukti:** Team Supabase berbeda snapshot repo sebelum pass 3; proof
+client pre/post memastikan non-Roles tidak diubah. Jangan reseed Team untuk
+menyamakan baseline. Local anon key absent saat pass 3; proof membaca key
+Management API di memori. Full test:cms jangan dimuati env server karena tes
+Team dapat mutation live. Audit cold-cache private media dan partial GAS
+validation terpisah, jangan diperluas diam-diam dalam Domains.
+
+Urutan: **Domains → Hods → Partners → auth CMS terakhir**. NEXT lama di arsip
+bukan instruksi aktif. Izin push `53f92f8` telah digunakan; **konfirmasi sebelum
+push baru**, termasuk pass 4/dokumentasi baru. User mengizinkan kerja/commit
+lokal. Dokumen planning sesi ini belum push sampai mendapat izin baru.
 
 ## CMS pass 2 — Team → Supabase — LIVE 8 Oct 2026
 
@@ -276,12 +283,14 @@ Growth memakai template konsisten, satu collection/pass; jangan membuka field
 geometri atau melonggarkan assertion geometri baseline. Setelah Growth hijau:
 Projects media upload/cache → Team → B3 per collection → B4 hardening.
 
-**Urutan baca:** `docs/kickoff-prompt.md` → `AGENTS.md` →
-`docs/pixel-precision-sop.md` → `docs/ai-handoff.md` → `docs/cms-plan.md` →
-`docs/cms-sop.md` → `docs/cms-b2-plan.md` → `docs/cms-projects-growth-plan.md`.
+**Urutan baca aktif CMS:** `docs/cms-migration-kickoff.md` → `AGENTS.md` →
+`docs/ai-handoff.md` → `docs/cms-pass4-domains-plan.md` →
+`docs/cms-migration-todo.md` → `docs/cms-supabase-migration-plan.md` →
+`docs/cms-sop.md`. Sebelum UI baca `docs/pixel-precision-sop.md`.
+Plan GAS/Growth/B2 di bawah adalah arsip, bukan work order Domains.
 
-**Prioritas dokumen:** checkpoint aktif ini dan plan Growth mengalahkan NEXT,
-PENDING atau instruksi setup di catatan historis di bawah. Riwayat disimpan
+**Prioritas dokumen:** checkpoint terbaru di awal file, kickoff migrasi, plan
+Domains dan TODO mengalahkan NEXT/PENDING/setup Growth dan catatan historis. Riwayat disimpan
 sebagai bukti keputusan, bukan work order aktif. Full-screen sudah selesai;
 Contact tetap hero Figma-exact tinggi 954, bukan video/full-screen.
 
@@ -305,7 +314,7 @@ new agents lives in `docs/kickoff-prompt.md`; for building a new page/section us
 - `npm run cms:gas` — generate source export ke ignored `artifacts/cms-gas/`.
 - `npm run cms:admin` — generate source admin ke ignored `artifacts/cms-admin/`.
 - `docs/cms-sop.md` — auth, secrets, fetch, QA, update GAS existing.
-- `docs/cms-projects-growth-plan.md` — Master Work Plan NEXT add/delete Projects.
+- `docs/cms-projects-growth-plan.md` — Master Work Plan historis add/delete Projects; NEXT aktif Domains.
 - `docs/cms-kickoff.md` — prompt lengkap sesi baru; jangan ulang B0/onboarding.
 
 ## Commands

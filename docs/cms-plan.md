@@ -1,5 +1,20 @@
 # CMS / Admin Dashboard — Rencana (backend Google Apps Script)
 
+## Work order aktif — CMS pass 4 Domains (plan only)
+
+CMS Projects/Team/Roles sudah Supabase dan live pada baseline `53f92f8`.
+Kedua Vercel SUCCESS; Roles live acceptance selesai. Domains/Hods/Partners
+masih GAS. NEXT hanya Domains; auth CMS terakhir dan keputusan login pending.
+Baca [kickoff migrasi](cms-migration-kickoff.md),
+[Domains Master Work Plan](cms-pass4-domains-plan.md),
+[TODO](cms-migration-todo.md), lalu AGENTS dan [ai-handoff](ai-handoff.md).
+
+Plan Domains/TODO/handoff sudah disiapkan, implementasi belum dimulai.
+Jangan membuat ulang GAS/Sheets/Drive, reseed Team, mengubah UI/auth, atau
+mengikuti NEXT historis di bawah. Approval push pass 3 sudah digunakan;
+konfirmasi sebelum push baru. Bagian lama berikut adalah **arsip konteks**,
+bukan status/scope aktif. Prompt AI baru ada di kickoff migrasi §6.
+
 ## B2 Team — pass lokal 6 Oct 2026
 
 Master Work Plan: [Team plan](cms-team-plan.md); update/acceptance:

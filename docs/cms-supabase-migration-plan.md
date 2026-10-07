@@ -1,19 +1,22 @@
 # Master Migration Plan — GAS/Sheets/Drive → Supabase
 
-Checkpoint pass 3: [Roles plan](cms-pass3-roles-plan.md). SQL/RPC Roles sudah
-terpasang dan diverifikasi, kode hybrid lokal + QA selesai; push/deploy pending.
-Sumber kode berikutnya: projects/team/roles = Supabase; domains/hods/partners =
-GAS. Roles hanya read-only. Urutan sisa: Domains → Hods → Partners → auth
-terakhir. Pilihan auth belum final sesuai kickoff terbaru; keputusan historis
-Google di bawah tidak menjadi instruksi implementasi saat ini. Team live
-berbeda dari snapshot repo, sudah ada sebelum pass 3 dan tidak diubah.
+## Checkpoint aktif — tiga pass CMS live, NEXT Domains
 
-Status: **CMS pass 1 (Projects) + pass 2 (Team) LIVE 8 Oct 2026.**
-Recruitment pass 1-3 juga sudah di Supabase.
-Lihat [cms-migration-kickoff.md](cms-migration-kickoff.md) untuk handoff AI baru.
-Pass 1 dan 2 sudah diimplementasi dan push — SQL migration di-apply,
-kode handler dispatch via Management API (`/database/query`) karena PostgREST safeupdate
-memblokir UPDATE di RPC untuk parameter `jsonb`. `SUPABASE_ACCESS_TOKEN` wajib di env.
+Projects/Team/Roles live `53f92f8`, kedua Vercel SUCCESS dan Roles acceptance
+selesai. Recruitment pass 1–3 juga Supabase, intake closed. NEXT
+[Domains Master Work Plan](cms-pass4-domains-plan.md) + [TODO](cms-migration-todo.md),
+plan only; lalu Hods → Partners → auth CMS terakhir. [Kickoff aktif](cms-migration-kickoff.md).
+
+Write existing Projects/Team memakai Management API database/query karena
+safeupdate PostgREST; read RPC anon. Roles/Domains tidak punya editor/write API.
+Full GAS export tetap divalidasi sebelum overrides; Hods/Partners masih GAS.
+Team remote drift preexisting dicatat, tidak di-reseed. Pilihan mekanisme auth
+CMS belum final; bagian desain auth/SDK di bawah adalah proposal bersyarat,
+bukan approval implementasi atau dependency. Rekrutmen punya auth terpisah.
+
+Bagian inventaris/checkpoint awal berikut menyimpan konteks 6 Oct sebelum
+migration; jangan mengklaim semua CMS masih GAS atau meminta setup ulang.
+Izin push pass 3 sudah digunakan; konfirmasi sebelum push baru.
 
 Disusun 6 Oct 2026. Bahasa: Indonesia. Semua nama env/property dicatat **tanpa
 nilai** — jangan pernah mencetak secret/token/URL admin.
@@ -28,16 +31,16 @@ nilai** — jangan pernah mencetak secret/token/URL admin.
 > assertion baseline TIDAK berubah.** Yang berubah hanya sumber data di belakang
 > `cms-snapshot.json` + tiga permukaan: auth, media, dan tulisan admin/intake.
 >
-> Klarifikasi yang diminta:
+> Catatan desain historis (mekanisme auth belum final pada checkpoint terbaru):
 >
-> - **OAuth Google** → lewat **Supabase Auth provider Google** (bukan OAuth
->   custom `/api/admin/auth/*`), lihat §5.4.
+> - **Mekanisme auth CMS** belum final; opsi Supabase Auth Google di §5.4
+>   hanya proposal untuk pass auth terakhir. OAuth custom tetap sekarang.
 > - **Kunci bypass RLS** → `service_role` / secret key hanya di server, lihat
 >   §3.3.
 > - **Snapshot gabungan** selama migrasi → snapshot hybrid per-collection, lihat
 >   §5.6.
 
-## 0. Ringkasan checkpoint yang diverifikasi
+## 0. Arsip checkpoint awal 6 Oct (bukan status aktif)
 
 | Fakta                                                             | Bukti                                         |
 | ----------------------------------------------------------------- | --------------------------------------------- |
@@ -248,9 +251,11 @@ Aturan:
 
 - **Deny by default**: RLS aktif di **semua** tabel; tidak ada grant anon yang
   tidak perlu.
-- **Konten `cms_*`**: policy `anon`/`authenticated` hanya `SELECT`; tulisan
-  (`INSERT/UPDATE/DELETE`) hanya `authenticated` admin yang `auth.uid()` ada di
-  `cms_admin_users`. Service role tidak dipakai untuk baca konten publik.
+- **Konten CMS migrated actual**: tabel privat dengan RLS/revoke/deny policy;
+  anon membaca lewat SECURITY DEFINER public wrapper, bukan table SELECT.
+  Projects/Team write hanya server lewat Management API dengan owner session
+  OAuth custom. Roles/next Domains read-only. Desain authenticated admin RLS
+  adalah proposal pass auth terakhir, bukan grant yang harus ditambah sekarang.
 - **`recruitment_applications`**: **tidak ada** policy `anon`/`authenticated`
   untuk `SELECT`. Insert hanya lewat Vercel Function ber-`service_role` (setelah
   origin check + kontrak validasi). Owner/admin hanya baca via jalur
@@ -260,13 +265,17 @@ Aturan:
 - **Kunci bypass RLS dilarang keras di klien.** Artinya: tidak ada `service_role`
   di `src/`, tidak ada prefix `PUBLIC_`, tidak ada di `dist/`, dan tidak
   dicetak. Vercel Function memuatnya dari env server.
-- **Build Astro** memakai `service_role` di build env (server) untuk fetch
-  snapshot — aman karena build berjalan di Vercel, bukan browser. Alternatif
-  read-only key juga boleh, asal policy-nya sengaja.
+- **Build Astro** memakai `SUPABASE_ANON_KEY` untuk RPC konten publik.
+  service_role bukan pengganti anon; akses media privat harus diaudit terpisah
+  pada jalur server tanpa memperluas public bucket policy.
 - **Rotasi**: bila key sempat terlihat, rotasi di dashboard Supabase dan update
   env kedua Vercel; jangan mengandalkan penghapusan saja.
 
-### 3.4 Otorisasi admin untuk operasi privileged
+### 3.4 Proposal otorisasi Supabase Auth untuk pass terakhir
+
+**Belum implementasi CMS:** recruitment sudah memakai cms_admin_users,
+CMS Projects/Team memakai sesi OAuth custom existing. Desain auth.uid()/RLS/
+helper di bawah bersyarat pilihan auth final, bukan instruksi pass Domains.
 
 Otorisasi tidak boleh bergantung pada RLS saja, karena `service_role` **melewati
 RLS**. Karena itu ada dua lapis:
@@ -327,9 +336,8 @@ before_hash, after_hash, at, request_id)`. Untuk pembacaan PII, catat
 ## 4. Urutan migrasi
 
 **Recruitment dulu** (fitur baru, GAS belum dipasang, tanpa data live yang
-hilang → risiko terendah). **Lalu CMS satu collection/pass**, mengikuti urutan
-B0/B1: `projects` → `team` → `roles` → `partners` → `domains` → `hods`.
-Verifikasi akhir: `milestones`/`settings` (kosong) + hardening.
+hilang → risiko terendah). **Lalu CMS satu collection/pass**. Urutan migrasi aktif: `projects` → `team` → `roles` → `domains` → `hods` → `partners`, lalu auth terakhir.
+Inventory `milestones`/`settings` adalah keputusan scope terpisah, bukan pass otomatis; hardening setelah data diterima.
 
 **Rekomendasi penting:** jangan pasang intake GAS recruitment sama sekali.
 Implementasikan intake Supabase langsung; ini menghindari kerja ganda dan
@@ -368,9 +376,11 @@ satu-satunya backend yang belum live.
 - **Semantik konflik berubah** → wajib uji dua tab/dua sesi (CONFLICT),
   add/delete, min/max (Projects 1–8, Team 1–8/grup), reorder posisi sisip.
 
-### 5.4 Login admin — Supabase Auth + OAuth Google (diputuskan)
+### 5.4 Proposal auth terakhir — Supabase Auth + OAuth Google (belum diputuskan)
 
-**Target: Supabase Auth dengan provider Google.** Ini menggantikan OAuth custom
+**Opsi untuk dibahas setelah seluruh collection selesai: Supabase Auth Google.**
+Belum diizinkan implementasi; OAuth custom CMS tetap berjalan sekarang.
+Desain berikut hanya berlaku jika opsi ini dipilih. Ini akan menggantikan OAuth custom
 (`/api/admin/auth/login|callback|logout`, PKCE/state buatan sendiri, cookie
 AES-256-GCM di `server/cms-admin.mjs`) dan Apps Script API. Flow:
 
@@ -443,18 +453,20 @@ berisi sebagian collection dari Supabase dan sebagian masih dari GAS. Aturannya:
 
 - **Bentuk snapshot + Zod tidak berubah.** `cmsSnapshotSchema` tetap validasi
   keenam collection sekaligus; loader/komponen tidak tahu asalnya.
-- **Peta sumber per-collection**, bukan per-field. Contoh: berkas
-  `cms/cms-sources.json` (atau env server) berisi
-  `{ "projects": "supabase", "team": "gas", "roles": "gas", ... }`. Nilai:
-  `supabase` | `gas` | `local`.
-- `syncCmsSnapshot` membaca **tiap collection dari sumber aktifnya**, menyusun
-  satu objek snapshot, validasi Zod utuh, lalu tulis atomik seperti sekarang.
+- **Peta sumber actual tercatat di kickoff/TODO dan dispatch cms-client.mjs**;
+  file cms/cms-sources.json belum dibuat. Jangan menganggap file/env switch itu
+  sudah ada. Current remote sources: projects/team/roles Supabase,
+  domains/hods/partners GAS. Local mode memakai snapshot committed.
+- Implementasi actual fetch full GAS snapshot yang tervalidasi terlebih dulu,
+  override migrated collections dari RPC, validasi Zod final dan atomic write.
+  Jadi source konten tiap collection sudah tunggal tetapi validitas full GAS
+  masih dependency; pure per-collection reads adalah proposal refactor terpisah.
   Tidak mencampur field: satu collection sepenuhnya dari satu sumber.
 - **Tidak ada fallback stale.** Jika sumber aktif sebuah collection gagal,
-  build gagal (kecuali mode `local` tanpa env apa pun yang memang memakai
+  build gagal (kecuali mode `local` tanpa kedua env GAS yang memang memakai
   snapshot committed untuk `verify.mjs`). Hybrid **bukan** izin fallback ke GAS
   ketika Supabase error.
-- **Cutover per collection** = ubah satu entri peta dari `gas`→`supabase` dalam
+- **Cutover per collection** = tambahkan override RPC source `gas`→`supabase` dalam
   satu commit, setelah rekonsiliasi (§6) hijau. Membalik entri peta **hanya
   aman bila belum ada tulisan baru**; setelah ada tulisan Supabase, wajib
   reverse-migration §6.3 (bukan sekadar balik peta). Jangan menganggap cutover
@@ -462,18 +474,18 @@ berisi sebagian collection dari Supabase dan sebagian masih dari GAS. Aturannya:
 - **Berakhir**: setelah keenam collection + recruitment di Supabase, hapus peta
   hybrid, hapus cabang kode GAS di `syncCmsSnapshot`, dan hapus kode GAS (§9).
   Tambah test yang menegaskan tidak ada collection ber-source `gas`.
-- **Bahaya yang dicegah**: dua sumber untuk satu collection (drift), dan hybrid
-  yang tertinggal permanen. Karena itu peta sumber + status migrasi dicatat di
-  `cms-sources.json` (bukan hanya di kepala orang) dan ditinjau tiap pass.
+- **Bahaya yang dicegah**: content source drift dan hybrid permanen. Review
+  source inventory kickoff/TODO + actual cms-client.mjs tiap pass; jangan
+  mendokumentasikan file konfigurasi yang belum diimplementasikan sebagai fakta.
 
-Contoh peta saat pass recruitment + projects selesai:
+Peta sumber actual sesudah pass 3 Roles live (dokumentasi, bukan file runtime):
 
 ```json
 {
   "recruitment": "supabase",
   "projects": "supabase",
-  "team": "gas",
-  "roles": "gas",
+  "team": "supabase",
+  "roles": "supabase",
   "partners": "gas",
   "domains": "gas",
   "hods": "gas"
@@ -491,8 +503,10 @@ sendiri, tetapi sumbernya mengikuti peta yang sama.)
 2. **Backup**: export snapshot, salinan Spreadsheet (File → Copy), salinan
    folder Drive, catat sha256 + jumlah baris + revision. Simpan di luar repo.
 3. **Import** ke Supabase + hitung checksum di tujuan.
-4. **Rekonsiliasi**: diff baris-per-baris kanonik; snapshot hasil Supabase harus
-   **byte-identik** dengan baseline (kecuali konten yang memang diubah).
+4. **Rekonsiliasi**: collection aktif pass harus value-identik dengan sumber
+   yang disepakati; bandingkan non-target terhadap pre-pass remote. Baseline
+   repo tetap untuk visual; jangan reset Team drift preexisting demi membuat
+   seluruh snapshot live tampak identik baseline.
 5. **Render parity**: build + 19/22 HTML identik baseline; 7 gate + SEO PASS.
 
 ### 6.2 Cutover
@@ -580,7 +594,11 @@ Bukti maksimal vs mock harus dibedakan jelas (lihat §10).
 
 ## 8. Kebutuhan setup owner, biaya/kuota, risiko, batas bukti
 
-### 8.1 Setup owner (saat implementasi disetujui)
+### 8.1 Arsip proposal setup awal / auth (bukan onboarding ulang)
+
+Project Supabase dan empat env server sudah digunakan pass live. Daftar
+setup awal di bawah bukan TODO Domains. Provider/callback/SDK hanya berlaku
+jika user memilih desain auth pada pass terakhir; jangan implementasikan sekarang.
 
 - Buat Supabase project (organisasi + region terdekat, mis. Singapore).
 - Terapkan migrasi SQL skema + RLS + seed dari snapshot.
@@ -658,8 +676,9 @@ tetap.
 1. **Mulai dari recruitment tanpa memasang GAS intake.** Implementasi Supabase
    intake langsung mengurangi risiko dan kerja ganda. Form publik + kontrak
    validasi tidak berubah.
-2. **Auth final = Supabase Auth provider Google** (§5.4). Hapus OAuth custom
-   setelah cutover; jangan pertahankan dua mekanisme auth.
+2. **Auth terakhir dan mekanisme pending** (§5.4 proposal). Jangan mengganti
+   OAuth custom CMS selama pass data; minta keputusan setelah semua collection
+   diterima. Recruitment email/password tetap terpisah.
 3. **Satu collection/pass**, snapshot+Zod dipertahankan, peta sumber hybrid
    (§5.6) selama migrasi, dua rebuild, 7 gate + SEO tiap pass; jangan sentuh
    geometri/assertion.
@@ -671,11 +690,11 @@ tetap.
 
 ## 11. Yang perlu keputusan user sebelum implementasi
 
-- ~~Opsi auth~~ **SUDAH DIPUTUSKAN**: Supabase Auth provider Google (§5.4).
-- Region + tier Supabase (free vs Pro).
+- Mekanisme auth CMS final **BELUM DIPUTUSKAN**; §5.4 proposal Google, auth terakhir.
+- Project/region existing web-community sudah ada; jangan onboarding ulang. Tier/kuota ditinjau terpisah bila diperlukan.
 - Retensi & akses data pendaftar.
 - Persetujuan dependency baru `@supabase/supabase-js` + `@supabase/ssr`.
-- Urutan pass yang disetujui (usulan: recruitment → projects → team → roles →
-  partners → domains → hods → milestones/settings).
+- Urutan aktif: recruitment/Projects/Team/Roles selesai → Domains → Hods →
+  Partners → auth terakhir. Milestones/settings bukan tambahan otomatis.
 - Konfirmasi window cutover (owner hadir) dan izin commit/push terpisah.
 - Siapa/berapa admin di `cms_admin_users` (sekarang satu owner).

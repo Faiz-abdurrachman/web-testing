@@ -1,77 +1,132 @@
-# CMS → Supabase Migration — Kickoff untuk AI baru
+# CMS → Supabase — kickoff aktif untuk AI baru
 
-## Status repo (8 Oct 2026)
+User: **Faiz**, panggil **bro**, bahasa Indonesia.
+Work order berikutnya: **pass 4 Domains**, satu collection. Baseline kode live:
+`53f92f8`. Planning sudah dibuat; kode/SQL Domains belum dibuat/applied.
 
-**SUDAH LIVE di Supabase:**
+## 1. Status yang benar
 
-- Recruitment pass 1-3 (intake, admin read, rate limit + refresh token)
-- **CMS pass 1 — Projects** (tabel `private.cms_projects` + state, Storage bucket `cms-media/projects/`)
-- **CMS pass 2 — Team** (tabel `private.cms_team_members` + state, Storage `cms-media/team/`)
-- Hybrid snapshot: `rebuildTeamSnapshot()` konversi format DB → Zod
-- Write via **Management API** (`/database/query`) karena PostgREST safeupdate blokir UPDATE di RPC
-- Env baru: `SUPABASE_ACCESS_TOKEN` wajib di kedua Vercel (tanpa ini write admin gagal)
+| Fitur                | Sumber/status                                                     |
+| -------------------- | ----------------------------------------------------------------- |
+| Recruitment pass 1–3 | Supabase, intake closed, login admin email/password               |
+| CMS Projects pass 1  | Supabase Postgres + Storage projects, live                        |
+| CMS Team pass 2      | Supabase Postgres + Storage team, live                            |
+| CMS Roles pass 3     | Supabase Postgres, public read RPC cms_load_roles, live           |
+| CMS Domains          | GAS saat ini; NEXT pass 4                                         |
+| CMS Hods             | GAS; pass 5 sesudah Domains                                       |
+| CMS Partners         | GAS; pass 6 sesudah Hods                                          |
+| CMS auth             | OAuth custom existing, jangan sentuh sebelum seluruh data selesai |
 
-**Yang MASIH GAS/Sheets/Drive:** Roles, Domains, Hods, Partners (4 collection)
+Commit `53f92f8` terkirim ke testing + production dengan izin user. Kedua
+Vercel SUCCESS, live browser six Roles × 390/1440 × dua situs PASS; admin API
+anonymous 401, recruitment accepting:false. Local QA: CMS 42 PASS/10 SKIP
+(tes Team mutation live), Recruitment 24 PASS, PostgreSQL Roles nyata,
+7 gate + SEO PASS, snapshot repo/19 HTML baseline identik.
 
-## Urutan sisa pass
+Tanggal bukti deploy: testing 2026-10-07 11:20:17 UTC dan production
+11:21:28 UTC (18:20:17/18:21:28 WIB). Nama file migration bertanggal kemudian
+adalah urutan file repo, bukan bukti tanggal execution. Catatan tanggal historis
+8 Oct tidak mengalahkan timestamp deployment actual.
 
-| Pass | Collection   | Notes                           |
-| ---- | ------------ | ------------------------------- |
-| 3    | **Roles**    | Read-only publik, paling ringan |
-| 4    | **Domains**  | Read-only, id fixed 6 baris     |
-| 5    | **Hods**     | Read-only, tab/panel slot fixed |
-| 6    | **Partners** | Read-only, 3 kategori + 4 why   |
+## 2. Urutan baca dan dokumen otoritatif
 
-## Arsitektur akhir
+1. File ini: checkpoint + starter prompt.
+2. `AGENTS.md`: aturan operasional dan izin.
+3. [AI handoff](ai-handoff.md): status/batas bukti terbaru.
+4. [Domains Master Work Plan](cms-pass4-domains-plan.md): kontrak, SQL proposal,
+   kritik risiko, checklist A–E, tes dan DoD.
+5. [Migration TODO](cms-migration-todo.md): done vs TODO seluruh pass.
+6. [Master migration plan](cms-supabase-migration-plan.md) + [CMS SOP](cms-sop.md).
+7. [Roles plan](cms-pass3-roles-plan.md), actual SQL Roles dan tests Roles:
+   template read-only paling relevan; Projects/Team bukan template CRUD Domains.
+8. Baca `docs/pixel-precision-sop.md` + `docs/assets.md` sebelum perubahan UI apa
+   pun; pass Domains justru mengunci UI tanpa perubahan.
 
+Checkpoint aktif + arahan user terbaru mengalahkan NEXT/setup/auth historis.
+Jangan membaca arsip GAS sebagai work order untuk membuat ulang setup.
+
+## 3. Aturan dan koreksi arsitektur
+
+- Satu collection/pass; tidak menyentuh UI/font/artwork/geometri/assertion.
+- Data dulu; auth CMS paling akhir. Pilihan mekanisme auth belum final.
+- Read migrated collections via RPC build-time **anon key**. Write existing
+  Projects/Team lewat Management API database/query dengan access token server.
+- Domains/Roles tidak punya editor atau write API. Jangan membuat handler admin
+  baru atau mengklaim `gas()` handler melayani Domains/Hods/Partners; saat ini
+  mereka berasal dari **build-time GAS full export**.
+- Full export GAS divalidasi sebelum Supabase override. Hods/Partners tetap
+  GAS, dan tab migrated harus tetap valid; jangan hapus GAS atau env sekarang.
+- Tidak ada fallback stale. RPC gagal → build gagal, snapshot lama tidak diganti.
+- service_role/access token server-only; jangan print env, keys, raw error body,
+  URLs bertoken, .env.local atau credentials.
+- Konfirmasi sebelum **push baru**; origin memiliki dua push URLs. Approval
+  `53f92f8` sudah digunakan, bukan izin push otomatis pass 4 atau dokumen baru.
+- Sesi ini hanya planning/docs. Implementasi dimulai saat user mengirim prompt
+  lanjut; jangan menganggap checklist TODO sudah dijalankan.
+
+## 4. Temuan yang wajib dipertahankan
+
+- Team remote berbeda snapshot repo sebelum pass 3. Proof pre/post menunjukkan
+  non-Roles tidak diubah. Jangan reseed Team atau menimpa baseline snapshot.
+- Domains labels nested tiga row mengandung blank dekoratif **persis ''**;
+  ID/order terikat desain via array index. Mask lengkap di plan §3.
+- .env.local saat pass 3 tidak memiliki SUPABASE_ANON_KEY. Verifikasi memakai
+  Management API membaca anon key di memori, tanpa mencetak atau menulis env.
+  Cek presence ulang; jangan menganggap env lokal/dua Vercel otomatis sama.
+- Full `test:cms` dengan server env dapat menjalankan mutation Team live.
+  Jalankan suite tanpa env server; tes Domains baru memakai DB ephemeral.
+- Private Storage read dengan build anon key/cold cache belum diaudit oleh
+  Roles pass. Jangan membuka bucket atau memperbaiki media diam-diam di Domains.
+- Artifacts ignored bisa hilang; simpan ringkasan di docs, buat proof baru saat
+  implementasi. Node 22, bukan mengandalkan instalasi/temp server AI lama.
+
+## 5. Env dan file implementasi
+
+Empat env wajib kedua Vercel: SUPABASE_URL, SUPABASE_ANON_KEY,
+SUPABASE_SERVICE_ROLE_KEY, SUPABASE_ACCESS_TOKEN. Env GAS dipertahankan.
+Project existing web-community, ref yejrdckcmlxrkklgtrwy.
+
+File utama: scripts/cms-client.mjs, src/data/cms-schema.mjs,
+src/data/cms-snapshot.json, src/data/domains.ts,
+supabase/migrations/20261010010000_cms_roles_pass3.sql,
+tests/cms-roles-supabase.test.mjs, tests/cms.test.mjs,
+tests/cms-media.test.mjs. Usulan migration Domains: 20261011010000;
+periksa collision sebelum membuatnya. Jangan mengubah actual Roles SQL.
+
+## 6. Prompt siap copy ke AI baru
+
+```text
+Bro, lanjut implementasi CMS pass 4 Domains → Supabase di repo
+/home/faiz/ds/ds5opencode.
+
+Baca docs/cms-migration-kickoff.md → AGENTS.md → docs/ai-handoff.md →
+docs/cms-pass4-domains-plan.md → docs/cms-migration-todo.md →
+docs/cms-supabase-migration-plan.md → docs/cms-sop.md sebelum coding.
+
+Baseline kode live 53f92f8: Projects/Team/Roles sudah Supabase, kedua Vercel
+SUCCESS dan Roles acceptance selesai. Domains/Hods/Partners masih GAS.
+Ikuti Master Work Plan Domains checklist A–E satu tahap demi satu tahap.
+
+Scope hanya Domains: enam fixed ID/order, labels tiga nested row dengan blank
+slot persis baseline, SQL private + RLS + public anon RPC, hybrid snapshot,
+tes PostgreSQL nyata dan failure atomicity, 7 gate + SEO, docs + commit.
+Tidak ada editor/write API/Storage/state baru. UI/geometri/font/artwork/Zod
+existing/assertion tidak berubah. Auth paling akhir, jangan sentuh sekarang.
+
+Periksa git/env/Node 22; jangan mencetak secret. Jangan reset perubahan asing,
+reseed Team atau menimpa snapshot baseline: Team remote drift sudah ada.
+GAS full export tetap dependency; jangan hapus tab/env/GAS. Jalankan full
+CMS suite tanpa server env karena ada tes mutation Team live.
+
+Kerjakan sampai hasil konkret siap review. Konfirmasi sebelum push baru;
+origin sekali push men-deploy testing + production. Setelah push berizin,
+verifikasi SHA/deployment dan live Home/Recruitment/routing kedua situs.
+Laporkan bukti lokal vs live dan blocker yang benar-benar terjadi.
 ```
-GAS/Sheets/Drive  ──►  Supabase Postgres + Storage
-(roles, domains,        ├── cms_projects ✓
-hods, partners)         ├── cms_team_members ✓
-                        ├── Storage bucket cms-media/{projects,team}/
-                        └── Supabase Auth (BELUM — auth = pass PALING AKHIR)
-```
 
-## Aturan keras
+## 7. Keputusan yang tidak boleh diasumsikan
 
-1. **Data dulu → auth terakhir.** Jangan sentuh auth admin sebelum semua collection migrasi.
-   Handler `gas()` masih dipanggil untuk roles/domains/hods/partners.
-2. **Satu collection per pass.** UI/geometri/font/artwork/assertion baseline TIDAK berubah. 7 gate + SEO tiap pass.
-3. **Hybrid snapshot** — collection di Supabase dibaca via RPC (`SUPABASE_ANON_KEY` build-time).
-   Sisanya dari GAS. Tidak ada fallback stale.
-4. **Write via Management API** — karena PostgREST safeupdate, semua write operation panggil
-   `POST /v1/projects/<ref>/database/query` dengan `SUPABASE_ACCESS_TOKEN`.
-   Read tetap via `/rest/v1/rpc/` endpoint.
-5. **`service_role` hanya di server.** `SUPABASE_ACCESS_TOKEN` juga server-only.
-6. **Secret tidak dicetak.**
-7. **Konfirmasi sebelum push.** Origin deploy ke dua situs.
-
-## Env yang wajib di kedua Vercel
-
-- `SUPABASE_URL`
-- `SUPABASE_ANON_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `SUPABASE_ACCESS_TOKEN`
-
-## File penting untuk AI baru
-
-1. `docs/cms-pass1-projects-plan.md` — pola implementasi Pass 1
-2. `docs/cms-pass2-team-plan.md` — pola implementasi Pass 2 (template untuk Pass 3)
-3. `AGENTS.md` — aturan operasional, commands, gotchas
-4. `docs/cms-supabase-migration-plan.md` — plan induk
-5. `docs/cms-sop.md` — SOP CMS, secret handling
-6. `server/cms-admin.mjs` — handler (projectsOperation + teamOperation sebagai template)
-7. `scripts/cms-client.mjs` — syncCmsSnapshot + rebuildTeamSnapshot
-8. `src/data/cms-schema.mjs` — Zod schema
-9. `supabase/migrations/20261008010000_cms_projects_pass1.sql` — template migration SQL
-10. `.env.local` — secret (jangan dicetak)
-
-## Yang BELUM diputuskan
-
-- Login admin: pindah ke Supabase Auth Google atau tetap OAuth custom? (Auth = pass terakhir)
-- CAPTCHA (butuh key Cloudflare)
-- Retensi/pembukaan publik recruitment
-
----
-
-User adalah **Faiz** — panggil "bro". Bahasa Indonesia.
+Auth CMS final/provider, CAPTCHA keys, retensi/pembukaan recruitment,
+perbaikan Team drift, audit cold-cache media, refactor partial GAS validation,
+dan penghapusan GAS memerlukan scope/keputusan sendiri. Tidak menambah semua
+itu ke pass Domains atas inisiatif AI baru.

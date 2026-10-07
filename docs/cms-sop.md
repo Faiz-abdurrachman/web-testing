@@ -1,11 +1,22 @@
 # SOP CMS — Data Sorcerers
 
-Checkpoint pass 3: [Roles plan](cms-pass3-roles-plan.md). SQL Roles live,
-kode hybrid lokal siap, push/deploy belum. Projects/Team/Roles dibaca via RPC
-anon; Domains/Hods/Partners masih GAS. Roles belum punya editor/write API.
-Handler OAuth custom, media dan Management API write existing tidak berubah.
-Auth hanya dikerjakan setelah seluruh collection migrasi; pilihannya pending.
-Keputusan/checkpoint terbaru mengalahkan catatan GAS historis di bawah.
+## Checkpoint aktif — pass 3 live, pass 4 plan
+
+[Roles](cms-pass3-roles-plan.md) selesai deploy/acceptance pada `53f92f8`:
+dua Vercel SUCCESS, six Roles × 390/1440 × dua situs PASS, admin API anonymous
+401, recruitment closed. [Domains Master Work Plan](cms-pass4-domains-plan.md)
+
+- [TODO](cms-migration-todo.md) adalah work order berikut; belum implementasi.
+  Projects/Team/Roles dibaca Supabase RPC anon. Domains/Hods/Partners masih dari
+  full export GAS (validasi awal tetap seluruh snapshot), bukan handler admin gas().
+
+Domains/Roles read-only tanpa editor; auth/media/handler tetap. Auth CMS terakhir;
+mekanisme pending. Jangan load env server pada seluruh test:cms (Team live
+mutation tests). Local anon key absent saat pass 3, verifikasi mengambil key
+Management API in-memory tanpa print. Jangan memakai privileged key sebagai anon.
+Team remote drift preexisting tidak diperbaiki di pass Roles/Domains. Docs/code
+historis di bawah bukan instruksi mengulang setup; sumber aktif lihat kickoff.
+Konfirmasi sebelum push baru; origin deploy dua situs.
 
 ## B2 Team — pass lokal 6 Oct 2026
 
@@ -98,8 +109,9 @@ pandu langkah instalasi akun satu tahap per pesan, tanpa meminta password.
    relevan; lock pass sebelum collection berikutnya. Simpan bukti ignored.
 8. Commit fitur + docs. Sesi Growth 6 Oct: konfirmasi user sebelum push. Deploy dua repo sesuai izin. Perubahan source GAS di
    repo tidak otomatis memperbarui project/deployment GAS live milik user.
-9. Generate installer baru, pandu owner mengganti file dan membuat version
-   deployment baru bila GAS berubah, lalu verifikasi real login/save/rebuild.
+9. Hanya bila source GAS berubah: generate installer baru, pandu owner
+   mengganti file/version deployment dan verifikasi real login/save/rebuild.
+   Pass Domains tidak mengubah GAS, jadi tidak menjalankan langkah installer.
    Jangan reseed Sheet atau membuat folder baru saat update.
 
 ## 4. Presisi konten dinamis

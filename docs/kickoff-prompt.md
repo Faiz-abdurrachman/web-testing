@@ -1,6 +1,21 @@
 # Kickoff prompt — buat AI agent baru
 
-## ★ CHECKPOINT AKTIF — Recruitment pass 1+2 Supabase (7 Oct 2026)
+## Work order aktif — CMS pass 4 Domains (plan only)
+
+CMS Projects/Team/Roles sudah Supabase dan live pada baseline `53f92f8`.
+Kedua Vercel SUCCESS; Roles live acceptance selesai. Domains/Hods/Partners
+masih GAS. NEXT hanya Domains; auth CMS terakhir dan keputusan login pending.
+Baca [kickoff migrasi](cms-migration-kickoff.md),
+[Domains Master Work Plan](cms-pass4-domains-plan.md),
+[TODO](cms-migration-todo.md), lalu AGENTS dan [ai-handoff](ai-handoff.md).
+
+Plan Domains/TODO/handoff sudah disiapkan, implementasi belum dimulai.
+Jangan membuat ulang GAS/Sheets/Drive, reseed Team, mengubah UI/auth, atau
+mengikuti NEXT historis di bawah. Approval push pass 3 sudah digunakan;
+konfirmasi sebelum push baru. Bagian lama berikut adalah **arsip konteks**,
+bukan status/scope aktif. Prompt AI baru ada di kickoff migrasi §6.
+
+## ★ ARSIP CHECKPOINT — Recruitment pass 1+2 Supabase (7 Oct 2026)
 
 Target akhir user: **seluruh backend ke Supabase** (Postgres + Storage +
 Supabase Auth); Astro/UI/geometri dan CMS existing **tidak berubah**. Rencana:
@@ -420,7 +435,7 @@ Urutan target (prioritas sekarang):
       `docs/cms-plan.md`. Lanjut **Projects Growth** (`docs/cms-projects-growth-plan.md`).
 
 --------------------------------------------------------------------------------
-CMS / ADMIN DASHBOARD — NEXT AKTIF
+CMS / ADMIN DASHBOARD — NEXT HISTORIS
 Gunakan `docs/cms-kickoff.md`, `docs/cms-sop.md` dan
 `docs/cms-projects-growth-plan.md`. B0/B1 selesai; admin Projects existing sudah
 terpasang; kedua hook dan build testing/production berhasil setelah fix 96a9756.

@@ -1,12 +1,12 @@
 # Page Full-Screen Migration Plan — Hero Gambar + Section 100svh
 
-## Checkpoint aktif CMS — 6 Oct 2026
+## Checkpoint aktif CMS — Roles live, Domains plan only
 
-Migrasi full-screen selesai; Contact tetap hero Figma-exact tinggi 954.
-NEXT CMS [Projects Growth](cms-projects-growth-plan.md), bukan migrasi/video.
-B0/B1 dan admin Projects existing sudah terpasang; kedua Vercel SUCCESS pada
-`96a9756`. Entri pemasangan pending di riwayat adalah checkpoint lama.
-Gunakan [ai-handoff.md](ai-handoff.md) dan [cms-sop.md](cms-sop.md).
+Full-screen selesai; Contact tetap hero Figma-exact tinggi 954. Tidak ada
+perubahan full-screen/UI pada planning migration ini. CMS Projects/Team/Roles
+live `53f92f8`; NEXT [Domains](cms-pass4-domains-plan.md),
+[TODO](cms-migration-todo.md), [kickoff](cms-migration-kickoff.md).
+Entri NEXT video/GAS Growth di riwayat bukan work order aktif.
 
 Status: **#9 SELESAI** untuk Homepage (`b228f3c`, 4 Oct), About Us (5 Oct),
 Recruitment, Partners, Hall of Frames (6 Oct). **Contact DIKECUALIKAN (6 Oct
