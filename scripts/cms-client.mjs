@@ -27,6 +27,29 @@ async function supabaseFetch(supabaseUrl, supabaseKey, rpcName, fetchImpl) {
 export const CMS_MAX_BYTES = 1024 * 1024;
 export const CMS_TIMEOUT_MS = 60000;
 
+function rebuildTeamSnapshot(data) {
+  const members = data.members || [];
+  const groups = data.groups || [];
+
+  const leaderMembers = members
+    .filter((m) => m.group === 'leader')
+    .sort((a, b) => a.order - b.order)
+    .map(({ name, role, photo }) => ({ name, role, photo }));
+
+  const hodsTeams = groups
+    .filter((g) => g.id !== 'leader')
+    .map((g) => ({
+      id: g.id,
+      title: g.title,
+      members: members
+        .filter((m) => m.group === g.id)
+        .sort((a, b) => a.order - b.order)
+        .map(({ name, role, photo }) => ({ name, role, photo })),
+    }));
+
+  return { leaderTeam: leaderMembers, hodsTeams };
+}
+
 export function validateCmsSnapshot(value) {
   const result = cmsSnapshotSchema.safeParse(value);
   if (!result.success) {
@@ -225,7 +248,7 @@ export async function syncCmsSnapshot({
   if (apiUrl && apiToken) {
     if (!supabaseUrl || !supabaseKey) {
       throw new Error(
-        'CMS projects migration requires SUPABASE_URL and SUPABASE_ANON_KEY',
+        'CMS migration requires SUPABASE_URL and SUPABASE_ANON_KEY',
       );
     }
 
@@ -237,6 +260,14 @@ export async function syncCmsSnapshot({
     );
     snapshot.projects = sp.projects;
 
+    const st = await supabaseFetch(
+      supabaseUrl,
+      supabaseKey,
+      'cms_load_team',
+      fetchImpl,
+    );
+    snapshot.team = rebuildTeamSnapshot(st);
+
     validateCmsSnapshot(snapshot);
   }
 
@@ -247,6 +278,8 @@ export async function syncCmsSnapshot({
     apiToken,
     fetchImpl,
     timeoutMs,
+    supabaseUrl,
+    supabaseKey,
   });
   const target =
     snapshotPath instanceof URL
@@ -274,6 +307,8 @@ export async function cacheProjectMedia({
   apiToken,
   fetchImpl = fetch,
   timeoutMs = CMS_TIMEOUT_MS,
+  supabaseUrl,
+  supabaseKey,
 }) {
   const images = [
     ...new Set(
@@ -310,18 +345,47 @@ export async function cacheProjectMedia({
         'CMS project media cache is missing or invalid. Configure remote CMS access.',
       );
     let bytes;
-    try {
-      const media = await fetchCmsSnapshot({
-        apiUrl,
-        apiToken,
-        fetchImpl,
-        timeoutMs,
-        action: 'media',
-        image,
+    if (
+      image.startsWith('/images/cms/team/') ||
+      image.startsWith('/images/cms/projects/')
+    ) {
+      if (!supabaseUrl || !supabaseKey)
+        throw new Error(
+          'Media fetch requires SUPABASE_URL and SUPABASE_ANON_KEY',
+        );
+      const storagePath = image.replace(/^\/images\/cms\//, '');
+      const storageUrl =
+        supabaseUrl.replace(/\/+$/, '') +
+        '/storage/v1/object/cms-media/' +
+        storagePath;
+      const sres = await fetchImpl(storageUrl, {
+        headers: {
+          Authorization: 'Bearer ' + supabaseKey,
+        },
+        signal: AbortSignal.timeout(15000),
       });
+      if (!sres.ok) throw new Error('Storage media fetch failed: ' + image);
+      const buf = Buffer.from(await sres.arrayBuffer());
+      const media = {
+        image,
+        mimeType: 'image/webp',
+        data: buf.toString('base64'),
+      };
       bytes = await verifyProjectMedia(media, image);
-    } catch {
-      throw new Error('CMS project media fetch or validation failed.');
+    } else {
+      try {
+        const media = await fetchCmsSnapshot({
+          apiUrl,
+          apiToken,
+          fetchImpl,
+          timeoutMs,
+          action: 'media',
+          image,
+        });
+        bytes = await verifyProjectMedia(media, image);
+      } catch {
+        throw new Error('CMS project media fetch or validation failed.');
+      }
     }
     await mkdir(new URL('./', target), { recursive: true });
     const temp = new URL(`.media-${randomUUID()}.tmp`, target);

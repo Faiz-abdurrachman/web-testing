@@ -12,6 +12,7 @@ const env = {
   CMS_ADMIN_API_DEPLOYMENT_ID: 'private-deployment',
   SUPABASE_URL: 'https://placeholder.supabase.co',
   SUPABASE_SERVICE_ROLE_KEY: 'placeholder',
+  SUPABASE_ACCESS_TOKEN: 'placeholder-token',
   CMS_DEPLOY_HOOK_TESTING: '',
   CMS_DEPLOY_HOOK_PRODUCTION: '',
 };
@@ -53,8 +54,36 @@ function harness(teamData) {
           expires_in: 3600,
           scope: scopes,
         });
-      if (typeof url === 'string' && url.includes('/rest/v1/rpc/'))
+      if (typeof url === 'string' && url.includes('/rest/v1/rpc/')) {
+        if (url.includes('cms_load_team')) {
+          return Response.json({
+            members: [],
+            groups: [],
+            revision: 'a'.repeat(64),
+            photoPresets: [],
+            minMembers: 1,
+            maxMembers: 8,
+            minGroups: 7,
+            publicationPending: false,
+            affectedId: null,
+          });
+        }
         return Response.json(data);
+      }
+      if (typeof url === 'string' && url.includes('/database/query')) {
+        // Return write result — wrap in select result format
+        const result = {
+          saved: true,
+          projects: data.projects,
+          revision: 'a'.repeat(64),
+          imagePresets: data.imagePresets,
+          minProjects: 1,
+          maxProjects: 8,
+          publicationPending: false,
+          affectedId: data.projects[0].id,
+        };
+        return Response.json([{ cms_save_project: result }]);
+      }
       return Response.json({
         done: true,
         response: {

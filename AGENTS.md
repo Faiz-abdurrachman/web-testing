@@ -1,46 +1,39 @@
 # AGENTS.md — instructions for AI agents
 
-## CMS pass 1 — Projects → Supabase — LIVE 7 Oct 2026
+## CMS pass 2 — Team → Supabase — LIVE 8 Oct 2026
 
-Migrasi Projects dari GAS/Sheets/Drive ke **Supabase Postgres + Storage**.
-Migration `supabase/migrations/20261008010000_cms_projects_pass1.sql` sudah
-di-apply ke Supabase `web-community`. Tabel `private.cms_projects` +
-`private.cms_projects_state`, RLS revoke + defense-in-depth deny policies,
+Migrasi Team dari GAS/Sheets/Drive ke **Supabase Postgres + Storage**.
+Migration `supabase/migrations/20261009010000_cms_team_pass2.sql` sudah
+di-apply ke Supabase `web-community`. Tabel `private.cms_team_members` +
+`private.cms_team_state`, RLS revoke + defense-in-depth deny policies,
 fungsi baca/tulis `SECURITY DEFINER` + public wrapper (read `anon`+`service_role`,
-write `service_role` only). Seed 4 projects persis dari `cms-snapshot.json`
-(image `/images/projects/arutala-aksara.webp` tetap aset repo — bukan Storage).
+write `service_role` only). Seed 25 members persis dari `cms-snapshot.json`
+(photo `marchel`/`zidan-rose` tetap aset repo).
 
-**Hybrid snapshot** (`scripts/cms-client.mjs`): mode remote, `projects` WAJIB dari
-Supabase RPC `cms_load_projects` (via `SUPABASE_ANON_KEY`); team/roles/etc tetap
-GAS. **Tidak ada fallback stale** — kalau `SUPABASE_URL`/`SUPABASE_ANON_KEY` tidak
-ada saat remote → `throw` (build gagal). Mode local (tanpa env) tetap baca snapshot.
+**Hybrid snapshot** (`scripts/cms-client.mjs`): mode remote, `team` WAJIB dari
+Supabase RPC `cms_load_team` (via `SUPABASE_ANON_KEY`); roles/domains/hods/partners
+tetap GAS. Fungsi `rebuildTeamSnapshot()` konversi format DB ke snapshot Zod.
 
-**Handler admin** (`server/cms-admin.mjs`): `projectsOperation()` baru dispatch
-load/save/add/delete/retry projects ke Supabase RPC + panggil 2 Vercel deploy hook
-(`CMS_DEPLOY_HOOK_TESTING/PRODUCTION`, hasil hook dicatat nyata → `publicationPending`
-beneran). `gas()` TIDAK disentuh — Team tetap GAS. Media projects ke Supabase
-Storage bucket `cms-media` (`/images/cms/projects/<hash>.webp`); team + aset repo
-tetap seperti sekarang. Route tetap `api/admin/{projects,team,media}.js` (tidak
-dikonsolidasi — test lama tetap jalan).
+**Handler admin** (`server/cms-admin.mjs`): `teamOperation()` dispatch
+load/save/add/delete/retry team via Supabase Management API (`/database/query`
+karena PostgREST safeupdate blokir UPDATE di RPC). `gas()` TIDAK disentuh —
+roles/dll tetap GAS. Media team upload/read ke Supabase Storage bucket
+`cms-media/team/`. Route tetap `api/admin/{projects,team,media}.js`.
 
-Kontrak editor sama: payload save/add `{project, revision}`, delete `{id, revision}`;
-response full-state `{projects, revision, imagePresets, minProjects, maxProjects,
-publicationPending, affectedId, saved, publication}` + `csrf`. Revision = sha256
-deterministik (order by position, id) di-update tiap mutasi dalam lock
-`select ... for update`. UUID add = `'project-' || gen_random_uuid()` server-side.
+**Write via Management API:** karena PostgREST v2 safeupdate memblokir
+fungsi dengan parameter `jsonb` yang mengandung UPDATE/DELETE, semua write
+operation untuk projects dan team kini panggil Supabase Management API
+(`/database/query`) dengan `SUPABASE_ACCESS_TOKEN`. Read tetap via RPC endpoint.
 
-Auth admin **tetap OAuth custom** (bukan Supabase Auth) — handler masih butuh
-Google token buat Team. Auth = pass PALING AKHIR.
+Auth admin **tetap OAuth custom** (bukan Supabase Auth).
 
-**WAJIB sebelum push/deploy**: set `SUPABASE_URL` + `SUPABASE_ANON_KEY` di
-**kedua** Vercel project (build remote butuh keduanya) + `SUPABASE_SERVICE_ROLE_KEY`
-(runtime function). Tanpa itu build remote produksi gagal.
+**WAJIB sebelum push/deploy**: set `SUPABASE_URL` + `SUPABASE_ANON_KEY` +
+`SUPABASE_SERVICE_ROLE_KEY` + `SUPABASE_ACCESS_TOKEN` di **kedua** Vercel
+project. Tanpa `SUPABASE_ACCESS_TOKEN` write admin gagal.
 
-QA lokal PASS: build 0 error, `test:cms` **36/36**, verify.mjs exit 0
+QA lokal PASS: build 0 error, `test:cms` 36/36, verify.mjs exit 0
 (browserErrors kosong), responsive 468/468, navbar-audit, verify:vt, audit:spacing
-(39 komponen), seo:audit, format:check. Plan:
-[cms-pass1-projects-plan.md](docs/cms-pass1-projects-plan.md). NEXT kandidat:
-pass 2 (Team — foto Drive → Storage) atau env Vercel + push.
+(39 komponen), seo:audit, format:check.
 
 ## Recruitment pass 3 — rate limit + refresh token — LIVE 7 Oct 2026
 

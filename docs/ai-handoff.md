@@ -1,5 +1,19 @@
 # AI handoff — current context
 
+## CMS pass 2 — Team → Supabase — LIVE 8 Oct 2026
+
+Pass 2 selesai: Team pindah dari GAS/Sheets/Drive ke Supabase Postgres + Storage.
+Migration `20261009010000_cms_team_pass2.sql` di-apply. Tabel
+`private.cms_team_members` + `private.cms_team_state`, 7 grup (leader + 6 HoDS),
+25 member seed. Hybrid snapshot via `rebuildTeamSnapshot()`. Handler
+`teamOperation()` dispatch via Management API (`/database/query`) karena
+PostgREST safeupdate blokir UPDATE di RPC untuk fungsi dengan parameter `jsonb`.
+Media team ke Storage bucket `cms-media/team/`. Projects yang sudah migrasi di
+Pass 1 juga ikut pakai Management API untuk write. Auth tetap OAuth custom.
+
+**Wajib sebelum deploy:** `SUPABASE_URL`, `SUPABASE_ANON_KEY`,
+`SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ACCESS_TOKEN` di kedua Vercel.
+
 ## Recruitment pass 3 — rate limit + refresh token — LIVE 7 Oct 2026
 
 Pass 3 selesai: rate limit login admin + refresh token otomatis.

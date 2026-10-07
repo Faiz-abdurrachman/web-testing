@@ -31,6 +31,46 @@ const raster = (format = 'png') =>
     .toFormat(format)
     .toBuffer();
 
+const teamRpc = () => {
+  const members = [];
+  const groups = [];
+  for (const ht of baseline.team.hodsTeams) {
+    groups.push({ id: ht.id, title: ht.title });
+    for (const [i, m] of ht.members.entries()) {
+      members.push({
+        id: ht.id + '-' + (i + 1),
+        group: ht.id,
+        name: m.name,
+        role: m.role,
+        photo: m.photo,
+        order: i + 1,
+      });
+    }
+  }
+  for (const [i, m] of baseline.team.leaderTeam.entries()) {
+    members.push({
+      id: 'leader-' + (i + 1),
+      group: 'leader',
+      name: m.name,
+      role: m.role,
+      photo: m.photo,
+      order: i + 1,
+    });
+  }
+  groups.unshift({ id: 'leader', title: '' });
+  return {
+    members,
+    groups,
+    revision: 'a'.repeat(64),
+    photoPresets: ['marchel', 'zidan-rose'],
+    minMembers: 1,
+    maxMembers: 8,
+    minGroups: 7,
+    publicationPending: false,
+    affectedId: null,
+  };
+};
+
 test('media normalizes raster uploads, bounds pixels/bytes and verifies hash and decode', async () => {
   for (const format of ['png', 'jpeg', 'webp']) {
     const media = await normalizeProjectImage(
@@ -97,6 +137,9 @@ test('prebuild caches verified private media before atomic snapshot write, refet
         const href = typeof url === 'string' ? url : url.href;
         if (href.includes('/rest/v1/rpc/cms_load_projects'))
           return Response.json(changed);
+        if (href.includes('/rest/v1/rpc/cms_load_team'))
+          return Response.json(teamRpc());
+        if (href.includes('/database/query')) return Response.json([]);
         const parsed = new URL(href);
         if (parsed.searchParams.get('action') === 'media') {
           mediaCalls++;
@@ -311,6 +354,7 @@ test('native media route enforces session/CSRF, normalizes bytes before fixed ow
     CMS_ADMIN_API_DEPLOYMENT_ID: 'private-deployment',
     SUPABASE_URL: 'https://placeholder.supabase.co',
     SUPABASE_SERVICE_ROLE_KEY: 'placeholder',
+    SUPABASE_ACCESS_TOKEN: 'placeholder',
   };
   const data = {
     projects: baseline.projects,
@@ -549,6 +593,7 @@ test('native Team media route enforces session/CSRF, normalizes bytes before fix
     CMS_ADMIN_API_DEPLOYMENT_ID: 'private-deployment',
     SUPABASE_URL: 'https://placeholder.supabase.co',
     SUPABASE_SERVICE_ROLE_KEY: 'placeholder',
+    SUPABASE_ACCESS_TOKEN: 'placeholder',
   };
   const data = {
     projects: baseline.projects,

@@ -22,12 +22,58 @@ const supabaseEnv = {
   SUPABASE_URL: 'https://placeholder.supabase.co',
   SUPABASE_ANON_KEY: 'placeholder',
 };
-const supabaseMock = (url) =>
-  (typeof url === 'string' ? url : url.href).includes(
-    '/rest/v1/rpc/cms_load_projects',
-  )
-    ? jsonResponse(baseline)
-    : null;
+const supabaseMock = (url) => {
+  const href = typeof url === 'string' ? url : url.href;
+  if (href.includes('/rest/v1/rpc/cms_load_projects'))
+    return jsonResponse(baseline);
+  if (href.includes('/rest/v1/rpc/cms_load_team')) {
+    // Return response in Supabase RPC format (members + groups)
+    const members = [];
+    const groups = [];
+    const seen = new Set();
+    for (const m of baseline.team.leaderTeam) {
+      if (seen.has('leader-' + members.length)) continue;
+      seen.add('leader-' + members.length);
+      members.push({
+        id: 'leader-' + (members.length + 1),
+        group: 'leader',
+        name: m.name,
+        role: m.role,
+        photo: m.photo,
+        order: members.length + 1,
+      });
+    }
+    if (!groups.find((g) => g.id === 'leader'))
+      groups.push({ id: 'leader', title: '' });
+    for (const ht of baseline.team.hodsTeams) {
+      if (!groups.find((g) => g.id === ht.id))
+        groups.push({ id: ht.id, title: ht.title });
+      for (const [i, m] of ht.members.entries()) {
+        members.push({
+          id: ht.id + '-' + (i + 1),
+          group: ht.id,
+          name: m.name,
+          role: m.role,
+          photo: m.photo,
+          order: i + 1,
+        });
+      }
+    }
+    return jsonResponse({
+      members,
+      groups,
+      revision: 'a'.repeat(64),
+      photoPresets: ['marchel', 'zidan-rose'],
+      minMembers: 1,
+      maxMembers: 8,
+      minGroups: 7,
+      publicationPending: false,
+      affectedId: null,
+    });
+  }
+  if (href.includes('/database/query')) return jsonResponse([]);
+  return null;
+};
 
 const jsonResponse = (value = baseline) =>
   new Response(JSON.stringify(value), {
@@ -92,12 +138,13 @@ test('GAS redirects return a valid payload and atomically replace the snapshot',
         snapshotPath: path,
         env: { CMS_API_URL: endpoint, CMS_API_TOKEN: token, ...supabaseEnv },
         fetchImpl: async (url, opts) => {
+          const href = typeof url === 'string' ? url : url.href;
           if (
-            (typeof url === 'string' ? url : url.href).includes(
-              '/rest/v1/rpc/cms_load_projects',
-            )
+            href.includes('/rest/v1/rpc/cms_load_projects') ||
+            href.includes('/rest/v1/rpc/cms_load_team')
           )
             return jsonResponse(changed);
+          if (href.includes('/database/query')) return jsonResponse([]);
           return fetchImpl(url, opts);
         },
       }),
@@ -267,12 +314,13 @@ test('timeouts retry once from the export endpoint; exhausted retries preserve t
           env: { CMS_API_URL: endpoint, CMS_API_TOKEN: token, ...supabaseEnv },
           timeoutMs: 10,
           fetchImpl: async (url, opts) => {
+            const href = typeof url === 'string' ? url : url.href;
             if (
-              (typeof url === 'string' ? url : url.href).includes(
-                '/rest/v1/rpc/cms_load_projects',
-              )
+              href.includes('/rest/v1/rpc/cms_load_projects') ||
+              href.includes('/rest/v1/rpc/cms_load_team')
             )
               return jsonResponse(baseline);
+            if (href.includes('/database/query')) return jsonResponse([]);
             return fetchImpl(url, opts);
           },
         });
@@ -374,12 +422,13 @@ test('redirect 404 retries with a fresh export request; exhaustion leaves snapsh
         snapshotPath: path,
         env: { CMS_API_URL: endpoint, CMS_API_TOKEN: token, ...supabaseEnv },
         fetchImpl: async (url, opts) => {
+          const href = typeof url === 'string' ? url : url.href;
           if (
-            (typeof url === 'string' ? url : url.href).includes(
-              '/rest/v1/rpc/cms_load_projects',
-            )
+            href.includes('/rest/v1/rpc/cms_load_projects') ||
+            href.includes('/rest/v1/rpc/cms_load_team')
           )
             return jsonResponse(baseline);
+          if (href.includes('/database/query')) return jsonResponse([]);
           return fetchImpl(url, opts);
         },
       });

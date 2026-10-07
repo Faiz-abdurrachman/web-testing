@@ -376,10 +376,14 @@ export function createAdminHandler({
     return result;
   }
 
-  async function projectsOperation(cfg, env, token, operation, payload) {
+  const wrapPayload = (p) =>
+    p && typeof p === 'object' ? JSON.stringify(p) : p;
+
+  async function teamOperation(cfg, env, token, operation, payload) {
     const supabaseUrl = env.SUPABASE_URL;
     const supabaseKey = env.SUPABASE_SERVICE_ROLE_KEY;
-    if (!supabaseUrl || !supabaseKey) fail('CONFIGURATION');
+    const mgmtToken = env.SUPABASE_ACCESS_TOKEN;
+    if (!supabaseUrl || !supabaseKey || !mgmtToken) fail('CONFIGURATION');
 
     const baseUrl = supabaseUrl.replace(/\/+$/, '');
 
@@ -397,6 +401,127 @@ export function createAdminHandler({
       });
       if (!res.ok) fail('SERVER_ERROR');
       return res.json();
+    };
+
+    const queryWrite = async (query) => {
+      const res = await fetchImpl(
+        'https://api.supabase.com/v1/projects/yejrdckcmlxrkklgtrwy/database/query',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: 'Bearer ' + mgmtToken,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ query }),
+          signal: AbortSignal.timeout(30000),
+        },
+      );
+      if (!res.ok) fail('SERVER_ERROR');
+      const rows = await res.json();
+      if (!rows.length) fail('SERVER_ERROR');
+      const key = Object.keys(rows[0])[0];
+      return rows[0][key];
+    };
+
+    const callDeployHooks = async () => {
+      const hooks = [
+        { target: 'testing', url: env.CMS_DEPLOY_HOOK_TESTING },
+        { target: 'production', url: env.CMS_DEPLOY_HOOK_PRODUCTION },
+      ];
+      const results = [];
+      for (const hook of hooks) {
+        if (!hook.url) {
+          results.push({ target: hook.target, accepted: false });
+          continue;
+        }
+        try {
+          const res = await fetchImpl(hook.url, {
+            method: 'POST',
+            signal: AbortSignal.timeout(30000),
+          });
+          results.push({ target: hook.target, accepted: res.ok });
+        } catch {
+          results.push({ target: hook.target, accepted: false });
+        }
+      }
+      return results;
+    };
+
+    if (operation === 'load') {
+      return sanitize({ ok: true, data: await rpc('cms_load_team') });
+    }
+
+    if (operation === 'save' || operation === 'add' || operation === 'delete') {
+      const fnName =
+        operation === 'save'
+          ? 'cms_save_member'
+          : operation === 'add'
+            ? 'cms_add_member'
+            : 'cms_delete_member';
+      const escaped =
+        payload && typeof payload === 'object'
+          ? JSON.stringify(payload).replace(/'/g, "''")
+          : String(payload || '').replace(/'/g, "''");
+      const result = await queryWrite(
+        `select * from public.${fnName}('${escaped}'::jsonb)`,
+      );
+      if (result.error) return { ok: false, error: result.error };
+      const publication = await callDeployHooks();
+      result.publication = publication;
+      result.publicationPending = publication.some((p) => !p.accepted);
+      return sanitize({ ok: true, data: result });
+    }
+
+    if (operation === 'retry') {
+      const publication = await callDeployHooks();
+      return sanitize({ ok: true, data: { publication } });
+    }
+
+    fail('INVALID_INPUT');
+  }
+
+  async function projectsOperation(cfg, env, token, operation, payload) {
+    const supabaseUrl = env.SUPABASE_URL;
+    const supabaseKey = env.SUPABASE_SERVICE_ROLE_KEY;
+    const mgmtToken = env.SUPABASE_ACCESS_TOKEN;
+    if (!supabaseUrl || !supabaseKey || !mgmtToken) fail('CONFIGURATION');
+
+    const baseUrl = supabaseUrl.replace(/\/+$/, '');
+
+    const rpc = async (fn, body) => {
+      const url = `${baseUrl}/rest/v1/rpc/${fn}`;
+      const res = await fetchImpl(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          apikey: supabaseKey,
+          Authorization: 'Bearer ' + supabaseKey,
+        },
+        body: JSON.stringify(body || {}),
+        signal: AbortSignal.timeout(15000),
+      });
+      if (!res.ok) fail('SERVER_ERROR');
+      return res.json();
+    };
+
+    const queryWrite = async (query) => {
+      const res = await fetchImpl(
+        'https://api.supabase.com/v1/projects/yejrdckcmlxrkklgtrwy/database/query',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: 'Bearer ' + mgmtToken,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ query }),
+          signal: AbortSignal.timeout(30000),
+        },
+      );
+      if (!res.ok) fail('SERVER_ERROR');
+      const rows = await res.json();
+      if (!rows.length) fail('SERVER_ERROR');
+      const key = Object.keys(rows[0])[0];
+      return rows[0][key];
     };
 
     const callDeployHooks = async () => {
@@ -428,13 +553,19 @@ export function createAdminHandler({
     }
 
     if (operation === 'save' || operation === 'add' || operation === 'delete') {
-      const rpcName =
+      const fnName =
         operation === 'save'
           ? 'cms_save_project'
           : operation === 'add'
             ? 'cms_add_project'
             : 'cms_delete_project';
-      const result = await rpc(rpcName, { p_payload: payload });
+      const escaped =
+        payload && typeof payload === 'object'
+          ? JSON.stringify(payload).replace(/'/g, "''")
+          : String(payload || '').replace(/'/g, "''");
+      const result = await queryWrite(
+        `select * from public.${fnName}('${escaped}'::jsonb)`,
+      );
       if (result.error) return { ok: false, error: result.error };
       const publication = await callDeployHooks();
       result.publication = publication;
@@ -586,7 +717,7 @@ export function createAdminHandler({
             !image.startsWith('/images/cms/' + collection + '/')
           )
             return error('INVALID_INPUT', 400);
-          if (collection === 'projects') {
+          if (collection === 'projects' || collection === 'team') {
             const storageUrl = `${env.SUPABASE_URL}/storage/v1/object/cms-media/${image.replace(/^\/images\/cms\//, '')}`;
             const sres = await fetchImpl(storageUrl, {
               headers: {
@@ -665,6 +796,24 @@ export function createAdminHandler({
             csrf: session.csrf,
           });
         }
+        if (collection === 'team') {
+          const storageUrl = `${env.SUPABASE_URL}/storage/v1/object/cms-media/team/${media.image.split('/').pop()}`;
+          const ures = await fetchImpl(storageUrl, {
+            method: 'POST',
+            headers: {
+              Authorization: 'Bearer ' + env.SUPABASE_SERVICE_ROLE_KEY,
+              'Content-Type': 'image/webp',
+            },
+            body: Buffer.from(media.data, 'base64'),
+            signal: AbortSignal.timeout(30000),
+          });
+          if (!ures.ok) return error('SERVER_ERROR', 502);
+          return json({
+            ok: true,
+            data: { image: media.image },
+            csrf: session.csrf,
+          });
+        }
         const result = await gas(
           cfg,
           session.token,
@@ -699,7 +848,9 @@ export function createAdminHandler({
           Object.keys(body).some(
             (k) => !['operation', 'payload'].includes(k),
           ) ||
-          (collection !== 'projects' && !Object.hasOwn(RPC, body.operation)) ||
+          (collection !== 'projects' &&
+            collection !== 'team' &&
+            !Object.hasOwn(RPC, body.operation)) ||
           ['load', 'upload', 'media'].includes(body.operation)
         )
           return error('INVALID_INPUT', 400);
@@ -716,6 +867,14 @@ export function createAdminHandler({
       let result;
       if (collection === 'projects') {
         result = await projectsOperation(
+          cfg,
+          env,
+          session.token,
+          operation,
+          payload,
+        );
+      } else if (collection === 'team') {
+        result = await teamOperation(
           cfg,
           env,
           session.token,
