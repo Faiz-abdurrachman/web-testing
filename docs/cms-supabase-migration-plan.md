@@ -1,8 +1,9 @@
 # Master Migration Plan — GAS/Sheets/Drive → Supabase
 
-Status: **PLAN + AUDIT + REVISI TARGET.** Belum ada implementasi, penghapusan
-kode/data, perubahan konfigurasi live, atau push. Dokumen ini bisa direview lalu
-diputuskan.
+Status: **READY TO EXECUTE.** Recruitment pass 1-3 SUDAH di Supabase.
+CMS migration dimulai — lihat [cms-migration-kickoff.md](cms-migration-kickoff.md) untuk handoff AI baru.
+Belum ada implementasi, penghapusan kode/data, perubahan konfigurasi live, atau push.
+Dokumen ini bisa direview lalu diputuskan.
 
 Disusun 6 Oct 2026. Bahasa: Indonesia. Semua nama env/property dicatat **tanpa
 nilai** — jangan pernah mencetak secret/token/URL admin.

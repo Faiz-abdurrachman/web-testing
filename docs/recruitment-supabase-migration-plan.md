@@ -3,7 +3,9 @@
 Status: **LIVE 7 Oct 2026.** Pass 1 (intake) SELESAI di Supabase project
 `web-community`. Pass 2 (admin read / derived columns / audit) SELESAI — login
 admin pakai Supabase Auth email + password, user admin + allowlist `cms_admin_users`
-sudah di-seed. Kode sudah push.
+sudah di-seed. Pass 3 (rate limit login + refresh token) SELESAI — migration
+`20261007210000_recruitment_pass3_rate_limit.sql`, 5 percobaan/menit per IP+email,
+route refresh, client auto-refresh 30 menit. Kode sudah push.
 
 Dokumen ini turunan dari
 [`docs/cms-supabase-migration-plan.md`](cms-supabase-migration-plan.md) dan
@@ -75,13 +77,14 @@ ID_CONFLICT | UNCONFIRMED | METHOD_NOT_ALLOWED`.
 | 6   | `RECRUITMENT_OPEN` tetap di env (kill-switch)                             | **disetujui user** (7 Oct 2026)      |
 | 7   | Akses data pendaftar server owner-only; route admin = pass terpisah       | **disetujui user** (7 Oct 2026)      |
 | 8   | Idempotency unique `receipt` + `ON CONFLICT` + fungsi DB atomik           | **disetujui user** (7 Oct 2026)      |
-| 9   | Kolom turunan/queryable (email, primary_hods, array, boolean)             | **pass lanjutan, belum disetujui**   |
-| 10  | Baca admin (route server + audit)                                         | **pass lanjutan, belum disetujui**   |
-| 11  | Rate limit server-side                                                    | **pass lanjutan, belum disetujui**   |
-| 12  | CAPTCHA (Turnstile) — butuh perubahan klien                               | **pass terpisah, belum disetujui**   |
-| 13  | Retensi PII (mis. 12 bulan)                                               | **belum diputuskan**                 |
-| 14  | Enkripsi tambahan `email`/`whatsapp` (pgcrypto)                           | **belum diputuskan**                 |
-| 15  | Pembukaan recruitment untuk publik                                        | **belum diputuskan**                 |
+| 9   | Kolom turunan/queryable (email, primary_hods, array, boolean)             | **selesai pass 2**     |
+| 10  | Baca admin (route server + audit)                                         | **selesai pass 2**     |
+| 11  | Rate limit server-side (login)                                            | **selesai pass 3**     |
+| 12  | Refresh token otomatis                                                    | **selesai pass 3**     |
+| 13  | CAPTCHA (Turnstile) — butuh perubahan klien                               | **pass terpisah, belum disetujui**   |
+| 14  | Retensi PII (mis. 12 bulan)                                               | **belum diputuskan**                 |
+| 15  | Enkripsi tambahan `email`/`whatsapp` (pgcrypto)                           | **belum diputuskan**                 |
+| 16  | Pembukaan recruitment untuk publik                                        | **belum diputuskan**                 |
 
 Catatan status:
 

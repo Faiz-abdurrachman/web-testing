@@ -1,5 +1,25 @@
 # AGENTS.md — instructions for AI agents
 
+## Recruitment pass 3 — rate limit + refresh token — LIVE 7 Oct 2026
+
+Pass 3 recruitment: rate limit login (5 attempts/min/IP+email via tabel Postgres
+`private.recruitment_rate_limit`), refresh token otomatis (route
+`/api/admin/recruitment/refresh` + client interval 30 menit).
+Migration `20261007210000_recruitment_pass3_rate_limit.sql` sudah di-apply ke
+Supabase project `web-community`. Tests 24/24 (9 pass 1 + 10 pass 2 + 5 pass 3).
+
+CMS (GAS/Sheets/Drive export+admin) **TIDAK diubah**.
+
+User memilih **target akhir: seluruh backend ke Supabase** (Postgres + Storage +
+Supabase Auth); Astro/UI/geometri **dan CMS existing tidak berubah**. Rencana
+induk: [cms-supabase-migration-plan.md](docs/cms-supabase-migration-plan.md);
+tahap pertama: [recruitment-supabase-migration-plan.md](docs/recruitment-supabase-migration-plan.md).
+
+NEXT kandidat: CAPTCHA (butuh key Cloudflare), migrasi CMS collection per pass
+(projects → team → roles → …), retensi/pembukaan publik. Jangan pasang GAS
+intake; jangan ubah CMS/auth/UI/geometri existing tanpa izin; secret dari
+`.env.local` jangan dicetak; push = origin (dua situs) dengan konfirmasi.
+
 ## Recruitment pass 2 — admin read (Supabase Auth) — 7 Oct 2026
 
 Pass 2 recruitment: kolom turunan (generated columns untuk queryable email,

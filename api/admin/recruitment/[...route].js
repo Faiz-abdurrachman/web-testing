@@ -7,6 +7,7 @@ const ROUTES = {
   application: 'detail',
   stats: 'stats',
   login: 'login',
+  refresh: 'refresh',
   callback: 'callback',
   logout: 'logout',
 };

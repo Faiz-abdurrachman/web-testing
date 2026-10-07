@@ -155,6 +155,23 @@ export function createRecruitmentAdminHandler({
     )
       return error('INVALID_INPUT', 400);
 
+    const ip =
+      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+      request.headers.get('x-real-ip') ||
+      '127.0.0.1';
+
+    try {
+      const rateCheck = await callRpc('admin_rate_limit_check', {
+        p_ip: ip,
+        p_email: body.email,
+        p_max: 5,
+        p_window: 60,
+      });
+      if (rateCheck?.limited) return error('LIMIT', 429);
+    } catch {
+      // Rate limit failure must not block login; continue without it.
+    }
+
     try {
       const response = await fetchImpl(
         `${cfg.authBase}/auth/v1/token?grant_type=password`,
@@ -181,9 +198,71 @@ export function createRecruitmentAdminHandler({
         !Number.isFinite(token.expires_in)
       )
         return error('UNAUTHORIZED', 401);
+
+      // Reset rate limit on success
+      try {
+        await callRpc('admin_rate_limit_reset', {
+          p_ip: ip,
+          p_email: body.email,
+        });
+      } catch {
+        // Non-critical
+      }
+
       const accessAge = Math.min(Math.floor(token.expires_in), 3600);
       const refreshAge = 60 * 60 * 24 * 30;
       const result = json({ ok: true });
+      result.headers.append(
+        'Set-Cookie',
+        cookie('sb-access-token', token.access_token, accessAge, cfg.secure),
+      );
+      result.headers.append(
+        'Set-Cookie',
+        cookie('sb-refresh-token', token.refresh_token, refreshAge, cfg.secure),
+      );
+      return result;
+    } catch {
+      return error('UNCONFIRMED', 502);
+    }
+  }
+
+  async function refreshSession(request, cfg) {
+    const refreshToken = readCookie(request, 'sb-refresh-token');
+    if (!refreshToken || !cfg.anon) return error('UNAUTHORIZED', 401);
+
+    try {
+      const response = await fetchImpl(
+        `${cfg.authBase}/auth/v1/token?grant_type=refresh_token`,
+        {
+          method: 'POST',
+          redirect: 'error',
+          signal: AbortSignal.timeout(15000),
+          headers: {
+            'Content-Type': 'application/json',
+            apikey: cfg.anon,
+          },
+          body: JSON.stringify({ refresh_token: refreshToken }),
+        },
+      );
+      if (!response.ok) {
+        // Clear expired tokens on failure
+        return redirectWithCookies(cfg.origin + '/admin/recruitment/', [
+          cookie('sb-access-token', '', 0, cfg.secure),
+          cookie('sb-refresh-token', '', 0, cfg.secure),
+        ]);
+      }
+      const token = await response.json();
+      if (
+        typeof token.access_token !== 'string' ||
+        !token.access_token ||
+        typeof token.refresh_token !== 'string' ||
+        !Number.isFinite(token.expires_in)
+      )
+        return error('UNAUTHORIZED', 401);
+
+      const accessAge = Math.min(Math.floor(token.expires_in), 3600);
+      const refreshAge = 60 * 60 * 24 * 30;
+      const result = json({ ok: true, refreshed: true });
       result.headers.append(
         'Set-Cookie',
         cookie('sb-access-token', token.access_token, accessAge, cfg.secure),
@@ -210,6 +289,11 @@ export function createRecruitmentAdminHandler({
       if (request.method === 'GET')
         return redirectWithCookies(cfg.origin + '/admin/recruitment/');
       if (request.method === 'POST') return loginWithPassword(request, cfg);
+      return error('METHOD_NOT_ALLOWED', 405);
+    }
+
+    if (route === 'refresh') {
+      if (request.method === 'POST') return refreshSession(request, cfg);
       return error('METHOD_NOT_ALLOWED', 405);
     }
 

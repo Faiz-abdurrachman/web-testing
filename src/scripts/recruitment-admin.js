@@ -7,6 +7,8 @@
   let busy = false;
   let page = 0;
   const PAGE_SIZE = 50;
+  const REFRESH_INTERVAL = 30 * 60 * 1000; // 30 minutes
+  let refreshTimer = null;
   const hodsDivisions = [
     'data',
     'core',
@@ -21,6 +23,7 @@
     INVALID_INPUT: 'Permintaan tidak valid.',
     NOT_FOUND: 'Data tidak ditemukan.',
     SERVER_ERROR: 'Kesalahan server. Coba lagi.',
+    LIMIT: 'Terlalu banyak percobaan. Coba beberapa saat lagi.',
   };
 
   const message = (text, error = false) => {
@@ -48,6 +51,32 @@
     byId('detail-area').hidden = true;
     byId('table-wrapper').hidden = false;
     message('Sesi berakhir. Silakan login ulang.', true);
+    if (refreshTimer) {
+      clearInterval(refreshTimer);
+      refreshTimer = null;
+    }
+  };
+
+  const refreshToken = async () => {
+    try {
+      const response = await fetch(api + '/refresh', {
+        method: 'POST',
+        credentials: 'same-origin',
+        cache: 'no-store',
+      });
+      if (!response.ok) {
+        expire();
+        return false;
+      }
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const startRefreshTimer = () => {
+    if (refreshTimer) clearInterval(refreshTimer);
+    refreshTimer = setInterval(refreshToken, REFRESH_INTERVAL);
   };
 
   const apiFetch = async (route, params = {}) => {
@@ -290,6 +319,10 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password }),
         });
+        if (response.status === 429) {
+          message(errors.LIMIT, true);
+          return;
+        }
         const result = await response.json().catch(() => ({}));
         if (!response.ok || !result.ok) {
           message(
@@ -301,6 +334,7 @@
           return;
         }
         byId('login-password').value = '';
+        startRefreshTimer();
         await loadList();
         await loadStats();
       } catch {
@@ -342,6 +376,7 @@
 
     loadList();
     loadStats();
+    startRefreshTimer();
   };
 
   if (document.readyState === 'loading') {

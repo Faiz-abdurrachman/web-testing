@@ -486,6 +486,12 @@ test('password login exchanges credentials for HttpOnly session cookies', async 
   const handle = createRecruitmentAdminHandler({
     env: supabaseEnv,
     fetchImpl: async (url, init) => {
+      if (url.includes('admin_rate_limit_check')) {
+        return new Response(JSON.stringify({ ok: true, limited: false }), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+      }
       calls.push({ url, init });
       if (url.includes('/auth/v1/token?grant_type=password')) {
         return new Response(
@@ -497,7 +503,11 @@ test('password login exchanges credentials for HttpOnly session cookies', async 
           { status: 200, headers: { 'content-type': 'application/json' } },
         );
       }
-      throw Error('unexpected fetch ' + url);
+      // rate_limit_reset
+      return new Response(JSON.stringify({ ok: true }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
     },
   });
   const response = await handle(
@@ -510,12 +520,16 @@ test('password login exchanges credentials for HttpOnly session cookies', async 
   assert.ok(cookies.some((c) => /^sb-access-token=access-abc/.test(c)));
   assert.ok(cookies.some((c) => /^sb-refresh-token=refresh-abc/.test(c)));
   assert.ok(cookies.every((c) => /HttpOnly/.test(c)));
-  assert.equal(calls.length, 1);
+  // One password call, rate limit check + reset are separate
+  const pwCalls = calls.filter((c) =>
+    c.url.includes('/auth/v1/token?grant_type=password'),
+  );
+  assert.equal(pwCalls.length, 1);
   assert.equal(
-    calls[0].url,
+    pwCalls[0].url,
     'https://testproject.supabase.co/auth/v1/token?grant_type=password',
   );
-  const sent = JSON.parse(calls[0].init.body);
+  const sent = JSON.parse(pwCalls[0].init.body);
   assert.equal(sent.email, 'admin@test.test');
   assert.equal(sent.password, 'correct horse');
 });
@@ -602,4 +616,173 @@ test('logout clears the session cookies', async () => {
   const cookies = response.headers.getSetCookie();
   assert.ok(cookies.some((c) => /^sb-access-token=;/.test(c)));
   assert.ok(cookies.some((c) => /^sb-refresh-token=;/.test(c)));
+});
+
+// Pass 3 — Rate limit and refresh token tests
+
+test('rate limit blocks login after 5 attempts within 60s', async () => {
+  let attempts = 0;
+  const handle = createRecruitmentAdminHandler({
+    env: supabaseEnv,
+    fetchImpl: async (url) => {
+      if (url.includes('admin_rate_limit_check')) {
+        attempts++;
+        if (attempts > 5) {
+          return new Response(JSON.stringify({ ok: false, limited: true }), {
+            status: 200,
+            headers: { 'content-type': 'application/json' },
+          });
+        }
+        return new Response(JSON.stringify({ ok: true, limited: false }), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+      }
+      // Auth endpoint - never reached after limit
+      return new Response(
+        JSON.stringify({
+          access_token: 'a',
+          refresh_token: 'b',
+          expires_in: 3600,
+        }),
+        { status: 200, headers: { 'content-type': 'application/json' } },
+      );
+    },
+  });
+  // First 5 succeed (rate check says ok, auth succeeds)
+  for (let i = 0; i < 5; i++) {
+    const r = await handle(
+      loginRequest({ email: 'admin@test.test', password: 'ok' }),
+      'login',
+    );
+    assert.equal(r.status, 200, 'attempt ' + (i + 1) + ' should succeed');
+  }
+  // 6th attempt is rate limited
+  const r = await handle(
+    loginRequest({ email: 'admin@test.test', password: 'ok' }),
+    'login',
+  );
+  assert.equal(r.status, 429);
+  assert.deepEqual(await r.json(), {
+    ok: false,
+    error: { code: 'LIMIT' },
+  });
+});
+
+test('refresh route returns new tokens when refresh cookie is valid', async () => {
+  const handle = createRecruitmentAdminHandler({
+    env: supabaseEnv,
+    fetchImpl: async (url) => {
+      if (url.includes('/auth/v1/token?grant_type=refresh_token')) {
+        return new Response(
+          JSON.stringify({
+            access_token: 'new-access',
+            refresh_token: 'new-refresh',
+            expires_in: 3600,
+          }),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        );
+      }
+      throw Error('unexpected fetch ' + url);
+    },
+  });
+  const req = new Request(adminUrl + '/refresh', {
+    method: 'POST',
+    headers: {
+      cookie: 'sb-refresh-token=valid-refresh; sb-access-token=old-access',
+    },
+  });
+  const response = await handle(req, 'refresh');
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.equal(body.ok, true);
+  assert.equal(body.refreshed, true);
+  const cookies = response.headers.getSetCookie();
+  assert.ok(cookies.some((c) => /^sb-access-token=new-access/.test(c)));
+  assert.ok(cookies.some((c) => /^sb-refresh-token=new-refresh/.test(c)));
+});
+
+test('refresh route clears cookies and redirects when token is expired', async () => {
+  const handle = createRecruitmentAdminHandler({
+    env: supabaseEnv,
+    fetchImpl: async () => new Response('{}', { status: 400 }),
+  });
+  const req = new Request(adminUrl + '/refresh', {
+    method: 'POST',
+    headers: {
+      cookie: 'sb-refresh-token=expired-refresh; sb-access-token=old-access',
+      origin: 'https://recruitment.test',
+    },
+  });
+  const response = await handle(req, 'refresh');
+  assert.equal(response.status, 303);
+  assert.equal(
+    response.headers.get('location'),
+    'https://recruitment.test/admin/recruitment/',
+  );
+  const cookies = response.headers.getSetCookie();
+  assert.ok(cookies.some((c) => /^sb-access-token=;/.test(c)));
+  assert.ok(cookies.some((c) => /^sb-refresh-token=;/.test(c)));
+});
+
+test('refresh route without cookie returns 401', async () => {
+  const handle = createRecruitmentAdminHandler({
+    env: supabaseEnv,
+    fetchImpl: () => {
+      throw Error('must not fetch');
+    },
+  });
+  const req = new Request(adminUrl + '/refresh', {
+    method: 'POST',
+    headers: {},
+  });
+  const response = await handle(req, 'refresh');
+  assert.equal(response.status, 401);
+  assert.deepEqual(await response.json(), {
+    ok: false,
+    error: { code: 'UNAUTHORIZED' },
+  });
+});
+
+test('rate limit check uses x-forwarded-for header for IP', async () => {
+  const calls = [];
+  const handle = createRecruitmentAdminHandler({
+    env: supabaseEnv,
+    fetchImpl: async (url, init) => {
+      if (url.includes('admin_rate_limit_check')) {
+        calls.push(JSON.parse(init.body));
+        return new Response(JSON.stringify({ ok: true, limited: false }), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+      }
+      if (url.includes('/auth/v1/token')) {
+        return new Response(
+          JSON.stringify({
+            access_token: 'a',
+            refresh_token: 'b',
+            expires_in: 3600,
+          }),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        );
+      }
+      return new Response(JSON.stringify({ ok: true }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+    },
+  });
+  const req = new Request(adminUrl + '/login', {
+    method: 'POST',
+    headers: {
+      origin: 'https://recruitment.test',
+      'content-type': 'application/json',
+      'x-forwarded-for': '203.0.113.42, 10.0.0.1',
+    },
+    body: JSON.stringify({ email: 'ip@test.test', password: 'test' }),
+  });
+  await handle(req, 'login');
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].p_ip, '203.0.113.42');
+  assert.equal(calls[0].p_email, 'ip@test.test');
 });

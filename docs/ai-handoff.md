@@ -1,5 +1,23 @@
 # AI handoff — current context
 
+## Recruitment pass 3 — rate limit + refresh token — LIVE 7 Oct 2026
+
+Pass 3 selesai: rate limit login admin + refresh token otomatis.
+
+**Rate limit:** tabel `private.recruitment_rate_limit` (5 percobaan/menit per IP +
+email). Check+increment atomik via `public.admin_rate_limit_check`, reset on
+success via `public.admin_rate_limit_reset`. Respons 429 `LIMIT` tanpa detail.
+
+**Refresh token:** route `POST /api/admin/recruitment/refresh` memanggil
+`/auth/v1/token?grant_type=refresh_token` dengan cookie `sb-refresh-token`.
+Client `src/scripts/recruitment-admin.js` menjalankan refresh tiap 30 menit
+(`setInterval`). Token expired → 303 redirect + hapus cookie.
+
+Migration `20261007210000_recruitment_pass3_rate_limit.sql` sudah di-apply ke
+project `web-community`. Tests 24/24 PASS (9 pass 1 + 10 pass 2 + 5 pass 3).
+
+CMS/auth/UI/geometri tidak berubah.
+
 ## Recruitment pass 1 → Supabase — LIVE 7 Oct 2026
 
 Rencana + status: [recruitment-supabase-migration-plan.md](recruitment-supabase-migration-plan.md).
