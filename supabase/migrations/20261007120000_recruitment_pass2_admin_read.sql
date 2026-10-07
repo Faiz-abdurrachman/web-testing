@@ -242,7 +242,7 @@ begin
   ) t;
 
   return jsonb_build_object(
-    'total',   v_total,
+    'total',   coalesce(v_total, 0),
     'by_hods', coalesce(v_by_hods, '[]'::jsonb)
   );
 end;
