@@ -1,119 +1,155 @@
 # CMS → Supabase — kickoff aktif untuk AI baru
 
-User: **Faiz**, panggil **bro**, bahasa Indonesia.
-Work order berikutnya: **pass 5 Hods**, satu collection, Master Work Plan dahulu.
-Baseline kode live **`6b36519`**; Domains A–E selesai, kedua deployments READY dan
-acceptance Home/Recruitment/routing kedua situs PASS. Checkpoint docs lokal
-belum dipush; izin push feature telah digunakan.
+User **Faiz**, panggil **bro**, bahasa Indonesia. Repo
+`/home/faiz/ds/ds5opencode`. Work order berikut: **pass 5 Hods**, satu collection.
+[Master Work Plan Hods](cms-pass5-hods-plan.md) sudah disiapkan rinci, **PLAN ONLY**;
+belum SQL/kode/apply/deploy Hods. Implementasi dimulai saat user memberi prompt
+lanjut di AI baru. Sesi persiapan ini hanya dokumentasi, tidak izin push.
 
-## 1. Status yang benar
+## 1. Baseline dan status actual
 
-| Fitur                | Sumber/status                                                     |
-| -------------------- | ----------------------------------------------------------------- |
-| Recruitment pass 1–3 | Supabase, intake closed, login admin email/password               |
-| CMS Projects pass 1  | Supabase Postgres + Storage projects, live                        |
-| CMS Team pass 2      | Supabase Postgres + Storage team, live                            |
-| CMS Roles pass 3     | Supabase Postgres, public read RPC cms_load_roles, live           |
-| CMS Domains          | Supabase public anon RPC, live dan acceptance selesai             |
-| CMS Hods             | GAS; pass 5 sesudah Domains                                       |
-| CMS Partners         | GAS; pass 6 sesudah Hods                                          |
-| CMS auth             | OAuth custom existing, jangan sentuh sebelum seluruh data selesai |
+Kode live **`6b36519`**, Domains selesai A–E. Kedua Vercel READY untuk SHA ini:
+testing 7 Oct 2026 **12:02:26.550 UTC / 19:02:26.550 WIB**, production
+**12:04:06.630 UTC / 19:04:06.630 WIB**. Home/Recruitment 390/1440, six cards/
+slots/rail/all detail links/back PASS. Admin anonymous 401, recruitment closed.
+Tanggal migration filename hanya urutan repo, bukan tanggal execution.
 
-Bukti historis Roles sebelum pass 4 (status Domains terbaru di checkpoint):
+Checkpoint docs **`df31ab0`** lokal, belum push; plan Hods/checkpoint terbaru
+lihat `git log -3 --oneline`. Jangan memakai git reset untuk “kembali baseline”.
+Runtime kode `6b36519` tetap live meskipun HEAD docs lokal lebih baru.
 
-Commit `53f92f8` terkirim ke testing + production dengan izin user. Kedua
-Vercel SUCCESS, live browser six Roles × 390/1440 × dua situs PASS; admin API
-anonymous 401, recruitment accepting:false. Local QA: CMS 42 PASS/10 SKIP
-(tes Team mutation live), Recruitment 24 PASS, PostgreSQL Roles nyata,
-7 gate + SEO PASS, snapshot repo/19 HTML baseline identik.
+| Bagian      | Sumber/status                                            |
+| ----------- | -------------------------------------------------------- |
+| Recruitment | Supabase pass 1–3, accepting:false, auth email/password  |
+| Projects    | Supabase Postgres + Storage, Management API write, live  |
+| Team        | Supabase Postgres + Storage, Management API write, live  |
+| Roles       | Supabase public read RPC, live                           |
+| Domains     | Supabase public read RPC, live                           |
+| Hods        | GAS full export build-time; NEXT pass 5 PLAN ONLY        |
+| Partners    | GAS; pass 6 setelah Hods accepted                        |
+| CMS auth    | OAuth custom existing, mekanisme final pending, terakhir |
 
-Tanggal bukti deploy: testing 2026-10-07 11:20:17 UTC dan production
-11:21:28 UTC (18:20:17/18:21:28 WIB). Nama file migration bertanggal kemudian
-adalah urutan file repo, bukan bukti tanggal execution. Catatan tanggal historis
-8 Oct tidak mengalahkan timestamp deployment actual.
+QA baseline pass 4: Node 22.23.0, CMS 56 PASS/10 Team live SKIP, Recruitment
+24 PASS, PostgreSQL nyata, tiga admin mock empat width, 7 gate + SEO, responsive
+468/468, SEO 23 pages, spacing 39 komponen, snapshot/19 HTML publik byte-identik.
+Proof ignored artifacts/cms-pass4/ bisa hilang; ringkasan tracked ada di handoff.
 
-## 2. Urutan baca dan dokumen otoritatif
+## 2. Urutan baca wajib sebelum coding
 
-1. File ini: checkpoint + starter prompt.
-2. `AGENTS.md`: aturan operasional dan izin.
-3. [AI handoff](ai-handoff.md): status/batas bukti terbaru.
-4. [Domains Master Work Plan](cms-pass4-domains-plan.md): kontrak, SQL actual,
-   kritik risiko, checklist A–E, tes dan DoD.
-5. [Migration TODO](cms-migration-todo.md): done vs TODO seluruh pass.
-6. [Master migration plan](cms-supabase-migration-plan.md) + [CMS SOP](cms-sop.md).
-7. [Roles plan](cms-pass3-roles-plan.md), actual SQL Roles dan tests Roles:
-   template read-only paling relevan; Projects/Team bukan template CRUD Domains.
-8. Baca `docs/pixel-precision-sop.md` + `docs/assets.md` sebelum perubahan UI apa
-   pun; pass Domains justru mengunci UI tanpa perubahan.
+1. File ini.
+2. `AGENTS.md`.
+3. [AI handoff](ai-handoff.md).
+4. [Hods Master Work Plan](cms-pass5-hods-plan.md): kontrak actual, seluruh
+   21-tab inventory, SQL proposal, A–E, test matrix, stop/rollback/DoD.
+5. [Migration TODO](cms-migration-todo.md).
+6. [Master migration plan](cms-supabase-migration-plan.md).
+7. [CMS SOP](cms-sop.md).
 
-Checkpoint aktif + arahan user terbaru mengalahkan NEXT/setup/auth historis.
-Jangan membaca arsip GAS sebagai work order untuk membuat ulang setup.
+Lalu actual Domains SQL/tests + cms-client/schema/hods.ts, sebagai contoh
+read-only; jangan menyalin CRUD Projects/Team. Pixel SOP/assets dibaca untuk
+kontrak visual terkunci; tidak ada izin perubahan UI. Checkpoint aktif + arahan
+user terbaru mengalahkan NEXT historis di HANDOVER/kickoff/GAS/Growth/auth docs.
 
-## 3. Aturan dan koreksi arsitektur
+## 3. Kontrak Hods dan batas scope
 
-- Satu collection/pass; tidak menyentuh UI/font/artwork/geometri/assertion.
-- Data dulu; auth CMS paling akhir. Pilihan mekanisme auth belum final.
-- Read migrated collections via RPC build-time **anon key**. Write existing
-  Projects/Team lewat Management API database/query dengan access token server.
-- Domains/Roles tidak punya editor atau write API. Jangan membuat handler admin
-  baru atau mengklaim `gas()` handler melayani Domains/Hods/Partners. Kode lokal
-  Domains memakai RPC; Hods/Partners tetap **build-time GAS full export**.
-- Full export GAS divalidasi sebelum Supabase override. Hods/Partners tetap
-  GAS, dan tab migrated harus tetap valid; jangan hapus GAS atau env sekarang.
-- Tidak ada fallback stale. RPC gagal → build gagal, snapshot lama tidak diganti.
-- service_role/access token server-only; jangan print env, keys, raw error body,
-  URLs bertoken, .env.local atau credentials.
-- Konfirmasi sebelum **push baru**; origin memiliki dua push URLs. Approval
-  `53f92f8` sudah digunakan, bukan izin push otomatis pass 4 atau dokumen baru.
-- Domains A–E selesai dengan izin push baru. NEXT Hods perlu plan sendiri;
-  jangan apply ulang SQL Domains atau menganggap semua CMS sudah selesai.
+**6 fixed IDs, 21 tabs, 55 sections (53 text + 2 bullets), 8 bullet items.**
+Hods bukan Domains cards dan bukan Team HoDS carousel. Snapshot:
+`{id,title,description,tabs:[{sections:[{title,text}|{title,bullets}]}]}`.
+Tab labels/kind/color/cardImage tetap lokal `src/data/hods.ts`, bukan field DB.
+Array order record/tab/section/bullet signifikan; loader merge via index.
+Matriks lengkap, checksum, Figma nodes/spacing/reference terkunci di plan §2–3.
 
-## 4. Temuan yang wajib dipertahankan
+Tidak ada editor/write API/state/Storage/dependency/auth baru. UI/geometri/font/
+artwork/schema Zod/assertions tidak berubah. Partners/auth pass berikutnya.
+Jangan reseed Team, memperbaiki cold-cache media, refactor partial GAS validation,
+atau hapus GAS/tab/env. Full GAS export tetap validasi sebelum overrides.
 
-- Team remote berbeda snapshot repo sebelum pass 3. Proof pre/post menunjukkan
-  non-Roles tidak diubah. Jangan reseed Team atau menimpa baseline snapshot.
-- Domains labels nested tiga row mengandung blank dekoratif **persis ''**;
-  ID/order terikat desain via array index. Mask lengkap di plan §3.
-- .env.local saat pass 3 tidak memiliki SUPABASE_ANON_KEY. Verifikasi memakai
-  Management API membaca anon key di memori, tanpa mencetak atau menulis env.
-  Cek presence ulang; jangan menganggap env lokal/dua Vercel otomatis sama.
-- Full `test:cms` dengan server env dapat menjalankan mutation Team live.
-  Jalankan suite tanpa env server; tes Domains baru memakai DB ephemeral.
-- Private Storage read dengan build anon key/cold cache belum diaudit oleh
-  Roles pass. Jangan membuka bucket atau memperbaiki media diam-diam di Domains.
-- Artifacts ignored bisa hilang; simpan ringkasan di docs, buat proof baru saat
-  implementasi. Node 22, bukan mengandalkan instalasi/temp server AI lama.
+## 4. Secrets, env dan lessons live
 
-## 5. Env dan file implementasi
+Existing Supabase **web-community**, ref **yejrdckcmlxrkklgtrwy**.
+Empat env Production kedua Vercel verified pass 4: SUPABASE_URL,
+SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_ACCESS_TOKEN. GAS env
+CMS_API_URL/CMS_API_TOKEN dipertahankan. **Cek presence ulang**, jangan asumsi.
+SUPABASE_ACCESS_TOKEN semula missing kedua project, dilengkapi encrypted sebelum
+push pass 4; jangan mengklaim env historis otomatis ada saat sesi baru.
 
-Empat env wajib kedua Vercel: SUPABASE_URL, SUPABASE_ANON_KEY,
-SUPABASE_SERVICE_ROLE_KEY, SUPABASE_ACCESS_TOKEN. Env GAS dipertahankan.
-Project existing web-community, ref yejrdckcmlxrkklgtrwy.
+Local anon key absent pass 4: Management API api-keys read privat/in-memory;
+jangan print/write key atau memakai service key sebagai anon. VERCEL_TOKEN
+lokal dapat akses kedua project; credential CLI default scope berbeda. Cek
+presence file/key tanpa values; bila akses privat hilang, laporkan blocker,
+jangan minta secret lewat chat. Jangan print .env.local/credentials/error body/
+URLs bertoken/headers. Capture inputs untuk proof hanya ke ignored private artifacts.
 
-File utama: scripts/cms-client.mjs, src/data/cms-schema.mjs,
-src/data/cms-snapshot.json, src/data/domains.ts,
-supabase/migrations/20261010010000_cms_roles_pass3.sql,
-tests/cms-roles-supabase.test.mjs, tests/cms.test.mjs,
-tests/cms-media.test.mjs. Migration Domains actual: 20261011010000, applied. Tes baru:
-tests/cms-domains-supabase.test.mjs. Jangan mengubah actual Roles SQL.
+Team remote drift sudah ada sebelum Roles/Domains; pre/post same captured inputs
+membuktikan tidak diubah. Jangan overwrite committed baseline untuk “membuat tes cocok”.
+**Full test:cms tanpa env server**, karena Team tests dapat mutation live.
+Node default sesi sebelumnya 26; pilih/verifikasi Node 22, jangan asumsi path
+/tmp/server/Postgres/artifacts masih tersedia. PG ephemeral tests local wajib.
+RPC probe pertama sesudah SQL apply pernah gagal, berikutnya HTTP 200: inspect
+applied state sebelum retry, tidak blind apply/drop. GitHub anon status bisa
+403 rate limit; API Vercel existing membuktikan deployment actual SHA/time.
 
-## 6. Prompt lanjut pass 5
+## 5. Scope file dan approval
+
+CREATE usulan SQL `20261012010000_cms_hods_pass5.sql` (cek collision),
+`tests/cms-hods-supabase.test.mjs`, optional focused browser verification.
+MODIFY cms-client RPC Hods, relevant sync mocks, active docs. Jangan ubah
+migrations applied, schema/hods.ts/UI/assertions/admin/auth/media/collection lain.
+
+Kerja dan commit lokal diizinkan. Izin push **`6b36519` sudah digunakan**;
+konfirmasi **SHA push baru** setelah hasil konkret reviewable. Origin punya dua
+push URLs: git push origin main sekali deploy testing + production. Jangan
+memicu hooks/rebuild/push sebelum approval. Checkpoint docs lokal juga perlu
+approval push; tidak perlu onboarding/re-konfirmasi pekerjaan lokal authorized.
+
+## 6. Prompt siap copy ke AI baru
 
 ```text
-Bro, baseline kode live 6b36519: Projects/Team/Roles/Domains Supabase.
-Domains A–E selesai: SQL/RPC nyata, dua Vercel READY, Home/Recruitment/routing
-390/1440 kedua situs PASS. Baca kickoff → AGENTS → ai-handoff → TODO → master
-migration plan → CMS SOP. Periksa git/commit docs lokal terbaru dan Node 22.
-NEXT Hods: susun Master Work Plan tersendiri dahulu, inventaris six IDs +
-ordered tabs/panels/text vs bullets/slot counts, rekonsiliasi GAS/snapshot.
-Jangan implementasi collection lain atau auth. UI/Zod/assertions tetap, jangan
-reseed Team atau hapus tab/env GAS. Full suite CMS tanpa env server.
-Kerja/commit lokal diizinkan; konfirmasi sebelum push baru, origin deploy dua situs.
+Bro, lanjut implementasi CMS pass 5 Hods → Supabase di repo:
+/home/faiz/ds/ds5opencode
+
+Baca berurutan sebelum coding:
+1. docs/cms-migration-kickoff.md
+2. AGENTS.md
+3. docs/ai-handoff.md
+4. docs/cms-pass5-hods-plan.md
+5. docs/cms-migration-todo.md
+6. docs/cms-supabase-migration-plan.md
+7. docs/cms-sop.md
+
+Baseline kode live 6b36519: Projects/Team/Roles/Domains Supabase,
+kedua Vercel READY dan Domains acceptance selesai. Hods/Partners masih GAS.
+Checkpoint live df31ab0 dan planning Hods terbaru commit lokal belum dipush;
+periksa git log/status, jangan reset docs/perubahan asing. Periksa Node 22 dahulu.
+
+Ikuti Master Work Plan Hods checklist A–E satu tahap demi satu tahap.
+Scope hanya Hods: enam fixed ID/order, 21 tabs, 55 sections (53 text + dua
+bullets x4), strict nested union/keys dan UTF-16 boundaries. Rekonsiliasi semua
+GAS/snapshot, SQL private + RLS + public anon read RPC, snapshot hybrid,
+tes PostgreSQL ephemeral + actual anon/role proof, full-tab browser coverage,
+tujuh gate + SEO, docs dan commit siap review.
+
+UI/geometri/font/artwork/schema Zod/assertion/hodDesign tetap.
+Jangan buat editor/write API/state/Storage/dependency baru. Auth terakhir.
+Jangan reseed Team atau menimpa baseline: remote drift sudah ada sebelumnya.
+Jangan hapus tab/env GAS: full export tetap dependency meski Partners saja
+menjadi konten GAS sesudah pass ini. Jangan refactor media/partial validation.
+Jangan jalankan seluruh test:cms dengan env server: ada Team live mutation tests.
+Secret jangan dicetak; anon key bila missing ambil privately/in-memory via
+Management API existing, bukan service key workaround. VERCEL_TOKEN lokal
+pernah akses dua project sementara credential CLI default beda scope.
+
+Lanjut sampai hasil konkret siap review. Konfirmasi sebelum push baru;
+izin push Domains sudah digunakan, origin sekali push deploy dua situs.
+Setelah push berizin, verifikasi kedua SHA/deployment actual + semua six Hods
+routes/21 tabs pada 390/1440 kedua situs, Home/Recruitment entry/back flows,
+admin anonymous 401 dan recruitment accepting:false, tanpa production mutation.
+Pisahkan bukti planning/local/SQL applied/push/deploy/live; laporkan blocker nyata.
+Panggil gw bro, bahasa Indonesia.
 ```
 
-## 7. Keputusan yang tidak boleh diasumsikan
+## 7. Keputusan yang tetap terpisah
 
-Auth CMS final/provider, CAPTCHA keys, retensi/pembukaan recruitment,
-perbaikan Team drift, audit cold-cache media, refactor partial GAS validation,
-dan penghapusan GAS memerlukan scope/keputusan sendiri. Tidak menambah semua
-itu ke pass Domains atas inisiatif AI baru.
+Auth CMS/provider final, CAPTCHA keys, retensi/pembukaan recruitment,
+Team drift repair, audit private media cold-cache, partial GAS validation,
+GAS deletion, milestones/settings belum diputuskan/diotorisasi untuk pass Hods.

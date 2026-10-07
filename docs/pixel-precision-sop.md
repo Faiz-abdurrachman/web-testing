@@ -1,14 +1,22 @@
 # SOP — Presisi piksel (WAJIB untuk semua section/halaman)
 
-## Penggunaan untuk CMS — checkpoint 6 Oct 2026
+## Penggunaan untuk CMS — checkpoint aktif pass 5 Hods planning
 
-Untuk CMS baca juga [cms-sop.md](cms-sop.md). B0/B1 dan editor Projects existing
-sudah selesai; NEXT [Projects Growth](cms-projects-growth-plan.md).
-Admin custom tidak punya node Figma: tulis layout/spacing/font/test criteria,
-jangan mengarang node/PNG. Public UI tetap mengikuti SOP presisi penuh ini.
-Growth memakai baseline fixture asli + fixture jumlah baru terpisah, bukan
-melonggarkan assertion geometri existing. Satu collection/langkah per pass,
-7 gate + SEO. Baked artwork tidak menjadi field editor; media Drive perlu cache.
+Baseline kode live `6b36519`: Projects/Team/Roles/Domains Supabase, Hods/Partners
+GAS. NEXT [Hods Master Work Plan](cms-pass5-hods-plan.md) + [CMS SOP](cms-sop.md),
+**PLAN ONLY**, belum SQL/kode/apply/deploy Hods. Planning tidak mengubah aturan
+presisi berikut. UI/font/artwork/geometri/reference/assertion terkunci;
+metadata tab label/kind/color/art tetap lokal. Semua 21 tab diuji saat pass.
+Satu collection per pass, tujuh gate + SEO; jangan mengubah baseline agar tes
+remote Team drift tampak cocok. Sebelum perubahan UI yang diotorisasi, ikuti
+per-section protocol penuh; pass Hods hanya sumber konten build-time.
+NEXT GAS/Growth dalam dokumen historis tidak menjadi work order aktif.
+
+Aturan tetap untuk UI/admin yang diotorisasi di pass tersendiri: admin custom
+belum punya node Figma, tulis layout/spacing/font/test criteria dan jangan
+mengarang node/PNG. Fixture growth terpisah dari fixture baseline, jangan
+melonggarkan assertion geometri. Baked artwork bukan field editor; media
+privat perlu pipeline cache. Ini aturan umum, bukan tambahan scope Hods.
 
 Tujuan proyek ini: **pixel-accurate ke Figma/PNG**. Dokumen ini adalah protokol
 keras yang harus diikuti tiap mengubah/membuat UI. Ringkasnya: **export node PNG

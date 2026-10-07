@@ -54,8 +54,12 @@ screenshot 8 surfaces, `qa-summary.json`, logs. Artifact availability tidak
 dijamin di workspace baru. Cold-cache private media dan partial GAS validation
 belum diaudit; scope terpisah.
 
-**NEXT: pass 5 Hods**, susun Master Work Plan tersendiri dahulu, kemudian
-Partners → auth CMS terakhir. [Domains plan](docs/cms-pass4-domains-plan.md),
+**NEXT: pass 5 Hods**, Master Work Plan rinci sudah disiapkan **PLAN ONLY**;
+belum SQL/kode/apply/deploy Hods. Sesi ini hanya planning/handoff, kemudian
+Partners → auth CMS terakhir. [Hods plan](docs/cms-pass5-hods-plan.md) berisi 6 ID/21 tabs/55 sections/8 bullets,
+SQL proposal, checklist A–E, security/Unicode/browser matrix dan DoD.
+Checkpoint live `df31ab0` dan planning terbaru belum push (lihat git log).
+[Domains plan](docs/cms-pass4-domains-plan.md),
 [TODO](docs/cms-migration-todo.md), [kickoff](docs/cms-migration-kickoff.md).
 Izin push `6b36519` sudah digunakan; **konfirmasi sebelum push baru**, termasuk
 checkpoint docs lokal. Origin sekali push deploy dua situs. User mengizinkan
@@ -304,13 +308,13 @@ geometri atau melonggarkan assertion geometri baseline. Setelah Growth hijau:
 Projects media upload/cache → Team → B3 per collection → B4 hardening.
 
 **Urutan baca aktif CMS:** `docs/cms-migration-kickoff.md` → `AGENTS.md` →
-`docs/ai-handoff.md` → `docs/cms-pass4-domains-plan.md` →
+`docs/ai-handoff.md` → `docs/cms-pass5-hods-plan.md` →
 `docs/cms-migration-todo.md` → `docs/cms-supabase-migration-plan.md` →
 `docs/cms-sop.md`. Sebelum UI baca `docs/pixel-precision-sop.md`.
-Plan GAS/Growth/B2 di bawah adalah arsip, bukan work order Domains.
+Plan GAS/Growth/B2 di bawah adalah arsip, bukan work order Hods.
 
 **Prioritas dokumen:** checkpoint terbaru di awal file, kickoff migrasi, plan
-Domains dan TODO mengalahkan NEXT/PENDING/setup Growth dan catatan historis. Riwayat disimpan
+Hods dan TODO mengalahkan NEXT/PENDING/setup Growth dan catatan historis. Riwayat disimpan
 sebagai bukti keputusan, bukan work order aktif. Full-screen sudah selesai;
 Contact tetap hero Figma-exact tinggi 954, bukan video/full-screen.
 
@@ -334,7 +338,7 @@ new agents lives in `docs/kickoff-prompt.md`; for building a new page/section us
 - `npm run cms:gas` — generate source export ke ignored `artifacts/cms-gas/`.
 - `npm run cms:admin` — generate source admin ke ignored `artifacts/cms-admin/`.
 - `docs/cms-sop.md` — auth, secrets, fetch, QA, update GAS existing.
-- `docs/cms-projects-growth-plan.md` — Master Work Plan historis add/delete Projects; NEXT aktif Domains.
+- `docs/cms-projects-growth-plan.md` — Master Work Plan historis add/delete Projects; NEXT aktif Hods.
 - `docs/cms-kickoff.md` — prompt lengkap sesi baru; jangan ulang B0/onboarding.
 
 ## Commands
@@ -474,7 +478,7 @@ src/components/*.astro   one section per file; scoped CSS inside
 src/components/TeamCard.astro  Our Team member card (302×400; used by OurTeam)
 src/components/Sound.astro  floating mute orb + delegated data-sfx wiring
 src/data/domains.ts      6 HoDS cards (title/desc/tint/chips)
-src/data/hods.ts         6 detail categories → 22 tabs (LEARNING/…/OUTPUT)
+src/data/hods.ts         6 detail categories → 21 tabs (LEARNING/…/OUTPUT)
 src/data/projects.ts     4 placeholder projects (swap for real data)
 src/data/partners.ts     Partners categories + why-cards (logos placeholder)
 src/data/team.ts         Our Team leader + 6 HoDS carousel groups (placeholder)

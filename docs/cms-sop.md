@@ -16,7 +16,8 @@ QA lokal CMS 56 PASS/10 live Team SKIP, recruitment 24 PASS, PostgreSQL nyata,
 Suite penuh tanpa env server, jangan mutation/reseed Team (drift preexisting).
 Cold-cache private media dan partial GAS validation scope terpisah.
 Auth CMS tetap OAuth custom; mekanisme final pending dan auth terakhir.
-NEXT pass 5 Hods perlu plan tersendiri. [TODO](cms-migration-todo.md),
+NEXT [pass 5 Hods plan](cms-pass5-hods-plan.md) rinci sudah siap, **PLAN ONLY**;
+belum SQL/kode/apply/deploy Hods. 6 ID/21 tabs/55 sections/8 bullet items. [TODO](cms-migration-todo.md),
 [Domains plan](cms-pass4-domains-plan.md), [kickoff](cms-migration-kickoff.md).
 Izin push `6b36519` sudah digunakan; checkpoint docs lokal memerlukan izin baru.
 

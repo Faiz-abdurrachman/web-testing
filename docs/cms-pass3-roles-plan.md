@@ -1,7 +1,9 @@
 # Master Work Plan — Pass 3: Roles → Supabase
 
 Status: **LIVE — commit `53f92f8`, kedua Vercel SUCCESS dan acceptance selesai.**
-NEXT [pass 4 Domains](cms-pass4-domains-plan.md); [TODO](cms-migration-todo.md).
+Checkpoint terbaru [Domains pass 4](cms-pass4-domains-plan.md) LIVE `6b36519`.
+NEXT [pass 5 Hods](cms-pass5-hods-plan.md) **PLAN ONLY**; [TODO](cms-migration-todo.md).
+Scope/baseline/urutan kerja di bawah riwayat pass Roles, bukan work order aktif.
 
 ## Lingkup dan baseline
 

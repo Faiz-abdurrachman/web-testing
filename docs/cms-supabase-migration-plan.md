@@ -5,7 +5,8 @@
 Projects/Team/Roles/Domains live `6b36519`, kedua Vercel READY/SUCCESS dan
 Domains acceptance Home/Recruitment/routing 390/1440 selesai. Recruitment pass
 1–3 juga Supabase, intake closed. [Domains Master Work Plan](cms-pass4-domains-plan.md)
-A–E selesai. NEXT Hods → Partners → auth CMS terakhir; lihat
+A–E selesai. NEXT [Hods Master Work Plan](cms-pass5-hods-plan.md) **PLAN ONLY**
+→ Partners → auth CMS terakhir; lihat
 [TODO](cms-migration-todo.md) dan [kickoff aktif](cms-migration-kickoff.md).
 
 Write existing Projects/Team memakai Management API database/query karena

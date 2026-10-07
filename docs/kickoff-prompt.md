@@ -1,19 +1,22 @@
 # Kickoff prompt — buat AI agent baru
 
-## Work order aktif — CMS pass 4 Domains (plan only)
+## Work order aktif — CMS pass 5 Hods (plan only)
 
-CMS Projects/Team/Roles sudah Supabase dan live pada baseline `53f92f8`.
-Kedua Vercel SUCCESS; Roles live acceptance selesai. Domains/Hods/Partners
-masih GAS. NEXT hanya Domains; auth CMS terakhir dan keputusan login pending.
-Baca [kickoff migrasi](cms-migration-kickoff.md),
-[Domains Master Work Plan](cms-pass4-domains-plan.md),
-[TODO](cms-migration-todo.md), lalu AGENTS dan [ai-handoff](ai-handoff.md).
+Kode live **`6b36519`**: Projects/Team/Roles/Domains Supabase. Kedua Vercel
+READY dan Domains A–E/dua-site acceptance selesai. Hods/Partners masih GAS.
+Checkpoint live **`df31ab0`** + planning terbaru commit lokal belum dipush.
+Baca urut [kickoff migrasi](cms-migration-kickoff.md) → AGENTS.md →
+[ai-handoff](ai-handoff.md) → [Hods Master Work Plan](cms-pass5-hods-plan.md)
+→ [TODO](cms-migration-todo.md) → [master migration plan](cms-supabase-migration-plan.md)
+→ [CMS SOP](cms-sop.md). Prompt lengkap AI baru: kickoff migrasi §6.
 
-Plan Domains/TODO/handoff sudah disiapkan, implementasi belum dimulai.
-Jangan membuat ulang GAS/Sheets/Drive, reseed Team, mengubah UI/auth, atau
-mengikuti NEXT historis di bawah. Approval push pass 3 sudah digunakan;
-konfirmasi sebelum push baru. Bagian lama berikut adalah **arsip konteks**,
-bukan status/scope aktif. Prompt AI baru ada di kickoff migrasi §6.
+Hods plan rinci siap **PLAN ONLY**, belum SQL/kode/apply/deploy. Scope 6 fixed
+IDs/21 tabs/55 sections/8 bullet items, read-only anon RPC + private SQL/RLS,
+hybrid snapshot, real PG/Unicode/security/atomic failure + all-tab browser,
+7 gate + SEO, docs/commit. UI/geometri/Zod/assertions/hodDesign/auth tetap.
+Jangan reseed Team/hapus GAS/tab/env; full test:cms tanpa env server karena
+Team dapat mutation live. Izin push Domains consumed; konfirmasi push baru.
+Isi NEXT/setup/flow historis di bawah **arsip**, bukan instruksi aktif Hods.
 
 ## ★ ARSIP CHECKPOINT — Recruitment pass 1+2 Supabase (7 Oct 2026)
 

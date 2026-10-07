@@ -54,8 +54,12 @@ screenshot 8 surfaces, `qa-summary.json`, logs. Artifact availability tidak
 dijamin di workspace baru. Cold-cache private media dan partial GAS validation
 belum diaudit; scope terpisah.
 
-**NEXT: pass 5 Hods**, susun Master Work Plan tersendiri dahulu, kemudian
-Partners → auth CMS terakhir. [Domains plan](cms-pass4-domains-plan.md),
+**NEXT: pass 5 Hods**, Master Work Plan rinci sudah disiapkan **PLAN ONLY**;
+belum SQL/kode/apply/deploy Hods. Sesi ini hanya planning/handoff, kemudian
+Partners → auth CMS terakhir. [Hods plan](cms-pass5-hods-plan.md) berisi 6 ID/21 tabs/55 sections/8 bullets,
+SQL proposal, checklist A–E, security/Unicode/browser matrix dan DoD.
+Checkpoint live `df31ab0` dan planning terbaru belum push (lihat git log).
+[Domains plan](cms-pass4-domains-plan.md),
 [TODO](cms-migration-todo.md), [kickoff](cms-migration-kickoff.md).
 Izin push `6b36519` sudah digunakan; **konfirmasi sebelum push baru**, termasuk
 checkpoint docs lokal. Origin sekali push deploy dua situs. User mengizinkan
@@ -320,7 +324,7 @@ Projects media upload/cache → Team → B3 per collection → B4 hardening.
 `docs/cms-sop.md` → `docs/cms-b2-plan.md` → `docs/cms-projects-growth-plan.md`.
 
 **Prioritas dokumen:** checkpoint terbaru di awal file, kickoff migrasi, plan
-Domains dan TODO mengalahkan NEXT/PENDING/setup Growth dan catatan historis. Riwayat disimpan
+Hods dan TODO mengalahkan NEXT/PENDING/setup Growth dan catatan historis. Riwayat disimpan
 sebagai bukti keputusan, bukan work order aktif. Full-screen sudah selesai;
 Contact tetap hero Figma-exact tinggi 954, bukan video/full-screen.
 
@@ -2511,9 +2515,10 @@ Fokus utama AI berikutnya adalah mengaudit dan mengeksekusi secara **strict pixe
    non-link sampai destinasi diberikan).
 9. ~~**Recruitment pass 3 (rate limit + refresh token) 7 Oct 2026**~~ — **LIVE.**
    5 attempts/min/IP+email, auto-refresh 30 menit. Migration applied, code pushed.
-10. **CMS Projects/Team/Roles LIVE `53f92f8`. NEXT pass 4 Domains (plan only).**
-    Baca cms-migration-kickoff.md + cms-pass4-domains-plan.md + cms-migration-todo.md;
-    lalu Hods → Partners → auth terakhir.
+10. **CMS Projects/Team/Roles/Domains LIVE `6b36519`. NEXT pass 5 Hods (PLAN ONLY).**
+    Baca cms-migration-kickoff.md → AGENTS → checkpoint awal file ini →
+    cms-pass5-hods-plan.md → cms-migration-todo.md → master migration plan → CMS SOP.
+    Hods plan rinci siap, belum SQL/kode/apply/deploy; lalu Partners → auth terakhir.
 11. **Sound (opsional):** tuning level cue/ambient (Bagian B, ditunda), pisah
     kontrol SFX vs ambient, atau ganti ke sample AI lewat MCP ElevenLabs kalau mau
     non-prosedural.

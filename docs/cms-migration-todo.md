@@ -1,6 +1,7 @@
 # CMS → Supabase — TODO dan status penerimaan
 
-Work order berikutnya: **pass 5 Hods**, perlu Master Work Plan tersendiri.
+Work order berikutnya: **pass 5 Hods**, [Master Work Plan](cms-pass5-hods-plan.md)
+rinci sudah disiapkan **PLAN ONLY**; belum SQL/kode/apply/deploy Hods.
 Domains [Master Work Plan](cms-pass4-domains-plan.md) A–E selesai, LIVE `6b36519`.
 Kedua Vercel READY + Home/Recruitment/routing 390/1440 acceptance PASS.
 Satu collection per pass, auth terakhir. Checkpoint docs ini lokal sampai izin
@@ -22,7 +23,7 @@ push baru; feature `6b36519` sudah terkirim ke dua repo.
 - [x] Vercel production SUCCESS 2026-10-07 11:21:28 UTC (18:21:28 WIB).
 - [x] Live Roles: enam routes × 390/1440 × dua situs PASS, copy/link/overflow/
       pageerrors; admin anonymous 401, recruitment tetap accepting:false.
-- [x] Planning/handoff Domains disusun; **ini tidak berarti pass 4 selesai**.
+- [x] Planning/handoff Domains disusun sebelum implementasi; actual A–E selesai di §2.
 
 Bukti pass 3 (ignored, boleh tidak tersedia di workspace baru):
 `artifacts/cms-pass3/{live-db,live-hybrid,live-browser,deploy-53f92f8}.json`.
@@ -59,29 +60,52 @@ Testing READY 12:02:26.550 UTC, production READY 12:04:06.630 UTC, 7 Oct 2026.
 Token server missing pada kedua project telah dilengkapi encrypted sebelum push.
 Tidak ada fallback stale; GAS full export tetap dependency.
 
-## 3. Work order sesudah pass 4 (belum dikerjakan)
+## 3. Pass 5 Hods — TODO berurutan, belum dieksekusi
 
-| Urutan            | Status           | Scope awal; perlu plan tersendiri                                            |
-| ----------------- | ---------------- | ---------------------------------------------------------------------------- |
-| Pass 5 Hods       | TODO             | six IDs, ordered tabs/panels, text vs bullets + slot counts; read-only       |
-| Pass 6 Partners   | TODO             | tiga kategori + empat why items + logo repo, read-only                       |
-| Auth CMS terakhir | BELUM DIPUTUSKAN | pilih mekanisme login, audit owner/allowlist/cookie/CSRF, dua domain         |
-| Penghapusan GAS   | BELUM DIIZINKAN  | semua data diterima, backup/observasi/reverse-migration aman, izin eksplisit |
+Semua rincian executable di [Master Work Plan Hods](cms-pass5-hods-plan.md).
+Planning ini tidak berarti SQL/tests/reconciliation baru sudah dijalankan.
+
+- [ ] A1: baca tujuh dokumen, git/SHA/perubahan asing, Node 22, env presence.
+- [ ] A2: fresh snapshot/hash/19 public HTML + pre-pass captured hybrid inputs.
+- [ ] A3: GAS/snapshot seluruh 6 ID/21 tabs/55 sections/8 bullets exact; destination read-only inspect.
+- [ ] B1: private SQL + strict typed JSON/mask/UTF-16 helpers/RLS/revoke/anon RPC/seed.
+- [ ] B2: PG ephemeral all slots/unions/keys/Unicode/order/rerun/security/RLS proof.
+- [ ] B3: hybrid Hods RPC + atomic errors/no stale + relevant sync fixture mocks.
+- [ ] B4: full CMS tanpa env server + recruitment contracts PASS sebelum SQL live.
+- [ ] C1: project/ref verified + private anon key retrieval + immediate reconciliation.
+- [ ] C2: additive apply + inspect applied state on failure + actual anon/catalog/role proof.
+- [ ] C3: same captured inputs pre/post hybrid unchanged values/non-Hods; Team drift utuh.
+- [ ] D1: 7 gate + SEO, snapshot/19 HTML baseline equality, counts/pass/skip recorded.
+- [ ] D2: local all 21 tabs/55 blocks/8 bullets content + click/arrow wrap/focus/aria/hidden/back.
+- [ ] D3: three admin mocks four widths, active docs + reviewable feature commit.
+- [ ] E1: fresh four Supabase/two GAS env Production kedua Vercel, secrets suppressed.
+- [ ] E2: konfirmasi SHA push baru, origin once/two remotes synced.
+- [ ] E3: two latest feature-SHA READY deployments + timestamps actual UTC/WIB.
+- [ ] E4: all six Hods/21 tabs × 390/1440 × both sites + Home/Recruitment entry/back/VT.
+- [ ] E5: anonymous admin 401/recruitment closed, no production mutation + LIVE checkpoint/DoD.
+
+## 4. Sesudah Hods (belum dikerjakan)
+
+| Urutan            | Status           | Scope awal                                        |
+| ----------------- | ---------------- | ------------------------------------------------- |
+| Pass 6 Partners   | TODO             | kategori/why/logo repo; plan tersendiri           |
+| Auth CMS terakhir | BELUM DIPUTUSKAN | pilih login, owner/cookie/CSRF/dua domain         |
+| Penghapusan GAS   | BELUM DIIZINKAN  | semua pass diterima, backup/observasi + izin baru |
 
 Milestones/settings bukan tambahan scope otomatis. Tinjau apakah benar dipakai
 sebelum menawarkan migrasi; jangan menambah pass/collection sendiri.
 
-## 4. Temuan dan keputusan yang harus dibawa ke AI baru
+## 5. Temuan dan keputusan yang harus dibawa ke AI baru
 
 - [ ] Team drift: **catat dan isolasi**, belum diizinkan untuk diperbaiki/reseed.
-      Tidak menghalangi tes Domains yang memakai perbandingan sebelum/sesudah.
+      Tidak menghalangi tes Hods yang memakai perbandingan sebelum/sesudah.
 - [ ] Full GAS export masih divalidasi sebelum overrides; menghapus tabs
       collection migrated bisa menggagalkan build. Refactor ini belum dikerjakan.
 - [ ] Local anon key belum ada di .env.local saat pass 3; tersedia untuk deploy
       yang berhasil. Verifikasi private key retrieval/in-memory; jangan cetak key.
 - [ ] Private Storage vs build anon key perlu audit media tersendiri: cache lokal
       bisa menyembunyikan kegagalan cold-cache. Tidak dibuktikan Roles tests dan
-      tidak boleh mengubah bucket policy agar public sebagai jalan pintas Domains.
+      tidak boleh mengubah bucket policy agar public sebagai jalan pintas Hods.
 - [ ] Catalog proof tidak setara mutation/role-execution proof seluruh fitur.
 - [ ] Auth CMS: Google lewat Supabase atau pertahankan custom masih pending;
       bagian master plan lama adalah proposal, bukan approval.
@@ -89,9 +113,9 @@ sebelum menawarkan migrasi; jangan menambah pass/collection sendiri.
 - [ ] Retensi/pembukaan recruitment: belum diputuskan; accepting:false tetap.
 
 Item bagian ini adalah issue/keputusan terpisah, **bukan** instruksi agar AI
-Domains menyelesaikannya semua. Laporkan blocker yang benar-benar terjadi.
+Hods menyelesaikannya semua. Laporkan blocker yang benar-benar terjadi.
 
-## 5. Aturan perubahan status
+## 6. Aturan perubahan status
 
 Pisahkan status `plan`, `kode lokal`, `SQL applied`, `QA lokal`, `pushed`,
 `dua deployments`, `live acceptance`. Satu status tidak membuktikan lainnya.

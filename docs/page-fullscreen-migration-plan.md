@@ -21,6 +21,10 @@ full-screen (satu section = satu layar) + hero berbasis gambar. Ikuti
 
 ---
 
+NEXT [Hods Master Work Plan](cms-pass5-hods-plan.md) rinci **PLAN ONLY**;
+6 IDs/21 tabs/55 sections/8 bullets. Node/reference/spacing/font/artwork existing
+terkunci; tidak ada fresh Figma export atau UI change sesi planning.
+
 ## 0. Keputusan desain (disetujui user, 4 Oct 2026)
 
 1. **Setiap HERO** memakai gambar dari `assets/hero gambar/` sebagai
