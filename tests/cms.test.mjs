@@ -18,6 +18,17 @@ const baseline = JSON.parse(
 );
 const endpoint = 'https://script.google.com/macros/s/test-deployment/exec';
 const token = 'test-only-export-token-for-cms-tests';
+const supabaseEnv = {
+  SUPABASE_URL: 'https://placeholder.supabase.co',
+  SUPABASE_ANON_KEY: 'placeholder',
+};
+const supabaseMock = (url) =>
+  (typeof url === 'string' ? url : url.href).includes(
+    '/rest/v1/rpc/cms_load_projects',
+  )
+    ? jsonResponse(baseline)
+    : null;
+
 const jsonResponse = (value = baseline) =>
   new Response(JSON.stringify(value), {
     headers: { 'content-type': 'application/json; charset=utf-8' },
@@ -79,8 +90,16 @@ test('GAS redirects return a valid payload and atomically replace the snapshot',
     assert.equal(
       await syncCmsSnapshot({
         snapshotPath: path,
-        env: { CMS_API_URL: endpoint, CMS_API_TOKEN: token },
-        fetchImpl,
+        env: { CMS_API_URL: endpoint, CMS_API_TOKEN: token, ...supabaseEnv },
+        fetchImpl: async (url, opts) => {
+          if (
+            (typeof url === 'string' ? url : url.href).includes(
+              '/rest/v1/rpc/cms_load_projects',
+            )
+          )
+            return jsonResponse(changed);
+          return fetchImpl(url, opts);
+        },
       }),
       'remote',
     );
@@ -130,8 +149,9 @@ test('failed remote responses preserve the snapshot and hide credentials', async
       await assert.rejects(
         syncCmsSnapshot({
           snapshotPath: path,
-          env: { CMS_API_URL: endpoint, CMS_API_TOKEN: token },
-          fetchImpl,
+          env: { CMS_API_URL: endpoint, CMS_API_TOKEN: token, ...supabaseEnv },
+          fetchImpl: async (url, opts) =>
+            supabaseMock(url) || fetchImpl(url, opts),
         }),
         (error) => !error.message.includes(token),
       );
@@ -244,9 +264,17 @@ test('timeouts retry once from the export endpoint; exhausted retries preserve t
         };
         const sync = syncCmsSnapshot({
           snapshotPath: path,
-          env: { CMS_API_URL: endpoint, CMS_API_TOKEN: token },
+          env: { CMS_API_URL: endpoint, CMS_API_TOKEN: token, ...supabaseEnv },
           timeoutMs: 10,
-          fetchImpl,
+          fetchImpl: async (url, opts) => {
+            if (
+              (typeof url === 'string' ? url : url.href).includes(
+                '/rest/v1/rpc/cms_load_projects',
+              )
+            )
+              return jsonResponse(baseline);
+            return fetchImpl(url, opts);
+          },
         });
         if (recover) {
           assert.equal(await sync, 'remote');
@@ -344,8 +372,16 @@ test('redirect 404 retries with a fresh export request; exhaustion leaves snapsh
       };
       const sync = syncCmsSnapshot({
         snapshotPath: path,
-        env: { CMS_API_URL: endpoint, CMS_API_TOKEN: token },
-        fetchImpl,
+        env: { CMS_API_URL: endpoint, CMS_API_TOKEN: token, ...supabaseEnv },
+        fetchImpl: async (url, opts) => {
+          if (
+            (typeof url === 'string' ? url : url.href).includes(
+              '/rest/v1/rpc/cms_load_projects',
+            )
+          )
+            return jsonResponse(baseline);
+          return fetchImpl(url, opts);
+        },
       });
       if (recover) {
         assert.equal(await sync, 'remote');

@@ -77,10 +77,10 @@ ID_CONFLICT | UNCONFIRMED | METHOD_NOT_ALLOWED`.
 | 6   | `RECRUITMENT_OPEN` tetap di env (kill-switch)                             | **disetujui user** (7 Oct 2026)      |
 | 7   | Akses data pendaftar server owner-only; route admin = pass terpisah       | **disetujui user** (7 Oct 2026)      |
 | 8   | Idempotency unique `receipt` + `ON CONFLICT` + fungsi DB atomik           | **disetujui user** (7 Oct 2026)      |
-| 9   | Kolom turunan/queryable (email, primary_hods, array, boolean)             | **selesai pass 2**     |
-| 10  | Baca admin (route server + audit)                                         | **selesai pass 2**     |
-| 11  | Rate limit server-side (login)                                            | **selesai pass 3**     |
-| 12  | Refresh token otomatis                                                    | **selesai pass 3**     |
+| 9   | Kolom turunan/queryable (email, primary_hods, array, boolean)             | **selesai pass 2**                   |
+| 10  | Baca admin (route server + audit)                                         | **selesai pass 2**                   |
+| 11  | Rate limit server-side (login)                                            | **selesai pass 3**                   |
+| 12  | Refresh token otomatis                                                    | **selesai pass 3**                   |
 | 13  | CAPTCHA (Turnstile) — butuh perubahan klien                               | **pass terpisah, belum disetujui**   |
 | 14  | Retensi PII (mis. 12 bulan)                                               | **belum diputuskan**                 |
 | 15  | Enkripsi tambahan `email`/`whatsapp` (pgcrypto)                           | **belum diputuskan**                 |

@@ -375,6 +375,81 @@ export function createAdminHandler({
       fail('SERVER_ERROR');
     return result;
   }
+
+  async function projectsOperation(cfg, env, token, operation, payload) {
+    const supabaseUrl = env.SUPABASE_URL;
+    const supabaseKey = env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!supabaseUrl || !supabaseKey) fail('CONFIGURATION');
+
+    const baseUrl = supabaseUrl.replace(/\/+$/, '');
+
+    const rpc = async (fn, body) => {
+      const url = `${baseUrl}/rest/v1/rpc/${fn}`;
+      const res = await fetchImpl(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          apikey: supabaseKey,
+          Authorization: 'Bearer ' + supabaseKey,
+        },
+        body: JSON.stringify(body || {}),
+        signal: AbortSignal.timeout(15000),
+      });
+      if (!res.ok) fail('SERVER_ERROR');
+      return res.json();
+    };
+
+    const callDeployHooks = async () => {
+      const hooks = [
+        { target: 'testing', url: env.CMS_DEPLOY_HOOK_TESTING },
+        { target: 'production', url: env.CMS_DEPLOY_HOOK_PRODUCTION },
+      ];
+      const results = [];
+      for (const hook of hooks) {
+        if (!hook.url) {
+          results.push({ target: hook.target, accepted: false });
+          continue;
+        }
+        try {
+          const res = await fetchImpl(hook.url, {
+            method: 'POST',
+            signal: AbortSignal.timeout(30000),
+          });
+          results.push({ target: hook.target, accepted: res.ok });
+        } catch {
+          results.push({ target: hook.target, accepted: false });
+        }
+      }
+      return results;
+    };
+
+    if (operation === 'load') {
+      return sanitize({ ok: true, data: await rpc('cms_load_projects') });
+    }
+
+    if (operation === 'save' || operation === 'add' || operation === 'delete') {
+      const rpcName =
+        operation === 'save'
+          ? 'cms_save_project'
+          : operation === 'add'
+            ? 'cms_add_project'
+            : 'cms_delete_project';
+      const result = await rpc(rpcName, { p_payload: payload });
+      if (result.error) return { ok: false, error: result.error };
+      const publication = await callDeployHooks();
+      result.publication = publication;
+      result.publicationPending = publication.some((p) => !p.accepted);
+      return sanitize({ ok: true, data: result });
+    }
+
+    if (operation === 'retry') {
+      const publication = await callDeployHooks();
+      return sanitize({ ok: true, data: { publication } });
+    }
+
+    fail('INVALID_INPUT');
+  }
+
   return async function handle(request, route) {
     let cfg;
     try {
@@ -511,6 +586,20 @@ export function createAdminHandler({
             !image.startsWith('/images/cms/' + collection + '/')
           )
             return error('INVALID_INPUT', 400);
+          if (collection === 'projects') {
+            const storageUrl = `${env.SUPABASE_URL}/storage/v1/object/cms-media/${image.replace(/^\/images\/cms\//, '')}`;
+            const sres = await fetchImpl(storageUrl, {
+              headers: {
+                Authorization: 'Bearer ' + env.SUPABASE_SERVICE_ROLE_KEY,
+              },
+              signal: AbortSignal.timeout(15000),
+            });
+            if (!sres.ok) return error('NOT_FOUND', 404);
+            const bytes = await sres.arrayBuffer();
+            return new Response(bytes, {
+              headers: { ...headers, 'Content-Type': 'image/webp' },
+            });
+          }
           const result = await gas(
             cfg,
             session.token,
@@ -558,6 +647,24 @@ export function createAdminHandler({
         } catch {
           return error('INVALID_INPUT', 400);
         }
+        if (collection === 'projects') {
+          const storageUrl = `${env.SUPABASE_URL}/storage/v1/object/cms-media/projects/${media.image.split('/').pop()}`;
+          const ures = await fetchImpl(storageUrl, {
+            method: 'POST',
+            headers: {
+              Authorization: 'Bearer ' + env.SUPABASE_SERVICE_ROLE_KEY,
+              'Content-Type': 'image/webp',
+            },
+            body: Buffer.from(media.data, 'base64'),
+            signal: AbortSignal.timeout(30000),
+          });
+          if (!ures.ok) return error('SERVER_ERROR', 502);
+          return json({
+            ok: true,
+            data: { image: media.image },
+            csrf: session.csrf,
+          });
+        }
         const result = await gas(
           cfg,
           session.token,
@@ -592,7 +699,7 @@ export function createAdminHandler({
           Object.keys(body).some(
             (k) => !['operation', 'payload'].includes(k),
           ) ||
-          !Object.hasOwn(RPC, body.operation) ||
+          (collection !== 'projects' && !Object.hasOwn(RPC, body.operation)) ||
           ['load', 'upload', 'media'].includes(body.operation)
         )
           return error('INVALID_INPUT', 400);
@@ -606,13 +713,18 @@ export function createAdminHandler({
         )
           return error('INVALID_INPUT', 400);
       }
-      const result = await gas(
-        cfg,
-        session.token,
-        operation,
-        payload,
-        collection,
-      );
+      let result;
+      if (collection === 'projects') {
+        result = await projectsOperation(
+          cfg,
+          env,
+          session.token,
+          operation,
+          payload,
+        );
+      } else {
+        result = await gas(cfg, session.token, operation, payload, collection);
+      }
       const response = json(
         result.ok ? { ...result, csrf: session.csrf } : result,
         result.error?.code === 'UNAUTHORIZED' ? 403 : 200,

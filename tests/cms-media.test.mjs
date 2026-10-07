@@ -90,9 +90,14 @@ test('prebuild caches verified private media before atomic snapshot write, refet
       env: {
         CMS_API_URL: 'https://script.google.com/macros/s/test/exec',
         CMS_API_TOKEN: 'PRIVATE-test',
+        SUPABASE_URL: 'https://placeholder.supabase.co',
+        SUPABASE_ANON_KEY: 'placeholder',
       },
       fetchImpl: async (url) => {
-        const parsed = new URL(url);
+        const href = typeof url === 'string' ? url : url.href;
+        if (href.includes('/rest/v1/rpc/cms_load_projects'))
+          return Response.json(changed);
+        const parsed = new URL(href);
         if (parsed.searchParams.get('action') === 'media') {
           mediaCalls++;
           return Response.json(
@@ -304,11 +309,27 @@ test('native media route enforces session/CSRF, normalizes bytes before fixed ow
     CMS_ADMIN_GOOGLE_CLIENT_ID: 'private-client',
     CMS_ADMIN_GOOGLE_CLIENT_SECRET: 'private-secret',
     CMS_ADMIN_API_DEPLOYMENT_ID: 'private-deployment',
+    SUPABASE_URL: 'https://placeholder.supabase.co',
+    SUPABASE_SERVICE_ROLE_KEY: 'placeholder',
+  };
+  const data = {
+    projects: baseline.projects,
+    revision: 'a'.repeat(64),
+    imagePresets: baseline.projects.map((p) => p.image),
+    minProjects: 1,
+    maxProjects: 8,
+    publicationPending: false,
   };
   const calls = [];
   const handle = createAdminHandler({
     env,
     fetchImpl: async (url, options) => {
+      if (typeof url === 'string' && url.includes('/rest/v1/rpc/'))
+        return Response.json(data);
+      if (typeof url === 'string' && url.includes('/storage/v1/'))
+        return new Response(Buffer.from(expected.data, 'base64'), {
+          headers: { 'Content-Type': 'image/webp' },
+        });
       if (url.endsWith('/token'))
         return Response.json({
           access_token: 'private-token',
@@ -318,7 +339,7 @@ test('native media route enforces session/CSRF, normalizes bytes before fixed ow
         });
       const rpc = JSON.parse(options.body);
       calls.push(rpc);
-      let data = {
+      let rpcData = {
         projects: baseline.projects,
         revision: 'a'.repeat(64),
         imagePresets: [baseline.projects[0].image],
@@ -327,12 +348,13 @@ test('native media route enforces session/CSRF, normalizes bytes before fixed ow
       };
       if (rpc.function === 'adminUploadProjectImage') {
         assert.deepEqual(rpc.parameters[0], expected);
-        data = { image: expected.image };
+        rpcData = { image: expected.image };
       }
-      if (rpc.function === 'adminReadProjectImage') data = { media: expected };
+      if (rpc.function === 'adminReadProjectImage')
+        rpcData = { media: expected };
       return Response.json({
         done: true,
-        response: { result: { ok: true, data } },
+        response: { result: { ok: true, data: rpcData } },
       });
     },
   });
@@ -411,9 +433,10 @@ test('native media route enforces session/CSRF, normalizes bytes before fixed ow
     Buffer.from(await preview.arrayBuffer()),
     Buffer.from(expected.data, 'base64'),
   );
+  // Upload projects sekarang ke Supabase Storage, bukan GAS RPC
   assert.equal(
     calls.filter((c) => c.function === 'adminUploadProjectImage').length,
-    1,
+    0,
   );
 });
 
@@ -470,13 +493,19 @@ test('Team photos use separate namespace, private owner upload/read and active-r
       env: {
         CMS_API_URL: 'https://script.google.com/macros/s/test/exec',
         CMS_API_TOKEN: 'test-token',
+        SUPABASE_URL: 'https://placeholder.supabase.co',
+        SUPABASE_ANON_KEY: 'placeholder',
       },
-      fetchImpl: async (url) =>
-        Response.json(
-          new URL(url).searchParams.get('action') === 'media'
+      fetchImpl: async (url) => {
+        const href = typeof url === 'string' ? url : url.href;
+        if (href.includes('/rest/v1/rpc/cms_load_projects'))
+          return Response.json(snapshot);
+        return Response.json(
+          new URL(href).searchParams.get('action') === 'media'
             ? media
             : snapshot,
-        ),
+        );
+      },
     };
     await syncCmsSnapshot(options);
     assert.deepEqual(
@@ -484,10 +513,14 @@ test('Team photos use separate namespace, private owner upload/read and active-r
       Buffer.from(media.data, 'base64'),
     );
     await writeFile(join(dir, 'public', media.image.slice(1)), 'corrupt');
-    options.fetchImpl = async (url) =>
-      Response.json(
-        new URL(url).searchParams.get('action') === 'media' ? {} : snapshot,
+    options.fetchImpl = async (url) => {
+      const href = typeof url === 'string' ? url : url.href;
+      if (href.includes('/rest/v1/rpc/cms_load_projects'))
+        return Response.json(snapshot);
+      return Response.json(
+        new URL(href).searchParams.get('action') === 'media' ? {} : snapshot,
       );
+    };
     await assert.rejects(
       syncCmsSnapshot(options),
       /media fetch or validation failed/,
@@ -514,11 +547,27 @@ test('native Team media route enforces session/CSRF, normalizes bytes before fix
     CMS_ADMIN_GOOGLE_CLIENT_ID: 'private-client',
     CMS_ADMIN_GOOGLE_CLIENT_SECRET: 'private-secret',
     CMS_ADMIN_API_DEPLOYMENT_ID: 'private-deployment',
+    SUPABASE_URL: 'https://placeholder.supabase.co',
+    SUPABASE_SERVICE_ROLE_KEY: 'placeholder',
+  };
+  const data = {
+    projects: baseline.projects,
+    revision: 'a'.repeat(64),
+    imagePresets: baseline.projects.map((p) => p.image),
+    minProjects: 1,
+    maxProjects: 8,
+    publicationPending: false,
   };
   const calls = [];
   const handle = createAdminHandler({
     env,
     fetchImpl: async (url, options) => {
+      if (typeof url === 'string' && url.includes('/rest/v1/rpc/'))
+        return Response.json(data);
+      if (typeof url === 'string' && url.includes('/storage/v1/'))
+        return new Response(Buffer.from(expected.data, 'base64'), {
+          headers: { 'Content-Type': 'image/webp' },
+        });
       if (url.endsWith('/token'))
         return Response.json({
           access_token: 'private-token',
@@ -528,7 +577,7 @@ test('native Team media route enforces session/CSRF, normalizes bytes before fix
         });
       const rpc = JSON.parse(options.body);
       calls.push(rpc);
-      let data = {
+      let rpcData = {
         projects: baseline.projects,
         revision: 'a'.repeat(64),
         imagePresets: [baseline.projects[0].image],
@@ -537,12 +586,12 @@ test('native Team media route enforces session/CSRF, normalizes bytes before fix
       };
       if (rpc.function === 'adminUploadTeamImage') {
         assert.deepEqual(rpc.parameters[0], expected);
-        data = { image: expected.image };
+        rpcData = { image: expected.image };
       }
-      if (rpc.function === 'adminReadTeamImage') data = { media: expected };
+      if (rpc.function === 'adminReadTeamImage') rpcData = { media: expected };
       return Response.json({
         done: true,
-        response: { result: { ok: true, data } },
+        response: { result: { ok: true, data: rpcData } },
       });
     },
   });

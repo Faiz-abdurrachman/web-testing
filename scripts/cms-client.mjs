@@ -5,6 +5,25 @@ import { pathToFileURL } from 'node:url';
 import { cmsSnapshotSchema } from '../src/data/cms-schema.mjs';
 import { MEDIA_PATH, verifyProjectMedia } from '../server/cms-media.mjs';
 
+async function supabaseFetch(supabaseUrl, supabaseKey, rpcName, fetchImpl) {
+  const url = supabaseUrl.replace(/\/+$/, '') + '/rest/v1/rpc/' + rpcName;
+  const response = await (fetchImpl || fetch)(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      apikey: supabaseKey,
+      Authorization: 'Bearer ' + supabaseKey,
+    },
+    signal: AbortSignal.timeout(30000),
+  });
+  if (!response.ok) {
+    throw new Error(
+      'Supabase RPC ' + rpcName + ' failed: HTTP ' + response.status,
+    );
+  }
+  return response.json();
+}
+
 export const CMS_MAX_BYTES = 1024 * 1024;
 export const CMS_TIMEOUT_MS = 60000;
 
@@ -185,6 +204,8 @@ export async function syncCmsSnapshot({
 }) {
   const apiUrl = env.CMS_API_URL;
   const apiToken = env.CMS_API_TOKEN;
+  const supabaseUrl = env.SUPABASE_URL;
+  const supabaseKey = env.SUPABASE_ANON_KEY;
   if (!apiUrl && !apiToken) {
     const snapshot = parseSnapshot(await readFile(snapshotPath, 'utf8'));
     await cacheProjectMedia({ snapshot, mediaRoot });
@@ -200,6 +221,25 @@ export async function syncCmsSnapshot({
     fetchImpl,
     timeoutMs,
   });
+
+  if (apiUrl && apiToken) {
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error(
+        'CMS projects migration requires SUPABASE_URL and SUPABASE_ANON_KEY',
+      );
+    }
+
+    const sp = await supabaseFetch(
+      supabaseUrl,
+      supabaseKey,
+      'cms_load_projects',
+      fetchImpl,
+    );
+    snapshot.projects = sp.projects;
+
+    validateCmsSnapshot(snapshot);
+  }
+
   await cacheProjectMedia({
     snapshot,
     mediaRoot,

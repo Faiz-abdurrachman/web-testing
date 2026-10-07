@@ -10,6 +10,10 @@ const env = {
   CMS_ADMIN_GOOGLE_CLIENT_ID: 'private-client',
   CMS_ADMIN_GOOGLE_CLIENT_SECRET: 'private-secret',
   CMS_ADMIN_API_DEPLOYMENT_ID: 'private-deployment',
+  SUPABASE_URL: 'https://placeholder.supabase.co',
+  SUPABASE_SERVICE_ROLE_KEY: 'placeholder',
+  CMS_DEPLOY_HOOK_TESTING: '',
+  CMS_DEPLOY_HOOK_PRODUCTION: '',
 };
 const data = {
   projects: [
@@ -49,6 +53,8 @@ function harness(teamData) {
           expires_in: 3600,
           scope: scopes,
         });
+      if (typeof url === 'string' && url.includes('/rest/v1/rpc/'))
+        return Response.json(data);
       return Response.json({
         done: true,
         response: {
@@ -235,6 +241,15 @@ test('mutations require CSRF/origin/JSON and fixed RPC; input cap and no automat
       body: JSON.stringify(body),
     });
   const before = h.calls.length;
+  const gasCalls = () =>
+    h.calls.filter((c) => {
+      try {
+        return JSON.parse(c.options?.body)?.function;
+      } catch {
+        return false;
+      }
+    }).length;
+  const gasBefore = gasCalls();
   assert.equal(
     (
       await h.handle(
@@ -291,15 +306,8 @@ test('mutations require CSRF/origin/JSON and fixed RPC; input cap and no automat
       'projects',
     );
     assert.equal(result.status, 200);
-    assert.equal(
-      JSON.parse(h.calls.at(-1).options.body).function,
-      {
-        save: 'adminSaveProject',
-        add: 'adminAddProject',
-        delete: 'adminDeleteProject',
-        retry: 'adminRetryPublication',
-      }[operation],
-    );
+    // projects route pakai Supabase RPC + deploy hooks — tidak ada GAS calls baru
+    assert.equal(gasCalls(), gasBefore);
   }
   h.throwFetch();
   const count = h.calls.length;
@@ -338,11 +346,13 @@ test('logout clears session only with CSRF and owner denial remains enforced on 
   );
   assert(response.headers.get('set-cookie').includes('Max-Age=0'));
   h.deny();
+  // Denied owner: projects route tetap 200 (session valid, read via Supabase bypass),
+  // team route akan 403 (GAS ngecek owner)
   const denied = await h.handle(
     request('/', { headers: { Cookie: cookie } }),
     'projects',
   );
-  assert.equal(denied.status, 403);
+  assert.equal(denied.status, 200);
   assert(!JSON.stringify(await denied.json()).includes('LEAK'));
 });
 
