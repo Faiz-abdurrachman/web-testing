@@ -1,13 +1,13 @@
 # CMS pass 6 — Partners → Supabase — Master Work Plan
 
-Status: **A–D selesai — SQL applied + QA lokal, siap review**. E belum
-berjalan: belum push/deploy/live acceptance Partners. Baseline situs526b428,
-planning lokal16828c2; lihat git log untuk commit fitur lokal. Kerja/commit lokal
-diizinkan; push baru memerlukan konfirmasi SHA konkret. Proof actual §9.
+Status: **A–E selesai — Partners LIVE925d577 di kedua situs**. Push fitur dengan
+izin Faiz, kedua exact SHA/primary aliases READY dan acceptance live PASS §10.
+Checkpoint docs sesudah acceptance lokal; lihat git log. Izin push925d577
+consumed; konfirmasi sebelum push baru. Auth CMS final pending, GAS tetap wajib.
 
 ## 1. Baseline, urutan baca, dan scope
 
-Baseline deployed **526b428** (checkpoint docs), fitur Hods **763bafc**.
+Baseline sebelum pass **526b428** (checkpoint docs), fitur Hods **763bafc**.
 Keduanya sudah dipush dengan izin; izin tersebut consumed. Testing READY
 7 Oct 2026 **13:12:20.677 UTC / 20:12:20.677 WIB**, production
 **13:13:44.014 UTC / 20:13:44.014 WIB**. Primary aliases dan HTTP smoke kedua
@@ -20,8 +20,9 @@ snapshot, partners.ts, cms-client, GAS export, SQL/tests Hods dan Domains.
 Baca pixel-precision SOP, assets provenance dan fullscreen plan sebelum menyentuh
 UI. Checkpoint aktif mengalahkan NEXT historis.
 
-Hanya sumber konten Partners build-time yang dipindah. Projects/Team/Roles/
-Domains/Hods sudah Supabase; Partners masih GAS. Full GAS export tetap divalidasi
+Hanya sumber konten Partners build-time yang dipindah. Pada baseline sebelum
+pass, Projects/Team/Roles/Domains/Hods sudah Supabase dan Partners masih GAS.
+Setelah acceptance925d577, keenam content sources Supabase. Full GAS export tetap divalidasi
 sebelum seluruh overrides, termasuk setelah enam collection memakai Supabase.
 Jangan hapus tab/env/deployment GAS, refactor partial validation/media, reseed
 Team, mengubah recruitment, auth, UI, assets, dependencies atau applied migrations.
@@ -264,18 +265,18 @@ If unforeseen change is required, explain concrete blocker rather than widening 
 
 ### E — Only after new explicit push approval
 
-- [ ] E1 Verify four Supabase + two GAS env Production both Vercel projects.
+- [x] E1 Verify four Supabase + two GAS env Production both Vercel projects.
       Presence/scope proof only, never values. Preserve recruitment closed.
-- [ ] E2 Confirm concrete SHA with Faiz; `git push origin main` once reaches
+- [x] E2 Confirm concrete SHA with Faiz; `git push origin main` once reaches
       two existing push URLs. Fetch refs verify main/origin/main/production/main.
-- [ ] E3 Verify exact SHA latest deployments READY, primary alias assignment,
+- [x] E3 Verify exact SHA latest deployments READY, primary alias assignment,
       actual provider READY UTC/WIB times on both sites; not GitHub status alone.
-- [ ] E4 Partners390/1440 both sites: three labels, 10/5/5 logos, alt/order,
+- [x] E4 Partners390/1440 both sites: three labels, 10/5/5 logos, alt/order,
       four why text pairs/index icons, artwork decode, navbar/footer entry and
       VT/keyboard/mobile flow, no overflow/pageerror. Smoke Home/Recruitment +
       six Hods and Roles; projects/team/media anonymous401, accepting:false.
       No owner/write/recruitment submission or production mutation.
-- [ ] E5 Record tracked live checkpoint + proof; lock Partners only after DoD.
+- [x] E5 Record tracked live checkpoint + proof; lock Partners only after DoD.
       New checkpoint commit local unless separately included in push approval.
 
 ## 7. Security, secrets and operational rules
@@ -380,7 +381,47 @@ local-db,live-db,live-hybrid,qa-summary,browser}.json`, Node22 test/gate/admin l
 2 Partners390/1440 full-page screenshots. Snapshot/remote inputs private/ignored.
 `local-db.json` adalah ringkasan focused PostgreSQL; raw fixtures di tracked test.
 
-**E pending seluruhnya.** Belum memverifikasi env Vercel fresh untuk push ini,
-belum push, belum deployment/alias/acceptance live baru. Setelah izin SHA:
-E1–E5 kedua situs; situs existing526b428 masih memakai Partners GAS. Setelah E
-accepted baru lock Partners; auth CMS dan GAS removal tetap pass terpisah.
+**E selesai** dengan push925d577 berizin dan acceptance berikut. Checkpoint docs
+lokal, tidak ikut push fitur yang sudah selesai.
+
+## 10. Live acceptance E — 7 Oct 2026
+
+Faiz memberi instruksi **push** untuk concrete feature925d577 (termasuk planning
+16828c2). Fresh4Supabase+2GAS env Production pada web-testing dan
+data-sorcerers-community semuanya present; nilai tidak dicetak/ditulis. Push
+origin main sekali berhasil ke dua existing URLs; fetch refs main/origin/main/
+production/main sinkron925d577 sesudah push fitur. Deployment API direct exact
+SHA `925d5774e28b2b9e78e75649d88e1b28949ce8cf`, targetproduction, READY;
+primary alias lookup actual deployment ID cocok latest exact-SHA deployment.
+
+- web-testing: **13:57:59.202 UTC / 20:57:59.202 WIB**, 07 Oct 2026.
+- data-sorcerers-community: **13:59:13.031 UTC / 20:59:13.031 WIB**, 07 Oct 2026.
+
+- Testing primary: `https://web-testing-azure.vercel.app`.
+- Production primary: `https://data-sorcerers-community-sigma.vercel.app`.
+
+Provider timestamps di atas actual READY API; artifact checkedAt memakai jam
+workspace, tidak dibandingkan untuk ordering lintas clock.
+
+Partners390/1440 kedua situs PASS (4 surfaces): three labels exact/order,
+10/5/5 count =20 shared logo paths/alt exact, all4 why title/description pairs,
+icons by index dan decorative aria-hidden. Lazy hero/cards/glow/icons/footer
+images decode after scroll. Runtime1440×903 hero/why dan1440×1071 Our Partners,
+why grid1286×185 exact. No overflow/clipped text/pageerror. Keyboard footer
+Home navigation +navbar desktop/mobile Partners entry serta keyboard footer
+Partners entry mempertahankan Astro JS context/VT. Four full-page screenshots.
+
+Public smoke Home/Recruitment +all6 Hods/all6 Roles pada390/1440 kedua situs
+PASS: HTTP200, headings/back links exact, detail artwork decoded, overflow0,
+pageErrors[]. API projects/team/media anonymous401 dan recruitment GET exact
+`{ok:true,accepting:false}` pada kedua widths/sites. Read-only acceptance saja;
+tidak ada owner write/recruitment submission/SQL apply ulang/hook tambahan.
+
+Artifacts ignored: `vercel-env.json`, `deployments-925d577.json`,
+`aliases-925d577.json`, `live-browser-testing.json`, `live-browser-production.json`,
+`live-smoke.json`, `live-{testing,production}-partners-{390,1440}.png`.
+
+**DoD Partners A–E tercapai.** Keenam CMS content sources Supabase, tetapi full
+GAS validation/env/tab masih dependency. Editors tetap Projects/Team; auth CMS
+final belum diputuskan, GAS removal perlu audit/backup/observasi/izin terpisah.
+Checkpoint live docs commit lokal, tidak push lagi memakai izin feature consumed.

@@ -1,14 +1,14 @@
 # Asset provenance
 
-## Checkpoint CMS — Partners SQL applied + QA lokal, belum deploy
+## Checkpoint CMS — Partners LIVE925d577, UI terkunci
 
-Pass 6 Partners A–D selesai; [proof dan scope](cms-pass6-partners-plan.md#9-proof-actual-a-d--7-oct-2026).
-Kode lokal memakai Partners read RPC Supabase; situs masih baseline526b428
-(Partners GAS), menunggu izin push baru dan acceptance E. UI/font/artwork,
-spacing/geometry/reference/assertions tidak diubah; count10/5/5 dan icons lokal.
-Fresh snapshot/19 public HTML exact, 7 gate + SEO PASS, Partners sembilan widths
-PASS. Full GAS export tetap divalidasi; jangan hapus tab/env. Auth terakhir.
-Checkpoint planning terdahulu di bawah disimpan sebagai riwayat.
+Pass6 Partners A–E accepted kedua situs; [proof](cms-pass6-partners-plan.md#10-live-acceptance-e--7-oct-2026).
+Keenam content collections memakai Supabase RPC build-time; full GAS export
+masih divalidasi, jangan hapus tab/env. UI/font/artwork/spacing/geometry/reference/
+assertions tetap, count10/5/5 dan why-icons lokal. Local7gate+SEO/snapshot19HTML
+exact; Partners390/1440 kedua situs accepted tanpa overflow/pageerror. Auth CMS
+final pending/keputusan user, GAS removal belum diizinkan. Docs checkpoint lokal;
+push925d577 consumed, konfirmasi sebelum push baru.
 
 ## Checkpoint CMS / provenance — Hods live, NEXT Partners
 

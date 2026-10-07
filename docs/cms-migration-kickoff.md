@@ -1,87 +1,94 @@
 # CMS → Supabase — kickoff aktif untuk AI baru
 
-## Checkpoint aktif — Partners SQL applied + QA lokal, menunggu izin push
+## Checkpoint aktif — Partners LIVE, NEXT auth CMS final
 
-Pass 6 Partners **A–D selesai**, implementasi lokal siap review; **E belum
-berjalan**, belum push/deploy/live acceptance Partners. Baseline situs tetap
-**526b428**, planning lokal **16828c2**; lihat `git log` untuk commit fitur lokal.
-[Master Work Plan Partners](cms-pass6-partners-plan.md) §9 menyimpan proof.
-Konfirmasi SHA konkret sebelum push baru; origin sekali push men-deploy dua situs.
+**Pass 6 Partners A–E selesai, LIVE `925d577`**, dipush dengan izin Faiz ke
+kedua repo. Sesudah push fitur, main/origin/main/production/main sinkron925d577.
+Kedua primary domains assigned ke exact feature SHA dan **READY**:
+
+- web-testing: **13:57:59.202 UTC / 20:57:59.202 WIB**, 07 Oct 2026.
+- data-sorcerers-community: **13:59:13.031 UTC / 20:59:13.031 WIB**, 07 Oct 2026.
+
+Timestamp READY dari API Vercel actual; browser/artifact checkedAt memakai jam
+workspace. Jangan urutkan event dengan mencampur kedua clock atau nama migration.
+Checkpoint docs sesudah acceptance ini **commit lokal saja**; lihat git log.
+Izin push925d577 sudah digunakan; konfirmasi sebelum push baru termasuk docs.
+[Master Work Plan Partners](cms-pass6-partners-plan.md) §9–10 menyimpan proof.
 
 Migration additive `20261013010000_cms_partners_pass6.sql` applied sekali ke
-existing **web-community / yejrdckcmlxrkklgtrwy**, 7 Oct 2026. GAS/snapshot/DB
-exact: **3 category labels + 1 local logo path + 4 why pairs**, order/keys/types
-utuh. Singleton private + RLS deny; public RPC anon/service_role saja.
-Catalog owner postgres, fixed search_path/definer/ACL dan **13 actual read role
-denials** PASS; write privileges denied via catalog, tanpa live DML probes.
-Probe anon pertama HTTP404; inspect state menunjukkan tabel/RPC dan satu row,
-read berikutnya HTTP200 exact. Tidak reapply; penyebab 404 awal belum diisolasi.
+existing web-community / yejrdckcmlxrkklgtrwy. GAS/snapshot/DB exact **3 category
+labels + 1 local logo path + 4 why pairs**, strict keys/types/order. Private
+singleton + RLS ALL deny; public RPC anon/service_role saja. Catalog owner/
+search_path/definer/ACL dan13 actual denied live reads PASS; write permissions
+via catalog denied, tanpa live DML probes. Initial anon404 → independent state
+inspect/count1 + HTTP200 exact → proof-only tanpa reapply; cause awal unresolved.
 
-Node **22.23.0**: CMS **92 PASS + 10 live Team SKIP / 0 FAIL**, recruitment
-**24 PASS**, focused Partners **18 PASS** + PostgreSQL ephemeral (199 invalid /
-72 valid schema-parity fixtures, 22 role denials, RLS isolation/rerun/order).
-Partners SQL memakai Unicode **codepoints** sesuai installed Zod; NUL/lone
-surrogates yang PostgreSQL tidak representasikan tetap fail closed. Schema dan
-applied helpers Domains/Hods tidak diubah. Path regex dan asset decode terpisah.
+Live Partners **390/1440 kedua situs PASS**:3 labels/10-5-5 slots/20 alt/logos,
+4 why pairs/index-matched local icons, hero/cards/glow/footer artwork decode,
+exact desktop geometry, navbar mobile/desktop entry, keyboard footer entry/back,
+Astro VT context retained, tanpa overflow/clipping/pageerror. Home/Recruitment +
+6 Hods +6 Roles ×390/1440 kedua situs PASS (HTTP200/headings/back/art decode/
+overflow); projects/team/media API anonymous401 dan recruitmentaccepting:false.
+Tidak ada owner mutation, submission, hook atau SQL apply ulang.
 
-Tujuh gate + SEO PASS: build0 errors/23 pages, visual browserErrors kosong,
-navbar/VT, responsive **468/468**, spacing39, format. Partners browser sembilan
-widths **320/390/700/701/1050/1051/1365/1366/1440** PASS: labels10/5/5 slots,
-20 alt/logos, four why pairs/index icons, artwork decode, exact geometry,
-keyboard footer/navbar entry/VT, tanpa overflow/clipping/pageerror. Native +
-legacy Projects + Team admin mock empat widths PASS, bukan real owner auth.
-Fresh snapshot bytes dan **19 public HTML exact**; same captured remote inputs
-pre/post value-identik. Team drift preexisting tetap, tidak reseed/mutation.
+Node22.23.0 QA lokal: CMS92 PASS+10 Team live SKIP/0FAIL, recruitment24 PASS,
+focused Partners18 PASS+PostgreSQL (199 invalid/72 valid parity fixtures,
+22 role denials, RLS/order/rerun/missing row/Unicode/path). Tujuh gate+SEO PASS,
+responsive468/468, spacing39, SEO23 pages, three admin mocks4widths. Snapshot
+bytes/19 public HTML exact fresh baseline. Same captured inputs pre/post deep
+value-identik; Team drift preexisting utuh, tidak reseed/overwrite snapshot.
+Codepoint ceiling sesuai installed Zod; NUL/lone surrogate fail closed PG.
 
-**Kode lokal** membaca keenam content collections dari Supabase RPC; situs live
-masih baseline lima RPC + Partners GAS sampai push berizin. **Full GAS export
-masih divalidasi sebelum overrides**; jangan hapus GAS/tab/env. Count10/5/5,
-icons, UI/geometri/font/artwork/schema/assertions/admin/auth/media tetap.
-Tanpa editor/write API/state/Storage/dependencies baru. Auth CMS final pending;
-seluruh CMS belum selesai. E wajib fresh env kedua Vercel, izin SHA, dua exact
-READY/aliases dan acceptance live; tidak trigger hook/deploy sebelum izin.
-Bukti ignored `artifacts/cms-pass6/`; ringkasan tracked ini berlaku jika hilang.
+**Sumber aktif keenam CMS content collections = Supabase RPC build-time.**
+**Full GAS export masih divalidasi sebelum overrides**; jangan hapus GAS/tab/env.
+Empat Supabase +dua GAS env Production kedua Vercel fresh verified sebelum push,
+nilai tidak dicetak. Count10/5/5/icons, UI/geometri/font/artwork/schema/assertions,
+admin/auth/media/dependencies tetap; tanpa Partners editor/write API/state/Storage.
+Auth CMS tetap OAuth custom, **provider/mekanisme final pending**, pass berikutnya
+butuh keputusan user. Seluruh CMS belum selesai dan GAS removal belum diizinkan.
+Proof ignored `artifacts/cms-pass6/`:live-db/live-hybrid/qa-summary/vercel-env,
+deployments/aliases-925d577,live-browser-testing/production,live-smoke,4screenshots.
+Ringkasan tracked ini menjadi handoff bila artifacts hilang.
 
 Faiz, panggil **bro**, bahasa Indonesia. Repo `/home/faiz/ds/ds5opencode`.
-Work order aktif **pass 6 Partners E**, [Master Work Plan](cms-pass6-partners-plan.md)
-A–D selesai, SQL applied + QA lokal; belum push/deploy/acceptance live Partners.
-Baca file ini seluruhnya termasuk prompt §6; jangan mengulang apply Partners
-atau pass Hods yang sudah LIVE. E dimulai setelah izin push konkret.
+Partners A–E accepted; status/proof terbaru di awal file dan plan §9–10.
+NEXT auth CMS final **belum diputuskan**, bukan izin implementasi otomatis.
+Baca seluruhnya termasuk §6; jangan mengulang SQL/apply/acceptance Partners.
 
 ## 1. Baseline actual dan status izin
 
-Baseline deployed **526b428**, checkpoint docs sesudah fitur Hods **763bafc**.
-Keduanya sudah dipush dengan izin Faiz. main/origin/main/production/main sinkron
-526b428 pada pemeriksaan sesi planning. Planning Partners terbaru commit lokal;
-lihat git log/status, jangan reset atau menimpa perubahan asing.
+Fitur deployed **925d577**, pass6 Partners A–E accepted pada kedua primary
+aliases. Planning16828c2 ikut push berizin bersama fitur; checkpoint docs sesudah
+acceptance lokal saja, lihat git log/status. Izin push925d577 consumed.
+Baseline sebelum pass526b428 dan fitur Hods763bafc adalah riwayat accepted,
+bukan work order untuk diulang. Jangan reset atau menimpa perubahan asing.
 
-Kedua primary aliases assigned exact SHA526b428, READY pada 7 Oct 2026:
+Kedua primary aliases assigned exact SHA925d577, READY pada7Oct2026:
 
-- Testing: **13:12:20.677 UTC / 20:12:20.677 WIB**,
+- Testing **13:57:59.202 UTC /20:57:59.202 WIB**,
   `https://web-testing-azure.vercel.app`.
-- Production: **13:13:44.014 UTC / 20:13:44.014 WIB**,
+- Production **13:59:13.031 UTC /20:59:13.031 WIB**,
   `https://data-sorcerers-community-sigma.vercel.app`.
 
-Checkpoint rebuild smoke PASS: six Hods headings exact, Home/Recruitment/
-Partners HTTP200, admin projects/team/media anonymous401, recruitment closed.
-Hods feature full acceptance: all6 routes/21 tabs ×390/1440 ×Home/Recruitment
-contexts kedua situs PASS; 6 IDs/55 sections/8 bullets exact, artwork/tab
-interaction/aria/keyboard/VT/back/no overflow/pageerror. No production mutation.
-[Hods plan](cms-pass5-hods-plan.md) §9–10 menyimpan actual proof.
+Timestamp API Vercel actual; jangan dibandingkan untuk ordering dengan workspace
+checkedAt. Partners390/1440 kedua situs accepted: labels/count10-5-5/20alt/
+why pairs/order/icons/art decode/geometri/keyboard/navbar/footer/VT/no errors.
+Home/Recruitment/sixHods/sixRoles390/1440 kedua situs smoke PASS, API admin401,
+recruitmentclosed, tanpa mutation/submission. [Partners proof](cms-pass6-partners-plan.md)
+§9–10 authoritative. Historical Hods all21-tab acceptance di [Hods plan](cms-pass5-hods-plan.md) §9–10.
 
 | Bagian             | Sumber/status aktif                                          |
 | ------------------ | ------------------------------------------------------------ |
 | Recruitment        | Supabase pass1–3; accepting:false; Auth email/password       |
-| Projects/Team      | Supabase Postgres + Storage; write Management API            |
+| Projects/Team      | Supabase Postgres +Storage; write Management API             |
 | Roles/Domains/Hods | Supabase public read RPC; LIVE accepted                      |
-| Partners           | Live masih GAS; lokal SQL/RPC/QA pass6 A–D PASS              |
+| Partners           | Supabase public read RPC; LIVE925d577 accepted               |
 | CMS auth           | Custom OAuth existing; final provider pending, pass terakhir |
 
-QA Hods Node22.23.0: CMS74 PASS/10 Team live SKIP/0 fail, recruitment24 PASS,
-focused Hods18 PASS/ephemeral PostgreSQL, 7 gate + SEO, tiga admin mocks empat
-widths, responsive468/468, SEO23 pages, spacing39, snapshot/19 public HTML exact.
-Ini historical baseline, bukan klaim tes Partners sudah dilakukan.
-**Izin push763bafc/526b428 consumed; konfirmasi sebelum push baru**, termasuk docs.
+Full GAS export masih divalidasi sebelum overrides, walau enam content sources
+Supabase. Jangan hapus tab/env/GAS. QA lokal Node22.23.0: CMS92PASS/10TeamSKIP,
+recruitment24PASS/Partners18PASS+realPG,7gate+SEO/admin mocks/Partners9widths,
+snapshot19HTML exact. Auth CMS final belum diputuskan; seluruh CMS belum selesai.
 
 ## 2. Urutan baca wajib sebelum coding
 
@@ -160,42 +167,41 @@ D menghasilkan hasil reviewable. `git push origin main` sekali ke dua existing
 push URLs deploy testing+production; jangan menambah remote/push URL.
 E verifikasi kedua deployment/aliases/live; pisahkan plan/local/SQL/push/live.
 
-## 6. Prompt siap salin — lanjut acceptance E setelah izin baru
+## 6. Prompt siap salin — handoff sesudah Partners LIVE
 
 ```text
-Bro, lanjut CMS pass6 Partners di /home/faiz/ds/ds5opencode.
-Panggil gw bro, bahasa Indonesia. Baca kickoff seluruhnya termasuk §6 lalu
+Bro, baca konteks CMS di /home/faiz/ds/ds5opencode.
+Panggil gw bro, bahasa Indonesia. Urutan kickoff seluruhnya termasuk §6 →
 AGENTS → ai-handoff → Partners plan → TODO → master migration plan → CMS SOP.
-Checkpoint aktif Partners A–D/SQL applied/QA lokal mengalahkan PLAN ONLY historis.
+Checkpoint Partners LIVE925d577/A–E accepted mengalahkan planning historis.
 
-Cek git status/log/refs dan Node22 dahulu. Baseline live526b428; planning16828c2
-serta fitur Partners terbaru lokal, belum push. Jangan reset/perubahan asing.
-Master Work Plan Partners §9: full GAS/snapshot/DB exact3categories/1path/4why;
-SQL applied SEKALI, initial RPC404 lalu state inspect+HTTP200 exact,13 live read
-denials/catalog. Jangan apply/reseed/drop lagi. Same frozen inputs pre/post
-identik, Team drift preexisting tetap. Local QA92CMS PASS+10TeamSKIP,24recruitment,
-18focused Partners/real PG,7gate+SEO,Partners9widths/admin3mocks4widths,
-snapshot/19HTML exact. Proof artifacts boleh hilang; ringkasan tracked authoritative.
+Cek git status/log/refs/Node22 dahulu; baseline fitur live925d577 kedua primary
+aliases exact SHA READY, Partners390/1440 kedua situs accepted. Checkpoint docs
+setelah live acceptance commit lokal, lihat git log. Izin push925d577 consumed;
+konfirmasi sebelum push baru termasuk docs. Jangan reset/perubahan asing.
 
-Work order E1–E5 setelah izin SHA konkret. Izin push lama consumed; jika belum
-ada izin baru, siapkan read-only hasil review lalu minta konfirmasi sesuai AGENTS.
-Verifikasi fresh4Supabase+2GAS env Production kedua Vercel, nilai tidak dicetak.
-Push origin main sekali ke dua existing push URLs hanya dengan izin; jangan
-trigger hooks/deploy sendiri. Verify exact SHA refs/two READY+primary aliases,
-actual provider timestamps UTC/WIB. Partners390/1440 kedua situs copy/count10-5-5/
-20alts/why order/icons/art decode/navbar/footer/keyboard/VT/no overflow/errors;
-Home/Recruitment/sixHods/sixRoles regression, admin projects/team/media anonymous401,
-recruitmentaccepting:false, tanpa owner mutation atau submission.
+SQL Partners applied SEKALI; initial anon404 lalu independent inspect/count1/
+HTTP200 exact dan13actual denied reads/catalog PASS, tanpa DML live probes.
+Jangan reapply/drop/reseed. GAS/snapshot/DB exact3category labels/1local logo/
+4why pairs; codepoint limit installed Zod/PG, NUL/lone surrogate fail closed.
+Same frozen pre/post input values identik; Team drift preexisting tetap.
+QA local92CMSPASS+10TeamSKIP/24recruitment/18Partners/realPG/7gate+SEO,
+Partners9widths/admin3mocks4widths/snapshot19HTML exact. Smoke live kedua situs
+Home/Recruitment/sixHods/sixRoles390/1440 PASS, anonymousadmin401,
+recruitmentaccepting:false. Proof plan §9–10 authoritative jika artifacts hilang.
 
-UI/geometri/font/art/schema/assertions/admin/auth/media/dependencies tetap;
-count/icons lokal, tanpa editor/write API/state/Storage. Full GAS export masih
-divalidasi sebelum semua6RPC overrides: jangan hapus tab/env/GAS. Jangan mutation/
-reseed Team, cold-cache media, partial validation, recruitment/CAPTCHA/auth.
-SQL Partners codepoints cocok actual Zod; NUL/lone surrogate fail closed PG;
-applied Hods/Domains helpers tidak diubah. Full test:cms TANPA env server.
-Secrets private/in-memory; jangan service-key workaround untuk anon. Auth CMS
-terakhir/provider pending; seluruh CMS belum selesai. E accepted baru lock
-Partners/update live checkpoint, checkpoint commit lokal kecuali push berizin.
+Keenam CMS content sources sudah Supabase RPC build-time; full GAS export masih
+divalidasi sebelum overrides, jangan hapus GAS/tab/env. Empat Supabase+duaGAS
+env kedua Vercel fresh verified sebelum push, secret jangan dicetak. UI/geometri/
+font/art/schema/assertions/admin/auth/media/dependencies tetap; Partners count/
+icons lokal, tanpa editor/write API/state/Storage. Full test:cms TANPA env server.
+
+NEXT auth CMS final belum diputuskan: tunggu work order/keputusan user sebelum
+implementasi. OAuth custom CMS existing tetap; recruitment Authemail/password
+terpisah. GAS removal belum diizinkan dan audit/backup/observasi pass tersendiri.
+Jangan otomatis mutation/reseed Team, cold-cache media, partial GAS validation,
+recruitment/CAPTCHA/retensi/pembukaan atau milestones/settings. Seluruh CMS belum
+selesai. Tidak onboarding ulang project/Sheet/folder/credentials.
 ```
 
 ## 7. Sesudah Partners dan keputusan terpisah
