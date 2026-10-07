@@ -1,0 +1,349 @@
+---
+const title = 'Recruitment Applications | Data Sorcerers';
+const description =
+  'Halaman privat owner Data Sorcerers untuk meninjau pendaftaran recruitment.';
+const canonical = new URL('/admin/recruitment/', Astro.site).href;
+const image = new URL('/og/og-default.jpg', Astro.site).href;
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="referrer" content="no-referrer" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.ico" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Data Sorcerers" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: title,
+        url: canonical,
+      })}
+    ></script>
+    <style is:global>
+      @font-face {
+        font-family: Manrope;
+        src: url('/fonts/manrope-400.woff2') format('woff2');
+        font-weight: 400;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: Manrope;
+        src: url('/fonts/manrope-700.woff2') format('woff2');
+        font-weight: 700;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Bluu Next';
+        src: url('/fonts/bluu-next-700.woff2') format('woff2');
+        font-weight: 700;
+        font-display: swap;
+      }
+      :root {
+        color-scheme: dark;
+        --font-display: 'Bluu Next', serif;
+        --font-body: Manrope, sans-serif;
+        --bg: #050507;
+        --surface: #16141f;
+        --text: #fff;
+        --muted: #bcb7cb;
+        --accent: #9b7bff;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 400 16px/1.5 var(--font-body);
+      }
+      main {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 32px;
+      }
+      header {
+        border-bottom: 1px solid #393344;
+        padding-bottom: 24px;
+        margin-bottom: 32px;
+      }
+      h1 {
+        margin: 0 0 16px;
+        font: 700 40px/1.2 var(--font-display);
+      }
+      h2 {
+        margin: 0 0 16px;
+        font: 700 24px/1.25 var(--font-display);
+      }
+      p {
+        margin: 0;
+        color: var(--muted);
+      }
+      .brand {
+        margin-bottom: 16px;
+        color: var(--accent);
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+      button {
+        border: 1px solid #4a4358;
+        border-radius: 8px;
+        padding: 8px 16px;
+        color: var(--text);
+        background: transparent;
+        cursor: pointer;
+      }
+      button:disabled {
+        cursor: wait;
+        opacity: 0.55;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      select:focus-visible,
+      textarea:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .primary {
+        background: var(--accent);
+        color: #050507;
+        border-color: var(--accent);
+        font-weight: 700;
+      }
+      .auth-links {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 24px;
+      }
+      .login-link {
+        display: inline-block;
+        padding: 8px 16px;
+        background: var(--accent);
+        color: #050507;
+        border-radius: 8px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+      a:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      #status {
+        margin-bottom: 24px;
+        overflow-wrap: anywhere;
+      }
+      #status[data-error='true'] {
+        color: #ffb6b6;
+      }
+      [hidden] {
+        display: none !important;
+      }
+
+      .search-bar {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+      }
+      .search-bar input,
+      .search-bar select {
+        padding: 8px 12px;
+        border: 1px solid #4a4358;
+        border-radius: 8px;
+        background: #0c0a11;
+        color: var(--text);
+        min-width: 0;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 16px;
+        font-size: 14px;
+      }
+      th,
+      td {
+        padding: 10px 12px;
+        border-bottom: 1px solid #393344;
+        text-align: left;
+        overflow-wrap: anywhere;
+      }
+      th {
+        background: var(--surface);
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      tr:hover td {
+        background: #1c182a;
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      .stat-card {
+        padding: 16px;
+        background: var(--surface);
+        border-radius: 12px;
+        text-align: center;
+      }
+      .stat-card .number {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--accent);
+        display: block;
+      }
+      .stat-card .label {
+        color: var(--muted);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 16px;
+      }
+
+      .detail-panel {
+        display: grid;
+        gap: 8px;
+        margin-top: 16px;
+      }
+      .detail-panel .field {
+        padding: 8px 12px;
+        background: #0c0a11;
+        border-radius: 6px;
+      }
+      .detail-panel .field-label {
+        font-size: 11px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      @media (max-width: 760px) {
+        main {
+          padding: 16px;
+        }
+        h1 {
+          font-size: 32px;
+        }
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        th,
+        td {
+          padding: 6px 8px;
+          font-size: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="brand">Data Sorcerers · Recruitment</p>
+        <h1>Pendaftaran</h1>
+        <p>
+          Tinjau pendaftar recruitment, filter berdasarkan domain atau kata
+          kunci.
+        </p>
+        <div class="auth-links">
+          <a id="login" class="login-link" href="/api/admin/recruitment/login">
+            Masuk dengan Google (Supabase)
+          </a>
+          <button id="logout" type="button" hidden>
+            Keluar
+          </button>
+          <a href="/admin/">Kelola Projects</a>
+          <a href="/admin/team/">Kelola Team</a>
+          <a href="/">Kembali ke situs</a>
+        </div>
+      </header>
+      <p id="status" role="status" aria-live="polite">
+        Memeriksa akses…
+      </p>
+      <div id="workspace" hidden>
+        <div class="stats-grid" id="stats"></div>
+        <div class="search-bar">
+          <input
+            id="search"
+            type="search"
+            placeholder="Cari nama atau email…"
+          />
+          <select id="filter-hods">
+            <option value="">Semua domain</option>
+          </select>
+          <button id="filter-btn" class="primary">
+            Cari
+          </button>
+        </div>
+        <div id="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Nama</th>
+                <th>Email</th>
+                <th>Domain</th>
+                <th>Tanggal</th>
+                <th>Resi</th>
+              </tr>
+            </thead>
+            <tbody id="applications-body"></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="pagination" hidden>
+          <button id="prev-page" type="button">
+            ← Sebelumnya
+          </button>
+          <span id="page-info"></span>
+          <button id="next-page" type="button">
+            Selanjutnya →
+          </button>
+        </div>
+        <div id="detail-area" hidden>
+          <h2>Detail pendaftar</h2>
+          <div id="detail-panel" class="detail-panel"></div>
+          <button id="back-list" type="button">
+            Kembali ke daftar
+          </button>
+        </div>
+      </div>
+      <noscript>
+        <p>Aktifkan JavaScript untuk melihat data pendaftaran.</p>
+      </noscript>
+    </main>
+    <script>
+      import '../../scripts/recruitment-admin.js';
+    </script>
+  </body>
+</html>

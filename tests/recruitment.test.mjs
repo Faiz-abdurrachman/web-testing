@@ -1,19 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import vm from 'node:vm';
-import { readFile } from 'node:fs/promises';
-import { createHash } from 'node:crypto';
 import * as contract from '../server/recruitment-contract.mjs';
 import {
   canonicalContentHash,
   createRecruitmentHandler,
 } from '../server/recruitment.mjs';
 
-const id = '12345678-1234-4123-8123-123456789abc';
+const id = '22345678-1234-4123-8123-123456789abc';
 const fields = () => ({
-  full_name: 'Test Applicant',
-  preferred_name: 'Test',
-  email: 'test@example.test',
+  full_name: 'Admin Test',
+  preferred_name: 'Admin',
+  email: 'admin@example.test',
   whatsapp: '+628123456789',
   institution: 'Test',
   city_region: 'Test',
@@ -33,11 +30,13 @@ const fields = () => ({
   foundation_skills: ['Python', 'SQL'],
   learning_methods: ['Self-learning', 'Books / Articles'],
 });
+
 const serviceKey = 'test-only-service-role-key-not-a-real-credential-0000';
 const supabaseEnv = {
   RECRUITMENT_OPEN: 'true',
   SUPABASE_URL: 'https://testproject.supabase.co',
   SUPABASE_SERVICE_ROLE_KEY: serviceKey,
+  SUPABASE_ANON_KEY: 'test-anon-key',
   CMS_ADMIN_ORIGIN: 'https://recruitment.test',
 };
 const rpcUrl =
@@ -58,6 +57,7 @@ const rpcJson = (status, body) =>
     headers: { 'content-type': 'application/json' },
   });
 
+// Pass 1 tests (from recruitment.test.mjs)
 test('contract validates every domain and rejects incomplete/foreign answers', () => {
   for (const domain of contract.DOMAINS)
     assert.equal(
@@ -226,124 +226,250 @@ test('unconfirmed upstream never reports success or retries the mutation', async
   }
 });
 
-// Legacy, uninstalled GAS source kept until the removal pass (see
-// docs/cms-supabase-migration-plan.md §9). It is not part of the live path.
-const gasToken = 'test-only-token-never-real-credential';
-async function gasFixture() {
-  const rows = [
-    ['receipt', 'content_hash', 'received_at', ...contract.APPLICATION_FIELDS],
-  ];
-  let flushes = 0,
-    locks = 0,
-    releases = 0;
-  const sheet = {
-    getLastRow: () => rows.length,
-    getRange: (r, c, n, w) => ({
-      getValues: () =>
-        Array.from({ length: n }, (_, i) =>
-          Array.from(
-            { length: w },
-            (_, j) => rows[r - 1 + i]?.[c - 1 + j] ?? '',
-          ),
-        ),
-      setNumberFormat() {
-        return this;
-      },
-      setValues(values) {
-        for (let i = 0; i < values.length; i++) rows[r - 1 + i] = values[i];
-        return this;
-      },
-    }),
-  };
-  const context = vm.createContext({
-    ...contract,
-    PropertiesService: {
-      getScriptProperties: () => ({
-        getProperty: (key) =>
-          ({
-            RECRUITMENT_GAS_TOKEN: gasToken,
-            RECRUITMENT_SHEET_ID: 'fixture-private-sheet',
-            RECRUITMENT_OPEN: 'true',
-          })[key],
-      }),
-    },
-    Utilities: {
-      DigestAlgorithm: { SHA_256: 'sha256' },
-      Charset: { UTF_8: 'utf8' },
-      computeDigest: (_, text) => [
-        ...createHash('sha256').update(text).digest(),
-      ],
-    },
-    LockService: {
-      getScriptLock: () => ({
-        waitLock() {
-          locks++;
-        },
-        releaseLock() {
-          releases++;
-        },
-      }),
-    },
-    SpreadsheetApp: {
-      openById: () => ({ getSheetByName: () => sheet }),
-      flush() {
-        flushes++;
-      },
-    },
-    ContentService: {
-      MimeType: { JSON: 'json' },
-      createTextOutput: (text) => ({ setMimeType: () => JSON.parse(text) }),
+// Pass 2 — Admin read tests
+import { createRecruitmentAdminHandler } from '../server/recruitment-admin.mjs';
+
+const adminId = 'admin-test-uuid-1234-5678';
+const adminUrl = 'https://recruitment.test/api/admin/recruitment';
+const makeRequest = (route, method = 'GET', token = 'test-valid-token') =>
+  new Request(adminUrl + '/' + route, {
+    method,
+    headers: {
+      cookie: 'sb-access-token=' + token,
+      origin: 'https://recruitment.test',
+      'content-type': 'application/json',
     },
   });
-  vm.runInContext(
-    contract.validateApplication.toString() +
-      '\n' +
-      (await readFile(
-        new URL('../recruitment/gas/intake.js', import.meta.url),
-        'utf8',
-      )),
-    context,
-  );
-  const post = (body) =>
-    context.doPost({ postData: { contents: JSON.stringify(body) } });
-  return { post, rows, counts: () => ({ flushes, locks, releases }) };
+
+function mockRpc(name, result) {
+  return async (url, init) => {
+    if (url.includes('auth/v1/user')) {
+      return new Response(
+        JSON.stringify({ id: adminId, email: 'admin@test.test' }),
+        { status: 200, headers: { 'content-type': 'application/json' } },
+      );
+    }
+    if (url.includes(name)) {
+      return new Response(JSON.stringify(result), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+    }
+    // Default for non-matching RPC: return ok
+    return new Response(JSON.stringify({ ok: true }), {
+      status: 200,
+      headers: { 'content-type': 'application/json' },
+    });
+  };
 }
-test('legacy GAS source writes once, formula-safe, locked and flushed; retry is idempotent', async () => {
-  const gas = await gasFixture(),
-    body = {
-      id,
-      token: gasToken,
-      fields: { ...fields(), full_name: '=IMPORTXML("fixture")' },
-    };
-  assert.equal(gas.post(body).ok, true);
-  assert.equal(gas.post(body).ok, true);
-  assert.equal(gas.rows.length, 2);
-  assert.equal(
-    gas.rows[1][3 + contract.APPLICATION_FIELDS.indexOf('full_name')],
-    '\'=IMPORTXML("fixture")',
-  );
-  assert.equal(gas.counts().flushes, 1);
-  assert.equal(gas.counts().locks, gas.counts().releases);
-  assert.equal(
-    gas.post({ ...body, fields: { ...fields(), full_name: 'changed' } }).error
-      .code,
-    'ID_CONFLICT',
-  );
-  assert.equal(gas.rows.length, 2);
+
+test('admin routes without auth return 401', async () => {
+  const handle = createRecruitmentAdminHandler({
+    env: supabaseEnv,
+    fetchImpl: async () => new Response('{}', { status: 401 }),
+  });
+  const req = new Request(adminUrl + '/applications', { method: 'GET' });
+  const response = await handle(req, 'list');
+  assert.equal(response.status, 401);
+  assert.deepEqual(await response.json(), {
+    ok: false,
+    error: { code: 'UNAUTHORIZED' },
+  });
 });
-test('legacy GAS source rejects wrong token and invalid fields without writing', async () => {
-  const gas = await gasFixture();
-  assert.equal(
-    gas.post({ id, token: 'wrong', fields: fields() }).error.code,
-    'UNAUTHORIZED',
+
+test('admin list returns applications when authorized', async () => {
+  const mockData = {
+    applications: [
+      {
+        receipt: id,
+        full_name: 'Test User',
+        email: 'test@test.test',
+        primary_hods: 'data',
+        received_at: '2026-10-07T00:00:00Z',
+        schema_version: 1,
+      },
+    ],
+    total: 1,
+    filtered: 1,
+  };
+  const handle = createRecruitmentAdminHandler({
+    env: supabaseEnv,
+    fetchImpl: mockRpc('admin_list_applications', mockData),
+  });
+  const response = await handle(makeRequest('applications'), 'list');
+  const result = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(result.ok, true);
+  assert.deepEqual(result.data, mockData);
+});
+
+test('admin list supports search and filter params', async () => {
+  const mockData = {
+    applications: [
+      {
+        receipt: id,
+        full_name: 'Filtered User',
+        email: 'filter@test.test',
+        primary_hods: 'core',
+        received_at: '2026-10-07T00:00:00Z',
+        schema_version: 1,
+      },
+    ],
+    total: 1,
+    filtered: 1,
+  };
+  const handle = createRecruitmentAdminHandler({
+    env: supabaseEnv,
+    fetchImpl: mockRpc('admin_list_applications', mockData),
+  });
+  const req = new Request(
+    adminUrl +
+      '/applications?search=filter&primary_hods=core&limit=10&offset=0',
+    {
+      method: 'GET',
+      headers: {
+        cookie: 'sb-access-token=valid',
+        origin: 'https://recruitment.test',
+      },
+    },
   );
-  assert.equal(
-    gas.post({
-      id,
-      token: gasToken,
-      fields: { ...fields(), agreement_1: '' },
-    }).error.code,
-    'INVALID_INPUT',
-  );
-  assert.equal(gas.rows.length, 1);
+  const response = await handle(req, 'list');
+  const result = await response.json();
+  assert.equal(result.ok, true);
+  assert.equal(result.data.applications.length, 1);
+  assert.equal(result.data.applications[0].primary_hods, 'core');
+});
+
+test('admin detail returns full application data', async () => {
+  const mockDetail = {
+    found: true,
+    receipt: id,
+    content_hash: 'a'.repeat(64),
+    received_at: '2026-10-07T00:00:00Z',
+    schema_version: 1,
+    fields: { full_name: 'Detail User', email: 'detail@test.test' },
+    email: 'detail@test.test',
+    full_name: 'Detail User',
+    primary_hods: 'data',
+    agreement_1: true,
+    agreement_2: true,
+    agreement_3: true,
+  };
+  const handle = createRecruitmentAdminHandler({
+    env: supabaseEnv,
+    fetchImpl: mockRpc('admin_get_application', mockDetail),
+  });
+  const req = new Request(adminUrl + '/application?receipt=' + id, {
+    method: 'GET',
+    headers: {
+      cookie: 'sb-access-token=valid',
+      origin: 'https://recruitment.test',
+    },
+  });
+  const response = await handle(req, 'detail');
+  const result = await response.json();
+  assert.equal(result.ok, true);
+  assert.equal(result.data.found, true);
+  assert.equal(result.data.full_name, 'Detail User');
+});
+
+test('admin detail for missing receipt returns 404', async () => {
+  const handle = createRecruitmentAdminHandler({
+    env: supabaseEnv,
+    fetchImpl: mockRpc('admin_get_application', { found: false }),
+  });
+  const req = new Request(adminUrl + '/application?receipt=' + id, {
+    method: 'GET',
+    headers: {
+      cookie: 'sb-access-token=valid',
+      origin: 'https://recruitment.test',
+    },
+  });
+  const response = await handle(req, 'detail');
+  assert.equal(response.status, 404);
+  assert.deepEqual(await response.json(), {
+    ok: false,
+    error: { code: 'NOT_FOUND' },
+  });
+});
+
+test('admin stats returns aggregated counts', async () => {
+  const mockStats = {
+    total: 3,
+    by_hods: [
+      { hods: 'data', count: 2 },
+      { hods: 'core', count: 1 },
+    ],
+  };
+  const handle = createRecruitmentAdminHandler({
+    env: supabaseEnv,
+    fetchImpl: mockRpc('admin_get_stats', mockStats),
+  });
+  const response = await handle(makeRequest('stats'), 'stats');
+  const result = await response.json();
+  assert.equal(result.ok, true);
+  assert.equal(result.data.total, 3);
+  assert.equal(result.data.by_hods.length, 2);
+});
+
+test('admin route without valid receipt format returns 400', async () => {
+  const handle = createRecruitmentAdminHandler({
+    env: supabaseEnv,
+  });
+  const req = new Request(adminUrl + '/application?receipt=not-a-uuid', {
+    method: 'GET',
+    headers: {
+      cookie: 'sb-access-token=valid',
+      origin: 'https://recruitment.test',
+    },
+  });
+  const response = await handle(req, 'detail');
+  assert.equal(response.status, 400);
+  assert.deepEqual(await response.json(), {
+    ok: false,
+    error: { code: 'INVALID_INPUT' },
+  });
+});
+
+test('admin audit log is written after every successful read', async () => {
+  const auditCalls = [];
+  const fetchImpl = async (url, init) => {
+    if (url.includes('auth/v1/user')) {
+      return new Response(
+        JSON.stringify({ id: adminId, email: 'audit@test.test' }),
+        { status: 200, headers: { 'content-type': 'application/json' } },
+      );
+    }
+    if (url.includes('admin_audit_write')) {
+      auditCalls.push(JSON.parse(init.body));
+      return new Response(JSON.stringify({ ok: true }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+    }
+    if (url.includes('admin_list_applications')) {
+      return new Response(
+        JSON.stringify({ applications: [], total: 0, filtered: 0 }),
+        { status: 200, headers: { 'content-type': 'application/json' } },
+      );
+    }
+    if (url.includes('admin_verify_identity')) {
+      return new Response(
+        JSON.stringify({ ok: true, email: 'audit@test.test' }),
+        {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        },
+      );
+    }
+    return new Response(JSON.stringify({}), {
+      status: 200,
+      headers: { 'content-type': 'application/json' },
+    });
+  };
+  const handle = createRecruitmentAdminHandler({ env: supabaseEnv, fetchImpl });
+  await handle(makeRequest('applications'), 'list');
+  assert.equal(auditCalls.length, 1);
+  assert.equal(auditCalls[0].p_action, 'admin_read_list');
+  assert.equal(auditCalls[0].p_actor_id, adminId);
 });

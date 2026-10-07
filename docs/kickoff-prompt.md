@@ -1,6 +1,6 @@
 # Kickoff prompt — buat AI agent baru
 
-## ★ CHECKPOINT AKTIF — Recruitment pass 1 Supabase LIVE (7 Oct 2026)
+## ★ CHECKPOINT AKTIF — Recruitment pass 1+2 Supabase (7 Oct 2026)
 
 Target akhir user: **seluruh backend ke Supabase** (Postgres + Storage +
 Supabase Auth); Astro/UI/geometri dan CMS existing **tidak berubah**. Rencana:
@@ -13,13 +13,27 @@ hanya `service_role`), `server/recruitment.mjs` pakai Supabase RPC, env
 `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`/`RECRUITMENT_OPEN=false` di kedua
 Vercel. Kode `f01a89b` + docs `4c98925` sudah push (kedua deployment READY),
 acceptance live PASS, intake kembali **tertutup** (`accepting:false`), tabel
-kosong. **CMS masih GAS/Sheets/Drive** (belum dimigrasi). NEXT kandidat (belum
-disetujui): pass 2 recruitment (kolom turunan + baca admin owner-only via
-Supabase Auth + audit), rate limit, CAPTCHA, retensi/pembukaan publik; atau
-mulai migrasi collection CMS per pass. Jangan pasang GAS intake; jangan ubah
-CMS/auth/UI/geometri existing; secret dari `.env.local` jangan dicetak; push =
-origin (dua situs) dengan konfirmasi. Blok B2/Projects/CMS di bawah adalah
-**riwayat** (6 Oct) — jangan dianggap work order aktif untuk backend Supabase.
+kosong. **CMS masih GAS/Sheets/Drive** (belum dimigrasi).
+
+## ★ PASS 2 SELESAI 7 Oct 2026 — Admin Read (Supabase Auth)
+
+Migration `20261007120000_recruitment_pass2_admin_read.sql` di-apply:
+generated columns (email, whatsapp, full_name, primary_hods, team_comfort,
+agreement_1/2/3), tabel `private.recruitment_audit_log`, tabel allowlist
+`private.cms_admin_users`, 10 fungsi (5 private + 5 public wrapper).
+Server handler `server/recruitment-admin.mjs`, API:
+`/api/admin/recruitment/applications|application|stats`,
+halaman `/admin/recruitment/` (noindex), client JS. Tests 15/15 ALL PASS.
+
+**BELUM LIVE — nunggu owner:**
+1. Aktifkan Supabase Auth Google provider (dashboard Supabase)
+2. Set redirect URI `https://<site>/api/admin/recruitment/callback`
+3. `INSERT INTO private.cms_admin_users (auth_id, email) VALUES (...);`
+4. Set `SUPABASE_ANON_KEY` di env kedua Vercel
+
+Jangan pasang GAS intake; jangan ubah
+CMS/auth/UI/geometri existing tanpa izin; secret dari `.env.local` jangan
+dicetak; push = origin (dua situs) dengan konfirmasi.
 
 ## B2 Team — pass lokal 6 Oct 2026
 

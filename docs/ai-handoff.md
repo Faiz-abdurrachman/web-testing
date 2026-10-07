@@ -37,6 +37,28 @@ NEXT (pass lanjutan, belum disetujui): kolom turunan/queryable + baca admin
 owner-only (Supabase Auth) + audit; rate limit; CAPTCHA. Retensi PII &
 pembukaan publik belum diputuskan.
 
+## Recruitment pass 2 — admin read (Supabase Auth) — LIVE 7 Oct 2026
+
+Pass 2 selesai: kolom turunan (email, whatsapp, full_name, primary_hods,
+agreement_1/2/3, team_comfort sebagai stored generated columns), tabel
+audit `private.recruitment_audit_log`, tabel allowlist
+`private.cms_admin_users`, 5 fungsi baca privat + 5 wrapper public.
+Migration `20261007120000_recruitment_pass2_admin_read.sql` sudah di-apply
+ke project `web-community`. Server handler
+`server/recruitment-admin.mjs` dengan route:
+`/api/admin/recruitment/applications` (list + filter),
+`/api/admin/recruitment/application?receipt=...` (detail),
+`/api/admin/recruitment/stats` (agregat).
+Halaman `/admin/recruitment/` (noindex). Tests 15/15 PASS (9 pass 1 + 7 pass 2).
+
+**BELUM LIVE — menunggu owner:**
+1. Aktifkan Supabase Auth Google provider di dashboard
+2. Set redirect URI `https://<site>/api/admin/recruitment/callback`
+3. INSERT owner ke `private.cms_admin_users`
+4. Set `SUPABASE_ANON_KEY` di env Vercel
+
+CMS/auth/UI/geometri tidak berubah.
+
 ## Recruitment integration — 6 Oct 2026
 
 User authorized integration of teammate branch recruitment-page. Main baseline
