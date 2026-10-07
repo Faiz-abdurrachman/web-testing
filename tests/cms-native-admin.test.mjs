@@ -1,7 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
-import { createAdminHandler, SCOPES } from '../server/cms-admin.mjs';
+import { createAdminHandler } from '../server/cms-admin.mjs';
 const origin = 'https://admin.example.test';
 const env = {
   NODE_ENV: 'production',
@@ -11,11 +10,13 @@ const env = {
   CMS_ADMIN_GOOGLE_CLIENT_SECRET: 'private-secret',
   CMS_ADMIN_API_DEPLOYMENT_ID: 'private-deployment',
   SUPABASE_URL: 'https://placeholder.supabase.co',
+  SUPABASE_ANON_KEY: 'placeholder-anon',
   SUPABASE_SERVICE_ROLE_KEY: 'placeholder',
   SUPABASE_ACCESS_TOKEN: 'placeholder-token',
   CMS_DEPLOY_HOOK_TESTING: '',
   CMS_DEPLOY_HOOK_PRODUCTION: '',
 };
+const USER_ID = '11111111-1111-1111-1111-111111111111';
 const data = {
   projects: [
     {
@@ -39,7 +40,8 @@ function harness(teamData) {
   let now = 100000;
   const calls = [];
   let owner = true,
-    scopes = SCOPES.join(' '),
+    authorized = true,
+    userOk = true,
     throws = false;
   const handle = createAdminHandler({
     env,
@@ -47,15 +49,30 @@ function harness(teamData) {
     fetchImpl: async (url, options) => {
       calls.push({ url, options });
       if (throws) throw new Error('PRIVATE upstream details LEAK');
-      if (url.endsWith('/token'))
+      const u = String(url);
+      if (u.includes('/auth/v1/token'))
         return Response.json({
           access_token: 'PRIVATE-access-token',
-          token_type: 'Bearer',
+          refresh_token: 'PRIVATE-refresh-token',
+          token_type: 'bearer',
           expires_in: 3600,
-          scope: scopes,
+          user: { id: USER_ID },
         });
-      if (typeof url === 'string' && url.includes('/rest/v1/rpc/')) {
-        if (url.includes('cms_load_team')) {
+      if (u.includes('/auth/v1/user')) {
+        if (!userOk)
+          return Response.json({ message: 'PRIVATE' }, { status: 401 });
+        return Response.json({ id: USER_ID, email: 'owner@example.test' });
+      }
+      if (u.includes('/rest/v1/rpc/cms_verify_admin'))
+        return Response.json(
+          authorized
+            ? { ok: true, email: 'owner@example.test' }
+            : { ok: false },
+        );
+      if (u.includes('/rest/v1/rpc/cms_rate_limit'))
+        return Response.json({ ok: true, limited: false });
+      if (u.includes('/rest/v1/rpc/')) {
+        if (u.includes('cms_load_team')) {
           return Response.json(
             teamData || {
               members: [],
@@ -72,7 +89,7 @@ function harness(teamData) {
         }
         return Response.json(data);
       }
-      if (typeof url === 'string' && url.includes('/database/query')) {
+      if (u.includes('/database/query')) {
         if (
           teamData &&
           JSON.parse(options.body).query.includes('cms_save_member')
@@ -118,9 +135,13 @@ function harness(teamData) {
     },
     deny: () => {
       owner = false;
+      authorized = false;
     },
-    missingScope: () => {
-      scopes = SCOPES[0];
+    unauthorized: () => {
+      authorized = false;
+    },
+    breakUser: () => {
+      userOk = false;
     },
     throwFetch: () => {
       throws = true;
@@ -134,17 +155,18 @@ function cookies(response) {
     .join('; ');
 }
 async function login(h) {
-  const start = await h.handle(request('/api/admin/auth/login'), 'login');
-  const state = new URL(start.headers.get('location')).searchParams.get(
-    'state',
-  );
-  const callback = await h.handle(
-    request('/api/admin/auth/callback?state=' + state + '&code=private-code', {
-      headers: { Cookie: cookies(start) },
+  const response = await h.handle(
+    request('/api/admin/auth/login', {
+      method: 'POST',
+      headers: { Origin: origin, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: 'owner@example.test',
+        password: 'private-password',
+      }),
     }),
-    'callback',
+    'login',
   );
-  return { start, callback, cookie: cookies(callback) };
+  return { response, cookie: cookies(response) };
 }
 test('native admin fails closed for missing config, unexpected origin, anonymous and unsupported method', async () => {
   const handle = createAdminHandler({ env: {} });
@@ -161,31 +183,22 @@ test('native admin fails closed for missing config, unexpected origin, anonymous
   );
   assert.equal(h.calls.length, 0);
 });
-test('OAuth uses PKCE, private cookies, fixed callback, owner verification and sanitized response', async () => {
+test('password login seals a private session, verifies permission and sanitizes response', async () => {
   const h = harness();
-  const { start, callback, cookie } = await login(h);
-  const target = new URL(start.headers.get('location'));
-  const tokenBody = h.calls[0].options.body;
-  assert.equal(
-    target.searchParams.get('redirect_uri'),
-    origin + '/api/admin/auth/callback',
-  );
-  assert.equal(
-    target.searchParams.get('code_challenge'),
-    createHash('sha256')
-      .update(tokenBody.get('code_verifier'))
-      .digest('base64url'),
-  );
-  assert.equal(target.searchParams.get('code_challenge_method'), 'S256');
-  assert(start.headers.get('set-cookie').includes('HttpOnly; SameSite=Lax'));
-  assert(start.headers.get('set-cookie').includes('Secure'));
-  assert.equal(callback.headers.get('location'), origin + '/admin/');
+  const { response, cookie } = await login(h);
+  assert.equal(response.status, 200);
+  assert(response.headers.get('set-cookie').includes('HttpOnly; SameSite=Lax'));
+  assert(response.headers.get('set-cookie').includes('Secure'));
+  assert(cookie.startsWith('__Host-ds-admin-session='));
   assert(!cookie.includes('PRIVATE-access-token'));
-  assert.equal(
-    h.calls[1].url,
-    'https://script.googleapis.com/v1/scripts/private-deployment:run',
-  );
-  assert.equal(JSON.parse(h.calls[1].options.body).devMode, false);
+  assert(!cookie.includes('PRIVATE-refresh-token'));
+  const loginBody = await response.clone().json();
+  assert.equal(loginBody.ok, true);
+  assert.equal(loginBody.csrf.length, 43);
+  // Password grant + verify RPC are called; no Google/GAS calls.
+  assert(h.calls.some((c) => String(c.url).includes('/auth/v1/token')));
+  assert(h.calls.some((c) => String(c.url).includes('cms_verify_admin')));
+  assert(!h.calls.some((c) => String(c.url).includes('google')));
   const loaded = await h.handle(
     request('/', { headers: { Cookie: cookie } }),
     'projects',
@@ -197,40 +210,63 @@ test('OAuth uses PKCE, private cookies, fixed callback, owner verification and s
   assert(!JSON.stringify(body).includes('LEAK'));
   assert(!JSON.stringify(body).includes('PRIVATE'));
 });
-test('invalid, expired or tampered OAuth state never exchanges code; non-owner or missing scopes denied', async () => {
-  for (const mode of ['state', 'expired', 'tampered', 'owner', 'scopes']) {
-    const h = harness();
-    const start = await h.handle(request('/'), 'login');
-    const state = new URL(start.headers.get('location')).searchParams.get(
-      'state',
-    );
-    if (mode === 'expired') h.advance(600001);
-    if (mode === 'owner') h.deny();
-    if (mode === 'scopes') h.missingScope();
-    const response = await h.handle(
-      request('/?state=' + (mode === 'state' ? 'bad' : state) + '&code=code', {
-        headers: {
-          Cookie: mode === 'tampered' ? cookies(start) + 'X' : cookies(start),
-        },
-      }),
-      'callback',
-    );
-    assert.equal(
-      response.headers.get('location'),
-      origin + '/admin/?login=failed',
-      mode,
-    );
-    if (['state', 'expired', 'tampered'].includes(mode))
-      assert.equal(h.calls.length, 0);
-    assert(
-      response.headers.getSetCookie().every((c) => c.includes('Max-Age=0')),
-    );
-  }
+test('login denies bad credentials, non-owner and broken user without leaking detail', async () => {
+  // missing/short body
+  const h1 = harness();
+  assert.equal(
+    (
+      await h1.handle(
+        request('/api/admin/auth/login', {
+          method: 'POST',
+          headers: { Origin: origin, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: 'owner@example.test' }),
+        }),
+        'login',
+      )
+    ).status,
+    400,
+  );
+  assert.equal(
+    (
+      await h1.handle(
+        request('/api/admin/auth/login', {
+          method: 'POST',
+          headers: {
+            Origin: 'https://evil.test',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: 'a@b.c', password: 'x' }),
+        }),
+        'login',
+      )
+    ).status,
+    403,
+  );
+  // non-owner: auth succeeds but cms_verify_admin returns ok:false
+  const h2 = harness();
+  h2.unauthorized();
+  const denied = await login(h2);
+  assert.equal(denied.response.status, 403);
+  assert(!denied.cookie.includes('__Host-ds-admin-session'));
+  const body = await denied.response.json();
+  assert.deepEqual(body, { ok: false, error: { code: 'FORBIDDEN' } });
+  // malformed JSON body fails closed without upstream calls
+  const h3 = harness();
+  const badBody = await h3.handle(
+    request('/api/admin/auth/login', {
+      method: 'POST',
+      headers: { Origin: origin, 'Content-Type': 'application/json' },
+      body: '{not-json',
+    }),
+    'login',
+  );
+  assert.equal(badBody.status, 400);
+  assert.equal(h3.calls.length, 0);
 });
-test('session tamper, expiry and origin binding deny access without GAS calls', async () => {
+test('session tamper, refresh and origin binding enforce trusted identity', async () => {
   const h = harness();
   const { cookie } = await login(h);
-  const before = h.calls.length;
+  // Tampered sealed cookie never authorizes.
   assert.equal(
     (
       await h.handle(
@@ -240,6 +276,7 @@ test('session tamper, expiry and origin binding deny access without GAS calls', 
     ).status,
     401,
   );
+  // Same cookie value is unusable on a different origin (origin-bound AAD).
   const other = createAdminHandler({
     env: { ...env, CMS_ADMIN_ORIGIN: 'https://other.test' },
   });
@@ -252,13 +289,27 @@ test('session tamper, expiry and origin binding deny access without GAS calls', 
     ).status,
     401,
   );
+  // Expired access token refreshes server-side from the sealed refresh token.
   h.advance(3600001);
-  assert.equal(
-    (await h.handle(request('/', { headers: { Cookie: cookie } }), 'projects'))
-      .status,
-    401,
+  const refreshed = await h.handle(
+    request('/', { headers: { Cookie: cookie } }),
+    'projects',
   );
-  assert.equal(h.calls.length, before);
+  assert.equal(refreshed.status, 200);
+  assert(
+    h.calls.some((c) => String(c.url).includes('grant_type=refresh_token')),
+  );
+});
+test('invalid access with no usable refresh fails closed (401)', async () => {
+  const h = harness();
+  const { cookie } = await login(h);
+  h.breakUser();
+  h.advance(3600001);
+  const response = await h.handle(
+    request('/', { headers: { Cookie: cookie } }),
+    'projects',
+  );
+  assert.equal(response.status, 401);
 });
 test('mutations require CSRF/origin/JSON and fixed RPC; input cap and no automatic retry', async () => {
   const h = harness();
@@ -287,7 +338,16 @@ test('mutations require CSRF/origin/JSON and fixed RPC; input cap and no automat
         return false;
       }
     }).length;
+  const privilegedCalls = () =>
+    h.calls.filter(
+      (c) =>
+        String(c.url).includes('/database/query') ||
+        (String(c.url).includes('/rest/v1/rpc/') &&
+          !String(c.url).includes('cms_verify_admin') &&
+          !String(c.url).includes('cms_rate_limit')),
+    ).length;
   const gasBefore = gasCalls();
+  const privilegedBefore = privilegedCalls();
   assert.equal(
     (
       await h.handle(
@@ -332,7 +392,8 @@ test('mutations require CSRF/origin/JSON and fixed RPC; input cap and no automat
     ).status,
     400,
   );
-  assert.equal(h.calls.length, before);
+  assert.equal(privilegedCalls(), privilegedBefore);
+  assert(h.calls.length >= before);
   for (const operation of ['save', 'add', 'delete', 'retry']) {
     const result = await h.handle(
       post({
@@ -347,20 +408,21 @@ test('mutations require CSRF/origin/JSON and fixed RPC; input cap and no automat
     // projects route pakai Supabase RPC + deploy hooks — tidak ada GAS calls baru
     assert.equal(gasCalls(), gasBefore);
   }
+  // Auth backend outage fails closed before any privileged call.
   h.throwFetch();
-  const count = h.calls.length;
+  const privilegedAtThrow = privilegedCalls();
   const failed = await h.handle(
     post({ operation: 'add', payload: {} }),
     'projects',
   );
-  assert.equal(failed.status, 502);
-  assert.equal(h.calls.length, count + 1);
+  assert.equal(failed.status, 401);
+  assert.equal(privilegedCalls(), privilegedAtThrow);
   assert.deepEqual(await failed.json(), {
     ok: false,
-    error: { code: 'SERVER_ERROR' },
+    error: { code: 'UNAUTHORIZED' },
   });
 });
-test('logout clears session only with CSRF and owner denial remains enforced on each RPC', async () => {
+test('logout clears session only with CSRF and per-request permission is enforced', async () => {
   const h = harness();
   const { cookie } = await login(h);
   const result = await (
@@ -375,44 +437,58 @@ test('logout clears session only with CSRF and owner denial remains enforced on 
     ).status,
     403,
   );
-  const response = await h.handle(
-    request('/', {
-      method: 'POST',
-      headers: { Cookie: cookie, Origin: origin, 'X-CSRF-Token': result.csrf },
-    }),
-    'logout',
-  );
-  assert(response.headers.get('set-cookie').includes('Max-Age=0'));
+  // Revoking CMS permission makes the very next request fail closed.
   h.deny();
-  // Denied owner: projects route tetap 200 (session valid, read via Supabase bypass),
-  // team route akan 403 (GAS ngecek owner)
   const denied = await h.handle(
     request('/', { headers: { Cookie: cookie } }),
     'projects',
   );
-  assert.equal(denied.status, 200);
+  assert.equal(denied.status, 403);
   assert(!JSON.stringify(await denied.json()).includes('LEAK'));
+  // Restore permission then logout clears the sealed session cookie.
+  const h2 = harness();
+  const logged = await login(h2);
+  const loaded2 = await (
+    await h2.handle(
+      request('/', { headers: { Cookie: logged.cookie } }),
+      'projects',
+    )
+  ).json();
+  const response = await h2.handle(
+    request('/', {
+      method: 'POST',
+      headers: {
+        Cookie: logged.cookie,
+        Origin: origin,
+        'X-CSRF-Token': loaded2.csrf,
+      },
+    }),
+    'logout',
+  );
+  assert(response.headers.get('set-cookie').includes('Max-Age=0'));
 });
 
-test('Google failures and unexpected result fields are sanitized without retry', async () => {
+test('upstream permission/backend failures are sanitized without retry', async () => {
+  const { cookie } = await login(harness());
   for (const upstream of [
     Response.json(
-      { error: { message: 'PRIVATE-google-secret' } },
+      { error: { message: 'PRIVATE-upstream-secret' } },
       { status: 503 },
     ),
-    Response.json({ done: true, error: { message: 'PRIVATE-google-secret' } }),
+    Response.json({
+      done: true,
+      error: { message: 'PRIVATE-upstream-secret' },
+    }),
     Response.json({
       done: true,
       response: {
         result: {
           ok: false,
-          error: { code: 'UNKNOWN', message: 'PRIVATE-google-secret' },
+          error: { code: 'UNKNOWN', message: 'PRIVATE-upstream-secret' },
         },
       },
     }),
   ]) {
-    const h = harness();
-    const { cookie } = await login(h);
     let calls = 0;
     const handle = createAdminHandler({
       env,
@@ -426,9 +502,11 @@ test('Google failures and unexpected result fields are sanitized without retry',
       request('/', { headers: { Cookie: cookie } }),
       'projects',
     );
+    // getUser/refresh/verify fail closed before any privileged call, exactly once.
     assert.equal(calls, 1);
+    assert.equal(response.status, 401);
     const body = await response.json();
-    assert.deepEqual(body, { ok: false, error: { code: 'SERVER_ERROR' } });
+    assert.deepEqual(body, { ok: false, error: { code: 'UNAUTHORIZED' } });
   }
 });
 

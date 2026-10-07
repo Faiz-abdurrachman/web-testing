@@ -366,6 +366,7 @@ test('native media route enforces session/CSRF, normalizes bytes before fixed ow
     CMS_ADMIN_GOOGLE_CLIENT_SECRET: 'private-secret',
     CMS_ADMIN_API_DEPLOYMENT_ID: 'private-deployment',
     SUPABASE_URL: 'https://placeholder.supabase.co',
+    SUPABASE_ANON_KEY: 'placeholder-anon',
     SUPABASE_SERVICE_ROLE_KEY: 'placeholder',
     SUPABASE_ACCESS_TOKEN: 'placeholder',
   };
@@ -381,6 +382,24 @@ test('native media route enforces session/CSRF, normalizes bytes before fixed ow
   const handle = createAdminHandler({
     env,
     fetchImpl: async (url, options) => {
+      const href = String(url);
+      if (href.includes('/auth/v1/token'))
+        return Response.json({
+          access_token: 'private-access',
+          refresh_token: 'private-refresh',
+          token_type: 'bearer',
+          expires_in: 3600,
+          user: { id: '11111111-1111-1111-1111-111111111111' },
+        });
+      if (href.includes('/auth/v1/user'))
+        return Response.json({
+          id: '11111111-1111-1111-1111-111111111111',
+          email: 'owner@example.test',
+        });
+      if (href.includes('cms_verify_admin'))
+        return Response.json({ ok: true, email: 'owner@example.test' });
+      if (href.includes('cms_rate_limit'))
+        return Response.json({ ok: true, limited: false });
       if (typeof url === 'string' && url.includes('/rest/v1/rpc/'))
         return Response.json(data);
       if (typeof url === 'string' && url.includes('/storage/v1/'))
@@ -425,22 +444,15 @@ test('native media route enforces session/CSRF, normalizes bytes before fixed ow
     ).status,
     401,
   );
-  const start = await handle(req('/login'), 'login');
-  const state = new URL(start.headers.get('location')).searchParams.get(
-    'state',
-  );
-  const callback = await handle(
-    req('/callback?state=' + state + '&code=test', {
-      headers: {
-        Cookie: start.headers
-          .getSetCookie()
-          .map((c) => c.split(';')[0])
-          .join('; '),
-      },
+  const loginResponse = await handle(
+    req('/api/admin/auth/login', {
+      method: 'POST',
+      headers: { Origin: origin, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: 'owner@example.test', password: 'pw' }),
     }),
-    'callback',
+    'login',
   );
-  const cookie = callback.headers
+  const cookie = loginResponse.headers
     .getSetCookie()
     .map((c) => c.split(';')[0])
     .join('; ');
@@ -629,6 +641,7 @@ test('native Team media route enforces session/CSRF, normalizes bytes before fix
     CMS_ADMIN_GOOGLE_CLIENT_SECRET: 'private-secret',
     CMS_ADMIN_API_DEPLOYMENT_ID: 'private-deployment',
     SUPABASE_URL: 'https://placeholder.supabase.co',
+    SUPABASE_ANON_KEY: 'placeholder-anon',
     SUPABASE_SERVICE_ROLE_KEY: 'placeholder',
     SUPABASE_ACCESS_TOKEN: 'placeholder',
   };
@@ -644,6 +657,24 @@ test('native Team media route enforces session/CSRF, normalizes bytes before fix
   const handle = createAdminHandler({
     env,
     fetchImpl: async (url, options) => {
+      const href = String(url);
+      if (href.includes('/auth/v1/token'))
+        return Response.json({
+          access_token: 'private-access',
+          refresh_token: 'private-refresh',
+          token_type: 'bearer',
+          expires_in: 3600,
+          user: { id: '11111111-1111-1111-1111-111111111111' },
+        });
+      if (href.includes('/auth/v1/user'))
+        return Response.json({
+          id: '11111111-1111-1111-1111-111111111111',
+          email: 'owner@example.test',
+        });
+      if (href.includes('cms_verify_admin'))
+        return Response.json({ ok: true, email: 'owner@example.test' });
+      if (href.includes('cms_rate_limit'))
+        return Response.json({ ok: true, limited: false });
       if (typeof url === 'string' && url.includes('/rest/v1/rpc/'))
         return Response.json(data);
       if (typeof url === 'string' && url.includes('/storage/v1/')) {
@@ -695,22 +726,15 @@ test('native Team media route enforces session/CSRF, normalizes bytes before fix
     ).status,
     401,
   );
-  const start = await handle(req('/login'), 'login');
-  const state = new URL(start.headers.get('location')).searchParams.get(
-    'state',
-  );
-  const callback = await handle(
-    req('/callback?state=' + state + '&code=test', {
-      headers: {
-        Cookie: start.headers
-          .getSetCookie()
-          .map((c) => c.split(';')[0])
-          .join('; '),
-      },
+  const loginResponse = await handle(
+    req('/api/admin/auth/login', {
+      method: 'POST',
+      headers: { Origin: origin, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: 'owner@example.test', password: 'pw' }),
     }),
-    'callback',
+    'login',
   );
-  const cookie = callback.headers
+  const cookie = loginResponse.headers
     .getSetCookie()
     .map((c) => c.split(';')[0])
     .join('; ');

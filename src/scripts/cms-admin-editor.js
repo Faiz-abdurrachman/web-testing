@@ -7,7 +7,7 @@
   let dirty = false;
   const errors = {
     UNAUTHORIZED:
-      'Masuk dengan akun Google owner untuk mengelola Projects. Perubahan formulir belum disimpan.',
+      'Masuk dengan akun owner untuk mengelola Projects. Perubahan formulir belum disimpan.',
     CONFIGURATION:
       'Konfigurasi penerbitan belum lengkap. Hubungi pengelola situs.',
     INVALID_INPUT:
@@ -418,11 +418,54 @@
       byId('project-list').replaceChildren();
       expire();
       byId('reload').hidden = true;
-      message('Sudah keluar. Masuk dengan Google untuk mengelola Projects.');
+      message('Sudah keluar. Masuk lagi untuk mengelola Projects.');
     } catch {
       message('Koneksi terputus. Coba keluar lagi.', true);
     } finally {
       setBusy(false);
+    }
+  });
+  const loginForm = byId('login-form');
+  const showLogin = () => {
+    loginForm.hidden = false;
+    byId('login').hidden = true;
+    const email = byId('login-email');
+    email.focus();
+  };
+  byId('login').addEventListener('click', showLogin);
+  loginForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (busy) return;
+    const submit = byId('login-submit');
+    const email = byId('login-email').value.trim();
+    const password = byId('login-password').value;
+    if (!email || !password) return;
+    submit.disabled = true;
+    try {
+      const response = await fetch('/api/admin/auth/login', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result.ok) {
+        message(
+          result.error?.code === 'FORBIDDEN'
+            ? 'Akun ini tidak punya akses owner.'
+            : 'Login belum berhasil. Periksa email dan kata sandi.',
+          true,
+        );
+        return;
+      }
+      byId('login-password').value = '';
+      loginForm.hidden = true;
+      message('Masuk. Memuat projects…');
+      load();
+    } catch {
+      message('Koneksi terputus. Coba masuk lagi.', true);
+    } finally {
+      submit.disabled = false;
     }
   });
   if (new URL(location.href).searchParams.has('login')) {
@@ -433,5 +476,6 @@
       true,
     );
     history.replaceState(null, '', '/admin/');
+    showLogin();
   } else load();
 })();

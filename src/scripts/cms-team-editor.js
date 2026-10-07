@@ -6,7 +6,7 @@
     dirty = false;
   const messages = {
     UNAUTHORIZED:
-      'Masuk dengan akun Google owner untuk mengelola Team. Formulir belum disimpan.',
+      'Masuk dengan akun owner untuk mengelola Team. Formulir belum disimpan.',
     CONFLICT:
       'Team sudah berubah. Muat ulang sebelum menyimpan lagi; formulir tetap tersedia.',
     MINIMUM: 'Setiap grup harus memiliki minimal satu anggota.',
@@ -376,11 +376,53 @@
       el('image-preview').removeAttribute('src');
       el('image-preview').hidden = true;
       expire();
-      message('Sudah keluar. Masuk dengan Google untuk mengelola Team.');
+      message('Sudah keluar. Masuk lagi untuk mengelola Team.');
     } catch {
       message('Koneksi terputus. Coba keluar lagi.', true);
     } finally {
       setBusy(false);
+    }
+  });
+  const loginForm = el('login-form');
+  const showLogin = () => {
+    loginForm.hidden = false;
+    el('login').hidden = true;
+    el('login-email').focus();
+  };
+  el('login').addEventListener('click', showLogin);
+  loginForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (busy) return;
+    const submit = el('login-submit');
+    const email = el('login-email').value.trim();
+    const password = el('login-password').value;
+    if (!email || !password) return;
+    submit.disabled = true;
+    try {
+      const response = await fetch('/api/admin/auth/login', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result.ok) {
+        message(
+          result.error?.code === 'FORBIDDEN'
+            ? 'Akun ini tidak punya akses owner.'
+            : 'Login belum berhasil. Periksa email dan kata sandi.',
+          true,
+        );
+        return;
+      }
+      el('login-password').value = '';
+      loginForm.hidden = true;
+      message('Masuk. Memuat Team…');
+      void load();
+    } catch {
+      message('Koneksi terputus. Coba masuk lagi.', true);
+    } finally {
+      submit.disabled = false;
     }
   });
   void load();

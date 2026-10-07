@@ -1,11 +1,7 @@
-import {
-  createCipheriv,
-  createDecipheriv,
-  createHash,
-  randomBytes,
-  timingSafeEqual,
-} from 'node:crypto';
+import { createCmsAuth } from './cms-auth.mjs';
 
+// Legacy scope list retained for compatibility with existing tests/tools only.
+// CMS auth no longer performs Google OAuth; see docs/cms-auth-design.md.
 export const SCOPES = [
   'https://www.googleapis.com/auth/spreadsheets',
   'https://www.googleapis.com/auth/drive',
@@ -43,13 +39,6 @@ const ERRORS = new Set([
   'SERVER_ERROR',
 ]);
 const LIMIT = 512 * 1024;
-const random = () => randomBytes(32).toString('base64url');
-const equal = (a, b) => {
-  if (typeof a !== 'string' || typeof b !== 'string') return false;
-  const left = Buffer.from(a),
-    right = Buffer.from(b);
-  return left.length === right.length && timingSafeEqual(left, right);
-};
 const fail = (code) => {
   throw Object.assign(new Error('Admin request failed'), { code });
 };
@@ -62,6 +51,8 @@ const headers = {
 const json = (body, status = 200) => Response.json(body, { status, headers });
 const error = (code, status) => json({ ok: false, error: { code } }, status);
 
+// Only routing/collection context is needed here; session + origin/CSRF
+// authorization lives in server/cms-auth.mjs.
 function config(env) {
   const origin = new URL(env.CMS_ADMIN_ORIGIN);
   const secure = origin.protocol === 'https:';
@@ -75,71 +66,8 @@ function config(env) {
     origin.origin !== env.CMS_ADMIN_ORIGIN
   )
     fail('CONFIGURATION');
-  const key = Buffer.from(env.CMS_ADMIN_SESSION_SECRET || '', 'base64');
-  if (
-    key.length !== 32 ||
-    !env.CMS_ADMIN_GOOGLE_CLIENT_ID ||
-    !env.CMS_ADMIN_GOOGLE_CLIENT_SECRET ||
-    !/^[\w-]+$/.test(env.CMS_ADMIN_API_DEPLOYMENT_ID || '')
-  )
-    fail('CONFIGURATION');
-  return {
-    origin: origin.origin,
-    secure,
-    key,
-    client: env.CMS_ADMIN_GOOGLE_CLIENT_ID,
-    secret: env.CMS_ADMIN_GOOGLE_CLIENT_SECRET,
-    deployment: env.CMS_ADMIN_API_DEPLOYMENT_ID,
-    prefix: secure ? '__Host-ds-admin-' : 'ds-admin-',
-  };
+  return { origin: origin.origin, secure };
 }
-function seal(value, cfg, purpose) {
-  const iv = randomBytes(12);
-  const cipher = createCipheriv('aes-256-gcm', cfg.key, iv);
-  cipher.setAAD(Buffer.from(purpose + cfg.origin));
-  const body = Buffer.concat([
-    cipher.update(JSON.stringify(value), 'utf8'),
-    cipher.final(),
-  ]);
-  return Buffer.concat([iv, cipher.getAuthTag(), body]).toString('base64url');
-}
-function unseal(value, cfg, purpose, now) {
-  try {
-    const buffer = Buffer.from(value || '', 'base64url');
-    if (buffer.toString('base64url') !== value) return null;
-    const cipher = createDecipheriv(
-      'aes-256-gcm',
-      cfg.key,
-      buffer.subarray(0, 12),
-    );
-    cipher.setAAD(Buffer.from(purpose + cfg.origin));
-    cipher.setAuthTag(buffer.subarray(12, 28));
-    const result = JSON.parse(
-      Buffer.concat([
-        cipher.update(buffer.subarray(28)),
-        cipher.final(),
-      ]).toString(),
-    );
-    if (!Number.isFinite(result.exp) || result.exp <= now) return null;
-    return result;
-  } catch {
-    return null;
-  }
-}
-const cookie = (cfg, name, value, age) =>
-  `${cfg.prefix}${name}=${value}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${age}${cfg.secure ? '; Secure' : ''}`;
-function readCookie(request, cfg, name, now) {
-  const entry = (request.headers.get('cookie') || '')
-    .split(';')
-    .map((s) => s.trim())
-    .find((s) => s.startsWith(cfg.prefix + name + '='));
-  return unseal(entry?.slice(entry.indexOf('=') + 1), cfg, name, now);
-}
-const redirect = (url, cookies = []) => {
-  const h = new Headers({ ...headers, Location: url });
-  cookies.forEach((c) => h.append('Set-Cookie', c));
-  return new Response(null, { status: 303, headers: h });
-};
 async function boundedJson(response, limit = 1024 * 1024) {
   const reader = response.body?.getReader();
   if (!reader) fail('SERVER_ERROR');
@@ -342,6 +270,9 @@ export function createAdminHandler({
   fetchImpl = fetch,
   clock = Date.now,
 } = {}) {
+  // Isolated CMS auth (Supabase password). See docs/cms-auth-design.md.
+  const auth = createCmsAuth({ env, clock, fetchImpl });
+
   async function gas(cfg, token, operation, payload, collection = 'projects') {
     const response = await fetchImpl(
       `https://script.googleapis.com/v1/scripts/${cfg.deployment}:run`,
@@ -582,17 +513,22 @@ export function createAdminHandler({
   }
 
   return async function handle(request, route) {
+    // Auth routes delegate to the isolated CMS auth module.
+    if (route === 'login') return auth.login(request);
+    if (route === 'logout') return auth.logout(request);
+    if (route === 'refresh') return auth.refresh(request);
+    // Legacy OAuth callback is retired; fail safe without leaking parameters.
+    if (route === 'callback')
+      return Response.redirect('/admin/?login=failed', 303);
+
     let cfg;
     try {
       cfg = config(env);
     } catch {
-      return ['login', 'callback'].includes(route)
-        ? redirect('/admin/?login=unavailable')
-        : error('CONFIGURATION', 503);
+      return error('CONFIGURATION', 503);
     }
     const url = new URL(request.url);
     if (url.origin !== cfg.origin) return error('UNAUTHORIZED', 403);
-    const now = clock();
     const collection =
       route === 'team' ||
       (route === 'media' && url.searchParams.get('collection') === 'team')
@@ -605,104 +541,15 @@ export function createAdminHandler({
     )
       return error('INVALID_INPUT', 400);
     try {
-      if (route === 'login' && request.method === 'GET') {
-        const flow = { state: random(), verifier: random(), exp: now + 600000 };
-        const target = new URL('https://accounts.google.com/o/oauth2/v2/auth');
-        target.search = new URLSearchParams({
-          client_id: cfg.client,
-          redirect_uri: cfg.origin + '/api/admin/auth/callback',
-          response_type: 'code',
-          scope: SCOPES.join(' '),
-          state: flow.state,
-          code_challenge: createHash('sha256')
-            .update(flow.verifier)
-            .digest('base64url'),
-          code_challenge_method: 'S256',
-          prompt: 'select_account',
-          access_type: 'online',
-        }).toString();
-        return redirect(target.href, [
-          cookie(cfg, 'flow', seal(flow, cfg, 'flow'), 600),
-        ]);
-      }
-      if (route === 'callback' && request.method === 'GET') {
-        const clear = cookie(cfg, 'flow', '', 0);
-        try {
-          const flow = readCookie(request, cfg, 'flow', now);
-          if (
-            !flow ||
-            !equal(flow.state, url.searchParams.get('state')) ||
-            !url.searchParams.get('code') ||
-            url.searchParams.has('error')
-          )
-            fail('UNAUTHORIZED');
-          const response = await fetchImpl(
-            'https://oauth2.googleapis.com/token',
-            {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-              body: new URLSearchParams({
-                client_id: cfg.client,
-                client_secret: cfg.secret,
-                code: url.searchParams.get('code'),
-                code_verifier: flow.verifier,
-                grant_type: 'authorization_code',
-                redirect_uri: cfg.origin + '/api/admin/auth/callback',
-              }),
-              signal: AbortSignal.timeout(15000),
-              redirect: 'error',
-            },
-          );
-          if (!response.ok) fail('UNAUTHORIZED');
-          const token = await boundedJson(response, 16384);
-          if (
-            token.token_type?.toLowerCase() !== 'bearer' ||
-            typeof token.access_token !== 'string' ||
-            token.access_token.length > 2048 ||
-            !Number.isFinite(token.expires_in) ||
-            token.expires_in <= 0 ||
-            !SCOPES.every((s) => token.scope?.split(' ').includes(s))
-          )
-            fail('UNAUTHORIZED');
-          const state = await gas(cfg, token.access_token, 'load');
-          if (!state.ok || !state.data.projects) fail('UNAUTHORIZED');
-          const age = Math.min(Math.floor(token.expires_in), 3600);
-          const session = {
-            token: token.access_token,
-            csrf: random(),
-            exp: now + age * 1000,
-          };
-          return redirect(cfg.origin + '/admin/', [
-            clear,
-            cookie(cfg, 'session', seal(session, cfg, 'session'), age),
-          ]);
-        } catch {
-          return redirect(cfg.origin + '/admin/?login=failed', [
-            clear,
-            cookie(cfg, 'session', '', 0),
-          ]);
-        }
-      }
       if (
-        !['projects', 'team', 'logout', 'media'].includes(route) ||
-        !['GET', 'POST'].includes(request.method) ||
-        (route === 'logout' && request.method !== 'POST')
+        !['projects', 'team', 'media'].includes(route) ||
+        !['GET', 'POST'].includes(request.method)
       )
         return error('INVALID_INPUT', 405);
-      const session = readCookie(request, cfg, 'session', now);
-      if (!session || !session.token || !session.csrf)
-        return error('UNAUTHORIZED', 401);
-      if (
-        request.method === 'POST' &&
-        (request.headers.get('origin') !== cfg.origin ||
-          !equal(session.csrf, request.headers.get('x-csrf-token')))
-      )
-        return error('UNAUTHORIZED', 403);
-      if (route === 'logout') {
-        const response = json({ ok: true });
-        response.headers.set('Set-Cookie', cookie(cfg, 'session', '', 0));
-        return response;
-      }
+      // Trusted Auth identity + CMS permission per request.
+      const guard = await auth.authorize(request);
+      if (guard.error) return guard.error;
+      const session = guard.session;
       if (route === 'media') {
         const {
           normalizeProjectImage,
@@ -727,13 +574,13 @@ export function createAdminHandler({
             });
             if (!sres.ok) return error('NOT_FOUND', 404);
             const bytes = await sres.arrayBuffer();
-            return new Response(bytes, {
-              headers: { ...headers, 'Content-Type': 'image/webp' },
-            });
+            const mediaHeaders = { ...headers, 'Content-Type': 'image/webp' };
+            if (guard.setCookie) mediaHeaders['Set-Cookie'] = guard.setCookie;
+            return new Response(bytes, { headers: mediaHeaders });
           }
           const result = await gas(
             cfg,
-            session.token,
+            undefined,
             'media',
             { image },
             collection,
@@ -790,11 +637,14 @@ export function createAdminHandler({
             signal: AbortSignal.timeout(30000),
           });
           if (!ures.ok) return error('SERVER_ERROR', 502);
-          return json({
+          const uploaded = json({
             ok: true,
             data: { image: media.image },
             csrf: session.csrf,
           });
+          if (guard.setCookie)
+            uploaded.headers.append('Set-Cookie', guard.setCookie);
+          return uploaded;
         }
         if (collection === 'team') {
           const storageUrl = `${env.SUPABASE_URL}/storage/v1/object/cms-media/team/${media.image.split('/').pop()}`;
@@ -808,19 +658,16 @@ export function createAdminHandler({
             signal: AbortSignal.timeout(30000),
           });
           if (!ures.ok) return error('SERVER_ERROR', 502);
-          return json({
+          const uploaded = json({
             ok: true,
             data: { image: media.image },
             csrf: session.csrf,
           });
+          if (guard.setCookie)
+            uploaded.headers.append('Set-Cookie', guard.setCookie);
+          return uploaded;
         }
-        const result = await gas(
-          cfg,
-          session.token,
-          'upload',
-          media,
-          collection,
-        );
+        const result = await gas(cfg, undefined, 'upload', media, collection);
         if (result.ok && result.data.image !== media.image)
           fail('SERVER_ERROR');
         return json(
@@ -869,27 +716,22 @@ export function createAdminHandler({
         result = await projectsOperation(
           cfg,
           env,
-          session.token,
+          undefined,
           operation,
           payload,
         );
       } else if (collection === 'team') {
-        result = await teamOperation(
-          cfg,
-          env,
-          session.token,
-          operation,
-          payload,
-        );
+        result = await teamOperation(cfg, env, undefined, operation, payload);
       } else {
-        result = await gas(cfg, session.token, operation, payload, collection);
+        result = await gas(cfg, undefined, operation, payload, collection);
       }
       const response = json(
         result.ok ? { ...result, csrf: session.csrf } : result,
         result.error?.code === 'UNAUTHORIZED' ? 403 : 200,
       );
-      if (result.error?.code === 'UNAUTHORIZED')
-        response.headers.set('Set-Cookie', cookie(cfg, 'session', '', 0));
+      // Propagate a refreshed session cookie when the guard rotated it.
+      if (guard.setCookie)
+        response.headers.append('Set-Cookie', guard.setCookie);
       return response;
     } catch (e) {
       return error(

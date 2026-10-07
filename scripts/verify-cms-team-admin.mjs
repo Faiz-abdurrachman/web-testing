@@ -217,9 +217,7 @@ try {
     unauthorized = true;
     await page.locator('#reload').evaluate((e) => (e.hidden = false));
     await page.locator('#reload').click();
-    await page
-      .getByText('Masuk dengan akun Google owner', { exact: false })
-      .waitFor();
+    await page.getByText('Masuk dengan akun owner', { exact: false }).waitFor();
     assert.equal(await page.locator('#workspace').isVisible(), false);
     assert.deepEqual(errors, []);
     report.push({ width, result: 'PASS', saved, uploads, retry });

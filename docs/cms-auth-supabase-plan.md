@@ -92,14 +92,14 @@ activation: namespace cookie terpisah saja tidak memisahkan Auth user permission
 AI baru lakukan A dahulu dan siapkan rekomendasi konkret. Tanyakan keputusan
 berikut sebagai satu paket ringkas; jangan meminta secret lewat chat.
 
-| Keputusan                              | Opsi dan rekomendasi bersyarat                                                                                                                                                            | Status                             |
-| -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| Provider CMS                           | Google via Supabase direkomendasikan untuk mempertahankan tombol/UX Google; password via Supabase butuh form/UI scope terpisah; custom existing tidak mencapai target Auth Supabase       | PENDING user                       |
-| SDK/transport sesi                     | Server-only `@supabase/ssr` + `@supabase/supabase-js` proposal; pin compatible versions dan buktikan API Node Functions. REST tanpa deps alternatif dengan beban PKCE/refresh lebih besar | PENDING approval dependency/design |
-| Owner mapping                          | Trusted Auth ID + CMS-specific active permission; verifikasi owner secara privat. Jangan auto-grant karena email atau copy recruitment grant                                              | PENDING owner mapping/config       |
-| Session lifecycle                      | Server-only cookie namespace CMS; explicit local sign-out direkomendasikan agar tidak global-signout recruitment; refresh/lifetime/failure policy harus ditulis dan diuji                 | PENDING desain final               |
-| Provider/redirect config dan SQL apply | Existing project, exact dua callback; review diff config dan migration/local proof dahulu, periksa otorisasi perubahan live                                                               | PENDING concrete action            |
-| Live acceptance mutation               | Read-only login/read/media/logout dahulu; fixture save/add/delete/upload/revocation test hanya dengan izin konkret + cleanup plan                                                         | PENDING bila diperlukan            |
+| Keputusan                              | Opsi dan rekomendasi bersyarat                                                                                                                                                            | Status                                                                                                              |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Provider CMS                           | Google via Supabase direkomendasikan untuk mempertahankan tombol/UX Google; password via Supabase butuh form/UI scope terpisah; custom existing tidak mencapai target Auth Supabase       | **DECIDED 7 Oct 2026: Password Supabase** (Google tidak dipakai; tidak ada callback/uri_allow_list/account linking) |
+| SDK/transport sesi                     | Server-only `@supabase/ssr` + `@supabase/supabase-js` proposal; pin compatible versions dan buktikan API Node Functions. REST tanpa deps alternatif dengan beban PKCE/refresh lebih besar | **DECIDED: `@supabase/supabase-js@2.117.3` saja** (server-only; `@supabase/ssr` tidak dipakai)                      |
+| Owner mapping                          | Trusted Auth ID + CMS-specific active permission; verifikasi owner secara privat. Jangan auto-grant karena email atau copy recruitment grant                                              | **DECIDED: allowlist CMS terpisah** `private.cms_admin_permissions` (auth_id uuid)                                  |
+| Session lifecycle                      | Server-only cookie namespace CMS; explicit local sign-out direkomendasikan agar tidak global-signout recruitment; refresh/lifetime/failure policy harus ditulis dan diuji                 | **DECIDED: cookie `__Host-ds-admin-session` + logout lokal**; refresh server-side; window 30 hari                   |
+| Provider/redirect config dan SQL apply | Existing project, exact dua callback; review diff config dan migration/local proof dahulu, periksa otorisasi perubahan live                                                               | **PENDING concrete action (C)** — password tidak butuh callback; hanya SQL apply + owner grant                      |
+| Live acceptance mutation               | Read-only login/read/media/logout dahulu; fixture save/add/delete/upload/revocation test hanya dengan izin konkret + cleanup plan                                                         | **PENDING** (E; read-only dulu, minta izin konkret)                                                                 |
 
 Tidak semua keputusan memerlukan pertanyaan terpisah. Gunakan izin yang benar-benar
 ada di sesi baru; jangan mengulang approval yang sudah jelas, dan jangan menganggap
@@ -377,3 +377,31 @@ Tidak menyalin framework Next.js middleware ke static Astro Node Functions.
 Inventory repo dan plan selesai; semua execution A–E masih unchecked. Tidak ada
 fresh auth runtime QA/live proof diklaim. Baseline Partners proof di plan pass6
 §9–10 tetap historical authority. Prompt sesi baru: kickoff migrasi §6.
+
+## 11. Progress eksekusi (sesi AI, 7 Oct 2026)
+
+Keputusan user direkam: **provider password Supabase**, **`@supabase/supabase-js`
+server-only saja**, allowlist CMS terpisah, cookie namespace terpisah + logout
+lokal, live action butuh izin konkret. Karena password, **tidak ada OAuth/PKCE/
+callback/`uri_allow_list`/account-linking**.
+
+- **A selesai:** git/Node22, alur actual, Supabase Auth settings + katalog +
+  Vercel env presence (tanpa secret/PII), baseline fresh (snapshot sha256,
+  19/19 public HTML, test tanpa env server).
+- **B selesai (local):** design `docs/cms-auth-design.md`; migration additive
+  `supabase/migrations/20261014010000_cms_auth_pass7.sql` (allowlist + rate limit
+  terpisah, RLS deny, `SECURITY DEFINER`, wrapper service_role) + bukti
+  PostgreSQL nyata; modul `server/cms-auth.mjs` (login/getUser/verify per
+  request/refresh/logout, CSRF session-bound, cookie ter-seal); integrasi
+  `server/cms-admin.mjs` (projects/team/media) + route `refresh.js`; form
+  password di `/admin/` & `/admin/team/`; test `tests/cms-auth.test.mjs` +
+  adaptasi native/media test.
+- **C/D selesai (local):** CMS light **81 PASS**, recruitment **24 PASS**, Team
+  live **10 SKIP**; 7 gate + SEO PASS (build, verify, navbar, VT, responsive
+  468/468, spacing 39, format, seo 23); tiga admin mock 4 widths PASS;
+  snapshot/19 public HTML unchanged. **Belum apply SQL/config live, belum
+  push/deploy, belum acceptance.** Hods real-PG suite timeout di environment ini
+  (tidak terkait auth).
+- **Pending:** C3 apply SQL + owner grant, C4 config, D4 push consent, E real
+  owner/non-owner/anon/refresh/logout/revocation dua-domain acceptance. Semua
+  butuh izin konkret; GAS removal terpisah.

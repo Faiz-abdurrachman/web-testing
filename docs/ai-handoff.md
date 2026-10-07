@@ -1,5 +1,27 @@
 # AI handoff — current context
 
+## Auth CMS → Supabase — local B–D selesai, MENUNGGU izin apply/push (7 Oct 2026)
+
+Keputusan user: **provider password Supabase**, **`@supabase/supabase-js`
+server-only saja**, allowlist CMS terpisah `private.cms_admin_permissions`,
+cookie `__Host-ds-admin-session` namespace terpisah + logout lokal, live action
+butuh izin konkret. Password ⇒ **tidak ada OAuth/PKCE/callback/uri_allow_list/
+account-linking**. Design: [cms-auth-design.md](cms-auth-design.md). Migration
+belum di-apply, belum push/deploy, belum acceptance.
+
+Yang sudah ada (local, uncommitted saat handoff ini ditulis): modul
+`server/cms-auth.mjs`, integrasi `server/cms-admin.mjs` + rute
+`api/admin/auth/refresh.js`, form password di `/admin/` & `/admin/team/`, form
+login di editor JS, migration `supabase/migrations/20261014010000_cms_auth_pass7.sql`,
+test `tests/cms-auth.test.mjs`. QA: CMS light 81 PASS, recruitment 24 PASS, Team
+live 10 SKIP, 6 auth (termasuk PostgreSQL nyata), 7 gate + SEO, tiga admin mock
+4 widths, 19 HTML publik + snapshot unchanged.
+
+NEXT: minta izin konkret untuk (C3) apply additive SQL + provision owner grant,
+(D4) push/deploy, lalu (E) acceptance read-only dulu (login/read/media/logout)
+dua domain + non-owner/anon/refresh/revocation. Recruitment cookies/allowlist
+tetap; GAS removal terpisah.
+
 ## Work order sesi berikutnya — auth CMS, PLAN ONLY
 
 Faiz meminta **eksekusi di AI baru**. [Master Work Plan auth CMS](cms-auth-supabase-plan.md)

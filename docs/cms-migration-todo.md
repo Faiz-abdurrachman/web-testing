@@ -1,5 +1,25 @@
 # CMS → Supabase — TODO dan status penerimaan
 
+## Auth CMS — local B–D selesai, menunggu izin apply/push (7 Oct 2026)
+
+Keputusan user: provider **password Supabase**; dependency
+**`@supabase/supabase-js` server-only saja**; allowlist CMS **terpisah**;
+cookie namespace CMS terpisah + logout lokal; live action butuh izin konkret.
+Password ⇒ tanpa OAuth/callback/uri_allow_list/account-linking. Design:
+[cms-auth-design.md](cms-auth-design.md).
+
+- [x] A: audit/baseline/env presence + keputusan provider/dep/owner/session.
+- [x] B: migration isolasi + PostgreSQL proof; modul auth + integrasi; form UI;
+      focused auth tests + adaptasi native/media tests.
+- [x] C1/D lokal: CMS light 81 PASS, recruitment 24 PASS, Team live 10 SKIP,
+      auth 6 PASS (PG nyata), 7 gate + SEO, tiga admin mock 4 widths,
+      snapshot/19 HTML unchanged.
+- [ ] C3: apply additive SQL + provision owner grant (butuh izin konkret).
+- [ ] C4: config live (tidak ada callback yang dibutuhkan untuk password).
+- [ ] D4: minta izin push SHA baru.
+- [ ] E: dua READY + real owner/non-owner/anon/refresh/logout/revocation
+      dua-domain acceptance; read-only dulu; recruitment isolation/closed.
+
 ## Work order sesi berikutnya — auth CMS, PLAN ONLY
 
 Faiz meminta **eksekusi di AI baru**. [Master Work Plan auth CMS](cms-auth-supabase-plan.md)
