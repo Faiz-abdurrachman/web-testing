@@ -20,7 +20,8 @@ live 10 SKIP, 6 auth (termasuk PostgreSQL nyata), 7 gate + SEO, tiga admin mock
 NEXT: minta izin konkret untuk (C3) apply additive SQL + provision owner grant,
 (D4) push/deploy, lalu (E) acceptance read-only dulu (login/read/media/logout)
 dua domain + non-owner/anon/refresh/revocation. Recruitment cookies/allowlist
-tetap; GAS removal terpisah.
+tetap; GAS removal terpisah. **Work order rinci C3–E:
+[cms-auth-execution-plan.md](cms-auth-execution-plan.md).**
 
 ## Work order sesi berikutnya — auth CMS, PLAN ONLY
 

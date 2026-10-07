@@ -1,6 +1,41 @@
 # CMS → Supabase — kickoff aktif untuk AI baru
 
-## Checkpoint aktif — Partners LIVE, NEXT auth CMS final
+## Checkpoint aktif — Auth CMS B–D lokal selesai, NEXT eksekusi C3–E
+
+**Auth CMS → Supabase sudah diimplementasikan lokal di commit `ae52f54`**, tree
+bersih, **belum push/deploy/apply**. Keputusan user (7 Oct 2026): provider
+**password Supabase**; dependency **`@supabase/supabase-js` server-only saja**;
+allowlist CMS **terpisah** `private.cms_admin_permissions`; cookie namespace CMS
+terpisah (`__Host-ds-admin-session`) + logout lokal; live action butuh izin
+konkret. Password ⇒ **tidak ada** OAuth/PKCE/callback/`uri_allow_list`/
+account-linking.
+
+**Urutan baca aktif:** `cms-migration-kickoff.md` seluruhnya termasuk §6 →
+`AGENTS.md` → `ai-handoff.md` → `cms-auth-supabase-plan.md` (termasuk §11 progress)
+→ **`cms-auth-design.md`** (design final) → **`cms-auth-execution-plan.md`**
+(Master Work Plan C3–E, rinci) → `cms-migration-todo.md`. Auth plan §11 dan
+execution plan **mengalahkan** pernyataan historis "PLAN ONLY".
+
+**Sudah ada (lokal, `ae52f54`):** `server/cms-auth.mjs`, integrasi
+`server/cms-admin.mjs`, `api/admin/auth/refresh.js`, form password di
+`/admin/` & `/admin/team/`, migration `20261014010000_cms_auth_pass7.sql`
+(**belum apply**), `tests/cms-auth.test.mjs`, adaptasi native/media test.
+
+**QA lokal PASS:** CMS light 81 PASS, recruitment 24 PASS, Team live 10 SKIP,
+auth 6 PASS (termasuk PostgreSQL nyata), 7 gate + SEO, tiga admin mock 4 widths,
+snapshot + 19/19 public HTML unchanged. Suite Hods real-PG timeout di environment
+lama (tidak terkait auth).
+
+**Sisa (butuh izin konkret Faiz):** C3 apply migration + provision owner grant,
+C4 konfigurasi password owner (owner isi sendiri), D4 push SHA baru, E dua
+deployment + real owner/non-owner/anon/refresh/logout/revocation acceptance
+(read-only dulu). **Detail lengkap: `cms-auth-execution-plan.md`.**
+
+Owner Supabase existing: `auth_id = 5903606f-5543-4832-9db5-f6a433b6c660`,
+email `admin@datasorcerers.com` (confirmed). Recruitment cookies/allowlist tetap
+terpisah; seluruh CMS belum selesai; GAS removal belum diizinkan.
+
+## Checkpoint sebelumnya — Partners LIVE
 
 **Pass 6 Partners A–E selesai, LIVE `925d577`**, dipush dengan izin Faiz ke
 kedua repo. Sesudah push fitur, main/origin/main/production/main sinkron925d577.
@@ -51,15 +86,15 @@ deployments/aliases-925d577,live-browser-testing/production,live-smoke,4screensh
 Ringkasan tracked ini menjadi handoff bila artifacts hilang.
 
 Faiz, panggil **bro**, bahasa Indonesia. Repo `/home/faiz/ds/ds5opencode`.
-Faiz meminta persiapan docs sekarang dan **eksekusi auth di AI baru**.
-[Master Work Plan auth CMS](cms-auth-supabase-plan.md) **PLAN ONLY**;
-provider/dependency/mapping/session decisions pending, execution A–E unchecked.
-Baca seluruhnya termasuk §6. Partners accepted, bukan pass yang diulang.
+Auth CMS B–D sudah lokal (`ae52f54`); AI baru mengeksekusi sisa **C3–E** sesuai
+[Master Work Plan auth CMS](cms-auth-supabase-plan.md) §11 +
+[cms-auth-execution-plan.md](cms-auth-execution-plan.md). Baca seluruhnya termasuk
+§6. Partners accepted, bukan pass yang diulang.
 
 ## 1. Baseline actual dan status izin
 
-Runtime deployed **925d577** kedua primary aliases; checkpoint docs **3229c5b**
-lokal, disusul planning auth terbaru (lihat git log). Izin push925d577 consumed;
+Runtime deployed **925d577** kedua primary aliases; checkpoint docs lokal setelah
+itu termasuk auth `ae52f54` (lihat git log). Izin push925d577 consumed;
 konfirmasi push baru termasuk docs. `origin` dua existing push URLs, satu push
 men-deploy testing+production. Jangan tambah remote, reset/stash perubahan asing.
 
@@ -131,63 +166,71 @@ menyimpulkan actual apply/deploy chronology.
 
 ## 5. Tahapan dan batas approval
 
-A audit/baseline/decision → B finaldesign/localcode+SQLproof → C localreview dan
-approved live prerequisites → D fullQA/docs/localcommit siapreview → E authorized
-push/duaREADY/realowner acceptance. Detail checklist di auth plan §6. Jangan
-skip gates atau melabel mocks sebagai real Supabase owner proof.
+A–D lokal **sudah selesai** di `ae52f54`. Sisa: **C2 review → C3 apply
+SQL + provision owner grant → C4 config password owner → D4 push consent → E
+deploy + acceptance**. Detail checklist: `cms-auth-execution-plan.md` §2–§7.
+Jangan skip gate atau melabel mock sebagai real Supabase owner proof.
 
-User ingin implementasi **di sesi AI baru**. Sesi persiapan hanya docs/localcommit,
-tanpa runtime/SQL/config/deps/deploy. AI baru memanfaatkan izin yang sudah ada,
-meminta keputusan missing sebelum dependent actions, dan menyelesaikan hasil
-reviewable sebelum minta push. Real mutation acceptance memerlukan fixture/cleanup
-konkret dan authorization yang berlaku; jangan save/reseed Team sebagai probe.
-Push baru wajib konfirmasi. Checkpoint docs setelah live juga tidak otomatis push.
+AI baru memanfaatkan izin yang sudah ada, **meminta izin konkret** sebelum apply
+live/push, dan menyelesaikan hasil reviewable dulu. Real mutation acceptance
+memerlukan fixture/cleanup konkret; jangan save/reseed Team sebagai probe. Push
+baru wajib konfirmasi; checkpoint docs setelah live tidak otomatis push.
 
-## 6. Prompt siap salin — mulai auth CMS di AI baru
+## 6. Prompt siap salin — eksekusi auth CMS C3–E di AI baru
 
 ```text
 Bro, lanjut auth CMS → Supabase di /home/faiz/ds/ds5opencode.
-Panggil gw bro, bahasa Indonesia. Eksekusi kita di sesi AI ini; sesi sebelumnya
-hanya menyiapkan planning/docs, belum ada kode/SQL/apply/config/deps/deploy auth.
+Panggil gw bro, bahasa Indonesia. Sesi sebelumnya sudah MENYELESAIKAN A–D LOKAL
+(commit ae52f54) — BUKAN plan-only lagi. Tugas lu eksekusi sisa C2–E: apply SQL,
+provision owner grant, push, dan acceptance dua domain.
 
-Periksa git status/log/refs dan Node22 dahulu. Runtime live925d577 kedua domain
-READY/Partners A–E accepted; docs3229c5b + planning terbaru lokal, lihat git log.
-Izin push925d577 consumed. Konfirmasi sebelum push baru termasuk planning docs;
-origin dua push URLs, satu push deploy testing+production. Jangan reset/edit asing.
+Periksa git status/log/refs dan Node22 dulu. Runtime live925d577 (Partners A–E
+accepted); auth lokal ae52f54 belum push. Izin push925d577 consumed; konfirmasi
+sebelum push SHA baru termasuk docs. origin dua push URLs, satu push deploy
+testing+production. Jangan reset/stash perubahan asing.
 
-Baca kickoff migrasi SELURUHNYA termasuk §6 → AGENTS → ai-handoff →
-docs/cms-auth-supabase-plan.md SELURUHNYA → migration TODO → master migration
-plan → CMS SOP. Ikuti auth Master Work Plan checklist A–E dan actual fileinventory.
-Checkpoint aktif/auth plan mengalahkan NEXT/assumsi historis. UI terkunci; sebelum
-UI baca pixel SOP/assets/fullscreen plan, per-section protocol tetap berlaku.
+Baca kickoff SELURUHNYA termasuk §6 → AGENTS → ai-handoff →
+docs/cms-auth-supabase-plan.md (termasuk §11 progress) → docs/cms-auth-design.md
+→ docs/cms-auth-execution-plan.md (Master Work Plan C3–E, detail) →
+docs/cms-migration-todo.md. §11 + execution plan MENGALAHKAN pernyataan historis
+"PLAN ONLY". UI terkunci; sebelum UI baca pixel SOP/assets/fullscreen plan.
 
-Mulai A: audit actual login/callback/cookie/CSRF/route/config/allowlist dan fresh
-baseline, lalu sajikan rekomendasi konkret untuk keputusan provider/dependency/
-owner mapping/session. Provider Google vs password, SDK baru dan config/grant
-belum dipilih/disetujui; jangan infer dari kata gas. Kerjakan independentaudit
-sambil menunggu, implementasi dependent setelah keputusan/otorisasi mencukupi.
+C2: review migration 20261014010000_cms_auth_pass7.sql + catalog existing
+(harus belum ada table/fungsi auth) + pastikan private.cms_admin_users
+(recruitment, auth_id text) TIDAK tersentuh/tidak dipakai. Konfirmasi owner
+mapping: admin@datasorcerers.com (auth_id 5903606f-5543-4832-9db5-f6a433b6c660).
+Stop bila catalog sudah ada — inspect state, jangan blind reapply/drop.
 
-Callback CMS custom saat ini cek owner via GAS, operasi Supabase pakai encrypted
-session. Target trusted Supabase Auth identity + CMS-specific active permission
-setiap request sebelum service/Management/Storage/hook. Existing private.cms_admin_users
-(auth_id text) mengotorisasi recruitment, JANGAN otomatis reuse/seed/alter atau
-link Auth Google/password identity. Recruitment cookies/users/allowlist/PII/Auth
-password/accepting:false tetap. CMS cookies/CSRF/logout namespace dan scopeisolated.
+C3 (BUTUH IZIN KONKRET dari gw sebelum apply live): tunjukkan diff + proof lokal,
+lalu apply migration sekali via Management API ke project web-community
+(yejrdckcmlxrkklgtrwy), provision 1 row private.cms_admin_permissions (bukan
+hardcode ke migration tracked), bukti read-only cms_verify_admin + catalog/ACL +
+role denials. Inspect state bila error, jangan reapply buta.
+
+C4: password owner di-set SENDIRI oleh gw di dashboard Supabase (jangan minta/
+isi password lewat chat). Verifikasi SUPABASE_ANON_KEY ada di kedua Vercel
+(presence saja), RECRUITMENT_OPEN=false. JANGAN hapus env lama CMS_ADMIN_GOOGLE_*.
+
+Provider = PASSWORD: TIDAK ada OAuth/PKCE/callback CMS/uri_allow_list tambahan/
+account-linking. api/admin/auth/callback.js tetap tapi retired (redirect aman).
 
 Preserve UI/editor/CRUD/revision/min-max/media/publication, write ManagementAPI
-existing, server-only keys, anon publicreadRPC, no direct authenticated writes.
-Keenam CMS content sources Supabase buildRPC, full GASexport MASIH validated
-sebelum overrides; jangan hapus GAS/tab/env/client/deployment. GASremoval terpisah.
-Partners SQL appliedsekali, jangan reapply/reseed; Teamdrift tetap. Full test:cms
-TANPA env server agar10Team live mutation SKIP. Secrets/PII/cookies/authcodes
-jangan print/commit. Fresh frozenbaseline19publicHTML/snapshotexact + SOP7gate/SEO,
-3adminmocks4widths, auth/security/realPG tests; mockbukanrealownerproof.
+existing, server-only keys, anon public readRPC, no direct authenticated writes.
+Keenam CMS content sources Supabase buildRPC; full GAS export MASIH validated;
+jangan hapus GAS/tab/env/client/deployment. Recruitment cookies/users/allowlist/
+PII/accepting:false tetap. Full test:cms TANPA env server agar 10 Team live
+mutation SKIP. Secrets/PII/cookies/token jangan print/commit. Re-run CMS light +
+recruitment + 7 gate+SEO + tiga admin mock 4 widths + snapshot/19 HTML parity
+sebelum push. Mock BUKAN real owner proof.
 
-Selesaikan localresult siapreview, update docs/status dan localcommit; minta izin
-push SHA baru. Setelah approved push: duaREADY/exactaliases dan realowner/nonowner/
-anon/refresh/logout/revocation dua-domainacceptance, recruitmentisolation/closed,
-publicregression. Realmutation butuh approvedfixture+cleanup, tanpa arbitraryTeamwrite.
-Jangan klaim authLIVE/seluruhCMSselesai jika realacceptance masihpending.
+D4: minta izin push SHA baru. Setelah approved push: E1 satu push origin (dua
+situs), E2 dua READY exact SHA + alias, E3 real owner login/read Projects/Team/
+private media/logout dua domain 390/1440 + non-owner denial + anon denial +
+expired/revoked session — READ-ONLY dulu; E4 recruitment login/session isolation
++ closed + public regression; E5 live mutation hanya dengan fixture+cleanup yang
+gw setujui, tanpa arbitrary Team write. Update checkpoint LIVE + docs commit;
+jangan klaim auth LIVE/seluruh CMS selesai bila real acceptance masih pending.
+GAS removal pass terpisah.
 ```
 
 ## 7. Setelah auth diterima

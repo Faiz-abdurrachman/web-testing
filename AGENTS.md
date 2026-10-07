@@ -1,29 +1,35 @@
 # AGENTS.md — instructions for AI agents
 
-## Work order sesi berikutnya — auth CMS, PLAN ONLY
+## Work order sesi berikutnya — eksekusi auth CMS C3–E
 
-Faiz meminta **eksekusi di AI baru**. [Master Work Plan auth CMS](docs/cms-auth-supabase-plan.md)
-sudah disiapkan rinci: inventory actual, keputusan provider/dependency/owner,
-security contract, checklist A–E, SQL permission proposal, QA, dua-domain
-acceptance dan rollback. Sesi persiapan ini **docs saja**; belum kode/SQL/apply/
-provider config/dependency/push/deploy auth. Semua execution checklist pending.
+Auth CMS → Supabase **A–D sudah selesai lokal di commit `ae52f54`** (tree bersih,
+belum push). Keputusan user (7 Oct 2026): provider **password Supabase**;
+dependency **`@supabase/supabase-js` server-only saja**; allowlist CMS terpisah
+`private.cms_admin_permissions`; cookie namespace CMS terpisah
+(`__Host-ds-admin-session`) + logout lokal; live action butuh izin konkret.
+Password ⇒ **tidak ada** OAuth/PKCE/callback/`uri_allow_list`/account-linking.
 
-Runtime live **925d577**, checkpoint docs **3229c5b lokal** dan planning terbaru
-lihat git log; origin/production masih925d577. Izin push925d577 consumed;
-konfirmasi sebelum push baru termasuk docs. Urutan baca aktif: kickoff seluruhnya
-termasuk §6 → AGENTS → ai-handoff → auth plan → TODO → master plan → CMS SOP.
-Provider/mekanisme belum dipilih; lakukan audit A lalu selesaikan gate keputusan
-sebelum implementasi dependent. OAuth CMS custom masih berjalan sekarang.
+**Sisa (butuh izin konkret):** C2 review → C3 apply SQL + provision owner grant →
+C4 password owner (owner isi sendiri) → D4 push consent → E dua READY + real
+owner/non-owner/anon/refresh/logout/revocation acceptance (read-only dulu).
+Master Work Plan rinci: [cms-auth-execution-plan.md](docs/cms-auth-execution-plan.md).
 
-**Temuan actual:** callback CMS masih cek owner via GAS; API Supabase CMS memakai
-sesi encrypted, bukan fresh GAS check per operasi. `private.cms_admin_users`
-existing (`auth_id text`, bukan proposal user_id uuid) mengotorisasi recruitment.
-Jangan otomatis reuse/seed tabel itu untuk CMS atau link Google/password identity.
-Target CMS permission terisolasi + trusted Auth identity per request; recruitment
-cookies/users/allowlist tetap. Keenam content sources Supabase tetapi full GAS
-export tetap divalidasi; penghapusan GAS belum diizinkan. UI/data/Team drift tetap.
+Runtime live **925d577** (Partners A–E accepted); origin/production masih925d577.
+Izin push925d577 consumed; konfirmasi sebelum push SHA baru termasuk docs. Urutan
+baca aktif: kickoff seluruhnya termasuk §6 → AGENTS → ai-handoff → auth plan
+(termasuk §11) → **cms-auth-design.md** → **cms-auth-execution-plan.md** → TODO.
 
-## Checkpoint aktif — Partners LIVE, NEXT auth CMS final
+**Status auth actual:** modul `server/cms-auth.mjs`, integrasi `server/cms-admin.mjs`,
+rute `api/admin/auth/refresh.js`, form password `/admin/` & `/admin/team/`,
+migration `20261014010000_cms_auth_pass7.sql` (**belum apply**),
+`tests/cms-auth.test.mjs`. QA lokal: CMS light 81 PASS, recruitment 24 PASS, Team
+live 10 SKIP, auth 6 PASS (PG nyata), 7 gate + SEO, 3 admin mock 4 widths,
+snapshot/19 public HTML unchanged. Owner Supabase
+`5903606f-5543-4832-9db5-f6a433b6c660` / `admin@datasorcerers.com`. Recruitment
+cookies/allowlist tetap terpisah; GAS removal belum diizinkan. Tiap request:
+origin → CSRF → `getUser()` → `cms_verify_admin` per request sebelum privileged.
+
+## Checkpoint sebelumnya — Partners LIVE
 
 **Pass 6 Partners A–E selesai, LIVE `925d577`**, dipush dengan izin Faiz ke
 kedua repo. Sesudah push fitur, main/origin/main/production/main sinkron925d577.

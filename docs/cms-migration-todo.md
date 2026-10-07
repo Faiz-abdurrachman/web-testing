@@ -6,7 +6,8 @@ Keputusan user: provider **password Supabase**; dependency
 **`@supabase/supabase-js` server-only saja**; allowlist CMS **terpisah**;
 cookie namespace CMS terpisah + logout lokal; live action butuh izin konkret.
 Password ⇒ tanpa OAuth/callback/uri_allow_list/account-linking. Design:
-[cms-auth-design.md](cms-auth-design.md).
+[cms-auth-design.md](cms-auth-design.md). Work order rinci C3–E:
+[cms-auth-execution-plan.md](cms-auth-execution-plan.md).
 
 - [x] A: audit/baseline/env presence + keputusan provider/dep/owner/session.
 - [x] B: migration isolasi + PostgreSQL proof; modul auth + integrasi; form UI;
