@@ -1,33 +1,33 @@
 # CMS → Supabase — kickoff aktif untuk AI baru
 
 User **Faiz**, panggil **bro**, bahasa Indonesia. Repo
-`/home/faiz/ds/ds5opencode`. Work order aktif: **Hods review/push berizin + live acceptance**.
-[Master Work Plan Hods](cms-pass5-hods-plan.md) A–D sudah selesai; SQL applied
-12:37:27.829 UTC / 19:37:27.829 WIB pada 7 Oct 2026, actual anon/catalog/role/hybrid
-proof PASS. Kode lokal + QA siap review; deployment kedua situs masih `6b36519`.
-Checkpoint `df31ab0`/planning `dbc2b22` dan feature lokal belum push. Konfirmasi
-SHA baru sebelum push, termasuk checkpoint docs lokal.
+`/home/faiz/ds/ds5opencode`. Work order berikut **pass 6 Partners**, belum implementasi/plan pass baru.
+**Hods A–E selesai, LIVE `763bafc`** kedua situs. Baca [Hods plan](cms-pass5-hods-plan.md)
+§9–10 untuk actual proof, lalu TODO/master plan/SOP; buat plan Partners tersendiri
+sebelum kode. Auth CMS terakhir dan mekanisme final pending.
 
-CMS 74 PASS + 10 live Team SKIP, recruitment 24 PASS; 7 gate + SEO, tiga admin
-mock empat width, 19 HTML/snapshot exact fresh baseline. Dedicated runner
-`scripts/verify-cms-hods.mjs`: semua 21 tabs/55 blocks/8 bullets, six routes ×
-390/1440 × Home + Recruitment entry/back/VT PASS. SQL ceiling UTF-16 lebih ketat
-untuk astral strings daripada installed Zod codepoint limit; schema utuh,
-perbedaan diuji/didokumentasikan di plan §2. First post-apply RPC probe gagal;
-state inspect + following HTTP 200 exact, tidak reapply; cause belum diisolasi.
+Hods SQL private/RLS/anon RPC applied, six records/21 tabs/55 sections/8 bullets
+exact. CMS 74 PASS/10 Team live SKIP, recruitment 24 PASS, 7 gate + SEO, tiga admin
+mock empat widths, snapshot/19 HTML exact. Live all-tab acceptance × 390/1440 ×
+Home/Recruitment kedua situs PASS; Roles smoke, API admin anonymous 401 dan
+recruitment closed PASS. Sumber aktif Projects/Team/Roles/Domains/Hods Supabase,
+Partners GAS; full GAS export masih divalidasi sebelum overrides. Team drift
+preexisting utuh. SQL Unicode ceiling UTF-16 lebih ketat daripada Zod installed,
+selisih diuji/didokumentasikan; schema/UI/geometri/assets/auth/media utuh.
 
-Empat Supabase + dua GAS env Production kedua Vercel verified ulang. Local
-anon key tetap absent, proof memakai Management API in-memory. Pre/post dengan
-same captured inputs identik, Team drift preexisting utuh. Live Hods masih GAS;
-setelah fitur deploy Hods Supabase dan Partners GAS, full export tetap divalidasi.
-Semua batas scope/secrets berlaku; Partners/auth belum work order.
+API Vercel READY testing **12:53:12.956 UTC / 19:53:12.956 WIB**, production
+**12:55:00.507 UTC / 19:55:00.507 WIB**, 7 Oct 2026. Primary domains assigned ke
+SHA baru. Jam workspace sekitar 138 detik di belakang Vercel HTTP Date; artifact
+browser `checkedAt` memakai workspace, READY memakai provider, jangan mengurutkan
+raw timestamp kedua clock seolah sama. Empat Supabase + dua GAS env Production
+kedua project verified ulang; secrets tetap private/in-memory.
 
-Prompt §6 di bawah adalah **arsip prompt implementasi** yang sudah dieksekusi
-A–D. Jangan mengulang SQL apply/seed atau baseline/reconciliation untuk menutupi
-drift. NEXT E: approval SHA konkret → push origin once → dua latest feature
-READY/time → all tabs kedua situs/dua widths/dua contexts → anonymous admin 401
-
-- recruitment closed → LIVE checkpoint. Lihat plan §9 dan TODO untuk actual state.
+Feature `763bafc`, checkpoint `df31ab0`, planning `dbc2b22` telah dipush dengan
+izin Faiz. Checkpoint LIVE sesudah push disimpan lokal terpisah, belum push;
+**izin `763bafc` consumed, konfirmasi sebelum push baru** termasuk docs lokal.
+Jangan reseed/drop/reapply Hods/Team, hapus tab/env GAS atau mulai auth/media.
+Prompt §6 di bawah arsip prompt implementasi Hods yang sudah dieksekusi A–E;
+bukan work order untuk mengulang pass Hods. NEXT Partners memerlukan plan baru.
 
 ## 1. Baseline live sebelum push Hods (arsip checkpoint Domains)
 

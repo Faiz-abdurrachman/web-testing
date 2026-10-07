@@ -1,9 +1,9 @@
 # Master Work Plan — CMS pass 5: Hods → Supabase
 
-Status: **A–D selesai; SQL applied + QA lokal PASS; E env presence PASS,
-push/deploy/live acceptance PENDING.** Kode live tetap `6b36519`; checkpoint
-`df31ab0` dan planning `dbc2b22` belum push. Implementasi dimulai atas instruksi
-Faiz pada 7 Oct 2026. Konfirmasi SHA fitur konkret sebelum push baru.
+Status: **A–E selesai, LIVE `763bafc` pada kedua situs, acceptance all-tab PASS.**
+Faiz mengizinkan push SHA fitur, origin mengirim ke dua repo. Checkpoint live
+sesudahnya lokal dan memerlukan izin push baru. Plan ini menjadi arsip eksekusi
+pass Hods; NEXT Partners plan terpisah, auth CMS terakhir.
 
 ## 1. Scope, sumber dan aturan baca
 
@@ -317,18 +317,18 @@ Lock tahap sebelum masuk tahap dependen; planning bukan bukti local/SQL/live.
 - [x] Fresh presence empat env Supabase + CMS_API_URL/CMS_API_TOKEN Production
       kedua Vercel; gunakan VERCEL_TOKEN lokal in-memory bila CLI beda scope.
       Missing env essential perbaiki dari konfigurasi existing, values tidak dicetak.
-- [ ] Konfirmasi push SHA baru yang konkret; izin Domains/dokumen sebelumnya consumed.
-- [ ] Push origin main sekali, fetch dua remote; pastikan tiga SHA feature sama.
-- [ ] Dua deployment terbaru SHA feature READY/SUCCESS, timestamp actual UTC/WIB;
+- [x] Konfirmasi push SHA baru yang konkret; izin Domains/dokumen sebelumnya consumed.
+- [x] Push origin main sekali, fetch dua remote; pastikan tiga SHA feature sama.
+- [x] Dua deployment terbaru SHA feature READY/SUCCESS, timestamp actual UTC/WIB;
       queued/building/green lama tidak dianggap live. GitHub anon 403 bukan bukti fail
       deploy: gunakan Vercel API token existing tanpa raw secrets.
-- [ ] Semua six /hods/{id} × 390/1440 × kedua situs, klik **seluruh 21 tab**;
+- [x] Semua six /hods/{id} × 390/1440 × kedua situs, klik **seluruh 21 tab**;
       copy/nested section/bullet order, labels lokal/art decode, no overflow/pageerror.
-- [ ] Click Home/Recruitment entry→detail→context-specific back + VT re-init tabs;
+- [x] Click Home/Recruitment entry→detail→context-specific back + VT re-init tabs;
       repeat normal query and ?from=recruitment, jangan hanya direct navigation.
-- [ ] Public smoke Home/Recruitment/Roles tetap baik; admin projects/team/media
+- [x] Public smoke Home/Recruitment/Roles tetap baik; admin projects/team/media
       anonymous 401, recruitment {ok:true,accepting:false}; no production mutations.
-- [ ] Update LIVE checkpoint/DoD, summary proof tracked docs; artifacts ignored
+- [x] Update LIVE checkpoint/DoD, summary proof tracked docs; artifacts ignored
       bukan satu-satunya handoff. Checkpoint docs lokal belum otomatis boleh push.
 
 ## 7. Test matrix dan commands
@@ -451,3 +451,29 @@ API routes, other migrations/collections.
 Bukti ignored `artifacts/cms-pass5/`; ringkasan tracked di section ini dan
 AGENTS/ai-handoff/TODO/kickoff. Tidak ada hook/rebuild/push atau mutation
 Projects/Team/recruitment pada pass ini. Seluruh CMS belum selesai.
+
+## 10. Live acceptance setelah push berizin — 7 Oct 2026
+
+- Feature SHA `763bafc9a350bfe062ea2e5fc5f74bb333b52c94` dipush origin once ke
+  testing + production; main/origin/main/production/main sama saat verifikasi.
+- API Vercel actual READY: testing **12:53:12.956 UTC / 19:53:12.956 WIB**,
+  production **12:55:00.507 UTC / 19:55:00.507 WIB**. Kedua primary domains assigned
+  ke deployment SHA ini. Env empat Supabase + dua GAS Production kedua project
+  diverifikasi ulang sebelum push; values suppressed.
+- Kedua situs: enam Hods routes, semua 21 tabs/55 blocks/8 bullets × 390/1440
+  × Home + Recruitment entry contexts PASS. Copy/order/local labels/art exact,
+  click/arrow wrap/focus/aria/hidden, context query/back + View Transitions,
+  no overflow/pageerror. 24 detail screenshots tersimpan.
+- Enam Roles smoke setiap situs PASS; anonymous projects/team/media API 401,
+  recruitment `{ok:true,accepting:false}`. Seluruh acceptance read-only.
+- Clock evidence: workspace UTC `12:54:39.370` vs Vercel HTTP Date `12:56:57`,
+  selisih sekitar 138 s. `checkedAt` browser menggunakan workspace clock;
+  READY timestamps menggunakan provider API. Tidak mengurutkan event lintas
+  jam tanpa memperhitungkan skew, tidak mengganti actual provider times.
+- Proof ignored: deployments/aliases-763bafc.json, live-browser-testing.json,
+  live-browser-production.json, 24 screenshots, live-smoke.json, time-check.json.
+  Summary tracked di AGENTS/ai-handoff/kickoff/TODO/SOP/master plan.
+
+DoD Hods A–E terpenuhi. Checkpoint LIVE ini lokal belum dipush; izin fitur
+`763bafc` consumed. NEXT Partners belum diimplementasikan, auth final pending,
+GAS masih dependency. Tidak mengulang seed SQL/Team atau mengganti UI/media/auth.

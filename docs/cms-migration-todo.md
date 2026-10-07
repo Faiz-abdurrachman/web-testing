@@ -1,11 +1,12 @@
 # CMS → Supabase — TODO dan status penerimaan
 
-Pass 5 Hods **A–D selesai: SQL applied + QA lokal PASS, belum push/deploy/LIVE**.
-[Master Work Plan](cms-pass5-hods-plan.md) §9 menyimpan bukti dan temuan Unicode.
-CMS 74 PASS/10 live Team SKIP, recruitment 24 PASS, 7 gate + SEO, all-tab browser
-lokal × dua widths/dua contexts. E env presence kedua Vercel PASS; NEXT konfirmasi
-SHA fitur baru sebelum push origin main (dua situs), lalu deployment/live acceptance.
-Kode live tetap `6b36519`; checkpoint `df31ab0`/planning `dbc2b22` lokal belum push.
+Pass 5 Hods **A–E selesai, LIVE `763bafc`** pada kedua situs.
+[Master Work Plan](cms-pass5-hods-plan.md) §9–10 menyimpan local/SQL/live proof.
+Vercel READY testing 12:53:12.956 UTC, production 12:55:00.507 UTC (7 Oct 2026),
+primary domains assigned ke SHA fitur. All 21-tab acceptance kedua situs ×
+390/1440 × Home/Recruitment contexts PASS, admin anonymous 401, recruitment closed.
+NEXT **Partners**, plan terpisah dahulu, lalu auth CMS terakhir. GAS tetap wajib.
+Checkpoint LIVE lokal belum push; izin push `763bafc` consumed.
 
 ## 1. Yang benar-benar sudah selesai
 
@@ -60,10 +61,10 @@ Testing READY 12:02:26.550 UTC, production READY 12:04:06.630 UTC, 7 Oct 2026.
 Token server missing pada kedua project telah dilengkapi encrypted sebelum push.
 Tidak ada fallback stale; GAS full export tetap dependency.
 
-## 3. Pass 5 Hods — A–D selesai, E push/acceptance pending
+## 3. Pass 5 Hods — selesai A–E, LIVE
 
 Semua rincian executable di [Master Work Plan Hods](cms-pass5-hods-plan.md).
-Bukti actual local/SQL ada di plan §9; deployment dan acceptance situs belum.
+Bukti local/SQL di plan §9, deployment/all-tab live acceptance di §10.
 
 - [x] A1: baca tujuh dokumen, git/SHA/perubahan asing, Node 22, env presence.
 - [x] A2: fresh snapshot/hash/19 public HTML + pre-pass captured hybrid inputs.
@@ -79,10 +80,10 @@ Bukti actual local/SQL ada di plan §9; deployment dan acceptance situs belum.
 - [x] D2: local all 21 tabs/55 blocks/8 bullets content + click/arrow wrap/focus/aria/hidden/back.
 - [x] D3: three admin mocks four widths, active docs + reviewable feature commit.
 - [x] E1: fresh four Supabase/two GAS env Production kedua Vercel, secrets suppressed.
-- [ ] E2: konfirmasi SHA push baru, origin once/two remotes synced.
-- [ ] E3: two latest feature-SHA READY deployments + timestamps actual UTC/WIB.
-- [ ] E4: all six Hods/21 tabs × 390/1440 × both sites + Home/Recruitment entry/back/VT.
-- [ ] E5: anonymous admin 401/recruitment closed, no production mutation + LIVE checkpoint/DoD.
+- [x] E2: konfirmasi SHA push baru, origin once/two remotes synced.
+- [x] E3: two latest feature-SHA READY deployments + timestamps actual UTC/WIB.
+- [x] E4: all six Hods/21 tabs × 390/1440 × both sites + Home/Recruitment entry/back/VT.
+- [x] E5: anonymous admin 401/recruitment closed, no production mutation + LIVE checkpoint/DoD.
 
 ## 4. Sesudah Hods (belum dikerjakan)
 
