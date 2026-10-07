@@ -12,6 +12,7 @@ Migration `20261007120000_recruitment_pass2_admin_read.sql` sudah di-apply ke
 Supabase project `web-community`. Tests 15/15 (pass 1 + pass 2).
 
 **BELUM LIVE:** menunggu owner:
+
 1. Aktifkan Supabase Auth Google provider (dashboard Supabase)
 2. Set redirect URI `https://<site>/api/admin/recruitment/callback`
 3. Jalankan SQL: `INSERT INTO private.cms_admin_users (auth_id, email) VALUES ('<owner-auth-id>', '<owner-email>');`
@@ -60,6 +61,7 @@ Migration `20261007120000_recruitment_pass2_admin_read.sql` sudah di-apply ke
 Supabase project `web-community`. Tests 15/15 (pass 1 + pass 2).
 
 **BELUM LIVE:** menunggu owner:
+
 1. Aktifkan Supabase Auth Google provider (dashboard Supabase)
 2. Set redirect URI `https://<site>/api/admin/recruitment/callback`
 3. Jalankan SQL: `INSERT INTO private.cms_admin_users (auth_id, email) VALUES ('<owner-auth-id>', '<owner-email>');`

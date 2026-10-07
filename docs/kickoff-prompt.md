@@ -26,6 +26,7 @@ Server handler `server/recruitment-admin.mjs`, API:
 halaman `/admin/recruitment/` (noindex), client JS. Tests 15/15 ALL PASS.
 
 **BELUM LIVE — nunggu owner:**
+
 1. Aktifkan Supabase Auth Google provider (dashboard Supabase)
 2. Set redirect URI `https://<site>/api/admin/recruitment/callback`
 3. `INSERT INTO private.cms_admin_users (auth_id, email) VALUES (...);`

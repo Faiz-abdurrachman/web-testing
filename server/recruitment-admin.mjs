@@ -1,4 +1,4 @@
-import { createHash } from 'node:crypto';
+import { createHash, randomBytes } from 'node:crypto';
 
 const headers = {
   'Cache-Control': 'no-store',
@@ -18,6 +18,20 @@ function readCookie(request, name) {
       ?.slice(name.length + 1) ?? null
   );
 }
+function cookie(name, value, maxAge, secure) {
+  return (
+    `${name}=${value}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAge}` +
+    (secure ? '; Secure' : '')
+  );
+}
+// Response.redirect() returns immutable headers, so build the 303 manually to
+// be able to attach Set-Cookie headers.
+function redirectWithCookies(location, cookies = []) {
+  const h = new Headers({ ...headers, Location: location });
+  cookies.forEach((c) => h.append('Set-Cookie', c));
+  return new Response(null, { status: 303, headers: h });
+}
+const base64url = (buffer) => Buffer.from(buffer).toString('base64url');
 
 function config(env) {
   const url = new URL(env.SUPABASE_URL || '');
@@ -26,18 +40,21 @@ function config(env) {
     !/^[a-z0-9-]+\.supabase\.co$/.test(url.hostname)
   )
     throw new Error();
+  const origin = new URL(env.CMS_ADMIN_ORIGIN || env.SITE_URL || '').origin;
   return {
     rpc: url.origin + '/rest/v1/rpc',
+    authBase: url.origin,
     key: env.SUPABASE_SERVICE_ROLE_KEY,
     anon: env.SUPABASE_ANON_KEY || '',
-    origin: new URL(env.CMS_ADMIN_ORIGIN || env.SITE_URL || '').origin,
+    origin,
+    secure: origin.startsWith('https://'),
+    redirect: origin + '/api/admin/recruitment/callback',
   };
 }
 
 export function createRecruitmentAdminHandler({
   env = process.env,
   fetchImpl = fetch,
-  clock = Date.now,
 } = {}) {
   async function callRpc(name, params) {
     const cfg = config(env);
@@ -61,8 +78,7 @@ export function createRecruitmentAdminHandler({
     const accessToken = readCookie(request, 'sb-access-token');
     if (!accessToken) return null;
 
-    const baseUrl = new URL(cfg.rpc).origin;
-    const response = await fetchImpl(`${baseUrl}/auth/v1/user`, {
+    const response = await fetchImpl(`${cfg.authBase}/auth/v1/user`, {
       headers: {
         apikey: cfg.anon,
         Authorization: `Bearer ${accessToken}`,
@@ -73,7 +89,6 @@ export function createRecruitmentAdminHandler({
     const user = await response.json();
     if (!user?.id) return null;
 
-    // Check allowlist
     const identity = await callRpc('admin_verify_identity', {
       p_auth_id: user.id,
     });
@@ -96,56 +111,91 @@ export function createRecruitmentAdminHandler({
     }
   }
 
-  return async (request, route) => {
+  function loginRedirect(cfg) {
+    // Server-side PKCE: keep the verifier in a short-lived HttpOnly cookie and
+    // send only its S256 challenge to Supabase Auth.
+    const verifier = base64url(randomBytes(48));
+    const challenge = base64url(createHash('sha256').update(verifier).digest());
+    const target = new URL(`${cfg.authBase}/auth/v1/authorize`);
+    target.search = new URLSearchParams({
+      provider: 'google',
+      redirect_to: cfg.redirect,
+      code_challenge: challenge,
+      code_challenge_method: 's256',
+    }).toString();
+    const response = redirectWithCookies(target.href, [
+      cookie('sb-pkce', verifier, 600, cfg.secure),
+    ]);
+    return response;
+  }
+
+  async function callbackHandler(request, cfg) {
+    const url = new URL(request.url);
+    const clearPkce = cookie('sb-pkce', '', 0, cfg.secure);
     try {
-      config(env);
-    } catch {
-      return error('CONFIGURATION', 503);
-    }
-
-    if (route === 'login' && request.method === 'GET') {
-      try {
-        const cfg = config(env);
-        const baseUrl = new URL(cfg.rpc).origin;
-        const supabaseAuthUrl = `${baseUrl}/auth/v1/authorize?provider=google`;
-        return Response.redirect(supabaseAuthUrl, 303);
-      } catch {
-        return error('CONFIGURATION', 503);
-      }
-    }
-
-    if (route === 'callback' && request.method === 'GET') {
-      // Supabase Auth callback is handled by Supabase itself.
-      // The redirect URL configured in Supabase dashboard points to:
-      // https://<site>/api/admin/recruitment/callback
-      // After successful auth, Supabase sets the session cookies and
-      // redirects back to the admin page.
-      const url = new URL(request.url);
-      const accessToken = url.searchParams.get('access_token');
-      const refreshToken = url.searchParams.get('refresh_token');
-      if (accessToken) {
-        // Set cookies and redirect to admin recruitment page
-        const response = Response.redirect(
-          new URL('/admin/recruitment', request.url).href,
-          303,
-        );
-        const maxAge = 3600 * 24; // 24 hours
-        response.headers.append(
-          'Set-Cookie',
-          `sb-access-token=${accessToken}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAge}; Secure`,
-        );
-        if (refreshToken) {
-          response.headers.append(
-            'Set-Cookie',
-            `sb-refresh-token=${refreshToken}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAge}; Secure`,
-          );
-        }
-        return response;
-      }
-      return Response.redirect(
-        new URL('/admin/recruitment?login=failed', request.url).href,
-        303,
+      const code = url.searchParams.get('code');
+      const verifier = readCookie(request, 'sb-pkce');
+      if (!code || !verifier) throw new Error();
+      const response = await fetchImpl(
+        `${cfg.authBase}/auth/v1/token?grant_type=pkce`,
+        {
+          method: 'POST',
+          redirect: 'error',
+          signal: AbortSignal.timeout(15000),
+          headers: {
+            'Content-Type': 'application/json',
+            apikey: cfg.anon,
+          },
+          body: JSON.stringify({ auth_code: code, code_verifier: verifier }),
+        },
       );
+      if (!response.ok) throw new Error();
+      const token = await response.json();
+      if (
+        typeof token.access_token !== 'string' ||
+        !token.access_token ||
+        typeof token.refresh_token !== 'string' ||
+        !Number.isFinite(token.expires_in)
+      )
+        throw new Error();
+      const accessAge = Math.min(Math.floor(token.expires_in), 3600);
+      const refreshAge = 60 * 60 * 24 * 30;
+      return redirectWithCookies(cfg.origin + '/admin/recruitment/', [
+        clearPkce,
+        cookie('sb-access-token', token.access_token, accessAge, cfg.secure),
+        cookie('sb-refresh-token', token.refresh_token, refreshAge, cfg.secure),
+      ]);
+    } catch {
+      return redirectWithCookies(
+        cfg.origin + '/admin/recruitment/?login=failed',
+        [clearPkce],
+      );
+    }
+  }
+
+  return async (request, route) => {
+    let cfg;
+    try {
+      cfg = config(env);
+    } catch {
+      return route === 'login' || route === 'callback'
+        ? Response.redirect(
+            new URL('/admin/recruitment/?login=unavailable', request.url).href,
+            303,
+          )
+        : error('CONFIGURATION', 503);
+    }
+
+    if (route === 'login' && request.method === 'GET')
+      return loginRedirect(cfg);
+    if (route === 'callback' && request.method === 'GET')
+      return callbackHandler(request, cfg);
+
+    if (route === 'logout') {
+      return redirectWithCookies(cfg.origin + '/admin/recruitment/', [
+        cookie('sb-access-token', '', 0, cfg.secure),
+        cookie('sb-refresh-token', '', 0, cfg.secure),
+      ]);
     }
 
     if (['GET', 'POST'].includes(request.method) === false)

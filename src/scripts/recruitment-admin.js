@@ -1,11 +1,9 @@
 (() => {
   const byId = (id) => document.getElementById(id);
   const api = '/api/admin/recruitment';
-  let accessToken = null;
   let applications = [];
   let total = 0;
   let filtered = 0;
-  let selectedReceipt = null;
   let busy = false;
   let page = 0;
   const PAGE_SIZE = 50;
@@ -37,13 +35,13 @@
       .forEach((el) => (el.disabled = value));
   };
 
-  const tokenFromCookie = () => {
-    const match = document.cookie.match(/(?:^|;\s*)sb-access-token=([^;]+)/);
-    return match ? match[1] : null;
+  const loggedIn = () => {
+    byId('workspace').hidden = false;
+    byId('login').hidden = true;
+    byId('logout').hidden = false;
   };
 
   const expire = () => {
-    accessToken = null;
     byId('workspace').hidden = true;
     byId('login').hidden = false;
     byId('logout').hidden = true;
@@ -53,11 +51,6 @@
   };
 
   const apiFetch = async (route, params = {}) => {
-    const token = accessToken || tokenFromCookie();
-    if (!token) {
-      expire();
-      return null;
-    }
     const url = new URL(api + '/' + route, location.origin);
     for (const [k, v] of Object.entries(params)) {
       if (v !== undefined && v !== null && v !== '') url.searchParams.set(k, v);
@@ -66,18 +59,13 @@
       const response = await fetch(url, {
         credentials: 'same-origin',
         cache: 'no-store',
-        headers: { Authorization: 'Bearer ' + token },
       });
-      const result = await response.json();
-      if (result.error?.code === 'UNAUTHORIZED') {
+      if (response.status === 401) {
         expire();
         return null;
       }
-      if (result.ok) {
-        byId('login').hidden = true;
-        byId('logout').hidden = false;
-        accessToken = token;
-      }
+      const result = await response.json();
+      if (result.ok) loggedIn();
       return result;
     } catch {
       if (!busy) message('Koneksi terputus.', true);
@@ -106,6 +94,27 @@
         card.label +
         '</span>';
       container.appendChild(div);
+    }
+  };
+
+  const escapeHtml = (text) => {
+    const d = document.createElement('div');
+    d.textContent = text;
+    return d.innerHTML;
+  };
+
+  const formatDate = (iso) => {
+    if (!iso) return '-';
+    try {
+      return new Date(iso).toLocaleString('id-ID', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    } catch {
+      return iso;
     }
   };
 
@@ -147,27 +156,6 @@
     byId('next-page').disabled = (page + 1) * PAGE_SIZE >= applications.length;
   };
 
-  const escapeHtml = (text) => {
-    const d = document.createElement('div');
-    d.textContent = text;
-    return d.innerHTML;
-  };
-
-  const formatDate = (iso) => {
-    if (!iso) return '-';
-    try {
-      return new Date(iso).toLocaleString('id-ID', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-    } catch {
-      return iso;
-    }
-  };
-
   const loadList = async (search, hods) => {
     setBusy(true);
     message('Memuat data…');
@@ -176,8 +164,8 @@
       if (search) params.search = search;
       if (hods) params.primary_hods = hods;
       const result = await apiFetch('applications', params);
-      if (!result || !result.ok) {
-        if (result === null) return;
+      if (!result) return;
+      if (!result.ok) {
         message(errors[result.error?.code] || errors.SERVER_ERROR, true);
         return;
       }
@@ -185,7 +173,6 @@
       total = result.data?.total || 0;
       filtered = result.data?.filtered || 0;
       page = 0;
-      selectedReceipt = null;
       byId('detail-area').hidden = true;
       byId('table-wrapper').hidden = false;
       renderTable();
@@ -202,12 +189,11 @@
     message('Memuat detail…');
     try {
       const result = await apiFetch('application', { receipt });
-      if (!result || !result.ok) {
-        if (result === null) return;
+      if (!result) return;
+      if (!result.ok) {
         message(errors[result.error?.code] || 'Gagal memuat detail.', true);
         return;
       }
-      selectedReceipt = receipt;
       byId('table-wrapper').hidden = true;
       byId('detail-area').hidden = false;
       byId('pagination').hidden = true;
@@ -271,45 +257,11 @@
     if (params.get('login') === 'failed') {
       message('Login gagal. Coba lagi.', true);
       history.replaceState(null, '', '/admin/recruitment/');
+    } else if (params.get('login') === 'unavailable') {
+      message('Konfigurasi server belum lengkap.', true);
+      history.replaceState(null, '', '/admin/recruitment/');
     }
 
-    const token = tokenFromCookie();
-    if (token) {
-      accessToken = token;
-      byId('login').hidden = true;
-      byId('logout').hidden = false;
-      byId('workspace').hidden = false;
-      loadList();
-      loadStats();
-    } else {
-      // Check URL for hash-fragment tokens from Supabase implicit flow
-      const hash = location.hash;
-      if (hash && hash.includes('access_token=')) {
-        const h = new URLSearchParams(hash.replace('#', '?'));
-        const t = h.get('access_token');
-        const r = h.get('refresh_token');
-        if (t) {
-          document.cookie =
-            'sb-access-token=' +
-            t +
-            '; Path=/; SameSite=Lax; Max-Age=' +
-            86400 +
-            '; Secure';
-          if (r)
-            document.cookie =
-              'sb-refresh-token=' +
-              r +
-              '; Path=/; SameSite=Lax; Max-Age=' +
-              86400 +
-              '; Secure';
-          location.href = '/admin/recruitment/';
-          return;
-        }
-      }
-      message('Belum login. Klik "Masuk dengan Google".');
-    }
-
-    // Populate filter dropdown
     const select = byId('filter-hods');
     for (const h of hodsDivisions) {
       const opt = document.createElement('option');
@@ -318,16 +270,8 @@
       select.appendChild(opt);
     }
 
-    byId('login').addEventListener('click', (e) => {
-      e.preventDefault();
-      location.href = byId('login').href;
-    });
-
-    byId('logout').addEventListener('click', async () => {
-      document.cookie = 'sb-access-token=; Path=/; Max-Age=0; Secure';
-      document.cookie = 'sb-refresh-token=; Path=/; Max-Age=0; Secure';
-      expire();
-      message('Sudah keluar.');
+    byId('logout').addEventListener('click', () => {
+      location.href = '/api/admin/recruitment/logout';
     });
 
     byId('filter-btn').addEventListener('click', () => {
@@ -354,12 +298,14 @@
     });
 
     byId('back-list').addEventListener('click', () => {
-      selectedReceipt = null;
       byId('detail-area').hidden = true;
       byId('table-wrapper').hidden = false;
       renderTable();
       message(filtered + ' dari ' + total + ' pendaftar');
     });
+
+    loadList();
+    loadStats();
   };
 
   if (document.readyState === 'loading') {

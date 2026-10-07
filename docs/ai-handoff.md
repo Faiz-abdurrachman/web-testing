@@ -52,6 +52,7 @@ ke project `web-community`. Server handler
 Halaman `/admin/recruitment/` (noindex). Tests 15/15 PASS (9 pass 1 + 7 pass 2).
 
 **BELUM LIVE — menunggu owner:**
+
 1. Aktifkan Supabase Auth Google provider di dashboard
 2. Set redirect URI `https://<site>/api/admin/recruitment/callback`
 3. INSERT owner ke `private.cms_admin_users`

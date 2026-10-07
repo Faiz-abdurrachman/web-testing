@@ -2,8 +2,9 @@
 
 Status: **LIVE 7 Oct 2026.** Pass 1 (intake) SELESAI di Supabase project
 `web-community`. Pass 2 (admin read / derived columns / audit) SELESAI — kode
-+ migration di `f01a89b`+pass2, menunggu owner aktifkan Supabase Auth Google
-provider + seed `cms_admin_users`. Belum ada push pass 2.
+
+- migration di `f01a89b`+pass2, menunggu owner aktifkan Supabase Auth Google
+  provider + seed `cms_admin_users`. Belum ada push pass 2.
 
 Dokumen ini turunan dari
 [`docs/cms-supabase-migration-plan.md`](cms-supabase-migration-plan.md) dan

@@ -473,3 +473,104 @@ test('admin audit log is written after every successful read', async () => {
   assert.equal(auditCalls[0].p_action, 'admin_read_list');
   assert.equal(auditCalls[0].p_actor_id, adminId);
 });
+
+test('login redirects to Supabase with a PKCE challenge and verifier cookie', async () => {
+  const handle = createRecruitmentAdminHandler({
+    env: supabaseEnv,
+    fetchImpl: () => {
+      throw Error('must not fetch');
+    },
+  });
+  const response = await handle(
+    new Request(adminUrl + '/login', { method: 'GET' }),
+    'login',
+  );
+  assert.equal(response.status, 303);
+  const location = new URL(response.headers.get('location'));
+  assert.equal(
+    location.origin + location.pathname,
+    'https://testproject.supabase.co/auth/v1/authorize',
+  );
+  assert.equal(location.searchParams.get('provider'), 'google');
+  assert.equal(
+    location.searchParams.get('redirect_to'),
+    'https://recruitment.test/api/admin/recruitment/callback',
+  );
+  assert.equal(location.searchParams.get('code_challenge_method'), 's256');
+  assert.ok((location.searchParams.get('code_challenge') || '').length >= 40);
+  const setCookie = response.headers.get('set-cookie') || '';
+  assert.match(setCookie, /sb-pkce=/);
+  assert.match(setCookie, /HttpOnly/);
+});
+
+test('callback exchanges the code for tokens and sets HttpOnly session cookies', async () => {
+  const calls = [];
+  const handle = createRecruitmentAdminHandler({
+    env: supabaseEnv,
+    fetchImpl: async (url, init) => {
+      calls.push({ url, init });
+      if (url.includes('/auth/v1/token?grant_type=pkce')) {
+        return new Response(
+          JSON.stringify({
+            access_token: 'access-abc',
+            refresh_token: 'refresh-abc',
+            expires_in: 3600,
+          }),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        );
+      }
+      throw Error('unexpected fetch ' + url);
+    },
+  });
+  const req = new Request(adminUrl + '/callback?code=the-code', {
+    method: 'GET',
+    headers: { cookie: 'sb-pkce=the-verifier' },
+  });
+  const response = await handle(req, 'callback');
+  assert.equal(response.status, 303);
+  assert.equal(
+    response.headers.get('location'),
+    'https://recruitment.test/admin/recruitment/',
+  );
+  const cookies = response.headers.getSetCookie();
+  assert.ok(cookies.some((c) => /^sb-access-token=access-abc/.test(c)));
+  assert.ok(cookies.some((c) => /^sb-refresh-token=refresh-abc/.test(c)));
+  assert.ok(cookies.some((c) => /^sb-pkce=;/.test(c)));
+  assert.ok(cookies.filter((c) => /HttpOnly/.test(c)).length >= 3);
+  assert.equal(calls.length, 1);
+  const sent = JSON.parse(calls[0].init.body);
+  assert.equal(sent.auth_code, 'the-code');
+  assert.equal(sent.code_verifier, 'the-verifier');
+});
+
+test('callback without a code fails closed to a login error', async () => {
+  const handle = createRecruitmentAdminHandler({
+    env: supabaseEnv,
+    fetchImpl: () => {
+      throw Error('must not fetch');
+    },
+  });
+  const response = await handle(
+    new Request(adminUrl + '/callback', { method: 'GET' }),
+    'callback',
+  );
+  assert.equal(response.status, 303);
+  assert.match(response.headers.get('location'), /login=failed/);
+});
+
+test('logout clears the session cookies', async () => {
+  const handle = createRecruitmentAdminHandler({
+    env: supabaseEnv,
+    fetchImpl: () => {
+      throw Error('must not fetch');
+    },
+  });
+  const response = await handle(
+    new Request(adminUrl + '/logout', { method: 'GET' }),
+    'logout',
+  );
+  assert.equal(response.status, 303);
+  const cookies = response.headers.getSetCookie();
+  assert.ok(cookies.some((c) => /^sb-access-token=;/.test(c)));
+  assert.ok(cookies.some((c) => /^sb-refresh-token=;/.test(c)));
+});
