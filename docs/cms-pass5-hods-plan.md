@@ -1,9 +1,9 @@
 # Master Work Plan — CMS pass 5: Hods → Supabase
 
 Status: **A–E selesai, LIVE `763bafc` pada kedua situs, acceptance all-tab PASS.**
-Faiz mengizinkan push SHA fitur, origin mengirim ke dua repo. Checkpoint live
-sesudahnya lokal dan memerlukan izin push baru. Plan ini menjadi arsip eksekusi
-pass Hods; NEXT Partners plan terpisah, auth CMS terakhir.
+Faiz mengizinkan push SHA fitur dan checkpoint526b428; keduanya dikirim ke dua
+repo. Planning Partners terbaru lokal perlu izin push baru. Plan ini arsip eksekusi
+pass Hods; NEXT [Partners plan](cms-pass6-partners-plan.md) PLAN ONLY, auth CMS terakhir.
 
 ## 1. Scope, sumber dan aturan baca
 
@@ -474,6 +474,12 @@ Projects/Team/recruitment pada pass ini. Seluruh CMS belum selesai.
   live-browser-production.json, 24 screenshots, live-smoke.json, time-check.json.
   Summary tracked di AGENTS/ai-handoff/kickoff/TODO/SOP/master plan.
 
-DoD Hods A–E terpenuhi. Checkpoint LIVE ini lokal belum dipush; izin fitur
-`763bafc` consumed. NEXT Partners belum diimplementasikan, auth final pending,
+DoD Hods A–E terpenuhi. Checkpoint LIVE **526b428 sudah dipush** dengan izin
+Faiz. Testing READY 7 Oct 2026 13:12:20.677 UTC, production 13:13:44.014 UTC;
+primary aliases exact SHA dan HTTP smoke kedua situs PASS (six Hods headings,
+Home/Recruitment/Partners200, admin401, recruitment closed). Proof ignored
+`aliases-526b428.json` dan `checkpoint-smoke-526b428.json`.
+Izin fitur `763bafc` dan checkpoint `526b428` consumed. Planning Partners
+terbaru lokal belum push; lihat [plan](cms-pass6-partners-plan.md).
+NEXT Partners belum diimplementasikan, auth final pending,
 GAS masih dependency. Tidak mengulang seed SQL/Team atau mengganti UI/media/auth.

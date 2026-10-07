@@ -1,22 +1,21 @@
 # SOP — Presisi piksel (WAJIB untuk semua section/halaman)
 
-## Penggunaan untuk CMS — checkpoint aktif pass 5 Hods planning
+## Penggunaan untuk CMS — checkpoint aktif pass 6 Partners planning
 
-Baseline kode live `6b36519`: Projects/Team/Roles/Domains Supabase, Hods/Partners
-GAS. NEXT [Hods Master Work Plan](cms-pass5-hods-plan.md) + [CMS SOP](cms-sop.md),
-**PLAN ONLY**, belum SQL/kode/apply/deploy Hods. Planning tidak mengubah aturan
-presisi berikut. UI/font/artwork/geometri/reference/assertion terkunci;
-metadata tab label/kind/color/art tetap lokal. Semua 21 tab diuji saat pass.
-Satu collection per pass, tujuh gate + SEO; jangan mengubah baseline agar tes
-remote Team drift tampak cocok. Sebelum perubahan UI yang diotorisasi, ikuti
-per-section protocol penuh; pass Hods hanya sumber konten build-time.
-NEXT GAS/Growth dalam dokumen historis tidak menjadi work order aktif.
+Deployed checkpoint `526b428`, fitur Hods `763bafc`; Projects/Team/Roles/Domains/
+Hods Supabase, Partners GAS. NEXT [Partners Master Work Plan](cms-pass6-partners-plan.md)
+dan [CMS SOP](cms-sop.md), **PLAN ONLY**, belum SQL/runtime/apply/deploy Partners.
+Planning tidak mengubah aturan presisi. UI/font/artwork/geometri/reference/
+assertion terkunci; count10/5/5 dan why-icons tetap lokal. Satu collection/pass,
+tujuh gate + SEO; jangan mengubah baseline untuk Team drift. Pass Partners hanya
+sumber konten build-time; perubahan UI perlu authorization dan protocol penuh
+per section. NEXT GAS/Growth historis tidak menjadi work order aktif.
 
 Aturan tetap untuk UI/admin yang diotorisasi di pass tersendiri: admin custom
 belum punya node Figma, tulis layout/spacing/font/test criteria dan jangan
 mengarang node/PNG. Fixture growth terpisah dari fixture baseline, jangan
 melonggarkan assertion geometri. Baked artwork bukan field editor; media
-privat perlu pipeline cache. Ini aturan umum, bukan tambahan scope Hods.
+privat perlu pipeline cache. Ini aturan umum, bukan tambahan scope Partners.
 
 Tujuan proyek ini: **pixel-accurate ke Figma/PNG**. Dokumen ini adalah protokol
 keras yang harus diikuti tiap mengubah/membuat UI. Ringkasnya: **export node PNG

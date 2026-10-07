@@ -2,13 +2,18 @@
 
 ## Checkpoint aktif — Hods LIVE, NEXT Partners
 
-Kode live **`763bafc`**, dipush ke testing + production dengan izin Faiz pada
-7 Oct 2026. Saat push main/origin/main/production/main sinkron pada SHA ini;
-checkpoint LIVE sesudahnya disimpan dalam commit lokal terpisah, belum push.
-Kedua domain publik terverifikasi assigned ke deployment SHA baru, **READY**:
+Baseline deployed terbaru **`526b428`** (checkpoint docs Hods), fitur runtime
+Hods **`763bafc`**. Keduanya sudah dipush dengan izin Faiz; setelah push checkpoint,
+main/origin/main/production/main sinkron `526b428`. Kedua primary domains assigned
+ke SHA checkpoint, **READY**, 7 Oct 2026:
 
-- testing: **12:53:12.956 UTC / 19:53:12.956 WIB**;
-- production: **12:55:00.507 UTC / 19:55:00.507 WIB**.
+- testing: **13:12:20.677 UTC / 20:12:20.677 WIB**;
+- production: **13:13:44.014 UTC / 20:13:44.014 WIB**.
+
+Rebuild docs-only: six Hods headings exact, Home/Recruitment/Partners HTTP200,
+admin projects/team/media anonymous401 dan recruitment closed kedua situs PASS.
+Full all-tab browser acceptance fitur `763bafc` tetap bukti di bawah.
+Planning Partners terbaru lokal, lihat git log; belum push dan bukan SQL/runtime.
 
 Timestamp deployment dari API Vercel actual. Jam workspace pada probe HTTP Date
 sekitar 138 detik di belakang Vercel; timestamps `checkedAt` browser/artifacts
@@ -53,10 +58,13 @@ vercel-env, deployments/aliases-763bafc, live-browser-testing/production,
 24 screenshot six detail routes × dua widths × dua situs, live-smoke,
 time-check. Ringkasan tracked ini menjadi handoff bila artifacts hilang.
 
-NEXT: **pass 6 Partners**, plan tersendiri sebelum implementasi; sesudahnya auth
-CMS terakhir. Seluruh CMS belum selesai; GAS belum boleh dihapus. Izin push
-`763bafc` sudah digunakan: **konfirmasi sebelum push baru**, termasuk checkpoint
-docs lokal. [Hods plan](cms-pass5-hods-plan.md), [TODO](cms-migration-todo.md), [kickoff](cms-migration-kickoff.md).
+NEXT: **pass 6 Partners**, [Master Work Plan](cms-pass6-partners-plan.md)
+rinci **PLAN ONLY**, belum SQL/runtime/apply/deploy Partners. Ikuti checklist
+A–E dan prompt kickoff §6; setelah Partners accepted, auth CMS terakhir.
+Seluruh CMS belum selesai; GAS belum boleh dihapus. Izin push `763bafc` dan
+`526b428` sudah digunakan: **konfirmasi sebelum push baru**, termasuk planning
+docs lokal. [Hods proof](cms-pass5-hods-plan.md), [TODO](cms-migration-todo.md),
+[kickoff](cms-migration-kickoff.md).
 
 ## Checkpoint sebelumnya — Domains LIVE, NEXT Hods
 

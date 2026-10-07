@@ -5,8 +5,11 @@ Pass 5 Hods **A–E selesai, LIVE `763bafc`** pada kedua situs.
 Vercel READY testing 12:53:12.956 UTC, production 12:55:00.507 UTC (7 Oct 2026),
 primary domains assigned ke SHA fitur. All 21-tab acceptance kedua situs ×
 390/1440 × Home/Recruitment contexts PASS, admin anonymous 401, recruitment closed.
-NEXT **Partners**, plan terpisah dahulu, lalu auth CMS terakhir. GAS tetap wajib.
-Checkpoint LIVE lokal belum push; izin push `763bafc` consumed.
+Checkpoint **526b428 sudah push**, kedua aliases exact SHA READY: testing
+13:12:20.677 UTC, production 13:13:44.014 UTC (7 Oct 2026), HTTP smoke PASS.
+NEXT [Partners plan](cms-pass6-partners-plan.md) **PLAN ONLY**, lalu auth CMS
+terakhir. GAS tetap wajib. Izin push `763bafc`/`526b428` consumed; planning
+terbaru lokal, konfirmasi sebelum push baru.
 
 ## 1. Yang benar-benar sudah selesai
 
@@ -85,28 +88,46 @@ Bukti local/SQL di plan §9, deployment/all-tab live acceptance di §10.
 - [x] E4: all six Hods/21 tabs × 390/1440 × both sites + Home/Recruitment entry/back/VT.
 - [x] E5: anonymous admin 401/recruitment closed, no production mutation + LIVE checkpoint/DoD.
 
-## 4. Sesudah Hods (belum dikerjakan)
+## 4. Pass 6 Partners — PLAN ONLY, implementasi belum dimulai
 
-| Urutan            | Status           | Scope awal                                        |
-| ----------------- | ---------------- | ------------------------------------------------- |
-| Pass 6 Partners   | TODO             | kategori/why/logo repo; plan tersendiri           |
-| Auth CMS terakhir | BELUM DIPUTUSKAN | pilih login, owner/cookie/CSRF/dua domain         |
-| Penghapusan GAS   | BELUM DIIZINKAN  | semua pass diterima, backup/observasi + izin baru |
+[Master Work Plan Partners](cms-pass6-partners-plan.md) memuat kontrak exact,
+inventory empat section terkunci, SQL proposal, matrix tes, secrets/stop/DoD.
+Planning selesai tidak membuktikan rekonsiliasi GAS/database atau implementasi.
+
+- [x] Plan rinci + kickoff §6 + urutan baca wajib disiapkan untuk AI baru.
+- [ ] A1–A4: baca/git/Node22/env, fresh baseline, GAS/snapshot/destination
+      reconciliation, capture inputs dan Team drift tanpa mutation.
+- [ ] B1–B5: additive singleton SQL/RLS/strict validators/anon RPC, PostgreSQL
+      ephemeral/security/Unicode/path/rerun, hybrid/mocks/fail closed, local tests.
+- [ ] C1–C3: immediate reconciliation, additive apply once, real HTTP anon +
+      catalog/role denied proof, same-input pre/post parity tanpa reset Team.
+- [ ] D1–D4: tujuh gate + SEO, Partners browser widths/boundaries,
+      tiga admin mocks, snapshot/19 HTML exact, docs + feature commit siap review.
+- [ ] E1–E5: env kedua Vercel, izin SHA push baru, dua READY exact aliases,
+      Partners390/1440 kedua situs + regression/admin401/closed, LIVE checkpoint.
+
+## 5. Sesudah Partners (belum dikerjakan)
+
+| Urutan            | Status           | Scope awal                                            |
+| ----------------- | ---------------- | ----------------------------------------------------- |
+| Pass 6 Partners   | PLAN ONLY        | tiga kategori, empat why, satu logo repo; A–E pending |
+| Auth CMS terakhir | BELUM DIPUTUSKAN | pilih login, owner/cookie/CSRF/dua domain             |
+| Penghapusan GAS   | BELUM DIIZINKAN  | semua pass diterima, backup/observasi + izin baru     |
 
 Milestones/settings bukan tambahan scope otomatis. Tinjau apakah benar dipakai
 sebelum menawarkan migrasi; jangan menambah pass/collection sendiri.
 
-## 5. Temuan dan keputusan yang harus dibawa ke AI baru
+## 6. Temuan dan keputusan yang harus dibawa ke AI baru
 
 - [ ] Team drift: **catat dan isolasi**, belum diizinkan untuk diperbaiki/reseed.
-      Tidak menghalangi tes Hods yang memakai perbandingan sebelum/sesudah.
+      Tidak menghalangi tes Partners yang memakai perbandingan sebelum/sesudah.
 - [ ] Full GAS export masih divalidasi sebelum overrides; menghapus tabs
       collection migrated bisa menggagalkan build. Refactor ini belum dikerjakan.
 - [ ] Local anon key belum ada di .env.local saat pass 3; tersedia untuk deploy
       yang berhasil. Verifikasi private key retrieval/in-memory; jangan cetak key.
 - [ ] Private Storage vs build anon key perlu audit media tersendiri: cache lokal
       bisa menyembunyikan kegagalan cold-cache. Tidak dibuktikan Roles tests dan
-      tidak boleh mengubah bucket policy agar public sebagai jalan pintas Hods.
+      tidak boleh mengubah bucket policy agar public sebagai jalan pintas Partners.
 - [ ] Catalog proof tidak setara mutation/role-execution proof seluruh fitur.
 - [ ] Auth CMS: Google lewat Supabase atau pertahankan custom masih pending;
       bagian master plan lama adalah proposal, bukan approval.
@@ -114,9 +135,9 @@ sebelum menawarkan migrasi; jangan menambah pass/collection sendiri.
 - [ ] Retensi/pembukaan recruitment: belum diputuskan; accepting:false tetap.
 
 Item bagian ini adalah issue/keputusan terpisah, **bukan** instruksi agar AI
-Hods menyelesaikannya semua. Laporkan blocker yang benar-benar terjadi.
+Partners menyelesaikannya semua. Laporkan blocker yang benar-benar terjadi.
 
-## 6. Aturan perubahan status
+## 7. Aturan perubahan status
 
 Pisahkan status `plan`, `kode lokal`, `SQL applied`, `QA lokal`, `pushed`,
 `dua deployments`, `live acceptance`. Satu status tidak membuktikan lainnya.

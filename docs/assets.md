@@ -1,14 +1,15 @@
 # Asset provenance
 
-## Checkpoint CMS / provenance — Domains live `6b36519`
+## Checkpoint CMS / provenance — Hods live, NEXT Partners
 
-CMS Projects/Team/Roles/Domains bersumber Supabase; Hods/Partners GAS.
-Domains A–E selesai: dua Vercel READY dan Home/Recruitment 390/1440 PASS.
-Kode live `6b36519`, dua deployments/acceptance Domains selesai. Lihat
-[Domains Master Work Plan](cms-pass4-domains-plan.md) + [TODO](cms-migration-todo.md).
-Pass Domains mengubah sumber build-time saja; tidak ada asset/font/CSS/artwork/reference PNG
-atau geometry/assertion yang diubah. Domains metadata design tint/x/y/gap
-masih lokal src/data/domains.ts; DB hanya id/title/description/labels.
+Deployed checkpoint `526b428`, fitur Hods `763bafc`; kedua Vercel READY dan
+acceptance Hods A–E selesai. Projects/Team/Roles/Domains/Hods Supabase;
+Partners masih GAS. NEXT [Partners plan](cms-pass6-partners-plan.md) PLAN ONLY,
+belum SQL/runtime/apply/deploy. Full GAS export tetap dependency.
+Tidak ada asset/font/CSS/artwork/reference PNG/geometry/assertion berubah pada
+pass Hods maupun planning Partners. Partners count10/5/5 dan why-icons tetap
+lokal; DB proposal hanya tiga labels, satu logo path, empat title/description.
+[Hods proof](cms-pass5-hods-plan.md), [TODO](cms-migration-todo.md).
 
 Home node 1430:2138 dan Recruitment node 1436:3512 memakai kartu bersama;
 blank slots nested labels tidak boleh dibersihkan. Frame/reference dan

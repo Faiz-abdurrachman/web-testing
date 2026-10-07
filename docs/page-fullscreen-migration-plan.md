@@ -1,13 +1,14 @@
 # Page Full-Screen Migration Plan — Hero Gambar + Section 100svh
 
-## Checkpoint aktif CMS — Domains live `6b36519`
+## Checkpoint aktif CMS — Hods live, NEXT Partners
 
-Full-screen selesai; Contact tetap hero Figma-exact tinggi 954. Tidak ada
-perubahan full-screen/UI pada migration Domains ini. CMS Projects/Team/Roles
-dan Domains live `6b36519`; A–E + QA lokal + dua-site acceptance selesai.
-Lihat [plan Domains](cms-pass4-domains-plan.md),
+Full-screen selesai; Contact tetap hero Figma-exact tinggi954. Deployed
+checkpoint `526b428`, fitur Hods `763bafc`; lima CMS collection Supabase,
+Partners GAS. Hods A–E/dua situs accepted. NEXT
+[Partners plan](cms-pass6-partners-plan.md) **PLAN ONLY**, belum SQL/runtime/apply.
+Tidak ada perubahan UI/full-screen pada planning/backend pass ini.
 [TODO](cms-migration-todo.md), [kickoff](cms-migration-kickoff.md).
-Entri NEXT video/GAS Growth di riwayat bukan work order aktif.
+NEXT video/GAS Growth historis bukan work order aktif.
 
 Status: **#9 SELESAI** untuk Homepage (`b228f3c`, 4 Oct), About Us (5 Oct),
 Recruitment, Partners, Hall of Frames (6 Oct). **Contact DIKECUALIKAN (6 Oct
@@ -21,9 +22,10 @@ full-screen (satu section = satu layar) + hero berbasis gambar. Ikuti
 
 ---
 
-NEXT [Hods Master Work Plan](cms-pass5-hods-plan.md) rinci **PLAN ONLY**;
-6 IDs/21 tabs/55 sections/8 bullets. Node/reference/spacing/font/artwork existing
-terkunci; tidak ada fresh Figma export atau UI change sesi planning.
+NEXT [Partners Master Work Plan](cms-pass6-partners-plan.md) rinci **PLAN ONLY**;
+empat section existing terkunci; tiga labels, satu logo path, empat why records.
+Node/reference/spacing/font/artwork terkunci; tidak ada fresh Figma export atau
+UI change sesi planning.
 
 ## 0. Keputusan desain (disetujui user, 4 Oct 2026)
 
