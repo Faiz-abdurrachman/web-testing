@@ -1,9 +1,10 @@
 # CMS → Supabase — kickoff aktif untuk AI baru
 
 User: **Faiz**, panggil **bro**, bahasa Indonesia.
-Work order aktif: **pass 4 Domains**, A–D selesai; E pending push berizin.
-Baseline kode situs live `53f92f8`. Domains SQL applied, kode + QA lokal siap
-review; belum push/deploy/acceptance Domains. Lihat checkpoint AI handoff.
+Work order berikutnya: **pass 5 Hods**, satu collection, Master Work Plan dahulu.
+Baseline kode live **`6b36519`**; Domains A–E selesai, kedua deployments READY dan
+acceptance Home/Recruitment/routing kedua situs PASS. Checkpoint docs lokal
+belum dipush; izin push feature telah digunakan.
 
 ## 1. Status yang benar
 
@@ -13,10 +14,12 @@ review; belum push/deploy/acceptance Domains. Lihat checkpoint AI handoff.
 | CMS Projects pass 1  | Supabase Postgres + Storage projects, live                        |
 | CMS Team pass 2      | Supabase Postgres + Storage team, live                            |
 | CMS Roles pass 3     | Supabase Postgres, public read RPC cms_load_roles, live           |
-| CMS Domains          | SQL Supabase applied; kode lokal siap, situs masih GAS            |
+| CMS Domains          | Supabase public anon RPC, live dan acceptance selesai             |
 | CMS Hods             | GAS; pass 5 sesudah Domains                                       |
 | CMS Partners         | GAS; pass 6 sesudah Hods                                          |
 | CMS auth             | OAuth custom existing, jangan sentuh sebelum seluruh data selesai |
+
+Bukti historis Roles sebelum pass 4 (status Domains terbaru di checkpoint):
 
 Commit `53f92f8` terkirim ke testing + production dengan izin user. Kedua
 Vercel SUCCESS, live browser six Roles × 390/1440 × dua situs PASS; admin API
@@ -62,8 +65,8 @@ Jangan membaca arsip GAS sebagai work order untuk membuat ulang setup.
   URLs bertoken, .env.local atau credentials.
 - Konfirmasi sebelum **push baru**; origin memiliki dua push URLs. Approval
   `53f92f8` sudah digunakan, bukan izin push otomatis pass 4 atau dokumen baru.
-- Implementasi Domains telah diotorisasi dan A–D selesai. Checklist E tetap
-  pending; jangan menganggap SQL applied berarti situs sudah LIVE.
+- Domains A–E selesai dengan izin push baru. NEXT Hods perlu plan sendiri;
+  jangan apply ulang SQL Domains atau menganggap semua CMS sudah selesai.
 
 ## 4. Temuan yang wajib dipertahankan
 
@@ -94,19 +97,18 @@ tests/cms-roles-supabase.test.mjs, tests/cms.test.mjs,
 tests/cms-media.test.mjs. Migration Domains actual: 20261011010000, applied. Tes baru:
 tests/cms-domains-supabase.test.mjs. Jangan mengubah actual Roles SQL.
 
-## 6. Prompt lanjut setelah review
+## 6. Prompt lanjut pass 5
 
 ```text
-Bro, baca checkpoint AGENTS/ai-handoff + plan Domains + TODO dahulu.
-Domains A–D selesai: SQL applied, RPC anon/role proof, QA lokal dan baseline parity.
-Situs live masih 53f92f8. Periksa commit/status lokal dan izin push terbaru.
-Jangan menganggap prompt ini memberi izin push; tunggu approval konkret Faiz.
-Verifikasi empat env Supabase + GAS pada dua Vercel melalui akses privat;
-credential CLI terakhir belum bisa membaca kedua project. Setelah approval,
-push origin main sekali, pastikan dua SHA/deployment baru SUCCESS, lalu jalankan
-checklist E Home/Recruitment/routing 390/1440 kedua situs. No mutations.
-Update checkpoint dengan bukti actual, jangan apply ulang SQL atau reseed Team.
-Hods/Partners/auth belum dikerjakan, tidak ada izin hapus GAS.
+Bro, baseline kode live 6b36519: Projects/Team/Roles/Domains Supabase.
+Domains A–E selesai: SQL/RPC nyata, dua Vercel READY, Home/Recruitment/routing
+390/1440 kedua situs PASS. Baca kickoff → AGENTS → ai-handoff → TODO → master
+migration plan → CMS SOP. Periksa git/commit docs lokal terbaru dan Node 22.
+NEXT Hods: susun Master Work Plan tersendiri dahulu, inventaris six IDs +
+ordered tabs/panels/text vs bullets/slot counts, rekonsiliasi GAS/snapshot.
+Jangan implementasi collection lain atau auth. UI/Zod/assertions tetap, jangan
+reseed Team atau hapus tab/env GAS. Full suite CMS tanpa env server.
+Kerja/commit lokal diizinkan; konfirmasi sebelum push baru, origin deploy dua situs.
 ```
 
 ## 7. Keputusan yang tidak boleh diasumsikan

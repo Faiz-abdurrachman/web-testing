@@ -1,8 +1,10 @@
 # CMS → Supabase — TODO dan status penerimaan
 
-Work order aktif: **pass 4 Domains**, [Master Work Plan](cms-pass4-domains-plan.md).
-Baseline kode live `53f92f8`. Domains SQL applied dan kode/QA lokal selesai;
-push/deploy/acceptance baru belum dilakukan. Satu collection per pass, auth terakhir.
+Work order berikutnya: **pass 5 Hods**, perlu Master Work Plan tersendiri.
+Domains [Master Work Plan](cms-pass4-domains-plan.md) A–E selesai, LIVE `6b36519`.
+Kedua Vercel READY + Home/Recruitment/routing 390/1440 acceptance PASS.
+Satu collection per pass, auth terakhir. Checkpoint docs ini lokal sampai izin
+push baru; feature `6b36519` sudah terkirim ke dua repo.
 
 ## 1. Yang benar-benar sudah selesai
 
@@ -27,7 +29,7 @@ Bukti pass 3 (ignored, boleh tidak tersedia di workspace baru):
 Tidak menjalankan mutation Team live untuk membuktikan Roles. Team remote
 berbeda snapshot repo sebelum pass 3; non-Roles pre/post identik, tidak diubah.
 
-## 2. Pass 4 Domains — TODO berurutan
+## 2. Pass 4 Domains — selesai A–E
 
 Rincian executable checklist A–E dan matriks tes ada di Master Work Plan.
 
@@ -45,15 +47,17 @@ Rincian executable checklist A–E dan matriks tes ada di Master Work Plan.
 - [x] D1: build/verify/navbar/VT/responsive/spacing/format/SEO PASS.
 - [x] D2: native/legacy/Team admin regression; snapshot/HTML baseline parity.
 - [x] D3: docs + commit fitur siap review, proof sanitised tersimpan.
-- [ ] E1: empat env Supabase pada kedua Vercel, GAS env tetap untuk Hods/Partners.
-- [ ] E2: **konfirmasi push baru** lalu push origin, dua remote SHA sinkron.
-- [ ] E3: dua latest deployments SHA pass 4 SUCCESS.
-- [ ] E4: Home/Recruitment 390/1440, six cards/blank slots/rail/links/back;
+- [x] E1: empat env Supabase pada kedua Vercel, GAS env tetap untuk Hods/Partners.
+- [x] E2: **konfirmasi push baru** lalu push origin, dua remote SHA sinkron.
+- [x] E3: dua latest deployments SHA pass 4 SUCCESS.
+- [x] E4: Home/Recruitment 390/1440, six cards/blank slots/rail/links/back;
       anonymous admin 401 + recruitment closed, no write test production.
-- [ ] E5: update checkpoint LIVE dengan proof; baru lock pass 4.
+- [x] E5: update checkpoint LIVE dengan proof; baru lock pass 4.
 
-Jika gate gagal jangan menandai tahap berikutnya complete, jangan longgarkan
-assertion atau seed collection lain. Tidak ada fallback stale.
+Proof live `artifacts/cms-pass4/{vercel-env,env-fix,deployments-6b36519,live-browser}.json`.
+Testing READY 12:02:26.550 UTC, production READY 12:04:06.630 UTC, 7 Oct 2026.
+Token server missing pada kedua project telah dilengkapi encrypted sebelum push.
+Tidak ada fallback stale; GAS full export tetap dependency.
 
 ## 3. Work order sesudah pass 4 (belum dikerjakan)
 

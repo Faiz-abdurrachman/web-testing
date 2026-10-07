@@ -1,20 +1,24 @@
 # Master Work Plan — CMS pass 4: Domains → Supabase
 
-Status: **A–D selesai lokal + SQL applied; E pending approval push/deploy/acceptance.**
-Baseline situs live tetap `53f92f8`; kode Domains belum dipush.
-Implementasi diotorisasi Faiz pada 7 Oct 2026, setelah planning lokal `7189fcc`.
+Status: **LIVE — checklist A–E selesai; commit kode `6b36519`.**
+Baseline sebelum pass: `53f92f8`; planning lokal `7189fcc`. Faiz mengizinkan
+push `6b36519`, satu push origin terkirim ke kedua repo.
 
-Proof database live: enam Domains exact, public RPC anon/service_role allowed,
-authenticated denied; catalog RLS + deny policy + private grants dan 13 actual
-role permission denials PASS. Same captured inputs pre/post hybrid identik,
-Team drift preexisting tidak diubah. SQL applied tanpa mengubah ledger.
-Probe RPC awal gagal sesudah apply; berikutnya HTTP 200 exact. Tidak apply ulang;
-root cause probe awal belum diisolasi. Verified 11:50:54 UTC / 18:50:54 WIB.
+Kedua Vercel READY/SUCCESS actual pada 7 Oct 2026: testing 12:02:26.550 UTC
+(19:02:26.550 WIB), production 12:04:06.630 UTC (19:04:06.630 WIB).
+Home + Recruitment × 390/1440 × dua situs PASS: enam cards/copy/order/nested
+blank slots exact, keyboard/arrows/native touch 390, semua enam HoDS links dan
+back links sesuai origin. Admin anonymous 401, recruitment closed, no mutations.
+Empat Supabase + dua GAS env keys Production kedua project verified;
+SUPABASE_ACCESS_TOKEN yang missing di keduanya dilengkapi encrypted sebelum push.
 
-QA Node 22.23.0: CMS 56 PASS/10 Team live SKIP, Recruitment 24 PASS,
-PostgreSQL ephemeral, tiga browser admin mock empat width, tujuh gate + SEO,
-responsive 468/468, 23 halaman SEO, 39 komponen spacing, snapshot dan 19 HTML
-publik byte-identik. Bukti `artifacts/cms-pass4/` ignored.
+SQL applied, anon HTTP/role read exact, RLS/deny/catalog dan 13 actual permission
+denials PASS. Same-input pre/post hybrid identik, Team drift tetap.
+QA lokal Node 22.23.0: CMS 56 PASS/10 live Team SKIP, Recruitment 24 PASS,
+PostgreSQL ephemeral, tiga admin mock empat width, 7 gate + SEO, responsive
+468/468, 23 pages SEO, 39 komponen spacing, snapshot/19 HTML byte-identik.
+Proof ignored `artifacts/cms-pass4/`; ringkasan di checkpoint/handoff.
+Dokumen kontrak/proposal historis berikut mempertahankan keputusan sebelum pass.
 
 ## 1. Keputusan scope dan urutan
 
@@ -40,7 +44,7 @@ Storage baru, webhook baru, dependency baru, atau perubahan handler admin.
 Write existing Projects/Team tetap Management API; Domains hanya RPC baca.
 Jangan hapus GAS/Sheet/Drive/backup atau membuat ulang setup existing.
 
-## 2. Fakta kode yang harus menjadi dasar
+## 2. Fakta baseline sebelum implementasi
 
 - `src/data/cms-schema.mjs`: `domains = orderedDomains(domain)`, tepat enam
   ID berurutan; `id`, `title`, `description`, `labels` saja (strict object).
@@ -202,7 +206,7 @@ lalu cache media existing dan atomic write seperti sekarang.
 
 ## 7. Tahapan eksekusi dan TODO rinci
 
-Checklist status di [migration TODO](cms-migration-todo.md); status actual A–D sudah selesai; E masih pending. Lock satu tahap sebelum masuk tahap dependen.
+Checklist status di [migration TODO](cms-migration-todo.md); status actual A–E sudah selesai. Lock satu tahap sebelum masuk tahap dependen.
 
 ### A. Orientasi dan baseline
 
@@ -271,19 +275,19 @@ Checklist status di [migration TODO](cms-migration-todo.md); status actual A–D
 
 ### E. Push dan acceptance dua situs
 
-- [ ] Periksa empat env wajib pada kedua Vercel; jangan menghapus env GAS saat
+- [x] Periksa empat env wajib pada kedua Vercel; jangan menghapus env GAS saat
       Hods/Partners masih membutuhkan full export.
-- [ ] Minta konfirmasi push **baru** untuk commit pass 4 yang konkret/reviewable.
-- [ ] Push `git push origin main` sekali (dua push URLs), fetch kedua remotes,
+- [x] Minta konfirmasi push **baru** untuk commit pass 4 yang konkret/reviewable.
+- [x] Push `git push origin main` sekali (dua push URLs), fetch kedua remotes,
       pastikan SHA local/origin/production sama; verifikasi tiap repo benar terkirim.
-- [ ] Dua Vercel status SUCCESS untuk **SHA baru**, bukan deployment lama.
-- [ ] Browser Home + Recruitment 390/1440: enam domain, content/blank chips/order,
+- [x] Dua Vercel status SUCCESS untuk **SHA baru**, bukan deployment lama.
+- [x] Browser Home + Recruitment 390/1440: enam domain, content/blank chips/order,
       rail navigation/touch/keyboard, tidak overflow/pageerror, correct links/back.
-- [ ] Smoke HoDS detail dari kedua origin untuk memastikan routing, bukan
+- [x] Smoke HoDS detail dari kedua origin untuk memastikan routing, bukan
       mengklaim Hods sudah ikut migrasi.
-- [ ] API admin anonymous 401; recruitment `{ok:true, accepting:false}`; tidak
+- [x] API admin anonymous 401; recruitment `{ok:true, accepting:false}`; tidak
       melakukan recruitment POST atau mutation Projects/Team.
-- [ ] Catat timestamp UTC/WIB benar; checkpoint lokal plan → live dengan bukti.
+- [x] Catat timestamp UTC/WIB benar; checkpoint lokal plan → live dengan bukti.
       Jangan menyebut pass 4 LIVE hanya karena SQL/RPC telah tersedia.
 
 ## 8. Test matrix minimum

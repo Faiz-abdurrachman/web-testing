@@ -1,26 +1,24 @@
 # SOP CMS — Data Sorcerers
 
-## Checkpoint aktif — pass 3 situs live, pass 4 SQL applied/kode lokal
+## Checkpoint aktif — Domains LIVE, NEXT Hods
 
-[Roles](cms-pass3-roles-plan.md) selesai deploy/acceptance pada `53f92f8`:
-dua Vercel SUCCESS, six Roles × 390/1440 × dua situs PASS, admin API anonymous
-401, recruitment closed. [Domains Master Work Plan](cms-pass4-domains-plan.md)
+Domains pass 4 A–E selesai pada `6b36519`, kedua Vercel READY/SUCCESS, acceptance
+Home/Recruitment/routing × 390/1440 PASS, admin anonymous 401, recruitment closed.
+Testing READY 7 Oct 12:02:26.550 UTC, production 12:04:06.630 UTC.
+Projects/Team/Roles/Domains read RPC anon; Hods/Partners full GAS export.
+Full GAS validation tetap dependency sebelum overrides; preserve tabs/env.
+SQL private Domains + RLS/deny + anon RPC verified; tidak ada editor/write API.
+Empat Supabase + dua GAS env keys kedua Vercel Production verified. Missing
+SUPABASE_ACCESS_TOKEN di kedua project dilengkapi encrypted sebelum push.
 
-- [TODO](cms-migration-todo.md): A–D selesai, E pending approval push/dua deploy/
-  acceptance. SQL Domains applied pada 7 Oct; RPC anon + role proof PASS.
-  Kode lokal Projects/Team/Roles/Domains memakai RPC anon, Hods/Partners GAS.
-  Situs live masih pass 3. Full export GAS tetap tervalidasi seluruh snapshot;
-  bukan handler admin gas(). QA lokal CMS 56 PASS/10 SKIP, recruitment 24 PASS,
-  PostgreSQL nyata, 7 gate + SEO, tiga admin mock empat width, snapshot/19 HTML
-  identik. Proof `artifacts/cms-pass4/` ignored. Fresh Vercel env proof pending akses.
-
-Domains/Roles read-only tanpa editor; auth/media/handler tetap. Auth CMS terakhir;
-mekanisme pending. Jangan load env server pada seluruh test:cms (Team live
-mutation tests). Local anon key absent saat pass 3, verifikasi mengambil key
-Management API in-memory tanpa print. Jangan memakai privileged key sebagai anon.
-Team remote drift preexisting tidak diperbaiki di pass Roles/Domains. Docs/code
-historis di bawah bukan instruksi mengulang setup; sumber aktif lihat kickoff.
-Konfirmasi sebelum push baru; origin deploy dua situs.
+QA lokal CMS 56 PASS/10 live Team SKIP, recruitment 24 PASS, PostgreSQL nyata,
+7 gate + SEO, tiga admin mock empat width, snapshot/19 HTML identik.
+Suite penuh tanpa env server, jangan mutation/reseed Team (drift preexisting).
+Cold-cache private media dan partial GAS validation scope terpisah.
+Auth CMS tetap OAuth custom; mekanisme final pending dan auth terakhir.
+NEXT pass 5 Hods perlu plan tersendiri. [TODO](cms-migration-todo.md),
+[Domains plan](cms-pass4-domains-plan.md), [kickoff](cms-migration-kickoff.md).
+Izin push `6b36519` sudah digunakan; checkpoint docs lokal memerlukan izin baru.
 
 ## B2 Team — pass lokal 6 Oct 2026
 

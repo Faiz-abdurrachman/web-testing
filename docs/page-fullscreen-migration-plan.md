@@ -1,10 +1,10 @@
 # Page Full-Screen Migration Plan — Hero Gambar + Section 100svh
 
-## Checkpoint aktif CMS — Domains SQL applied, kode lokal
+## Checkpoint aktif CMS — Domains live `6b36519`
 
 Full-screen selesai; Contact tetap hero Figma-exact tinggi 954. Tidak ada
 perubahan full-screen/UI pada migration Domains ini. CMS Projects/Team/Roles
-live `53f92f8`; Domains SQL applied + QA lokal selesai, E pending approval push.
+dan Domains live `6b36519`; A–E + QA lokal + dua-site acceptance selesai.
 Lihat [plan Domains](cms-pass4-domains-plan.md),
 [TODO](cms-migration-todo.md), [kickoff](cms-migration-kickoff.md).
 Entri NEXT video/GAS Growth di riwayat bukan work order aktif.

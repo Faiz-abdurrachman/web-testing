@@ -1,10 +1,10 @@
 # Asset provenance
 
-## Checkpoint CMS / provenance — Domains SQL applied, kode lokal
+## Checkpoint CMS / provenance — Domains live `6b36519`
 
-Kode lokal CMS Projects/Team/Roles/Domains bersumber Supabase; Hods/Partners GAS.
-SQL Domains applied; situs masih pass 3 sampai push/deploy/acceptance berizin.
-Kode live `53f92f8`, dua deployments/acceptance Roles selesai. Cutover pending checklist E
+CMS Projects/Team/Roles/Domains bersumber Supabase; Hods/Partners GAS.
+Domains A–E selesai: dua Vercel READY dan Home/Recruitment 390/1440 PASS.
+Kode live `6b36519`, dua deployments/acceptance Domains selesai. Lihat
 [Domains Master Work Plan](cms-pass4-domains-plan.md) + [TODO](cms-migration-todo.md).
 Pass Domains mengubah sumber build-time saja; tidak ada asset/font/CSS/artwork/reference PNG
 atau geometry/assertion yang diubah. Domains metadata design tint/x/y/gap
