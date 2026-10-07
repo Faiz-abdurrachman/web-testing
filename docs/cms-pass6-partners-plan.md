@@ -1,8 +1,9 @@
 # CMS pass 6 — Partners → Supabase — Master Work Plan
 
-Status: **PLAN ONLY**. Belum membuat SQL/runtime/tests, apply database, atau deploy
-Partners. Faiz meminta handoff rinci untuk implementasi di AI baru. Kerja dan
-commit lokal diizinkan; push baru memerlukan konfirmasi setelah hasil siap review.
+Status: **A–D selesai — SQL applied + QA lokal, siap review**. E belum
+berjalan: belum push/deploy/live acceptance Partners. Baseline situs526b428,
+planning lokal16828c2; lihat git log untuk commit fitur lokal. Kerja/commit lokal
+diizinkan; push baru memerlukan konfirmasi SHA konkret. Proof actual §9.
 
 ## 1. Baseline, urutan baca, dan scope
 
@@ -89,8 +90,8 @@ schema saat implementasi, termasuk slash, control, traversal, https/data URL,
 protocol-relative, empty, extra keys. Path regex tidak membuktikan file ada:
 cek file public existing dan browser decode terpisah. Jangan normalisasi path/text.
 
-Planning hanya menginventarisasi snapshot/code lokal; **belum merekonsiliasi
-Partners dengan GAS live atau destination database**. A3/C1 wajib dilakukan.
+Planning awal hanya menginventarisasi snapshot/code lokal. Rekonsiliasi GAS/
+snapshot/destination A3/C1 kini actual PASS; lihat §9, bukan bukti planning.
 
 ## 3. Inventory visual terkunci per section
 
@@ -207,58 +208,58 @@ If unforeseen change is required, explain concrete blocker rather than widening 
 
 ### A — Read, reconcile, capture baseline
 
-- [ ] A1 Read all mandatory docs; git status/log/refs/remotes; verify Node22.
+- [x] A1 Read all mandatory docs; git status/log/refs/remotes; verify Node22.
       Respect foreign changes; never reset/stash them blindly. Paths in /tmp and
       ignored artifacts may disappear; verify tools rather than assuming reuse.
-- [ ] A2 Record snapshot SHA/bytes + fresh 19 public HTML baseline and current
+- [x] A2 Record snapshot SHA/bytes + fresh 19 public HTML baseline and current
       local asset paths/decode. Capture remote inputs privately for before/after.
-- [ ] A3 Full validated GAS export vs snapshot: all 11 texts/path/array order;
+- [x] A3 Full validated GAS export vs snapshot: all 11 texts/path/array order;
       inspect destination Partners objects/data/ACL read-only. Report mismatch,
       do not choose stale seed or overwrite Team drift to satisfy comparisons.
-- [ ] A4 Verify private env presence/project ref; capture scoped pre-pass hybrid.
+- [x] A4 Verify private env presence/project ref; capture scoped pre-pass hybrid.
       Record existing Team drift separately. Freeze plan/review scope before code.
 
 ### B — Local SQL/runtime and focused proof
 
-- [ ] B1 Implement additive singleton/validators/seed/RLS/revokes/wrappers.
-- [ ] B2 Ephemeral PostgreSQL: valid payload exact; missing row fails schema;
+- [x] B1 Implement additive singleton/validators/seed/RLS/revokes/wrappers.
+- [x] B2 Ephemeral PostgreSQL: valid payload exact; missing row fails schema;
       wrong/duplicate ID, wrong counts/types/null/keys/text/path rejected.
       Reorder preserved; rerun keeps edited valid fixture. Unicode boundary probes
       compare actual Zod with SQL, including ASCII/astral/mixed/combining/newlines.
-- [ ] B3 Actual role executions: anon/service_role public read allowed;
+- [x] B3 Actual role executions: anon/service_role public read allowed;
       authenticated public read denied; PUBLIC/helper/private read denied;
       anon/authenticated direct SELECT/INSERT/UPDATE/DELETE denied. Catalog proof
       includes implicit PUBLIC execute. RLS isolation grants only temporary local
       rollback fixture, never broaden live grants. Document exact denial count.
-- [ ] B4 Wire RPC and mocks; HTTP/network/timeout/invalid JSON/shape/path errors
+- [x] B4 Wire RPC and mocks; HTTP/network/timeout/invalid JSON/shape/path errors
       fail closed atomically; no GAS fallback. Invalid full GAS blocks overrides;
       local mode no fetch; missing Supabase env fails remote mode.
-- [ ] B5 Full CMS suite **without server env** (Team live mutation tests must
+- [x] B5 Full CMS suite **without server env** (Team live mutation tests must
       SKIP), recruitment contracts and focused Partners tests pass before apply.
 
 ### C — Existing Supabase apply and real read proof
 
-- [ ] C1 Immediately recheck GAS/snapshot/destination, project ref and private
+- [x] C1 Immediately recheck GAS/snapshot/destination, project ref and private
       anon key. Only apply reviewed new SQL after A/B green; no stale inputs.
-- [ ] C2 Apply additive transaction once; inspect applied state if probe fails
+- [x] C2 Apply additive transaction once; inspect applied state if probe fails
       before retry. Real HTTP anon exact, catalog + actual denied role operations
       via read-only transactions. No production INSERT/UPDATE/DELETE probes.
-- [ ] C3 Run hybrid against same captured inputs pre/post: Partners exact and
+- [x] C3 Run hybrid against same captured inputs pre/post: Partners exact and
       every other collection value identical. Keep Team drift; snapshot baseline
       remains untouched. No fallback. Store sanitized proof in ignored artifacts.
 
 ### D — QA and concrete reviewable commit
 
-- [ ] D1 Build0 errors, verify.mjs, audit:navbar, verify:vt,
+- [x] D1 Build0 errors, verify.mjs, audit:navbar, verify:vt,
       responsive-audit (468 baseline assertions), audit:spacing, format:check,
       SEO audit (23 pages baseline). Record actual counts; don't invent passes.
-- [ ] D2 Local Partners browser: 320/390/700/701/1050/1051/1365/1366/1440 widths,
+- [x] D2 Local Partners browser: 320/390/700/701/1050/1051/1365/1366/1440 widths,
       labels/counts/order/alt/all four why copy + mapped icons, lazy image decode
       after scroll, exact geometry/reduced motion, no overflow/pageerrors.
-- [ ] D3 Native Projects, legacy Projects, Team mock admin four widths; public
+- [x] D3 Native Projects, legacy Projects, Team mock admin four widths; public
       Home/Recruitment/Hods/Roles regressions. Snapshot bytes +19 HTML exact fresh
       baseline with same inputs; isolate preexisting remote drift separately.
-- [ ] D4 Update active docs/status/proof/limitations, scoped diff/secrets review;
+- [x] D4 Update active docs/status/proof/limitations, scoped diff/secrets review;
       feature commit local and complete review summary. **Pause before push**.
 
 ### E — Only after new explicit push approval
@@ -316,3 +317,70 @@ E green only after approval, two exact SHA READY deployments and both-sites
 Partners acceptance. All six CMS content sources then Supabase **but full GAS
 export remains a dependency**. Editors only Projects/Team; auth CMS and GAS
 removal are separate future passes. Never declare entire CMS complete here.
+
+## 9. Proof actual A–D — 7 Oct 2026
+
+- **A:** working tree awal bersih, HEAD16828c2; origin/main dan production/main
+  tetap526b428 setelah fetch ulang. Dua existing origin push URLs verified,
+  tidak berubah. Node default26 dihindari; seluruh QA22.23.0. Snapshot SHA256
+  `4345f1abe445aa2a400c31413ccc058707a77105a7e388dc8d1074e78da94857`;
+  fresh build baseline23 pages dan19 public HTML hashed. Full validated GAS
+  Partners exact semua11 texts/path/order. Destination table/wrappers/helpers
+  absent; project/ref existing verified. Local anon key absent, diambil privat
+  in-memory dari Management API; tidak ditulis env/dicetak. Frozen pre-pass
+  hybrid berbeda hanya Team terhadap repo; drift dipertahankan.
+- **B:** additive private singleton + dua validators immutable (items dan logo),
+  seed ON CONFLICT DO NOTHING, private/public stable definer read wrappers,
+  RLS ALL deny, explicit table/function revokes termasuk service_role privat.
+  Public wrapper hanya anon/service_role. PostgreSQL ephemeral proof seed exact,
+  id/duplicate/not-null, 199 invalid +72 valid Zod/SQL parity fixtures meliputi
+  seluruh11 text slots, ASCII/20000 astral/mixed/combining/newlines/quotes,
+  path/control/traversal/type/key/count. Batas20001 codepoints ditolak; NUL/lone
+  surrogates diterima JS Zod tetapi ditolak konversi PostgreSQL, documented
+  representational limit. Local RLS granted fixtures rollback, reorder/rerun
+  preserve edit/singleton, missing row `{partners:null}` gagal final Zod.
+  Catalog PUBLIC implicit execute revoked, helper invoker immutable dan read
+  definer stable/search_path qualified. 22 actual local privilege denials
+  (anon/authenticated/service_role), allowed public anon/service_role reads.
+  Runtime RPC setelah Hods; whole Partners override proven terhadap stale GAS
+  category/why/logo. Failure HTTP/network/timeout/JSON/missing row/shape/keys/
+  path/count/type mempertahankan snapshot bytes dan tanpa temp residue. Invalid
+  full GAS memblokir semua RPC; local mode no fetch, missing env fail closed.
+  CMS full92 PASS/10 Team live SKIP/0 fail tanpa server env; recruitment24 PASS,
+  focused Partners18 PASS. Initial fixture-count assertion corrected before
+  final green; additional focused test verifies exact RPC sequence.
+- **C:** immediate GAS/project/ref/destination recheck PASS. SQL transaction
+  applied **sekali**; filename13Oct adalah urutan, actual apply7Oct. Initial
+  anon probe404; independent read-only inspect table/RPC/count1 + HTTP200 exact,
+  lalu proof-only tanpa reapply. Cause404 awal belum diisolasi. Actual RPC exact
+  `{partners:{partnerCategories,partnerLogo,whyPartners}}`, catalog owner
+  postgres/RLS/deny/search_path/ACL PASS. 13 actual live denied **read** operations
+  (4 private/table/helper reads ×3 roles + authenticated public read); both
+  anon/service_role public reads exact. Direct SELECT/INSERT/UPDATE/DELETE etc
+  privileges denied via catalog; **tidak ada live mutation probes**. Same frozen
+  inputs pre/post deep-equal semua collections; Partners exact, Team drift utuh,
+  repository snapshot tidak ditimpa.
+- **D:** build0 errors, visual exit0/browserErrors[], navbar/VT exit0,
+  responsive468/468, spacing39 components, format PASS, SEO23 pages. Local
+  Partners320/390/700/701/1050/1051/1365/1366/1440 PASS:3 labels/10-5-5 counts,
+  20 exact alt/shared logo paths +decode,4 exact why pairs/mapped local icons,
+  decorative aria-hidden, hero/cards/glow/footer artwork decode after scroll,
+  no overflow/text clipping/pageerror. Runtime1440 hero903/our1071/why903,
+  grid1286×185 exact; existing full verify assertions intact. Keyboard footer
+  Home navigation +navbar Partners entry preserves Astro JS context at all9
+  widths. Native Projects/legacy Projects/Team mock4 widths each PASS; public
+  Home/Recruitment/six Hods/six Roles covered by verify/VT/responsive gates.
+  Snapshot bytes and19 public HTML hashes exact fresh baseline. Docs and scoped
+  feature commit lokal siap review; tidak ada perubahan UI/schema/assets/auth/
+  server/API/media/dependency/other applied SQL. Helpers/codepoints tidak
+  memperbaiki applied Hods UTF16 ceiling.
+
+Proof ignored: `artifacts/cms-pass6/{reconciliation,baseline-html,after-html,
+local-db,live-db,live-hybrid,qa-summary,browser}.json`, Node22 test/gate/admin logs,
+2 Partners390/1440 full-page screenshots. Snapshot/remote inputs private/ignored.
+`local-db.json` adalah ringkasan focused PostgreSQL; raw fixtures di tracked test.
+
+**E pending seluruhnya.** Belum memverifikasi env Vercel fresh untuk push ini,
+belum push, belum deployment/alias/acceptance live baru. Setelah izin SHA:
+E1–E5 kedua situs; situs existing526b428 masih memakai Partners GAS. Setelah E
+accepted baru lock Partners; auth CMS dan GAS removal tetap pass terpisah.

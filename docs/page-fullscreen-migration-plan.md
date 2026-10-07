@@ -1,5 +1,15 @@
 # Page Full-Screen Migration Plan — Hero Gambar + Section 100svh
 
+## Checkpoint CMS — Partners SQL applied + QA lokal, belum deploy
+
+Pass 6 Partners A–D selesai; [proof dan scope](cms-pass6-partners-plan.md#9-proof-actual-a-d--7-oct-2026).
+Kode lokal memakai Partners read RPC Supabase; situs masih baseline526b428
+(Partners GAS), menunggu izin push baru dan acceptance E. UI/font/artwork,
+spacing/geometry/reference/assertions tidak diubah; count10/5/5 dan icons lokal.
+Fresh snapshot/19 public HTML exact, 7 gate + SEO PASS, Partners sembilan widths
+PASS. Full GAS export tetap divalidasi; jangan hapus tab/env. Auth terakhir.
+Checkpoint planning terdahulu di bawah disimpan sebagai riwayat.
+
 ## Checkpoint aktif CMS — Hods live, NEXT Partners
 
 Full-screen selesai; Contact tetap hero Figma-exact tinggi954. Deployed

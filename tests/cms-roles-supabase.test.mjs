@@ -58,6 +58,8 @@ for (const failure of [null, 'http', 'shape', 'slots', 'network']) {
           if (u.hostname === 'script.google.com') return Response.json(gas);
           assert.equal(options.headers.apikey, env.SUPABASE_ANON_KEY);
           assert.equal(options.method, 'POST');
+          if (u.pathname.endsWith('cms_load_partners'))
+            return Response.json({ partners: baseline.partners });
           if (u.pathname.endsWith('cms_load_projects'))
             return Response.json({ projects: baseline.projects });
           if (u.pathname.endsWith('cms_load_team')) return Response.json(team);

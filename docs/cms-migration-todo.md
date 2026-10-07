@@ -1,5 +1,47 @@
 # CMS → Supabase — TODO dan status penerimaan
 
+## Checkpoint aktif — Partners SQL applied + QA lokal, menunggu izin push
+
+Pass 6 Partners **A–D selesai**, implementasi lokal siap review; **E belum
+berjalan**, belum push/deploy/live acceptance Partners. Baseline situs tetap
+**526b428**, planning lokal **16828c2**; lihat `git log` untuk commit fitur lokal.
+[Master Work Plan Partners](cms-pass6-partners-plan.md) §9 menyimpan proof.
+Konfirmasi SHA konkret sebelum push baru; origin sekali push men-deploy dua situs.
+
+Migration additive `20261013010000_cms_partners_pass6.sql` applied sekali ke
+existing **web-community / yejrdckcmlxrkklgtrwy**, 7 Oct 2026. GAS/snapshot/DB
+exact: **3 category labels + 1 local logo path + 4 why pairs**, order/keys/types
+utuh. Singleton private + RLS deny; public RPC anon/service_role saja.
+Catalog owner postgres, fixed search_path/definer/ACL dan **13 actual read role
+denials** PASS; write privileges denied via catalog, tanpa live DML probes.
+Probe anon pertama HTTP404; inspect state menunjukkan tabel/RPC dan satu row,
+read berikutnya HTTP200 exact. Tidak reapply; penyebab 404 awal belum diisolasi.
+
+Node **22.23.0**: CMS **92 PASS + 10 live Team SKIP / 0 FAIL**, recruitment
+**24 PASS**, focused Partners **18 PASS** + PostgreSQL ephemeral (199 invalid /
+72 valid schema-parity fixtures, 22 role denials, RLS isolation/rerun/order).
+Partners SQL memakai Unicode **codepoints** sesuai installed Zod; NUL/lone
+surrogates yang PostgreSQL tidak representasikan tetap fail closed. Schema dan
+applied helpers Domains/Hods tidak diubah. Path regex dan asset decode terpisah.
+
+Tujuh gate + SEO PASS: build0 errors/23 pages, visual browserErrors kosong,
+navbar/VT, responsive **468/468**, spacing39, format. Partners browser sembilan
+widths **320/390/700/701/1050/1051/1365/1366/1440** PASS: labels10/5/5 slots,
+20 alt/logos, four why pairs/index icons, artwork decode, exact geometry,
+keyboard footer/navbar entry/VT, tanpa overflow/clipping/pageerror. Native +
+legacy Projects + Team admin mock empat widths PASS, bukan real owner auth.
+Fresh snapshot bytes dan **19 public HTML exact**; same captured remote inputs
+pre/post value-identik. Team drift preexisting tetap, tidak reseed/mutation.
+
+**Kode lokal** membaca keenam content collections dari Supabase RPC; situs live
+masih baseline lima RPC + Partners GAS sampai push berizin. **Full GAS export
+masih divalidasi sebelum overrides**; jangan hapus GAS/tab/env. Count10/5/5,
+icons, UI/geometri/font/artwork/schema/assertions/admin/auth/media tetap.
+Tanpa editor/write API/state/Storage/dependencies baru. Auth CMS final pending;
+seluruh CMS belum selesai. E wajib fresh env kedua Vercel, izin SHA, dua exact
+READY/aliases dan acceptance live; tidak trigger hook/deploy sebelum izin.
+Bukti ignored `artifacts/cms-pass6/`; ringkasan tracked ini berlaku jika hilang.
+
 Pass 5 Hods **A–E selesai, LIVE `763bafc`** pada kedua situs.
 [Master Work Plan](cms-pass5-hods-plan.md) §9–10 menyimpan local/SQL/live proof.
 Vercel READY testing 12:53:12.956 UTC, production 12:55:00.507 UTC (7 Oct 2026),
@@ -88,31 +130,31 @@ Bukti local/SQL di plan §9, deployment/all-tab live acceptance di §10.
 - [x] E4: all six Hods/21 tabs × 390/1440 × both sites + Home/Recruitment entry/back/VT.
 - [x] E5: anonymous admin 401/recruitment closed, no production mutation + LIVE checkpoint/DoD.
 
-## 4. Pass 6 Partners — PLAN ONLY, implementasi belum dimulai
+## 4. Pass 6 Partners — A–D selesai, E menunggu izin push
 
 [Master Work Plan Partners](cms-pass6-partners-plan.md) memuat kontrak exact,
 inventory empat section terkunci, SQL proposal, matrix tes, secrets/stop/DoD.
-Planning selesai tidak membuktikan rekonsiliasi GAS/database atau implementasi.
+Rekonsiliasi, SQL applied dan QA lokal actual tercatat di plan §9; E belum berjalan.
 
 - [x] Plan rinci + kickoff §6 + urutan baca wajib disiapkan untuk AI baru.
-- [ ] A1–A4: baca/git/Node22/env, fresh baseline, GAS/snapshot/destination
+- [x] A1–A4: baca/git/Node22/env, fresh baseline, GAS/snapshot/destination
       reconciliation, capture inputs dan Team drift tanpa mutation.
-- [ ] B1–B5: additive singleton SQL/RLS/strict validators/anon RPC, PostgreSQL
+- [x] B1–B5: additive singleton SQL/RLS/strict validators/anon RPC, PostgreSQL
       ephemeral/security/Unicode/path/rerun, hybrid/mocks/fail closed, local tests.
-- [ ] C1–C3: immediate reconciliation, additive apply once, real HTTP anon +
+- [x] C1–C3: immediate reconciliation, additive apply once, real HTTP anon +
       catalog/role denied proof, same-input pre/post parity tanpa reset Team.
-- [ ] D1–D4: tujuh gate + SEO, Partners browser widths/boundaries,
+- [x] D1–D4: tujuh gate + SEO, Partners browser widths/boundaries,
       tiga admin mocks, snapshot/19 HTML exact, docs + feature commit siap review.
 - [ ] E1–E5: env kedua Vercel, izin SHA push baru, dua READY exact aliases,
       Partners390/1440 kedua situs + regression/admin401/closed, LIVE checkpoint.
 
 ## 5. Sesudah Partners (belum dikerjakan)
 
-| Urutan            | Status           | Scope awal                                            |
-| ----------------- | ---------------- | ----------------------------------------------------- |
-| Pass 6 Partners   | PLAN ONLY        | tiga kategori, empat why, satu logo repo; A–E pending |
-| Auth CMS terakhir | BELUM DIPUTUSKAN | pilih login, owner/cookie/CSRF/dua domain             |
-| Penghapusan GAS   | BELUM DIIZINKAN  | semua pass diterima, backup/observasi + izin baru     |
+| Urutan            | Status              | Scope awal                                                     |
+| ----------------- | ------------------- | -------------------------------------------------------------- |
+| Pass 6 Partners   | A–D PASS, E pending | tiga kategori, empat why, satu logo repo; SQL applied/QA lokal |
+| Auth CMS terakhir | BELUM DIPUTUSKAN    | pilih login, owner/cookie/CSRF/dua domain                      |
+| Penghapusan GAS   | BELUM DIIZINKAN     | semua pass diterima, backup/observasi + izin baru              |
 
 Milestones/settings bukan tambahan scope otomatis. Tinjau apakah benar dipakai
 sebelum menawarkan migrasi; jangan menambah pass/collection sendiri.

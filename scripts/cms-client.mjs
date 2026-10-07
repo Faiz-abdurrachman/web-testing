@@ -302,6 +302,19 @@ export async function syncCmsSnapshot({
       throw new Error('Supabase RPC cms_load_hods failed.');
     }
 
+    // Partners upstream errors must not expose private response bodies or URLs.
+    try {
+      const partners = await supabaseFetch(
+        supabaseUrl,
+        supabaseKey,
+        'cms_load_partners',
+        fetchImpl,
+      );
+      snapshot.partners = partners.partners;
+    } catch {
+      throw new Error('Supabase RPC cms_load_partners failed.');
+    }
+
     validateCmsSnapshot(snapshot);
   }
 
