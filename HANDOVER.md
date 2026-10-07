@@ -1,5 +1,28 @@
 # Handover — Data Sorcerers (community-web)
 
+## ⭐ CHECKPOINT TERKINI — Recruitment pass 2 Supabase LIVE (7 Oct 2026)
+
+Untuk state paling akurat, baca `docs/kickoff-prompt.md` → `AGENTS.md` →
+`docs/ai-handoff.md` (urut). Ringkas:
+
+- **Target akhir:** seluruh backend → Supabase (Postgres + Storage + Supabase
+  Auth). Astro/UI/geometri + CMS existing **tidak berubah**.
+- **Recruitment pass 1 (intake) LIVE:** `server/recruitment.mjs` → Supabase RPC;
+  tabel `private.recruitment_applications`; `RECRUITMENT_OPEN=false` (tertutup).
+- **Recruitment pass 2 (admin read) LIVE:** login `/admin/recruitment/` pakai
+  **Supabase Auth email + password** (cookie HttpOnly), user
+  `admin@datasorcerers.com` di-seed ke `private.cms_admin_users`. Migration
+  `20261007120000_recruitment_pass2_admin_read.sql` (generated columns, audit
+  log, 10 fungsi). Route catch-all `api/admin/recruitment/[...route].js`.
+  Tests 19/19. Commit terakhir `254fa68` (dua repo).
+- **CMS masih GAS/Sheets/Drive** (belum dimigrasi). `SUPABASE_ANON_KEY` sudah di
+  kedua Vercel.
+- **Next kandidat:** ganti password admin (owner), Pass 3 (rate limit + refresh
+  token), CAPTCHA, atau mulai migrasi CMS collection per pass.
+- **Aturan:** jangan pasang GAS intake; jangan ubah CMS/auth/UI/geometri tanpa
+  izin; secret di `.env.local` jangan dicetak; push `origin main` = dua situs
+  (konfirmasi dulu).
+
 ## Recruitment integration — 6 Oct 2026
 
 User authorized integration of teammate branch recruitment-page. Main baseline
