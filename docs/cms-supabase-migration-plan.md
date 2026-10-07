@@ -1,11 +1,12 @@
 # Master Migration Plan — GAS/Sheets/Drive → Supabase
 
-## Checkpoint aktif — tiga pass CMS live, NEXT Domains
+## Checkpoint aktif — Domains SQL applied, cutover situs pending
 
 Projects/Team/Roles live `53f92f8`, kedua Vercel SUCCESS dan Roles acceptance
 selesai. Recruitment pass 1–3 juga Supabase, intake closed. NEXT
 [Domains Master Work Plan](cms-pass4-domains-plan.md) + [TODO](cms-migration-todo.md),
-plan only; lalu Hods → Partners → auth CMS terakhir. [Kickoff aktif](cms-migration-kickoff.md).
+A–D selesai lokal + SQL applied; E pending approval push/dua deploy/acceptance.
+Lalu Hods → Partners → auth CMS terakhir. [Kickoff aktif](cms-migration-kickoff.md).
 
 Write existing Projects/Team memakai Management API database/query karena
 safeupdate PostgREST; read RPC anon. Roles/Domains tidak punya editor/write API.
@@ -254,7 +255,7 @@ Aturan:
 - **Konten CMS migrated actual**: tabel privat dengan RLS/revoke/deny policy;
   anon membaca lewat SECURITY DEFINER public wrapper, bukan table SELECT.
   Projects/Team write hanya server lewat Management API dengan owner session
-  OAuth custom. Roles/next Domains read-only. Desain authenticated admin RLS
+  OAuth custom. Roles/Domains read-only. Desain authenticated admin RLS
   adalah proposal pass auth terakhir, bukan grant yang harus ditambah sekarang.
 - **`recruitment_applications`**: **tidak ada** policy `anon`/`authenticated`
   untuk `SELECT`. Insert hanya lewat Vercel Function ber-`service_role` (setelah
@@ -455,8 +456,8 @@ berisi sebagian collection dari Supabase dan sebagian masih dari GAS. Aturannya:
   keenam collection sekaligus; loader/komponen tidak tahu asalnya.
 - **Peta sumber actual tercatat di kickoff/TODO dan dispatch cms-client.mjs**;
   file cms/cms-sources.json belum dibuat. Jangan menganggap file/env switch itu
-  sudah ada. Current remote sources: projects/team/roles Supabase,
-  domains/hods/partners GAS. Local mode memakai snapshot committed.
+  sudah ada. Kode lokal remote sources: projects/team/roles/domains Supabase,
+  hods/partners GAS. Situs live masih pass 3 sampai push/deploy baru. Local mode memakai snapshot committed.
 - Implementasi actual fetch full GAS snapshot yang tervalidasi terlebih dulu,
   override migrated collections dari RPC, validasi Zod final dan atomic write.
   Jadi source konten tiap collection sudah tunggal tetapi validitas full GAS
@@ -478,7 +479,7 @@ berisi sebagian collection dari Supabase dan sebagian masih dari GAS. Aturannya:
   source inventory kickoff/TODO + actual cms-client.mjs tiap pass; jangan
   mendokumentasikan file konfigurasi yang belum diimplementasikan sebagai fakta.
 
-Peta sumber actual sesudah pass 3 Roles live (dokumentasi, bukan file runtime):
+Peta sumber kode lokal pass 4 (SQL applied, situs cutover pending; bukan file runtime):
 
 ```json
 {
@@ -487,7 +488,7 @@ Peta sumber actual sesudah pass 3 Roles live (dokumentasi, bukan file runtime):
   "team": "supabase",
   "roles": "supabase",
   "partners": "gas",
-  "domains": "gas",
+  "domains": "supabase",
   "hods": "gas"
 }
 ```

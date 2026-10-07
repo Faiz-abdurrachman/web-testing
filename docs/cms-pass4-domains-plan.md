@@ -1,10 +1,20 @@
 # Master Work Plan — CMS pass 4: Domains → Supabase
 
-Status: **PLAN ONLY — belum implementasi, belum apply SQL, belum deploy.**
-Baseline implementasi/deploy: `53f92f8` (Projects + Team + Roles di Supabase).
-Dokumentasi ini disiapkan untuk AI baru atas permintaan Faiz. Mulai implementasi
-hanya ketika user memberi instruksi lanjut; persetujuan push pass 3 tidak
-mengizinkan push pass 4. Tidak ada perubahan runtime/DB dalam sesi planning ini.
+Status: **A–D selesai lokal + SQL applied; E pending approval push/deploy/acceptance.**
+Baseline situs live tetap `53f92f8`; kode Domains belum dipush.
+Implementasi diotorisasi Faiz pada 7 Oct 2026, setelah planning lokal `7189fcc`.
+
+Proof database live: enam Domains exact, public RPC anon/service_role allowed,
+authenticated denied; catalog RLS + deny policy + private grants dan 13 actual
+role permission denials PASS. Same captured inputs pre/post hybrid identik,
+Team drift preexisting tidak diubah. SQL applied tanpa mengubah ledger.
+Probe RPC awal gagal sesudah apply; berikutnya HTTP 200 exact. Tidak apply ulang;
+root cause probe awal belum diisolasi. Verified 11:50:54 UTC / 18:50:54 WIB.
+
+QA Node 22.23.0: CMS 56 PASS/10 Team live SKIP, Recruitment 24 PASS,
+PostgreSQL ephemeral, tiga browser admin mock empat width, tujuh gate + SEO,
+responsive 468/468, 23 halaman SEO, 39 komponen spacing, snapshot dan 19 HTML
+publik byte-identik. Bukti `artifacts/cms-pass4/` ignored.
 
 ## 1. Keputusan scope dan urutan
 
@@ -192,73 +202,72 @@ lalu cache media existing dan atomic write seperti sekarang.
 
 ## 7. Tahapan eksekusi dan TODO rinci
 
-Checklist status di [migration TODO](cms-migration-todo.md); semua item pass 4
-berikut masih belum dikerjakan. Lock satu tahap sebelum masuk tahap dependen.
+Checklist status di [migration TODO](cms-migration-todo.md); status actual A–D sudah selesai; E masih pending. Lock satu tahap sebelum masuk tahap dependen.
 
 ### A. Orientasi dan baseline
 
-- [ ] `git status --short`, SHA/branch/remotes; jangan ubah/reset perubahan asing.
-- [ ] Baca kickoff → AGENTS → ai-handoff → plan ini → master plan → CMS SOP.
-- [ ] Pastikan runtime Node 22 (`node --version`), dependency existing tersedia.
+- [x] `git status --short`, SHA/branch/remotes; jangan ubah/reset perubahan asing.
+- [x] Baca kickoff → AGENTS → ai-handoff → plan ini → master plan → CMS SOP.
+- [x] Pastikan runtime Node 22 (`node --version`), dependency existing tersedia.
       Jangan mengandalkan path `/tmp` atau server/artifacts dari AI sebelumnya.
-- [ ] Simpan snapshot baseline, checksum, 19 HTML publik build baseline dan
+- [x] Simpan snapshot baseline, checksum, 19 HTML publik build baseline dan
       current remote hybrid ke artifacts/cms-pass4/. Jangan cetak data privat.
-- [ ] Rekonsiliasi Domains GAS dengan snapshot (enam ID/order/semua field/slot).
+- [x] Rekonsiliasi Domains GAS dengan snapshot (enam ID/order/semua field/slot).
       Jika berbeda, laporkan paths/counts; minta keputusan sumber, jangan overwrite.
-- [ ] Read-only cek apakah private.cms_domains / RPC sudah ada; cocokkan field,
+- [x] Read-only cek apakah private.cms_domains / RPC sudah ada; cocokkan field,
       constraints, grants dan data. Jika berbeda, hentikan seed, siapkan resolusi.
-- [ ] Catat Team remote vs snapshot sebagai drift **preexisting**. Bandingkan
+- [x] Catat Team remote vs snapshot sebagai drift **preexisting**. Bandingkan
       client sebelum/sesudah pass dengan remote input yang sama untuk isolasi.
 
 ### B. Kode dan PostgreSQL lokal
 
-- [ ] Buat SQL sesuai §5 + seed, tanpa write API/state/Storage.
-- [ ] Tambah `tests/cms-domains-supabase.test.mjs` mengikuti Roles: fixture lokal
+- [x] Buat SQL sesuai §5 + seed, tanpa write API/state/Storage.
+- [x] Tambah `tests/cms-domains-supabase.test.mjs` mengikuti Roles: fixture lokal
       hybrid dan PostgreSQL ephemeral, tidak mutation Supabase live.
-- [ ] Uji type/length/mask per semua enam ID, string quotes/Unicode, rerun seed
+- [x] Uji type/length/mask per semua enam ID, string quotes/Unicode, rerun seed
       menjaga edit, order deterministik dan deny grants.
-- [ ] Tambah RPC Domains ke remote snapshot; local mode tetap tanpa network.
-- [ ] Update mock pada `tests/cms.test.mjs` dan `tests/cms-media.test.mjs` serta
+- [x] Tambah RPC Domains ke remote snapshot; local mode tetap tanpa network.
+- [x] Update mock pada `tests/cms.test.mjs` dan `tests/cms-media.test.mjs` serta
       fixture lain yang benar-benar melewati sync. Hindari scope admin non-Domains.
-- [ ] Seluruh contract tests + PostgreSQL lokal PASS sebelum SQL remote.
+- [x] Seluruh contract tests + PostgreSQL lokal PASS sebelum SQL remote.
 
 ### C. Apply SQL dan proof database live
 
-- [ ] Pastikan project ref existing web-community `yejrdckcmlxrkklgtrwy`.
+- [x] Pastikan project ref existing web-community `yejrdckcmlxrkklgtrwy`.
       Jangan hardcode project baru atau menerapkan SQL ke target lain.
-- [ ] Periksa presence env tanpa nilai. `.env.local` sesi Roles tidak punya anon
+- [x] Periksa presence env tanpa nilai. `.env.local` sesi Roles tidak punya anon
       key; kedua Vercel berhasil build Roles. Jika lokal masih missing, ambil key
       lewat akses Management existing secara privat/in-memory, atau minta owner
       isi env privat. Jangan meminta key lewat chat, jangan ganti dengan service key.
-- [ ] Ulangi read-only reconciliation segera sebelum seed. Freeze hanya edit
+- [x] Ulangi read-only reconciliation segera sebelum seed. Freeze hanya edit
       manual tab Domains selama jendela cutover bila owner memang sedang mengedit;
       read-only API tidak berarti Sheet mustahil diubah manual.
-- [ ] Apply additive migration setelah data & SQL lokal PASS. Tidak memicu
+- [x] Apply additive migration setelah data & SQL lokal PASS. Tidak memicu
       deploy hook/manual rebuild sebelum commit/code siap dan push disetujui.
-- [ ] Baca RPC anon nyata; exact value equality seluruh Domains + Zod.
-- [ ] Query catalog untuk RLS/policy/table/function grants; buktikan direct access
+- [x] Baca RPC anon nyata; exact value equality seluruh Domains + Zod.
+- [x] Query catalog untuk RLS/policy/table/function grants; buktikan direct access
       denied dengan role anon/authenticated dalam transaction read-only/rollback.
       Pisahkan bukti privileges catalog, role execution dan HTTP RPC, jangan
       mengklaim catalog saja sebagai seluruh RLS acceptance.
-- [ ] Hybrid live + comparison pre-pass: hanya sumber Domains berubah;
+- [x] Hybrid live + comparison pre-pass: hanya sumber Domains berubah;
       Projects/Team/Roles/Hods/Partners tidak diubah/reseed.
-- [ ] Simpan proof sanitised; failure setelah SQL apply tidak otomatis berarti
+- [x] Simpan proof sanitised; failure setelah SQL apply tidak otomatis berarti
       SQL belum terpasang. Cek applied state sebelum mencoba lagi.
 
 ### D. QA situs dan dokumentasi
 
-- [ ] Build baseline snapshot, bukan menimpa committed snapshot dengan Team
+- [x] Build baseline snapshot, bukan menimpa committed snapshot dengan Team
       remote yang drift agar tes baseline tampak cocok.
-- [ ] `npm run test:cms`: catat pass/fail/skip, **tanpa env file untuk suite penuh**.
+- [x] `npm run test:cms`: catat pass/fail/skip, **tanpa env file untuk suite penuh**.
       `cms-team-supabase.test.mjs` berisi mutation nyata jika env server dimuat;
       jangan menjalankannya ke production sekadar mengejar zero skips.
-- [ ] `npm run test:recruitment` + browser admin native/legacy/Team empat width.
-- [ ] Build + verify + navbar + VT + responsive + spacing + format + SEO (§9).
-- [ ] Snapshot baseline byte-identik; HTML publik identik baseline lokal pada
+- [x] `npm run test:recruitment` + browser admin native/legacy/Team empat width.
+- [x] Build + verify + navbar + VT + responsive + spacing + format + SEO (§9).
+- [x] Snapshot baseline byte-identik; HTML publik identik baseline lokal pada
       input sama; format JSONB field-order jangan dikira content drift.
-- [ ] Update plan/TODO/AGENTS/ai-handoff/kickoff/SOP/master plan/provenance,
+- [x] Update plan/TODO/AGENTS/ai-handoff/kickoff/SOP/master plan/provenance,
       label setiap proof local vs live, SQL applied vs deployment.
-- [ ] Commit satu fitur + docs; working tree tidak membawa perubahan asing.
+- [x] Commit satu fitur + docs; working tree tidak membawa perubahan asing.
 
 ### E. Push dan acceptance dua situs
 

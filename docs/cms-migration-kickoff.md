@@ -1,8 +1,9 @@
 # CMS → Supabase — kickoff aktif untuk AI baru
 
 User: **Faiz**, panggil **bro**, bahasa Indonesia.
-Work order berikutnya: **pass 4 Domains**, satu collection. Baseline kode live:
-`53f92f8`. Planning sudah dibuat; kode/SQL Domains belum dibuat/applied.
+Work order aktif: **pass 4 Domains**, A–D selesai; E pending push berizin.
+Baseline kode situs live `53f92f8`. Domains SQL applied, kode + QA lokal siap
+review; belum push/deploy/acceptance Domains. Lihat checkpoint AI handoff.
 
 ## 1. Status yang benar
 
@@ -12,7 +13,7 @@ Work order berikutnya: **pass 4 Domains**, satu collection. Baseline kode live:
 | CMS Projects pass 1  | Supabase Postgres + Storage projects, live                        |
 | CMS Team pass 2      | Supabase Postgres + Storage team, live                            |
 | CMS Roles pass 3     | Supabase Postgres, public read RPC cms_load_roles, live           |
-| CMS Domains          | GAS saat ini; NEXT pass 4                                         |
+| CMS Domains          | SQL Supabase applied; kode lokal siap, situs masih GAS            |
 | CMS Hods             | GAS; pass 5 sesudah Domains                                       |
 | CMS Partners         | GAS; pass 6 sesudah Hods                                          |
 | CMS auth             | OAuth custom existing, jangan sentuh sebelum seluruh data selesai |
@@ -33,7 +34,7 @@ adalah urutan file repo, bukan bukti tanggal execution. Catatan tanggal historis
 1. File ini: checkpoint + starter prompt.
 2. `AGENTS.md`: aturan operasional dan izin.
 3. [AI handoff](ai-handoff.md): status/batas bukti terbaru.
-4. [Domains Master Work Plan](cms-pass4-domains-plan.md): kontrak, SQL proposal,
+4. [Domains Master Work Plan](cms-pass4-domains-plan.md): kontrak, SQL actual,
    kritik risiko, checklist A–E, tes dan DoD.
 5. [Migration TODO](cms-migration-todo.md): done vs TODO seluruh pass.
 6. [Master migration plan](cms-supabase-migration-plan.md) + [CMS SOP](cms-sop.md).
@@ -52,8 +53,8 @@ Jangan membaca arsip GAS sebagai work order untuk membuat ulang setup.
 - Read migrated collections via RPC build-time **anon key**. Write existing
   Projects/Team lewat Management API database/query dengan access token server.
 - Domains/Roles tidak punya editor atau write API. Jangan membuat handler admin
-  baru atau mengklaim `gas()` handler melayani Domains/Hods/Partners; saat ini
-  mereka berasal dari **build-time GAS full export**.
+  baru atau mengklaim `gas()` handler melayani Domains/Hods/Partners. Kode lokal
+  Domains memakai RPC; Hods/Partners tetap **build-time GAS full export**.
 - Full export GAS divalidasi sebelum Supabase override. Hods/Partners tetap
   GAS, dan tab migrated harus tetap valid; jangan hapus GAS atau env sekarang.
 - Tidak ada fallback stale. RPC gagal → build gagal, snapshot lama tidak diganti.
@@ -61,8 +62,8 @@ Jangan membaca arsip GAS sebagai work order untuk membuat ulang setup.
   URLs bertoken, .env.local atau credentials.
 - Konfirmasi sebelum **push baru**; origin memiliki dua push URLs. Approval
   `53f92f8` sudah digunakan, bukan izin push otomatis pass 4 atau dokumen baru.
-- Sesi ini hanya planning/docs. Implementasi dimulai saat user mengirim prompt
-  lanjut; jangan menganggap checklist TODO sudah dijalankan.
+- Implementasi Domains telah diotorisasi dan A–D selesai. Checklist E tetap
+  pending; jangan menganggap SQL applied berarti situs sudah LIVE.
 
 ## 4. Temuan yang wajib dipertahankan
 
@@ -90,38 +91,22 @@ File utama: scripts/cms-client.mjs, src/data/cms-schema.mjs,
 src/data/cms-snapshot.json, src/data/domains.ts,
 supabase/migrations/20261010010000_cms_roles_pass3.sql,
 tests/cms-roles-supabase.test.mjs, tests/cms.test.mjs,
-tests/cms-media.test.mjs. Usulan migration Domains: 20261011010000;
-periksa collision sebelum membuatnya. Jangan mengubah actual Roles SQL.
+tests/cms-media.test.mjs. Migration Domains actual: 20261011010000, applied. Tes baru:
+tests/cms-domains-supabase.test.mjs. Jangan mengubah actual Roles SQL.
 
-## 6. Prompt siap copy ke AI baru
+## 6. Prompt lanjut setelah review
 
 ```text
-Bro, lanjut implementasi CMS pass 4 Domains → Supabase di repo
-/home/faiz/ds/ds5opencode.
-
-Baca docs/cms-migration-kickoff.md → AGENTS.md → docs/ai-handoff.md →
-docs/cms-pass4-domains-plan.md → docs/cms-migration-todo.md →
-docs/cms-supabase-migration-plan.md → docs/cms-sop.md sebelum coding.
-
-Baseline kode live 53f92f8: Projects/Team/Roles sudah Supabase, kedua Vercel
-SUCCESS dan Roles acceptance selesai. Domains/Hods/Partners masih GAS.
-Ikuti Master Work Plan Domains checklist A–E satu tahap demi satu tahap.
-
-Scope hanya Domains: enam fixed ID/order, labels tiga nested row dengan blank
-slot persis baseline, SQL private + RLS + public anon RPC, hybrid snapshot,
-tes PostgreSQL nyata dan failure atomicity, 7 gate + SEO, docs + commit.
-Tidak ada editor/write API/Storage/state baru. UI/geometri/font/artwork/Zod
-existing/assertion tidak berubah. Auth paling akhir, jangan sentuh sekarang.
-
-Periksa git/env/Node 22; jangan mencetak secret. Jangan reset perubahan asing,
-reseed Team atau menimpa snapshot baseline: Team remote drift sudah ada.
-GAS full export tetap dependency; jangan hapus tab/env/GAS. Jalankan full
-CMS suite tanpa server env karena ada tes mutation Team live.
-
-Kerjakan sampai hasil konkret siap review. Konfirmasi sebelum push baru;
-origin sekali push men-deploy testing + production. Setelah push berizin,
-verifikasi SHA/deployment dan live Home/Recruitment/routing kedua situs.
-Laporkan bukti lokal vs live dan blocker yang benar-benar terjadi.
+Bro, baca checkpoint AGENTS/ai-handoff + plan Domains + TODO dahulu.
+Domains A–D selesai: SQL applied, RPC anon/role proof, QA lokal dan baseline parity.
+Situs live masih 53f92f8. Periksa commit/status lokal dan izin push terbaru.
+Jangan menganggap prompt ini memberi izin push; tunggu approval konkret Faiz.
+Verifikasi empat env Supabase + GAS pada dua Vercel melalui akses privat;
+credential CLI terakhir belum bisa membaca kedua project. Setelah approval,
+push origin main sekali, pastikan dua SHA/deployment baru SUCCESS, lalu jalankan
+checklist E Home/Recruitment/routing 390/1440 kedua situs. No mutations.
+Update checkpoint dengan bukti actual, jangan apply ulang SQL atau reseed Team.
+Hods/Partners/auth belum dikerjakan, tidak ada izin hapus GAS.
 ```
 
 ## 7. Keputusan yang tidak boleh diasumsikan

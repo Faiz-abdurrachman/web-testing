@@ -1,14 +1,18 @@
 # SOP CMS — Data Sorcerers
 
-## Checkpoint aktif — pass 3 live, pass 4 plan
+## Checkpoint aktif — pass 3 situs live, pass 4 SQL applied/kode lokal
 
 [Roles](cms-pass3-roles-plan.md) selesai deploy/acceptance pada `53f92f8`:
 dua Vercel SUCCESS, six Roles × 390/1440 × dua situs PASS, admin API anonymous
 401, recruitment closed. [Domains Master Work Plan](cms-pass4-domains-plan.md)
 
-- [TODO](cms-migration-todo.md) adalah work order berikut; belum implementasi.
-  Projects/Team/Roles dibaca Supabase RPC anon. Domains/Hods/Partners masih dari
-  full export GAS (validasi awal tetap seluruh snapshot), bukan handler admin gas().
+- [TODO](cms-migration-todo.md): A–D selesai, E pending approval push/dua deploy/
+  acceptance. SQL Domains applied pada 7 Oct; RPC anon + role proof PASS.
+  Kode lokal Projects/Team/Roles/Domains memakai RPC anon, Hods/Partners GAS.
+  Situs live masih pass 3. Full export GAS tetap tervalidasi seluruh snapshot;
+  bukan handler admin gas(). QA lokal CMS 56 PASS/10 SKIP, recruitment 24 PASS,
+  PostgreSQL nyata, 7 gate + SEO, tiga admin mock empat width, snapshot/19 HTML
+  identik. Proof `artifacts/cms-pass4/` ignored. Fresh Vercel env proof pending akses.
 
 Domains/Roles read-only tanpa editor; auth/media/handler tetap. Auth CMS terakhir;
 mekanisme pending. Jangan load env server pada seluruh test:cms (Team live

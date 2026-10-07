@@ -1,8 +1,8 @@
 # CMS → Supabase — TODO dan status penerimaan
 
 Work order aktif: **pass 4 Domains**, [Master Work Plan](cms-pass4-domains-plan.md).
-Baseline kode live `53f92f8`. Dokumen/TODO ini adalah persiapan AI baru;
-implementasi Domains belum dimulai. Satu collection per pass, auth terakhir.
+Baseline kode live `53f92f8`. Domains SQL applied dan kode/QA lokal selesai;
+push/deploy/acceptance baru belum dilakukan. Satu collection per pass, auth terakhir.
 
 ## 1. Yang benar-benar sudah selesai
 
@@ -31,20 +31,20 @@ berbeda snapshot repo sebelum pass 3; non-Roles pre/post identik, tidak diubah.
 
 Rincian executable checklist A–E dan matriks tes ada di Master Work Plan.
 
-- [ ] A1: baca state, Node 22, git bersih/isolasi perubahan asing, env presence.
-- [ ] A2: snapshot/HTML baseline baru + proof remote sebelum pass.
-- [ ] A3: Domains GAS vs snapshot cocok keenam record, urutan, nested slot/blank.
-- [ ] A4: read-only check tabel/RPC destination existing, rekonsiliasi mismatch.
-- [ ] B1: SQL tabel/helper/check/RLS/revoke/public RPC/seed idempotent.
-- [ ] B2: PostgreSQL ephemeral positif/negatif/security/rerun/Unicode boundary.
-- [ ] B3: hybrid `cms_load_domains` + fail closed + fixture mocks relevan.
-- [ ] B4: local CMS/recruitment contracts PASS, jangan load server env full suite.
-- [ ] C1: apply additive SQL setelah reconciliation + local DB proof.
-- [ ] C2: real anon RPC exact data, catalog + role privilege proof.
-- [ ] C3: remote hybrid parity dengan pre-pass; Team drift tidak di-reset.
-- [ ] D1: build/verify/navbar/VT/responsive/spacing/format/SEO PASS.
-- [ ] D2: native/legacy/Team admin regression; snapshot/HTML baseline parity.
-- [ ] D3: docs + commit fitur siap review, proof sanitised tersimpan.
+- [x] A1: baca state, Node 22, git bersih/isolasi perubahan asing, env presence.
+- [x] A2: snapshot/HTML baseline baru + proof remote sebelum pass.
+- [x] A3: Domains GAS vs snapshot cocok keenam record, urutan, nested slot/blank.
+- [x] A4: read-only check tabel/RPC destination existing, rekonsiliasi mismatch.
+- [x] B1: SQL tabel/helper/check/RLS/revoke/public RPC/seed idempotent.
+- [x] B2: PostgreSQL ephemeral positif/negatif/security/rerun/Unicode boundary.
+- [x] B3: hybrid `cms_load_domains` + fail closed + fixture mocks relevan.
+- [x] B4: local CMS/recruitment contracts PASS, jangan load server env full suite.
+- [x] C1: apply additive SQL setelah reconciliation + local DB proof.
+- [x] C2: real anon RPC exact data, catalog + role privilege proof.
+- [x] C3: remote hybrid parity dengan pre-pass; Team drift tidak di-reset.
+- [x] D1: build/verify/navbar/VT/responsive/spacing/format/SEO PASS.
+- [x] D2: native/legacy/Team admin regression; snapshot/HTML baseline parity.
+- [x] D3: docs + commit fitur siap review, proof sanitised tersimpan.
 - [ ] E1: empat env Supabase pada kedua Vercel, GAS env tetap untuk Hods/Partners.
 - [ ] E2: **konfirmasi push baru** lalu push origin, dua remote SHA sinkron.
 - [ ] E3: dua latest deployments SHA pass 4 SUCCESS.

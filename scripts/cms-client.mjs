@@ -276,6 +276,19 @@ export async function syncCmsSnapshot({
     );
     snapshot.roles = sr.roles;
 
+    // Keep Domains upstream JSON/network errors from exposing private response details.
+    try {
+      const sd = await supabaseFetch(
+        supabaseUrl,
+        supabaseKey,
+        'cms_load_domains',
+        fetchImpl,
+      );
+      snapshot.domains = sd.domains;
+    } catch {
+      throw new Error('Supabase RPC cms_load_domains failed.');
+    }
+
     validateCmsSnapshot(snapshot);
   }
 

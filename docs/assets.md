@@ -1,11 +1,12 @@
 # Asset provenance
 
-## Checkpoint CMS / provenance — Roles live, Domains plan only
+## Checkpoint CMS / provenance — Domains SQL applied, kode lokal
 
-CMS Projects/Team/Roles bersumber Supabase; Domains/Hods/Partners masih GAS.
-Kode live `53f92f8`, dua deployments/acceptance Roles selesai. Berikutnya
+Kode lokal CMS Projects/Team/Roles/Domains bersumber Supabase; Hods/Partners GAS.
+SQL Domains applied; situs masih pass 3 sampai push/deploy/acceptance berizin.
+Kode live `53f92f8`, dua deployments/acceptance Roles selesai. Cutover pending checklist E
 [Domains Master Work Plan](cms-pass4-domains-plan.md) + [TODO](cms-migration-todo.md).
-Planning hanya mengubah docs; tidak ada asset/font/CSS/artwork/reference PNG
+Pass Domains mengubah sumber build-time saja; tidak ada asset/font/CSS/artwork/reference PNG
 atau geometry/assertion yang diubah. Domains metadata design tint/x/y/gap
 masih lokal src/data/domains.ts; DB hanya id/title/description/labels.
 

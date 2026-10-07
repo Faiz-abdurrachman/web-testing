@@ -1,45 +1,48 @@
 # AGENTS.md — instructions for AI agents
 
-## Checkpoint aktif — Roles LIVE, NEXT pass 4 Domains
+## Checkpoint aktif — Domains SQL applied, kode lokal siap review
 
-Baseline kode live **`53f92f8`**, terkirim ke testing + production dengan izin
-Faiz. Kedua Vercel SUCCESS; acceptance enam Roles pada 390/1440 kedua situs
-PASS, API admin anonymous 401, recruitment tetap accepting:false.
-Timestamp deploy actual: testing 2026-10-07 11:20:17 UTC dan production
-11:21:28 UTC (18:20:17 / 18:21:28 WIB). Tanggal pada nama migration bukan
-bukti tanggal execution; catatan tanggal historis tidak mengalahkan bukti ini.
+Baseline situs live tetap **`53f92f8`** (Projects/Team/Roles Supabase).
+Pass 4 Domains diimplementasikan atas instruksi Faiz: SQL additive
+`20261011010000_cms_domains_pass4.sql` sudah applied ke existing web-community
+pada **7 Oct 2026**; RPC anon nyata cocok keenam record/urutan/nested blank slots.
+Catalog RLS/deny policy/grants + execution anon/service_role dan 13 operasi
+private/authenticated denied PASS. Verifikasi 11:50:54 UTC / 18:50:54 WIB.
+Tidak memalsukan migration ledger; tanggal filename adalah urutan repo.
 
-**Work order AI baru:** [kickoff](docs/cms-migration-kickoff.md) →
-[Domains Master Work Plan](docs/cms-pass4-domains-plan.md) →
-[TODO migrasi](docs/cms-migration-todo.md). Pass 4 masih **PLAN ONLY**;
-belum SQL/kode/apply/deploy. Sesi ini menyiapkan plan/TODO/docs, tidak
-mengimplementasikan Domains. Prompt lanjut siap copy di kickoff §6.
+Kode lokal `syncCmsSnapshot` membaca `cms_load_domains` setelah Roles, tanpa
+fallback. UI/geometri/font/artwork/Zod/assertions/admin/auth/media tidak berubah.
+Tidak ada editor/write API/state/Storage Domains. GAS full export tetap
+tervalidasi sebelum override; **Hods/Partners masih GAS**, jangan hapus tab/env.
+Situs masih memakai kode lama sampai push/deployment baru diterima.
 
-Sumber aktif: Projects/Team/Roles = Supabase; Domains/Hods/Partners = GAS
-full export build-time. Roles/Domains belum punya editor/write API; handler
-`gas()` bukan jalur admin empat collection read-only. Full GAS export masih
-divalidasi sebelum overrides, jadi jangan hapus tab collection migrated.
-Write Projects/Team tetap Management API; auth CMS tetap OAuth custom.
-Auth terakhir, mekanisme final belum diputuskan. Tidak mengubah UI/geometri,
-font/artwork/schema Zod/assertion atau collection lain.
+QA Node **22.23.0**: CMS **56 PASS + 10 Team live SKIP**, Recruitment **24 PASS**,
+PostgreSQL ephemeral Domains (tipe/mask keenam ID, UTF-16/emoji, fixed order,
+rerun menjaga edit, privileges/RLS), tiga admin browser mock × empat width,
+**7 gate + SEO PASS**, responsive **468/468**, SEO **23 halaman**, spacing
+**39 komponen**. Snapshot byte-identik dan **19 HTML publik identik** baseline.
 
-QA pass 3: CMS **42 PASS + 10 live Team SKIP**, Recruitment **24 PASS**,
-PostgreSQL Roles nyata, tiga browser admin mock empat width, **7 gate + SEO
-PASS**, responsive **468/468**, SEO 23 halaman, snapshot/19 HTML lokal identik.
-Bukti ignored: artifacts/cms-pass3/{live-db,live-hybrid,live-browser,
-deploy-53f92f8}.json; artifact availability tidak dijamin di workspace baru.
+Same captured remote inputs pada client pre/post menghasilkan value identik
+seluruh snapshot; Team drift **preexisting** tetap dicatat, tidak di-reseed.
+Anon key lokal absent; diambil Management API in-memory tanpa print/write env.
+Suite CMS penuh dijalankan tanpa env server agar tidak mutation Team live.
+Probe RPC pertama setelah apply gagal; pemeriksaan state berikutnya HTTP 200
+exact, proof dilanjutkan tanpa apply ulang. Penyebab probe awal belum diisolasi.
 
-**Batas bukti:** Team Supabase berbeda snapshot repo sebelum pass 3; proof
-client pre/post memastikan non-Roles tidak diubah. Jangan reseed Team untuk
-menyamakan baseline. Local anon key absent saat pass 3; proof membaca key
-Management API di memori. Full test:cms jangan dimuati env server karena tes
-Team dapat mutation live. Audit cold-cache private media dan partial GAS
-validation terpisah, jangan diperluas diam-diam dalam Domains.
+Bukti ignored: `artifacts/cms-pass4/{reconciliation,live-db,live-hybrid,
+baseline-html,after-html}.json` + logs gates/tests. Artifact availability tidak
+dijamin pada workspace baru. Cold-cache private media dan pemisahan validasi
+GAS tetap scope terpisah. Recruitment closed; auth CMS tetap OAuth custom,
+auth final belum diputuskan.
 
-Urutan: **Domains → Hods → Partners → auth CMS terakhir**. NEXT lama di arsip
-bukan instruksi aktif. Izin push `53f92f8` telah digunakan; **konfirmasi sebelum
-push baru**, termasuk pass 4/dokumentasi baru. User mengizinkan kerja/commit
-lokal. Dokumen planning sesi ini belum push sampai mendapat izin baru.
+**NEXT: konfirmasi push commit pass 4 yang konkret**, lalu dua deployments SHA
+baru dan acceptance Home/Recruitment/routing kedua situs. Izin push `53f92f8`
+sudah digunakan. Origin sekali push deploy testing + production. Pemeriksaan
+fresh env Vercel melalui credential CLI saat ini belum tersedia untuk kedua
+project; wajib verifikasi sebelum push, tanpa menghapus env GAS. Pass 4 belum
+LIVE/locked sampai checklist E selesai. Setelah acceptance: Hods → Partners →
+auth CMS terakhir. Plan/TODO: `docs/cms-pass4-domains-plan.md`,
+`docs/cms-migration-todo.md`; kickoff: `docs/cms-migration-kickoff.md`.
 
 ## CMS pass 2 — Team → Supabase — LIVE 8 Oct 2026
 
