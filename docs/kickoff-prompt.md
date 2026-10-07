@@ -21,16 +21,14 @@ Migration `20261007120000_recruitment_pass2_admin_read.sql` di-apply:
 generated columns (email, whatsapp, full_name, primary_hods, team_comfort,
 agreement_1/2/3), tabel `private.recruitment_audit_log`, tabel allowlist
 `private.cms_admin_users`, 10 fungsi (5 private + 5 public wrapper).
-Server handler `server/recruitment-admin.mjs`, API:
-`/api/admin/recruitment/applications|application|stats`,
-halaman `/admin/recruitment/` (noindex), client JS. Tests 15/15 ALL PASS.
+Server handler `server/recruitment-admin.mjs`, API catch-all:
+`/api/admin/recruitment/{applications|application|stats|login|logout}`,
+halaman `/admin/recruitment/` (noindex), client JS. Tests 19/19 ALL PASS.
 
-**BELUM LIVE — nunggu owner:**
-
-1. Aktifkan Supabase Auth Google provider (dashboard Supabase)
-2. Set redirect URI `https://<site>/api/admin/recruitment/callback`
-3. `INSERT INTO private.cms_admin_users (auth_id, email) VALUES (...);`
-4. Set `SUPABASE_ANON_KEY` di env kedua Vercel
+**Login admin = Supabase Auth email + password** (`grant_type=password`,
+cookie HttpOnly), bukan Google. User `admin@datasorcerers.com` dibuat +
+di-seed ke `cms_admin_users`. `SUPABASE_ANON_KEY` sudah di-set di kedua Vercel.
+Owner disarankan ganti password lemah via dashboard Supabase.
 
 Jangan pasang GAS intake; jangan ubah
 CMS/auth/UI/geometri existing tanpa izin; secret dari `.env.local` jangan

@@ -1,5 +1,3 @@
-import { createHash, randomBytes } from 'node:crypto';
-
 const headers = {
   'Cache-Control': 'no-store',
   'X-Content-Type-Options': 'nosniff',
@@ -31,7 +29,23 @@ function redirectWithCookies(location, cookies = []) {
   cookies.forEach((c) => h.append('Set-Cookie', c));
   return new Response(null, { status: 303, headers: h });
 }
-const base64url = (buffer) => Buffer.from(buffer).toString('base64url');
+async function boundedJson(request, limit) {
+  const reader = request.body?.getReader();
+  if (!reader) throw new Error();
+  let size = 0;
+  const chunks = [];
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    size += value.byteLength;
+    if (size > limit) {
+      await reader.cancel();
+      throw new Error();
+    }
+    chunks.push(Buffer.from(value));
+  }
+  return JSON.parse(Buffer.concat(chunks).toString('utf8'));
+}
 
 function config(env) {
   const url = new URL(env.SUPABASE_URL || '');
@@ -48,7 +62,6 @@ function config(env) {
     anon: env.SUPABASE_ANON_KEY || '',
     origin,
     secure: origin.startsWith('https://'),
-    redirect: origin + '/api/admin/recruitment/callback',
   };
 }
 
@@ -76,7 +89,7 @@ export function createRecruitmentAdminHandler({
   async function verifyIdentity(request) {
     const cfg = config(env);
     const accessToken = readCookie(request, 'sb-access-token');
-    if (!accessToken) return null;
+    if (!accessToken || !cfg.anon) return null;
 
     const response = await fetchImpl(`${cfg.authBase}/auth/v1/user`, {
       headers: {
@@ -111,33 +124,40 @@ export function createRecruitmentAdminHandler({
     }
   }
 
-  function loginRedirect(cfg) {
-    // Server-side PKCE: keep the verifier in a short-lived HttpOnly cookie and
-    // send only its S256 challenge to Supabase Auth.
-    const verifier = base64url(randomBytes(48));
-    const challenge = base64url(createHash('sha256').update(verifier).digest());
-    const target = new URL(`${cfg.authBase}/auth/v1/authorize`);
-    target.search = new URLSearchParams({
-      provider: 'google',
-      redirect_to: cfg.redirect,
-      code_challenge: challenge,
-      code_challenge_method: 's256',
-    }).toString();
-    const response = redirectWithCookies(target.href, [
-      cookie('sb-pkce', verifier, 600, cfg.secure),
-    ]);
-    return response;
-  }
+  async function loginWithPassword(request, cfg) {
+    if (request.headers.get('origin') !== cfg.origin)
+      return error('FORBIDDEN', 403);
+    if (
+      !(request.headers.get('content-type') || '').startsWith(
+        'application/json',
+      )
+    )
+      return error('INVALID_INPUT', 400);
+    if (!cfg.anon) return error('CONFIGURATION', 503);
 
-  async function callbackHandler(request, cfg) {
-    const url = new URL(request.url);
-    const clearPkce = cookie('sb-pkce', '', 0, cfg.secure);
+    let body;
     try {
-      const code = url.searchParams.get('code');
-      const verifier = readCookie(request, 'sb-pkce');
-      if (!code || !verifier) throw new Error();
+      body = await boundedJson(request, 4096);
+    } catch {
+      return error('INVALID_INPUT', 400);
+    }
+    if (
+      !body ||
+      typeof body !== 'object' ||
+      Array.isArray(body) ||
+      Object.keys(body).some((k) => !['email', 'password'].includes(k)) ||
+      typeof body.email !== 'string' ||
+      typeof body.password !== 'string' ||
+      !body.email ||
+      !body.password ||
+      body.email.length > 320 ||
+      body.password.length > 256
+    )
+      return error('INVALID_INPUT', 400);
+
+    try {
       const response = await fetchImpl(
-        `${cfg.authBase}/auth/v1/token?grant_type=pkce`,
+        `${cfg.authBase}/auth/v1/token?grant_type=password`,
         {
           method: 'POST',
           redirect: 'error',
@@ -146,10 +166,13 @@ export function createRecruitmentAdminHandler({
             'Content-Type': 'application/json',
             apikey: cfg.anon,
           },
-          body: JSON.stringify({ auth_code: code, code_verifier: verifier }),
+          body: JSON.stringify({
+            email: body.email,
+            password: body.password,
+          }),
         },
       );
-      if (!response.ok) throw new Error();
+      if (!response.ok) return error('UNAUTHORIZED', 401);
       const token = await response.json();
       if (
         typeof token.access_token !== 'string' ||
@@ -157,19 +180,21 @@ export function createRecruitmentAdminHandler({
         typeof token.refresh_token !== 'string' ||
         !Number.isFinite(token.expires_in)
       )
-        throw new Error();
+        return error('UNAUTHORIZED', 401);
       const accessAge = Math.min(Math.floor(token.expires_in), 3600);
       const refreshAge = 60 * 60 * 24 * 30;
-      return redirectWithCookies(cfg.origin + '/admin/recruitment/', [
-        clearPkce,
+      const result = json({ ok: true });
+      result.headers.append(
+        'Set-Cookie',
         cookie('sb-access-token', token.access_token, accessAge, cfg.secure),
-        cookie('sb-refresh-token', token.refresh_token, refreshAge, cfg.secure),
-      ]);
-    } catch {
-      return redirectWithCookies(
-        cfg.origin + '/admin/recruitment/?login=failed',
-        [clearPkce],
       );
+      result.headers.append(
+        'Set-Cookie',
+        cookie('sb-refresh-token', token.refresh_token, refreshAge, cfg.secure),
+      );
+      return result;
+    } catch {
+      return error('UNCONFIRMED', 502);
     }
   }
 
@@ -178,18 +203,15 @@ export function createRecruitmentAdminHandler({
     try {
       cfg = config(env);
     } catch {
-      return route === 'login' || route === 'callback'
-        ? Response.redirect(
-            new URL('/admin/recruitment/?login=unavailable', request.url).href,
-            303,
-          )
-        : error('CONFIGURATION', 503);
+      return error('CONFIGURATION', 503);
     }
 
-    if (route === 'login' && request.method === 'GET')
-      return loginRedirect(cfg);
-    if (route === 'callback' && request.method === 'GET')
-      return callbackHandler(request, cfg);
+    if (route === 'login') {
+      if (request.method === 'GET')
+        return redirectWithCookies(cfg.origin + '/admin/recruitment/');
+      if (request.method === 'POST') return loginWithPassword(request, cfg);
+      return error('METHOD_NOT_ALLOWED', 405);
+    }
 
     if (route === 'logout') {
       return redirectWithCookies(cfg.origin + '/admin/recruitment/', [
@@ -223,7 +245,7 @@ export function createRecruitmentAdminHandler({
           request.method === 'POST' &&
           request.headers.get('content-type')?.startsWith('application/json')
         ) {
-          filters = await request.json().catch(() => ({}));
+          filters = await boundedJson(request, 32768).catch(() => ({}));
           if (typeof filters !== 'object' || Array.isArray(filters))
             return error('INVALID_INPUT', 400);
         } else if (request.method === 'GET') {

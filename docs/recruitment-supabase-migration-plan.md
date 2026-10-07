@@ -1,10 +1,9 @@
 # Master Work Plan — Recruitment → Supabase
 
 Status: **LIVE 7 Oct 2026.** Pass 1 (intake) SELESAI di Supabase project
-`web-community`. Pass 2 (admin read / derived columns / audit) SELESAI — kode
-
-- migration di `f01a89b`+pass2, menunggu owner aktifkan Supabase Auth Google
-  provider + seed `cms_admin_users`. Belum ada push pass 2.
+`web-community`. Pass 2 (admin read / derived columns / audit) SELESAI — login
+admin pakai Supabase Auth email + password, user admin + allowlist `cms_admin_users`
+sudah di-seed. Kode sudah push.
 
 Dokumen ini turunan dari
 [`docs/cms-supabase-migration-plan.md`](cms-supabase-migration-plan.md) dan
@@ -394,15 +393,13 @@ tanpa migrasi balik data:
 **Pass lanjutan (terpisah, hanya setelah pass 1 hijau + approval):**
 
 - **Pass 2 (SELESAI 7 Oct 2026):** kolom turunan/queryable (§4.2) + baca admin
-  owner-only (auth Supabase §9) + audit + retensi/enkripsi bila diputuskan.
-  Kode, migration, tests selesai. Acceptance live menunggu: (a) owner aktifkan
-  Supabase Auth Google provider di dashboard, (b) isi redirect URI
-  `https://<site>/api/admin/recruitment/callback`, (c) jalankan SQL seed
-  `cms_admin_users` dengan auth_id owner, (d) set `SUPABASE_ANON_KEY` di env
-  Vercel. Route: `GET /api/admin/recruitment/applications` (list),
-  `GET /api/admin/recruitment/application?receipt=...` (detail),
-  `GET /api/admin/recruitment/stats` (agregat).
-- **Pass 3:** rate limit server-side (§7).
+  owner-only (auth Supabase §9) + audit. Kode, migration, tests selesai.
+  Login admin = **Supabase Auth email + password** (`grant_type=password`,
+  cookie HttpOnly). Route catch-all
+  `/api/admin/recruitment/{applications|application|stats|login|logout}`.
+  Tests 19/19. `SUPABASE_ANON_KEY` terpasang di kedua Vercel. Google provider
+  tidak dipakai.
+- **Pass 3:** rate limit server-side (§7) + refresh token otomatis.
 - **Pass 4:** CAPTCHA + perubahan klien (§7) — pass UI tersendiri.
 - **Keputusan terpisah:** pembukaan publik (§2 #15).
 

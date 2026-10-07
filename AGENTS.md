@@ -5,18 +5,17 @@
 Pass 2 recruitment: kolom turunan (generated columns untuk queryable email,
 primary_hods, dll), tabel allowlist `private.cms_admin_users`, tabel audit
 `private.recruitment_audit_log`, fungsi baca (5 private + 5 public wrapper),
-server handler `server/recruitment-admin.mjs`, API routes
-`/api/admin/recruitment/applications|application|stats`, halaman
-`/admin/recruitment/` (noindex), client `src/scripts/recruitment-admin.js`.
+server handler `server/recruitment-admin.mjs`, API route catch-all
+`api/admin/recruitment/[...route].js` (list/application/stats/login/logout),
+halaman `/admin/recruitment/` (noindex), client `src/scripts/recruitment-admin.js`.
 Migration `20261007120000_recruitment_pass2_admin_read.sql` sudah di-apply ke
-Supabase project `web-community`. Tests 15/15 (pass 1 + pass 2).
+Supabase project `web-community`. Tests 19/19 (9 pass 1 + 10 pass 2).
 
-**BELUM LIVE:** menunggu owner:
-
-1. Aktifkan Supabase Auth Google provider (dashboard Supabase)
-2. Set redirect URI `https://<site>/api/admin/recruitment/callback`
-3. Jalankan SQL: `INSERT INTO private.cms_admin_users (auth_id, email) VALUES ('<owner-auth-id>', '<owner-email>');`
-4. Set `SUPABASE_ANON_KEY` di env kedua Vercel
+**Login admin = Supabase Auth email + password** (`grant_type=password`, cookie
+HttpOnly), bukan Google. User admin dibuat (`admin@datasorcerers.com`) + di-seed
+ke `private.cms_admin_users`. Owner disarankan ganti password lemah via dashboard
+sebelum dipakai serius. `SUPABASE_ANON_KEY` sudah di-set di kedua Vercel. Google
+provider tidak dipakai (boleh dinonaktifkan).
 
 CMS (GAS/Sheets/Drive export+admin) **TIDAK diubah**.
 
@@ -48,26 +47,6 @@ Supabase Auth + audit), rate limit, CAPTCHA, retensi/pembukaan publik; atau
 mulai migrasi collection CMS per pass. Jangan pasang GAS intake; jangan ubah
 CMS/auth/UI/geometri existing tanpa izin; secret dari `.env.local` jangan
 dicetak; push = origin (dua situs) dengan konfirmasi.
-
-## Recruitment pass 2 — admin read (Supabase Auth) — 7 Oct 2026
-
-Pass 2 recruitment: kolom turunan (generated columns untuk queryable email,
-primary_hods, dll), tabel allowlist `private.cms_admin_users`, tabel audit
-`private.recruitment_audit_log`, fungsi baca (5 private + 5 public wrapper),
-server handler `server/recruitment-admin.mjs`, API routes
-`/api/admin/recruitment/applications|application|stats`, halaman
-`/admin/recruitment/` (noindex), client `src/scripts/recruitment-admin.js`.
-Migration `20261007120000_recruitment_pass2_admin_read.sql` sudah di-apply ke
-Supabase project `web-community`. Tests 15/15 (pass 1 + pass 2).
-
-**BELUM LIVE:** menunggu owner:
-
-1. Aktifkan Supabase Auth Google provider (dashboard Supabase)
-2. Set redirect URI `https://<site>/api/admin/recruitment/callback`
-3. Jalankan SQL: `INSERT INTO private.cms_admin_users (auth_id, email) VALUES ('<owner-auth-id>', '<owner-email>');`
-4. Set `SUPABASE_ANON_KEY` di env kedua Vercel
-
-CMS (GAS/Sheets/Drive export+admin) **TIDAK diubah**.
 
 ## Arsip — Recruitment integration GAS (6 Oct 2026)
 

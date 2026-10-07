@@ -45,18 +45,14 @@ audit `private.recruitment_audit_log`, tabel allowlist
 `private.cms_admin_users`, 5 fungsi baca privat + 5 wrapper public.
 Migration `20261007120000_recruitment_pass2_admin_read.sql` sudah di-apply
 ke project `web-community`. Server handler
-`server/recruitment-admin.mjs` dengan route:
-`/api/admin/recruitment/applications` (list + filter),
-`/api/admin/recruitment/application?receipt=...` (detail),
-`/api/admin/recruitment/stats` (agregat).
-Halaman `/admin/recruitment/` (noindex). Tests 15/15 PASS (9 pass 1 + 7 pass 2).
+`server/recruitment-admin.mjs` dengan route catch-all
+`/api/admin/recruitment/{applications|application|stats|login|logout}`.
+Halaman `/admin/recruitment/` (noindex). Tests 19/19 PASS (9 pass 1 + 10 pass 2).
 
-**BELUM LIVE — menunggu owner:**
-
-1. Aktifkan Supabase Auth Google provider di dashboard
-2. Set redirect URI `https://<site>/api/admin/recruitment/callback`
-3. INSERT owner ke `private.cms_admin_users`
-4. Set `SUPABASE_ANON_KEY` di env Vercel
+**Login admin = Supabase Auth email + password** (`grant_type=password`, cookie
+HttpOnly), bukan Google. User admin `admin@datasorcerers.com` sudah dibuat dan
+di-seed ke `private.cms_admin_users`. `SUPABASE_ANON_KEY` sudah di-set di kedua
+Vercel. Sisa: owner sebaiknya ganti password lemah via dashboard Supabase.
 
 CMS/auth/UI/geometri tidak berubah.
 

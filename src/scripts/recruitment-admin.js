@@ -37,13 +37,13 @@
 
   const loggedIn = () => {
     byId('workspace').hidden = false;
-    byId('login').hidden = true;
+    byId('login-form').hidden = true;
     byId('logout').hidden = false;
   };
 
   const expire = () => {
     byId('workspace').hidden = true;
-    byId('login').hidden = false;
+    byId('login-form').hidden = false;
     byId('logout').hidden = true;
     byId('detail-area').hidden = true;
     byId('table-wrapper').hidden = false;
@@ -272,6 +272,42 @@
 
     byId('logout').addEventListener('click', () => {
       location.href = '/api/admin/recruitment/logout';
+    });
+
+    byId('login-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (busy) return;
+      const email = byId('login-email').value;
+      const password = byId('login-password').value;
+      if (!email || !password) return;
+      setBusy(true);
+      message('Masuk…');
+      try {
+        const response = await fetch(api + '/login', {
+          method: 'POST',
+          credentials: 'same-origin',
+          cache: 'no-store',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || !result.ok) {
+          message(
+            result.error?.code === 'CONFIGURATION'
+              ? errors.CONFIGURATION
+              : 'Email atau password salah.',
+            true,
+          );
+          return;
+        }
+        byId('login-password').value = '';
+        await loadList();
+        await loadStats();
+      } catch {
+        message('Koneksi terputus.', true);
+      } finally {
+        setBusy(false);
+      }
     });
 
     byId('filter-btn').addEventListener('click', () => {
