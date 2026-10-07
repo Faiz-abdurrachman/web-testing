@@ -31,6 +31,7 @@ function harness({
   userOk = true,
   badLogin = false,
   limited = false,
+  limitFailure = false,
 } = {}) {
   let now = 100000;
   const calls = [];
@@ -60,6 +61,8 @@ function harness({
       return Response.json(
         authorized ? { ok: true, email: 'o@e.t' } : { ok: false },
       );
+    if (u.includes('cms_rate_limit_check') && limitFailure)
+      return Response.json({ message: 'PRIVATE' }, { status: 500 });
     if (u.includes('cms_rate_limit_check'))
       return Response.json(
         limited ? { ok: false, limited: true } : { ok: true, limited: false },
@@ -68,7 +71,12 @@ function harness({
     return Response.json({});
   };
   const auth = createCmsAuth({ env, clock: () => now, fetchImpl });
-  return { auth, calls, advance: (n) => (now += n) };
+  return {
+    auth,
+    calls,
+    setAuthorized: (value) => (authorized = value),
+    advance: (n) => (now += n),
+  };
 }
 
 function cookieOf(response) {
@@ -421,4 +429,46 @@ test('CMS auth SQL: schema, RLS deny, privileges, security and rerun (real Postg
     if (started) command('pg_ctl', ['-D', data, '-m', 'immediate', 'stop']);
     await rm(dir, { recursive: true, force: true });
   }
+});
+
+test('rate limit backend failure denies login before password authentication', async () => {
+  const h = harness({ limitFailure: true });
+  const response = await login(h);
+  assert.equal(response.status, 502);
+  assert(!h.calls.some((u) => u.includes('/auth/v1/token')));
+  assert(!JSON.stringify(await response.json()).includes('PRIVATE'));
+});
+
+test('refresh denies revoked CMS permission and clears only the CMS cookie', async () => {
+  const h = harness();
+  const response = await login(h);
+  const cookie = cookieOf(response);
+  const csrf = (await response.json()).csrf;
+  h.setAuthorized(false);
+  const denied = await h.auth.refresh(
+    request('/api/admin/auth/refresh', {
+      method: 'POST',
+      headers: { Cookie: cookie, Origin: origin, 'X-CSRF-Token': csrf },
+    }),
+  );
+  assert.equal(denied.status, 403);
+  assert(denied.headers.get('set-cookie').includes('Max-Age=0'));
+  assert(!denied.headers.get('set-cookie').includes('sb-'));
+  assert(h.calls.some((u) => u.includes('/auth/v1/user')));
+});
+
+test('logout revokes the sealed access token with local scope', async () => {
+  const h = harness();
+  const response = await login(h);
+  const cookie = cookieOf(response);
+  const csrf = (await response.json()).csrf;
+  const out = await h.auth.logout(
+    request('/api/admin/auth/logout', {
+      method: 'POST',
+      headers: { Cookie: cookie, Origin: origin, 'X-CSRF-Token': csrf },
+    }),
+  );
+  assert.equal(out.status, 200);
+  assert(h.calls.some((u) => u.includes('/auth/v1/logout?scope=local')));
+  assert(!h.calls.some((u) => u.includes('scope=global')));
 });

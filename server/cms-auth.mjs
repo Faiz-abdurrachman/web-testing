@@ -303,9 +303,11 @@ export function createCmsAuth({
         p_max: 5,
         p_window: 60,
       });
-      if (limit?.limited) return authError('LIMIT', 429);
+      if (limit?.limited === true) return authError('LIMIT', 429);
+      if (limit?.ok !== true || limit?.limited !== false)
+        return authError('SERVER_ERROR', 502);
     } catch {
-      // Rate limit backend failure must not lock out the owner; continue.
+      return authError('SERVER_ERROR', 502);
     }
     let auth;
     try {
@@ -368,7 +370,7 @@ export function createCmsAuth({
     // Best-effort local sign-out; recruitment session is never affected.
     if (session.refresh && cfg.anon) {
       try {
-        await client(cfg, cfg.anon).auth.signOut({ scope: 'local' });
+        await client(cfg, cfg.anon).auth.admin.signOut(session.access, 'local');
       } catch {
         // ignore
       }
@@ -408,6 +410,21 @@ export function createCmsAuth({
     }
     if (rotated.error || !rotated.data?.session?.access_token) {
       const failed = authError('UNAUTHORIZED', 401);
+      failed.headers.append('Set-Cookie', cookie(cfg, 'session', '', 0));
+      return failed;
+    }
+    // Refresh still requires trusted identity and an active CMS permission.
+    const checked = await authorizeSession(cfg, {
+      ...session,
+      access: rotated.data.session.access_token,
+      refresh: rotated.data.session.refresh_token,
+      exp: now + (rotated.data.session.expires_in || 3600) * 1000,
+    });
+    if (checked.status !== 'ok') {
+      const failed = authError(
+        checked.status === 'forbidden' ? 'FORBIDDEN' : 'UNAUTHORIZED',
+        checked.status === 'forbidden' ? 403 : 401,
+      );
       failed.headers.append('Set-Cookie', cookie(cfg, 'session', '', 0));
       return failed;
     }

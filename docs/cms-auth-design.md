@@ -23,7 +23,7 @@ Route individual existing dipertahankan (bukan catch-all, bukan Astro SSR).
 - Cookie: **`__Host-ds-admin-session`** (HTTPS) / **`ds-admin-session`** (localhost dev),
   `Path=/; HttpOnly; SameSite=Lax; Secure` (HTTPS). Nilai = AES-256-GCM sealed
   (`CMS_ADMIN_SESSION_SECRET` 32-byte base64, AAD = purpose + origin), berisi
-  `{ access, refresh, csrf, exp }`. `exp` = access token expiry (clock server).
+  `{ access, refresh, csrf, exp, rexp }`. `exp` = access token expiry (clock server).
 - Satu-satunya state sesi CMS ada di cookie ini. Browser **tidak** menyimpan
   token Supabase, tidak ada `sb-*`, tidak ada localStorage/HTML token.
 - Cookie recruitment (`sb-access-token`/`sb-refresh-token`) **tidak disentuh**.
@@ -39,7 +39,8 @@ Urutan untuk setiap request API CMS:
    server-validated) dengan `SUPABASE_ANON_KEY` sebagai apikey.
 4. **CMS permission:** RPC `cms_verify_admin(p_auth_id)` (service_role) →
    `{ok, email}`; `active=true` wajib. Bukan owner/inactive → 403 sanitized.
-5. POST: Origin exact + `X-CSRF-Token` == `session.csrf` (constant-time).
+5. POST Origin exact + `X-CSRF-Token` == `session.csrf` (constant-time) diperiksa
+   sebelum upstream Auth/permission calls (langkah 3–4).
 6. Operasi privileged existing (projects/team/media) dijalankan.
 7. Gagal Auth/permission/DB/network → **fail closed**, error sanitized, tidak ada
    fallback ke cookie lama atau cek GAS owner.
@@ -51,6 +52,7 @@ Urutan untuk setiap request API CMS:
 - `POST /login`: validasi Origin + content-type json + body cap 4096 + shape
   `{email,password}` (string, email ≤320, password ≤256). Rate limit CMS
   (terpisah dari recruitment) via RPC `cms_rate_limit_check/reset`.
+- Backend rate limit gagal/response malformed → 502 sebelum password Auth.
 - `supabase.auth.signInWithPassword({email,password})` (anon key). Gagal → 401
   `UNAUTHORIZED` sanitized (tanpa bocorkan detail upstream).
 - Cek allowlist `cms_verify_admin(user.id)`; gagal → bersihkan sesi/flow, 403.
@@ -64,7 +66,8 @@ Urutan untuk setiap request API CMS:
 - `csrf` acak 256-bit (`randomBytes(32).toString('base64url')`, 43 char) disimpan
   dalam sesi ter-seal; respons sukses mengembalikan `csrf`; editor mengirim
   `X-CSRF-Token`. Perbandingan `timingSafeEqual`.
-- Token lama otomatis invalid saat login/logout/refresh (cookie baru menggantikan).
+- Login membuat CSRF baru; logout menghapus cookie. Refresh mengganti cookie/token
+  Auth dan mempertahankan CSRF sesi agar tab lain tetap dapat memakai sesi yang sama.
 - `Cache-Control: no-store`, `X-Content-Type-Options: nosniff`,
   `X-Robots-Tag: noindex, nofollow`, `Referrer-Policy: no-referrer` untuk semua
   respons auth/admin/media/error.
@@ -72,15 +75,19 @@ Urutan untuk setiap request API CMS:
 
 ## 6. Refresh & lifecycle
 
-- Access token `jwt_exp=3600` (dari config Auth actual). Cookie sesi `Max-Age` =
-  umur access token (≤3600s).
+- Access token `jwt_exp=3600` (dari config Auth actual). Cookie sesi `Max-Age`
+  awal 30 hari; `rexp` adalah batas absolut window refresh. Refresh tidak
+  memperpanjang `rexp`; `exp` menyimpan expiry access token.
 - Saat access expired tapi refresh valid: server refresh via SDK
   `refreshSession({refresh_token})`, rotate cookie (access+refresh baru), tetap
   permission check sebelum operasi. `refresh_token_rotation_enabled=true` (reuse
   interval 10s) → simpan refresh **terbaru**; parallel request deterministic
   fail-safe (satu menang, lain pakai cookie yang ada / 401 graceful).
+- Endpoint refresh juga memanggil trusted `getUser()` + CMS permission setelah
+  rotasi; inactive/revoked grant → 403 + hapus cookie.
 - Refresh gagal/replay → hapus cookie, 401; UI tidak mengklaim save berhasil.
-- Logout: `signOut({scope:'local'})` opsional best-effort + hapus cookie sesi CMS.
+- Logout: `auth.admin.signOut(sealedAccessToken, 'local')` best-effort ke Auth
+  menggunakan token sesi CMS, kemudian hapus cookie sesi CMS.
   Residual lifetime access JWT didokumentasikan (tidak instant-revoke global).
 - Cookie expiry ≠ Auth session lifetime; lifetime final eksplisit di sini.
 
@@ -97,8 +104,9 @@ Tabel `private.cms_admin_permissions`:
 - RLS enabled + `revoke all` dari public/anon/authenticated (deny by default).
 - Minimal metadata; tidak ada PII sensitif.
 
-Rate limit CMS: `private.cms_rate_limit` (ip text, email text, attempts int,
-window_start timestamptz) + helper check/reset — **terpisah** dari recruitment.
+Rate limit CMS: `private.cms_rate_limit` (`id bigserial`, `ip_address text`,
+`email text`, `attempted_at timestamptz`) + helper check/reset — **terpisah**
+dari recruitment.
 
 Fungsi `SECURITY DEFINER`, `set search_path = pg_catalog`, objek qualified:
 

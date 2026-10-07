@@ -1,5 +1,52 @@
 # AGENTS.md — instructions for AI agents
 
+## Checkpoint auth CMS — C2/C3 selesai, C4 owner configured, D4/E pending (7 Oct 2026)
+
+C3 diizinkan Faiz eksplisit sesi ini: migration
+`20261014010000_cms_auth_pass7.sql` **applied sekali** via Management API ke
+existing `web-community / yejrdckcmlxrkklgtrwy`; **tepat 1** grant aktif CMS untuk
+owner mapping yang disetujui. Owner melaporkan password sudah di-set sendiri di
+dashboard; password tidak diminta/dicetak. Tidak ada push/deploy auth sesi ini.
+Runtime kedua situs masih `925d577`; auth lokal awal `ae52f54`, docs `b1c437c`.
+
+C2 fresh sebelum apply: 0 tabel/0 fungsi auth, owner UID/email confirmed match,
+recruitment `auth_id text`, satu allowlist aktif dan nol applications. Sesudah
+apply: 2 tabel RLS/deny, 6 fungsi SECURITY DEFINER fixed `pg_catalog`, public
+wrapper service_role-only; service RPC `cms_verify_admin` HTTP200 owner exact.
+**12 actual read-only role denials** (6 wrapper anon/authenticated + 6 table
+SELECT anon/authenticated/service_role); catalog semua table SELECT/INSERT/
+UPDATE/DELETE denied. Recruitment allowlist fingerprint identik; applications0.
+Owner grant tidak hardcoded ke migration tracked; tidak ada content writes.
+
+Review lokal menemukan dan memperbaiki tiga celah di `ae52f54`: backend rate
+limit gagal kini fail closed sebelum password Auth; endpoint refresh melakukan
+trusted getUser + CMS permission dan menolak revoked grant; logout merevoke
+refresh session dengan sealed access token + scope local, lalu clear cookie CMS.
+Tambahan 3 regression tests. Focused auth/native/media + recruitment **49 PASS**
+termasuk ephemeral PostgreSQL. Cookie window30hari dan CSRF stabil sepanjang
+refresh kini sesuai dokumentasi actual; login baru membuat CSRF baru.
+
+Vercel Production kedua situs: anon key dan env legacy/GAS tetap present.
+`RECRUITMENT_OPEN` sensitive present, nilainya tidak dapat dibaca API; **live
+GET kedua situs membuktikan accepting:false**. Jangan menyebut nilai encrypted
+terverifikasi bila hanya presence/runtime yang terbukti.
+
+Fresh 7 gate + SEO PASS: build0errors/23pages, verify browserErrors kosong,
+navbar/VT PASS, responsive468/468, spacing39, format, SEO23. Tiga admin mock
+masing-masing4widths PASS; mock bukan real owner. Snapshot hash
+`4345f1abe445aa2a400c31413ccc058707a77105a7e388dc8d1074e78da94857` dan
+**19/19 public HTML exact** baseline pass6. Full CMS tanpa env server **102 PASS + 10 Team live SKIP / 0 FAIL**,
+termasuk Hods PostgreSQL nyata (selesai ~442 detik); CMS light **84 PASS +
+10 SKIP**. Recruitment **24 PASS**.
+
+**NEXT D4:** commit hasil review lokal dan minta izin exact SHA baru sebelum
+satu push origin (dua push URLs). **E pending:** dua READY exact SHA/aliases,
+real owner/non-owner/anon/expired/revoked/refresh/logout + recruitment isolation,
+read-only dulu; fixture/cleanup live mutation harus disetujui. Auth belum LIVE
+accepted; seluruh CMS belum selesai; keenam content Supabase buildRPC dan full
+GAS export validation tetap. GAS removal pass terpisah.
+Proof ignored `artifacts/cms-auth/{c2-audit,c2-parity,c3-apply,c3-read-proof}.json`.
+
 ## Work order sesi berikutnya — eksekusi auth CMS C3–E
 
 Auth CMS → Supabase **A–D sudah selesai lokal di commit `ae52f54`** (tree bersih,

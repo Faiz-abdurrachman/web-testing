@@ -402,6 +402,9 @@ callback/`uri_allow_list`/account-linking**.
   snapshot/19 public HTML unchanged. **Belum apply SQL/config live, belum
   push/deploy, belum acceptance.** Hods real-PG suite timeout di environment ini
   (tidak terkait auth).
-- **Pending:** C3 apply SQL + owner grant, C4 config, D4 push consent, E real
-  owner/non-owner/anon/refresh/logout/revocation dua-domain acceptance. Semua
-  butuh izin konkret; GAS removal terpisah.
+- **C2/C3 selesai live (sesi lanjutan):** approved additive migration applied sekali,
+  satu grant owner, service RPC HTTP200, catalog + 12 read-only role denials PASS;
+  recruitment fingerprint/counts unchanged. Owner melaporkan password sudah
+  di-set sendiri. Lihat execution plan §12 untuk fresh QA/perbaikan review lokal.
+- **Pending:** D4 izin push SHA baru, E real owner/non-owner/anon/refresh/logout/
+  revocation dua-domain acceptance. Auth belum LIVE accepted; GAS removal terpisah.

@@ -43,16 +43,17 @@ consent)**, **E (deploy + acceptance dua domain)**.
 
 Tujuan: pastikan perubahan additive aman, tidak menyentuh recruitment.
 
-- [ ] C2.1 Baca `20261014010000_cms_auth_pass7.sql` baris demi baris. Verifikasi: - hanya additive (`create table if not exists`, `create or replace function`). - `private.cms_admin_permissions` (auth_id **uuid**), `private.cms_rate_limit`. - RLS enabled + deny policy untuk kedua tabel. - `revoke all ... from public, anon, authenticated` (+ service_role pada tabel). - fungsi `SECURITY DEFINER`, `set search_path = pg_catalog`, objek qualified. - public wrapper hanya `grant execute ... to service_role`. - **tidak** ada `drop`, `alter` tabel recruitment, atau seed email/UID.
-- [ ] C2.2 Read-only inspect catalog existing (tanpa mutasi):
+- [x] C2.1 Baca `20261014010000_cms_auth_pass7.sql` baris demi baris. Verifikasi: - hanya additive (`create table if not exists`, `create or replace function`). - `private.cms_admin_permissions` (auth_id **uuid**), `private.cms_rate_limit`. - RLS enabled + deny policy untuk kedua tabel. - `revoke all ... from public, anon, authenticated` (+ service_role pada tabel). - fungsi `SECURITY DEFINER`, `set search_path = pg_catalog`, objek qualified. - public wrapper hanya `grant execute ... to service_role`. - **tidak** ada drop table/function, alter tabel recruitment, atau seed email/UID.
+      `DROP POLICY IF EXISTS` hanya dua policy auth CMS baru untuk rerun lokal.
+- [x] C2.2 Read-only inspect catalog existing (tanpa mutasi):
       `to_regclass('private.cms_admin_permissions')` / `to_regclass('private.cms_rate_limit')`
       → harus `null` (belum ada). `to_regclass`/`to_regprocedure` untuk
       `public.cms_verify_admin(uuid)`, `public.cms_rate_limit_check(...)`,
       `public.cms_rate_limit_reset(...)` → `null`.
-- [ ] C2.3 Inspeksi `private.cms_admin_users` (recruitment): pastikan
+- [x] C2.3 Inspeksi `private.cms_admin_users` (recruitment): pastikan
       **tidak berubah** dan **tidak dipakai** oleh migration auth (grep: tidak ada
       referensi). Konfirmasi `auth_id text` vs CMS `auth_id uuid` = sengaja beda.
-- [ ] C2.4 Konfirmasi owner mapping: `admin@datasorcerers.com`
+- [x] C2.4 Konfirmasi owner mapping: `admin@datasorcerers.com`
       (`5903606f-5543-4832-9db5-f6a433b6c660`) adalah satu-satunya yang akan
       di-provision. **Jangan** tambah Google identity, **jangan** seed dari email.
 
@@ -74,37 +75,38 @@ percobaan), **inspect state dulu**, jangan blind reapply/drop.
 > Gate: AI baru **wajib** minta izin eksplisit Faiz sebelum menjalankan apply live.
 > Tun+jukkan diff migration + rencana + proof lokal dulu.
 
-- [ ] C3.1 Konfirmasi project: Management API `GET /v1/projects/<ref>` → `name`
+- [x] C3.1 Konfirmasi project: Management API `GET /v1/projects/<ref>` → `name`
       harus `web-community`, ref `yejrdckcmlxrkklgtrwy`.
-- [ ] C3.2 Apply migration **sekali** via Management API `/database/query`
+- [x] C3.2 Apply migration **sekali** via Management API `/database/query`
       (eksekusi isi file, idempotent oleh `if not exists`/`create or replace`).
       Simpan output sanitized ke `artifacts/cms-auth/apply.json`.
-- [ ] C3.3 Jika error: **inspect actual state** (`to_regclass`/`to_regprocedure`),
+- [x] C3.3 Jika error: **inspect actual state** (`to_regclass`/`to_regprocedure`),
       jangan reapply buta. Laporkan cause.
-- [ ] C3.4 Provision owner grant (hanya 1 baris):
+- [x] C3.4 Provision owner grant (hanya 1 baris):
       `insert into private.cms_admin_permissions (auth_id, email, active)
  values ('5903606f-5543-4832-9db5-f6a433b6c660','admin@datasorcerers.com', true)
  on conflict (auth_id) do update set active = true, email = excluded.email;`
       **Jangan** hardcode ini ke migration tracked — jalankan sebagai provisioning
       privat setelah mapping disetujui. Simpan bukti (bukan secret) ke artifacts.
-- [ ] C3.5 Bukti read-only: panggil `public.cms_verify_admin('5903606f-...')` via
+- [x] C3.5 Bukti read-only: panggil `public.cms_verify_admin('5903606f-...')` via
       service_role → `{ok:true}`. Cek catalog: owner/definer/search_path/ACL.
       Uji anon/authenticated **ditolak** (catalog + tidak ada execute).
-- [ ] C3.6 Pastikan recruitment tak tersentuh: `private.cms_admin_users` count
+- [x] C3.6 Pastikan recruitment tak tersentuh: `private.cms_admin_users` count
       tetap, `private.recruitment_applications` tetap 0.
 
 ## 5. C4 — Konfigurasi (minim untuk password)
 
 Password provider **tidak** butuh `uri_allow_list`/callback baru. Yang perlu:
 
-- [ ] C4.1 Pastikan `SUPABASE_ANON_KEY` ada di kedua Vercel (sudah ada; verifikasi
+- [x] C4.1 Pastikan `SUPABASE_ANON_KEY` ada di kedua Vercel (sudah ada; verifikasi
       presence/scope, jangan print).
-- [ ] C4.2 **Password owner**: Faiz sendiri yang set/replace password akun
+- [x] C4.2 **Password owner**: Faiz sendiri yang set/replace password akun
       `admin@datasorcerers.com` di dashboard Supabase. AI **tidak** meminta/mengisi
-      password lewat chat. Catat sebagai langkah manual owner.
+      password lewat chat. Owner melaporkan sudah set di dashboard sesi ini.
 - [ ] C4.3 Verifikasi `RECRUITMENT_OPEN=false` (recruitment tetap closed) kedua
-      project.
-- [ ] C4.4 **Jangan** hapus env lama (`CMS_ADMIN_GOOGLE_*`,
+      project. Nilai env sensitive tidak dapat dibaca API; presence + live
+      accepting:false kedua domain PASS, exact encrypted value belum dibuktikan.
+- [x] C4.4 **Jangan** hapus env lama (`CMS_ADMIN_GOOGLE_*`,
       `CMS_ADMIN_API_DEPLOYMENT_ID`) — dipertahankan untuk rollback/observasi.
 
 ## 6. D4 — Local commit + minta izin push
@@ -185,3 +187,50 @@ Password provider **tidak** butuh `uri_allow_list`/callback baru. Yang perlu:
   `admin@datasorcerers.com` (confirmed). Password di-set owner manual.
 - Ignored artifacts: `artifacts/cms-auth/` (baseline/apply/qa-summary/live proof),
   jangan simpan cookie/header/token/error mentah.
+
+## 12. Fresh C2/C3 execution proof — 7 Oct 2026
+
+C3 diizinkan Faiz eksplisit sesi ini: migration
+`20261014010000_cms_auth_pass7.sql` **applied sekali** via Management API ke
+existing `web-community / yejrdckcmlxrkklgtrwy`; **tepat 1** grant aktif CMS untuk
+owner mapping yang disetujui. Owner melaporkan password sudah di-set sendiri di
+dashboard; password tidak diminta/dicetak. Tidak ada push/deploy auth sesi ini.
+Runtime kedua situs masih `925d577`; auth lokal awal `ae52f54`, docs `b1c437c`.
+
+C2 fresh sebelum apply: 0 tabel/0 fungsi auth, owner UID/email confirmed match,
+recruitment `auth_id text`, satu allowlist aktif dan nol applications. Sesudah
+apply: 2 tabel RLS/deny, 6 fungsi SECURITY DEFINER fixed `pg_catalog`, public
+wrapper service_role-only; service RPC `cms_verify_admin` HTTP200 owner exact.
+**12 actual read-only role denials** (6 wrapper anon/authenticated + 6 table
+SELECT anon/authenticated/service_role); catalog semua table SELECT/INSERT/
+UPDATE/DELETE denied. Recruitment allowlist fingerprint identik; applications0.
+Owner grant tidak hardcoded ke migration tracked; tidak ada content writes.
+
+Review lokal menemukan dan memperbaiki tiga celah di `ae52f54`: backend rate
+limit gagal kini fail closed sebelum password Auth; endpoint refresh melakukan
+trusted getUser + CMS permission dan menolak revoked grant; logout merevoke
+refresh session dengan sealed access token + scope local, lalu clear cookie CMS.
+Tambahan 3 regression tests. Focused auth/native/media + recruitment **49 PASS**
+termasuk ephemeral PostgreSQL. Cookie window30hari dan CSRF stabil sepanjang
+refresh kini sesuai dokumentasi actual; login baru membuat CSRF baru.
+
+Vercel Production kedua situs: anon key dan env legacy/GAS tetap present.
+`RECRUITMENT_OPEN` sensitive present, nilainya tidak dapat dibaca API; **live
+GET kedua situs membuktikan accepting:false**. Jangan menyebut nilai encrypted
+terverifikasi bila hanya presence/runtime yang terbukti.
+
+Fresh 7 gate + SEO PASS: build0errors/23pages, verify browserErrors kosong,
+navbar/VT PASS, responsive468/468, spacing39, format, SEO23. Tiga admin mock
+masing-masing4widths PASS; mock bukan real owner. Snapshot hash
+`4345f1abe445aa2a400c31413ccc058707a77105a7e388dc8d1074e78da94857` dan
+**19/19 public HTML exact** baseline pass6. Full CMS tanpa env server **102 PASS + 10 Team live SKIP / 0 FAIL**,
+termasuk Hods PostgreSQL nyata (selesai ~442 detik); CMS light **84 PASS +
+10 SKIP**. Recruitment **24 PASS**.
+
+**NEXT D4:** commit hasil review lokal dan minta izin exact SHA baru sebelum
+satu push origin (dua push URLs). **E pending:** dua READY exact SHA/aliases,
+real owner/non-owner/anon/expired/revoked/refresh/logout + recruitment isolation,
+read-only dulu; fixture/cleanup live mutation harus disetujui. Auth belum LIVE
+accepted; seluruh CMS belum selesai; keenam content Supabase buildRPC dan full
+GAS export validation tetap. GAS removal pass terpisah.
+Proof ignored `artifacts/cms-auth/{c2-audit,c2-parity,c3-apply,c3-read-proof}.json`.

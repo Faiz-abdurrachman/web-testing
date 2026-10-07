@@ -1,5 +1,16 @@
 # Master Migration Plan — GAS/Sheets/Drive → Supabase
 
+## Status auth CMS terbaru — C3 applied, D4/E pending (7 Oct 2026)
+
+Provider final password Supabase; A–D lokal awal `ae52f54`, fresh review lokal
+memperbaiki rate-limit failure/refresh permission/local token sign-out.
+Dengan izin eksplisit Faiz, auth migration applied sekali dan satu CMS owner
+permission provisioned; recruitment tetap unchanged/closed. Owner set password
+sendiri di dashboard. Auth belum push/deploy/real accepted; runtime925d577.
+Rincian current proof dan sisa gate: [execution plan §12](cms-auth-execution-plan.md#12-fresh-c2c3-execution-proof--7-oct-2026).
+Status ini mengalahkan PLAN ONLY historis di bawah. Push baru wajib izin exact
+SHA; GAS export validation/env/legacy OAuth tetap untuk pass terpisah.
+
 ## Work order sesi berikutnya — auth CMS, PLAN ONLY
 
 Faiz meminta **eksekusi di AI baru**. [Master Work Plan auth CMS](cms-auth-supabase-plan.md)
