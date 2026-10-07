@@ -2407,11 +2407,12 @@ Fokus utama AI berikutnya adalah mengaudit dan mengeksekusi secara **strict pixe
    logo partner (20 slot, sekarang placeholder DS), member HoF, project HoF,
    milestone. **Jangan bikin URL palsu** untuk kartu info Contact (sengaja
    non-link sampai destinasi diberikan).
-9. **Nasalization webfont:** butuh file berlisensi dari manusia — **jangan
-   diakali**. Taruh `.woff2` di `public/fonts/`, update `@font-face` di
-   `global.css` (pertahankan `local()`).
-10. **Sound (opsional):** tuning level cue/ambient (Bagian B, ditunda), pisah
+9. ~~**Recruitment pass 3 (rate limit + refresh token) 7 Oct 2026**~~ — **LIVE.**
+   5 attempts/min/IP+email, auto-refresh 30 menit. Migration applied, code pushed.
+10. **CMS Pass 1 — Projects → Supabase 7 Oct 2026 — LIVE.**
+    Baca AGENTS.md + docs/cms-pass1-projects-plan.md sebelum mulai Pass 2 (Team).
+11. **Sound (opsional):** tuning level cue/ambient (Bagian B, ditunda), pisah
     kontrol SFX vs ambient, atau ganti ke sample AI lewat MCP ElevenLabs kalau mau
     non-prosedural.
-11. ~~**OG hardening**~~ — **DONE:** `<html prefix="og: https://ogp.me/ns#">` +
+12. ~~**OG hardening**~~ — **DONE:** `<html prefix="og: https://ogp.me/ns#">` +
     `og:image:secure_url` di `BaseLayout.astro`, `seo:audit` PASS.

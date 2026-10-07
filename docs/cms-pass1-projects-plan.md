@@ -1,9 +1,8 @@
 # Master Work Plan — Pass 1: Projects → Supabase
 
-Status: **DIEKSEKUSI 7 Oct 2026** — migration applied ke Supabase live;
-kode (`cms-client.mjs`, `cms-admin.mjs`) + test (36/36) + 7 gate + SEO PASS.
-Hari-hari berikutnya: tambah env `SUPABASE_URL` + `SUPABASE_ANON_KEY` ke **kedua**
-Vercel project sebelum push deploy (build remote wajib Supabase).
+Status: **LIVE 7 Oct 2026** — migration applied, kode push, kedua Vercel deploy READY.
+AI baru: baca AGENTS.md + [cms-supabase-migration-plan.md](cms-supabase-migration-plan.md)
+sebelum mulai Pass 2.
 
 ## 1. Lingkup
 
