@@ -393,3 +393,53 @@ sebelum3690detik; Auth actual jwt_exp3600. Due workspace UTC18:24:42.845 tanggal
 refresh. Setelah private media PASS, jalankan approved non-owner/revocation
 fixtures. GAS tetap; auth belum LIVE accepted penuh. Proof ignored: e-resume-audit,
 e-storage-inspect,e-fixture-baseline,e-natural-expiry,e-deployments-7e17fc0.
+
+## E5 findings — private media PASS, fixture cleaned, delete SQL repaired
+
+Dengan izin Faiz (`gasss`), bucket `cms-media` dibuat sekali: private,
+max262144bytes, MIMEimage/webp. Upload fixture PNG32×32 berhasil; owner media
+200/decode32×32/hash exact pada390/1440 kedua domain, CMS anonymous401,
+direct Storage anon denied. Bucket tetap privat dan dipertahankan untuk runtime.
+
+Approved non-owner fixture: CMS login403 kedua situs, tanpa CMS/recruitment grant;
+Auth UID fixture dan rate-limit fixture sudah dihapus/absence confirmed. Approved
+revocation: hanya CMS owner grant dinonaktifkan sementara; Projects/Team/media403
+kedua situs; grant restored active=true dan owner Projects4/Team25 kembali200.
+Recruitment allowlist tidak diubah, applications0.
+
+E5 add fixture200/5records dan dua hooks accepted, tetapi rebuild gagal karena
+build fetch media memakai anon key pada bucket privat. Delete API502: fungsi
+existing `private.cms_delete_project` memakai window function langsung UPDATE.
+Tidak blindretry. Cleanup guarded hanya UID fixture terakhir: Projects kembali4
+exact fingerprint `8a7d4624d896842800dfd191892df7a8`; Team fingerprint tetap
+`b867f2890c939b410e3e428259082883`. Hanya hash Storage fixture dihapus setelah
+reference check0; absence confirmed. Dua rebuild baseline lewat retry diterima;
+kedua aliases kembali **READY exact7e17fc0**. Tidak ada Team write.
+
+Faiz mengizinkan patch delete konkret: migration baru
+`20261015010000_cms_projects_delete_fix.sql` applied sekali; hanya mengganti
+reindex invalid dengan CTE ranked. Definisi sesudah patch, ACL/search_path/
+SECURITY DEFINER dan Projects fingerprint verified unchanged. Auth migration
+lama tidak diapply ulang. PostgreSQL nyata PASS untuk delete tengah, stale
+revision, missing ID, minimum, ACL preservation dan anon/authenticated denials.
+
+Fix build lokal memakai SUPABASE_SERVICE_ROLE_KEY hanya untuk media private;
+public RPC tetap SUPABASE_ANON_KEY. Media tests memeriksa Authorization server
+key dan fail closed ketika key missing. Fix build belum push; setiap SHA baru
+termasuk docs perlu izin exact SHA. E5 publication/edit/delete acceptance perlu
+ulang fixture konkret setelah fix deployed; belum LIVE accepted penuh. Natural
+access expiry masih menunggu worker due workspace UTC18:24:42.845 7Oct /
+WIB01:24:42.845 8Oct; explicit refresh tidak dihitung sebagai expiry proof.
+GAS/full export/env tetap; GAS removal pass terpisah.
+
+QA Node22.23.0: full CMS104PASS+10Team live SKIP/0FAIL tanpa env server;
+CMS light86PASS+10SKIP/0FAIL; recruitment24PASS; focused media7PASS. Build0errors/
+23pages, tujuh gate+SEO PASS (browserErrors[], responsive468/468, spacing39,
+SEO23), tiga admin mock masing-masing4widths. Snapshot hash tetap dan19/19 HTML
+lokal exact; public live19/19 exact per domain sesudah cleanup. Dist47textfiles
+scan0server secrets. Semua sesi browser testing kemudian CMS logout200 dan
+Projects/Team401; hanya worker expiry khusus masih menyimpan sesi di memory.
+
+Proof ignored: `e5-progress`, `e-nonowner-fixture`, `e-apply-delete-fix`,
+`e-emergency-cleanup`, `e-storage-cleanup`, `e-delete-fix-review`,
+`e-deployments-7e17fc0`, `e-natural-expiry`, `e5-local-parity`.

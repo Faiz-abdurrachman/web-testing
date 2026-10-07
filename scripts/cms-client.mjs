@@ -326,7 +326,7 @@ export async function syncCmsSnapshot({
     fetchImpl,
     timeoutMs,
     supabaseUrl,
-    supabaseKey,
+    supabaseMediaKey: env.SUPABASE_SERVICE_ROLE_KEY,
   });
   const target =
     snapshotPath instanceof URL
@@ -355,7 +355,7 @@ export async function cacheProjectMedia({
   fetchImpl = fetch,
   timeoutMs = CMS_TIMEOUT_MS,
   supabaseUrl,
-  supabaseKey,
+  supabaseMediaKey,
 }) {
   const images = [
     ...new Set(
@@ -396,9 +396,9 @@ export async function cacheProjectMedia({
       image.startsWith('/images/cms/team/') ||
       image.startsWith('/images/cms/projects/')
     ) {
-      if (!supabaseUrl || !supabaseKey)
+      if (!supabaseUrl || !supabaseMediaKey)
         throw new Error(
-          'Media fetch requires SUPABASE_URL and SUPABASE_ANON_KEY',
+          'Media fetch requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY',
         );
       const storagePath = image.replace(/^\/images\/cms\//, '');
       const storageUrl =
@@ -407,7 +407,7 @@ export async function cacheProjectMedia({
         storagePath;
       const sres = await fetchImpl(storageUrl, {
         headers: {
-          Authorization: 'Bearer ' + supabaseKey,
+          Authorization: 'Bearer ' + supabaseMediaKey,
         },
         signal: AbortSignal.timeout(15000),
       });

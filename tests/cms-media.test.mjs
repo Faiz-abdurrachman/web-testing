@@ -132,9 +132,15 @@ test('prebuild caches verified private media before atomic snapshot write, refet
         CMS_API_TOKEN: 'PRIVATE-test',
         SUPABASE_URL: 'https://placeholder.supabase.co',
         SUPABASE_ANON_KEY: 'placeholder',
+        SUPABASE_SERVICE_ROLE_KEY: 'private-build-test',
       },
-      fetchImpl: async (url) => {
+      fetchImpl: async (url, requestOptions) => {
         const href = typeof url === 'string' ? url : url.href;
+        if (href.includes('/rest/v1/rpc/'))
+          assert.equal(
+            requestOptions.headers.Authorization,
+            'Bearer placeholder',
+          );
         if (href.includes('/rest/v1/rpc/cms_load_projects'))
           return Response.json(changed);
         if (href.includes('/rest/v1/rpc/cms_load_team'))
@@ -148,6 +154,10 @@ test('prebuild caches verified private media before atomic snapshot write, refet
         if (href.includes('/rest/v1/rpc/cms_load_roles'))
           return Response.json({ roles: baseline.roles });
         if (href.includes('/storage/v1/object/cms-media/')) {
+          assert.equal(
+            requestOptions.headers.Authorization,
+            'Bearer private-build-test',
+          );
           mediaCalls++;
           return bad
             ? new Response(null, { status: 404 })
@@ -163,6 +173,14 @@ test('prebuild caches verified private media before atomic snapshot write, refet
         return Response.json(changed);
       },
     };
+    await assert.rejects(
+      syncCmsSnapshot({
+        ...options,
+        env: { ...options.env, SUPABASE_SERVICE_ROLE_KEY: undefined },
+      }),
+      /Media fetch requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY/,
+    );
+    assert.equal(mediaCalls, 0);
     await assert.rejects(
       syncCmsSnapshot(options),
       /media (fetch or validation failed|fetch failed)/,
@@ -564,9 +582,15 @@ test('Team photos use separate namespace, private owner upload/read and active-r
         CMS_API_TOKEN: 'test-token',
         SUPABASE_URL: 'https://placeholder.supabase.co',
         SUPABASE_ANON_KEY: 'placeholder',
+        SUPABASE_SERVICE_ROLE_KEY: 'private-build-test',
       },
-      fetchImpl: async (url) => {
+      fetchImpl: async (url, requestOptions) => {
         const href = typeof url === 'string' ? url : url.href;
+        if (href.includes('/rest/v1/rpc/'))
+          assert.equal(
+            requestOptions.headers.Authorization,
+            'Bearer placeholder',
+          );
         if (href.includes('/rest/v1/rpc/cms_load_projects'))
           return Response.json(snapshot);
         if (href.includes('/rest/v1/rpc/cms_load_team'))
@@ -579,8 +603,13 @@ test('Team photos use separate namespace, private owner upload/read and active-r
           return Response.json({ domains: baseline.domains });
         if (href.includes('/rest/v1/rpc/cms_load_roles'))
           return Response.json({ roles: snapshot.roles });
-        if (href.includes('/storage/v1/object/cms-media/'))
+        if (href.includes('/storage/v1/object/cms-media/')) {
+          assert.equal(
+            requestOptions.headers.Authorization,
+            'Bearer private-build-test',
+          );
           return new Response(Buffer.from(media.data, 'base64'));
+        }
         return Response.json(
           new URL(href).searchParams.get('action') === 'media'
             ? media
