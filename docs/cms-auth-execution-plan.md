@@ -111,22 +111,22 @@ Password provider **tidak** butuh `uri_allow_list`/callback baru. Yang perlu:
 
 ## 6. D4 — Local commit + minta izin push
 
-- [ ] D4.1 Pastikan `ae52f54` (atau commit auth lokal) berisi kode+SQL+docs+test.
+- [x] D4.1 Pastikan `ae52f54` (atau commit auth lokal) berisi kode+SQL+docs+test.
       Commit docs kickoff/execution/AGENTS terpisah bila perlu.
-- [ ] D4.2 Laporkan SHA + ringkasan QA + sisa proof real-owner ke Faiz.
-- [ ] D4.3 **Minta izin push baru** untuk SHA tersebut. Jangan push sebelum izin.
+- [x] D4.2 Laporkan SHA + ringkasan QA + sisa proof real-owner ke Faiz.
+- [x] D4.3 **Minta izin push baru** untuk SHA tersebut. Jangan push sebelum izin.
 
 ## 7. E — Push, dua deployment, real acceptance
 
 - [x] E1. Setelah izin konkret: `git push origin main` **sekali** (existing dua
       push URLs → testing + production). Verifikasi refs sinkron.
-- [x] E2. Tunggu dua Vercel READY untuk SHA tersebut; ambil timestamp provider
-      (UTC/WIB) via API. Konfirmasi primary alias assignment + env scope benar.
+- [x] E2. Latest7e17fc0: dua primary alias READY exact SHA confirmed via API
+      setelah akses pulih (timestamps §17). First e08a604 juga accepted.
 - [ ] E3. Real owner acceptance **read-only dulu** di dua domain, browser 390/1440: - login `admin@datasorcerers.com` (owner isi sendiri saat login), - GET load Projects (4 baseline), load Team, preview private media, - logout → sesi bersih; reload → 401. - anon (tanpa cookie) → 401; non-owner (kalau ada akun uji) → 403; - refresh: buka dua tab, tunggu access expiry, operasi tetap valid tanpa
       replay mutation; revoked grant (uji lokal dulu, live hanya bila diizinkan)
       → request berikutnya ditolak.
       Mock **bukan** bukti real owner.
-- [ ] E4. Recruitment isolation + privacy regression: login recruitment tetap
+- [x] E4. Recruitment isolation + privacy regression: login recruitment tetap
       jalan sendiri (akun email/password recruitment), cookie `sb-*` tidak saling
       memengaruhi CMS; recruitment `accepting:false`; public routes tetap.
 - [ ] E5. Live mutation (save/add/delete/upload) **hanya** bila Faiz menyetujui
@@ -275,3 +275,121 @@ Expired-session dan E5 content mutation masih pending; fixture E5 belum disetuju
 Proof ignored `artifacts/cms-auth/e-{deployments-e08a604,public-before,public-after,browser}.json`
 dan `readfix-local-rpc.json`. Keenam content Supabase buildRPC + full GAS export
 validation/env tetap; GAS removal pass terpisah. Seluruh CMS belum selesai.
+
+## 14. 7e17fc0 deployment and partial real-owner proof
+
+Faiz mengizinkan push fix (`gas`); satu `git push origin main` mengirim
+`7e17fc05d3ce421eacc5511c57c515a6b1b8aa95` ke kedua repo. Refs main/origin/main/
+production/main sinkron. Izin SHA ini consumed; push berikutnya termasuk docs
+memerlukan izin baru. Testing primary alias READY exact SHA, provider timestamp
+**7 Oct 2026 16:47:54.100 UTC / 23:47:54.100 WIB**. Production terakhir tercatat
+BUILDING via API; sesudah environment berubah, terminal Management API terkena
+DNS EAI_AGAIN/network restriction. **Production READY exact SHA/alias belum
+terkonfirmasi ulang via API**, walaupun callback fixed sudah terbaca di primary.
+
+Browser terhubung restart; owner mengisi credential sendiri lagi. Real owner
+Projects **200/4 record**, Team **200/25**, explicit refresh **200** dan after-
+refresh read **200** kedua domain. Reload editor + Projects/Team **390/1440**:
+4/25 pilihan, workspace tampil, tanpa overflow. Anonymous Projects/Team/media
+**401** kedua domain. Public **19/19 HTML exact** pre/post per situs, recruitment
+**accepting:false**, callback retired mengikuti redirect ke `/admin/?login=failed`
+HTTP200 (tidak lagi500). Tidak ada save/edit/upload/hook/content mutation.
+
+**Batas bukti:** record aktif tidak merujuk media privat; path upload GAS historis
+mengembalikan404, sehingga preview private media belum PASS. Explicit refresh
+bukan bukti natural access expiry. Recruitment login/stats **200 kedua situs**
+setelah owner login manual.
+CMS logout **200** → Projects/Team/media **401**, CMS refresh **401**; recruitment
+masih **200**, recruitment refresh **200** dan read sesudahnya **200** kedua situs.
+Expired-session dan approved non-owner/revocation+cleanup masih pending. Fixture
+script disiapkan ignored tetapi **belum dijalankan**; Management
+API tidak tersedia dan owner read-only matrix belum lengkap untuk private media.
+E5 content fixture belum disetujui. SQL auth tidak diapply ulang; grant/recruitment
+users/allowlist tidak diubah. Auth belum LIVE accepted; seluruh CMS belum selesai.
+
+Proof ignored: `e-deployments-7e17fc0.json` (last API state),
+`e-owner-7e17fc0.json` (sanitized browser read/UI/refresh/anon/public proof).
+NEXT: production READY exact SHA proof; restore Management API access untuk
+fixture denial yang sudah approved; pilih private media fixture + cleanup
+dengan izin E5 konkret.
+GAS export validation/env/legacy credentials tetap; GAS removal pass terpisah.
+Checkpoint ini belum commit/push; environment terbaru membatasi `.git` read-only.
+
+## 15. Fresh automated owner acceptance — 8 Oct 2026
+
+Faiz memberi izin eksplisit agent memakai credential sementara untuk testing
+login; credential tidak dicatat ke docs/artifacts/commit. Runtime tetap7e17fc0.
+Fresh browser contexts kedua domain: password login **200**, Projects **200/4**,
+Team **200/25**; explicit refresh **200**, CSRF stabil dan post-refresh read200.
+Bad CSRF403, GET refresh405, empty login body400; owner read tetap200.
+
+Isolasi actual dua arah PASS: CMS-only → recruitment401; recruitment-only →
+Projects/Team/media401. Invalid sealed CMS cookie → Projects/Team401 dan
+recruitment tetap200. Sesi gabungan: CMS logout200 → Projects/Team/media401,
+recruitment stats200, refresh200 dan post-refresh stats200 kedua situs.
+Recruitment accepting:false. Semua sesi browser pengujian kemudian logout;
+recruitment own logout → stats401. Tidak ada content write/upload/hook/SQL/grant
+mutation. Read recruitment menjalankan audit handler existing, tanpa mengambil
+atau mencetak application PII. Proof ignored `e-fresh-auth-20261008.json`.
+
+E4 isolation/closed/public regression selesai; E3 masih parsial (positive private
+media, natural expiry, approved non-owner/revocation fixture). Terminal API tetap
+EAI_AGAIN dan `.git` read-only; production READY exact SHA confirmation/fixture
+cleanup/commit tetap blocked oleh akses environment. E5 fixture konkret disiapkan
+di execution plan §16, belum dieksekusi. Auth belum LIVE accepted penuh.
+
+## 16. Concrete E5 fixture proposal (belum dieksekusi)
+
+Run-id baru per eksekusi. Scope shared Projects/Storage saja, bukan Team.
+Prerequisite: Management API read/write dan cleanup tersedia, dua primary alias
+READY exact feature SHA, current baseline ditangkap, fixture konkret disetujui.
+
+1. Tangkap baseline Projects fields/order + Team fingerprint + public19HTML
+   per situs. Verifikasi min1/max8 dan current4; simpan data sensitif in-memory.
+2. Upload tepat1 PNG32×32 sintetis unik (<2MB) via owner media API Projects.
+   Path hash dari respons adalah satu-satunya object fixture; cek hash tidak
+   existing sebelum upload/cleanup. Tidak merujuk foto/nama anggota.
+3. Read private media200/decode kedua domain ×390/1440; credentials omit401.
+   Buktikan read-only media sebelum menjalankan approved denial fixtures.
+4. Add tepat1 Projects fixture dengan title `Uji CMS Auth <run-id>`, tags
+   `QA`/`Temporary`, description `Temporary CMS acceptance fixture <run-id>`,
+   image=path tadi, fresh revision. UID dibuat server, simpan affectedId.
+5. Save hanya fixture itu (description tambah `verified`), fresh revision.
+   Verifikasi dua publication hooks accepted, dua rebuild READY dan fixture
+   tampil kedua situs. Setiap error → GET inspect actual state, tanpa blindretry.
+6. Delete hanya fixture UID, fresh revision; tunggu dua rebuild READY dan
+   baseline empat Projects fields/order kembali exact. Team unchanged.
+7. Delete hanya Storage object hash fixture setelah memastikan tidak direferensi
+   collection manapun. Verify object absent dan baseline public19HTML restored.
+   Revision/state timestamp boleh berubah sebagai konsekuensi mutation normal;
+   tidak menyebut state DB byte-identik. Tidak reset/reseed/overwrite snapshot.
+
+Add/save/delete dapat memicu **3×2 deployment hooks**. Bila cleanup gagal, stop
+mutations, inspect state dan laporkan fixture UID/object yang masih ada; jangan
+hapus object/grant/user di luar fixture. Persetujuan login otomatis tidak sendiri
+mengubah gate fixture konkret yang diminta Faiz di E5 kickoff.
+
+## 17. Access restored and missing Storage prerequisite
+
+Full access kembali aktif 8 Oct 2026; `.git` writable dan Management API bekerja.
+Dua primary aliases **READY exact7e17fc0** confirmed API: testing provider timestamp
+7 Oct16:47:54.100 UTC/23:47:54.100 WIB; production16:49:24.662 UTC/23:49:24.662 WIB.
+Cek live: satu CMS owner grant aktif, satu recruitment allowlist aktif/fingerprint
+unchanged, applications0. CMS auth/recruitment focused43PASS; catalog table ACL +
+6 actual table-read denials PASS. Tidak apply ulang auth migration.
+
+Faiz mengizinkan **fixture E5 + cleanup** eksplisit: satu PNG32×32 + satu Projects
+fixture, edit/delete fixture, publikasi3×2 hooks, tanpa Team write. Baseline4
+Projects + Team fingerprint ditangkap. Upload pertama502; read-only inspect
+menemukan **bucket cms-media tidak ada** (catalog0buckets/0objects; Storage API
+Bucket not found). Tidak blindretry; tidak ada object/Projects fixture tersimpan.
+Storage existing3Team policies hanya service_role. Proposed prerequisite bucket:
+private/public=false, max262144bytes, allowed MIMEimage/webp; provisioning izin
+konkret pending terpisah dari E5. Script create disiapkan, belum dijalankan.
+
+Sesi khusus expiry alami dimulai: cookie hanya process memory, tanpa refresh
+sebelum3690detik; Auth actual jwt_exp3600. Due workspace UTC18:24:42.845 tanggal
+7Oct / WIB01:24:42.845 tanggal8Oct. Hasil **pending**, jangan klaim PASS dari explicit
+refresh. Setelah private media PASS, jalankan approved non-owner/revocation
+fixtures. GAS tetap; auth belum LIVE accepted penuh. Proof ignored: e-resume-audit,
+e-storage-inspect,e-fixture-baseline,e-natural-expiry,e-deployments-7e17fc0.

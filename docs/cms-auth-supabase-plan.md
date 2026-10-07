@@ -411,3 +411,10 @@ callback/`uri_allow_list`/account-linking**.
   retired callback juga 500 karena relative Response.redirect. Fix lokal + QA
   sebelum izin SHA baru. Execution plan §13 menyimpan bukti dan fixture denial
   bersyarat yang sudah diizinkan. E3/E4/E5 masih pending; auth belum LIVE accepted.
+
+Latest runtime: approved push `7e17fc0`; real owner load Projects/Team, explicit
+refresh, 390/1440 editor, logout401 and recruitment login/refresh isolation PASS
+kedua domain. Dua READY exact SHA API proof selesai setelah akses pulih. E5 fixture+cleanup
+approved; upload502 mengungkap bucket cms-media belum ada (0bucket/0object).
+Provisioning bucket privat menunggu izin. Positive media/denial/expiry/E5 belum
+PASS; probe expiry alami sedang berjalan. Lihat execution plan §17.

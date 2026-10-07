@@ -1,5 +1,17 @@
 # Master Migration Plan — GAS/Sheets/Drive → Supabase
 
+## Status runtime terbaru — 7e17fc0, acceptance parsial
+
+Approved push fix ke dua repo selesai. Real owner Projects/Team read, explicit
+refresh, 390/1440 editor dan CMS logout/recruitment isolation PASS kedua domain.
+Dua primary alias READY exact SHA sudah confirmed via API setelah akses pulih.
+E5 fixture approved; upload502 mengungkap bucket cms-media belum ada. Provisioning
+bucket privat meminta izin konkret; belum dibuat. Private media preview, natural expiry, approved
+non-owner/revocation fixtures dan E5 masih pending. Auth belum LIVE accepted.
+Lihat [execution plan §14](cms-auth-execution-plan.md#14-7e17fc0-deployment-and-partial-real-owner-proof).
+SQL tidak diapply ulang; content/recruitment allowlist/GAS tetap. Checkpoint docs
+lokal belum push; `.git` writable kembali setelah Full access diaktifkan.
+
 ## Status auth CMS terbaru — C3 applied, D4/E pending (7 Oct 2026)
 
 Provider final password Supabase; A–D lokal awal `ae52f54`, fresh review lokal
