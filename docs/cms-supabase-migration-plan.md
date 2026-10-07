@@ -1,9 +1,11 @@
 # Master Migration Plan — GAS/Sheets/Drive → Supabase
 
-Status: **READY TO EXECUTE.** Recruitment pass 1-3 SUDAH di Supabase.
-CMS migration dimulai — lihat [cms-migration-kickoff.md](cms-migration-kickoff.md) untuk handoff AI baru.
-Belum ada implementasi, penghapusan kode/data, perubahan konfigurasi live, atau push.
-Dokumen ini bisa direview lalu diputuskan.
+Status: **CMS pass 1 (Projects) + pass 2 (Team) LIVE 8 Oct 2026.**
+Recruitment pass 1-3 juga sudah di Supabase.
+Lihat [cms-migration-kickoff.md](cms-migration-kickoff.md) untuk handoff AI baru.
+Pass 1 dan 2 sudah diimplementasi dan push — SQL migration di-apply,
+kode handler dispatch via Management API (`/database/query`) karena PostgREST safeupdate
+memblokir UPDATE di RPC untuk parameter `jsonb`. `SUPABASE_ACCESS_TOKEN` wajib di env.
 
 Disusun 6 Oct 2026. Bahasa: Indonesia. Semua nama env/property dicatat **tanpa
 nilai** — jangan pernah mencetak secret/token/URL admin.

@@ -1,6 +1,8 @@
 # Master Work Plan — Pass 2: Team → Supabase
 
-Status: **DRAFT — review sebelum eksekusi.**
+Status: **LIVE 8 Oct 2026** — migration applied, kode push ke kedua Vercel, build + 7 gate PASS.
+AI baru: baca AGENTS.md + [cms-supabase-migration-plan.md](cms-supabase-migration-plan.md)
+sebelum mulai Pass 3.
 
 ## 1. Lingkup
 

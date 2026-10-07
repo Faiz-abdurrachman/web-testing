@@ -3,16 +3,43 @@
 ## CMS pass 2 — Team → Supabase — LIVE 8 Oct 2026
 
 Pass 2 selesai: Team pindah dari GAS/Sheets/Drive ke Supabase Postgres + Storage.
-Migration `20261009010000_cms_team_pass2.sql` di-apply. Tabel
-`private.cms_team_members` + `private.cms_team_state`, 7 grup (leader + 6 HoDS),
-25 member seed. Hybrid snapshot via `rebuildTeamSnapshot()`. Handler
-`teamOperation()` dispatch via Management API (`/database/query`) karena
-PostgREST safeupdate blokir UPDATE di RPC untuk fungsi dengan parameter `jsonb`.
-Media team ke Storage bucket `cms-media/team/`. Projects yang sudah migrasi di
-Pass 1 juga ikut pakai Management API untuk write. Auth tetap OAuth custom.
+Migration `20261009010000_cms_team_pass2.sql` di-apply.
 
-**Wajib sebelum deploy:** `SUPABASE_URL`, `SUPABASE_ANON_KEY`,
-`SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ACCESS_TOKEN` di kedua Vercel.
+**Tabel:** `private.cms_team_members` (id, group_id, name, role, photo, position, 7 grup
+leader+6 HoDS, 1-8 member/grup) + `private.cms_team_state` (revision sha256 per
+`group_id, position, id`, publication_pending). RLS revoke + deny policies.
+
+**Fungsi:** `cms_load_team`, `cms_save_member`, `cms_add_member`, `cms_delete_member`
+(private) + public wrapper (read anon+service_role, write service_role only).
+Seed 25 members persis dari snapshot.
+
+**Storage:** bucket `cms-media/team/` (service_role only).
+
+**Hybrid snapshot:** `rebuildTeamSnapshot()` di `scripts/cms-client.mjs` konversi
+format Supabase (members[] + groups[]) ke snapshot Zod (leaderTeam + hodsTeams).
+`cacheProjectMedia` routing `/images/cms/team/` ke Storage.
+
+**Handler:** `teamOperation()` di `server/cms-admin.mjs` — dispatch load/save/add/
+delete/retry team. Write via Management API `/database/query` (bukan RPC) karena
+PostgREST safeupdate blokir UPDATE di fungsi dengan parameter `jsonb`.
+
+**Projects juga ikut upgrade:** `projectsOperation()` sekarang juga via Management API.
+`wrapPayload()` dihapus — cukup JSON.stringify di handler.
+
+**Env baru:** `SUPABASE_ACCESS_TOKEN` wajib di kedua Vercel. Tanpa ini write admin gagal.
+Auth tetap OAuth custom. Route tetap `api/admin/{projects,team,media}.js`.
+
+**QA lokal:** build 0 error, test:cms 36/46 (7 fail mock test GAS, 3 skip Supabase),
+verify exit 0 browserErrors[], navbar PASS, VT PASS, responsive 468/468 PASS,
+spacing 39 komponen PASS, seo 23 pages PASS, format PASS.
+Push `fc20b70` ke testing + production.
+
+## CMS pass 1 — Projects → Supabase — LIVE 7 Oct 2026
+
+Pass 1 Projects: tabel `private.cms_projects` + state, 4 project seed, Storage
+`cms-media/projects/`. Hybrid snapshot overrides `snapshot.projects` dari RPC.
+Handler `projectsOperation()` untuk load/save/add/delete/retry. Auth tetap OAuth.
+(Detail lebih lanjut di AGENTS.md dan docs.)
 
 ## Recruitment pass 3 — rate limit + refresh token — LIVE 7 Oct 2026
 
