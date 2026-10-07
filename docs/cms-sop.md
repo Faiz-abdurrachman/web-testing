@@ -1,5 +1,12 @@
 # SOP CMS — Data Sorcerers
 
+Checkpoint pass 3: [Roles plan](cms-pass3-roles-plan.md). SQL Roles live,
+kode hybrid lokal siap, push/deploy belum. Projects/Team/Roles dibaca via RPC
+anon; Domains/Hods/Partners masih GAS. Roles belum punya editor/write API.
+Handler OAuth custom, media dan Management API write existing tidak berubah.
+Auth hanya dikerjakan setelah seluruh collection migrasi; pilihannya pending.
+Keputusan/checkpoint terbaru mengalahkan catatan GAS historis di bawah.
+
 ## B2 Team — pass lokal 6 Oct 2026
 
 Master Work Plan: [Team plan](cms-team-plan.md); update/acceptance:

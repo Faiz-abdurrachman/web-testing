@@ -56,21 +56,30 @@ function harness(teamData) {
         });
       if (typeof url === 'string' && url.includes('/rest/v1/rpc/')) {
         if (url.includes('cms_load_team')) {
-          return Response.json({
-            members: [],
-            groups: [],
-            revision: 'a'.repeat(64),
-            photoPresets: [],
-            minMembers: 1,
-            maxMembers: 8,
-            minGroups: 7,
-            publicationPending: false,
-            affectedId: null,
-          });
+          return Response.json(
+            teamData || {
+              members: [],
+              groups: [],
+              revision: 'a'.repeat(64),
+              photoPresets: [],
+              minMembers: 1,
+              maxMembers: 8,
+              minGroups: 7,
+              publicationPending: false,
+              affectedId: null,
+            },
+          );
         }
         return Response.json(data);
       }
       if (typeof url === 'string' && url.includes('/database/query')) {
+        if (
+          teamData &&
+          JSON.parse(options.body).query.includes('cms_save_member')
+        )
+          return Response.json([
+            { cms_save_member: { ...teamData, saved: true } },
+          ]);
         // Return write result — wrap in select result format
         const result = {
           saved: true,
@@ -464,10 +473,7 @@ test('Team API uses existing session and CSRF, fixed Team RPC and sanitized cont
   assert.equal(result.ok, true);
   assert.equal(result.data.members.length, 7);
   assert(!JSON.stringify(result).includes('LEAK'));
-  assert.equal(
-    JSON.parse(h.calls.at(-1).options.body).function,
-    'adminLoadTeam',
-  );
+  assert.equal(h.calls.at(-1).url.split('/').at(-1), 'cms_load_team');
   const payload = {
     revision: result.data.revision,
     member: result.data.members[0],
@@ -499,9 +505,9 @@ test('Team API uses existing session and CSRF, fixed Team RPC and sanitized cont
     }),
     'team',
   );
-  assert.equal(
-    JSON.parse(h.calls.at(-1).options.body).function,
-    'adminSaveMember',
+  assert.match(
+    JSON.parse(h.calls.at(-1).options.body).query,
+    /public\.cms_save_member/,
   );
   assert.equal(
     (
@@ -518,14 +524,15 @@ test('Team API uses existing session and CSRF, fixed Team RPC and sanitized cont
     ).status,
     400,
   );
-  h.deny();
+  // Supabase cutover authorizes via the encrypted owner session, not GAS RPC.
+  const tamperedCookie = cookie.replace(/=./, '=X');
   assert.equal(
     (
       await h.handle(
-        request('/api/admin/team', { headers: { Cookie: cookie } }),
+        request('/api/admin/team', { headers: { Cookie: tamperedCookie } }),
         'team',
       )
     ).status,
-    403,
+    401,
   );
 });

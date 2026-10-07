@@ -24,6 +24,8 @@ const supabaseEnv = {
 };
 const supabaseMock = (url) => {
   const href = typeof url === 'string' ? url : url.href;
+  if (href.includes('/rest/v1/rpc/cms_load_roles'))
+    return jsonResponse({ roles: baseline.roles });
   if (href.includes('/rest/v1/rpc/cms_load_projects'))
     return jsonResponse(baseline);
   if (href.includes('/rest/v1/rpc/cms_load_team')) {
@@ -141,11 +143,11 @@ test('GAS redirects return a valid payload and atomically replace the snapshot',
           const href = typeof url === 'string' ? url : url.href;
           if (
             href.includes('/rest/v1/rpc/cms_load_projects') ||
-            href.includes('/rest/v1/rpc/cms_load_team')
+            href.includes('/rest/v1/rpc/cms_load_roles')
           )
             return jsonResponse(changed);
           if (href.includes('/database/query')) return jsonResponse([]);
-          return fetchImpl(url, opts);
+          return supabaseMock(url) || fetchImpl(url, opts);
         },
       }),
       'remote',
@@ -317,11 +319,11 @@ test('timeouts retry once from the export endpoint; exhausted retries preserve t
             const href = typeof url === 'string' ? url : url.href;
             if (
               href.includes('/rest/v1/rpc/cms_load_projects') ||
-              href.includes('/rest/v1/rpc/cms_load_team')
+              href.includes('/rest/v1/rpc/cms_load_roles')
             )
               return jsonResponse(baseline);
             if (href.includes('/database/query')) return jsonResponse([]);
-            return fetchImpl(url, opts);
+            return supabaseMock(url) || fetchImpl(url, opts);
           },
         });
         if (recover) {
@@ -425,11 +427,11 @@ test('redirect 404 retries with a fresh export request; exhaustion leaves snapsh
           const href = typeof url === 'string' ? url : url.href;
           if (
             href.includes('/rest/v1/rpc/cms_load_projects') ||
-            href.includes('/rest/v1/rpc/cms_load_team')
+            href.includes('/rest/v1/rpc/cms_load_roles')
           )
             return jsonResponse(baseline);
           if (href.includes('/database/query')) return jsonResponse([]);
-          return fetchImpl(url, opts);
+          return supabaseMock(url) || fetchImpl(url, opts);
         },
       });
       if (recover) {

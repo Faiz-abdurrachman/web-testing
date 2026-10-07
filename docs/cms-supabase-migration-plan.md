@@ -1,5 +1,13 @@
 # Master Migration Plan — GAS/Sheets/Drive → Supabase
 
+Checkpoint pass 3: [Roles plan](cms-pass3-roles-plan.md). SQL/RPC Roles sudah
+terpasang dan diverifikasi, kode hybrid lokal + QA selesai; push/deploy pending.
+Sumber kode berikutnya: projects/team/roles = Supabase; domains/hods/partners =
+GAS. Roles hanya read-only. Urutan sisa: Domains → Hods → Partners → auth
+terakhir. Pilihan auth belum final sesuai kickoff terbaru; keputusan historis
+Google di bawah tidak menjadi instruksi implementasi saat ini. Team live
+berbeda dari snapshot repo, sudah ada sebelum pass 3 dan tidak diubah.
+
 Status: **CMS pass 1 (Projects) + pass 2 (Team) LIVE 8 Oct 2026.**
 Recruitment pass 1-3 juga sudah di Supabase.
 Lihat [cms-migration-kickoff.md](cms-migration-kickoff.md) untuk handoff AI baru.

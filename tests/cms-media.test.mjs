@@ -31,10 +31,10 @@ const raster = (format = 'png') =>
     .toFormat(format)
     .toBuffer();
 
-const teamRpc = () => {
+const teamRpc = (snapshot = baseline) => {
   const members = [];
   const groups = [];
-  for (const ht of baseline.team.hodsTeams) {
+  for (const ht of snapshot.team.hodsTeams) {
     groups.push({ id: ht.id, title: ht.title });
     for (const [i, m] of ht.members.entries()) {
       members.push({
@@ -47,7 +47,7 @@ const teamRpc = () => {
       });
     }
   }
-  for (const [i, m] of baseline.team.leaderTeam.entries()) {
+  for (const [i, m] of snapshot.team.leaderTeam.entries()) {
     members.push({
       id: 'leader-' + (i + 1),
       group: 'leader',
@@ -139,7 +139,14 @@ test('prebuild caches verified private media before atomic snapshot write, refet
           return Response.json(changed);
         if (href.includes('/rest/v1/rpc/cms_load_team'))
           return Response.json(teamRpc());
-        if (href.includes('/database/query')) return Response.json([]);
+        if (href.includes('/rest/v1/rpc/cms_load_roles'))
+          return Response.json({ roles: baseline.roles });
+        if (href.includes('/storage/v1/object/cms-media/')) {
+          mediaCalls++;
+          return bad
+            ? new Response(null, { status: 404 })
+            : new Response(Buffer.from(media.data, 'base64'));
+        }
         const parsed = new URL(href);
         if (parsed.searchParams.get('action') === 'media') {
           mediaCalls++;
@@ -152,7 +159,7 @@ test('prebuild caches verified private media before atomic snapshot write, refet
     };
     await assert.rejects(
       syncCmsSnapshot(options),
-      /media fetch or validation failed/,
+      /media (fetch or validation failed|fetch failed)/,
     );
     assert.deepEqual(JSON.parse(await readFile(snapshotPath)), baseline);
     bad = false;
@@ -544,6 +551,12 @@ test('Team photos use separate namespace, private owner upload/read and active-r
         const href = typeof url === 'string' ? url : url.href;
         if (href.includes('/rest/v1/rpc/cms_load_projects'))
           return Response.json(snapshot);
+        if (href.includes('/rest/v1/rpc/cms_load_team'))
+          return Response.json(teamRpc(snapshot));
+        if (href.includes('/rest/v1/rpc/cms_load_roles'))
+          return Response.json({ roles: snapshot.roles });
+        if (href.includes('/storage/v1/object/cms-media/'))
+          return new Response(Buffer.from(media.data, 'base64'));
         return Response.json(
           new URL(href).searchParams.get('action') === 'media'
             ? media
@@ -561,13 +574,19 @@ test('Team photos use separate namespace, private owner upload/read and active-r
       const href = typeof url === 'string' ? url : url.href;
       if (href.includes('/rest/v1/rpc/cms_load_projects'))
         return Response.json(snapshot);
+      if (href.includes('/rest/v1/rpc/cms_load_team'))
+        return Response.json(teamRpc(snapshot));
+      if (href.includes('/rest/v1/rpc/cms_load_roles'))
+        return Response.json({ roles: snapshot.roles });
+      if (href.includes('/storage/v1/object/cms-media/'))
+        return new Response(null, { status: 404 });
       return Response.json(
         new URL(href).searchParams.get('action') === 'media' ? {} : snapshot,
       );
     };
     await assert.rejects(
       syncCmsSnapshot(options),
-      /media fetch or validation failed/,
+      /media (fetch or validation failed|fetch failed)/,
     );
     assert.deepEqual(JSON.parse(await readFile(path)), snapshot);
   } finally {
@@ -609,10 +628,18 @@ test('native Team media route enforces session/CSRF, normalizes bytes before fix
     fetchImpl: async (url, options) => {
       if (typeof url === 'string' && url.includes('/rest/v1/rpc/'))
         return Response.json(data);
-      if (typeof url === 'string' && url.includes('/storage/v1/'))
+      if (typeof url === 'string' && url.includes('/storage/v1/')) {
+        if (options.method === 'POST') {
+          assert.deepEqual(
+            Buffer.from(options.body),
+            Buffer.from(expected.data, 'base64'),
+          );
+          calls.push({ storageUpload: url });
+        }
         return new Response(Buffer.from(expected.data, 'base64'), {
           headers: { 'Content-Type': 'image/webp' },
         });
+      }
       if (url.endsWith('/token'))
         return Response.json({
           access_token: 'private-token',
@@ -723,7 +750,7 @@ test('native Team media route enforces session/CSRF, normalizes bytes before fix
     Buffer.from(expected.data, 'base64'),
   );
   assert.equal(
-    calls.filter((c) => c.function === 'adminUploadTeamImage').length,
+    calls.filter((c) => c.storageUpload?.includes('/cms-media/team/')).length,
     1,
   );
 });

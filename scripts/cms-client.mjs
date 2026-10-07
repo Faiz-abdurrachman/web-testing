@@ -268,6 +268,14 @@ export async function syncCmsSnapshot({
     );
     snapshot.team = rebuildTeamSnapshot(st);
 
+    const sr = await supabaseFetch(
+      supabaseUrl,
+      supabaseKey,
+      'cms_load_roles',
+      fetchImpl,
+    );
+    snapshot.roles = sr.roles;
+
     validateCmsSnapshot(snapshot);
   }
 

@@ -1,5 +1,39 @@
 # AI handoff — current context
 
+## CMS pass 3 — Roles → Supabase — SQL live, kode lokal siap
+
+Migration `supabase/migrations/20261010010000_cms_roles_pass3.sql` sudah
+terpasang di `web-community`. Enam Roles direkonsiliasi dengan GAS dan snapshot;
+RPC anon `cms_load_roles` mengembalikan data identik. Tabel private.cms_roles
+memakai RLS + deny policy, revoke direct table/private function, public wrapper
+SECURITY DEFINER (anon/service_role saja). ID, order dan jumlah slot fixed;
+whatsapp NULL tidak muncul di snapshot. Seed idempotent tanpa overwrite.
+
+Kode lokal snapshot hybrid membaca Projects + Team + Roles dari Supabase,
+Domains/Hods/Partners dari GAS. Roles read-only, belum punya editor atau write
+API; handler admin/auth/media tidak diubah. Auth terakhir, keputusan mekanisme
+login tetap pending sesuai kickoff terbaru (mengalahkan keputusan historis).
+
+QA Node 22: CMS 42 PASS + 10 live Team tests SKIP (tidak menjalankan mutation
+Team live); Recruitment 24 PASS; enam tes Roles mencakup PostgreSQL nyata.
+Build 0 error, visual verify browserErrors[], responsive 468/468, navbar, VT,
+spacing (39 komponen), format dan SEO (23 halaman) PASS. Browser mock admin
+native/legacy/Team masing-masing empat width PASS. 19 HTML publik dan snapshot
+repo identik baseline. Mock lama diperbaiki mengikuti transport pass 2, tanpa
+mengubah handler atau assertion geometri.
+
+**Batas bukti:** hybrid live memuat Team yang berbeda dari snapshot repo.
+Perbandingan client sebelum/sesudah pass membuktikan collection selain Roles
+tidak berubah; selisih Team sudah ada sebelum pass ini. Tidak mengubah/reseed
+Team untuk menyamakan baseline. Artefak: artifacts/cms-pass3/{reconciliation,
+live-db,live-hybrid}.json dan log gates. .env.local belum berisi anon key;
+verifikasi membaca key dari Management API di memori, tanpa mencetak secret.
+
+**Belum push/deploy kode situs.** Wajib konfirmasi push origin (dua situs),
+lalu cek dua build dan penerimaan publik. Sebelum deploy pastikan empat env
+Supabase di kedua Vercel, termasuk SUPABASE_ACCESS_TOKEN. NEXT pass 4 Domains
+setelah pass 3 deploy diterima; jangan lanjut collection lain di pass ini.
+
 ## CMS pass 2 — Team → Supabase — LIVE 8 Oct 2026
 
 Pass 2 selesai: Team pindah dari GAS/Sheets/Drive ke Supabase Postgres + Storage.
