@@ -1,5 +1,28 @@
 # CMS → Supabase — TODO dan status penerimaan
 
+## Work order sesi berikutnya — auth CMS, PLAN ONLY
+
+Faiz meminta **eksekusi di AI baru**. [Master Work Plan auth CMS](cms-auth-supabase-plan.md)
+sudah disiapkan rinci: inventory actual, keputusan provider/dependency/owner,
+security contract, checklist A–E, SQL permission proposal, QA, dua-domain
+acceptance dan rollback. Sesi persiapan ini **docs saja**; belum kode/SQL/apply/
+provider config/dependency/push/deploy auth. Semua execution checklist pending.
+
+Runtime live **925d577**, checkpoint docs **3229c5b lokal** dan planning terbaru
+lihat git log; origin/production masih925d577. Izin push925d577 consumed;
+konfirmasi sebelum push baru termasuk docs. Urutan baca aktif: kickoff seluruhnya
+termasuk §6 → AGENTS → ai-handoff → auth plan → TODO → master plan → CMS SOP.
+Provider/mekanisme belum dipilih; lakukan audit A lalu selesaikan gate keputusan
+sebelum implementasi dependent. OAuth CMS custom masih berjalan sekarang.
+
+**Temuan actual:** callback CMS masih cek owner via GAS; API Supabase CMS memakai
+sesi encrypted, bukan fresh GAS check per operasi. `private.cms_admin_users`
+existing (`auth_id text`, bukan proposal user_id uuid) mengotorisasi recruitment.
+Jangan otomatis reuse/seed tabel itu untuk CMS atau link Google/password identity.
+Target CMS permission terisolasi + trusted Auth identity per request; recruitment
+cookies/users/allowlist tetap. Keenam content sources Supabase tetapi full GAS
+export tetap divalidasi; penghapusan GAS belum diizinkan. UI/data/Team drift tetap.
+
 ## Checkpoint aktif — Partners LIVE, NEXT auth CMS final
 
 **Pass 6 Partners A–E selesai, LIVE `925d577`**, dipush dengan izin Faiz ke
@@ -160,14 +183,29 @@ Rekonsiliasi, SQL applied dan QA lokal actual tercatat di plan §9; E actual PAS
 
 ## 5. Sesudah Partners (belum dikerjakan)
 
-| Urutan            | Status           | Scope awal                                             |
-| ----------------- | ---------------- | ------------------------------------------------------ |
-| Pass 6 Partners   | LIVE925d577      | tiga kategori, empat why, satu logo repo; A–E accepted |
-| Auth CMS terakhir | BELUM DIPUTUSKAN | pilih login, owner/cookie/CSRF/dua domain              |
-| Penghapusan GAS   | BELUM DIIZINKAN  | semua pass diterima, backup/observasi + izin baru      |
+| Urutan            | Status                        | Scope awal                                             |
+| ----------------- | ----------------------------- | ------------------------------------------------------ |
+| Pass 6 Partners   | LIVE925d577                   | tiga kategori, empat why, satu logo repo; A–E accepted |
+| Auth CMS terakhir | PLAN ONLY / keputusan pending | detailed plan A–E; eksekusi di AI baru                 |
+| Penghapusan GAS   | BELUM DIIZINKAN               | semua pass diterima, backup/observasi + izin baru      |
 
 Milestones/settings bukan tambahan scope otomatis. Tinjau apakah benar dipakai
 sebelum menawarkan migrasi; jangan menambah pass/collection sendiri.
+
+### Checklist auth CMS untuk AI baru
+
+[Master Work Plan](cms-auth-supabase-plan.md) berisi sub-checklist A1–E5 lengkap.
+
+- [x] Planning/handoff rinci dan inventory actual disiapkan; docs saja.
+- [ ] A: fresh audit/baseline/env presence + provider/dependency/owner/session decisions.
+- [ ] B: final contract/SQL local PG/server auth/session-bound CSRF/focused tests.
+- [ ] C: local regression/review, approved additive SQL/config/isolated owner grant.
+- [ ] D: tujuh gate+SEO/admin mocks/public parity/security proof/docs/localcommit siap review.
+- [ ] E: izin push baru, dua exact READY aliases, real owner/non-owner/anon/refresh/logout/
+      revocation/isolation acceptance + LIVE checkpoint.
+
+Tidak ada runtime/SQL/config/deps/deploy auth sesi planning. Recruitment
+allowlist existing tetap terpisah; GAS export removal belum diizinkan.
 
 ## 6. Temuan dan keputusan yang harus dibawa ke AI baru
 
@@ -182,12 +220,12 @@ sebelum menawarkan migrasi; jangan menambah pass/collection sendiri.
       tidak boleh mengubah bucket policy agar public sebagai jalan pintas Partners.
 - [ ] Catalog proof tidak setara mutation/role-execution proof seluruh fitur.
 - [ ] Auth CMS: Google lewat Supabase atau pertahankan custom masih pending;
-      bagian master plan lama adalah proposal, bukan approval.
+      bagian master plan lama adalah proposal, bukan approval. Ikuti auth plan §3 decision gates; password via Supabase juga memerlukan scope UI tersendiri.
 - [ ] CAPTCHA: key Cloudflare belum diputuskan/disediakan.
 - [ ] Retensi/pembukaan recruitment: belum diputuskan; accepting:false tetap.
 
 Item bagian ini adalah issue/keputusan terpisah, **bukan** instruksi agar AI
-Partners menyelesaikannya semua. Laporkan blocker yang benar-benar terjadi.
+auth menyelesaikannya semua. Laporkan blocker yang benar-benar terjadi.
 
 ## 7. Aturan perubahan status
 

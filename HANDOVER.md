@@ -1,22 +1,21 @@
 # Handover — Data Sorcerers (community-web)
 
-## Work order aktif — CMS pass 5 Hods (plan only)
+## Work order aktif — auth CMS, PLAN ONLY untuk AI baru
 
-Kode live **`6b36519`**: Projects/Team/Roles/Domains Supabase. Kedua Vercel
-READY dan Domains A–E/dua-site acceptance selesai. Hods/Partners masih GAS.
-Checkpoint live **`df31ab0`** + planning terbaru commit lokal belum dipush.
-Baca urut [kickoff migrasi](docs/cms-migration-kickoff.md) → AGENTS.md →
-[ai-handoff](docs/ai-handoff.md) → [Hods Master Work Plan](docs/cms-pass5-hods-plan.md)
-→ [TODO](docs/cms-migration-todo.md) → [master migration plan](docs/cms-supabase-migration-plan.md)
-→ [CMS SOP](docs/cms-sop.md). Prompt lengkap AI baru: kickoff migrasi §6.
+Runtime LIVE **925d577**, Partners A–E accepted di kedua primary domains.
+Keenam content collections Supabase; full GAS export tetap dependency.
+Checkpoint docs3229c5b + planning auth terbaru lokal, lihat git log/status;
+izin push925d577 consumed, konfirmasi sebelum push baru termasuk docs.
 
-Hods plan rinci siap **PLAN ONLY**, belum SQL/kode/apply/deploy. Scope 6 fixed
-IDs/21 tabs/55 sections/8 bullet items, read-only anon RPC + private SQL/RLS,
-hybrid snapshot, real PG/Unicode/security/atomic failure + all-tab browser,
-7 gate + SEO, docs/commit. UI/geometri/Zod/assertions/hodDesign/auth tetap.
-Jangan reseed Team/hapus GAS/tab/env; full test:cms tanpa env server karena
-Team dapat mutation live. Izin push Domains consumed; konfirmasi push baru.
-Isi NEXT/setup/flow historis di bawah **arsip**, bukan instruksi aktif Hods.
+Baca [kickoff migrasi](docs/cms-migration-kickoff.md) seluruhnya termasuk §6 →
+AGENTS → [ai-handoff](docs/ai-handoff.md) →
+[Auth CMS Master Work Plan](docs/cms-auth-supabase-plan.md) →
+[TODO](docs/cms-migration-todo.md) → [master plan](docs/cms-supabase-migration-plan.md)
+→ [CMS SOP](docs/cms-sop.md). Plan rinci A–E/security/SQL/QA/acceptance/rollback;
+Faiz meminta **eksekusi di AI baru**, sesi persiapan docs saja. Belum runtime/SQL/
+provider config/deps/deploy auth. Provider/dependency/owner/session gate pending.
+Recruitment allowlist existing tidak otomatis CMS allowlist. UI/data tetap;
+full test:cms tanpa env server. GAS removal belum diizinkan. NEXT historis arsip.
 
 ## ARSIP CHECKPOINT — Recruitment pass 2 Supabase LIVE (7 Oct 2026)
 

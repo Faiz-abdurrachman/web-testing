@@ -1,5 +1,14 @@
 # Native /admin — konfigurasi dan acceptance
 
+## Status dokumen — arsip native OAuth/GAS
+
+Isi setup/flow di bawah merekam pass historis; jangan onboarding/config ulang.
+Runtime latest925d577, keenam content collections Supabase, CMS login masih
+custom OAuth. NEXT [Auth CMS Master Work Plan](cms-auth-supabase-plan.md)
+**PLAN ONLY**, eksekusi di AI baru setelah decision gates. Baca kickoff migrasi
+§6 dan checkpoint ai-handoff dahulu. Recruitment Auth/allowlist terpisah dan
+GAS export tetap dependency. Push baru memerlukan konfirmasi.
+
 Kode native Projects 824e333 sudah push dengan izin user; kedua Vercel SUCCESS.
 Shell /admin dan routing API terverifikasi; login Google belum aktif.
 User memilih admin penuh di situs. Semua perubahan konten tetap memakai GAS

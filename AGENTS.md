@@ -1,5 +1,28 @@
 # AGENTS.md — instructions for AI agents
 
+## Work order sesi berikutnya — auth CMS, PLAN ONLY
+
+Faiz meminta **eksekusi di AI baru**. [Master Work Plan auth CMS](docs/cms-auth-supabase-plan.md)
+sudah disiapkan rinci: inventory actual, keputusan provider/dependency/owner,
+security contract, checklist A–E, SQL permission proposal, QA, dua-domain
+acceptance dan rollback. Sesi persiapan ini **docs saja**; belum kode/SQL/apply/
+provider config/dependency/push/deploy auth. Semua execution checklist pending.
+
+Runtime live **925d577**, checkpoint docs **3229c5b lokal** dan planning terbaru
+lihat git log; origin/production masih925d577. Izin push925d577 consumed;
+konfirmasi sebelum push baru termasuk docs. Urutan baca aktif: kickoff seluruhnya
+termasuk §6 → AGENTS → ai-handoff → auth plan → TODO → master plan → CMS SOP.
+Provider/mekanisme belum dipilih; lakukan audit A lalu selesaikan gate keputusan
+sebelum implementasi dependent. OAuth CMS custom masih berjalan sekarang.
+
+**Temuan actual:** callback CMS masih cek owner via GAS; API Supabase CMS memakai
+sesi encrypted, bukan fresh GAS check per operasi. `private.cms_admin_users`
+existing (`auth_id text`, bukan proposal user_id uuid) mengotorisasi recruitment.
+Jangan otomatis reuse/seed tabel itu untuk CMS atau link Google/password identity.
+Target CMS permission terisolasi + trusted Auth identity per request; recruitment
+cookies/users/allowlist tetap. Keenam content sources Supabase tetapi full GAS
+export tetap divalidasi; penghapusan GAS belum diizinkan. UI/data/Team drift tetap.
+
 ## Checkpoint aktif — Partners LIVE, NEXT auth CMS final
 
 **Pass 6 Partners A–E selesai, LIVE `925d577`**, dipush dengan izin Faiz ke
@@ -424,13 +447,13 @@ geometri atau melonggarkan assertion geometri baseline. Setelah Growth hijau:
 Projects media upload/cache → Team → B3 per collection → B4 hardening.
 
 **Urutan baca aktif CMS:** `docs/cms-migration-kickoff.md` → `AGENTS.md` →
-`docs/ai-handoff.md` → `docs/cms-pass6-partners-plan.md` →
+`docs/ai-handoff.md` → `docs/cms-auth-supabase-plan.md` →
 `docs/cms-migration-todo.md` → `docs/cms-supabase-migration-plan.md` →
 `docs/cms-sop.md`. Sebelum UI baca `docs/pixel-precision-sop.md`.
-Plan GAS/Growth/B2 di bawah adalah arsip, bukan work order Partners.
+Plan GAS/Growth/B2 dan pass content selesai adalah arsip, bukan work order auth.
 
 **Prioritas dokumen:** checkpoint terbaru di awal file, kickoff migrasi, plan
-Partners dan TODO mengalahkan NEXT/PENDING/setup Growth dan catatan historis. Riwayat disimpan
+auth CMS dan TODO mengalahkan NEXT/PENDING/setup Growth dan catatan historis. Riwayat disimpan
 sebagai bukti keputusan, bukan work order aktif. Full-screen sudah selesai;
 Contact tetap hero Figma-exact tinggi 954, bukan video/full-screen.
 
@@ -454,7 +477,7 @@ new agents lives in `docs/kickoff-prompt.md`; for building a new page/section us
 - `npm run cms:gas` — generate source export ke ignored `artifacts/cms-gas/`.
 - `npm run cms:admin` — generate source admin ke ignored `artifacts/cms-admin/`.
 - `docs/cms-sop.md` — auth, secrets, fetch, QA, update GAS existing.
-- `docs/cms-projects-growth-plan.md` — Master Work Plan historis add/delete Projects; NEXT aktif Partners.
+- `docs/cms-projects-growth-plan.md` — Master Work Plan historis add/delete Projects; NEXT aktif auth CMS (plan).
 - `docs/cms-kickoff.md` — prompt lengkap sesi baru; jangan ulang B0/onboarding.
 
 ## Commands

@@ -1,5 +1,14 @@
 # Native website admin — Projects/auth pass (6 Oct 2026)
 
+## Status dokumen — arsip native OAuth/GAS
+
+Isi setup/flow di bawah merekam pass historis; jangan onboarding/config ulang.
+Runtime latest925d577, keenam content collections Supabase, CMS login masih
+custom OAuth. NEXT [Auth CMS Master Work Plan](cms-auth-supabase-plan.md)
+**PLAN ONLY**, eksekusi di AI baru setelah decision gates. Baca kickoff migrasi
+§6 dan checkpoint ai-handoff dahulu. Recruitment Auth/allowlist terpisah dan
+GAS export tetap dependency. Push baru memerlukan konfirmasi.
+
 User selected full admin inside the website at /admin with Google owner login.
 Working tree clean at 198586b. Projects Growth code deployed successfully to both
 sites; owner reports GAS Admin code/HTML deployment updated. Read-only export

@@ -1,5 +1,9 @@
 # CMS pass 6 — Partners → Supabase — Master Work Plan
 
+NEXT [Auth CMS Master Work Plan](cms-auth-supabase-plan.md) rinci **PLAN ONLY**,
+eksekusi di AI baru atas permintaan Faiz. Provider/dependency/owner/session
+pending. File Partners ini tetap proof A–E accepted, bukan work order diulang.
+
 Status: **A–E selesai — Partners LIVE925d577 di kedua situs**. Push fitur dengan
 izin Faiz, kedua exact SHA/primary aliases READY dan acceptance live PASS §10.
 Checkpoint docs sesudah acceptance lokal; lihat git log. Izin push925d577

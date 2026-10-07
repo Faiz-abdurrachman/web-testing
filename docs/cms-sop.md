@@ -1,5 +1,49 @@
 # SOP CMS — Data Sorcerers
 
+## Work order sesi berikutnya — auth CMS, PLAN ONLY
+
+Faiz meminta **eksekusi di AI baru**. [Master Work Plan auth CMS](cms-auth-supabase-plan.md)
+sudah disiapkan rinci: inventory actual, keputusan provider/dependency/owner,
+security contract, checklist A–E, SQL permission proposal, QA, dua-domain
+acceptance dan rollback. Sesi persiapan ini **docs saja**; belum kode/SQL/apply/
+provider config/dependency/push/deploy auth. Semua execution checklist pending.
+
+Runtime live **925d577**, checkpoint docs **3229c5b lokal** dan planning terbaru
+lihat git log; origin/production masih925d577. Izin push925d577 consumed;
+konfirmasi sebelum push baru termasuk docs. Urutan baca aktif: kickoff seluruhnya
+termasuk §6 → AGENTS → ai-handoff → auth plan → TODO → master plan → CMS SOP.
+Provider/mekanisme belum dipilih; lakukan audit A lalu selesaikan gate keputusan
+sebelum implementasi dependent. OAuth CMS custom masih berjalan sekarang.
+
+**Temuan actual:** callback CMS masih cek owner via GAS; API Supabase CMS memakai
+sesi encrypted, bukan fresh GAS check per operasi. `private.cms_admin_users`
+existing (`auth_id text`, bukan proposal user_id uuid) mengotorisasi recruitment.
+Jangan otomatis reuse/seed tabel itu untuk CMS atau link Google/password identity.
+Target CMS permission terisolasi + trusted Auth identity per request; recruitment
+cookies/users/allowlist tetap. Keenam content sources Supabase tetapi full GAS
+export tetap divalidasi; penghapusan GAS belum diizinkan. UI/data/Team drift tetap.
+
+## SOP auth CMS pass terakhir — gate operasional
+
+Ikuti [auth plan](cms-auth-supabase-plan.md) A–E. Audit/baseline sebelum memilih
+provider/deps; implementasi di AI baru. Live provider/grant/account-linking/SQL
+mutations membutuhkan concrete diff, local proof dan authorization yang berlaku;
+planning bukan izin otomatis. Push/hook/deploy baru tidak dijalankan tanpa izin.
+
+CMS session server-only namespace terpisah recruitment, trusted Auth identity +
+CMS-specific active permission **setiap request** sebelum service/Management/
+Storage/hook; Origin + session-bound CSRF tetap untuk POST termasuk logout.
+Jangan reuse/seed recruitment allowlist, memperluas authenticated table/bucket
+permissions atau mengirim service secret ke browser. SDK client per request,
+refresh cookies/redirect/no-store/error sanitization diuji, no automaticwrite retry.
+Real owner acceptance terpisah mock; live fixture mutation hanya approved + cleanup.
+Recruitment Auth/cookies/users/allowlist/PII/accepting:false tetap; account linking
+harus direview sebelum activation. Full GAS export masih validated; jangan retire
+OAuth client/env/tab/deployment selama planning/authcutover tanpa retirementpass.
+
+SOP setup/GAS historis di bawah merekam flow lama. Checkpoint/auth plan terbaru
+mengalahkan instruksi install/seed/permissions lama; jangan ulang onboarding.
+
 ## Checkpoint aktif — Partners LIVE, NEXT auth CMS final
 
 **Pass 6 Partners A–E selesai, LIVE `925d577`**, dipush dengan izin Faiz ke

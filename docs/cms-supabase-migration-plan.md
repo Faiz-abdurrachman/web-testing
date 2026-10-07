@@ -1,5 +1,28 @@
 # Master Migration Plan — GAS/Sheets/Drive → Supabase
 
+## Work order sesi berikutnya — auth CMS, PLAN ONLY
+
+Faiz meminta **eksekusi di AI baru**. [Master Work Plan auth CMS](cms-auth-supabase-plan.md)
+sudah disiapkan rinci: inventory actual, keputusan provider/dependency/owner,
+security contract, checklist A–E, SQL permission proposal, QA, dua-domain
+acceptance dan rollback. Sesi persiapan ini **docs saja**; belum kode/SQL/apply/
+provider config/dependency/push/deploy auth. Semua execution checklist pending.
+
+Runtime live **925d577**, checkpoint docs **3229c5b lokal** dan planning terbaru
+lihat git log; origin/production masih925d577. Izin push925d577 consumed;
+konfirmasi sebelum push baru termasuk docs. Urutan baca aktif: kickoff seluruhnya
+termasuk §6 → AGENTS → ai-handoff → auth plan → TODO → master plan → CMS SOP.
+Provider/mekanisme belum dipilih; lakukan audit A lalu selesaikan gate keputusan
+sebelum implementasi dependent. OAuth CMS custom masih berjalan sekarang.
+
+**Temuan actual:** callback CMS masih cek owner via GAS; API Supabase CMS memakai
+sesi encrypted, bukan fresh GAS check per operasi. `private.cms_admin_users`
+existing (`auth_id text`, bukan proposal user_id uuid) mengotorisasi recruitment.
+Jangan otomatis reuse/seed tabel itu untuk CMS atau link Google/password identity.
+Target CMS permission terisolasi + trusted Auth identity per request; recruitment
+cookies/users/allowlist tetap. Keenam content sources Supabase tetapi full GAS
+export tetap divalidasi; penghapusan GAS belum diizinkan. UI/data/Team drift tetap.
+
 ## Checkpoint aktif — Partners LIVE, NEXT auth CMS final
 
 **Pass 6 Partners A–E selesai, LIVE `925d577`**, dipush dengan izin Faiz ke
@@ -338,22 +361,27 @@ deployment executable, dependency `sharp` **tetap** (dipakai media).
   `partners` 3 kategori + 4 why, `team` 7 grup.
 - Kolom audit: `created_at`, `updated_at`, `updated_by`.
 
-### 3.2 Tabel
+### 3.2 Arsip proposal tabel — bukan catalog applied
 
-| Tabel                      | Kunci             | Konten                                                                                               |
-| -------------------------- | ----------------- | ---------------------------------------------------------------------------------------------------- |
-| `cms_projects`             | `id text pk`      | title, tags jsonb[2], description, image                                                             |
-| `cms_team_groups`          | `id text pk`      | title, position                                                                                      |
-| `cms_team_members`         | `id text pk`      | group_id fk, name, role, photo, position (1–8/grup)                                                  |
-| `cms_roles`                | `id text pk`      | title, tagline, chips jsonb, deadline, about, requirements jsonb, contact, whatsapp                  |
-| `cms_hods`                 | `id text pk`      | title, description, tabs jsonb                                                                       |
-| `cms_domains`              | `id text pk`      | title, description, labels jsonb                                                                     |
-| `cms_partners`             | `id text pk`      | type, position, label, image, title, description                                                     |
-| `cms_milestones`           | `id text pk`      | year, title, description, image (reserved)                                                           |
-| `cms_settings`             | `key text pk`     | value                                                                                                |
-| `cms_admin_users`          | `user_id uuid pk` | label, active — allowlist admin                                                                      |
-| `cms_publication`          | `id int pk`       | publication_pending, revision, updated_at                                                            |
-| `recruitment_applications` | `receipt uuid pk` | content_hash text (index, **bukan** unique global), received_at, fields (kolom eksplisit atau jsonb) |
+Tabel berikut inventory desain awal, **bukan** definisi SQL actual. Bentuk applied
+masing-masing collection ditentukan migrations/plan pass accepted. Contoh Partners
+actual singleton smallint + arrays, bukan record per-slot. Auth plan actual terbaru
+mengalahkan proposal global; milestones/settings tidak menjadi pass otomatis.
+
+| Tabel                      | Kunci                 | Konten                                                                                               |
+| -------------------------- | --------------------- | ---------------------------------------------------------------------------------------------------- |
+| `cms_projects`             | `id text pk`          | title, tags jsonb[2], description, image                                                             |
+| `cms_team_groups`          | `id text pk`          | title, position                                                                                      |
+| `cms_team_members`         | `id text pk`          | group_id fk, name, role, photo, position (1–8/grup)                                                  |
+| `cms_roles`                | `id text pk`          | title, tagline, chips jsonb, deadline, about, requirements jsonb, contact, whatsapp                  |
+| `cms_hods`                 | `id text pk`          | title, description, tabs jsonb                                                                       |
+| `cms_domains`              | `id text pk`          | title, description, labels jsonb                                                                     |
+| `cms_partners`             | `id text pk`          | type, position, label, image, title, description                                                     |
+| `cms_milestones`           | `id text pk`          | year, title, description, image (reserved)                                                           |
+| `cms_settings`             | `key text pk`         | value                                                                                                |
+| `cms_admin_users`          | `auth_id text UNIQUE` | existing recruitment allowlist; CMS permission proposal terpisah                                     |
+| `cms_publication`          | `id int pk`           | publication_pending, revision, updated_at                                                            |
+| `recruitment_applications` | `receipt uuid pk`     | content_hash text (index, **bukan** unique global), received_at, fields (kolom eksplisit atau jsonb) |
 
 ### 3.3 Hak akses (RLS) dan tiga kunci
 
@@ -389,50 +417,28 @@ Aturan:
 - **Rotasi**: bila key sempat terlihat, rotasi di dashboard Supabase dan update
   env kedua Vercel; jangan mengandalkan penghapusan saja.
 
-### 3.4 Proposal otorisasi Supabase Auth untuk pass terakhir
+### 3.4 Auth CMS terakhir — actual scope dan permission terisolasi
 
-**Belum implementasi CMS:** recruitment sudah memakai cms_admin_users,
-CMS Projects/Team memakai sesi OAuth custom existing. Desain auth.uid()/RLS/
-helper di bawah bersyarat pilihan auth final, bukan instruksi pass Domains.
+Desain operasional terbaru: [Auth CMS Master Work Plan](cms-auth-supabase-plan.md)
+§2–4 dan A–E. **PLAN ONLY**, provider/dependency/owner/session pending; bukan
+izin perubahan RLS, multi-admin/editor, audit atau recruitment PII.
 
-Otorisasi tidak boleh bergantung pada RLS saja, karena `service_role` **melewati
-RLS**. Karena itu ada dua lapis:
+Actual `private.cms_admin_users` existing memakai `auth_id text`, email, active
+serta id serial; dipakai **recruitment**, bukan proposal user_id uuid. Jangan
+reuse/seed/alter otomatis untuk CMS. Proposal auth CMS: private allowlist terpisah,
+trusted Supabase Auth identity dan CMS active permission per request sebelum
+service-role/Management/Storage calls. Recruitment identity linking/permissions
+wajib ditinjau, cookies terpisah saja tidak cukup memisahkan akses.
 
-**Lapis 1 — allowlist + helper.** Tabel `cms_admin_users(user_id uuid pk →
-auth.users, label, role, active bool, granted_at, granted_by)`. Fungsi
-`is_admin()` `SECURITY DEFINER`/`STABLE` mengembalikan `true` bila `auth.uid()`
-ada dan `active`. Dipakai di policy RLS (menghindari rekursi policy dan
-menyembunyikan isi allowlist).
+Content public read tetap anon RPC, bukan direct anon SELECT. Authenticated tidak
+mendapat direct CMS writes. Projects/Team Management writes dan private media
+transport existing tetap server-mediated. RLS deny/ACL existing dipertahankan;
+service role melewati RLS, sehingga server permission check wajib. Revocation
+CMS grant berlaku request berikutnya; Origin+session-bound CSRF wajib POST.
 
-**Lapis 2 — pemeriksaan server per operasi privileged.** Vercel Function (atau
-RPC `SECURITY DEFINER`) **selalu** memeriksa ulang admin + CSRF + origin
-sebelum write, meski memakai `service_role`. Ini mempertahankan paritas dengan
-`server/cms-admin.mjs` sekarang (defense-in-depth).
-
-| Kategori operasi                                       | Jalur                           | Role             |
-| ------------------------------------------------------ | ------------------------------- | ---------------- |
-| Baca konten publik `cms_*`                             | RLS (`anon` SELECT)             | —                |
-| Edit konten (save/add/reorder, non-destruktif)         | server + `requireAdmin`         | `editor`/`owner` |
-| Delete record, publish/rebuild, media lifecycle        | server + `requireAdmin`         | `owner`          |
-| Kelola `cms_admin_users`, rotasi key, ekspor/hapus PII | server + `requireAdmin`         | `owner`          |
-| Baca data pendaftar                                    | server + `requireAdmin` + audit | `owner`          |
-
-Aturan tambahan:
-
-- **Server-mediated untuk operasi privileged/destruktif** (dianjurkan): validasi,
-  revision guard, batas min/max, dan audit terkumpul di satu tempat; `service_role`
-  tetap hanya di server. RPC `SECURITY DEFINER` boleh untuk operasi sederhana
-  yang butuh atomik, asalkan memanggil `is_admin()`.
-- **Audit** di `cms_audit_log(id, actor, action, target_table, target_id,
-before_hash, after_hash, at, request_id)`. Untuk pembacaan PII, catat
-  akses (actor+target) **tanpa** payload.
-- **Revokasi instan**: `cms_admin_users.active=false` langsung mencabut akses
-  (RLS + server). Rotasi `service_role` = break-glass.
-- **Session freshness** untuk operasi owner (delete, allowlist, ekspor PII):
-  wajibkan autentikasi ulang bila `auth_time` lebih lama dari ambang (usul 15
-  menit — **belum disetujui**).
-- **MFA/TOTP** untuk owner: usul, **belum disetujui**.
-- Tidak ada jalur admin lewat `anon` key; tidak ada `service_role` di browser.
+Multi-admin/editor, MFA, audit baru, freshness15menit dan PII management adalah
+proposal masa depan, bukan scope otomatis auth pass. Jangan menambahkan grant
+recruitment kepada owner CMS sebagai efek samping cutover.
 
 ### 3.5 Privasi pendaftar (wajib)
 
@@ -494,67 +500,35 @@ satu-satunya backend yang belum live.
 - **Semantik konflik berubah** → wajib uji dua tab/dua sesi (CONFLICT),
   add/delete, min/max (Projects 1–8, Team 1–8/grup), reorder posisi sisip.
 
-### 5.4 Proposal auth terakhir — Supabase Auth + OAuth Google (belum diputuskan)
+### 5.4 Auth terakhir — keputusan dan desain bersyarat
 
-**Opsi untuk dibahas setelah seluruh collection selesai: Supabase Auth Google.**
-Belum diizinkan implementasi; OAuth custom CMS tetap berjalan sekarang.
-Desain berikut hanya berlaku jika opsi ini dipilih. Ini akan menggantikan OAuth custom
-(`/api/admin/auth/login|callback|logout`, PKCE/state buatan sendiri, cookie
-AES-256-GCM di `server/cms-admin.mjs`) dan Apps Script API. Flow:
+[Master Work Plan auth CMS](cms-auth-supabase-plan.md) menjadi desain aktual;
+checklist A–E seluruhnya execution pending. Faiz meminta eksekusi **di AI baru**.
+Google via Supabase rekomendasi untuk mempertahankan login UX existing; provider
+belum dipilih. Password memerlukan scope/UI plan tambahan. SDK proposal
+`@supabase/ssr` + `@supabase/supabase-js` belum installed/disetujui.
 
-1. Editor `/admin` memanggil Supabase Auth `signInWithOAuth({ provider: 'google' })`.
-2. Redirect ke consent Google → callback ke Supabase → Supabase set sesi (JWT).
-3. Server Vercel menukar code Supabase menjadi cookie sesi HttpOnly via
-   `@supabase/ssr`; tidak ada token di `localStorage`.
-4. Setiap request admin: server memvalidasi JWT Supabase; RLS memakai
-   `auth.uid()`.
-5. **Allowlist `cms_admin_users`**: user yang tidak ada di tabel (walau Google
-   valid) ditolak. Non-owner → 401/403, tanpa records.
-6. `logout` = `signOut()` + clear cookie.
+Jika Google dipilih: gunakan Node Functions login/callback existing
+`/api/admin/auth/login|callback`, bukan Astro SSR adapter baru. Google callback
+ke existing Supabase `/auth/v1/callback`; Supabase redirect ke exact testing dan
+production `/api/admin/auth/callback`. Pertahankan unrelated recruitment redirects
+serta oldconfig selama observation/rollback. Tidak wildcard atau client URL trust.
 
-#### 5.4.1 Pemisahan tiga callback (Google / Supabase / aplikasi)
+Server-only cookies proposal HttpOnly/Secure/SameSite=Lax/Path=/ dalam namespace
+CMS terpisah recruitment; SDK default tidak otomatis HttpOnly. New Auth client
+per request; refresh/Set-Cookie chunks/redirect/cache headers diuji. `getSession`
+user atau unverified JWT tidak cukup untuk permission; trusted Auth verification
 
-Ada **tiga** URL callback berbeda; jangan digabung atau disamakan:
+- CMS-specific active grant setiap request, bounded failures fail closed.
+  CSRF current session-bound contract dipertahankan, bukan generic double-submit
+  assumption. Logout scope explicit local proposal untuk menghindari global logout
+  recruitment; residual access-token lifetime dan revocation tests harus jelas.
 
-| Lapisan             | URL                                                                     | Dikonfigurasi di                                          | Catatan                                                         |
-| ------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------------- |
-| Google OAuth client | `https://<project-ref>.supabase.co/auth/v1/callback`                    | Google Cloud Console → Authorized redirect URIs           | Google **tidak** redirect ke domain aplikasi                    |
-| Supabase Auth       | `https://<testing>/auth/callback`, `https://<production>/auth/callback` | Supabase Dashboard → Auth → URL Configuration (allowlist) | jadi nilai `redirect_to`; exact, **tanpa wildcard** di produksi |
-| Aplikasi            | `/auth/callback` (route baru)                                           | repo Astro                                                | tukar `code`, set cookie, redirect ke `/admin`                  |
-
-- Route aplikasi baru: `src/pages/auth/callback.astro` (shell) atau
-  `api/admin/auth/callback.js`; memanggil `exchangeCodeForSession`.
-- OAuth custom lama (`/api/admin/auth/login|callback` dengan PKCE/state sendiri)
-  **dihapus**, bukan dipertahankan berdampingan.
-- Deployment preview acak tidak didukung (sama seperti sekarang): daftarkan
-  hanya dua domain tetap.
-- `SITE_URL` Supabase di-set ke domain produksi; `additional_redirect_urls`
-  memuat domain testing + produksi.
-
-#### 5.4.2 Desain cookie & sesi
-
-- Pakai `@supabase/ssr` (`createServerClient` + cookie adapter); **jangan**
-  menulis cookie Supabase manual dan **jangan** simpan token di `localStorage`.
-- Cookie auth Supabase (default `sb-<ref>-auth-token`, bisa ter-chunk `.0`,`.1`):
-  `HttpOnly`, `Secure` (HTTPS), `SameSite=Lax`, `Path=/`, host-only
-  (`__Host-` bila memungkinkan).
-- Access token ~1 jam; refresh token dirotasi; segarkan di server
-  (route/middleware); gagal refresh → hapus cookie + redirect login.
-- `logout` = `signOut()` server + clear cookie. Access token yang sempat dicuri
-  tetap valid sampai kedaluwarsa (batas sama seperti sesi AES sekarang) —
-  revokasi instan lewat `cms_admin_users.active=false` + cek server.
-- CSRF: `SameSite=Lax` + PKCE untuk login; operasi privileged tetap memeriksa
-  `Origin` + token CSRF double-submit `x-csrf-token` (pola existing disesuaikan).
-- JWT signing secret dikelola Supabase — **jangan** bikin secret sesi sendiri.
-
-**Yang harus dijaga:** shell editor & UX tetap; hanya mekanisme auth yang
-berganti. Hapus `SCOPES`, AES `seal/unseal`, `CMS_ADMIN_*` OAuth env setelah
-cutover. `@supabase/ssr` adalah dependency baru yang perlu disetujui (runtime
-dep saat ini hanya astro/gsap/three + `sharp`).
-
-**Acceptance:** anon ditolak 401/403; owner Google masuk ke `/admin`; akun
-Google non-allowlist ditolak; logout mencabut akses; kedua domain; noindex;
-tidak ada records di respons anon.
+No direct authenticated content writes/grants baru; preserve Management API writes.
+Jangan seed existing recruitment `cms_admin_users` untuk CMS. Owner provisioning,
+account linking/provider/settings/grant mutations setelah concrete design/approval.
+Jangan delete GAS export/env/OAuth client dalam pass ini. Auth cutover dan GAS
+removal dipisahkan; old env retirement setelah acceptance+observation terkontrol.
 
 ### 5.5 Publikasi static
 
@@ -728,7 +702,7 @@ jika user memilih desain auth pada pass terakhir; jangan implementasikan sekaran
   server-only), plus token pemicu rebuild. Kunci `service_role` **tidak** masuk
   bundle klien. Dependency baru: `@supabase/ssr` (klien) + `@supabase/supabase-js`
   (server) — perlu persetujuan.
-- Daftarkan owner ke `cms_admin_users`.
+- Arsip proposal owner enrollment: kini wajib CMS-specific permission terisolasi; jangan seed recruitment `cms_admin_users` untuk CMS.
 - Konfigurasi pemicu rebuild (webhook/Edge Function/server hook).
 - Redeploy kedua situs; verifikasi rute admin/ANON.
 

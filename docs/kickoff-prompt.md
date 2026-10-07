@@ -1,5 +1,13 @@
 # Kickoff prompt — buat AI agent baru
 
+## Routing aktif CMS — auth planning untuk AI baru
+
+Untuk CMS gunakan [kickoff migrasi](cms-migration-kickoff.md) **seluruhnya termasuk
+prompt §6**, lalu urutan baca auth Master Work Plan. Runtime925d577 Partners
+accepted; detailed auth plan **PLAN ONLY**, eksekusi di AI baru, keputusan provider/
+deps/owner/session pending. Flow/setup NEXT historis di bawah bukan work order CMS.
+GAS export tetap dependency; push baru termasuk docs perlu konfirmasi.
+
 ## Work order aktif — CMS pass 5 Hods (plan only)
 
 Kode live **`6b36519`**: Projects/Team/Roles/Domains Supabase. Kedua Vercel

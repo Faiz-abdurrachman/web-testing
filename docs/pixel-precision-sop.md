@@ -1,5 +1,15 @@
 # SOP — Presisi piksel (WAJIB untuk semua section/halaman)
 
+## Work order CMS berikutnya — auth, UI tetap terkunci
+
+[Master Work Plan auth CMS](cms-auth-supabase-plan.md) rinci **PLAN ONLY**;
+Faiz meminta eksekusi di AI baru, sesi persiapan docs saja. Runtime925d577 dan
+Partners A–E accepted; provider/deps/owner/session decisions pending. Tidak ada
+asset/font/layout/spacing/reference/assertion berubah. UI changes memerlukan
+scope+per-section protocol penuh, admin custom tanpa node Figma jangan dikarang.
+GAS export masih required; push925d577 consumed, konfirmasi push baru.
+Checkpoint planning content/historis di bawah bukan work order auth.
+
 ## Checkpoint CMS — Partners LIVE925d577, UI terkunci
 
 Pass6 Partners A–E accepted kedua situs; [proof](cms-pass6-partners-plan.md#10-live-acceptance-e--7-oct-2026).
@@ -10,7 +20,7 @@ exact; Partners390/1440 kedua situs accepted tanpa overflow/pageerror. Auth CMS
 final pending/keputusan user, GAS removal belum diizinkan. Docs checkpoint lokal;
 push925d577 consumed, konfirmasi sebelum push baru.
 
-## Penggunaan untuk CMS — checkpoint aktif pass 6 Partners planning
+## Arsip penggunaan CMS — checkpoint pass 6 Partners planning
 
 Deployed checkpoint `526b428`, fitur Hods `763bafc`; Projects/Team/Roles/Domains/
 Hods Supabase, Partners GAS. NEXT [Partners Master Work Plan](cms-pass6-partners-plan.md)
