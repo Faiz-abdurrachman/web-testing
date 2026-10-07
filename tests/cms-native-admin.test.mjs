@@ -32,6 +32,7 @@ const data = {
   imagePresets: ['/images/one.webp'],
   minProjects: 1,
   maxProjects: 8,
+  affectedId: null,
   publicationPending: false,
   secret: 'LEAK',
 };
@@ -206,6 +207,7 @@ test('password login seals a private session, verifies permission and sanitizes 
   assert.equal(loaded.headers.get('cache-control'), 'no-store');
   const body = await loaded.json();
   assert.equal(body.ok, true);
+  assert.equal(Object.hasOwn(body.data, 'affectedId'), false);
   assert.equal(body.csrf.length, 43);
   assert(!JSON.stringify(body).includes('LEAK'));
   assert(!JSON.stringify(body).includes('PRIVATE'));
@@ -535,6 +537,7 @@ test('Team API uses existing session and CSRF, fixed Team RPC and sanitized cont
     photoPresets: ['marchel', 'zidan-rose'],
     minMembers: 1,
     maxMembers: 8,
+    affectedId: null,
     secret: 'LEAK',
   };
   const h = harness(teamData);
@@ -549,6 +552,7 @@ test('Team API uses existing session and CSRF, fixed Team RPC and sanitized cont
   );
   const result = await loaded.json();
   assert.equal(result.ok, true);
+  assert.equal(Object.hasOwn(result.data, 'affectedId'), false);
   assert.equal(result.data.members.length, 7);
   assert(!JSON.stringify(result).includes('LEAK'));
   assert.equal(h.calls.at(-1).url.split('/').at(-1), 'cms_load_team');
@@ -613,4 +617,24 @@ test('Team API uses existing session and CSRF, fixed Team RPC and sanitized cont
     ).status,
     401,
   );
+});
+
+test('retired callback redirects to a fixed internal path without upstream calls or query leakage', async () => {
+  const handle = createAdminHandler({
+    env: {},
+    fetchImpl: () => {
+      throw new Error('Retired callback must not call upstream');
+    },
+  });
+  const response = await handle(
+    request(
+      '/api/admin/auth/callback?code=PRIVATE&state=PRIVATE&next=https://evil.test',
+    ),
+    'callback',
+  );
+  assert.equal(response.status, 303);
+  assert.equal(response.headers.get('location'), '/admin/?login=failed');
+  assert.equal(response.headers.get('cache-control'), 'no-store');
+  assert.equal(response.headers.get('referrer-policy'), 'no-referrer');
+  assert.equal(await response.text(), '');
 });

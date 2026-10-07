@@ -406,5 +406,8 @@ callback/`uri_allow_list`/account-linking**.
   satu grant owner, service RPC HTTP200, catalog + 12 read-only role denials PASS;
   recruitment fingerprint/counts unchanged. Owner melaporkan password sudah
   di-set sendiri. Lihat execution plan §12 untuk fresh QA/perbaikan review lokal.
-- **Pending:** D4 izin push SHA baru, E real owner/non-owner/anon/refresh/logout/
-  revocation dua-domain acceptance. Auth belum LIVE accepted; GAS removal terpisah.
+- **E1/E2 selesai:** approved push `e08a604`, dua READY exact SHA/aliases.
+  Owner Projects/Team read 502 karena SQL load `affectedId:null` ditolak validator;
+  retired callback juga 500 karena relative Response.redirect. Fix lokal + QA
+  sebelum izin SHA baru. Execution plan §13 menyimpan bukti dan fixture denial
+  bersyarat yang sudah diizinkan. E3/E4/E5 masih pending; auth belum LIVE accepted.

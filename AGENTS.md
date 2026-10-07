@@ -1,6 +1,45 @@
 # AGENTS.md — instructions for AI agents
 
-## Checkpoint auth CMS — C2/C3 selesai, C4 owner configured, D4/E pending (7 Oct 2026)
+## Checkpoint auth CMS — e08a604 deployed, acceptance owner blocked
+
+Dengan izin Faiz, satu push origin mengirim `e08a604fb18b4aad30c75832f850351114671163`
+ke dua repo. Main/origin/main/production/main sinkron. Dua primary alias READY
+exact SHA: testing **7 Oct 2026 16:31:50.069 UTC / 23:31:50.069 WIB**;
+production **16:33:07.011 UTC / 23:33:07.011 WIB** (timestamp API provider).
+Izin push e08a604 consumed; SHA berikutnya termasuk docs perlu izin baru.
+
+Public regression dua situs PASS: 19/19 HTML exact pre/post, 84 browser cases
+(19 public + 2 admin shells × 390/1440 × dua situs), anonymous Projects/Team/media
+401, recruitment accepting:false. Owner isi password sendiri di browser terhubung,
+namun GET Projects/Team **502** kedua domain. Auth belum LIVE accepted.
+
+Read-only RPC inspection menemukan `affectedId:null` dari kedua load functions;
+validator admin lama menolak field opsional itu. Perbaikan lokal mengabaikan null
+sebagai field absent dan tetap memvalidasi affectedId non-null sebagai string.
+Retired callback juga diperbaiki: fixed internal Location header 303, karena
+Response.redirect dengan URL relatif melempar error Node live (500).
+Regression tests memakai bentuk SQL actual; local handler dengan mock Auth +
+real read-only CMS RPC kini 200 (4 Projects/25 Team), bukan real owner proof.
+
+QA fix Node22.23.0: CMS light **85 PASS + 10 Team live SKIP**, recruitment
+**24 PASS**, build0errors/23pages, tujuh gate + SEO PASS (verify browserErrors[],
+navbar/VT, responsive468/468, spacing39, format, SEO23), tiga admin mock masing-
+masing4widths PASS; snapshot hash tetap dan **19/19 public HTML exact**. Full CMS
+sebelum fix e08a604 **102 PASS + 10 SKIP / 0 FAIL**; tidak diulang untuk fix
+nullable field/callback ini. Proof fresh `readfix-{qa-summary,parity,local-rpc}.json`.
+
+Faiz mengizinkan fixture non-owner example.invalid + cleanup UID/rate-limit
+fixture, serta revoke sementara tepat owner CMS grant + restore. Izin bersyarat
+**setelah owner read-only PASS**; fixture belum dijalankan. Tidak ada content
+write/hook/Team mutation/recruitment user atau allowlist change. SQL C3 sudah
+applied sekali; jangan reapply. NEXT: QA + commit fix, minta izin exact SHA baru,
+dua READY, lanjut real read/media/refresh/logout/denials dan recruitment isolation.
+Expired-session dan E5 content mutation masih pending; fixture E5 belum disetujui.
+Proof ignored `artifacts/cms-auth/e-{deployments-e08a604,public-before,public-after,browser}.json`
+dan `readfix-local-rpc.json`. Keenam content Supabase buildRPC + full GAS export
+validation/env tetap; GAS removal pass terpisah. Seluruh CMS belum selesai.
+
+## Arsip checkpoint sebelum e08a604 — C2/C3 selesai (7 Oct 2026)
 
 C3 diizinkan Faiz eksplisit sesi ini: migration
 `20261014010000_cms_auth_pass7.sql` **applied sekali** via Management API ke

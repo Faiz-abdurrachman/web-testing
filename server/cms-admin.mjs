@@ -135,7 +135,8 @@ function sanitize(result) {
     out.minProjects = 1;
     out.maxProjects = 8;
     out.publicationPending = data.publicationPending === true;
-    if (data.affectedId !== undefined) out.affectedId = str(data.affectedId);
+    if (data.affectedId !== undefined && data.affectedId !== null)
+      out.affectedId = str(data.affectedId);
   }
   if ('members' in data) {
     const str = (v) => {
@@ -219,7 +220,8 @@ function sanitize(result) {
     out.minMembers = 1;
     out.maxMembers = 8;
     out.publicationPending = data.publicationPending === true;
-    if (data.affectedId !== undefined) out.affectedId = str(data.affectedId);
+    if (data.affectedId !== undefined && data.affectedId !== null)
+      out.affectedId = str(data.affectedId);
   }
   if ('publication' in data) {
     if (
@@ -519,7 +521,10 @@ export function createAdminHandler({
     if (route === 'refresh') return auth.refresh(request);
     // Legacy OAuth callback is retired; fail safe without leaking parameters.
     if (route === 'callback')
-      return Response.redirect('/admin/?login=failed', 303);
+      return new Response(null, {
+        status: 303,
+        headers: { ...headers, Location: '/admin/?login=failed' },
+      });
 
     let cfg;
     try {
